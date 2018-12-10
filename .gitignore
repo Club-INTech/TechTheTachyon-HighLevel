@@ -1,0 +1,14 @@
+# JetBrains files
+**.idea/
+**.iml
+
+# Maven Output Directories
+**/out
+**/target
+
+# Logs & Config files
+logs/
+config/hierarchy.txt
+
+# Doc
+doc/formation/*.pdf
