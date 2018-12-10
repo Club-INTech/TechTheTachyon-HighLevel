@@ -48,9 +48,9 @@ public class Test_ConnectionManager {
     @Test
     public void testInitConnections() throws Exception {
         connectionManager.initConnections(Connection.LOCALHOST_SERVER);
-        Thread.sleep(20);
+        Thread.sleep(100);
         connectionManager.initConnections(Connection.LOCALHOST_CLIENT);
-        Thread.sleep(20);
+        Thread.sleep(100);
 
         Assert.assertTrue(Connection.LOCALHOST_SERVER.isInitiated());
         Assert.assertTrue(Connection.LOCALHOST_CLIENT.isInitiated());
