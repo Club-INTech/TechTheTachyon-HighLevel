@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+<<<<<<< HEAD
+      <x>180</x>
+=======
+      <x>110</x>
+>>>>>>> dev
+      <y>30</y>
+      <w>260</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>LocomotionService(Thread)
+<<<<<<< HEAD
+Package :: Locomotion
+=======
+Package :: main.locomotion
+>>>>>>> dev
+--
+-table : Table
+-graphe : Graphe
+-orderWrapper : OrderWrapper
+-messageQueue : Buffer
+--
+@run()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+<<<<<<< HEAD
+      <x>40</x>
+      <y>230</y>
+      <w>260</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>Pathfinding
+Package :: Locomotion
+--
+-graphe : Graphe
+-table : Table
+-path : Liste
+-eventQueue : Buffer
+=======
+      <x>110</x>
+      <y>230</y>
+      <w>260</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Pathfinding(LPA*)
+Package :: main.locomotion
+--
+-graphe : Graphe
+-table : Table
+>>>>>>> dev
+--
+~moveTo()
+-init()
+-findPath()
+-reconstructPath()
+-clean()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+<<<<<<< HEAD
+      <x>340</x>
+      <y>310</y>
+      <w>260</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>PathFollower(Thread)
+Package :: Locomotion
+--
+-path : Liste
+-orderWrapper : OrderWrapper
+-eventQueue : Buffer
+=======
+      <x>480</x>
+      <y>330</y>
+      <w>260</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>PathFollower(Thread)
+Package :: main.locomotion
+--
+-orderWrapper : OrderWrapper
+>>>>>>> dev
+--
+@run()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+<<<<<<< HEAD
+      <x>290</x>
+      <y>350</y>
+      <w>70</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;10.0</additional_attributes>
+=======
+      <x>360</x>
+      <y>340</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-&gt;
+path : File
+events : File</panel_attributes>
+    <additional_attributes>10.0;20.0;120.0;20.0</additional_attributes>
+>>>>>>> dev
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+<<<<<<< HEAD
+      <x>160</x>
+      <y>150</y>
+      <w>100</w>
+=======
+      <x>230</x>
+      <y>150</y>
+      <w>40</w>
+>>>>>>> dev
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+
+1</panel_attributes>
+<<<<<<< HEAD
+    <additional_attributes>80.0;10.0;10.0;80.0</additional_attributes>
+=======
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+>>>>>>> dev
+  </element>
+</diagram>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>420</x>
+      <y>180</y>
+      <w>220</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>CommunicationInterface
+--
+init() : void
+close() : void
+send(String message) : void
+read() : String
+isInterfaceUp() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>190</x>
+      <y>330</y>
+      <w>200</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>/SocketInterface/
+--
+#ip : String
+#port : Integer
+#socket : Socket
+-input : Buffer
+-output : Buffer
+-initiate : Boolean
+--
++close()
++read() : String
++send(String message)
++isInterfaceUp() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>70</x>
+      <y>580</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>SocketServerInterface
+--
+--
++init()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>580</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>SocketClientInterface
+--
+--
++init()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>180</y>
+      <w>260</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>240.0;20.0;10.0;20.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>230</x>
+      <y>520</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>520</y>
+      <w>100</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>50</x>
+      <y>160</y>
+      <w>620</w>
+      <h>500</h>
+    </coordinates>
+    <panel_attributes>utils.communication
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>740</x>
+      <y>180</y>
+      <w>270</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+Connection
+--
+-ipKey : ConfigInfo
+-portKey : ConfigInfo
+-class : Class
+-interface : CommunicationInterface
+--
+~Connection(ConfigInfo ipKey,
+   ConfigInfo portKey, Class class)
++init()
++close()
++send(String message)
++read() : String
++isConnecionUp() : boolean
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1060</x>
+      <y>180</y>
+      <w>320</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>ConnectionManager
+--
+-config : Config
+-initiatedConnections : List
+--
+-ConnectionManager()
++initConnections(Connection... connection)
++closeInitiatedConnections()
++areInitiedConnectionsUp()
+@finalize()
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>1000</x>
+      <y>50</y>
+      <w>220</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Service
+--
+updateConfig(Config config)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1110</x>
+      <y>50</y>
+      <w>170</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0;150.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>720</x>
+      <y>140</y>
+      <w>690</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>connection
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>180</y>
+      <w>230</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+.1</panel_attributes>
+    <additional_attributes>210.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1000</x>
+      <y>210</y>
+      <w>80</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+.*</panel_attributes>
+    <additional_attributes>60.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+</diagram>

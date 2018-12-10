@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>133</y>
+      <w>154</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>Table
+Package :: Data
+--
+-sizeX : Nbr
+-sizeY : Nbr
+-robotRay : Nbr
+-buddyRay : Nbr
+-ennemyRay : Nbr
+-fixedObstacles : Liste
+-ennemy : Liste
+-buddy : Obstacle
+_+entryPosition : Point_
+--
+-Constructeur
++updateObstacle(List)
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>721</x>
+      <y>133</y>
+      <w>154</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Graphe
+Package :: Data
+--
+-fixedObstacles : Liste
+--
+-Constructeur
+-initGraphe()
++addNode()
++removeNode()
++reInit()
+~updateRidges()
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>497</x>
+      <y>133</y>
+      <w>238</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;&gt;&gt;&gt;
+1
+1</panel_attributes>
+    <additional_attributes>10.0;20.0;320.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>280</x>
+      <y>399</y>
+      <w>154</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>/Obstacle/
+Package :: Table
+--
+#position : Point
+-lifeTime : Nbr
+-entryObstacleAllowed : Boolean
+--
+/+isInObstacle(Point) : Booléen/
+/+intersect(Segment) : Booléen/
+/@equals() : Booléen/
+/@hashCode() : Nbr/
+/@toString() : String/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>294</y>
+      <w>91</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1.*</panel_attributes>
+    <additional_attributes>110.0;10.0;10.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>280</x>
+      <y>560</y>
+      <w>154</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>CircularObstacle
+Package :: Table
+--
+-circle : Cercle
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>455</x>
+      <y>560</y>
+      <w>154</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>RectangularObstacle
+Package :: Table
+--
+- rectangle: Rectangle</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>350</x>
+      <y>525</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>413</x>
+      <y>525</y>
+      <w>140</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;180.0;30.0;180.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>399</y>
+      <w>154</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Node
+Package :: Graphe
+--
+-position : Point
+-heuristic : Nbr
+-cost : Nbr
+-neighbours : Dictionnaire
+-predecessor : Node
+--
++addNeighbour(Node, Ridge)
+@equals(Object) : Booléen
+@hashCode() : Nbr
+@toString() : String
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>826</x>
+      <y>399</y>
+      <w>154</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>Ridge
+Package :: Graphe
+--
+-segment : Segment
+-COST : Nbr
+<<<<<<< HEAD
+-reachable : Booléen
+=======
+-usable : Booléen
+>>>>>>> dev
+_-staticCost : Nbr_
+--
+@equals(Object) : Booléen
+@hashCode() : Nbr
+@toString() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>266</y>
+      <w>84</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1.*</panel_attributes>
+    <additional_attributes>100.0;10.0;10.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>819</x>
+      <y>266</y>
+      <w>98</w>
+      <h>147</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1.*</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;190.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1260</x>
+      <y>476</y>
+      <w>182</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Listener(Thread)
+Package :: Data
+--
+-lidarBuffer : Buffer
+-positionBuffer : Buffer
+-debugBuffer : Buffer
+-eventBuffer : Buffer
+-standartBuffer : Buffer
+-buddyBuffer : Buffer
+-socketsLists : Liste
+--
+-Constructeur
+@run()
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1029</x>
+      <y>301</y>
+      <w>182</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>LidarHandler(Thread)
+Package :: Data
+--
+-lidarBuffer : Buffer
+-robotXYO : XYO
+-table : Table
+-graphe : Graphe
+--
+-Constructeur
+*?? Ug, Melanoémie, Flo ??*
+@run()
+
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1267</x>
+      <y>301</y>
+      <w>175</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>SensorHandler(Thread)
+Package :: Data
+--
+-positionBuffer : Buffer
+-standartBuffer : Buffer
+-buddyBuffer : Buffer
+-robotXYO : XYO
+--
+-Contructeur
+@run()
+
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1491</x>
+      <y>301</y>
+      <w>182</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>EventHandler(Thread)
+Package :: Data
+--
+-eventBuffer : Buffer
+-services : Liste
+--
+-Constructeur
+@run()
+
+
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1106</x>
+      <y>413</y>
+      <w>189</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;250.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1344</x>
+      <y>399</y>
+      <w>21</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1407</x>
+      <y>378</y>
+      <w>182</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+group=1</panel_attributes>
+    <additional_attributes>240.0;10.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>126</x>
+      <y>133</y>
+      <w>182</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>XYO
+Package :: Data
+--
+-position : Point
+-orientation : Nbr
+_-instance : XYO_
+--
+-Constructeur
+_+getInstance() : XYO_
+~update()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>105</x>
+      <y>378</y>
+      <w>511</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>Table
+--
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>623</x>
+      <y>378</y>
+      <w>371</w>
+      <h>252</h>
+    </coordinates>
+    <panel_attributes>Graphe
+--
+bg=white</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1001</x>
+      <y>133</y>
+      <w>182</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+RobotState
+Package :: Data
+--
+
+- actuatorState //à compléter
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1204</x>
+      <y>147</y>
+      <w>196</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>Data
+Package :: Data
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1176</x>
+      <y>147</y>
+      <w>42</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+*</panel_attributes>
+    <additional_attributes>10.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>1015</x>
+      <y>273</y>
+      <w>672</w>
+      <h>357</h>
+    </coordinates>
+    <panel_attributes>Controler
+--
+bg=white
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
