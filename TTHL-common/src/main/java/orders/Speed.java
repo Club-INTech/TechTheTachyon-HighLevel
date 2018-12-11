@@ -40,7 +40,6 @@ public enum Speed implements Order {
     SLOW_ALL(300, 1D),
 
     /** Vitesse standard de déplacement et rotation */
-
     MEDIUM_ALL(400,2D),
 
     /** Vitesse rapide en translation et rotation */

@@ -27,5 +27,5 @@ public interface Order {
     /**
      * Chaîne de caractères à envoyer au LL
      */
-    public String getOrderStr();
+    String getOrderStr();
 }

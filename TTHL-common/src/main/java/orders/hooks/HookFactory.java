@@ -51,7 +51,7 @@ public class HookFactory implements Service {
      * Configure les hooks en paramètre (envoie toutes les infos au LL)
      * @param hooks hooks à configurer
      */
-    public void configureHook(HookNames... hooks) {
+    public void configureHooks(HookNames... hooks) {
 
         Order sentOrder;
         for(HookNames hook:hooks){
@@ -103,7 +103,7 @@ public class HookFactory implements Service {
     /**
      * Active tous les hooks configurés
      */
-    public void enableConfiguredHook(){
+    public void enableConfiguredHooks(){
         for(HookNames hook:configuredHook){
             orderWrapper.enableHook(hook);
             Log.HOOK.debug("Hook " + hook.getDeclaringClass().getName() + " : Activé");
@@ -113,7 +113,7 @@ public class HookFactory implements Service {
     /**
      * Désactive tous les hooks configurés
      */
-    public void disableConfiguredHook(){
+    public void disableConfiguredHooks(){
         for(HookNames hook:configuredHook){
             orderWrapper.disableHook(hook);
             Log.HOOK.debug("Hook " + hook.getDeclaringClass().getName() + " : Désactivé");

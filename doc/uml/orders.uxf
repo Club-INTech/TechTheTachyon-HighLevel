@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>180</y>
+      <w>310</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>OrderWrapper
+--
+-llConnection : Connection
+-symmetry : boolean
+--
++useActuator(Order)
++moveLenghtwise(int)
++turn(double)
++moveToPoint(Vec2)
++immobilise()
++setTranslationnalSpeed(float)
++setRotationalSpeed(float)
++setBothSpeed(Speed)
++setPositionAndOrientation(Vec2, double)
++setPosition(Vec2)
++setOrientation(double)
++configureHook(int, Vec2, int, 
+  double, double, Order)
++enableHook(HookName)
++disableHook(HookName)
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>480</x>
+      <y>520</y>
+      <w>230</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+Speed
+--
+-translationnalSpeed : int
+-rotationnalSpeed : double
+--
+--
+ULTRA_SLOW_ALL
+VERY_SLOW_ALL
+SLOW_ALL
+MEDIUM_ALL
+FAST_ALL
+ULTRA_FAST</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>540</y>
+      <w>310</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>SymmetrizedActuatorOrderMap
+--
+-correspondanceMap : Map
+--
++getSymmetrizedActuatorOrder : Order</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>80</x>
+      <y>350</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Order
+--
+getOrderStr() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>360</y>
+      <w>540</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;520.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>330</x>
+      <y>360</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>400</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>MiscOrder
+--
+-orderString : String
+--
+TEST
+PING</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>400</y>
+      <w>160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>ActuatorOrder
+--
+-orderString : String
+-actionDuration : int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>530</x>
+      <y>360</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>70</x>
+      <y>330</y>
+      <w>640</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>order
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>130</y>
+      <w>270</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>HookFactory
+--
+-configuredHook : List&lt;HookNames&gt;
+--
++configureHooks(HookNames...)
++enableHooks(HookNames...)
++disableHooks(HookNames...)
++enableConfiguredHooks()
++disableConfiguredHooks()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>130</y>
+      <w>290</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+HookNames
+--
+-order : Order
+-id : int
+-position : Vec2
+-tolerency : int
+-orientation : double
+-tolerencyAngle : double
+--
+SPEED_DOWN</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>670</x>
+      <y>140</y>
+      <w>220</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1.</panel_attributes>
+    <additional_attributes>10.0;20.0;200.0;20.0;200.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>490</y>
+      <w>40</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+1.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>70</x>
+      <y>100</y>
+      <w>640</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>hook
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>360</y>
+      <w>30</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=.</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>60</x>
+      <y>70</y>
+      <w>1000</w>
+      <h>660</h>
+    </coordinates>
+    <panel_attributes>orders
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
