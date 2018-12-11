@@ -384,17 +384,17 @@ Ces tests sont destinés à être exécutés quotidiennement par un bot Jenkins 
 vite voir si un bug a été introduit par une feature et d'indentifier plus rapidement son origine.
 
 ### Annexes
-Utils :
+* **Utils** :
 
 ![utils.communication](doc/uml/utils.communication.png)
 
 ![utils.math](doc/uml/utils.math.png)
 
-Orders :
+* **Orders** :
 
 ![orders](doc/uml/orders.png)
 
-Data :
+* **Data** :
 
 ![data.table](doc/uml/data.table.png)
 
@@ -404,6 +404,6 @@ Data :
 
 ![data](doc/uml/data.png)
 
-Locomotion :
+* **Locomotion** :
 
 ![locomotion](doc/uml/locomotion.png)
