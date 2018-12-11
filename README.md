@@ -343,7 +343,20 @@ retrouve.
 
 ##### Locomotion
 * **PathFollower**
+
+Le PathFollower est un service de suivit du chemin : ce service est chargé d'envoyer les ordres appropriés au bas niveau
+et de vérifier que le trajectoire n'est pas obstruée au fur et à mesure que le robot avance. Pour cela il s'appuie sur
+les données de la tables pour vérifier que le robot ne vas pas cogner un obstacle ou un robot adverse ! Si tel est le
+cas lors du suivit d'un chemin, il le communique au service Pathfinder via une file de message. Il reçoit les points à
+atteindre via une autre file de message.
+
 * **PathFinder**
+
+Le Pathfinder a pour rôle la recherche de chemins : le but, lorsque l'on veut atteindre un point, est de rechercher
+periodiquement le plus court chemin entre le prochain point que l'on va atteindre et le point que l'on veut, in fine
+atteindre. Cela permet d'anticiper les changements du graphe, i.e les mouvements de l'adversaires, et donc de les éviter !
+Bien entendus, on ne peut pas tout voir dans le futur : c'est pourquoi il y a beaucoup de cas à traiter. Pour plus
+d'informations, voir les commentaires.
 
 #### TTHL-master
 #### TTHL-slave
