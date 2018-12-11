@@ -73,6 +73,8 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 ![TTHL-Common - Architecture détaillée](doc/images/TTHL-common.png)
 
+**Pour une vue plus précise, voir les annexes. Il existe un MEMO uml si besoin (doc/MEMO.md)**
+
 #### TTHL-master
 #### TTHL-slave
 
@@ -382,4 +384,25 @@ Ces tests sont destinés à être exécutés quotidiennement par un bot Jenkins 
 vite voir si un bug a été introduit par une feature et d'indentifier plus rapidement son origine.
 
 ### Annexes
-**TODO** : Plan de la table + umls
+Utils :
+
+![utils.communication](doc/uml/utils.communication.png)
+
+![utils.math](doc/uml/utils.math.png)
+
+Orders :
+
+![orders](doc/uml/orders.png)
+
+Data :
+
+![data.table](doc/uml/data.table.png)
+
+![data.graphe](doc/uml/data.graphe.png)
+
+![data.controlers](doc/uml/data.controlers.png)
+
+![data](doc/uml/data.png)
+
+Locomotion :
+TODO
