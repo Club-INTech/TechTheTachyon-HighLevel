@@ -121,7 +121,7 @@ public class Test_Math {
     @Test
     public void segmentVecteurDirecteur() {
         Segment segment = new Segment(new VectCartesian(12, 58), new VectCartesian(98, -47));
-        Assert.assertEquals(new VectCartesian(-86, 105), segment.vecteurDirecteur());
+        Assert.assertEquals(new VectCartesian(-86, 105), segment.vectorDirector());
     }
 
     @Test
