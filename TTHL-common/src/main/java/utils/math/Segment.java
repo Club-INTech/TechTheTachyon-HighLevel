@@ -50,7 +50,7 @@ public class Segment implements Cloneable {
     public Segment(Vec2 pointA, Vec2 pointB) {
         this.pointA = pointA;
         this.pointB = pointB;
-        this.length = longueurSegment();
+        this.length = computeLength();
     }
 
     /**
@@ -88,7 +88,7 @@ public class Segment implements Cloneable {
     /**
      * Cette méthode retourne la longueur d'un segment
      */
-    private double longueurSegment(){
+    private double computeLength(){
         int xB=pointB.getX();
         int yB=pointB.getY();
         int xA=pointA.getX();
@@ -99,7 +99,7 @@ public class Segment implements Cloneable {
     /**
      * Cette méthode détermine le vecteur directeur d'une droite
      */
-    public Vec2 vecteurDirecteur(){
+    public Vec2 vectorDirector(){
         return pointA.minusVector(pointB);
     }
 
@@ -150,11 +150,11 @@ public class Segment implements Cloneable {
     }
     public void setPointA(Vec2 pointA) {
         this.pointA = pointA;
-        this.length = longueurSegment();
+        this.length = computeLength();
     }
     public void setPointB(Vec2 pointB) {
         this.pointB = pointB;
-        this.length = longueurSegment();
+        this.length = computeLength();
     }
 
     public double getLength() {

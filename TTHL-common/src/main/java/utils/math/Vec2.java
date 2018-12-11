@@ -55,8 +55,8 @@ public abstract class Vec2 {
     protected Vec2(int x, int y) {
         this.x = x;
         this.y = y;
-        this.a = this.calculateAngle();
-        this.r = this.calculateRay();
+        this.a = this.computeAngle();
+        this.r = this.computeRay();
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class Vec2 {
     /**
      * @return  r²
      */
-    public double squaredLength(){
+    public int squaredLength(){
         return (this.x * this.x + this.y + this.y);
     }
 
@@ -161,7 +161,7 @@ public abstract class Vec2 {
      * Calcul le symétrique de this
      * @return  le vecteur symétrique de this
      */
-    public VectCartesian symetrizeVector(){
+    public Vec2 symetrizeVector(){
         return new VectCartesian(-x,y);
     }
 
@@ -170,15 +170,15 @@ public abstract class Vec2 {
      */
     public void symetrize() {
         this.x = -x;
-        this.r = calculateRay();
-        this.a = calculateAngle();
+        this.r = computeRay();
+        this.a = computeAngle();
     }
 
     /**
      * On calcule l'angle du vecteur entre [-pi, pi[ (non inclus)
      * @return  a
      */
-    private double calculateAngle() {
+    private double computeAngle() {
         if (this.squaredLength() == 0)
             return 0;
 
@@ -199,7 +199,7 @@ public abstract class Vec2 {
      * Calcul de r à partir de x et y
      * @return  r
      */
-    private double calculateRay() {
+    private double computeRay() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
@@ -255,16 +255,16 @@ public abstract class Vec2 {
     }
     public void setX(int x) {
         this.x = x;
-        this.a = this.calculateAngle();
-        this.r = this.calculateRay();
+        this.a = this.computeAngle();
+        this.r = this.computeRay();
     }
     public int getY() {
         return y;
     }
     public void setY(int y) {
         this.y = y;
-        this.a = this.calculateAngle();
-        this.r = this.calculateRay();
+        this.a = this.computeAngle();
+        this.r = this.computeRay();
     }
     public double getR() {
         return r;
@@ -285,7 +285,7 @@ public abstract class Vec2 {
     public void setXY(int x, int y) {
         this.x = x;
         this.y = y;
-        this.a = this.calculateAngle();
-        this.r = this.calculateRay();
+        this.a = this.computeAngle();
+        this.r = this.computeRay();
     }
 }
