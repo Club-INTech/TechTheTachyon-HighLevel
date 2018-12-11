@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>110</y>
+      <w>290</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Locomotion
+--
+-table :Table
+-grpahe : Graphe
+-xyo : XYO
+-pointsQueue : Queue&lt;Vec2&gt;
+-exceptionQueue : Queue&lt;Exception&gt;
+--
++moveLengthwise(int)
++moveLengthwise(int, boolean)
++turn(double)
++turn(double, boolean)
++turnRelative(double)
++moveToPoint(Vec2)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>370</y>
+      <w>290</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>PathFollower
+--
+-orderWrapper : OrderWrapper
+-table : Table
+-robotXYO : XYO
+-pointsQueue : Queue&lt;Vec2&gt;
+-exceptionQueue : Queue&lt;Exception&gt;
+--
++moveLengthwise(int, boolean)
++turn(int, boolean)
+-isLineObstructed(boolean) : boolean
+-isCircleObstructed() : boolean
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>730</x>
+      <y>370</y>
+      <w>250</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>PathFinder
+--
+-graphe : Graphe
+-openList : PriorityQueue&lt;Node&gt;
+-closedList : List&lt;Node&gt;
+--
++findPath(Node, Node)
+-reconstructPath(Node, Node)
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>590</x>
+      <y>310</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>310</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>250</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>Thread</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>460</x>
+      <y>270</y>
+      <w>30</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>400</x>
+      <y>80</y>
+      <w>590</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>locomotion
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

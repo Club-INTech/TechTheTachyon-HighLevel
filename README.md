@@ -405,4 +405,5 @@ Data :
 ![data](doc/uml/data.png)
 
 Locomotion :
-TODO
+
+![locomotion](doc/uml/locomotion.png)
