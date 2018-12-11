@@ -16,7 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package data;
+package scripts;
 
 /**
  * Correspond à une base de données des variables à propos du main.robot
@@ -25,7 +25,6 @@ package data;
  */
 public enum RobotState {
 
-    //Exemples
     BRAS_AVANT_DEPLOYE(true),
     BRAS_ARRIERE_DEPLOYE(true),
     ;
