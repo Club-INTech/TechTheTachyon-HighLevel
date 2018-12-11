@@ -1,6 +1,6 @@
 ## MEMO
-### MEMO - JAVA
-#### JAVA - LANGUAGE
+### MEMO - Java
+#### Java - Language
 * Les types primitifs des variables en java sont : boolean, char(2 octets), byte(1 octet), short( octets), int(4 octets), long(8 octets), 
   float(4 octets) et double(8 octets)
 * Les références en java sont tous les types qui n'appartiennent pas aux 8 types primitifs cités dessus. 
@@ -42,7 +42,7 @@
   Les instances sont visibles partout et accessibles de partout dans le code.
  * Les exceptions servent à gérer les erreurs via un système de try catch. 
 
-#### JAVA - CONVENTION
+#### Java - Convention
 * Une Classe commence toujours par une majuscule, une instance par une minuscule :
 
         MaClasse monInstance = new MaClasse(...);
@@ -97,7 +97,7 @@
          * along with it.  If not, see <http://www.gnu.org/licenses/>.
          **/
 
-### MEMO - GIT
+### MEMO - Git
 * On travaille toujours dans la branche **dev**, la branche **master** est réservée à ce qui **fonctionne** !
 * On **commit** TOUJOURS quelque chose qui compile, avec un message CLAIR (git commit -m "Mon message"),
   pour vérifier, dans le terminal :
@@ -110,8 +110,30 @@
 
         mvn clean install
 
+### MEMO - IntelliJ
+1. Le mode debug : IntelliJ intègre un debuggeur très performant, qui permet d'executer du code pas à pas.
+   Pour ce faire, il faut créer des "break point", c'est-à-dire des lignes de codes ou le programme va
+   s'arréter et commencer une execution pas à pas. Pour placer un break point, il suffit de cliquer gauche
+   **à droite du numero** de la ligne de code sur laquelle vous voulez créer le break point :
+
+   ![Break Point](images/IntelliJ-breakpoint.png)
+
+   Puis executer le test ou main en mode debug :
+
+   ![Debug Mode](images/IntelliJ-debugmode.png)
+
+   Ce qui vous donne quelque chose comme ca :
+
+   ![Debug Mode - Run](images/IntelliJ-debugmode-run.png)
+
+2. Code couleur git
+    * rouge : fichier non suivi
+    * vert : nouveau fichier suivi
+    * bleue : fichier modifié indexé ou non
+    * blanc : fichier non modifié
+
 ### MEMO - UML
-![Exemple UML - utils.communication](uml/utils.communication-conection.png)
+![Exemple UML - utils.communication](uml/utils.communication.png)
 1. Classes
     * Cercle (CommunicationInterface & Service) : **Interface**
     * _Intalique_ (SocketInterface) : **Classe Abstraite**
