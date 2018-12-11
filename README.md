@@ -71,6 +71,8 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 ![TTHL - Architecture générale](doc/images/TTHL.png)
 
+![TTHL-Common - Architecture détaillée](doc/images/TTHL-common.png)
+
 #### TTHL-master
 #### TTHL-slave
 
@@ -92,8 +94,6 @@ Utilisation :
     Log.CANNAL.setActive(false);
     Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
     Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
-    
-
 
 * **Config**
 
