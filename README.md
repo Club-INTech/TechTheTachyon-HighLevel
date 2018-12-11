@@ -278,9 +278,68 @@ départ)
     }
 
 * **Graphe**
+
+Le Graphe sert à paramétrer la table pour qu'elle soit plus facilement navigable : on la modélise sous forme de noeuds,
+qui ont des positions, et d'arrêtes, qui sont des segments reliant des noeuds. Cela sert à représenter des trajectoires
+que le robot peut parcourir sans rencontrer d'obstacle fixe ! Ces arrêtes sont mise à jour par le Lidar Controler qui
+spécifie pour chaque arrête si elle est parcourable ou non à chaque scan reçu par le Lidar. C'est cette classe qui sert
+de support à la réflexion pour le parcours de la table en évitant tous les obstacles.
+
 * **SensorState**
+
+Cette enum regroupe l'état des capteurs du robots qui ne nécessite pas de traitement, comme des contacteurs ou certains
+capteurs de présence. Pour ajouter un capteur, rien de plus simple, on spécifie son type :
+
+    public enum SensorState {
+        EXEMPLE(1.8, Double.class),
+        ;
+    }
+
 * **XYO**
+
+XYO représente une position et une orientation du robot. Elle contient deux champs statics accessibles partout dans le
+code : XYO du robot, et celui du "buddy" (Master pour le Slave, Slave pour le Master). Elle permet tout simplement
+d'englober Vecteur et double dans une seule classe.
+
 * **Controlers & Listener**
+
+Le listener est un service qui écoute toutes les données envoyées au HL, et les redistribus en fonctions du type de donnée,
+indiqué par le header du message. Ces headers sont définis dans l'enum data.controlers.Channel, qui lie les chaînes de
+caractère à un type enuméré (instance d'enum). Ces messages sont redistribués aux controlers, qui traitent et stockent
+les données reçues. Un controler "s'abonne" à un cannal via le Listener pour recevoir et traiter les données :
+data.controlers.Channel.java :
+
+    public enum Channel {
+        MY_CHANNEL((char) 0x28, (char) 0x22),
+        ;
+    }
+
+data.controlers.MonControler.java :
+
+    public class MonContoler extends Thread implement Service {
+        ...
+        private boolean symetry;
+        private ConcurrentLinkedQueue<String> messageQueue;
+
+        private MonControler(Listener listener) {
+            messageQueue = new ConcurrentLinkedQueue<>();
+            listener.addQueue(Channel.MY_CHANNEL, messageQueue);
+        }
+
+        ...
+        @Override
+        public void run() {
+            ...
+        }
+
+        @Override
+        public void updateConfig(Config config) {
+            this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
+        }
+    }
+
+Les controlers ont aussi un rôle de symetrisation ! Il symetrise, si besoin, les données envoyées, afin que le HL s'y
+retrouve.
 
 ##### Locomotion
 * **PathFollower**
