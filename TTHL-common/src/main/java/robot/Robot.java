@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
+package robot;
 
 import data.XYO;
 import locomotion.Locomotion;
@@ -126,7 +127,5 @@ public abstract class Robot implements Service {
     // And so on...
 
     @Override
-    public void updateConfig(Config config) {
-
-    }
+    public void updateConfig(Config config) {}
 }

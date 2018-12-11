@@ -19,9 +19,10 @@
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import robot.Robot;
 
 /**
- * Robot principale : on rassemble ici tout ce qui est unique au robot principale
+ * robot.Robot principale : on rassemble ici tout ce qui est unique au robot principale
  *
  * @author rem
  */

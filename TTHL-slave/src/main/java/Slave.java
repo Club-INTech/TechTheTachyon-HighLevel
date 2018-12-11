@@ -19,9 +19,10 @@
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import robot.Robot;
 
 /**
- * Robot secondaire !
+ * robot.Robot secondaire !
  *
  * @author rem
  */

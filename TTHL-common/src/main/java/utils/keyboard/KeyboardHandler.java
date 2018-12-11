@@ -31,7 +31,7 @@ public class KeyboardHandler extends Thread {
                 frame = new InputFrame();
                 frame.setFocusable(true);
                 frame.setFocusTraversalKeysEnabled(false);
-                frame.setTitle("Robot control interface");
+                frame.setTitle("robot.Robot control interface");
                 frame.setResizable(false);
                 frame.setSize(300, 200);
                 frame.setMinimumSize(new Dimension(300, 200));
