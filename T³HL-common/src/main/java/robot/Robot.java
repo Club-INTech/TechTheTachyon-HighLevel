@@ -22,6 +22,8 @@ import data.XYO;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
+import orders.hooks.HookFactory;
+import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.Speed;
 import pfg.config.Config;
@@ -47,6 +49,11 @@ public abstract class Robot implements Service {
     protected OrderWrapper orderWrapper;
 
     /**
+     * Service de gestion des hooks
+     */
+    protected HookFactory hookFactory;
+
+    /**
      * Position et Orientation du robot
      */
     protected XYO xyo;
@@ -57,9 +64,10 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper) {
+    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
+        this.hookFactory = hookFactory;
     }
 
     /**
@@ -124,6 +132,15 @@ public abstract class Robot implements Service {
      */
     public void setPositionAndOrientation(Vec2 pos, double orientation) {
         this.orderWrapper.setPositionAndOrientation(pos, orientation);
+    }
+
+    /**
+     * Configure des hooks
+     * @param hooks
+     *              les hooks à configurer
+     */
+    public void configureHook(HookNames... hooks) {
+        //TODO
     }
     // And so on...
 

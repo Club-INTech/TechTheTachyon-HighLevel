@@ -18,7 +18,6 @@
 
 package scripts;
 
-import orders.hooks.HookFactory;
 import robot.Robot;
 import utils.container.Service;
 import utils.math.Shape;
@@ -38,11 +37,6 @@ public abstract class Script implements Service {
     protected Robot robot;
 
     /**
-     * La hook factory
-     */
-    protected HookFactory hookFactory;
-
-    /**
      * Les différentes versions du script
      */
     protected ArrayList<Integer> versions;
@@ -51,12 +45,9 @@ public abstract class Script implements Service {
      * Construit un script
      * @param robot
      *              le robot
-     * @param hookFactory
-     *              la hookFactory
      */
-    protected Script(Robot robot, HookFactory hookFactory) {
+    protected Script(Robot robot) {
         this.robot = robot;
-        this.hookFactory = hookFactory;
     }
 
     /**

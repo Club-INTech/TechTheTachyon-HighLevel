@@ -18,6 +18,7 @@
 
 import locomotion.Locomotion;
 import orders.OrderWrapper;
+import orders.hooks.HookFactory;
 import pfg.config.Config;
 import robot.Robot;
 
@@ -27,8 +28,8 @@ import robot.Robot;
  * @author rem
  */
 public class Master extends Robot {
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper) {
-        super(locomotion, orderWrapper);
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
+        super(locomotion, orderWrapper, hookFactory);
     }
 
     @Override
