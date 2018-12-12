@@ -1,4 +1,4 @@
-## TechTheTachion-HighLevel
+## TechTheTachion-HighLevel - T³HL
 Code de l'année 2019 
 
 ### Installation - IntelliJ
@@ -25,14 +25,14 @@ Vous êtes parrés pour naviguer dans le HL !
 ### Architecture générale
 Le HL est composé de trois modules Maven :
     
-* **TTHL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
+* **T³HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
     des mouvements du robot et la gestion des ordres à envoyer au LL
     
-* **TTHL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
+* **T³HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
 
-* **TTHL-slave** : IA du robot secondaire
+* **T³HL-slave** : IA du robot secondaire
 
-#### TTHL-common
+#### T³HL-common
 
 L'architecture de ce projet est orientée micro-services : l'IA se base sur plusieurs modules qui ont tous une tâche bien
 définie, et qui communiquent entre eux si besoin. Elle est construite de manière à ce qu'elle soit maintenable, 
@@ -75,12 +75,12 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 **Pour une vue plus précise, voir les annexes. Il existe un MEMO uml si besoin (doc/MEMO.md)**
 
-#### TTHL-master
-#### TTHL-slave
+#### T³HL-master
+#### T³HL-slave
 
 ### Architecture détaillée
 Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
-#### TTHL-common
+#### T³HL-common
 ##### Utils 
 * **Log**
 
@@ -360,8 +360,8 @@ atteindre. Cela permet d'anticiper les changements du graphe, i.e les mouvements
 Bien entendus, on ne peut pas tout voir dans le futur : c'est pourquoi il y a beaucoup de cas à traiter. Pour plus
 d'informations, voir les commentaires.
 
-#### TTHL-master
-#### TTHL-slave
+#### T³HL-master
+#### T³HL-slave
     
 ### Tests
 Les tests, indispensables pour la maintenabilité du HL, et permettant d'être efficace pour trouver l'origine de vos bugs

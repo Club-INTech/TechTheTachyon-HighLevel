@@ -19,7 +19,7 @@
  et les méthodes d'instance qui doivent être appelés sur un objet instancié (avec le new), l'appel se fait ainsi : 
         
         Objet objet = new Objet();
-        objet.maMéthode();
+        objet.maMethode();
  * Il existe quatre attributs utilisés pour gérer la visibilité : public, private, (rien), protected, donc quatre déclarations possibles de méthodes : 
         
         public void methode(){....}
@@ -34,7 +34,7 @@
  * Une classe peut hériter d'autres classes avec le mot extends, une classe fille est du même type que sa classe mère, possède ses mêmes attributs et 
  méthodes qu'elle peut modifier en les override. Une classe mère n'est pas du même type que sa classe fille, mais on peut le transtyper en faisant : 
  
-        ClasseMère classeMère=(ClasseFille) new ClasseFille();
+        ClasseMere classeMere=(ClasseFille) new ClasseFille();
  
  * Une classe ne peut hériter que d'une seule classe, d'où l'intérêt des interfaces. 
  * Les interfaces définissent un comportement de la classe qui les implémentent. Les classes peuvent implémenter plusieurs interfaces. 
@@ -43,7 +43,7 @@
  * Les exceptions servent à gérer les erreurs via un système de try catch. 
 
 #### Java - Convention
-* Une Classe commence toujours par une majuscule, une instance par une minuscule :
+* Une Classe commence toujours par une majuscule, une instance par une minuscule, pas d'accent dans les noms :
 
         MaClasse monInstance = new MaClasse(...);
 
