@@ -63,8 +63,8 @@
 
     <!-- SubModules -->
     <modules>
-        <module>TTHL-common</module>
-        <module>TTHL-master</module>
-        <module>TTHL-slave</module>
+        <module>T³HL-common</module>
+        <module>T³HL-master</module>
+        <module>T³HL-slave</module>
     </modules>
 </project>
