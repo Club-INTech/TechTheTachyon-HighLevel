@@ -1,45 +1,20 @@
-/**
- * Copyright (c) 2018, INTech.
- * this file is part of INTech's HighLevel.
-
- * INTech's HighLevel is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * INTech's HighLevel is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with it.  If not, see <http://www.gnu.org/licenses/>.
- **/
-
 package scripts;
 
 /**
- * Correspond à une base de données des variables à propos du main.robot
+ * Etablit l'état du robot non détectable avec des capteurs
  *
- * @author william
+ * @author rem
  */
-public enum RobotState {
+public interface RobotState {
 
-    BRAS_AVANT_DEPLOYE(true),
-    BRAS_ARRIERE_DEPLOYE(true),
-    ;
-    private Object valueObject;
-    RobotState(Object valueObject){
-        this.valueObject=valueObject;
-    }
+    /**
+     * @return  l'état de la donnée
+     */
+    Object getData();
 
-    /** Renvoie la valeur de la variable */
-    public synchronized Object getData(){
-        return this.valueObject;
-    }
-
-    /** Affecte une valeur à la variable */
-    public synchronized void setData(Object value){
-        this.valueObject=value;
-    }
+    /**
+     * Set l'état d'un donnée
+     * @param data  la donnée
+     */
+    void setData(Object data);
 }
