@@ -24,7 +24,7 @@ package utils.math;
  * @author yousra, rem
  */
 public abstract class Shape implements Cloneable {
-    /**œ
+    /**
      * Centre de la forme
      */
     protected Vec2 center;
@@ -48,6 +48,12 @@ public abstract class Shape implements Cloneable {
      * @return  true si le point se trouve dans la forme
      */
     public abstract boolean isInShape(Vec2 point);
+
+    /**
+     * @param point point
+     * @return  le point de la forme le plus proche du point donné en paramètre
+     */
+    public abstract Vec2 closestPointToShape(Vec2 point);
 
     /**
      * @see Object#clone()

@@ -70,6 +70,43 @@ public class Segment implements Cloneable {
     }
 
     /**
+     * @param segment
+     *              un autre segment
+     * @return  le point d'intersection des deux segments
+     * TODO : implémenter le test
+     */
+    public Vec2 intersectionPoint(Segment segment) {
+        if (!this.intersect(segment)) {
+            return null;
+        }
+        Vec2 p1A = segment.pointA;
+        Vec2 p1B = segment.pointB;
+        Vec2 p2A = this.pointA;
+        Vec2 p2B = this.pointB;
+
+        double a1, a2, b1, b2;
+
+        if (p1A.getX() == p1B.getX()) {
+            a2 = (p2A.getY() - p2B.getY()) / (double) (p2A.getX() - p2B.getX());
+            b2 = p2B.getY() - a2* p2B.getX();
+            return new VectCartesian(p1A.getX(), (float)(a2* p1A.getX() + b2));
+        } else if (p2A.getX() == p2B.getX()) {
+            a1 = (p1A.getY() - p1B.getY()) / (double) (p1A.getX() - p1B.getX());
+            b1 = p1B.getY() - a1* p1B.getX();
+            return new VectCartesian(p2A.getX(), (float)(a1* p2A.getX() + b1));
+        }
+
+        a1 = (p1A.getY() - p1B.getY()) / (double) (p1A.getX() - p1B.getX());
+        a2 = (p2A.getY() - p2B.getY()) / (double) (p2A.getX() - p2B.getX());
+        b1 = p1B.getY() - a1*p1B.getX();
+        b2 = p2B.getY() - a2*p2B.getX();
+
+        float d = (float) (a2 - a1);
+
+        return new VectCartesian((float) ((b1 - b2) / d), (float) ((a1* b2 - a2* b1) / d));
+    }
+
+    /**
      * Cette méthode détermine la distance entre une droite et un point
      * @param point point
      * @return  la distance entre le point et la droite qui porte le segment
@@ -156,7 +193,6 @@ public class Segment implements Cloneable {
         this.pointB = pointB;
         this.length = longueurSegment();
     }
-
     public double getLength() {
         return length;
     }

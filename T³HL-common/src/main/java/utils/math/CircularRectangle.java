@@ -135,6 +135,15 @@ public class CircularRectangle extends Shape {
     }
 
     /**
+     * @see Shape#closestPointToShape(Vec2)
+     */
+    @Override
+    public Vec2 closestPointToShape(Vec2 point) {
+        // TODO
+        return null;
+    }
+
+    /**
      * @see Cloneable#clone()
      */
     @Override

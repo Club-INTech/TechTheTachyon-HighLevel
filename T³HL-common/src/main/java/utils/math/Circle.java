@@ -50,7 +50,7 @@ public class Circle extends Shape {
      * @param centre centre
      * @param radius rayon du cercle
      */
-    public Circle(Vec2 centre,float radius) {
+    public Circle(Vec2 centre, float radius) {
         super(centre);
         this.radius = radius;
         this.angleStart = -Math.PI;
@@ -64,7 +64,7 @@ public class Circle extends Shape {
      * @param angleStart angle de début
      * @param angleEnd angle de fin
      */
-    public Circle(Vec2 centre,float radius,double angleStart, double angleEnd) {
+    public Circle(Vec2 centre, float radius, double angleStart, double angleEnd) {
         super(centre);
         this.radius = radius;
         this.angleStart = Calculs.modulo(angleStart, 2*Math.PI);
@@ -100,27 +100,15 @@ public class Circle extends Shape {
     }
 
     /**
-     * Cette méthode retourne true si deux cercles sont sécants, c'est-à-dire si la distance entre les deux centres est entre la valeur absolue de la différence des deux
-     * rayons et la valeur absolue de la somme (valeur absolue ici pour la somme par sécurité, on sait jamais...)
-     * @param circle cercle
-     * @return  true si les cercles s'intersectent
-     */
-    public boolean intersectsWithCircle(Circle circle){
-        float r1 = this.radius;
-        float r2 = circle.getRadius();
-        //distance entre les deux centres
-        double d = this.getCenter().distanceTo(circle.getCenter());
-        return d >= Math.abs(r2-r1) && d <= Math.abs(r2+r1);
-    }
-
-    /**
+     * @see Shape#closestPointToShape(Vec2)
      * Cette méthode prend en paramètre un point et retourne le point du cercle le plus proche de ce point
      * Le point le plus proche du cercle est le point appartenant au cercle et à la droite passante par le centre
      * du cercle et le point en paramètre
      * @param point point
      * @return  le point du cercle (ou de l'arc) le plus proche du point donné en paramètre
      */
-    public Vec2 closestPointToCircle(Vec2 point){
+    @Override
+    public Vec2 closestPointToShape(Vec2 point){
         Vec2 vec = point.minusVector(this.getCenter());
 
         // Si la direction donnée par le vecteur point qui est hors du cercle intersecte l'arc de cercle, on a le point avec les coordonnées polaires
@@ -141,6 +129,20 @@ public class Circle extends Shape {
             }
         }
 
+    }
+
+    /**
+     * Cette méthode retourne true si deux cercles sont sécants, c'est-à-dire si la distance entre les deux centres est entre la valeur absolue de la différence des deux
+     * rayons et la valeur absolue de la somme (valeur absolue ici pour la somme par sécurité, on sait jamais...)
+     * @param circle cercle
+     * @return  true si les cercles s'intersectent
+     */
+    public boolean intersectsWithCircle(Circle circle){
+        float r1 = this.radius;
+        float r2 = circle.getRadius();
+        //distance entre les deux centres
+        double d = this.getCenter().distanceTo(circle.getCenter());
+        return d >= Math.abs(r2-r1) && d <= Math.abs(r2+r1);
     }
 
     /**

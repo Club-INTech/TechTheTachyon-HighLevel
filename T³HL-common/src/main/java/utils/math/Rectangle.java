@@ -105,6 +105,22 @@ public class Rectangle extends Shape {
     }
 
     /**
+     * @see Shape#closestPointToShape(Vec2)
+     */
+    @Override
+    public Vec2 closestPointToShape(Vec2 point) {
+        Segment seg = new Segment(point, this.center);
+
+        for (Segment segment : this.segments) {
+            if (segment.intersect(seg)) {
+                return segment.intersectionPoint(seg);
+            }
+        }
+        // TODO Traiter le cas ou le point est dans le rectangle
+        return null;
+    }
+
+    /**
      * Cette méthode retourne les diagonales d'un rectangle
      * @return  les diagonales du rectangle
      */

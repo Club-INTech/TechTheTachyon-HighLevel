@@ -18,9 +18,11 @@
 
 package scripts;
 
+import data.Table;
 import robot.Robot;
 import utils.container.Service;
 import utils.math.Shape;
+import utils.math.Vec2;
 
 import java.util.ArrayList;
 
@@ -37,6 +39,11 @@ public abstract class Script implements Service {
     protected Robot robot;
 
     /**
+     * La table
+     */
+    protected Table table;
+
+    /**
      * Les différentes versions du script
      */
     protected ArrayList<Integer> versions;
@@ -46,8 +53,9 @@ public abstract class Script implements Service {
      * @param robot
      *              le robot
      */
-    protected Script(Robot robot) {
+    protected Script(Robot robot, Table table) {
         this.robot = robot;
+        this.table = table;
     }
 
     /**
@@ -57,7 +65,7 @@ public abstract class Script implements Service {
      */
     public void goToThenExecute(Integer version) {
         /*
-         * On commence par trouver le point d'entrer à l'aide de l'entryPosition
+         * On commence par trouver le point d'entrée à l'aide de l'entryPosition
          * Si non trouvé ou obstrué
          *      Exception levée
          * On tente d'aller à ce point
