@@ -16,6 +16,8 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+package robot;
+
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -23,12 +25,12 @@ import pfg.config.Config;
 import robot.Robot;
 
 /**
- * robot.Robot principale : on rassemble ici tout ce qui est unique au robot principale
+ * robot.Robot secondaire !
  *
  * @author rem
  */
-public class Master extends Robot {
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
+public class Slave extends Robot {
+    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
         super(locomotion, orderWrapper, hookFactory);
     }
 

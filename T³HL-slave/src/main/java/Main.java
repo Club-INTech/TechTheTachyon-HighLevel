@@ -23,7 +23,7 @@ import utils.Container;
  */
 public class Main {
     public static void main(String[] args) {
-        Container container = Container.getInstance("Slave");
-        System.out.println("Hello World ! I'm Billy's Slave :D");
+        Container container = Container.getInstance("robot.Slave");
+        System.out.println("Hello World ! I'm Billy's robot.Slave :D");
     }
 }

@@ -41,7 +41,7 @@ public class Main {
             e.printStackTrace();
         }
         */
-        container = Container.getInstance("Master");
+        container = Container.getInstance("robot.Master");
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {

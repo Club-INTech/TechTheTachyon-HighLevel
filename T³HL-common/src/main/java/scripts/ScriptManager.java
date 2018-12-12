@@ -49,8 +49,6 @@ public abstract class ScriptManager implements Service {
     protected ScriptManager(Container container) {
         this.container = container;
         this.instanciedScripts = new HashMap<>();
-
-        //TODO : Instancier les scripts
     }
 
     /**

@@ -18,12 +18,27 @@
 
 package scripts;
 
+import pfg.config.Config;
+import utils.Container;
+
 /**
- * Interface permettant de définir les noms des scripts
+ * @see ScriptManager
  *
  * @author rem
  */
-public interface ScriptNames {
+public class ScriptManagerMaster extends ScriptManager {
+
+    /**
+     * Construit un script manager pour le maître
+     * @param container
+     *              container pour instancier les scripts
+     */
+    public ScriptManagerMaster(Container container) {
+        super(container);
+
+        // TODO Instancier les scripts (AVEC LE CONTAINER)
+    }
+
     @Override
-    String toString();
+    public void updateConfig(Config config) {}
 }
