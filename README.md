@@ -1,6 +1,15 @@
 ## TechTheTachion-HighLevel - T³HL
 Code de l'année 2019 
 
+### TODO
+[ ] Découvrir le HL et sa doc
+[ ] Script
+[ ] Cas particulier pathfinding
+[ ] Créer les ordres (avec le LL)
+[ ] S'occuper du recalage avec les sicks (commencer par voir les maths)
+[ ] Com avec l'électron
+[ ] IA
+
 ### Installation - IntelliJ
 #### Prérequis
 1. Installer Java (Par défaut sur beacoup de distribution)
