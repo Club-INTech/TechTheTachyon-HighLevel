@@ -19,6 +19,8 @@
 package scripts;
 
 import data.Table;
+import data.XYO;
+import locomotion.UnableToMoveException;
 import robot.Robot;
 import utils.container.Service;
 import utils.math.Shape;
@@ -79,6 +81,24 @@ public abstract class Script implements Service {
          * Execution du script
          *      Si Exception, rethrow
          */
+        Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
+        if (table.isPositionInFixedObstacle(entryPosition)) {
+            // TODO
+        } else if (table.isPositionInMobileObstacle(entryPosition)) {
+            // TODO
+        }
+
+        try {
+            this.robot.moveToPoint(entryPosition);
+        } catch (UnableToMoveException e) {
+            // TODO
+        }
+
+        try {
+            this.execute(version);
+        } catch (Exception e) {
+            // TODO
+        }
     }
 
     /**
