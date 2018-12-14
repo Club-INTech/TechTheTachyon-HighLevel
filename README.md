@@ -20,6 +20,15 @@ Alt+F12 pour ouvrir le terminal :
 
     mvn clean install -DskipTests
 
+#### Installer les plugins
+File -\> Settings... -\> Plugins
+
+Installer les plugins Checkstyle-IDEA et MarkDown Navigator (ou MarkDown support)
+
+Redémarrer IntelliJ et revenir dans File -\> Settings... -\> Checkstyle
+
+Sous _Configuration File_, ajouter le fichier _resources/intcheckstyle.xml_
+
 Vous êtes parrés pour naviguer dans le HL !
 
 ### Architecture générale
