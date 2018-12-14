@@ -66,26 +66,11 @@ public abstract class Script implements Service {
      *              version du script à executer
      */
     public void goToThenExecute(Integer version) {
-        /*
-         * On commence par trouver le point d'entrée à l'aide de l'entryPosition
-         * Si non trouvé ou obstrué
-         *      Exception levée
-         * On tente d'aller à ce point
-         *      Si Exception
-         *          On retente de trouver un point d'entré
-         *              Si non trouvé ou obstrué
-         *                  Exception levéé
-         *              Sinon goTo "On tente d'aller à ce point"
-         *      Sinon
-         *          On continu
-         * Execution du script
-         *      Si Exception, rethrow
-         */
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
         if (table.isPositionInFixedObstacle(entryPosition)) {
-            // TODO
+            // TODO Si le point trouvé est dans un obstacle fixe
         } else if (table.isPositionInMobileObstacle(entryPosition)) {
-            // TODO
+            // TODO Si le point trouvé est dans un obstacle mobile
         }
 
         try {
@@ -97,6 +82,7 @@ public abstract class Script implements Service {
         try {
             this.execute(version);
         } catch (Exception e) {
+            this.finalize(e);
             // TODO
         }
     }
