@@ -125,6 +125,20 @@ public class Test_Math {
     }
 
     @Test
+    public void segmentIntersectionPoint() {
+        Segment segment = new Segment(new VectCartesian(0, 10), new VectCartesian(40, 90));
+        Segment seg = new Segment(new VectCartesian(15, 0), new VectCartesian(0, 100));
+        Segment seg1 = new Segment(new VectCartesian(20, -10), new VectCartesian(20, 100));
+
+        Assert.assertEquals(new VectCartesian(10, 31), segment.intersectionPoint(seg));
+        Assert.assertEquals(segment.intersectionPoint(seg), seg.intersectionPoint(segment));
+        Assert.assertEquals(new VectCartesian(20, 50), seg1.intersectionPoint(segment));
+        Assert.assertEquals(segment.intersectionPoint(seg1), seg1.intersectionPoint(segment));
+        Assert.assertNull(seg1.intersectionPoint(seg));
+        Assert.assertNull(seg.intersectionPoint(seg1));
+    }
+
+    @Test
     public void segmentEquals() {
         Segment segment = new Segment(new VectCartesian(89, -457), new VectCartesian(-42, 584));
         Segment segment1 = new Segment(new VectCartesian(-42, 584), new VectCartesian(89, -457));
@@ -162,20 +176,20 @@ public class Test_Math {
     }
 
     @Test
-    public void circleClosestPointAroundCircle() {
+    public void circleClosestPointToShape() {
         Circle circle = new Circle(new VectCartesian(50, 20), 50);
         Vec2 vec1 = new VectCartesian(150, 120);
         Vec2 vec2 = new VectCartesian(55, 25);
 
-        Assert.assertEquals(new VectCartesian((float) (50 + (Math.sqrt(2)/2) * 50), (float) (20 + (Math.sqrt(2)/2) * 50)), circle.closestPointToCircle(vec1));
-        Assert.assertEquals(new VectCartesian((float) (50 + (Math.sqrt(2)/2) * 50), (float) (20 + (Math.sqrt(2)/2) * 50)), circle.closestPointToCircle(vec2));
+        Assert.assertEquals(new VectCartesian((float) (50 + (Math.sqrt(2)/2) * 50), (float) (20 + (Math.sqrt(2)/2) * 50)), circle.closestPointToShape(vec1));
+        Assert.assertEquals(new VectCartesian((float) (50 + (Math.sqrt(2)/2) * 50), (float) (20 + (Math.sqrt(2)/2) * 50)), circle.closestPointToShape(vec2));
 
         circle = new Circle(new VectCartesian(0, 50), 80, -Math.PI/4, Math.PI/2);
         vec1 = new VectCartesian(-421, 96);
         vec2 = new VectCartesian(-94, -214);
 
-        Assert.assertEquals(new VectCartesian(0, 130), circle.closestPointToCircle(vec1));
-        Assert.assertEquals(new VectCartesian((float) ((Math.sqrt(2)/2) * 80), 50 - (float) ((Math.sqrt(2)/2) * 80)), circle.closestPointToCircle(vec2));
+        Assert.assertEquals(new VectCartesian(0, 130), circle.closestPointToShape(vec1));
+        Assert.assertEquals(new VectCartesian((float) ((Math.sqrt(2)/2) * 80), 50 - (float) ((Math.sqrt(2)/2) * 80)), circle.closestPointToShape(vec2));
     }
 
     @Test

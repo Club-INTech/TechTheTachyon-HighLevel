@@ -103,7 +103,7 @@ public class Segment implements Cloneable {
 
         float d = (float) (a2 - a1);
 
-        return new VectCartesian((float) ((b1 - b2) / d), (float) ((a1* b2 - a2* b1) / d));
+        return new VectCartesian((float) ((b1 - b2) / d), (float) ((a2* b1 - a1* b2) / d));
     }
 
     /**
