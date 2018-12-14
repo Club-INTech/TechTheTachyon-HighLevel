@@ -1,4 +1,4 @@
-## TechTheTachion-HighLevel
+## TechTheTachyon-HighLevel
 Code de l'année 2019 
 
 ### Installation - IntelliJ
@@ -64,9 +64,12 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
   classes, également dans le package data, définissent également comment est-ce que l'on représente la table afin que
   l'on puisse aisément s'y déplacer !
   
-* Locomotion : dernier package à ce jour, ce module un peu plus haut niveau regroupe les fonctions permettant au robot
+* Locomotion : ce module un peu plus haut niveau regroupe les fonctions permettant au robot
   de se déplacer en évitant si possible l'adversaire et les collisions avec les bords de la table et les obstacles
-  
+
+* Scripts : ce package regroupe les classes abstraites et interfaces definissant le fonctionnement d'un script ! Un script
+  est une suite d'action à faire pour le robot, implémentée dans la methode _Script.execute_.
+
 L'orchestration de tous ces packages et modules se fait de la manière suivante :
 
 ![TTHL - Architecture générale](doc/images/TTHL.png)
