@@ -131,9 +131,9 @@ public class Container implements Service {
     /**
      * Getter pour instanciation du singleton
      */
-    public static Container getInstance(String ConfigProfile) {
+    public static Container getInstance(String configProfile) {
         if (instance == null) {
-            instance = new Container(ConfigProfile);
+            instance = new Container(configProfile);
         }
         return instance;
     }

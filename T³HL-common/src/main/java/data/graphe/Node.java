@@ -34,7 +34,7 @@ public class Node {
      */
     private static final int DEFAULT_HEURISTIC      = 1000000;
     private static final int DEFAULT_COST           = 1000000;
-    private static int FIX_COST                     = 0;
+    private static final int FIX_COST               = 0;
 
     /**
      * Position du noeud
@@ -160,9 +160,6 @@ public class Node {
     }
     public HashMap<Node, Ridge> getNeighbours() {
         return neighbours;
-    }
-    public static void setFixCost(int fixCost) {
-        FIX_COST = fixCost;
     }
     public static int getDefaultHeuristic() {
         return DEFAULT_HEURISTIC;
