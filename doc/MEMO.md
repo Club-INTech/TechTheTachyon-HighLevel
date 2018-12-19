@@ -39,8 +39,10 @@
  * Une classe ne peut hériter que d'une seule classe, d'où l'intérêt des interfaces. 
  * Les interfaces définissent un comportement de la classe qui les implémentent. Les classes peuvent implémenter plusieurs interfaces. 
  * Les enums : c'est une classe comme les autres mais avec la particularité de lister toutes ses instances à l’intérieur de la classe.
-  Les instances sont visibles partout et accessibles de partout dans le code.
- * Les exceptions servent à gérer les erreurs via un système de try catch. 
+   Les instances sont visibles partout et accessibles de partout dans le code.
+ * Les exceptions servent à gérer les erreurs via un système de try catch.
+ * Une classe d'un package `java` inconnue ? Aller sur https://docs.oracle.com/javase/8/docs/api/, et chercher la documentation sur la
+   classe inconnue
 
 #### JAVA - CONVENTION
 * Une Classe commence toujours par une majuscule, une instance par une minuscule :

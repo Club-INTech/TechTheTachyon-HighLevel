@@ -94,11 +94,11 @@ Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
 ##### Utils 
 * **Log**
 
-Le service de log est une enum : chaque instance représente un canal de journalisation que l'on peut activer et
+Le service de log est une `enum` : chaque instance représente un canal de journalisation que l'on peut activer et
 désactiver au besoin, le but étant d'éviter de surcharger le terminal d'informations lorsque l'on se concentre sur une
-fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print. Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche
-toujours, que le canal spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas 
-instancié !
+fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print.
+Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche toujours, que le canal
+spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas instancié !
 Utilisation :
     
     Log.CANNAL.setActive(true);
@@ -113,12 +113,12 @@ La config est une librairie externe utilisée pour changer des paramètres dans 
 exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui aussi géré par le 
 container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
 les valeurs des paramètres par défaut. Les valeurs chargées par le container à l'instanciation des services sont 
-présentes dans le fichier config.txt. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
+présentes dans le fichier `config.txt`. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
 
 * **Container**
 
 Le container fait office à la fois de factory .ie il instancie les services(toutes les classes qui implémentent l'interface Service), 
-et de gestion des dépendances : lorsque  l'on demande un service via la méthode _getService(Class class)_, le container va instancier 
+et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va instancier
 tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
     
     Container container = Container.getInstance("Master");
@@ -127,8 +127,8 @@ tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà 
 "Tu nous parles de service depuis tout à l'heure mais c'est quoi au juste un service ???"
 
 Et bien c'est un **singleton** offrant des **fonctionnalités** bien définies ! Dans notre cas c'est une interface qui 
-doit surcharger la méthode _public void updateConfig(Config config)_, qui permet justement de récupérer des valeurs de 
-la config ! On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
+doit surcharger la méthode `updateConfig(Config config)`, qui permet justement de récupérer des valeurs de la config !
+On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
 
 ConfigData.java :
 
@@ -161,7 +161,7 @@ MonService.java :
 
 Ce service sert à gérer des IO (Input Output) du HL, c'est-à-dire l'échange de messages entre le HL et le LL,
 mais aussi avec le Lidar, et la communication Master-Slave. Il se base sur l'enum Connection qui répertorie les
-connections du HL. Après avoir initialiser les connections à l'aide de la méthode _initConnections(Connection... connections)_,
+connections du HL. Après avoir initialiser les connections à l'aide de la méthode `initConnections(Connection... connections)`,
 on peut simplement envoyer et lire des messages grâce aux autres méthodes :
 
     import connection.ConnectionManager
@@ -180,26 +180,26 @@ on peut simplement envoyer et lire des messages grâce aux autres méthodes :
         }
     }
 
-**ATTENTION** : Dans le HL, les connections sont initialisées dans le Listener ! (voir plus bas)
+**ATTENTION** : Dans le HL, les connections sont initialisées dans le `Listener` ! (voir plus bas)
 
 ##### Orders
 * **OrderWrapper**
 
 L'order wrapper est un service servant à simplifier l'envoi d'ordres au bas niveau via des méthodes plus simples
 d'utilisation. Par exemple, plutôt que de devoir écrire, à chaque fois que l'on veut envoyer au bas niveau l'ordre 
-d'avancer d'une certaine distance _Connection.TEENSY_MASTER.send("d 100")_, on préfère utiliser une méthode
-du style _orderWrapper.moveLenghtwise(100)_ ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
-sur des enums qui implémentent l'interface _orders.order.Order_, et qui typent les chaînes de caractères correspondant aux
-ordres que l'on envoie au bas niveau. Regardez la classe _orders.order.MotionOrder_ ainsi que dans l'order wrapper
+d'avancer d'une certaine distance `Connection.TEENSY_MASTER.send("d 100")`, on préfère utiliser une méthode
+du style `orderWrapper.moveLenghtwise(100)` ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
+sur des enums qui implémentent l'interface `orders.order.Order`, et qui typent les chaînes de caractères correspondant aux
+ordres que l'on envoie au bas niveau. Regardez la classe `orders.order.MotionOrder` ainsi que dans l'order wrapper
 pour plus d'informations.
 
 L'order wrapper ne s'occupe pas que de simplifier l'envoie d'ordre au bas-niveau, il est également en charge de
 la symétrisation des ordres. Pour ne pas avoir à écrire deux version du code, une pour chaque côté de la table, le
 haut niveau réfléchit toujours du même côté et symétrise les ordres envoyés au bas niveau si nécessaire. C'est
 au niveau de l'order wrapper que cela se fait. Imaginons que le HL réfléchisse toujours du côté violet, et que
-l'on utilise la méthode _moveToPoint(Vec2 point)_, avec _point\[x: 370, y: 800\] (voir en annexe pour le repère
-de la table). Si l'on est du côté violet, l'order wrapper doit envoyé au LL la chaîne de caractères _"p 370 800"_.
-Si l'on est du côté jaune, il envoie _"p -370 800"_.
+l'on utilise la méthode `moveToPoint(Vec2 point)`, avec point\[x: 370, y: 800\] (voir en annexe pour le repère
+de la table). Si l'on est du côté violet, l'order wrapper doit envoyé au LL la chaîne de caractères `"p 370 800"`.
+Si l'on est du côté jaune, il envoie `"p -370 800"`.
 
 "Et du coup comment je crée un ordre ?"
 
@@ -227,7 +227,7 @@ orders.SymmetrizedActuatorOrderMap.java:
         ...
     }
 
-Voilà pour un ordre de type actionneur, la méthode _useActuator(ActuatorOrder order, boolean waitForCompletion)_
+Voilà pour un ordre de type actionneur, la méthode `useActuator(ActuatorOrder order, boolean waitForCompletion)`
 s'occupe du reste !
 
 "Le reste ? Du genre l'entier à côté de la chaîne de caractère et le booléen waitForCompletion
@@ -238,7 +238,7 @@ l'action est considérée comme immédiate et le HL va continuer sa réflexion e
 souvent à des actions qui se déroulent en même temps, et ce n'est pas toujours souhaitable. Cependant il y a bien des
 fois où c'est pratique de déplier/replier des actionneurs en même temps ! C'est pourquoi ce petit booléen
 waitForCompletion existe dans le prototype de la méthode. Mis à false, le HL ne va pas attendre le temps indiqué
-dans la classe _orders.order.ActuatorsOrder_ avant de passer à la suite.
+dans la classe `orders.order.ActuatorsOrder` avant de passer à la suite.
 * **HookFactory**
 
 Le service HookFactory comme son nom l'indique, permet de créer des Hooks ! Un hook est tout simplement un mécanisme
