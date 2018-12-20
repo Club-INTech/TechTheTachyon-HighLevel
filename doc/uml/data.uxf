@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>230</y>
+      <w>310</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Graphe
+--
+-fixedObstacle : List&lt;Obstacle&gt;
+-mobileCircularObstacle : List&lt;Obstacle&gt;
+-nodes : List&lt;Node&gt;
+-ridges : List&lt;Ridge&gt;
+-updated : boolean
+--
+-init()
+~reInit()
+-placeNodes()
+-placeNodes(Obstacle)
+-placeRidges()
+~update()
++addProvisoryNode(Vec2) : Node
++removeProvisoryNode(Node)
++reInitNodes()
+-constructRidge(Node, Node, Segment)
+
+
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>230</y>
+      <w>360</w>
+      <h>290</h>
+    </coordinates>
+    <panel_attributes>Table
+--
+-fixedObstacle : List&lt;Obstacle&gt;
+-mobileObstacle : List&lt;MobileCircularObstacle&gt;
+-length : int
+-width : int
+-robotRay : int
+-buddyRay : int
+-compareThreshold : int
+--
+-initObstacle()
++updateMobileObstacles(List&lt;Vec2&gt;)
++isPositionInFixedObstacle(Vec2) : boolean
++isPositionInMobileObstacle(Vec2) : boolean
++intersectAnyFixedObstacle(Segment) : boolean
++intersectAnyMobileObstacle(Segment) : boolean
++intersectAnyMobileObstacle(Circle) : boolean
++addFixedObstacle(Obstacle)
++removeFixedObstacle(Obstacle)
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>460</x>
+      <y>530</y>
+      <w>310</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>XYO
+--
+_-robotXYO : XYO_
+_-buddyXYO : XYO_
+-position : Vec2
+-orientation : double
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>760</x>
+      <y>250</y>
+      <w>90</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;&gt;&gt;&gt;
+1.1
+</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>540</y>
+      <w>360</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Enum&gt;&gt;
+SensorState
+--
+-data : Object
+-c : Class
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>450</x>
+      <y>200</y>
+      <w>750</w>
+      <h>440</h>
+    </coordinates>
+    <panel_attributes>data
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

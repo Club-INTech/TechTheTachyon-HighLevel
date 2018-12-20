@@ -36,7 +36,7 @@ public class SymmetrizedActuatorOrderMap implements Service {
     /**
      * Map contenant un actionneur pour clé, et son symétrique pour valeur
      */
-    Map<ActuatorsOrder, ActuatorsOrder> correspondenceMap = new HashMap<ActuatorsOrder, ActuatorsOrder>();
+    private Map<ActuatorsOrder, ActuatorsOrder> correspondenceMap = new HashMap<ActuatorsOrder, ActuatorsOrder>();
 
     /**
      * construit la map de correspondances
@@ -55,7 +55,5 @@ public class SymmetrizedActuatorOrderMap implements Service {
     }
 
     @Override
-    public void updateConfig(Config config) {
-
-    }
+    public void updateConfig(Config config) {}
 }

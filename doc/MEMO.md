@@ -1,6 +1,6 @@
 ## MEMO
-### MEMO - JAVA
-#### JAVA - LANGUAGE
+### MEMO - Java
+#### Java - Language
 * Les types primitifs des variables en java sont : boolean, char(2 octets), byte(1 octet), short( octets), int(4 octets), long(8 octets), 
   float(4 octets) et double(8 octets)
 * Les références en java sont tous les types qui n'appartiennent pas aux 8 types primitifs cités dessus. 
@@ -19,7 +19,7 @@
  et les méthodes d'instance qui doivent être appelés sur un objet instancié (avec le new), l'appel se fait ainsi : 
         
         Objet objet = new Objet();
-        objet.maMéthode();
+        objet.maMethode();
  * Il existe quatre attributs utilisés pour gérer la visibilité : public, private, (rien), protected, donc quatre déclarations possibles de méthodes : 
         
         public void methode(){....}
@@ -34,7 +34,7 @@
  * Une classe peut hériter d'autres classes avec le mot extends, une classe fille est du même type que sa classe mère, possède ses mêmes attributs et 
  méthodes qu'elle peut modifier en les override. Une classe mère n'est pas du même type que sa classe fille, mais on peut le transtyper en faisant : 
  
-        ClasseMère classeMère=(ClasseFille) new ClasseFille();
+        ClasseMere classeMere=(ClasseFille) new ClasseFille();
  
  * Une classe ne peut hériter que d'une seule classe, d'où l'intérêt des interfaces. 
  * Les interfaces définissent un comportement de la classe qui les implémentent. Les classes peuvent implémenter plusieurs interfaces. 
@@ -44,8 +44,8 @@
  * Une classe d'un package `java` inconnue ? Aller sur https://docs.oracle.com/javase/8/docs/api/, et chercher la documentation sur la
    classe inconnue
 
-#### JAVA - CONVENTION
-* Une Classe commence toujours par une majuscule, une instance par une minuscule :
+#### Java - Convention
+* Une Classe commence toujours par une majuscule, une instance par une minuscule, pas d'accent dans les noms :
 
         MaClasse monInstance = new MaClasse(...);
 
@@ -99,7 +99,7 @@
          * along with it.  If not, see <http://www.gnu.org/licenses/>.
          **/
 
-### MEMO - GIT
+### MEMO - Git
 * On travaille toujours dans la branche **dev**, la branche **master** est réservée à ce qui **fonctionne** !
 * On **commit** TOUJOURS quelque chose qui compile, avec un message CLAIR (git commit -m "Mon message"),
   pour vérifier, dans le terminal :
@@ -112,8 +112,30 @@
 
         mvn clean install
 
+### MEMO - IntelliJ
+1. Le mode debug : IntelliJ intègre un debuggeur très performant, qui permet d'executer du code pas à pas.
+   Pour ce faire, il faut créer des "break point", c'est-à-dire des lignes de codes ou le programme va
+   s'arréter et commencer une execution pas à pas. Pour placer un break point, il suffit de cliquer gauche
+   **à droite du numero** de la ligne de code sur laquelle vous voulez créer le break point :
+
+   ![Break Point](images/IntelliJ-breakpoint.png)
+
+   Puis executer le test ou main en mode debug :
+
+   ![Debug Mode](images/IntelliJ-debugmode.png)
+
+   Ce qui vous donne quelque chose comme ca :
+
+   ![Debug Mode - Run](images/IntelliJ-debugmode-run.png)
+
+2. Code couleur git
+    * rouge : fichier non suivi
+    * vert : nouveau fichier suivi
+    * bleue : fichier modifié indexé ou non
+    * blanc : fichier non modifié
+
 ### MEMO - UML
-![Exemple UML - utils.communication](uml/utils.communication-conection.png)
+![Exemple UML - utils.communication](uml/utils.communication.png)
 1. Classes
     * Cercle (CommunicationInterface & Service) : **Interface**
     * _Intalique_ (SocketInterface) : **Classe Abstraite**

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>230</x>
+      <y>230</y>
+      <w>300</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>/Shape/
+--
+#center : Vec2
+--
+/+intersect(Segment) : boolean /
+/+isInsShape(Vec2) : boolean /
+/@clone() : Shape/
+/@equals() : boolean/
+/@hashCode() : int/
+/@toString() : String/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>910</x>
+      <y>200</y>
+      <w>210</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>/Vec2/
+--
+-x : int
+-y : int
+-r : double
+-a : double
+--
++dot(Vec2) : int
++crossProduct(Vec2) : int
++plusVector(Vec2) : Vec2
++minusVector(Vec2) : Vec2
++plus(Vec2)
++minus(Vec2)
++distanceTo(Vec2) : double
++homothetie(float) : Vec2 
++squaredLength() : int
++symetrizedVector() : Vec2
++symetrize()
+-computeAngle() : double
+-computeRay() : double
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>830</x>
+      <y>530</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>VecCartesian
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1050</x>
+      <y>530</y>
+      <w>150</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>VecPolar
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1170</x>
+      <y>360</y>
+      <w>250</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Segment
+--
+-pointA : Vec2
+-pointB : Vec2
+-length : int
+--
++intersect(Segment) : boolean
++distanceTo(Vec2) : double
++computeLength() : double
++vectorDirector() : Vec2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>440</y>
+      <w>210</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Circle
+--
+-radius : int
+-angleStart : double
+-angleEnd : double
+--
++intersect(Circle)
++closestPointToCircle(Vec2)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>440</y>
+      <w>220</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>Rectangle
+--
+-length : int
+-width : int
+-segments : List&lt;Segment&gt;
+--
++getDiagonals : List&lt;Segment&gt;
++getPoints : List&lt;Vec2&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>530</x>
+      <y>440</y>
+      <w>250</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>CircularRectangle
+--
+-radius : float
+-mainRectangle : Rectangle
+-circleArcs : List&lt;Circle&gt;
+-sideRectangle : List&lt;Rectangle&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1170</x>
+      <y>200</y>
+      <w>250</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Calculs
+--
+--
+_+modulo(double, double) : double_
+_+isBetween(double, double,_
+_   double) : boolean_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>120</x>
+      <y>380</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;190.0;40.0;10.0;40.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>380</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;190.0;40.0;190.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>370</x>
+      <y>380</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>930</x>
+      <y>500</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1080</x>
+      <y>500</y>
+      <w>30</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>10</x>
+      <y>150</y>
+      <w>1440</w>
+      <h>450</h>
+    </coordinates>
+    <panel_attributes>utils.math
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

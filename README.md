@@ -1,5 +1,15 @@
-## TechTheTachyon-HighLevel
+## TechTheTachion-HighLevel - T³HL
+>>>>>>> master
 Code de l'année 2019 
+
+### TODO
+* [ ] Découvrir le HL et sa doc
+* [ ] Script
+* [ ] Cas particulier pathfinding
+* [ ] Créer les ordres (avec le LL)
+* [ ] S'occuper du recalage avec les sicks (commencer par voir les maths)
+* [ ] Com avec l'électron
+* [ ] IA
 
 ### Installation - IntelliJ
 #### Prérequis
@@ -34,14 +44,14 @@ Vous êtes parrés pour naviguer dans le HL !
 ### Architecture générale
 Le HL est composé de trois modules Maven :
     
-* **TTHL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
+* **T³HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
     des mouvements du robot et la gestion des ordres à envoyer au LL
     
-* **TTHL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
+* **T³HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
 
-* **TTHL-slave** : IA du robot secondaire
+* **T³HL-slave** : IA du robot secondaire
 
-#### TTHL-common
+#### T³HL-common
 
 L'architecture de ce projet est orientée micro-services : l'IA se base sur plusieurs modules qui ont tous une tâche bien
 définie, et qui communiquent entre eux si besoin. Elle est construite de manière à ce qu'elle soit maintenable, 
@@ -85,12 +95,14 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 ![TTHL-Common - Architecture détaillée](doc/images/TTHL-common.png)
 
-#### TTHL-master
-#### TTHL-slave
+**Pour une vue plus précise, voir les annexes. Il existe un MEMO uml si besoin (doc/MEMO.md)**
+
+#### T³HL-master
+#### T³HL-slave
 
 ### Architecture détaillée
 Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
-#### TTHL-common
+#### T³HL-common
 ##### Utils 
 * **Log**
 
@@ -370,8 +382,8 @@ atteindre. Cela permet d'anticiper les changements du graphe, i.e les mouvements
 Bien entendus, on ne peut pas tout voir dans le futur : c'est pourquoi il y a beaucoup de cas à traiter. Pour plus
 d'informations, voir les commentaires.
 
-#### TTHL-master
-#### TTHL-slave
+#### T³HL-master
+#### T³HL-slave
     
 ### Tests
 Les tests, indispensables pour la maintenabilité du HL, et permettant d'être efficace pour trouver l'origine de vos bugs
@@ -394,4 +406,26 @@ Ces tests sont destinés à être exécutés quotidiennement par un bot Jenkins 
 vite voir si un bug a été introduit par une feature et d'indentifier plus rapidement son origine.
 
 ### Annexes
-**TODO** : Plan de la table + umls
+* **Utils** :
+
+![utils.communication](doc/uml/utils.communication.png)
+
+![utils.math](doc/uml/utils.math.png)
+
+* **Orders** :
+
+![orders](doc/uml/orders.png)
+
+* **Data** :
+
+![data.table](doc/uml/data.table.png)
+
+![data.graphe](doc/uml/data.graphe.png)
+
+![data.controlers](doc/uml/data.controlers.png)
+
+![data](doc/uml/data.png)
+
+* **Locomotion** :
+
+![locomotion](doc/uml/locomotion.png)
