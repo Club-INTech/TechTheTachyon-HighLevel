@@ -80,7 +80,7 @@ public class ConnectionManager implements Service {
     /**
      * @return true si les connexions instanciées sont prêtes
      */
-    public boolean areConnectionInitiated() {
+    public boolean areConnectionsInitiated() {
         for (Connection connection : initiatedConnections) {
             if (!connection.isInitiated()) {
                 return false;

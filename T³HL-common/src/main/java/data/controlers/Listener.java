@@ -111,7 +111,7 @@ public class Listener extends Thread implements Service {
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
-        while (!connectionManager.areConnectionInitiated()) {
+        while (!connectionManager.areConnectionsInitiated()) {
             try {
                 Thread.sleep(TIME_LOOP);
             } catch (InterruptedException e) {
