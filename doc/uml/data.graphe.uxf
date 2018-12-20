@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>500</x>
+      <y>230</y>
+      <w>250</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Node
+--
+-position ; Vec2
+-cost : int
+-heuristic : int
+-permanent : boolean
+-neighbours : Map&lt;Node, Ridge&gt;
+-pred : Node
+--
++addNeighbour(Node, Ridge)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>230</y>
+      <w>220</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Ridge
+--
+-seg : Segment
+-cost : int
+-reachable : boolean
+_-staticCost : int_
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>490</x>
+      <y>200</y>
+      <w>540</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>data.graphe
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

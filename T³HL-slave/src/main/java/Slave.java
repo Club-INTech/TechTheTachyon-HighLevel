@@ -16,16 +16,22 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package orders.order;
+import locomotion.Locomotion;
+import orders.OrderWrapper;
+import pfg.config.Config;
 
 /**
- * Interface permettant que tous les ordres(MotionOrder, ActionOrder,....) soient de la classe Order
+ * Robot secondaire !
  *
- * @author yousra
+ * @author rem
  */
-public interface Order {
-    /**
-     * Chaîne de caractères à envoyer au LL
-     */
-    String getOrderStr();
+public class Slave extends Robot {
+    public Slave(Locomotion locomotion, OrderWrapper orderWrapper) {
+        super(locomotion, orderWrapper);
+    }
+
+    @Override
+    public void updateConfig(Config config) {
+        super.updateConfig(config);
+    }
 }

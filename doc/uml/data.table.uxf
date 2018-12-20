@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>120</y>
+      <w>240</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>/Obstacle/
+--
+-shape : Shape
+--
++isInObstacle(Vec2) : boolean
++intersect(Segment) : boolean
+--
+/@clone()/
+/@toString() : String/
++equals(Obstacle) : boolean
++hashCode() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>370</x>
+      <y>320</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>MobileCircularObstacle
+--
+-outDatedTime : long
+--
++update(Vec2)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>320</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>StillCircularObstacle
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>870</x>
+      <y>320</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>StillRectangularObstacle
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>270</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>190.0;10.0;190.0;30.0;10.0;30.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>790</x>
+      <y>270</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;160.0;30.0;160.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>270</y>
+      <w>30</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>360</x>
+      <y>80</y>
+      <w>710</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>data.table
+--
+bg=light_gray</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

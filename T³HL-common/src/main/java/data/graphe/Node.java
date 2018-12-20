@@ -49,7 +49,7 @@ public class Node {
     /**
      * Coût du noeud : coût du point de départ jusqu'à ce noeud
      */
-    private int cout;
+    private int cost;
 
     /**
      * Dis si le noeud est permanent (si c'est un noeud ajouté pour le Pathfinder)
@@ -73,7 +73,7 @@ public class Node {
     public Node(Vec2 position) {
         this.position = position;
         this.heuristique = DEFAULT_HEURISTIC;
-        this.cout = DEFAULT_COST;
+        this.cost = DEFAULT_COST;
         this.permanent = true;
         this.neighbours = new HashMap<>();
     }
@@ -86,7 +86,7 @@ public class Node {
     public Node(Vec2 position, boolean permanent) {
         this.position = position;
         this.heuristique = DEFAULT_HEURISTIC;
-        this.cout = DEFAULT_COST;
+        this.cost = DEFAULT_COST;
         this.permanent = permanent;
         this.neighbours = new HashMap<>();
     }
@@ -141,10 +141,10 @@ public class Node {
         this.heuristique = heuristique;
     }
     public int getCout() {
-        return cout;
+        return cost;
     }
     public void setCout(int cout) {
-        this.cout = cout;
+        this.cost = cout;
     }
     public boolean isPermanent() {
         return permanent;

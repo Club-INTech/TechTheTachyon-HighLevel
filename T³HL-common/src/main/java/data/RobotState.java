@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2018, INTech.
  * this file is part of INTech's HighLevel.
- *
+
  * INTech's HighLevel is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -16,16 +16,31 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-package orders.order;
+package data;
 
 /**
- * Interface permettant que tous les ordres(MotionOrder, ActionOrder,....) soient de la classe Order
+ * Correspond à une base de données des variables à propos du main.robot
  *
- * @author yousra
+ * @author william
  */
-public interface Order {
-    /**
-     * Chaîne de caractères à envoyer au LL
-     */
-    String getOrderStr();
+public enum RobotState {
+
+    //Exemples
+    BRAS_AVANT_DEPLOYE(true),
+    BRAS_ARRIERE_DEPLOYE(true),
+    ;
+    private Object valueObject;
+    RobotState(Object valueObject){
+        this.valueObject=valueObject;
+    }
+
+    /** Renvoie la valeur de la variable */
+    public synchronized Object getData(){
+        return this.valueObject;
+    }
+
+    /** Affecte une valeur à la variable */
+    public synchronized void setData(Object value){
+        this.valueObject=value;
+    }
 }
