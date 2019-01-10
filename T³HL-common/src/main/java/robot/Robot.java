@@ -110,7 +110,7 @@ public abstract class Robot implements Service {
      * @param order
      *              l'ordre que l'on veut executer
      */
-    protected void useActuator(ActuatorsOrder order) {
+    public void useActuator(ActuatorsOrder order) {
         this.orderWrapper.useActuator(order);
     }
 
