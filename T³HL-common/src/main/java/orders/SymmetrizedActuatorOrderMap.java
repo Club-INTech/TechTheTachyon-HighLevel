@@ -43,8 +43,31 @@ public class SymmetrizedActuatorOrderMap implements Service {
      */
     private SymmetrizedActuatorOrderMap(){
         correspondenceMap.put(ActuatorsOrder.FERME_PORTE_DROITE, ActuatorsOrder.FERME_PORTE_GAUCHE);
-        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_A_LA_POSITION_DISTRIBUTEUR_DROIT, ActuatorsOrder.ENVOIE_LE_BRAS_A_LA_POSITION_DISTRIBUTEUR_GAUCHE);
-        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_A_LA_POSITION_DISTRIBUTEUR_GAUCHE, ActuatorsOrder.ENVOIE_LE_BRAS_A_LA_POSITION_DISTRIBUTEUR_DROIT);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_GOLDONIUM, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_GOLDONIUM);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE);
+        correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+        correspondenceMap.put(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE, ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE, ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+
     }
 
     /**
