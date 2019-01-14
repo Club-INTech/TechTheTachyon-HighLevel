@@ -55,6 +55,8 @@ public enum ActuatorsOrder implements Order {
     ACTIVE_ELECTROVANNE_GAUCHE("valveon left"),
     DESACTIVE_ELECTROVANNE_DROITE("valveoff right"),
     DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left"),
+    ENVOIE_UN_XL_À_ANGLE_VOULU("XLm"),
+    ENVOIE_UN_XL_À_LA_VITESSE_VOULUE("XLs"),
 
 
     ;
