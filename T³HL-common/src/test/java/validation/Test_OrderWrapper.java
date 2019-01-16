@@ -87,11 +87,11 @@ public class Test_OrderWrapper {
      */
     @Test
     public void sendActionOrder() throws Exception{
-        orderWrapper.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE);
+        orderWrapper.useActuator(ActuatorsOrder.values()[0]);
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = ActuatorsOrder.DESACTIVE_LA_POMPE.getOrderStr();
+        String a = ActuatorsOrder.values()[0].getOrderStr();
         Assert.assertEquals(a,m.get());
     }
 
