@@ -1,5 +1,5 @@
 ## TechTheTachion-HighLevel - T³HL
->>>>>>> master
+
 Code de l'année 2019 
 
 ### TODO
@@ -75,7 +75,7 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
   Niveau sans avoir à s'occuper du côté de la table sur lequel navigue notre robot, et surtout sans avoir
   d'incompréhension lorsque l'on parle à ce cher Bas Niveau. Il offre aux autres modules, via la classe principale
   OrderWrapper les méthodes permettant d'envoyer tous les ordres que le Bas Niveau gère.
-  
+
 * Data : le plus gros package, et sans doute le plus complexe du HL, il regroupe toutes les données provenant de 
   l'extérieur, à savoir celles du Lidar ou des capteurs infrarouges Sick par exemple, ainsi que les contrôleurs qui
   récupèrent ces données et les traitent afin qu'elles soient utilisables par tous les autres modules du HL. Par exemple, 
