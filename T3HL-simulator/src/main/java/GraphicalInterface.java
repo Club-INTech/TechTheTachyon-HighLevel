@@ -14,6 +14,7 @@ class GraphicalInterface extends JFrame {
     private final int MILLIS_BETWEEN_UPDATES=10;
     private final Color DEFAULT_COLOR = new Color(0,0,0,255);
     private final Color ROBOT_COLOR = new Color(0,255,0,128);
+    private final Color ORIENTATION_COLOR = new Color(0,0,255,192);
     private final Color OBSTACLE_COLOR = new Color(255,0,0,128);
 
 
@@ -50,20 +51,26 @@ class GraphicalInterface extends JFrame {
     }
 
     /** Affiche le robot*/
-    private void drawRobot(Graphics g, int x, int y, int radius){
+    private void drawRobot(Graphics g, int x, int y, float orientation, int radius){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-radius/2,y-radius/2,radius,radius);
+        g.setColor(ORIENTATION_COLOR);
+        g.drawLine(x, y, Math.round(x-(float)Math.cos(orientation)*radius/2), Math.round(y-(float)Math.sin(orientation)*radius/2));
         g.setColor(DEFAULT_COLOR);
     }
 
     /** Efface l'affichage */
     private void clearScreen(Graphics g){
-        g.clearRect(0,0,this.WIDTH, this.HEIGHT);
+        g.clearRect(0,0,this.WIDTH_FRAME, this.HEIGHT_FRAME);
     }
 
     /** Met à jour l'affichage */
     private void updateGraphics(Graphics g){
         clearScreen(g);
-        drawRobot(g, Math.round(this.simulatedRobot.getX()*(this.WIDTH_FRAME/(float)this.WIDTH_TABLE)), Math.round(this.simulatedRobot.getY()*(this.HEIGHT_FRAME/(float)this.HEIGHT_TABLE)), 50);
+        drawRobot(g,
+                Math.round(this.simulatedRobot.getX()*(this.WIDTH_FRAME/(float)this.WIDTH_TABLE)),
+                Math.round(this.simulatedRobot.getY()*(this.HEIGHT_FRAME/(float)this.HEIGHT_TABLE)),
+                this.simulatedRobot.getOrientation(),
+                50);
     }
 }

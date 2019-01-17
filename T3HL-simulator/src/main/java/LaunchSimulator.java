@@ -24,8 +24,15 @@ public class LaunchSimulator extends Thread{
         this.launchTestCode();
     }
 
+    /** Code de test : peut envoyer des messages simulés */
     private void launchTestCode(){
-        this.connectionManagerSimulator.SIMULATE_receiveMessage(MotionOrder.MOVE_TO_POINT.getOrderStr()+" 1500 1500");
+        try {
+            this.connectionManagerSimulator.SIMULATE_receiveMessage(MotionOrder.MOVE_TO_POINT.getOrderStr()+" 1500 1500");
+            Thread.sleep(5000);
+            this.connectionManagerSimulator.SIMULATE_receiveMessage("conar 1500 1500");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

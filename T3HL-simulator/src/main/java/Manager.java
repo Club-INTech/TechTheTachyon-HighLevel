@@ -10,6 +10,7 @@ public class Manager extends Thread {
     private SimulatedRobot simulatedRobot;
     private Thread threadHandlingMessages;
 
+    /** Constructeur */
     Manager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
         this.graphicalInterface = graphicalInterace;
         this.commSimulatorThread = commSimulatorThread;
@@ -18,6 +19,7 @@ public class Manager extends Thread {
     }
 
     @Override
+    /** Manage les messages reçus, le robot et l'interface graphique */
     public void run() {
         String lastMessage;
 
@@ -44,7 +46,7 @@ public class Manager extends Thread {
         }
     }
 
-
+    /** Gère les messages qui sont reçus */
     private void handleMessage(String m){
         System.out.println(String.format("SIMULATEUR : message reçu : %s",m));
         String[] arguments = m.split(" ");
@@ -62,12 +64,13 @@ public class Manager extends Thread {
             this.simulatedRobot.stop();
         }
         else{
-            Log.COMMUNICATION.critical(String.format("SIMULATEUR : l'ordre \"%s\" est inconnu", order));
+            System.out.println(String.format("SIMULATEUR : l'ordre \"%s\" est inconnu", order));
         }
     }
 
-    private boolean compare(String message, Order order){
-        return message.equals(order.getOrderStr());
+    /** Compare une string et un ordre */
+    private boolean compare(String str, Order order){
+        return str.equals(order.getOrderStr());
     }
 
 }

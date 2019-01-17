@@ -11,10 +11,10 @@ public class SimulatedRobot {
     private float orientationTarget;    //Orientation cible du robot
 
     private final float POSITION_TOLERANCE = 0.01f;  //Tolérance sur la position
-    private final float ORIENTATION_TOLERANCE = 0.01f;  //Tolérance sur l'orientation
+    private final float ORIENTATION_TOLERANCE = 0.001f;  //Tolérance sur l'orientation
 
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
-    private final float ROTATION_SPEED = 2;           //Vitesse de rotation en rad/s
+    private final float ROTATION_SPEED = 0.001f;           //Vitesse de rotation en rad/s
 
     private final Vec2 START_POSITION = new VectCartesian(400,300);
     private final float START_ORIENTATION = 0;
@@ -25,7 +25,7 @@ public class SimulatedRobot {
     private long lastUpdateTime;
     private final int MILLIS_BETWEEN_UPDATES=10;
 
-    //Constructeur
+    /** Constructeur */
     SimulatedRobot(){
         this.forwardOrBackward=false;
         this.lastUpdateTime=System.currentTimeMillis();
@@ -36,25 +36,24 @@ public class SimulatedRobot {
         this.orientationTarget = START_ORIENTATION;
     }
 
-    //On update la position et l'orientation
+    /** Fonction appelée pour update la position du robot */
     void update(){
-        if (this.deltaTime() > this.MILLIS_BETWEEN_UPDATES) {
+        if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
             updateOrientation();
             updatePosition();
-            System.out.println(this.getX());
-            System.out.println(this.deltaTime());
             this.lastUpdateTime = System.currentTimeMillis();
         }
     }
 
+    /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
-        if (Math.abs(this.orientationTarget -this.orientation) > this.ORIENTATION_TOLERANCE){
-            if (Math.abs(this.orientationTarget -this.orientation) < this.ROTATION_SPEED * this.deltaTime()){
+        if (Math.abs(this.orientationTarget - this.orientation) > this.ORIENTATION_TOLERANCE){
+            if (Math.abs(this.orientationTarget -this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=this.orientationTarget;
                 this.turning=true;
             }
             else {
-                this.orientation+=((this.orientationTarget - this.orientation)/Math.abs(this.orientationTarget - this.orientation))*this.ROTATION_SPEED *this.deltaTime();
+                this.orientation+=((this.orientationTarget - this.orientation)/Math.abs(this.orientationTarget - this.orientation))*this.ROTATION_SPEED *this.timeSinceLastUpdate();
                 this.turning=true;
             }
         }
@@ -64,14 +63,15 @@ public class SimulatedRobot {
         }
     }
 
+    /** Update la position pas à pas en fonction de la distance restante entre la position actuelle et la position cible */
     private void updatePosition(){
         if (!this.turning) {
             if (this.positionTarget.distanceTo(this.position) > this.POSITION_TOLERANCE) {
-                if (this.positionTarget.distanceTo(this.position) < this.TRANSLATION_SPEED * this.deltaTime()) {
+                if (this.positionTarget.distanceTo(this.position) < this.TRANSLATION_SPEED * this.timeSinceLastUpdate()) {
                     this.position = this.positionTarget;
                     this.forwardOrBackward = true;
                 } else {
-                    this.position.plus(this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.deltaTime() / (float) this.positionTarget.minusVector(this.position).getR()));
+                    this.position.plus(this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.timeSinceLastUpdate() / (float) this.positionTarget.minusVector(this.position).getR()));
                     this.forwardOrBackward = true;
                 }
             } else {
@@ -81,37 +81,46 @@ public class SimulatedRobot {
         }
     }
 
-    private long deltaTime(){
+    /** Renvoie le temps depuis la dernière update */
+    private long timeSinceLastUpdate(){
         return (System.currentTimeMillis() - this.lastUpdateTime);
     }
 
+    /** Renvoie si le robot bouge */
     boolean isMoving(){
-        return this.turning && this.forwardOrBackward;
+        return this.turning || this.forwardOrBackward;
     }
 
+    /** Fait avancer le robot de delta */
     void moveLengthwise(int delta){
         Vec2 orientationVector = new VectPolar(1,this.orientation);
         this.positionTarget=this.position.plusVector(orientationVector.homothetie((float)delta));
     }
 
+    /** Fait tourner le robot de delta */
     void turn(float delta){
         this.orientationTarget=this.orientation+delta;
     }
 
+    /** Fait arrêter le robot */
     void stop(){
         this.positionTarget=this.position;
         this.orientationTarget=this.orientation;
     }
 
+    /** Fait bouger le robot vers un point */
     void goTo(Vec2 position){
         this.positionTarget = position;
-        this.orientationTarget = (float)this.positionTarget.minusVector(position).getA();
+        this.orientationTarget = (float)this.position.minusVector(position).getA();
     }
 
-    int getX() { return this.position.getX(); }
+    /** Renvoie la position en X du robot */
+    int getX(){ return this.position.getX(); }
 
-    int getY(){
-        return this.position.getY();
-    }
+    /** Renvoie la position en Y du robot */
+    int getY(){ return this.position.getY(); }
+
+    /** Renvoie l'orientation du robot */
+    float getOrientation(){ return this.orientation; }
 
 }
