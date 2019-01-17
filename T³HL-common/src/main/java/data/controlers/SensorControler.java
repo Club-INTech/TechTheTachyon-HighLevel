@@ -1,13 +1,19 @@
 package data.controlers;
 
+import data.SensorState;
+import data.Sick;
 import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Future;
 
 /**
  * Gère les données de positions et de capteur ne nécessitant pas de traitement
@@ -36,6 +42,7 @@ public class SensorControler extends Thread implements Service {
      */
     private ConcurrentLinkedQueue<String> robotPosQueue;
     private ConcurrentLinkedQueue<String> buddyPosQueue;
+    private ConcurrentLinkedQueue<String> sickData;
 
     /**
      * True si autre couleur
@@ -51,8 +58,10 @@ public class SensorControler extends Thread implements Service {
         this.listener = listener;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
+        this.sickData=new ConcurrentLinkedQueue<>();
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
+        listener.addQueue(Channel.SICK,sickData);
     }
 
     @Override
@@ -68,6 +77,7 @@ public class SensorControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
         String[] coordonates;
+        String[] sickMeasurements;
         int x;
         int y;
         double o;
@@ -100,6 +110,16 @@ public class SensorControler extends Thread implements Service {
                     o = Calculs.modulo(Math.PI - o, 2*Math.PI);
                 }
                 XYO.getBuddyInstance().update(x, y, o);
+            }
+            if (sickData.peek() !=null) {
+                 sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
+                //TODO : implémenter calculs : on aura donc une nouvelle position et une nouvelle orientation
+                //TODO : Voir quelles sont les valeurs des sicks qui sont signifiantes via la méthode Sick.getSignificantSicks et lire les valeurs correspondantes dans sickMeasurements
+                VectCartesian newPosition = new VectCartesian(0, 0);
+                double newOrientation = 0;
+                XYO newXYO = new XYO(newPosition, newOrientation);
+                Sick.setNewXYO(newXYO);
+
             }
         }
     }

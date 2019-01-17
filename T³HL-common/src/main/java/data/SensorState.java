@@ -18,6 +18,8 @@
 
 package data;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Liste les données du robot et leurs état
  *
@@ -27,7 +29,7 @@ public enum SensorState {
     EXEMPLE(1.5, Double.class),
     CUBE_PRIS(0, Integer.class),
     MOVING(false, Boolean.class),
-    STUCKED(false, Boolean.class)
+    STUCKED(false, Boolean.class),
     ;
 
     /**
@@ -60,7 +62,7 @@ public enum SensorState {
      * @param object    valeur à écrire
      * @throws ClassCastException   si l'on essai d'assigner à un paramètre un objet d'une autre classe
      */
-    synchronized void setData(Object object) {
+    public synchronized void setData(Object object) {
         if (object.getClass() != this.c) {
             throw new ClassCastException("Cette donnée est de type " + this.c + ", trouvé : " + object.getClass());
         }
