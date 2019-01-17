@@ -74,4 +74,9 @@ public class ConnectionManagerSimulator extends Thread {
             e.printStackTrace();
         }
     }
+
+    /** Simule la réception d'un message */
+    void SIMULATE_receiveMessage(String message){
+        this.receivedMessage.add(message);
+    }
 }

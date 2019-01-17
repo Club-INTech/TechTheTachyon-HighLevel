@@ -3,9 +3,9 @@ import java.awt.*;
 
 class GraphicalInterface extends JFrame {
 
+    private SimulatedRobot simulatedRobot;
+
     private JPanel panel;
-    private boolean ready=false;
-    private int t;
     private long lastTimeUpdate;
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
@@ -14,9 +14,9 @@ class GraphicalInterface extends JFrame {
     private final Color ROBOT_COLOR = new Color(0,255,0,128);
     private final Color OBSTACLE_COLOR = new Color(255,0,0,128);
 
+
     /** Constructeur */
-    GraphicalInterface() {
-        this.t=0;
+    GraphicalInterface(SimulatedRobot simulatedRobot) {
         this.lastTimeUpdate=System.currentTimeMillis();
 
         this.setTitle("Simulateur");
@@ -35,13 +35,6 @@ class GraphicalInterface extends JFrame {
 
         this.getContentPane().add(this.panel);
         this.setVisible(true);
-
-        this.ready=true;
-    }
-
-    /** Renvoi si l'affichage est prêt */
-    boolean isReady() {
-        return this.ready;
     }
 
     /** Fonction appelée par le simulateur */
@@ -67,9 +60,6 @@ class GraphicalInterface extends JFrame {
     /** Met à jour l'affichage */
     private void updateGraphics(Graphics g){
         clearScreen(g);
-        drawRobot(g, t, 250, 50);
-        if (this.t++>500){
-            this.t=0;
-        }
+        drawRobot(g, this.simulatedRobot.getX(), this.simulatedRobot.getY(), 50);
     }
 }
