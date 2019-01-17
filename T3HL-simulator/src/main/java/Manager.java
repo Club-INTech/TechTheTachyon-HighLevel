@@ -3,18 +3,18 @@ import orders.order.Order;
 import utils.Log;
 import utils.math.VectCartesian;
 
-public class RobotManager extends Thread {
+public class Manager extends Thread {
 
     private ConnectionManagerSimulator commSimulatorThread;
     private GraphicalInterface graphicalInterface;
     private SimulatedRobot simulatedRobot;
     private Thread threadHandlingMessages;
 
-    RobotManager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
+    Manager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
         this.graphicalInterface = graphicalInterace;
         this.commSimulatorThread = commSimulatorThread;
         this.simulatedRobot = simulatedRobot;
-        this.run();
+        this.start();
     }
 
     @Override
@@ -46,6 +46,7 @@ public class RobotManager extends Thread {
 
 
     private void handleMessage(String m){
+        System.out.println(String.format("SIMULATEUR : message reçu : %s",m));
         String[] arguments = m.split(" ");
         String order = arguments[0];
         if (compare(order, MotionOrder.MOVE_LENTGHWISE)){

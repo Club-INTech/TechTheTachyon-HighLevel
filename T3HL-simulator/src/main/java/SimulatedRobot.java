@@ -16,45 +16,50 @@ public class SimulatedRobot {
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
     private final float ROTATION_SPEED = 2;           //Vitesse de rotation en rad/s
 
-    private final Vec2 START_POSITION = new VectCartesian(10,10);
+    private final Vec2 START_POSITION = new VectCartesian(400,300);
     private final float START_ORIENTATION = 0;
 
-    private boolean moving;     //Vrai si le robot avance, recule ou tourne, faux sinon
+    private boolean forwardOrBackward;     //Vrai si le robot avance ou recule, faux sinon
     private boolean turning;    //Vrai si le robot tourne, faux sinon
 
-
     private long lastUpdateTime;
+    private final int MILLIS_BETWEEN_UPDATES=10;
 
     //Constructeur
     SimulatedRobot(){
-        this.moving=false;
+        this.forwardOrBackward=false;
+        this.lastUpdateTime=System.currentTimeMillis();
+        this.turning=false;
         this.position = START_POSITION;
+        this.positionTarget = START_POSITION;
         this.orientation = START_ORIENTATION;
+        this.orientationTarget = START_ORIENTATION;
     }
 
     //On update la position et l'orientation
     void update(){
-        this.lastUpdateTime=System.currentTimeMillis();
-        updateOrientation();
-        updatePosition();
+        if (this.deltaTime() > this.MILLIS_BETWEEN_UPDATES) {
+            updateOrientation();
+            updatePosition();
+            System.out.println(this.getX());
+            System.out.println(this.deltaTime());
+            this.lastUpdateTime = System.currentTimeMillis();
+        }
     }
 
     private void updateOrientation(){
         if (Math.abs(this.orientationTarget -this.orientation) > this.ORIENTATION_TOLERANCE){
-            if (Math.abs(this.orientationTarget -this.orientation) < this.ROTATION_SPEED * this.time()){
+            if (Math.abs(this.orientationTarget -this.orientation) < this.ROTATION_SPEED * this.deltaTime()){
                 this.orientation=this.orientationTarget;
-                this.moving=true;
                 this.turning=true;
             }
             else {
-                this.orientation+=((this.orientationTarget - this.orientation)/Math.abs(this.orientationTarget - this.orientation))*this.ROTATION_SPEED *this.time();
-                this.moving=true;
+                this.orientation+=((this.orientationTarget - this.orientation)/Math.abs(this.orientationTarget - this.orientation))*this.ROTATION_SPEED *this.deltaTime();
                 this.turning=true;
             }
         }
         else{
             this.orientation=this.orientationTarget;
-            this.moving=false;
             this.turning=false;
         }
     }
@@ -62,26 +67,26 @@ public class SimulatedRobot {
     private void updatePosition(){
         if (!this.turning) {
             if (this.positionTarget.distanceTo(this.position) > this.POSITION_TOLERANCE) {
-                if (this.positionTarget.distanceTo(this.position) < this.TRANSLATION_SPEED * this.time()) {
+                if (this.positionTarget.distanceTo(this.position) < this.TRANSLATION_SPEED * this.deltaTime()) {
                     this.position = this.positionTarget;
-                    this.moving = true;
+                    this.forwardOrBackward = true;
                 } else {
-                    this.position = this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.time() / (float) this.positionTarget.minusVector(this.position).getR());
-                    this.moving = true;
+                    this.position.plus(this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.deltaTime() / (float) this.positionTarget.minusVector(this.position).getR()));
+                    this.forwardOrBackward = true;
                 }
             } else {
                 this.position = this.positionTarget;
-                this.moving = false;
+                this.forwardOrBackward = false;
             }
         }
     }
 
-    private long time(){
+    private long deltaTime(){
         return (System.currentTimeMillis() - this.lastUpdateTime);
     }
 
     boolean isMoving(){
-        return this.moving;
+        return this.turning && this.forwardOrBackward;
     }
 
     void moveLengthwise(int delta){
@@ -103,16 +108,10 @@ public class SimulatedRobot {
         this.orientationTarget = (float)this.positionTarget.minusVector(position).getA();
     }
 
-    int getX(){
-        return this.position.getX();
-    }
+    int getX() { return this.position.getX(); }
 
     int getY(){
         return this.position.getY();
     }
-
-
-
-
 
 }

@@ -7,8 +7,10 @@ class GraphicalInterface extends JFrame {
 
     private JPanel panel;
     private long lastTimeUpdate;
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int WIDTH_FRAME = 800;    //in pixels
+    private final int HEIGHT_FRAME = 600;   //in pixels
+    private final int WIDTH_TABLE = 3000;      //in millimeters
+    private final int HEIGHT_TABLE = 2000;     //in millimeters
     private final int MILLIS_BETWEEN_UPDATES=10;
     private final Color DEFAULT_COLOR = new Color(0,0,0,255);
     private final Color ROBOT_COLOR = new Color(0,255,0,128);
@@ -17,11 +19,13 @@ class GraphicalInterface extends JFrame {
 
     /** Constructeur */
     GraphicalInterface(SimulatedRobot simulatedRobot) {
+        this.simulatedRobot=simulatedRobot;
+
         this.lastTimeUpdate=System.currentTimeMillis();
 
         this.setTitle("Simulateur");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(this.WIDTH, this.HEIGHT);
+        this.setSize(this.WIDTH_FRAME, this.HEIGHT_FRAME);
 
         this.panel = new JPanel(){
             @Override
@@ -60,6 +64,6 @@ class GraphicalInterface extends JFrame {
     /** Met à jour l'affichage */
     private void updateGraphics(Graphics g){
         clearScreen(g);
-        drawRobot(g, this.simulatedRobot.getX(), this.simulatedRobot.getY(), 50);
+        drawRobot(g, Math.round(this.simulatedRobot.getX()*(this.WIDTH_FRAME/(float)this.WIDTH_TABLE)), Math.round(this.simulatedRobot.getY()*(this.HEIGHT_FRAME/(float)this.HEIGHT_TABLE)), 50);
     }
 }

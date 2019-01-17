@@ -12,45 +12,53 @@ public class ConnectionManagerSimulator extends Thread {
     private BufferedReader incoming;
     private BufferedWriter outgoing;
 
+    private boolean onlyReceivingSimulatedMessages;
 
     /** Constructeur
      * @param port port sur lequel écoute le simulateur
      */
-    ConnectionManagerSimulator(int port){
+    ConnectionManagerSimulator(int port, boolean onlyReceivingSimulatedMessages){
         //On initialise le dernier message reçu et le serveur Socket
+        this.onlyReceivingSimulatedMessages=onlyReceivingSimulatedMessages;
         this.receivedMessage = new ConcurrentLinkedQueue<String>();
-        try {
-            this.receptionSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!this.onlyReceivingSimulatedMessages) {
+            try {
+                this.receptionSocket = new ServerSocket(port);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                this.socket=this.receptionSocket.accept();
+                this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
+                this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        this.run();
+        this.start();
     }
 
     @Override
     /** Ecoute les messages et les ajoute à la queue des messages reçus*/
     public void run() {
-        try {
-            this.socket=this.receptionSocket.accept();
-            this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
-            this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         //On boucle infiniement pour
         while (true){
-            try {
-                if (this.incoming.ready()) {
-                    this.receivedMessage.add(this.incoming.readLine());
+            if (!this.onlyReceivingSimulatedMessages) {
+                try {
+                    if (this.incoming.ready()) {
+                        this.receivedMessage.add(this.incoming.readLine());
+                    }
+                    Thread.sleep(1);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                Thread.sleep(1);
             }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            catch (IOException e) {
-                e.printStackTrace();
+            else {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

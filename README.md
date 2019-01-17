@@ -192,7 +192,7 @@ on peut simplement envoyer et lire des messages grâce aux autres méthodes :
         }
     }
 
-**ATTENTION** : Dans le HL, les connections sont initialisées dans le `RobotManager` ! (voir plus bas)
+**ATTENTION** : Dans le HL, les connections sont initialisées dans le `Manager` ! (voir plus bas)
 
 ##### Orders
 * **OrderWrapper**
@@ -325,12 +325,12 @@ XYO représente une position et une orientation du robot. Elle contient deux cha
 code : XYO du robot, et celui du "buddy" (Master pour le Slave, Slave pour le Master). Elle permet tout simplement
 d'englober Vecteur et double dans une seule classe.
 
-* **Controlers & RobotManager**
+* **Controlers & Manager**
 
 Le listener est un service qui écoute toutes les données envoyées au HL, et les redistribus en fonctions du type de donnée,
 indiqué par le header du message. Ces headers sont définis dans l'enum data.controlers.Channel, qui lie les chaînes de
 caractère à un type enuméré (instance d'enum). Ces messages sont redistribués aux controlers, qui traitent et stockent
-les données reçues. Un controler "s'abonne" à un cannal via le RobotManager pour recevoir et traiter les données :
+les données reçues. Un controler "s'abonne" à un cannal via le Manager pour recevoir et traiter les données :
 data.controlers.Channel.java :
 
     public enum Channel {
@@ -345,7 +345,7 @@ data.controlers.MonControler.java :
         private boolean symetry;
         private ConcurrentLinkedQueue<String> messageQueue;
 
-        private MonControler(RobotManager listener) {
+        private MonControler(Manager listener) {
             messageQueue = new ConcurrentLinkedQueue<>();
             listener.addQueue(Channel.MY_CHANNEL, messageQueue);
         }
