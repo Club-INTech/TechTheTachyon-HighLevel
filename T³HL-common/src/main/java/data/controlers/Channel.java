@@ -28,6 +28,7 @@ public enum Channel {
     ROBOT_POSITION((char) 0x20, (char) 0x22),
     BUDDY_POSITION((char) 0x20, (char) 0x23),
     EVENT((char) 0x20, (char) 0x24),
+    SICK((char)0x20,(char)0x25),
     ;
 
     /**

@@ -212,6 +212,14 @@ public class OrderWrapper implements Service {
     }
 
     /**
+     * Envoyer l'order de récupérer les données des sicks
+     */
+    public void getSickData(){
+
+        //TODO : Envoyer l'ordre de récupérer les données de sick qui est dans l'Enum PositionAndoOrientationOrder
+    }
+
+    /**
      * Permet de configurer un hook
      * @param id id du hook
      * @param posTrigger position où on active le hook
@@ -266,6 +274,8 @@ public class OrderWrapper implements Service {
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void updateConfig(Config config) {

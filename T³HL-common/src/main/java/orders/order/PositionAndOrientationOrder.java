@@ -29,6 +29,7 @@ public enum PositionAndOrientationOrder implements Order {
     XYO("?xyo"),
     SET_POSITION_AND_ORIENTATION("cxyo"),
     SET_ORIENTATION("co"),
+    DATA_SICK("lectureSICK"),
     ;
 
     /**
