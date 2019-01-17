@@ -18,7 +18,10 @@
 
 package robot;
 
+import data.SensorState;
+import data.Sick;
 import data.XYO;
+import data.controlers.SensorControler;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -29,6 +32,8 @@ import orders.Speed;
 import pfg.config.Config;
 import utils.container.Service;
 import utils.math.Vec2;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -142,7 +147,16 @@ public abstract class Robot implements Service {
     public void configureHook(HookNames... hooks) {
         //TODO
     }
-    // And so on...
+
+    /**
+     * Méthode qui permet le recalage avec les sicks
+     */
+    public void computeNewPositionAndOrientation(Sick... significantSicks){
+        //TODO 1) Envoyer l'ordre au bas niveau pour récupérer les données, 2) récupérer le nouveau XYO de l'énum Sick 3)setLa nouvelle Position et orientation
+    }
+
+
+
 
     @Override
     public void updateConfig(Config config) {}
