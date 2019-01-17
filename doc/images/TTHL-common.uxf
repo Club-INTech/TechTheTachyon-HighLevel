@@ -35,7 +35,7 @@ fg=white</panel_attributes>
       <w>570</w>
       <h>30</h>
     </coordinates>
-    <panel_attributes>Manager
+    <panel_attributes>Listener
 bg=gray</panel_attributes>
     <additional_attributes/>
   </element>

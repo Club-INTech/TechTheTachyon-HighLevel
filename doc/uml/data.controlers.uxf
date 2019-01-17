@@ -9,7 +9,7 @@
       <w>390</w>
       <h>170</h>
     </coordinates>
-    <panel_attributes>Manager
+    <panel_attributes>Listener
 --
 -connectionManager : ConnectionManager
 -queueMap : Map&lt;Channel, ConcurrentLinkedQueue&gt;
@@ -68,7 +68,7 @@ LIDAR
     </coordinates>
     <panel_attributes>LidarController
 --
--listener : Manager
+-listener : Listener
 -table : Table
 -messageQueue : ConcurrentLinkedQueue
 -symetry : boolean
