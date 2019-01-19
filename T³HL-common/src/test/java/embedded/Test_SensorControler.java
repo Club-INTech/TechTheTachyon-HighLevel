@@ -19,16 +19,32 @@
 
 package embedded;
 
+import connection.ConnectionManager;
+import data.controlers.Listener;
+import data.controlers.SensorControler;
+import org.junit.Before;
 import org.junit.Test;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class Test_SensorControler {
+
+    private SensorControler sensorControler;
+
+    private Listener listener;
+
+    private ConnectionManager connectionManager;
     // TODO
 
+    @Before
+    public void setUp() throws Exception{
+        //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
+        connectionManager=new ConnectionManager();
+        listener=new Listener(connectionManager);
+        sensorControler=new SensorControler(listener);
+    }
     @Test
-    public VectCartesian newPosition(int sick1, int sick2, int sick3) {
-
+    public VectCartesian newPosition(int sick1, int sick2, int sick3) throws Exception{
         int dsick = 180;
         int xtheo = 300;
         int ytheo = 300;
