@@ -20,8 +20,11 @@
 package embedded;
 
 import connection.ConnectionManager;
+import data.Sick;
+import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utils.math.Vec2;
@@ -44,30 +47,27 @@ public class Test_SensorControler {
         sensorControler=new SensorControler(listener);
     }
     @Test
-    public VectCartesian newPosition(int sick1, int sick2, int sick3) throws Exception{
-        int dsick = 180;
-        int xtheo = 300;
-        int ytheo = 300;
-        int esick = sick1 - sick2;
-        double rapport= esick/dsick;
-        double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
-        int x = (int) ((sick1 - xtheo) * Math.cos(teta));
-        int y = (int) ((sick3 - ytheo) * Math.cos(teta));
-        VectCartesian pos = new VectCartesian(x,y);
-        return pos;
-    }
+    public void run() throws Exception {
+
+            int dsick = 173;
+            int xtheo = 0;
+            int ytheo = 0;
+            int esick = 0;
+            double rapport= esick/dsick;
+            double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
+            int xCalcule = (int) ((300- xtheo) * Math.cos(teta));
+            int yCalcule = (int) ((300- ytheo) * Math.cos(teta));
+
+            VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
+            double newOrientation = teta;
+            XYO newXYO = new XYO(newPosition, newOrientation);
+            Assert.assertEquals(new VectCartesian(300,300 ), newPosition);
+            Assert.assertEquals(0, newOrientation,0.1);
+
+        }
 
 
-    @Test
-    public double newOrientation(int sick1, int sick2) {
 
-        int dsick = 180;
-        int esick = sick1 - sick2;
-        double rapport= esick/dsick;
-        double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
-
-        return teta;
-    }
 
 
 
