@@ -7,6 +7,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
+import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
@@ -17,7 +18,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = 150;
+    private int xEntry = -230;
     private int yEntry = 150;
 
     /**
@@ -34,7 +35,7 @@ public class Accelerateur extends Script {
         try {
 
             /** Fait avancer le robot de distavance */
-            robot.moveLengthwise(distavance, false);
+            robot.moveToPoint(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
 
             /** Fait tourner le robot vers PI */
             robot.turn(Math.PI);
