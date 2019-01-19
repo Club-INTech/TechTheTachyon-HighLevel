@@ -63,7 +63,7 @@ public class Listener extends Thread implements Service {
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
-    private Listener(ConnectionManager connectionManager) {
+    public Listener(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
         this.queueMap = new HashMap<>();
     }

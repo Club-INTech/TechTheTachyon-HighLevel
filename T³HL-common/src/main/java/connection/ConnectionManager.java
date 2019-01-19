@@ -45,7 +45,7 @@ public class ConnectionManager implements Service {
     /**
      * Pour le container
      */
-    private ConnectionManager() {
+    public ConnectionManager() {
         this.initiatedConnections = new ArrayList<>();
     }
 
