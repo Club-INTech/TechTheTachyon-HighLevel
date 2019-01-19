@@ -7,8 +7,13 @@ import java.util.concurrent.ExecutionException;
  * Enum des sicks, les numérotations respectent la convention avec le LL
  */
 public enum Sick {
-    //TODO : Instancier les autres sicks (GAUCHE_AVANT, GAUCHE_ARRIERE etc)
+
     SICK_AVANT(0),
+    SICK_AVANT_GAUCHE(1),
+    SICK_ARRIERE_GAUCHE(2),
+    SICK_ARRIERE(3),
+    SICK_ARRIERE_DROIT(4),
+    SICK_AVANT_DROIT(5),
 
     ;
     /**
@@ -81,7 +86,12 @@ public enum Sick {
      * @return
      */
     public static int[] getSignificantSicks(){
-        //TODO
-        return null;
+        //TODO Définir les véritables SignificantSicks
+        int[] tab = new int[2];
+        tab[1]=1;
+        tab[2]=2;
+        return tab;
     }
+
+
 }
