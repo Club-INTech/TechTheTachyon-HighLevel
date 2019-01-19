@@ -30,8 +30,18 @@ import robot.Robot;
  * @author rem
  */
 public class Master extends Robot {
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
+    private int nbpaletsdroits;
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, int nbpaletsdroits) {
         super(locomotion, orderWrapper, hookFactory);
+        this.nbpaletsdroits = nbpaletsdroits;
+
+    }
+
+    public int getNbpaletsdroits (){
+        return this.nbpaletsdroits;
+    }
+    public void decrement(){
+        this.nbpaletsdroits=this.nbpaletsdroits-1;
     }
 
     @Override
