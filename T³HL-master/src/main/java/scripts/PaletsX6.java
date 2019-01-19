@@ -44,7 +44,7 @@ public class PaletsX6 extends Script {
             try {
                 for (Vec2 position : positions) {
                     if (premierPaletPris){
-                        robot.moveToPoint(new VectCartesian(100, 100));
+                        robot.moveToPoint(position);
                     }
                     else{
                         premierPaletPris=true;
