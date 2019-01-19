@@ -1,6 +1,5 @@
 import orders.order.MotionOrder;
 import orders.order.Order;
-import utils.Log;
 import utils.math.VectCartesian;
 
 public class Manager extends Thread {
@@ -31,11 +30,11 @@ public class Manager extends Thread {
                 handleMessage(lastMessage);
             }
 
-            //On update la position du robot si besoin est
-            this.simulatedRobot.update();
+            //On tryUpdate la position du robot si besoin est
+            this.simulatedRobot.tryUpdate();
 
-            //On update l'interface graphique
-            this.graphicalInterface.update();
+            //On tryUpdate l'interface graphique
+            this.graphicalInterface.tryUpdate();
 
             //On attend un peu, faut pas deconner
             try {
