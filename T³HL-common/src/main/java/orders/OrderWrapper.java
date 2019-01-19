@@ -214,12 +214,17 @@ public class OrderWrapper implements Service {
     /**
      * Envoyer l'order de récupérer les données des sicks
      */
-    public void getSickData(){
+    public void getSickData() {
 
-        //TODO : Envoyer l'ordre de récupérer les données de sick qui est dans l'Enum PositionAndoOrientationOrder
+        try {
+            llConnection.send(String.format(Locale.US, "%s", PositionAndOrientationOrder.DATA_SICK.getOrderStr()));
+
+        } catch (CommunicationException e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
+        /**
      * Permet de configurer un hook
      * @param id id du hook
      * @param posTrigger position où on active le hook
