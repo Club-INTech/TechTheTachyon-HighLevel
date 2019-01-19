@@ -25,6 +25,7 @@ import orders.Speed;
 import pfg.config.Config;
 import utils.container.Service;
 import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -112,6 +113,7 @@ public abstract class Robot implements Service {
     public void setSpeed(Speed speed) {
         this.orderWrapper.setBothSpeed(speed);
     }
+
 
     /**
      * Change la position du LL

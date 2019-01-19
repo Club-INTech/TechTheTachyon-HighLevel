@@ -19,6 +19,42 @@
 
 package embedded;
 
+import org.junit.Test;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
+
 public class Test_SensorControler {
     // TODO
+
+    @Test
+    public VectCartesian newPosition(int sick1, int sick2, int sick3) {
+
+        int dsick = 180;
+        int xtheo = 300;
+        int ytheo = 300;
+        int esick = sick1 - sick2;
+        double rapport= esick/dsick;
+        double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
+        int x = (int) ((sick1 - xtheo) * Math.cos(teta));
+        int y = (int) ((sick3 - ytheo) * Math.cos(teta));
+        VectCartesian pos = new VectCartesian(x,y);
+        return pos;
+    }
+
+
+    @Test
+    public double newOrientation(int sick1, int sick2) {
+
+        int dsick = 180;
+        int esick = sick1 - sick2;
+        double rapport= esick/dsick;
+        double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
+
+        return teta;
+    }
+
+
+
+
+
 }
