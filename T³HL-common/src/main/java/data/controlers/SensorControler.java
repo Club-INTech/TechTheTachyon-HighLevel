@@ -128,7 +128,7 @@ public class SensorControler extends Thread implements Service {
                 int yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])- ytheo) * Math.cos(teta));
 
                 VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
-                double newOrientation = 0;
+                double newOrientation = teta;
                 XYO newXYO = new XYO(newPosition, newOrientation);
                 Sick.setNewXYO(newXYO);
 
