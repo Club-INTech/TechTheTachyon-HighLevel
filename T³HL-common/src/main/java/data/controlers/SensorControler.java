@@ -113,9 +113,21 @@ public class SensorControler extends Thread implements Service {
             }
             if (sickData.peek() !=null) {
                  sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
-                //TODO : implémenter calculs : on aura donc une nouvelle position et une nouvelle orientation
+                //TODO : implémenter calculs : on aura donc une nouvelle position et une nouvelle orientation FAIT
+
                 //TODO : Voir quelles sont les valeurs des sicks qui sont signifiantes via la méthode Sick.getSignificantSicks et lire les valeurs correspondantes dans sickMeasurements
-                VectCartesian newPosition = new VectCartesian(0, 0);
+                int[] significantSicks = Sick.getSignificantSicks();
+
+                int dsick = 173;
+                int xtheo = 0;
+                int ytheo = 0;
+                int esick = Integer.parseInt(sickMeasurements[significantSicks[0]]) - Integer.parseInt(sickMeasurements[significantSicks[1]]);
+                double rapport= esick/dsick;
+                double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
+                int xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]]) - xtheo) * Math.cos(teta));
+                int yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])- ytheo) * Math.cos(teta));
+
+                VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
                 double newOrientation = 0;
                 XYO newXYO = new XYO(newPosition, newOrientation);
                 Sick.setNewXYO(newXYO);
