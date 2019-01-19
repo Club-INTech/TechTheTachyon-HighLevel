@@ -2,24 +2,34 @@ package scripts;
 
 import data.Table;
 import locomotion.UnableToMoveException;
+import orders.Speed;
 import orders.order.ActuatorsOrder;
+import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
-
+import utils.math.Circle;
+import utils.math.Shape;
+import utils.math.VectCartesian;
 
 
 public class Accelerateur extends Script {
-    /** Position d'entrée du script */
+    /**
+     * Position d'entrée du script
+     */
 
-    private int xEntry=150;
-    private int yEntry=150;
+    private int xEntry = 150;
+    private int yEntry = 150;
 
-    /** constante */
-    private int distavance=19;
+    /**
+     * constante
+     */
+    private int distavance = 19;
+
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
     }
-     @Override
+
+    @Override
     public void execute(Integer version) {
         try {
 
@@ -32,7 +42,7 @@ public class Accelerateur extends Script {
             /** Active la pompe*/
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
 
-            while( ((Master)robot).getNbpaletsdroits() >0 ) {
+            while (((Master) robot).getNbpaletsdroits() > 0) {
                 /** Active l'electrovanne droite */
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
 
@@ -49,7 +59,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
 
                 /** Décrémentation du nb de palets*/
-                ((Master)robot).decrement();
+                ((Master) robot).decrement();
 
             }
 
@@ -61,8 +71,23 @@ public class Accelerateur extends Script {
             /
 
 
-    } catch (UnableToMoveException e) {
+        } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
 
-     }
+    }
+    @Override
+    public Shape entryPosition(Integer version) {
+        return new Circle(new VectCartesian(xEntry, yEntry), 42);
+    }
+
+    @Override
+    public void finalize(Exception e) {
+        robot.setSpeed(Speed.DEFAULT_SPEED);
+    }
+
+    @Override
+    public void updateConfig(Config config) { }
+
+}
+
