@@ -25,6 +25,9 @@ public class SimulatedRobot {
     private long lastUpdateTime;
     private final int MILLIS_BETWEEN_UPDATES=10;
 
+    private boolean stoppedMovingMessageToSendFlag = false;
+    private boolean previousMovingState = false;
+
     /** Constructeur */
     SimulatedRobot(){
         this.forwardOrBackward=false;
@@ -41,8 +44,28 @@ public class SimulatedRobot {
         if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
             updateOrientation();
             updatePosition();
+            updateStopMovingMessage();
             this.lastUpdateTime = System.currentTimeMillis();
-            System.out.println(this.orientation);
+        }
+    }
+
+    /** Up un flag pour dire si on doit envoyer un message pour dire que le robot a fini son mouvement */
+    private void updateStopMovingMessage() {
+        if (previousMovingState){
+            if (!this.isMoving()){
+                stoppedMovingMessageToSendFlag = true;
+            }
+        }
+        this.previousMovingState=this.isMoving();
+    }
+
+    public boolean mustSendStoppedMovingMessage(){
+        if (this.stoppedMovingMessageToSendFlag){
+            this.stoppedMovingMessageToSendFlag=false;
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

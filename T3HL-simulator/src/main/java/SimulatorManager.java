@@ -2,15 +2,14 @@ import orders.order.MotionOrder;
 import orders.order.Order;
 import utils.math.VectCartesian;
 
-public class Manager extends Thread {
+public class SimulatorManager extends Thread {
 
     private ConnectionManagerSimulator commSimulatorThread;
     private GraphicalInterface graphicalInterface;
     private SimulatedRobot simulatedRobot;
-    private Thread threadHandlingMessages;
 
     /** Constructeur */
-    Manager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
+    SimulatorManager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
         this.graphicalInterface = graphicalInterace;
         this.commSimulatorThread = commSimulatorThread;
         this.simulatedRobot = simulatedRobot;
@@ -33,8 +32,13 @@ public class Manager extends Thread {
             //On tryUpdate la position du robot si besoin est
             this.simulatedRobot.tryUpdate();
 
+            if (this.simulatedRobot.mustSendStoppedMovingMessage()){
+                this.commSimulatorThread.sendMessage("StoppedMoving");
+            }
+
             //On tryUpdate l'interface graphique
             this.graphicalInterface.tryUpdate();
+
 
             //On attend un peu, faut pas deconner
             try {

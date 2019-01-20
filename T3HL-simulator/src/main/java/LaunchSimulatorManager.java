@@ -1,24 +1,41 @@
 import orders.order.MotionOrder;
 
-public class LaunchSimulator extends Thread{
+public class LaunchSimulatorManager extends Thread{
 
     private GraphicalInterface graphicalInterface;
-    private String lastMessage;
-    private Manager robotManager;
+    private SimulatorManager robotManager;
     private SimulatedRobot simulatedRobot;
     private ConnectionManagerSimulator connectionManagerSimulator;
 
     /** Constructeur
      * @param port port sur lequel on devra se connecter pour parler au simulateur
      */
-    public LaunchSimulator(int port, boolean onlyReceivingSimulatedMessages) {
-        this.connectionManagerSimulator = new ConnectionManagerSimulator(port, onlyReceivingSimulatedMessages);
-        System.out.println("Listener lancé et connecté");
+    public LaunchSimulatorManager(int port) {
+        Thread serverThread = new Thread(){
+            @Override
+            public void run() {
+                connectionManagerSimulator = new ConnectionManagerSimulator(port);
+            }
+        };
+        serverThread.start();
+        System.out.println("Listener lancé");
+
+
+        //On attend que le listener soit connecté
+        while (connectionManagerSimulator==null || !connectionManagerSimulator.isReady()){
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Listener connecté");
         this.simulatedRobot = new SimulatedRobot();
         System.out.println("Robot simulé instancié");
         this.graphicalInterface = new GraphicalInterface(this.simulatedRobot);
         System.out.println("Interface graphique instanciée");
-        this.robotManager = new Manager(this.graphicalInterface, this.connectionManagerSimulator, this.simulatedRobot);
+        this.robotManager = new SimulatorManager(this.graphicalInterface, connectionManagerSimulator, this.simulatedRobot);
         System.out.println("Physique instanciée");
 
         this.launchTestCode();
