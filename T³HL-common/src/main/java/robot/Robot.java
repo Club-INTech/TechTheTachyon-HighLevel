@@ -159,7 +159,7 @@ public abstract class Robot implements Service {
 
     }
 
-
+    public XYO getXyo() { return this.xyo;}
 
 
     @Override
