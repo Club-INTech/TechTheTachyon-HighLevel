@@ -2,11 +2,23 @@ package data.table;
 
 import utils.math.CircularRectangle;
 
+/**
+ * Classe représentant les obstacles circulaires
+ *
+ * @author gwenser
+ */
+
 public class StillCircularRectangularObstacle extends Obstacle{
+
+    /**
+     * Constructeur rectangle arrondi
+     * @param   rectangleArrondi  rectangle arrondi
+     */
 
     public StillCircularRectangularObstacle(CircularRectangle rectangleArrondi) {
         super(rectangleArrondi);
     }
+
 
     @Override
     public Obstacle clone() throws CloneNotSupportedException {
