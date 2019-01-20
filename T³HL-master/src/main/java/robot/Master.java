@@ -46,8 +46,8 @@ public class Master extends Robot {
     }
 
     public int getNbpaletsgauches(){return this.nbpaletsgauches;}
-    public void decrementgauche(){this.nbpaletsgauches=this.nbpaletsgauches-1}
-    /** TODO implémenter un ordre sur le couple des XL pour remplacer*/
+    public void decrementgauche(){this.nbpaletsgauches=this.nbpaletsgauches-1;}
+    /** TODO implémenter un ordre sur le couple des XL pour remplacer les nbpaletsdroits et nbpaletsgauches*/
 
     @Override
     public void updateConfig(Config config) {
