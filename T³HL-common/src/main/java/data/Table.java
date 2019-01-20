@@ -132,7 +132,7 @@ public class Table implements Service {
         this.addFixedObstacle(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0,18);                                 //arrondi
-        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre,36,2000,180);
+        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre,2000,36,180);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
         this.addFixedObstacle(accelerateur);
 

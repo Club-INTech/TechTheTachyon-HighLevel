@@ -123,7 +123,7 @@ public class SensorControler extends Thread implements Service {
                 int ytheo = 0;
                 int esick = Integer.parseInt(sickMeasurements[significantSicks[0]]) - Integer.parseInt(sickMeasurements[significantSicks[1]]);
                 double rapport= esick/dsick;
-                double teta = rapport- Math.pow(rapport, 3) / 3 + Math.pow(rapport,5)/5;
+                double teta = Math.atan(rapport);
                 int xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]]) - xtheo) * Math.cos(teta));
                 int yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])- ytheo) * Math.cos(teta));
 

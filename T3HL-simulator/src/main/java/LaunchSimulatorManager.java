@@ -1,17 +1,28 @@
+import data.Table;
+import data.table.Obstacle;
+import utils.Container;
+import utils.container.ContainerException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LaunchSimulatorManager extends Thread{
 
     private GraphicalInterface graphicalInterface;
-    private SimulatorManager robotManager;
+    private SimulatorManager simulatorManager;
     private HashMap<Integer, SimulatedRobot> simulatedRobots = new HashMap<>();
     private HashMap<Integer, ConnectionManagerSimulator> connectionManagerSimulators = new HashMap<>();
+
+    private Container container;
+    private ArrayList<Obstacle> obstacles;
+    private Table table;
 
     /** Constructeur
      * @param ports ports sur lesquels on devra se connecter pour parler au simulateur
      */
     public LaunchSimulatorManager(int[] ports) {
 
+        // On instancie un listener par port, de manière à ce que l'ordre de connexion aux listeners soit sans importance
         for (int port : ports) {
             Thread serverThread = new Thread() {
                 @Override
@@ -23,7 +34,7 @@ public class LaunchSimulatorManager extends Thread{
             System.out.println(String.format("Listener lancé sur le port %d", port));
         }
 
-        //On attend que tous les listeners soient connectés
+        // On attend que tous les listeners soient connectés
         for (int port : ports){
             while (this.connectionManagerSimulators.get(port) == null || !this.connectionManagerSimulators.get(port).isReady()) {
                 try {
@@ -34,6 +45,7 @@ public class LaunchSimulatorManager extends Thread{
             }
         }
 
+        // On créer un robot par port
         for (int port : ports) {
             System.out.println(String.format("(%d) Listener connecté",port));
             SimulatedRobot simulatedRobot = new SimulatedRobot();
@@ -41,11 +53,22 @@ public class LaunchSimulatorManager extends Thread{
             System.out.println(String.format("(%d) Robot simulé instancié",port));
         }
 
-        this.graphicalInterface = new GraphicalInterface(ports, this.simulatedRobots);
+        //Récupération des obstacles
+        this.container = Container.getInstance("Master");
+        try {
+            this.table = this.container.getService(Table.class);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+
+
+        // On instancie l'interface graphique
+        this.graphicalInterface = new GraphicalInterface(ports, this.simulatedRobots, this.table);
         System.out.println(String.format("Interface graphique instanciée"));
 
-        this.robotManager = new SimulatorManager(ports, this.graphicalInterface,this.connectionManagerSimulators,this.simulatedRobots);
-        System.out.println("Physique instanciée");
+        // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
+        this.simulatorManager = new SimulatorManager(ports, this.graphicalInterface, this.connectionManagerSimulators,this.simulatedRobots);
+        System.out.println("Manager instancié");
 
         //this.launchTestCode();
     }
