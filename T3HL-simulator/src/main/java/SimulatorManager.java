@@ -1,7 +1,13 @@
+import data.Table;
+import data.table.Obstacle;
 import orders.order.MotionOrder;
 import orders.order.Order;
+import utils.Container;
+import utils.container.ContainerException;
+import utils.container.Service;
 import utils.math.VectCartesian;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SimulatorManager extends Thread {
@@ -17,6 +23,9 @@ public class SimulatorManager extends Thread {
         this.graphicalInterface = graphicalInterace;
         this.commSimulatorThreads = commSimulatorThread;
         this.simulatedRobots = simulatedRobots;
+
+
+
         this.start();
     }
 
