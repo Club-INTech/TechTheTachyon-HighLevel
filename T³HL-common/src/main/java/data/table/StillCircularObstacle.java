@@ -45,11 +45,17 @@ public class StillCircularObstacle extends Obstacle {
         super(circle);
     }
 
+    /**
+     * @see Obstacle#clone()
+     */
     @Override
     public Obstacle clone() throws CloneNotSupportedException {
         return new StillCircularObstacle((Circle) this.shape.clone());
     }
 
+    /**
+     * @see Obstacle#toString()
+     */
     @Override
     public String toString() {
         return "Obstacle fixe circulaire " + shape.toString();

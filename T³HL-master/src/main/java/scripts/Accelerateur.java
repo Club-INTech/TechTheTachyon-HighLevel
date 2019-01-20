@@ -7,6 +7,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
+import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
@@ -17,13 +18,14 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = 150;
+    private int xEntry = -230;
     private int yEntry = 150;
 
     /**
      * constante
      */
     private int distavance = 19;
+    private int palet = 80;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
@@ -32,45 +34,36 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-
-            /** Fait avancer le robot de distavance */
-            robot.moveLengthwise(distavance, false);
-
-            /** Fait tourner le robot vers PI */
+            robot.moveToPoint(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
             robot.turn(Math.PI);
-
-            /** Active la pompe*/
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-
-            while (((Master) robot).getNbpaletsdroits() > 0) {
-                /** Active l'electrovanne droite */
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+            ((Master) robot).decrement();
+            while (((Master) robot).getNbpaletsgauches() > 0) {
+                robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-
-                /** Bras va chercher palet dans le stock */
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-
-                /** Bras met le palet dans l'accélérateur */
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-
-                /** Désactive l'électrovanne */
+                robot.moveLengthwise(-palet,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-
-                /** Fait monter l'ascenceur */
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-
-                /** Décrémentation du nb de palets*/
                 ((Master) robot).decrement();
-
             }
-
-
-
-
-
-
-
-
-
+            robot.turn(0);
+            while(((Master) robot).getNbpaletsdroits() > 0){
+                robot.moveLengthwise(palet, false);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
+                robot.moveLengthwise(-palet,false);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                ((Master) robot).decrementgauche();
+            }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

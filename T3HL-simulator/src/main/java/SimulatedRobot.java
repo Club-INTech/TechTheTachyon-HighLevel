@@ -25,6 +25,9 @@ public class SimulatedRobot {
     private long lastUpdateTime;
     private final int MILLIS_BETWEEN_UPDATES=10;
 
+    private boolean stoppedMovingMessageToSendFlag = false;
+    private boolean previousMovingState = false;
+
     /** Constructeur */
     SimulatedRobot(){
         this.forwardOrBackward=false;
@@ -36,12 +39,33 @@ public class SimulatedRobot {
         this.orientationTarget = START_ORIENTATION;
     }
 
-    /** Fonction appelée pour update la position du robot */
-    void update(){
+    /** Fonction appelée pour tryUpdate la position du robot */
+    void tryUpdate(){
         if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
             updateOrientation();
             updatePosition();
+            updateStopMovingMessage();
             this.lastUpdateTime = System.currentTimeMillis();
+        }
+    }
+
+    /** Up un flag pour dire si on doit envoyer un message pour dire que le robot a fini son mouvement */
+    private void updateStopMovingMessage() {
+        if (previousMovingState){
+            if (!this.isMoving()){
+                stoppedMovingMessageToSendFlag = true;
+            }
+        }
+        this.previousMovingState=this.isMoving();
+    }
+
+    public boolean mustSendStoppedMovingMessage(){
+        if (this.stoppedMovingMessageToSendFlag){
+            this.stoppedMovingMessageToSendFlag=false;
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -81,7 +105,7 @@ public class SimulatedRobot {
         }
     }
 
-    /** Renvoie le temps depuis la dernière update */
+    /** Renvoie le temps depuis la dernière tryUpdate */
     private long timeSinceLastUpdate(){
         return (System.currentTimeMillis() - this.lastUpdateTime);
     }
@@ -111,7 +135,7 @@ public class SimulatedRobot {
     /** Fait bouger le robot vers un point */
     void goTo(Vec2 position){
         this.positionTarget = position;
-        this.orientationTarget = (float)this.position.minusVector(position).getA();
+        this.orientationTarget = (float)position.minusVector(this.position).getA();
     }
 
     /** Renvoie la position en X du robot */

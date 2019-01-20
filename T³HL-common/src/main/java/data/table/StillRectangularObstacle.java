@@ -58,6 +58,6 @@ public class StillRectangularObstacle extends Obstacle {
      */
     @Override
     public String toString() {
-        return "Obstacle " + shape.toString();
+        return "Obstacle fixe rectangulaire " + shape.toString();
     }
 }

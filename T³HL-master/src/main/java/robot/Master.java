@@ -31,6 +31,7 @@ import robot.Robot;
  */
 public class Master extends Robot {
     private int nbpaletsdroits;
+    private int nbpaletsgauches;
     public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, int nbpaletsdroits) {
         super(locomotion, orderWrapper, hookFactory);
         this.nbpaletsdroits = nbpaletsdroits;
@@ -43,6 +44,10 @@ public class Master extends Robot {
     public void decrement(){
         this.nbpaletsdroits=this.nbpaletsdroits-1;
     }
+
+    public int getNbpaletsgauches(){return this.nbpaletsgauches;}
+    public void decrementgauche(){this.nbpaletsgauches=this.nbpaletsgauches-1;}
+    /** TODO implémenter un ordre sur le couple des XL pour remplacer les nbpaletsdroits et nbpaletsgauches*/
 
     @Override
     public void updateConfig(Config config) {

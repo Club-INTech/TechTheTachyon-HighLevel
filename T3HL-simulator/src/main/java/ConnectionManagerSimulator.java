@@ -12,28 +12,25 @@ public class ConnectionManagerSimulator extends Thread {
     private BufferedReader incoming;
     private BufferedWriter outgoing;
 
-    private boolean onlyReceivingSimulatedMessages;
+    private boolean ready = false;
 
     /** Constructeur
      * @param port port sur lequel écoute le simulateur
      */
-    ConnectionManagerSimulator(int port, boolean onlyReceivingSimulatedMessages){
+    ConnectionManagerSimulator(int port){
         //On initialise le dernier message reçu et le serveur Socket
-        this.onlyReceivingSimulatedMessages=onlyReceivingSimulatedMessages;
         this.receivedMessage = new ConcurrentLinkedQueue<String>();
-        if (!this.onlyReceivingSimulatedMessages) {
-            try {
-                this.receptionSocket = new ServerSocket(port);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                this.socket=this.receptionSocket.accept();
-                this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
-                this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            this.receptionSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            this.socket=this.receptionSocket.accept();
+            this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
+            this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         this.start();
     }
@@ -41,26 +38,23 @@ public class ConnectionManagerSimulator extends Thread {
     @Override
     /** Ecoute les messages et les ajoute à la queue des messages reçus*/
     public void run() {
+        this.ready = true;
         //On boucle infiniement pour
         while (true){
-            if (!this.onlyReceivingSimulatedMessages) {
-                try {
-                    if (this.incoming.ready()) {
-                        this.receivedMessage.add(this.incoming.readLine());
-                    }
-                    Thread.sleep(1);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            try {
+                if (this.incoming.ready()) {
+                    this.receivedMessage.add(this.incoming.readLine());
                 }
-            }
-            else {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                Thread.sleep(1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    /** Renvoie False tant que tout n'est pas instancié */
+    boolean isReady(){
+        return this.ready;
     }
 
     /** Renvoie le dernier message reçu par le simulateur */
