@@ -104,38 +104,63 @@ public class Table implements Service {
     private void initObstacle() {
         // TODO : Remplir avec les obstacles de l'année !
         Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
-        StillCircularObstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
+        Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
 
         Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
-        StillCircularObstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
+        Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
 
         Vec2 vecteurRampeCentre = new VectCartesian(0,1789);
-        CircularRectangle FormeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
-        Obstacle rampe = new StillCircularRectangularObstacle(FormeRampe);
+        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
+        Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750,1561);           //arrondi
-        CircularRectangle FormePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre,600,18,180);
-        Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(FormePaletSupportRampeDroite);
+        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre,600,18,180);
+        Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
 
         Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750,1561);           //arrondi
-        CircularRectangle FormePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre,600,18,180);
-        Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(FormePaletSupportRampeGauche);
+        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre,600,18,180);
+        Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
 
-        Vec2 vecteurSeparationRampe = new VectCartesian(0,1478);
-        CircularRectangle FormeSeparationRampe = new CircularRectangle(vecteurSeparationRampe,40,200,180);
-        Obstacle SeparationRampe = new StillCircularRectangularObstacle(FormeSeparationRampe);
+        Vec2 vecteurSeparationRampeCentre = new VectCartesian(0,1478);
+        CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre,40,200,180);
+        Obstacle separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
 
-        Vec2 vecteurAccelerateur = new VectCartesian(0,18);                                 //arrondi
-        CircularRectangle FormeAccelerateur = new CircularRectangle(vecteurAccelerateur,36,2000,180);
-        Obstacle Accelerateur = new StillCircularRectangularObstacle(FormeAccelerateur);
+        Vec2 vecteurAccelerateurCentre = new VectCartesian(0,18);                                 //arrondi
+        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre,36,2000,180);
+        Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
 
-        Vec2 vecteurGoldeniumDroite = new VectCartesian(736,46);
-        CircularRectangle FormeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroite,102,22,180);
-        Obstacle GoldeniumDroite = new StillCircularRectangularObstacle(FormeGoldeniumDroite);
+        Vec2 vecteurGoldeniumDroiteCentre = new VectCartesian(736,46);
+        CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre,102,22,180);
+        Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
 
-        Vec2 vecteurGoldeniumGauche = new VectCartesian(-736,46);
-        CircularRectangle FormeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGauche,102,22,180);
-        Obstacle GoldeniumGauche = new StillCircularRectangularObstacle(FormeGoldeniumGauche);
+        Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736,46);
+        CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre,102,22,180);
+        Obstacle goldeniumGauche = new StillCircularRectangularObstacle(formeGoldeniumGauche);
+
+
+        /**
+         * /!\ /!\ /!\ /!\ /!\ /!\ /!\ Palets devant la zone de départ à supprimer à chaque fois que le palet est prit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+         * Couleur représente la couleur de la zone se situant derrière le palet !
+         */
+
+        Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000,450);
+        Obstacle paletRougeDroiteCentre = new StillCircularObstacle(vecteurPaletRougeDroiteCentre,199);
+
+        Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000,750);
+        Obstacle paletVertDroiteCentre = new StillCircularObstacle(vecteurPaletVertDroiteCentre,199);
+
+        Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000,1050);
+        Obstacle paletBleuDroiteCentre = new StillCircularObstacle(vecteurPaletBleuDroiteCentre,199);
+
+        Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000,450);
+        Obstacle paletRougeGaucheCentre = new StillCircularObstacle(vecteurPaletRougeGaucheCentre,199);
+
+        Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000,750);
+        Obstacle paletVertGaucheCentre = new StillCircularObstacle(vecteurPaletVertGaucheCentre,199);
+
+        Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000,1050);
+        Obstacle paletBleuGaucheCentre = new StillCircularObstacle(vecteurPaletBleuGaucheCentre,199);
+
     }
 
     /**
