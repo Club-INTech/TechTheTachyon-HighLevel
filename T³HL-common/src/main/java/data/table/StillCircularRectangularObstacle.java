@@ -19,14 +19,19 @@ public class StillCircularRectangularObstacle extends Obstacle{
         super(rectangleArrondi);
     }
 
-
+    /**
+     * @see Obstacle#clone()
+     */
     @Override
     public Obstacle clone() throws CloneNotSupportedException {
         return new StillCircularRectangularObstacle((CircularRectangle) this.shape.clone());
     }
 
+    /**
+     * @see Obstacle#toString()
+     */
     @Override
     public String toString() {
-        return "Obstacle " + shape.toString();
+        return "Obstacle fixe rectangulaireArrondi " + shape.toString();
     }
 }
