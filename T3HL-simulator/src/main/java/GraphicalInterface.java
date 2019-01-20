@@ -4,10 +4,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private SimulatedRobot simulatedRobot;
+    private int[] ports;
+    private HashMap<Integer, SimulatedRobot> simulatedRobots;
 
     private BufferedImage backgroundImage;
 
@@ -25,8 +27,9 @@ class GraphicalInterface extends JFrame {
 
 
     /** Constructeur */
-    GraphicalInterface(SimulatedRobot simulatedRobot) {
-        this.simulatedRobot=simulatedRobot;
+    GraphicalInterface(int[] ports, HashMap<Integer, SimulatedRobot> simulatedRobots) {
+        this.ports = ports;
+        this.simulatedRobots=simulatedRobots;
 
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
@@ -86,10 +89,12 @@ class GraphicalInterface extends JFrame {
     private void updateGraphics(Graphics g){
         clearScreen(g);
         drawBackground(g);
-        drawRobot(g,
-                Math.round((this.simulatedRobot.getX()+(this.WIDTH_TABLE/2.0f))*(this.WIDTH_FRAME/(float)this.WIDTH_TABLE)),
-                Math.round((this.HEIGHT_TABLE-this.simulatedRobot.getY())*(this.HEIGHT_FRAME/(float)this.HEIGHT_TABLE)),
-                this.simulatedRobot.getOrientation(),
-                50);
+        for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
+            drawRobot(g,
+                    Math.round((simulatedRobot.getX() + (this.WIDTH_TABLE / 2.0f)) * (this.WIDTH_FRAME / (float) this.WIDTH_TABLE)),
+                    Math.round((HEIGHT_TABLE - simulatedRobot.getY()) * (this.HEIGHT_FRAME / (float) this.HEIGHT_TABLE)),
+                    simulatedRobot.getOrientation(),
+                    50);
+        }
     }
 }

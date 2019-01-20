@@ -2,17 +2,21 @@ import orders.order.MotionOrder;
 import orders.order.Order;
 import utils.math.VectCartesian;
 
+import java.util.HashMap;
+
 public class SimulatorManager extends Thread {
 
-    private ConnectionManagerSimulator commSimulatorThread;
+    private int[] ports;
+    private HashMap<Integer, ConnectionManagerSimulator> commSimulatorThreads;
+    private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private GraphicalInterface graphicalInterface;
-    private SimulatedRobot simulatedRobot;
 
     /** Constructeur */
-    SimulatorManager(GraphicalInterface graphicalInterace, ConnectionManagerSimulator commSimulatorThread, SimulatedRobot simulatedRobot){
+    SimulatorManager(int[] ports, GraphicalInterface graphicalInterace, HashMap<Integer, ConnectionManagerSimulator> commSimulatorThread, HashMap<Integer, SimulatedRobot> simulatedRobots){
+        this.ports=ports;
         this.graphicalInterface = graphicalInterace;
-        this.commSimulatorThread = commSimulatorThread;
-        this.simulatedRobot = simulatedRobot;
+        this.commSimulatorThreads = commSimulatorThread;
+        this.simulatedRobots = simulatedRobots;
         this.start();
     }
 
@@ -23,22 +27,23 @@ public class SimulatorManager extends Thread {
 
         //On tourne en boucle
         while (true) {
-            //On gère les messages d'entrée
-            lastMessage=this.commSimulatorThread.getLastReceivedMessage();
-            if (lastMessage!=null) {
-                handleMessage(lastMessage);
-            }
-
             //On tryUpdate la position du robot si besoin est
-            this.simulatedRobot.tryUpdate();
+            for (int port: ports) {
 
-            if (this.simulatedRobot.mustSendStoppedMovingMessage()){
-                this.commSimulatorThread.sendMessage("StoppedMoving");
+                //On gère les messages d'entrée
+                lastMessage=this.commSimulatorThreads.get(port).getLastReceivedMessage();
+                if (lastMessage!=null) {
+                    handleMessage(lastMessage, simulatedRobots.get(port));
+                }
+
+                simulatedRobots.get(port).tryUpdate();
+                if (simulatedRobots.get(port).mustSendStoppedMovingMessage()){
+                    this.commSimulatorThreads.get(port).sendMessage("StoppedMoving\n");
+                }
             }
 
             //On tryUpdate l'interface graphique
             this.graphicalInterface.tryUpdate();
-
 
             //On attend un peu, faut pas deconner
             try {
@@ -50,21 +55,21 @@ public class SimulatorManager extends Thread {
     }
 
     /** Gère les messages qui sont reçus */
-    private void handleMessage(String m){
+    private void handleMessage(String m, SimulatedRobot robot){
         System.out.println(String.format("SIMULATEUR : message reçu : %s",m));
         String[] arguments = m.split(" ");
         String order = arguments[0];
         if (compare(order, MotionOrder.MOVE_LENTGHWISE)){
-            this.simulatedRobot.moveLengthwise(Integer.parseInt(arguments[1]));
+            robot.moveLengthwise(Integer.parseInt(arguments[1]));
         }
         else if (compare(order, MotionOrder.TURN)){
-            this.simulatedRobot.turn(Float.parseFloat(arguments[1]));
+            robot.turn(Float.parseFloat(arguments[1]));
         }
         else if (compare(order, MotionOrder.MOVE_TO_POINT)){
-            this.simulatedRobot.goTo(new VectCartesian(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2])));
+            robot.goTo(new VectCartesian(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2])));
         }
         else if (compare(order, MotionOrder.STOP)){
-            this.simulatedRobot.stop();
+            robot.stop();
         }
         else{
             System.out.println(String.format("SIMULATEUR : l'ordre \"%s\" est inconnu", order));
