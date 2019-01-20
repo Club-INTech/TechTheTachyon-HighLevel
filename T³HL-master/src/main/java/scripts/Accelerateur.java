@@ -43,7 +43,7 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             ((Master) robot).decrement();
-            while (((Master) robot).getNbpaletsgauche() > 0) {
+            while (((Master) robot).getNbpaletsgauches() > 0) {
                 robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -62,7 +62,7 @@ public class Accelerateur extends Script {
                 robot.moveLengthwise(-palet,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                ((Master) robot).decrement();
+                ((Master) robot).decrementgauche();
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
