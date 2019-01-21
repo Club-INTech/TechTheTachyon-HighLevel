@@ -17,6 +17,9 @@
  **/
 
 import connection.ConnectionManager;
+import data.Table;
+import robot.Master;
+import scripts.ScriptManagerMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -42,11 +45,19 @@ public class Main {
         }
         */
         container = Container.getInstance("robot.Master");
+        ScriptManagerMaster scriptManager;
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
             ConnectionManager connectionManager = container.getService(ConnectionManager.class);
             Thread.sleep(2000);
+
+
+            Master robot = container.getService(Master.class);
+            Table table = container.getService(Table.class);
+            scriptManager = container.getService(ScriptManagerMaster.class);
+
+            //Paletsx3 paletx3 = scriptManager.getScript(Paletsx3);
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
         }
