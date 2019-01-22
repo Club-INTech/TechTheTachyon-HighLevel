@@ -123,7 +123,7 @@ public class SimulatedRobot {
 
     /** Fait tourner le robot de delta */
     void turn(float delta){
-        this.orientationTarget=this.orientation+delta;
+        this.orientationTarget=moduloSpec(this.orientation+delta);
     }
 
     /** Fait arrêter le robot */
@@ -136,6 +136,15 @@ public class SimulatedRobot {
     void goTo(Vec2 position){
         this.positionTarget = position;
         this.orientationTarget = (float)position.minusVector(this.position).getA();
+    }
+
+    /** Fait un modulo entre -Pi et Pi d'un angle en radians */
+    private float moduloSpec(float angle){
+        float moduloedAngle = angle % (float)(2*Math.PI);
+        if (moduloedAngle>Math.PI){
+            moduloedAngle-=2*Math.PI;
+        }
+        return moduloedAngle;
     }
 
     /** Renvoie la position en X du robot */
