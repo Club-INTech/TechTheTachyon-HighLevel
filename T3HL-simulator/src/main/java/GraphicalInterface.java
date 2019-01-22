@@ -32,8 +32,8 @@ class GraphicalInterface extends JFrame {
     private final int MILLIS_BETWEEN_UPDATES=10;
     private final Color DEFAULT_COLOR = new Color(0,0,0,255);
     private final Color ROBOT_COLOR = new Color(0,255,0,128);
-    private final Color ORIENTATION_COLOR = new Color(0,0,255,192);
-    private final Color OBSTACLE_COLOR = new Color(255,0,0,128);
+    private final Color ORIENTATION_COLOR = new Color(0,0,255,255);
+    private final Color OBSTACLE_COLOR = new Color(255,0,0,64);
 
 
     /** Constructeur */

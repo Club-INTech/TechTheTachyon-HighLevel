@@ -49,29 +49,21 @@ public class Test_SensorControler {
     @Test
     public void run() throws Exception {
 
-            int dsick = 173;
-            int xtheo = 0;
-            int ytheo = 0;
-            int esick = 173;
-            double rapport= esick/dsick;
-            double teta = Math.atan(rapport);
-            int xCalcule = (int) ((300- xtheo) * Math.cos(teta));
-            int yCalcule = (int) ((300- ytheo) * Math.cos(teta));
+        int dsick = 173;
+        int xtheo = 0;
+        int ytheo = 0;
+        int esick = 173;
+        double rapport= esick/dsick;
+        double teta = Math.atan(rapport);
+        int xCalcule = (int) ((300- xtheo) * Math.cos(teta));
+        int yCalcule = (int) ((300- ytheo) * Math.cos(teta));
 
-            VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
-            double newOrientation = teta;
-            XYO newXYO = new XYO(newPosition, newOrientation);
-            //Assert.assertEquals(new VectCartesian(300,300 ), newPosition);
-            //Assert.assertEquals(0, newOrientation,0.1);
-            System.out.println(teta);
+        VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
+        double newOrientation = teta;
+        XYO newXYO = new XYO(newPosition, newOrientation);
+        //Assert.assertEquals(new VectCartesian(300,300 ), newPosition);
+        //Assert.assertEquals(0, newOrientation,0.1);
+        System.out.println(teta);
 
-        }
-
-
-
-
-
-
-
-
+    }
 }

@@ -63,9 +63,9 @@
 
     <!-- SubModules -->
     <modules>
-        <module>T³HL-common</module>
-        <module>T³HL-master</module>
-        <module>T³HL-slave</module>
+        <module>T3HL-common</module>
+        <module>T3HL-master</module>
+        <module>T3HL-slave</module>
         <module>T3HL-simulator</module>
     </modules>
 </project>
