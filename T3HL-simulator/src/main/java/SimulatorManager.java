@@ -90,24 +90,25 @@ public class SimulatorManager extends Thread {
         }
     }
 
-    /** Compare une string et un ordre */
+    /** Compare une string et un ordre
+     * @param arguments arguments envoyés au simulateur
+     * @param order ordre auquel on compare le message reçu
+     * @param nb_args nombre d'arguments attendus (comprenant l'ordre)
+     * @return True, si le bon nombre d'arguments est reçu par le simulateur, et que l'ordre correspond au message envoyé, False sinon
+     * @throws OrderException si un mauvais nombre d'arguments est reçu par le simulateur
+     */
     private boolean testOrder(String[] arguments, Order order, int nb_args) throws OrderException {
-        if (arguments.length>0){
-            if (arguments[0].equals(order.getOrderStr())){
-                if (arguments.length==nb_args){
-                    return true;
-                }
-                else{
-                    StringBuilder message = new StringBuilder();
-                    for (int i=0; i<arguments.length; i++){
-                        message.append(arguments[i]);
-                        message.append(" ");
-                    }
-                    throw new OrderException(String.format("Mauvais nombre d'arguments pour l'ordre %s(attendu: %d)", message.toString(), nb_args));
-                }
+        if (arguments[0].equals(order.getOrderStr())){
+            if (arguments.length==nb_args){
+                return true;
             }
             else{
-                return false;
+                StringBuilder message = new StringBuilder();
+                for (int i=0; i<arguments.length; i++){
+                    message.append(arguments[i]);
+                    message.append(" ");
+                }
+                throw new OrderException(String.format("Mauvais nombre d'arguments pour l'ordre %s(attendu: %d)", message.toString(), nb_args));
             }
         }
         else{
