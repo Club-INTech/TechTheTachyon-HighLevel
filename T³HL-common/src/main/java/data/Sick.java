@@ -87,6 +87,7 @@ public enum Sick {
      */
     public static int[] getSignificantSicks(){
         //TODO Définir les véritables SignificantSicks
+        // Il faut impérativement que int[0] soit égal à 0 ou 3
         int[] tab = new int[2];
         tab[1]=1;
         tab[2]=2;

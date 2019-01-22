@@ -112,25 +112,61 @@ public class SensorControler extends Thread implements Service {
                 XYO.getBuddyInstance().update(x, y, o);
             }
             if (sickData.peek() !=null) {
-                 sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
-                //TODO : implémenter calculs : on aura donc une nouvelle position et une nouvelle orientation FAIT
-
-                //TODO : Voir quelles sont les valeurs des sicks qui sont signifiantes via la méthode Sick.getSignificantSicks et lire les valeurs correspondantes dans sickMeasurements
+                sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
                 int[] significantSicks = Sick.getSignificantSicks();
-
                 int dsick = 173;
-                int xtheo = 0;
-                int ytheo = 0;
-                int esick = Integer.parseInt(sickMeasurements[significantSicks[0]]) - Integer.parseInt(sickMeasurements[significantSicks[1]]);
-                double rapport= esick/dsick;
-                double teta = Math.atan(rapport);
-                int xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]]) - xtheo) * Math.cos(teta));
-                int yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])- ytheo) * Math.cos(teta));
+                int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
+                double rapport = esick / dsick;
+                int xCalcule;
+                int yCalcule;
+                double teta;
 
+                if (ConfigData.COULEUR.toString().equals("jaune")) {
+                    // On différencie les cas où le robot est orienté vers la gauche et la droite
+                    teta = Math.atan(rapport);
+                    xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
+                    if ( 0< teta && teta< Math.PI){
+                        if (significantSicks[1]==4 || significantSicks[1]==5) {
+                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                        else {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                    }
+                    else {
+                        if (significantSicks[1]==4 || significantSicks[1]==5) {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                        else {
+                            yCalcule = (int) (2000 -(Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                    }
+                }
+                else {
+                    teta = Math.PI - Math.atan(rapport);
+                    xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]] )) * Math.cos(teta)) - 1500;
+                    if ( 0< teta && teta< Math.PI){
+                        if (significantSicks[1]==1 || significantSicks[1]==2) {
+                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                        else {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                    }
+                    else {
+                        if (significantSicks[1]==4 || significantSicks[1]==5) {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                        else {
+                            yCalcule = (int) (2000 -(Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                    }
+                }
                 VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
                 double newOrientation = teta;
                 XYO newXYO = new XYO(newPosition, newOrientation);
                 Sick.setNewXYO(newXYO);
+
 
             }
         }
