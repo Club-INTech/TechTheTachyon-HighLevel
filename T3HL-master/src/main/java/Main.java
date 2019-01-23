@@ -49,6 +49,11 @@ public class Main {
         */
         container = Container.getInstance("robot.Master");
         ScriptManagerMaster scriptManager;
+        Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
+        Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
+        Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
+        Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
+        Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
@@ -60,10 +65,12 @@ public class Main {
             Table table = container.getService(Table.class);
             scriptManager = container.getService(ScriptManagerMaster.class);
 
-            Script paletx3 = ScriptNamesMaster.ACCELERATEUR.getScript();
-            paletx3.goToThenExecute(1);
+            zone_depart_palets.goToThenExecute(1);
+            zone_chaos_palets.goToThenExecute(1);
+            paletsx6.goToThenExecute(1);
+            paletsx3.goToThenExecute(1);
+            accelerateur.goToThenExecute(1);
 
-            
 
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();

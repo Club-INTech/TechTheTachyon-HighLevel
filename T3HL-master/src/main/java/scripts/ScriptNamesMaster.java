@@ -9,7 +9,7 @@ public enum ScriptNamesMaster implements ScriptNames {
     PALETS3(Paletsx3.class),
     PALETS6(PaletsX6.class),
     PALETS_ZONE_DEPART(PaletsZoneDepart.class),
-    ACTIVATION_PANNEAU_DOMOTIQUE(ActivationPanneauDomotique.class);
+    PALETS_ZONE_CHAOS(PaletsZoneChaos.class);
 
 
     private Class<? extends Service> aClass;
