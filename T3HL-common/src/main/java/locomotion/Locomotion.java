@@ -161,15 +161,19 @@ public class Locomotion implements Service {
             Log.LOCOMOTION.warning("Points de départ " + xyo.getOrientation() + " ou d'arriver " + point + " dans un obstacle");
         }
 
+        graphe.writeLock().lock();
         start = graphe.addProvisoryNode(xyo.getPosition());
         next = start;
         aim = graphe.addProvisoryNode(point);
+        graphe.writeLock().unlock();
         pointsQueue.clear();
         exceptionsQueue.clear();
 
-        while (xyo.getPosition().equals(aim.getPosition())) {
+        while ( ! xyo.getPosition().equals(aim.getPosition())) {
             try {
+                graphe.readLock().lock();
                 path = pathfinder.findPath(next, aim);
+                graphe.readLock().unlock();
                 pointsQueue.clear();
                 pointsQueue.addAll(path);
                 while (!graphe.isUpdated()) {
@@ -177,8 +181,10 @@ public class Locomotion implements Service {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             // TODO : Gérer les cas ou les points d'arrivé et de départ sont dans des obstacles
+                            graphe.writeLock().lock();
                             graphe.removeProvisoryNode(start);
                             start = graphe.addProvisoryNode(xyo.getPosition());
+                            graphe.writeLock().unlock();
                             next = start;
                         }
                     }
@@ -188,8 +194,10 @@ public class Locomotion implements Service {
                 // TODO : Compéter
             }
         }
+        graphe.writeLock().lock();
         graphe.removeProvisoryNode(start);
         graphe.removeProvisoryNode(aim);
+        graphe.writeLock().unlock();
         pointsQueue.clear();
         exceptionsQueue.clear();
     }

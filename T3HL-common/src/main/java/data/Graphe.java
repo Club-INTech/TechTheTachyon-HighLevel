@@ -33,6 +33,9 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
 
 /**
  * Classe permettant de paramétrer la table pour faciliter la navigation du robot
@@ -48,23 +51,25 @@ public class Graphe implements Service {
 
     /**
      * Liste des obstacles fixes
+     * @see Table#fixedObstacles
      */
-    private ArrayList<Obstacle> fixedObstacles;
+    private final ArrayList<Obstacle> fixedObstacles;
 
     /**
      * Liste des obstacles mobiles
+     * @see Table#mobileObstacles
      */
-    private ArrayList<MobileCircularObstacle> mobileCircularObstacles;
+    private final ArrayList<MobileCircularObstacle> mobileCircularObstacles;
 
     /**
      * Liste des noeuds
      */
-    private ArrayList<Node> nodes;
+    private final ArrayList<Node> nodes;
 
     /**
      * Liste des arrêtes
      */
-    private ArrayList<Ridge> ridges;
+    private final ArrayList<Ridge> ridges;
 
     /**
      * Permet de synchroniser la mise à jour du graphe avec le pathfinding
@@ -80,6 +85,11 @@ public class Graphe implements Service {
     private int nodeYNbr;
 
     /**
+     * Verrous de synchronisation
+     */
+    private ReadWriteLock locks;
+
+    /**
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
      * @param table la table à paramétrer
      */
@@ -88,6 +98,8 @@ public class Graphe implements Service {
         table.setGraphe(this);
         this.fixedObstacles = table.getFixedObstacles();
         this.mobileCircularObstacles = table.getMobileObstacles();
+        this.nodes = new ArrayList<>();
+        this.ridges = new ArrayList<>();
     }
 
     /**
@@ -95,8 +107,6 @@ public class Graphe implements Service {
      */
     private void init() {
         Log.GRAPHE.debug("Initialisation du Graphe...");
-        this.nodes = new ArrayList<>();
-        this.ridges = new ArrayList<>();
         Vec2 pos;
 
         try {
@@ -185,13 +195,15 @@ public class Graphe implements Service {
     void update() {
         Log.LIDAR.debug("Mise à jour du graphe...");
         int counter = 0;
-        for (Ridge ridge : ridges) {
-            ridge.setReachable(true);
+        synchronized (mobileCircularObstacles) {
             for (MobileCircularObstacle obstacle : mobileCircularObstacles) {
-                if (obstacle.intersect(ridge.getSeg())) {
-                    ridge.setReachable(false);
-                    counter++;
-                    break;
+                for (Ridge ridge : ridges) {
+                    ridge.setReachable(true);
+                    if (obstacle.intersect(ridge.getSeg())) {
+                        ridge.setReachable(false);
+                        counter++;
+                        break;
+                    }
                 }
             }
         }
@@ -285,6 +297,14 @@ public class Graphe implements Service {
     }
     public void setUpdated(boolean updated) {
         this.updated = updated;
+    }
+
+    public Lock writeLock() {
+        return locks.writeLock();
+    }
+
+    public Lock readLock() {
+        return locks.readLock();
     }
 
     /**

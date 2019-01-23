@@ -19,17 +19,12 @@
 import connection.ConnectionManager;
 import data.Table;
 import robot.Master;
-import scripts.Paletsx3;
 import scripts.Script;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author nayth
@@ -63,6 +58,7 @@ public class Main {
 
             Master robot = container.getService(Master.class);
             Table table = container.getService(Table.class);
+            table.initObstacles();
             scriptManager = container.getService(ScriptManagerMaster.class);
 
             zone_depart_palets.goToThenExecute(1);
