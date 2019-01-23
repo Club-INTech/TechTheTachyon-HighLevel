@@ -2,12 +2,15 @@
 Code de l'année 2019 
 
 ### TODO
-* [ ] Découvrir le HL et sa doc
-* [ ] Script
+* [x] Découvrir le HL et sa doc
+* [ ] Scripts
 * [ ] Cas particulier pathfinding
-* [ ] Créer les ordres (avec le LL)
-* [ ] S'occuper du recalage avec les sicks (commencer par voir les maths)
-* [ ] Com avec l'électron
+* [x] Créer les ordres (avec le LL)
+* [x] S'occuper du recalage avec les sicks (commencer par voir les maths)
+* [x] Com avec l'électron
+* [ ] Tester la COM LL <-> HL
+* [ ] Tester la COM master <-> slave
+* [ ] Test LIDAR + Pathfinging
 * [ ] IA
 
 ### Installation - IntelliJ
