@@ -19,7 +19,10 @@
 import connection.ConnectionManager;
 import data.Table;
 import robot.Master;
+import scripts.Paletsx3;
+import scripts.Script;
 import scripts.ScriptManagerMaster;
+import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -57,7 +60,11 @@ public class Main {
             Table table = container.getService(Table.class);
             scriptManager = container.getService(ScriptManagerMaster.class);
 
-            //Paletsx3 paletx3 = scriptManager.getScript(Paletsx3);
+            Script paletx3 = ScriptNamesMaster.ACCELERATEUR.getScript();
+            paletx3.goToThenExecute(1);
+
+            
+
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
         }
