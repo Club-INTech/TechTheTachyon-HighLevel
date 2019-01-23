@@ -35,7 +35,10 @@ import utils.math.Shape;
 import utils.math.CircularRectangle;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -55,7 +58,7 @@ public class Table implements Service {
     private ArrayList<Obstacle> fixedObstacles;
 
     /**
-     * Liste des obstacles mobiles
+     * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
      */
     private ArrayList<MobileCircularObstacle> mobileObstacles;
 
@@ -89,19 +92,28 @@ public class Table implements Service {
      */
     private int compareThreshold;
 
+    // ====================================================================================
+    // |  Variables temporaires pour éviter d'instancier des millions d'objets par match  |
+    // ====================================================================================
+
+    /**
+     * Liste temporaires des obstacles mobiles, utilisée pour pouvoir écrire tous les obstacles d'un coup
+     */
+    private final List<MobileCircularObstacle> mobileObstacleBuffer;
+
     /**
      * Constructeur de la table
      */
     public Table() {
         this.fixedObstacles = new ArrayList<>();
         this.mobileObstacles = new ArrayList<>();
-        this.initObstacle();
+        this.mobileObstacleBuffer = new ArrayList<>();
     }
 
     /**
      * Initialisation des obstacles fixes de la table
      */
-    private void initObstacle() {
+    public void initObstacles() {
         // TODO : Remplir avec les obstacles de l'année !
         Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
         Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
@@ -183,23 +195,28 @@ public class Table implements Service {
      * @param points    liste des centres des obstacles
      */
     public void updateMobileObstacles(ArrayList<Vec2> points) {
-        Iterator<MobileCircularObstacle> iterator = mobileObstacles.iterator();
         MobileCircularObstacle obstacle;
-        Iterator<Vec2> it = points.iterator();
+        Iterator<Vec2> pointIterator = points.iterator();
         Vec2 point;
         Log.LIDAR.debug("Mise à jour des Obstacle...");
 
-        while (iterator.hasNext()) {
-            obstacle = iterator.next();
-            while (it.hasNext()) {
-                point = it.next();
-                if (obstacle.isInObstacle(point)) {
-                    obstacle.update(point);
-                    it.remove();
+        mobileObstacleBuffer.clear();
+        synchronized (mobileObstacles) {
+            mobileObstacles.clear();
+            Iterator<MobileCircularObstacle> mobileObstacleIterator = mobileObstacles.iterator();
+
+            while (mobileObstacleIterator.hasNext()) {
+                obstacle = mobileObstacleIterator.next();
+                while (pointIterator.hasNext()) {
+                    point = pointIterator.next();
+                    if (obstacle.isInObstacle(point)) {
+                        obstacle.update(point);
+                        pointIterator.remove();
+                    }
                 }
-            }
-            if (obstacle.getOutDatedTime() < System.currentTimeMillis()) {
-                iterator.remove();
+                if (obstacle.getOutDatedTime() < System.currentTimeMillis()) {
+                    mobileObstacleIterator.remove();
+                }
             }
         }
 
@@ -210,10 +227,17 @@ public class Table implements Service {
             }
             MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray);
             Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
-            mobileObstacles.add(obst);
+            mobileObstacleBuffer.add(obst);
         }
+
+        synchronized (mobileObstacles) {
+            mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup, CopyOnWriteArrayList est assez lente pour l'écriture donc on accélère comme ça
+        }
+
         if (graphe != null) {
-            this.graphe.update();
+            synchronized (graphe) {
+                this.graphe.update();
+            }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }
@@ -258,15 +282,7 @@ public class Table implements Service {
      * @return  true si le segment intersecte l'un des obstacles fixes
      */
     public boolean intersectAnyFixedObstacle(Segment segment) {
-        Iterator<Obstacle> iterator = fixedObstacles.iterator();
-        Obstacle obstacle;
-        while (iterator.hasNext()) {
-            obstacle = iterator.next();
-            if (obstacle.intersect(segment)) {
-                return true;
-            }
-        }
-        return false;
+        return intersectObstacle(segment, fixedObstacles);
     }
 
     /**
@@ -275,7 +291,11 @@ public class Table implements Service {
      * @return  true si le segment intersecte l'un des obstacles mobiles
      */
     public boolean intersectAnyMobileObstacle(Segment segment) {
-        Iterator<MobileCircularObstacle> iterator = mobileObstacles.iterator();
+        return intersectObstacle(segment, mobileObstacles);
+    }
+
+    private boolean intersectObstacle(Segment segment, List<? extends Obstacle> obstacles) {
+        Iterator<? extends Obstacle> iterator = obstacles.iterator();
         Obstacle obstacle;
         while (iterator.hasNext()) {
             obstacle = iterator.next();

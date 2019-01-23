@@ -122,7 +122,9 @@ public class LidarControler extends Thread implements Service {
                 Vec2s.add(Vec2);
             }
             table.updateMobileObstacles(Vec2s);
-            table.getGraphe().setUpdated(true);
+            synchronized (table.getGraphe()) {
+                table.getGraphe().setUpdated(true);
+            }
         }
     }
 
