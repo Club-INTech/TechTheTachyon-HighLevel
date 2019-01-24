@@ -2,6 +2,7 @@ package scripts;
 import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import robot.Master;
 import robot.Robot;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
-    public PaletsX6(Robot robot, Table table) {
+    public PaletsX6(Master robot, Table table) {
         super(robot, table);
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
