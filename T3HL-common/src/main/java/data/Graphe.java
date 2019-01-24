@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Classe permettant de paramétrer la table pour faciliter la navigation du robot
@@ -87,7 +88,7 @@ public class Graphe implements Service {
     /**
      * Verrous de synchronisation
      */
-    private ReadWriteLock locks;
+    private ReadWriteLock locks = new ReentrantReadWriteLock();
 
     /**
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
