@@ -196,9 +196,9 @@ public class Graphe implements Service {
         Log.LIDAR.debug("Mise à jour du graphe...");
         int counter = 0;
         synchronized (mobileCircularObstacles) {
-            for (MobileCircularObstacle obstacle : mobileCircularObstacles) {
-                for (Ridge ridge : ridges) {
-                    ridge.setReachable(true);
+            for (Ridge ridge : ridges) {
+                ridge.setReachable(true);
+                for (MobileCircularObstacle obstacle : mobileCircularObstacles) {
                     if (obstacle.intersect(ridge.getSeg())) {
                         ridge.setReachable(false);
                         counter++;
