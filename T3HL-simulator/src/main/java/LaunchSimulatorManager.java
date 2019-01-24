@@ -57,6 +57,7 @@ public class LaunchSimulatorManager extends Thread{
         this.container = Container.getInstance("Master");
         try {
             this.table = this.container.getService(Table.class);
+            table.initObstacles();
         } catch (ContainerException e) {
             e.printStackTrace();
         }

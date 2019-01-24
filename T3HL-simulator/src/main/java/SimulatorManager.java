@@ -1,13 +1,8 @@
-import data.Table;
-import data.table.Obstacle;
+import exceptions.OrderException;
 import orders.order.MotionOrder;
 import orders.order.Order;
-import utils.Container;
-import utils.container.ContainerException;
-import utils.container.Service;
 import utils.math.VectCartesian;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SimulatorManager extends Thread {
@@ -25,7 +20,6 @@ public class SimulatorManager extends Thread {
         this.simulatedRobots = simulatedRobots;
 
 
-
         this.start();
     }
 
@@ -36,6 +30,7 @@ public class SimulatorManager extends Thread {
 
         //On tourne en boucle
         while (true) {
+
             //On tryUpdate la position du robot si besoin est
             for (int port: ports) {
 
@@ -67,27 +62,83 @@ public class SimulatorManager extends Thread {
     private void handleMessage(String m, SimulatedRobot robot){
         System.out.println(String.format("SIMULATEUR : message reçu : %s",m));
         String[] arguments = m.split(" ");
-        String order = arguments[0];
-        if (compare(order, MotionOrder.MOVE_LENTGHWISE)){
-            robot.moveLengthwise(Integer.parseInt(arguments[1]));
-        }
-        else if (compare(order, MotionOrder.TURN)){
-            robot.turn(Float.parseFloat(arguments[1]));
-        }
-        else if (compare(order, MotionOrder.MOVE_TO_POINT)){
-            robot.goTo(new VectCartesian(Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2])));
-        }
-        else if (compare(order, MotionOrder.STOP)){
-            robot.stop();
+        if (arguments.length>0) {
+            String order = arguments[0];
+            try {
+                if (testOrder(arguments, MotionOrder.MOVE_LENTGHWISE,2)) {
+                    robot.moveLengthwise(parseInt(arguments[1]));
+                }
+                else if (testOrder(arguments, MotionOrder.TURN,2)) {
+                    robot.turn(parseFloat(arguments[1]));
+                }
+                else if (testOrder(arguments, MotionOrder.MOVE_TO_POINT,3)) {
+                    robot.goTo(new VectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
+                }
+                else if (testOrder(arguments, MotionOrder.STOP,1)) {
+                    robot.stop();
+                }
+                else {
+                    System.out.println(String.format("SIMULATEUR : l'ordre \"%s\" est inconnu", order));
+                }
+            }
+            catch (OrderException e){
+                System.out.println(String.format("SIMULATEUR : %s", e));
+            }
         }
         else{
-            System.out.println(String.format("SIMULATEUR : l'ordre \"%s\" est inconnu", order));
+            System.out.println("SIMULATEUR : l'ordre est vide");
         }
     }
 
     /** Compare une string et un ordre */
-    private boolean compare(String str, Order order){
-        return str.equals(order.getOrderStr());
+    private boolean testOrder(String[] arguments, Order order, int nb_args) throws OrderException {
+        if (arguments.length>0){
+            if (arguments[0].equals(order.getOrderStr())){
+                if (arguments.length==nb_args){
+                    return true;
+                }
+                else{
+                    StringBuilder message = new StringBuilder();
+                    for (int i=0; i<arguments.length; i++){
+                        message.append(arguments[i]);
+                        message.append(" ");
+                    }
+                    throw new OrderException(String.format("Mauvais nombre d'arguments pour l'ordre %s(attendu: %d)", message.toString(), nb_args));
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+
+    /** Parser de float
+     * @param str chaîne de caractère à parser
+     * @return le nombre parsé
+     */
+    private float parseFloat(String str) throws OrderException {
+        try{
+            return Float.parseFloat(str);
+        }
+        catch (NumberFormatException e){
+            throw new OrderException(String.format("Le parser de float n'a pas réussi à parser \"%s\"",str));
+        }
+    }
+
+    /** Parser d'integer
+     * @param str chaîne de caractère à parser
+     * @return le nombre parsé
+     */
+    private int parseInt(String str) throws OrderException {
+        try{
+            return Integer.parseInt(str);
+        }
+        catch (NumberFormatException e){
+            throw new OrderException(String.format("Le parser d'integer n'a pas réussi à parser \"%s\"",str));
+        }
     }
 
 }
