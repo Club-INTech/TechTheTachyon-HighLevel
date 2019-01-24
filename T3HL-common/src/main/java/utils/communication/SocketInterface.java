@@ -63,7 +63,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     /**
      * True si la connexion a été initialisée
      */
-    private boolean initiate;
+    private boolean initiated;
 
     /**
      * Timeout de connexion du server
@@ -78,7 +78,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     public SocketInterface(String ipAddress, int port) {
         this.ipAddress = ipAddress;
         this.port = port;
-        this.initiate = false;
+        this.initiated = false;
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     public synchronized Optional<String> read() throws CommunicationException {
         Optional<String> message = Optional.empty();
         try {
-            if (this.input.ready() && initiate) {
+            if (this.input.ready() && initiated) {
                 message = Optional.of(input.readLine());
             }
         } catch (IOException e) {
@@ -108,11 +108,11 @@ public abstract class SocketInterface implements CommunicationInterface {
     @Override
     public synchronized void close() throws CommunicationException {
         try {
-            if (this.initiate) {
+            if (this.initiated) {
                 this.input.close();
                 this.output.close();
                 this.socket.close();
-                this.initiate = false;
+                this.initiated = false;
             }
         } catch (IOException e) {
             throw new CommunicationException("Impossible de fermer la communication");
@@ -121,7 +121,7 @@ public abstract class SocketInterface implements CommunicationInterface {
 
     @Override
     public boolean isInterfaceOpen() {
-        return initiate;
+        return initiated;
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class SocketInterface implements CommunicationInterface {
         try {
             this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
             this.output = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
-            this.initiate = true;
+            this.initiated = true;
         } catch (IOException e) {
             throw new CommunicationException("Impossible de créer les buffers IO");
         }
@@ -142,7 +142,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     /**
      * Getter & Setter
      */
-    public boolean isInitiate() {
-        return initiate;
+    public boolean isInitiated() {
+        return initiated;
     }
 }

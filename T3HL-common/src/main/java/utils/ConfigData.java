@@ -59,6 +59,11 @@ public enum ConfigData implements ConfigInfo
     SIMULATION(true),
 
     /**
+     * Si on utilise le Lidar
+     */
+    USING_LIDAR(false),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),

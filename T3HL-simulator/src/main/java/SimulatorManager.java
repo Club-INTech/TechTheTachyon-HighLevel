@@ -1,3 +1,4 @@
+import data.controlers.Channel;
 import exceptions.OrderException;
 import orders.order.MotionOrder;
 import orders.order.Order;
@@ -41,7 +42,6 @@ public class SimulatorManager extends Thread {
 
             //On tryUpdate la position du robot
             for (int port: LLports) {
-
                 //On gère les messages d'entrée
                 lastMessage=this.simulatedLLConnectionManagers.get(port).getLastReceivedMessage();
                 if (lastMessage!=null) {
@@ -49,9 +49,6 @@ public class SimulatorManager extends Thread {
                 }
 
                 simulatedRobots.get(port).tryUpdate();
-                if (simulatedRobots.get(port).mustSendStoppedMovingMessage()){
-                    this.simulatedLLConnectionManagers.get(port).sendMessage("StoppedMoving\n");
-                }
             }
 
             //On écoute les ports du HL pour transmettre un éventuel message

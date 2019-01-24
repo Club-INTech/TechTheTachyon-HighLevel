@@ -188,7 +188,7 @@ public class Locomotion implements Service {
                     pointsQueue.clear();
                     pointsQueue.addAll(path);
                 }
-                while (!graphe.isUpdated()) {
+                while (!graphe.isUpdated() && !xyo.getPosition().equals(aim.getPosition())) {
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
