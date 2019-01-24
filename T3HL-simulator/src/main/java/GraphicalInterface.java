@@ -16,7 +16,8 @@ import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private int[] ports;
+    private int[] LLports;
+    private int[] HLports;
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
     private ArrayList<Obstacle> fixedObstacles;
@@ -30,25 +31,25 @@ class GraphicalInterface extends JFrame {
     private final int WIDTH_TABLE = 3000;      //in millimeters
     private final int HEIGHT_TABLE = 2000;     //in millimeters
     private final int MILLIS_BETWEEN_UPDATES=10;
-    private final Color DEFAULT_COLOR = new Color(0,0,0,255);
-    private final Color ROBOT_COLOR = new Color(0,255,0,128);
-    private final Color ORIENTATION_COLOR = new Color(0,0,255,192);
-    private final Color OBSTACLE_COLOR = new Color(255,0,0,128);
+    private Color DEFAULT_COLOR = new Color(0,0,0,255);
+    private Color ROBOT_COLOR = new Color(0,255,0,128);
+    private Color ORIENTATION_COLOR = new Color(0,0,255,255);
+    private Color OBSTACLE_COLOR = new Color(255,0,0,64);
 
 
     /** Constructeur */
-    GraphicalInterface(int[] ports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table) {
-        this.ports = ports;
+    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode) {
+        this.LLports = LLports;
+        this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
         this.table = table;
-
+        this.setColorSchema(colorblindMode);
 
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         this.lastTimeUpdate=System.currentTimeMillis();
 
@@ -69,6 +70,21 @@ class GraphicalInterface extends JFrame {
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
+    }
+
+    private void setColorSchema(boolean colorblindMode){
+        if (colorblindMode) {
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 0, 255, 128);
+            ORIENTATION_COLOR = new Color(0, 255, 255, 255);
+            OBSTACLE_COLOR = new Color(255, 255, 0, 64);
+        }
+        else{
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 255, 0, 128);
+            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
+            OBSTACLE_COLOR = new Color(255, 0, 0, 64);
+        }
     }
 
     /** Fonction appelée par le simulateur */
@@ -116,6 +132,7 @@ class GraphicalInterface extends JFrame {
         }
     }
 
+    /** Fonction utlisée pour dessiner un carré ou un rectangle */
     private void drawPrimitiveShape(Graphics g, Shape shape){
         Vec2 centerOnTable = shape.getCenter();
         Vec2 center = transformTableCoordsToInterfaceCoords(centerOnTable);
