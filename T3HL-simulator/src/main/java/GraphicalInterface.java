@@ -16,7 +16,8 @@ import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private int[] ports;
+    private int[] LLports;
+    private int[] HLports;
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
     private ArrayList<Obstacle> fixedObstacles;
@@ -37,8 +38,9 @@ class GraphicalInterface extends JFrame {
 
 
     /** Constructeur */
-    GraphicalInterface(int[] ports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table) {
-        this.ports = ports;
+    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table) {
+        this.LLports = LLports;
+        this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
         this.table = table;
 
