@@ -46,6 +46,7 @@ public class Test_SensorControler {
         listener=new Listener(connectionManager);
         sensorControler=new SensorControler(listener);
     }
+
     @Test
     public void run() throws Exception {
 

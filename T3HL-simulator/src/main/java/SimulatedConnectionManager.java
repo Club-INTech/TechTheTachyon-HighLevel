@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class ConnectionManagerSimulator extends Thread {
+public class SimulatedConnectionManager extends Thread {
 
     private ServerSocket receptionSocket;
     private Socket socket;
@@ -17,7 +17,7 @@ public class ConnectionManagerSimulator extends Thread {
     /** Constructeur
      * @param port port sur lequel écoute le simulateur
      */
-    ConnectionManagerSimulator(int port){
+    SimulatedConnectionManager(int port){
         //On initialise le dernier message reçu et le serveur Socket
         this.receivedMessage = new ConcurrentLinkedQueue<String>();
         try {
