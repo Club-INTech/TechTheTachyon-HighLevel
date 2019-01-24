@@ -4,6 +4,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
+import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -81,6 +82,26 @@ public class PaletsX6 extends Script {
     }
     @Override
     public Shape entryPosition(Integer version) {
+
+        if (version == 0) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 1) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 2) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 3) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 4) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 5) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+
         return null;
     }
     @Override
