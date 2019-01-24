@@ -57,8 +57,9 @@ public enum ActuatorsOrder implements Order {
     DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left"),
     ENVOIE_UN_XL_A_ANGLE_VOULU("XLm"),
     ENVOIE_UN_XL_A_LA_VITESSE_VOULUE("XLs"),
-
-
+    TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT("torqueBras right"),
+    TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_GAUCHE("torqueBras left"),
+    TEST_COUPLE_XL("torqueXL"),
     ;
 
     /**
