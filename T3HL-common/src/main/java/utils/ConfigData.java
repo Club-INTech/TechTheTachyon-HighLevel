@@ -77,6 +77,7 @@ public enum ConfigData implements ConfigInfo
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
     MASTER_LL_SIMULATEUR(10001),
+    SLAVE_SIMULATEUR(20001),
 
     /**
      * Dimensions du robot

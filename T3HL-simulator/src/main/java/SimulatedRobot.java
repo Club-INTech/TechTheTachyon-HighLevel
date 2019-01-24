@@ -6,10 +6,10 @@ import utils.math.VectPolar;
 public class SimulatedRobot {
 
     private Vec2 position;          //Position actuelle du robot
-    private float orientation;      //Orientation actuelle du robot
+    private double orientation;      //Orientation actuelle du robot
 
     private Vec2 positionTarget;        //Position cible du robot
-    private float orientationTarget;    //Orientation cible du robot
+    private double orientationTarget;    //Orientation cible du robot
 
     private final float POSITION_TOLERANCE = 0.01f;  //Tolérance sur la position
     private final float ORIENTATION_TOLERANCE = 0.001f;  //Tolérance sur l'orientation
@@ -48,18 +48,24 @@ public class SimulatedRobot {
             updateOrientation();
             updatePosition();
             trySendingStoppedMovingMessage();
+            sendRealtimePosition();
             this.lastUpdateTime = System.currentTimeMillis();
         }
     }
 
-    /** Up un flag pour dire si on doit envoyer un message pour dire que le robot a fini son mouvement */
+    /** Envoie un message quand on a fini un mouvement */
     private void trySendingStoppedMovingMessage() {
         if (this.previousMovingState){
             if (!this.isMoving()){
-                this.simulatedLLConnectionManager.sendMessage(String.format("%s%s", Channel.EVENT.getHeaders(),"stoppedMoving\n"));
+                this.simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(),"stoppedMoving"));
             }
         }
         this.previousMovingState=this.isMoving();
+    }
+
+    /** Envoie la position à l'instance de HL qui est en relation avec ce robot simulé */
+    private void sendRealtimePosition(){
+        this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.3f\n",Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",","."));
     }
 
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
@@ -144,8 +150,8 @@ public class SimulatedRobot {
     }
 
     /** Fait un modulo entre -Pi et Pi d'un angle en radians */
-    private float moduloSpec(float angle){
-        float moduloedAngle = angle % (float)(2*Math.PI);
+    private double moduloSpec(double angle){
+        double moduloedAngle = angle % (float)(2*Math.PI);
         if (moduloedAngle>Math.PI){
             moduloedAngle-=2*Math.PI;
         }
@@ -159,6 +165,6 @@ public class SimulatedRobot {
     int getY(){ return this.position.getY(); }
 
     /** Renvoie l'orientation du robot */
-    float getOrientation(){ return this.orientation; }
+    double getOrientation(){ return this.orientation; }
 
 }

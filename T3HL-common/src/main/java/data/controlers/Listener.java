@@ -97,7 +97,13 @@ public class Listener extends Thread implements Service {
 
     @Override
     public void run() {
-        Connection buddy = Connection.SLAVE;
+        Connection buddy;
+        if (simulation){
+            buddy = Connection.SLAVE_SIMULATEUR;
+        }
+        else {
+            buddy = Connection.SLAVE;
+        }
         // Initialisation des connexions
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
@@ -105,6 +111,9 @@ public class Listener extends Thread implements Service {
                 connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
                 Log.COMMUNICATION.debug("Simulation");
                 Log.COMMUNICATION.debug("Simulated Teensy Master");
+                connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
+                Log.COMMUNICATION.debug("Simulation");
+                Log.COMMUNICATION.debug("Simulated Buddy");
             }
             else {
                 connectionManager.initConnections(Connection.LIDAR);

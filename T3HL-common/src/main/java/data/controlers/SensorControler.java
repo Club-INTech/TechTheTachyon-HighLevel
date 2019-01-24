@@ -118,7 +118,6 @@ public class SensorControler extends Thread implements Service {
             }
             if (eventData.peek() != null){
                 event = eventData.poll().split(ARGUMENTS_SEPARATOR);
-                System.out.println(event[0]);
                 if (event.length==1){
                     if (event[0].equals("stoppedMoving")){
                         SensorState.MOVING.setData(false);
@@ -130,7 +129,7 @@ public class SensorControler extends Thread implements Service {
                 int[] significantSicks = Sick.getSignificantSicks();
                 int dsick = 173;
                 int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
-                double rapport = esick / dsick;
+                double rapport = esick / dsick; //TODO : attention, c'est une division d'entiers, elle renvoie donc un entier
                 int xCalcule;
                 int yCalcule;
                 double teta;

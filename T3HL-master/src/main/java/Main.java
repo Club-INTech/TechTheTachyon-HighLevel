@@ -53,32 +53,40 @@ public class Main {
 
         SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
         launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
+        launcher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
         launcher.setColorblindMode(true);
         launcher.launchSimulator();
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
-            ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Master robot = container.getService(Master.class);
+            Table table = container.getService(Table.class);
+
             Locomotion locomotion = container.getService(Locomotion.class);
             PathFollower pathFollower = container.getService(PathFollower.class);
             pathFollower.start();
             SensorControler sensorControler = container.getService(SensorControler.class);
             sensorControler.start();
-            Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
-            Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
-            Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
-            Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
-            Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
+
+
+            table.initObstacles();
+
+
             ConnectionManager connectionManager = container.getService(ConnectionManager.class);
             OrderWrapper orderWrapper = container.getService(OrderWrapper.class);
             Listener listener = container.getService(Listener.class);
             listener.start();
             Thread.sleep(2000);
 
-            Master robot = container.getService(Master.class);
-            Table table = container.getService(Table.class);
 
-            table.initObstacles();
+
+            ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
+            Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
+            Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
+            Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
+            Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
+
 
             zone_depart_palets.goToThenExecute(1);
             zone_chaos_palets.goToThenExecute(1);
