@@ -49,7 +49,7 @@ public class SimulatorManagerLauncher extends Thread{
     }
 
     /** Définition du mode daltonien */
-    void setcolorblindMode(boolean value){
+    void setColorblindMode(boolean value){
         if (!this.launched) {
             this.colorblindMode = value;
         }
@@ -72,6 +72,9 @@ public class SimulatorManagerLauncher extends Thread{
     public boolean getColorblindMode(){
         return this.colorblindMode;
     }
+
+
+
 
     /** Fonction à appeler pour lancer le simulateur */
     void launchSimulator() {

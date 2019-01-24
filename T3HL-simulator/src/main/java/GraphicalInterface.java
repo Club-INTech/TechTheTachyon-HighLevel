@@ -132,6 +132,7 @@ class GraphicalInterface extends JFrame {
         }
     }
 
+    /** Fonction utlisée pour dessiner un carré ou un rectangle */
     private void drawPrimitiveShape(Graphics g, Shape shape){
         Vec2 centerOnTable = shape.getCenter();
         Vec2 center = transformTableCoordsToInterfaceCoords(centerOnTable);
