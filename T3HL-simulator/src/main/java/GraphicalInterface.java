@@ -112,23 +112,24 @@ class GraphicalInterface extends JFrame {
 
     /** Affiche les obstacles */
     private void drawObstacles(Graphics g){
-        for (Obstacle obstacle : this.fixedObstacles){
-            g.setColor(OBSTACLE_COLOR);
-            Shape shape = obstacle.getShape();
-            Vec2 center = shape.getCenter();
-            if (shape instanceof CircularRectangle){
-                for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()){
-                    drawPrimitiveShape(g, rectangle);
+        synchronized (this.fixedObstacles) {
+            for (Obstacle obstacle : this.fixedObstacles) {
+                g.setColor(OBSTACLE_COLOR);
+                Shape shape = obstacle.getShape();
+                Vec2 center = shape.getCenter();
+                if (shape instanceof CircularRectangle) {
+                    for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()) {
+                        drawPrimitiveShape(g, rectangle);
+                    }
+                    for (Circle circle : ((CircularRectangle) shape).getCircleArcs()) {
+                        drawPrimitiveShape(g, circle);
+                    }
+                    drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
+                } else {
+                    drawPrimitiveShape(g, shape);
                 }
-                for (Circle circle : ((CircularRectangle) shape).getCircleArcs()){
-                    drawPrimitiveShape(g, circle);
-                }
-                drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
+                g.setColor(DEFAULT_COLOR);
             }
-            else{
-                drawPrimitiveShape(g, shape);
-            }
-            g.setColor(DEFAULT_COLOR);
         }
     }
 

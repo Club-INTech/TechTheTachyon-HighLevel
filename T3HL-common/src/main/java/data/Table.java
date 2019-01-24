@@ -332,11 +332,15 @@ public class Table implements Service {
         if (obstacle instanceof MobileCircularObstacle) {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
-        this.fixedObstacles.add(obstacle);
-        if (graphe != null) {
-            this.graphe.reInit();
-        } else {
-            Log.LIDAR.warning("Graphe non instancié");
+        synchronized (this.fixedObstacles) {
+            this.fixedObstacles.add(obstacle);
+        }
+        synchronized (this.graphe) {
+            if (this.graphe != null) {
+                this.graphe.reInit();
+            } else {
+                Log.LIDAR.warning("Graphe non instancié");
+            }
         }
     }
 
