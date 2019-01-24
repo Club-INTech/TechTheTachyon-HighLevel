@@ -1,6 +1,6 @@
 package data.controlers;
 
-import data.SensorState;
+import data.CouleurPalet;
 import data.Sick;
 import data.XYO;
 import pfg.config.Config;
@@ -8,12 +8,9 @@ import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Future;
 
 /**
  * Gère les données de positions et de capteur ne nécessitant pas de traitement
@@ -43,6 +40,7 @@ public class SensorControler extends Thread implements Service {
     private ConcurrentLinkedQueue<String> robotPosQueue;
     private ConcurrentLinkedQueue<String> buddyPosQueue;
     private ConcurrentLinkedQueue<String> sickData;
+    private ConcurrentLinkedQueue<String> couleurPalet;
 
     /**
      * True si autre couleur
@@ -59,9 +57,11 @@ public class SensorControler extends Thread implements Service {
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
+        this.couleurPalet =new ConcurrentLinkedQueue<>();
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
         listener.addQueue(Channel.SICK,sickData);
+        listener.addQueue(Channel.COULEUR_PALET_PRIS, couleurPalet);
     }
 
     @Override
@@ -166,9 +166,12 @@ public class SensorControler extends Thread implements Service {
                 double newOrientation = teta;
                 XYO newXYO = new XYO(newPosition, newOrientation);
                 Sick.setNewXYO(newXYO);
-
-
             }
+            if(couleurPalet.peek()!=null){
+                String couleur = couleurPalet.poll();
+                CouleurPalet.setCouleurPalRecu(couleur);
+            }
+
         }
     }
 
