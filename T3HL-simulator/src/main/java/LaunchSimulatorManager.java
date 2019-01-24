@@ -21,7 +21,7 @@ public class LaunchSimulatorManager extends Thread{
      * @param LLports ports sur lesquels on devra se connecter pour parler au LL simulé
      * @param HLports ports sur lesquels on devra se connecter pour parler à l'autre HL
      */
-    public LaunchSimulatorManager(int[] LLports, int[] HLports) {
+    public LaunchSimulatorManager(int[] LLports, int[] HLports, int colorVersion) {
         if (HLports.length > 2) {
             System.out.println("SIMULATOR : Le nombre de ports attendus pour le HL (2ème argument) est de 2 ou moins");
             return;
@@ -89,7 +89,7 @@ public class LaunchSimulatorManager extends Thread{
 
 
         // On instancie l'interface graphique
-        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table);
+        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, colorVersion);
         System.out.println(String.format("Interface graphique instanciée"));
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
