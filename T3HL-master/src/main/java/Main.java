@@ -22,6 +22,7 @@ import data.controlers.Listener;
 import orders.OrderWrapper;
 import robot.Master;
 import scripts.Script;
+import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
 import utils.ConfigData;
@@ -45,12 +46,6 @@ public class Main {
         }
         */
         container = Container.getInstance("robot.Master");
-        ScriptManagerMaster scriptManager;
-        Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
-        Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
-        Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
-        Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
-        Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
 
 
         SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
@@ -60,7 +55,12 @@ public class Main {
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
-            scriptManager = container.getService(ScriptManagerMaster.class);
+            ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
+            Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
+            Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
+            Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
+            Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             ConnectionManager connectionManager = container.getService(ConnectionManager.class);
             OrderWrapper orderWrapper = container.getService(OrderWrapper.class);
             Listener listener = container.getService(Listener.class);
