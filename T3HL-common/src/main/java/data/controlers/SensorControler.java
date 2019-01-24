@@ -1,6 +1,7 @@
 package data.controlers;
 
 import data.CouleurPalet;
+import data.SensorState;
 import data.Sick;
 import data.XYO;
 import pfg.config.Config;
