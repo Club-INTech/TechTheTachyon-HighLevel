@@ -18,11 +18,14 @@
 
 import connection.ConnectionManager;
 import data.Table;
+import data.controlers.Listener;
+import orders.OrderWrapper;
 import robot.Master;
-import scripts.ScriptManagerMaster;
+import scripts.*;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.VectCartesian;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,33 +37,32 @@ import java.nio.file.Paths;
 public class Main {
 
     public static void main(String[] args){
-        Container container;
-        String hierarchy;
-        /*
-        try {
-            hierarchy = Files.readAllLines(Paths.get("../config/hierarchy.txt")).get(0);
-        } catch (IOException e) {
-            hierarchy=null;
-            e.printStackTrace();
-        }
-        */
-        container = Container.getInstance("robot.Master");
-        ScriptManagerMaster scriptManager;
+        Container container = Container.getInstance("robot.Master");
+
+        SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
+        launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
+        launcher.setColorblindMode(true);
+        launcher.launchSimulator();
+
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
+            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
             ConnectionManager connectionManager = container.getService(ConnectionManager.class);
+            OrderWrapper orderWrapper = container.getService(OrderWrapper.class);
+            Listener listener = container.getService(Listener.class);
+            listener.start();
             Thread.sleep(2000);
-
 
             Master robot = container.getService(Master.class);
             Table table = container.getService(Table.class);
-            scriptManager = container.getService(ScriptManagerMaster.class);
 
-            //Paletsx3 paletx3 = scriptManager.getScript(Paletsx3);
+            orderWrapper.moveToPoint(new VectCartesian(1000,1000));
+
+            //Paletsx3 paletx3 = scriptManager.getScript();
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
         }
-        Container.resetInstance();
+        //Container.resetInstance();
     }
 }

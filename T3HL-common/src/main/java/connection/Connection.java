@@ -27,6 +27,7 @@ import utils.communication.SocketServerInterface;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.Socket;
 import java.util.Optional;
 
 /**
@@ -42,7 +43,9 @@ public enum Connection {
     TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketClientInterface.class),
 
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
-    LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class)
+    LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class),
+
+    MASTER_LL_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.MASTER_LL_SIMULATEUR, SocketClientInterface.class)
     ;
 
     /**

@@ -48,9 +48,14 @@ public class OrderWrapper implements Service {
     private boolean symetry;
 
     /**
+     * Simulation active
+     */
+    private boolean simulation;
+
+    /**
      * On utitise comme connexion par défaut le bas niveau
      */
-    private Connection llConnection = Connection.TEENSY_MASTER;
+    private Connection llConnection;
 
     /**
      * Le service de symétrie des ordres
@@ -286,6 +291,13 @@ public class OrderWrapper implements Service {
     public void updateConfig(Config config) {
         //On est du côté violet par défaut , le HL pense en violet
         symetry=config.getString(ConfigData.COULEUR).equals("jaune");
+        this.simulation = config.getBoolean(ConfigData.SIMULATION);
+        if (this.simulation) {
+            this.llConnection = Connection.MASTER_LL_SIMULATEUR;
+        }
+        else {
+            this.llConnection = Connection.TEENSY_MASTER;
+        }
     }
 
     /**

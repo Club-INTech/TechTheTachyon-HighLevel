@@ -73,11 +73,19 @@ public class SimulatorManagerLauncher extends Thread{
         return this.colorblindMode;
     }
 
+    /** Fonction qui crée un Thread pour lancer le simualteur */
+    public void launchSimulator(){
+        this.start();
+    }
 
+    @Override
+    /** Run du thread du simulateur */
+    public void run() {
+        launch();
+    }
 
-
-    /** Fonction à appeler pour lancer le simulateur */
-    void launchSimulator() {
+    /** Lancer le simulateur */
+    private void launch() {
         this.launched=true;
         if (this.HLports.length > 2) {
             System.out.println("SIMULATEUR : Le nombre de ports attendus pour le HL (2ème argument) est de 2 ou moins");

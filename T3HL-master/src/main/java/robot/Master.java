@@ -32,10 +32,10 @@ import robot.Robot;
 public class Master extends Robot {
     private int nbpaletsdroits;
     private int nbpaletsgauches;
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, int nbpaletsdroits) {
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
         super(locomotion, orderWrapper, hookFactory);
-        this.nbpaletsdroits = nbpaletsdroits;
-
+        this.nbpaletsdroits = 0;
+        this.nbpaletsgauches = 0;
     }
 
     public int getNbpaletsdroits (){
