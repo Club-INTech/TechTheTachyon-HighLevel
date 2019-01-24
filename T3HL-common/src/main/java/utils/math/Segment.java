@@ -87,13 +87,9 @@ public class Segment implements Cloneable {
         double a1, a2, b1, b2;
 
         if (p1A.getX() == p1B.getX()) {
-            a2 = (p2A.getY() - p2B.getY()) / (double) (p2A.getX() - p2B.getX());
-            b2 = p2B.getY() - a2* p2B.getX();
-            return new VectCartesian(p1A.getX(), (float)(a2* p1A.getX() + b2));
+            return computeIntersection(p1A, p2A, p2B);
         } else if (p2A.getX() == p2B.getX()) {
-            a1 = (p1A.getY() - p1B.getY()) / (double) (p1A.getX() - p1B.getX());
-            b1 = p1B.getY() - a1* p1B.getX();
-            return new VectCartesian(p2A.getX(), (float)(a1* p2A.getX() + b1));
+            return computeIntersection(p2A, p1A, p1B);
         }
 
         a1 = (p1A.getY() - p1B.getY()) / (double) (p1A.getX() - p1B.getX());
@@ -104,6 +100,14 @@ public class Segment implements Cloneable {
         float d = (float) (a2 - a1);
 
         return new VectCartesian((float) ((b1 - b2) / d), (float) ((a2* b1 - a1* b2) / d));
+    }
+
+    private Vec2 computeIntersection(Vec2 p1A, Vec2 p2A, Vec2 p2B) {
+        double a2;
+        double b2;
+        a2 = (p2A.getY() - p2B.getY()) / (double) (p2A.getX() - p2B.getX());
+        b2 = p2B.getY() - a2* p2B.getX();
+        return new VectCartesian(p1A.getX(), (float)(a2* p1A.getX() + b2));
     }
 
     /**

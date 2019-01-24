@@ -99,9 +99,10 @@ public class Listener extends Thread implements Service {
             connectionManager.initConnections(Connection.LIDAR);
             Log.COMMUNICATION.debug("Lidar");
             if (master) {
-                connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
+                connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER, Connection.LIDAR);
                 Log.COMMUNICATION.debug("Slave");
                 Log.COMMUNICATION.debug("Teensy Master");
+                Log.COMMUNICATION.debug("Lidar");
             } else {
                 connectionManager.initConnections(Connection.MASTER, Connection.TEENSY_SLAVE);
                 buddy = Connection.MASTER;
