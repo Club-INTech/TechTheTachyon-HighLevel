@@ -24,11 +24,12 @@ package data.controlers;
  * @author rem
  */
 public enum Channel {
-    LIDAR((char) 0x20, (char) 0x21),
-    ROBOT_POSITION((char) 0x20, (char) 0x22),
-    BUDDY_POSITION((char) 0x20, (char) 0x23),
-    EVENT((char) 0x20, (char) 0x24),
-    SICK((char)0x20,(char)0x25),
+    LIDAR((char) 0x21, (char) 0x21),
+    ROBOT_POSITION((char) 0x21, (char) 0x22),
+    BUDDY_POSITION((char) 0x21, (char) 0x23),
+    EVENT((char) 0x21, (char) 0x24),
+    SICK((char)0x21, (char)0x25),
+    COULEUR_PALET_PRIS((char)0x21,(char)0x26),
     ;
 
     /**

@@ -27,7 +27,7 @@ import java.util.HashMap;
  *
  * @author rem
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     /**
      * Variables static pour l'initialistation des noeuds
@@ -169,5 +169,10 @@ public class Node {
     }
     public static int getFixCost() {
         return FIX_COST;
+    }
+
+    @Override
+    public int compareTo(Node node) {
+        return this.heuristique-node.heuristique;
     }
 }

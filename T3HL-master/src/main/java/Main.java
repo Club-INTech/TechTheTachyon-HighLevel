@@ -19,6 +19,9 @@
 import connection.ConnectionManager;
 import data.Table;
 import data.controlers.Listener;
+import data.controlers.SensorControler;
+import locomotion.Locomotion;
+import locomotion.PathFollower;
 import orders.OrderWrapper;
 import robot.Master;
 import scripts.Script;
@@ -56,6 +59,11 @@ public class Main {
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
             ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Locomotion locomotion = container.getService(Locomotion.class);
+            PathFollower pathFollower = container.getService(PathFollower.class);
+            pathFollower.start();
+            SensorControler sensorControler = container.getService(SensorControler.class);
+            sensorControler.start();
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
             Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
             Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();

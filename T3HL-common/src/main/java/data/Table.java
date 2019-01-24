@@ -335,12 +335,12 @@ public class Table implements Service {
         synchronized (this.fixedObstacles) {
             this.fixedObstacles.add(obstacle);
         }
-        synchronized (this.graphe) {
-            if (this.graphe != null) {
+        if (this.graphe != null) {
+            synchronized (this.graphe) {
                 this.graphe.reInit();
-            } else {
-                Log.LIDAR.warning("Graphe non instancié");
             }
+        } else {
+            Log.LIDAR.warning("Graphe non instancié");
         }
     }
 

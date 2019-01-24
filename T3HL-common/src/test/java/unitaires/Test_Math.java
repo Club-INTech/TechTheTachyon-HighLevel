@@ -292,4 +292,41 @@ public class Test_Math {
         Assert.assertFalse(rectangle.equals(rectangle3));
         Assert.assertFalse(rectangle2.equals(rectangle3));
     }
+
+    @Test
+    public void circularRectangleClosest() {
+        float radius = 10;
+        CircularRectangle rectangle = new CircularRectangle(new VectCartesian(0, 0), 80, 40, radius);
+
+        Assert.assertEquals(new VectCartesian(0, -20 - radius), rectangle.closestPointToShape(new VectCartesian(0, -500))); // au nord
+        Assert.assertEquals(new VectCartesian(0, 20 + radius), rectangle.closestPointToShape(new VectCartesian(0, 500))); // au sud
+        Assert.assertEquals(new VectCartesian(40 + radius, 0), rectangle.closestPointToShape(new VectCartesian(500, 0))); // à l'est
+        Assert.assertEquals(new VectCartesian(-40 - radius, 0), rectangle.closestPointToShape(new VectCartesian(-500, 0))); // à l'ouest
+
+        // coins
+        // coin nord-ouest
+        Assert.assertEquals(
+                new VectCartesian((float) (-40 + radius * Math.cos(3*Math.PI/4)), (float) (-20 - radius * Math.sin(3*Math.PI/4))),
+                rectangle.closestPointToShape(new VectCartesian(-500, -500)));
+
+        // coin nord-est
+        Assert.assertEquals(
+                new VectCartesian((float) (40 + radius * Math.cos(Math.PI/4)), (float) (-20 - radius * Math.sin(Math.PI/4))),
+                rectangle.closestPointToShape(new VectCartesian(500, -500))
+        );
+
+        // coin sud-ouest
+        Assert.assertEquals(
+                new VectCartesian((float) (-40 + radius * Math.cos(5*Math.PI/4)), (float) (20 - radius * Math.sin(5*Math.PI/4))),
+                rectangle.closestPointToShape(new VectCartesian(-500, 500))
+        );
+
+        // coin sud-est
+        Assert.assertEquals(
+                new VectCartesian((float) (40 + radius * Math.cos(7*Math.PI/4)), (float) (20 - radius * Math.sin(7*Math.PI/4))),
+                rectangle.closestPointToShape(new VectCartesian(500, 500))
+        );
+
+        // TODO: test qd point dans le rectangle
+    }
 }

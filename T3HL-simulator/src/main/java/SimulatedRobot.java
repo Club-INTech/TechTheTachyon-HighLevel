@@ -1,3 +1,4 @@
+import data.controlers.Channel;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 import utils.math.VectPolar;
@@ -25,11 +26,12 @@ public class SimulatedRobot {
     private long lastUpdateTime;
     private final int MILLIS_BETWEEN_UPDATES=10;
 
-    private boolean stoppedMovingMessageToSendFlag = false;
     private boolean previousMovingState = false;
 
+    private SimulatedConnectionManager simulatedLLConnectionManager;
+
     /** Constructeur */
-    SimulatedRobot(){
+    SimulatedRobot(SimulatedConnectionManager simulatedLLConnectionManager){
         this.forwardOrBackward=false;
         this.lastUpdateTime=System.currentTimeMillis();
         this.turning=false;
@@ -37,6 +39,7 @@ public class SimulatedRobot {
         this.positionTarget = START_POSITION;
         this.orientation = START_ORIENTATION;
         this.orientationTarget = START_ORIENTATION;
+        this.simulatedLLConnectionManager=simulatedLLConnectionManager;
     }
 
     /** Fonction appelée pour tryUpdate la position du robot */
@@ -44,29 +47,19 @@ public class SimulatedRobot {
         if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
             updateOrientation();
             updatePosition();
-            updateStopMovingMessage();
+            trySendingStoppedMovingMessage();
             this.lastUpdateTime = System.currentTimeMillis();
         }
     }
 
     /** Up un flag pour dire si on doit envoyer un message pour dire que le robot a fini son mouvement */
-    private void updateStopMovingMessage() {
-        if (previousMovingState){
+    private void trySendingStoppedMovingMessage() {
+        if (this.previousMovingState){
             if (!this.isMoving()){
-                stoppedMovingMessageToSendFlag = true;
+                this.simulatedLLConnectionManager.sendMessage(String.format("%s%s", Channel.EVENT.getHeaders(),"stoppedMoving\n"));
             }
         }
         this.previousMovingState=this.isMoving();
-    }
-
-    public boolean mustSendStoppedMovingMessage(){
-        if (this.stoppedMovingMessageToSendFlag){
-            this.stoppedMovingMessageToSendFlag=false;
-            return true;
-        }
-        else{
-            return false;
-        }
     }
 
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
