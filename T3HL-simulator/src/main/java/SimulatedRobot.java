@@ -16,7 +16,7 @@ public class SimulatedRobot {
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
     private final float ROTATION_SPEED = 0.001f;           //Vitesse de rotation en rad/s
 
-    private final Vec2 START_POSITION = new VectCartesian(400,300);
+    private final Vec2 START_POSITION = new VectCartesian(0,1000);
     private final float START_ORIENTATION = 0;
 
     private boolean forwardOrBackward;     //Vrai si le robot avance ou recule, faux sinon
@@ -136,6 +136,18 @@ public class SimulatedRobot {
     void goTo(Vec2 position){
         this.positionTarget = position;
         this.orientationTarget = (float)position.minusVector(this.position).getA();
+    }
+
+    /** Set la position du robot */
+    void setPosition(Vec2 position){
+        this.positionTarget=position;
+        this.position=position;
+    }
+
+    /** Set l'orientation du robot */
+    void setOrientation(float orientation){
+        this.orientationTarget=orientation;
+        this.orientation=orientation;
     }
 
     /** Fait un modulo entre -Pi et Pi d'un angle en radians */

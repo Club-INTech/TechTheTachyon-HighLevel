@@ -60,6 +60,11 @@ public class Listener extends Thread implements Service {
     private Map<Channel, ConcurrentLinkedQueue<String>> queueMap;
 
     /**
+     * Si on est en simulation
+     */
+    private boolean simulation;
+
+    /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
@@ -96,17 +101,24 @@ public class Listener extends Thread implements Service {
         // Initialisation des connexions
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
-            connectionManager.initConnections(Connection.LIDAR);
-            Log.COMMUNICATION.debug("Lidar");
-            if (master) {
-                connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
-                Log.COMMUNICATION.debug("Slave");
-                Log.COMMUNICATION.debug("Teensy Master");
-            } else {
-                connectionManager.initConnections(Connection.MASTER, Connection.TEENSY_SLAVE);
-                buddy = Connection.MASTER;
-                Log.COMMUNICATION.debug("Master");
-                Log.COMMUNICATION.debug("Teensy Slave");
+            if (simulation){
+                connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
+                Log.COMMUNICATION.debug("Simulation");
+                Log.COMMUNICATION.debug("Simulated Teensy Master");
+            }
+            else {
+                connectionManager.initConnections(Connection.LIDAR);
+                Log.COMMUNICATION.debug("Lidar");
+                if (master) {
+                    connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
+                    Log.COMMUNICATION.debug("Slave");
+                    Log.COMMUNICATION.debug("Teensy Master");
+                } else {
+                    connectionManager.initConnections(Connection.MASTER, Connection.TEENSY_SLAVE);
+                    buddy = Connection.MASTER;
+                    Log.COMMUNICATION.debug("Master");
+                    Log.COMMUNICATION.debug("Teensy Slave");
+                }
             }
         } catch (CommunicationException e) {
             e.printStackTrace();
@@ -162,5 +174,6 @@ public class Listener extends Thread implements Service {
     @Override
     public void updateConfig(Config config) {
         this.master = config.getBoolean(ConfigData.MASTER);
+        this.simulation=config.getBoolean(ConfigData.SIMULATION);
     }
 }

@@ -54,6 +54,11 @@ public enum ConfigData implements ConfigInfo
     MASTER(true),
 
     /**
+     * Simulation active
+     */
+    SIMULATION(true),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),
@@ -66,6 +71,7 @@ public enum ConfigData implements ConfigInfo
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
+    MASTER_LL_SIMULATEUR(10001),
 
     /**
      * Dimensions du robot
