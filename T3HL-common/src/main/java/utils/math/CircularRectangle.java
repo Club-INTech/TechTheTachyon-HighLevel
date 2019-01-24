@@ -139,8 +139,45 @@ public class CircularRectangle extends Shape {
      */
     @Override
     public Vec2 closestPointToShape(Vec2 point) {
-        // TODO
-        return null;
+        // il y a deux cas principaux:
+        // 1. On est directement au dessus, en dessous, à gauche ou à droite du rectangle principal (en gros pas dans les coins)
+        //      Dans ce cas là, il suffit de comparer par rapport au rectangle entourant le principal qui est le plus approprié
+        // 2. On est dans un des coins
+        //      On cherche l'arc le plus proche et on teste
+        // 3. On est dans la figure, c'est pas pris en compte -> TODO
+        // TODO: cas où on est dans le rectangle arrondi qui est simplement ignoré ici
+
+        // nord/sud
+        if(Calculs.isBetween(point.getX(), center.getX()-mainRectangle.getLength()/2, center.getX()+mainRectangle.getLength()/2)) {
+            if(point.getY() < center.getY()) { // test rectangle nord
+                return sideRectangles.get(2).closestPointToShape(point);
+            } else {
+                return sideRectangles.get(0).closestPointToShape(point);
+            }
+        }
+
+        // ouest/est
+        if(Calculs.isBetween(point.getY(), center.getY()-mainRectangle.getWidth()/2, center.getY()+mainRectangle.getWidth()/2)) {
+            // test rectangle nord
+            if(point.getX() < center.getX()) { // test rectangle ouest
+                return sideRectangles.get(3).closestPointToShape(point);
+            } else {
+                return sideRectangles.get(1).closestPointToShape(point);
+            }
+        }
+
+        // tests des arcs de cercle
+        Vec2 closest = circleArcs.get(0).closestPointToShape(point);
+        double minDistance = closest.distanceTo(point);
+        for (int i = 1;i<circleArcs.size();i++) {
+            Vec2 closestInArc = circleArcs.get(i).closestPointToShape(point);
+            double distanceToArc = closestInArc.distanceTo(point);
+            if(distanceToArc < minDistance) {
+                minDistance = distanceToArc;
+                closest = closestInArc;
+            }
+        }
+        return closest;
     }
 
     /**

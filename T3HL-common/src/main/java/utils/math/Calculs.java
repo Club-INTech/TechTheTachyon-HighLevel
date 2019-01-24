@@ -39,19 +39,19 @@ public class Calculs {
         return number;
     }
 
-    /**Cette méthode détermine si x est bien entre y et z
-     * @param x nombre dont on veut savoir s'il est entre les deux autres nombres spécifiés
-     *@param y plus petit nombre
-     * @param z plus grand nombre*/
+    /**Cette méthode détermine si value est bien entre boundA et boundB
+     * @param value nombre dont on veut savoir s'il est entre les deux autres nombres spécifiés
+     *@param boundA plus petit nombre
+     * @param boundB plus grand nombre*/
 
-    public static boolean isBetween(double x, double y, double z) {
-        //On inverse y et z si jamais on se trompe de paramètres
-        if(y>z)
+    public static boolean isBetween(double value, double boundA, double boundB) {
+        //On inverse boundA et boundB si jamais on se trompe de paramètres
+        if(boundA>boundB)
         {
-            double t=z;
-            z=y;
-            y=t;
+            double t=boundB;
+            boundB=boundA;
+            boundA=t;
         }
-        return x>=y && x<=z;
+        return value>=boundA && value<=boundB;
     }
 }
