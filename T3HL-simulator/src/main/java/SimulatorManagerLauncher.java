@@ -1,12 +1,10 @@
 import data.Table;
-import data.table.Obstacle;
 import utils.Container;
 import utils.container.ContainerException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class LaunchSimulatorManager extends Thread{
+public class SimulatorManagerLauncher extends Thread{
 
     private GraphicalInterface graphicalInterface;
     private SimulatorManager simulatorManager;
@@ -17,18 +15,74 @@ public class LaunchSimulatorManager extends Thread{
     private Container container;
     private Table table;
 
-    /** Constructeur
-     * @param LLports ports sur lesquels on devra se connecter pour parler au LL simulé
-     * @param HLports ports sur lesquels on devra se connecter pour parler à l'autre HL
-     */
-    public LaunchSimulatorManager(int[] LLports, int[] HLports, int colorVersion) {
-        if (HLports.length > 2) {
-            System.out.println("SIMULATOR : Le nombre de ports attendus pour le HL (2ème argument) est de 2 ou moins");
+    private int[] LLports;
+    private int[] HLports;
+    private boolean colorblindMode;
+    private boolean launched;
+
+    /** Constructeur */
+    SimulatorManagerLauncher(){
+        this.launched=false;
+        this.colorblindMode=false;
+        this.LLports=new int[]{};
+        this.HLports=new int[]{};
+    }
+
+    /** Setter des ports utilisés pour parler au LL */
+    void setLLports(int[] LLports){
+        if (!this.launched) {
+            this.LLports = LLports;
+        }
+        else{
+            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
+        }
+    }
+
+    /** Setter des ports utilisés pour parler entre les HL */
+    void setHLports(int[] HLports) {
+        if (!this.launched) {
+            this.HLports = HLports;
+        }
+        else{
+            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
+        }
+    }
+
+    /** Définition du mode daltonien */
+    void setcolorblindMode(boolean value){
+        if (!this.launched) {
+            this.colorblindMode = value;
+        }
+        else{
+            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
+        }
+    }
+
+    /** Getter pour les ports utilisés pour parler au LL */
+    public int[] getLLports(){
+        return this.LLports;
+    }
+
+    /** Getter pour les ports utilisés pour parler entre les HL */
+    public int[] getHLports(){
+        return this.HLports;
+    }
+
+    /** Getter pour savoir si on est en mode colorblind */
+    public boolean getColorblindMode(){
+        return this.colorblindMode;
+    }
+
+    /** Fonction à appeler pour lancer le simulateur */
+    void launchSimulator() {
+        this.launched=true;
+        if (this.HLports.length > 2) {
+            System.out.println("SIMULATEUR : Le nombre de ports attendus pour le HL (2ème argument) est de 2 ou moins");
             return;
         }
 
         // On instancie un listener par port, de manière à ce que l'ordre de connexion aux listeners soit sans importance
-        for (int port : LLports) {
+        for (int port : this.LLports) {
             Thread serverThread = new Thread() {
                 @Override
                 public void run() {
@@ -39,7 +93,7 @@ public class LaunchSimulatorManager extends Thread{
             System.out.println(String.format("Listener LL lancé sur le port %d", port));
         }
 
-        for (int port : HLports) {
+        for (int port : this.HLports) {
             Thread serverThread = new Thread() {
                 @Override
                 public void run() {
@@ -51,7 +105,7 @@ public class LaunchSimulatorManager extends Thread{
         }
 
         // On attend que tous les listeners soient connectés
-        for (int port : LLports) {
+        for (int port : this.LLports) {
             while (this.simulatedLLConnectionManager.get(port) == null || !this.simulatedLLConnectionManager.get(port).isReady()) {
                 try {
                     Thread.sleep(5);
@@ -61,7 +115,7 @@ public class LaunchSimulatorManager extends Thread{
             }
         }
 
-        for (int port : HLports) {
+        for (int port : this.HLports) {
             while (this.simulatedHLConnectionManager.get(port) == null || !this.simulatedHLConnectionManager.get(port).isReady()) {
                 try {
                     Thread.sleep(5);
@@ -72,7 +126,7 @@ public class LaunchSimulatorManager extends Thread{
         }
 
         // On créer un robot par port
-        for (int port : LLports) {
+        for (int port : this.LLports) {
             System.out.println(String.format("(%d) Listener connecté", port));
             SimulatedRobot simulatedRobot = new SimulatedRobot();
             this.simulatedRobots.put(port, simulatedRobot);
@@ -89,7 +143,7 @@ public class LaunchSimulatorManager extends Thread{
 
 
         // On instancie l'interface graphique
-        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, colorVersion);
+        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, this.colorblindMode);
         System.out.println(String.format("Interface graphique instanciée"));
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)

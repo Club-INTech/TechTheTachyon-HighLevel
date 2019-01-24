@@ -1,5 +1,9 @@
 public class Main {
     public static void main(String[] args) {
-        new LaunchSimulatorManager(new int[]{11111, 11112}, new int[]{22221, 22222},1);
+        SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
+        launcher.setLLports(new int[]{10001,10002});
+        launcher.setHLports(new int[]{20001,20002});
+        launcher.setcolorblindMode(false);
+        launcher.launchSimulator();
     }
 }

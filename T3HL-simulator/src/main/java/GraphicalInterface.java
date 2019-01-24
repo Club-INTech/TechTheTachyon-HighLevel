@@ -38,20 +38,18 @@ class GraphicalInterface extends JFrame {
 
 
     /** Constructeur */
-    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, int colorVersion) {
+    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode) {
         this.LLports = LLports;
         this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
         this.table = table;
-        this.setColorSchema(colorVersion);
-
+        this.setColorSchema(colorblindMode);
 
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         this.lastTimeUpdate=System.currentTimeMillis();
 
@@ -74,18 +72,18 @@ class GraphicalInterface extends JFrame {
         this.pack();
     }
 
-    private void setColorSchema(int version){
-        if (version==0) {
-            DEFAULT_COLOR = new Color(0, 0, 0, 255);
-            ROBOT_COLOR = new Color(0, 255, 0, 128);
-            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
-            OBSTACLE_COLOR = new Color(255, 0, 0, 64);
-        }
-        else if (version==1){
+    private void setColorSchema(boolean colorblindMode){
+        if (colorblindMode) {
             DEFAULT_COLOR = new Color(0, 0, 0, 255);
             ROBOT_COLOR = new Color(0, 0, 255, 128);
             ORIENTATION_COLOR = new Color(0, 255, 255, 255);
             OBSTACLE_COLOR = new Color(255, 255, 0, 64);
+        }
+        else{
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 255, 0, 128);
+            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
+            OBSTACLE_COLOR = new Color(255, 0, 0, 64);
         }
     }
 
