@@ -109,7 +109,7 @@ public class LidarControler extends Thread implements Service {
                     e.printStackTrace();
                 }
             }
-            points= messageQueue.poll().split(POINT_SEPARATOR);
+            points = messageQueue.poll().split(POINT_SEPARATOR);
             Vec2s.clear();
             for (String point : points) {
                 Vec2 = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
