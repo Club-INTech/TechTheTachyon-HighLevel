@@ -188,7 +188,7 @@ public class SensorControler extends Thread implements Service {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int dsick = 50;
                     int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
-                    double rapport = esick / dsick;
+                    double rapport = (double) esick / dsick;
                     int xCalcule;
                     int yCalcule;
                     double teta;
