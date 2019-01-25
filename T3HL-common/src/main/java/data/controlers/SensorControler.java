@@ -1,5 +1,6 @@
 package data.controlers;
 
+import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
@@ -8,13 +9,13 @@ import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 
+
 import java.util.concurrent.CompletableFuture;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Future;
 
 /**
  * Gère les données de positions et de capteur ne nécessitant pas de traitement
@@ -31,7 +32,7 @@ public class SensorControler extends Thread implements Service {
     /**
      * Separateur entre deux coordonnées d'un point
      */
-    private static final String COORDONATE_SEPARATOR    = " ";
+    private static final String ARGUMENTS_SEPARATOR = " ";
 
     /**
      * Listener
@@ -43,7 +44,9 @@ public class SensorControler extends Thread implements Service {
      */
     private ConcurrentLinkedQueue<String> robotPosQueue;
     private ConcurrentLinkedQueue<String> buddyPosQueue;
+    private ConcurrentLinkedQueue<String> eventData;
     private ConcurrentLinkedQueue<String> sickData;
+    private ConcurrentLinkedQueue<String> couleurPalet;
 
     /**
      * True si autre couleur
@@ -62,10 +65,14 @@ public class SensorControler extends Thread implements Service {
         this.listener = listener;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
+        this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
+        this.couleurPalet =new ConcurrentLinkedQueue<>();
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
-        listener.addQueue(Channel.SICK,sickData);
+        listener.addQueue(Channel.EVENT, eventData);
+        listener.addQueue(Channel.SICK, sickData);
+        listener.addQueue(Channel.COULEUR_PALET_PRIS, couleurPalet);
     }
 
     @Override
@@ -82,11 +89,12 @@ public class SensorControler extends Thread implements Service {
 
         String[] coordonates;
         String[] sickMeasurements;
+        String[] event;
         int x;
         int y;
         double o;
         while (!Thread.currentThread().isInterrupted()) {
-            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null) {
+            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
@@ -94,7 +102,7 @@ public class SensorControler extends Thread implements Service {
                 }
             }
             if (robotPosQueue.peek() !=null) {
-                coordonates = robotPosQueue.poll().split(COORDONATE_SEPARATOR);
+                coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
                 o = Double.parseDouble(coordonates[2]);
@@ -105,7 +113,7 @@ public class SensorControler extends Thread implements Service {
                 XYO.getRobotInstance().update(x, y, o);
             }
             if (buddyPosQueue.peek() !=null) {
-                coordonates = buddyPosQueue.poll().split(COORDONATE_SEPARATOR);
+                coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
                 o = Double.parseDouble(coordonates[2]);
@@ -115,7 +123,16 @@ public class SensorControler extends Thread implements Service {
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }
+            if (eventData.peek() != null){
+                event = eventData.poll().split(ARGUMENTS_SEPARATOR);
+                if (event.length==1){
+                    if (event[0].equals("stoppedMoving")){
+                        SensorState.MOVING.setData(false);
+                    }
+                }
+            }
             if (sickData.peek() !=null) {
+
                 if (isMaster) {
                     sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
                     int[] significantSicks = Sick.getSignificantSicks();
@@ -143,6 +160,32 @@ public class SensorControler extends Thread implements Service {
                             } else {
                                 yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
                             }
+
+                sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
+                int[] significantSicks = Sick.getSignificantSicks();
+                int dsick = 173;
+                int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
+                double rapport = (double) esick / dsick; //TODO : attention, c'est une division d'entiers, elle renvoie donc un entier
+                int xCalcule;
+                int yCalcule;
+                double teta;
+
+                if (ConfigData.COULEUR.toString().equals("jaune")) {
+                    // On différencie les cas où le robot est orienté vers la gauche et la droite
+                    teta = Math.atan(rapport);
+                    xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
+                    if ( 0< teta && teta< Math.PI){
+                        if (significantSicks[1]==4 || significantSicks[1]==5) {
+                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                        else {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                        }
+                    }
+                    else {
+                        if (significantSicks[1]==4 || significantSicks[1]==5) {
+                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+
                         }
                     } else {
                         teta = Math.PI - Math.atan(rapport);
@@ -195,8 +238,17 @@ public class SensorControler extends Thread implements Service {
                     Sick.setNewXYO(newXYO);
                 }
 
+                VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
+                double newOrientation = teta;
+                XYO newXYO = new XYO(newPosition, newOrientation);
+                Sick.setNewXYO(newXYO);
 
             }
+            if(couleurPalet.peek()!=null){
+                String couleur = couleurPalet.poll();
+                CouleurPalet.setCouleurPalRecu(couleur);
+            }
+
         }
     }
 

@@ -16,7 +16,8 @@ import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private int[] ports;
+    private int[] LLports;
+    private int[] HLports;
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
     private ArrayList<Obstacle> fixedObstacles;
@@ -30,25 +31,25 @@ class GraphicalInterface extends JFrame {
     private final int WIDTH_TABLE = 3000;      //in millimeters
     private final int HEIGHT_TABLE = 2000;     //in millimeters
     private final int MILLIS_BETWEEN_UPDATES=10;
-    private final Color DEFAULT_COLOR = new Color(0,0,0,255);
-    private final Color ROBOT_COLOR = new Color(0,255,0,128);
-    private final Color ORIENTATION_COLOR = new Color(0,0,255,255);
-    private final Color OBSTACLE_COLOR = new Color(255,0,0,64);
+    private Color DEFAULT_COLOR = new Color(0,0,0,255);
+    private Color ROBOT_COLOR = new Color(0,255,0,128);
+    private Color ORIENTATION_COLOR = new Color(0,0,255,255);
+    private Color OBSTACLE_COLOR = new Color(255,0,0,64);
 
 
     /** Constructeur */
-    GraphicalInterface(int[] ports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table) {
-        this.ports = ports;
+    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode) {
+        this.LLports = LLports;
+        this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
         this.table = table;
-
+        this.setColorSchema(colorblindMode);
 
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         this.lastTimeUpdate=System.currentTimeMillis();
 
@@ -71,6 +72,21 @@ class GraphicalInterface extends JFrame {
         this.pack();
     }
 
+    private void setColorSchema(boolean colorblindMode){
+        if (colorblindMode) {
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 0, 255, 128);
+            ORIENTATION_COLOR = new Color(0, 255, 255, 255);
+            OBSTACLE_COLOR = new Color(255, 255, 0, 64);
+        }
+        else{
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 255, 0, 128);
+            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
+            OBSTACLE_COLOR = new Color(255, 0, 0, 64);
+        }
+    }
+
     /** Fonction appelée par le simulateur */
     void tryUpdate(){
         if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
@@ -81,7 +97,7 @@ class GraphicalInterface extends JFrame {
     }
 
     /** Affiche un robot */
-    private void drawRobot(Graphics g, int x, int y, float orientation, int diameter){
+    private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
@@ -96,26 +112,28 @@ class GraphicalInterface extends JFrame {
 
     /** Affiche les obstacles */
     private void drawObstacles(Graphics g){
-        for (Obstacle obstacle : this.fixedObstacles){
-            g.setColor(OBSTACLE_COLOR);
-            Shape shape = obstacle.getShape();
-            Vec2 center = shape.getCenter();
-            if (shape instanceof CircularRectangle){
-                for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()){
-                    drawPrimitiveShape(g, rectangle);
+        synchronized (this.fixedObstacles) {
+            for (Obstacle obstacle : this.fixedObstacles) {
+                g.setColor(OBSTACLE_COLOR);
+                Shape shape = obstacle.getShape();
+                Vec2 center = shape.getCenter();
+                if (shape instanceof CircularRectangle) {
+                    for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()) {
+                        drawPrimitiveShape(g, rectangle);
+                    }
+                    for (Circle circle : ((CircularRectangle) shape).getCircleArcs()) {
+                        drawPrimitiveShape(g, circle);
+                    }
+                    drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
+                } else {
+                    drawPrimitiveShape(g, shape);
                 }
-                for (Circle circle : ((CircularRectangle) shape).getCircleArcs()){
-                    drawPrimitiveShape(g, circle);
-                }
-                drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
+                g.setColor(DEFAULT_COLOR);
             }
-            else{
-                drawPrimitiveShape(g, shape);
-            }
-            g.setColor(DEFAULT_COLOR);
         }
     }
 
+    /** Fonction utlisée pour dessiner un carré ou un rectangle */
     private void drawPrimitiveShape(Graphics g, Shape shape){
         Vec2 centerOnTable = shape.getCenter();
         Vec2 center = transformTableCoordsToInterfaceCoords(centerOnTable);

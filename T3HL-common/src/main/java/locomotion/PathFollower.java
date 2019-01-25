@@ -162,11 +162,15 @@ public class PathFollower extends Thread implements Service {
      */
     private void moveToPoint(Vec2 point) throws UnableToMoveException {
         XYO aim = new XYO(point, point.minusVector(robotXYO.getPosition()).getA());
-
+        SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 
         while ((Boolean) SensorState.MOVING.getData()) {
-            // TODO
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -196,7 +200,8 @@ public class PathFollower extends Thread implements Service {
 
     @Override
     public void run() {
-        // TODO : Synchroniser
+        // TODO : Vérification que la synchronisation est correcte (qu'il n'y ai pas de deadlock).
+        // TODO cont. : En théorie, l'utilisation des ConcurrentLinkedList fait qu'il n'y en a pas besoin
         Vec2 aim;
         boolean hasNext;
         while (!Thread.currentThread().isInterrupted()) {
@@ -215,10 +220,8 @@ public class PathFollower extends Thread implements Service {
                 } while (hasNext);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
-                synchronized (this) {
-                    this.pointsQueue.clear();
-                    exceptionsQueue.add(e);
-                }
+                this.pointsQueue.clear();
+                exceptionsQueue.add(e);
             }
         }
     }

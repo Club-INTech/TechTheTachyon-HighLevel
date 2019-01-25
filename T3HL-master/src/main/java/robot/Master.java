@@ -18,11 +18,15 @@
 
 package robot;
 
+import data.CouleurPalet;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
+import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Robot;
+
+import java.util.Stack;
 
 /**
  * robot.Robot principale : on rassemble ici tout ce qui est unique au robot principale
@@ -30,12 +34,14 @@ import robot.Robot;
  * @author rem
  */
 public class Master extends Robot {
+    private Stack<CouleurPalet> ascenseurgauche;
+    private Stack<CouleurPalet> ascenseurdroite;
     private int nbpaletsdroits;
     private int nbpaletsgauches;
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, int nbpaletsdroits) {
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
         super(locomotion, orderWrapper, hookFactory);
-        this.nbpaletsdroits = nbpaletsdroits;
-
+        this.nbpaletsdroits = 0;
+        this.nbpaletsgauches = 0;
     }
 
     public int getNbpaletsdroits (){
@@ -48,6 +54,22 @@ public class Master extends Robot {
     public int getNbpaletsgauches(){return this.nbpaletsgauches;}
     public void decrementgauche(){this.nbpaletsgauches=this.nbpaletsgauches-1;}
     /** TODO implémenter un ordre sur le couple des XL pour remplacer les nbpaletsdroits et nbpaletsgauches*/
+
+    public void pushPaletDroit(){
+        ascenseurdroite.push(CouleurPalet.getCouleurPalRecu());
+    }
+
+    public void pushPaletGauche(){
+        ascenseurgauche.push(CouleurPalet.getCouleurPalRecu());
+    }
+
+    public void popPaletDroit(){
+        ascenseurdroite.pop();
+    }
+
+    public void popPaletGauche(){
+        ascenseurgauche.pop();
+    }
 
     @Override
     public void updateConfig(Config config) {

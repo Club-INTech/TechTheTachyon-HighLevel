@@ -120,7 +120,7 @@ public class Test_OrderWrapper {
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
         String a = String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), Math.PI);
-        Assert.assertEquals(a,m.get());
+        Assert.assertEquals(a, m.get());
     }
 
     /**
@@ -134,7 +134,7 @@ public class Test_OrderWrapper {
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
         String a = String.format(Locale.US, "%s %.3f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), 2.0);
-        Assert.assertEquals(a,m.get());
+        Assert.assertEquals(a, m.get());
     }
 
     /**
@@ -162,7 +162,7 @@ public class Test_OrderWrapper {
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
         String a = String.format(Locale.US, "%s %d %d %.3f", PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), 2, 3, Math.PI/2);
-        Assert.assertEquals(a,m.get());
+        Assert.assertEquals(a, m.get());
     }
 
     /**

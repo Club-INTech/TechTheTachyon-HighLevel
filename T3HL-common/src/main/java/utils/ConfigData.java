@@ -46,12 +46,22 @@ public enum ConfigData implements ConfigInfo
     /**
      * Couleur
      */
-    COULEUR("jaune"),
+    COULEUR("violet"),
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)
      */
     MASTER(true),
+
+    /**
+     * Simulation active
+     */
+    SIMULATION(true),
+
+    /**
+     * Si on utilise le Lidar
+     */
+    USING_LIDAR(false),
 
     /**
      * Ips et ports des raspis, lidar & teensy
@@ -62,10 +72,12 @@ public enum ConfigData implements ConfigInfo
     TEENSY_MASTER_PORT(13500),
     TEENSY_SLAVE_IP("192.168.0.2"),
     TEENSY_SLAVE_PORT(13500),
-    LIDAR_PORT(15500),
+    LIDAR_PORT(17685),
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
+    MASTER_LL_SIMULATEUR(10001),
+    SLAVE_SIMULATEUR(20001),
 
     /**
      * Dimensions du robot

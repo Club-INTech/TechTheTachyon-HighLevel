@@ -18,15 +18,19 @@
 
 import connection.ConnectionManager;
 import data.Table;
+import data.controlers.Listener;
+import data.controlers.SensorControler;
+import locomotion.Locomotion;
+import locomotion.PathFollower;
+import orders.OrderWrapper;
 import robot.Master;
+import scripts.Script;
+import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
+import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * @author nayth
@@ -45,19 +49,51 @@ public class Main {
         }
         */
         container = Container.getInstance("robot.Master");
-        ScriptManagerMaster scriptManager;
+
+
+        SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
+        launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
+        launcher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
+        launcher.setColorblindMode(true);
+        launcher.launchSimulator();
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
+            Master robot = container.getService(Master.class);
+            Table table = container.getService(Table.class);
+
+            Locomotion locomotion = container.getService(Locomotion.class);
+            PathFollower pathFollower = container.getService(PathFollower.class);
+            pathFollower.start();
+            SensorControler sensorControler = container.getService(SensorControler.class);
+            sensorControler.start();
+
+
+            table.initObstacles();
+
+
             ConnectionManager connectionManager = container.getService(ConnectionManager.class);
+            OrderWrapper orderWrapper = container.getService(OrderWrapper.class);
+            Listener listener = container.getService(Listener.class);
+            listener.start();
             Thread.sleep(2000);
 
 
-            Master robot = container.getService(Master.class);
-            Table table = container.getService(Table.class);
-            scriptManager = container.getService(ScriptManagerMaster.class);
 
-            //Paletsx3 paletx3 = scriptManager.getScript(Paletsx3);
+            ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
+            Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
+            Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
+            Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
+            Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
+
+
+            zone_depart_palets.goToThenExecute(1);
+            zone_chaos_palets.goToThenExecute(1);
+            paletsx6.goToThenExecute(1);
+            paletsx3.goToThenExecute(1);
+            accelerateur.goToThenExecute(1);
+
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
         }

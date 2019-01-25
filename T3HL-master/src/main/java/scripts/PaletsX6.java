@@ -2,7 +2,9 @@ package scripts;
 import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import robot.Master;
 import robot.Robot;
+import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
-    public PaletsX6(Robot robot, Table table) {
+    public PaletsX6(Master robot, Table table) {
         super(robot, table);
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
@@ -80,6 +82,26 @@ public class PaletsX6 extends Script {
     }
     @Override
     public Shape entryPosition(Integer version) {
+
+        if (version == 0) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 1) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 2) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 3) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 4) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+        else if (version == 5) {
+            new Circle(new VectCartesian(100,100), 5);
+        }
+
         return null;
     }
     @Override

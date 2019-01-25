@@ -23,6 +23,7 @@ import data.Table;
 import data.XYO;
 import data.graphe.Node;
 import pfg.config.Config;
+import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
@@ -68,6 +69,11 @@ public class Locomotion implements Service {
      */
     private ConcurrentLinkedQueue<Vec2> pointsQueue;
     private ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue;
+
+    /**
+     * Seuil de distance par rapport à un point pour savoir si un point est considéré comme dans l'autre robot
+     */
+    private int compareThreshold;
 
     /**
      * Construit le service de locmotion
@@ -161,25 +167,41 @@ public class Locomotion implements Service {
             Log.LOCOMOTION.warning("Points de départ " + xyo.getOrientation() + " ou d'arriver " + point + " dans un obstacle");
         }
 
+        graphe.writeLock().lock();
         start = graphe.addProvisoryNode(xyo.getPosition());
         next = start;
         aim = graphe.addProvisoryNode(point);
+        graphe.writeLock().unlock();
         pointsQueue.clear();
         exceptionsQueue.clear();
 
-        while (xyo.getPosition().equals(aim.getPosition())) {
+        while ( ! xyo.getPosition().equals(aim.getPosition())) {
             try {
+                graphe.readLock().lock();
                 path = pathfinder.findPath(next, aim);
-                pointsQueue.clear();
-                pointsQueue.addAll(path);
-                while (!graphe.isUpdated()) {
+                graphe.readLock().unlock();
+
+                // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
+                // ce thread pourrait être interrompu entre le addAll et le clear ;(
+                // ça a pas beaucoup de conséquences dans notre cas mais si on peut sauver 20ms au HL, c'est pas mal (cf Thread.sleep(20) de PathFollower)
+                synchronized (pointsQueue) {
+                    pointsQueue.clear();
+                    pointsQueue.addAll(path);
+                }
+                while (!graphe.isUpdated() && !xyo.getPosition().equals(aim.getPosition())) {
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
-                            // TODO : Gérer les cas ou les points d'arrivé et de départ sont dans des obstacles
-                            graphe.removeProvisoryNode(start);
-                            start = graphe.addProvisoryNode(xyo.getPosition());
-                            next = start;
+                            XYO buddyPos = XYO.getBuddyInstance();
+                            if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
+// TODO: c'est ton pote, on fait quoi?
+                            } else { // c'est pas ton pote!
+                                graphe.writeLock().lock();
+                                graphe.removeProvisoryNode(start);
+                                start = graphe.addProvisoryNode(xyo.getPosition());
+                                graphe.writeLock().unlock();
+                                next = start;
+                            }
                         }
                     }
                 }
@@ -188,8 +210,10 @@ public class Locomotion implements Service {
                 // TODO : Compéter
             }
         }
+        graphe.writeLock().lock();
         graphe.removeProvisoryNode(start);
         graphe.removeProvisoryNode(aim);
+        graphe.writeLock().unlock();
         pointsQueue.clear();
         exceptionsQueue.clear();
     }
@@ -198,5 +222,7 @@ public class Locomotion implements Service {
      * @see Service#updateConfig(Config)
      */
     @Override
-    public void updateConfig(Config config) {}
+    public void updateConfig(Config config) {
+        this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
+    }
 }
