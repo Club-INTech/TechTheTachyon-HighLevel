@@ -94,47 +94,47 @@ public class SensorControler extends Thread implements Service {
         int y;
         double o;
         while (!Thread.currentThread().isInterrupted()) {
-            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null) {
+            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek() == null && eventData.peek() == null) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            if (robotPosQueue.peek() !=null) {
+            if (robotPosQueue.peek() != null) {
                 coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2*Math.PI);
+                    o = Calculs.modulo(Math.PI - o, 2 * Math.PI);
                 }
                 XYO.getRobotInstance().update(x, y, o);
             }
-            if (buddyPosQueue.peek() !=null) {
+            if (buddyPosQueue.peek() != null) {
                 coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2*Math.PI);
+                    o = Calculs.modulo(Math.PI - o, 2 * Math.PI);
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }
-            if (eventData.peek() != null){
+            if (eventData.peek() != null) {
                 event = eventData.poll().split(ARGUMENTS_SEPARATOR);
-                if (event.length==1){
-                    if (event[0].equals("stoppedMoving")){
+                if (event.length == 1) {
+                    if (event[0].equals("stoppedMoving")) {
                         SensorState.MOVING.setData(false);
                     }
                 }
             }
-            if (sickData.peek() !=null) {
+            if (sickData.peek() != null) {
 
                 if (isMaster) {
-                    sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
+                    sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int[] significantSicks = Sick.getSignificantSicks();
                     int dsick = 173;
                     int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
@@ -161,31 +161,6 @@ public class SensorControler extends Thread implements Service {
                                 yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
                             }
 
-                sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
-                int[] significantSicks = Sick.getSignificantSicks();
-                int dsick = 173;
-                int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
-                double rapport = (double) esick / dsick; //TODO : attention, c'est une division d'entiers, elle renvoie donc un entier
-                int xCalcule;
-                int yCalcule;
-                double teta;
-
-                if (ConfigData.COULEUR.toString().equals("jaune")) {
-                    // On différencie les cas où le robot est orienté vers la gauche et la droite
-                    teta = Math.atan(rapport);
-                    xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
-                    if ( 0< teta && teta< Math.PI){
-                        if (significantSicks[1]==4 || significantSicks[1]==5) {
-                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                        else {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                    }
-                    else {
-                        if (significantSicks[1]==4 || significantSicks[1]==5) {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-
                         }
                     } else {
                         teta = Math.PI - Math.atan(rapport);
@@ -210,9 +185,9 @@ public class SensorControler extends Thread implements Service {
                     Sick.setNewXYO(newXYO);
                 }
                 else {
-                    sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
-                    int dsick =50;
-                    int esick = Integer.parseInt(sickMeasurements[1])- Integer.parseInt(sickMeasurements[2]);
+                    sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
+                    int dsick = 50;
+                    int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
                     double rapport = esick / dsick;
                     int xCalcule;
                     int yCalcule;
@@ -224,13 +199,11 @@ public class SensorControler extends Thread implements Service {
                         teta = Math.atan(rapport);
                         xCalcule = (int) (1500 - Integer.parseInt(sickMeasurements[1]) * Math.cos(teta));
                         yCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta));
-                    }
-
-                     else {
+                    } else {
                         teta = Math.PI - Math.atan(rapport);
                         xCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta)) - 1500;
                         yCalcule = (int) (2000 - Integer.parseInt(sickMeasurements[2]) * Math.cos(teta));
-                     }
+                    }
 
                     VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
                     double newOrientation = teta;
@@ -238,10 +211,6 @@ public class SensorControler extends Thread implements Service {
                     Sick.setNewXYO(newXYO);
                 }
 
-                VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
-                double newOrientation = teta;
-                XYO newXYO = new XYO(newPosition, newOrientation);
-                Sick.setNewXYO(newXYO);
 
             }
             if(couleurPalet.peek()!=null){
@@ -253,6 +222,7 @@ public class SensorControler extends Thread implements Service {
     }
 
     @Override
+
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
