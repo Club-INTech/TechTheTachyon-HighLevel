@@ -121,7 +121,7 @@ public class SensorControler extends Thread implements Service {
                     int[] significantSicks = Sick.getSignificantSicks();
                     int dsick = 173;
                     int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
-                    double rapport = esick / dsick;
+                    double rapport = (double) esick / dsick;
                     int xCalcule;
                     int yCalcule;
                     double teta;
