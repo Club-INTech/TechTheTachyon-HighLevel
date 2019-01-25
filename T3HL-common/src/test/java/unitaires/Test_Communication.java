@@ -22,7 +22,6 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.communication.CommunicationException;
 import utils.communication.SocketClientInterface;
 import utils.communication.SocketServerInterface;
 
@@ -54,7 +53,7 @@ public class Test_Communication {
         interface2 = new SocketClientInterface("localhost", 10200);
         interface2.init();
 
-        while (!interface1.isInitiate() || !interface2.isInitiate()) {
+        while (!interface1.isInitiated() || !interface2.isInitiated()) {
             Thread.sleep(50);
         }
 

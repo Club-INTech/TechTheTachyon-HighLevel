@@ -162,11 +162,15 @@ public class PathFollower extends Thread implements Service {
      */
     private void moveToPoint(Vec2 point) throws UnableToMoveException {
         XYO aim = new XYO(point, point.minusVector(robotXYO.getPosition()).getA());
-
+        SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 
         while ((Boolean) SensorState.MOVING.getData()) {
-            // TODO
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

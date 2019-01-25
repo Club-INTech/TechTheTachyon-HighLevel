@@ -234,10 +234,10 @@ public class Table implements Service {
             mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup, CopyOnWriteArrayList est assez lente pour l'écriture donc on accélère comme ça
         }
 
-        if (graphe != null) {
-            synchronized (graphe) {
-                this.graphe.update();
-            }
+        if (this.graphe != null) {
+            this.graphe.writeLock().lock();
+            this.graphe.update();
+            this.graphe.writeLock().unlock();
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }
@@ -336,9 +336,9 @@ public class Table implements Service {
             this.fixedObstacles.add(obstacle);
         }
         if (this.graphe != null) {
-            synchronized (this.graphe) {
-                this.graphe.reInit();
-            }
+            this.graphe.writeLock().lock();
+            this.graphe.reInit();
+            this.graphe.writeLock().unlock();
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }

@@ -97,7 +97,7 @@ class GraphicalInterface extends JFrame {
     }
 
     /** Affiche un robot */
-    private void drawRobot(Graphics g, int x, int y, float orientation, int diameter){
+    private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);

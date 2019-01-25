@@ -45,7 +45,8 @@ public enum Connection {
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
     LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class),
 
-    MASTER_LL_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.MASTER_LL_SIMULATEUR, SocketClientInterface.class)
+    MASTER_LL_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.MASTER_LL_SIMULATEUR, SocketClientInterface.class),
+    SLAVE_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.SLAVE_SIMULATEUR, SocketClientInterface.class),
     ;
 
     /**

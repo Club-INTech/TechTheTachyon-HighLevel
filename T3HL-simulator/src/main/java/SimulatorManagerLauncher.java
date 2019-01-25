@@ -139,7 +139,7 @@ public class SimulatorManagerLauncher extends Thread{
         // On créer un robot par port
         for (int port : this.LLports) {
             System.out.println(String.format("(%d) Listener connecté", port));
-            SimulatedRobot simulatedRobot = new SimulatedRobot();
+            SimulatedRobot simulatedRobot = new SimulatedRobot(this.simulatedLLConnectionManager.get(port));
             this.simulatedRobots.put(port, simulatedRobot);
             System.out.println(String.format("(%d) Robot simulé instancié", port));
         }
