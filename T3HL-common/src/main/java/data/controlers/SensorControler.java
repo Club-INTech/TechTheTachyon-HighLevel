@@ -11,6 +11,7 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
@@ -48,6 +49,9 @@ public class SensorControler extends Thread implements Service {
      * True si autre couleur
      */
     private boolean symetrie;
+
+    boolean isMaster;
+
 
     /**
      * Construit un gestionnaire de capteur
@@ -112,60 +116,84 @@ public class SensorControler extends Thread implements Service {
                 XYO.getBuddyInstance().update(x, y, o);
             }
             if (sickData.peek() !=null) {
-                sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
-                int[] significantSicks = Sick.getSignificantSicks();
-                int dsick = 173;
-                int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
-                double rapport = esick / dsick;
-                int xCalcule;
-                int yCalcule;
-                double teta;
+                if (isMaster) {
+                    sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
+                    int[] significantSicks = Sick.getSignificantSicks();
+                    int dsick = 173;
+                    int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
+                    double rapport = esick / dsick;
+                    int xCalcule;
+                    int yCalcule;
+                    double teta;
 
-                if (ConfigData.COULEUR.toString().equals("jaune")) {
-                    // On différencie les cas où le robot est orienté vers la gauche et la droite
-                    teta = Math.atan(rapport);
-                    xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
-                    if ( 0< teta && teta< Math.PI){
-                        if (significantSicks[1]==4 || significantSicks[1]==5) {
-                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                    if (ConfigData.COULEUR.toString().equals("jaune")) {
+                        // On différencie les cas où le robot est orienté vers la gauche et la droite
+
+                        teta = Math.atan(rapport);
+                        xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
+                        if (0 < teta && teta < Math.PI) { //modifier car arctan est toujours inférieur à PI
+                            if (significantSicks[1] == 4 || significantSicks[1] == 5) {
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            } else {
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            }
+                        } else {
+                            if (significantSicks[1] == 4 || significantSicks[1] == 5) {
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            } else {
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            }
                         }
-                        else {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                    } else {
+                        teta = Math.PI - Math.atan(rapport);
+                        xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta)) - 1500;
+                        if (0 < teta && teta < Math.PI) {
+                            if (significantSicks[1] == 1 || significantSicks[1] == 2) {
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            } else {
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            }
+                        } else {
+                            if (significantSicks[1] == 4 || significantSicks[1] == 5) {
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            } else {
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                            }
                         }
                     }
-                    else {
-                        if (significantSicks[1]==4 || significantSicks[1]==5) {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                        else {
-                            yCalcule = (int) (2000 -(Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                    }
+                    VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
+                    double newOrientation = teta;
+                    XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
+                    Sick.setNewXYO(newXYO);
                 }
                 else {
-                    teta = Math.PI - Math.atan(rapport);
-                    xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]] )) * Math.cos(teta)) - 1500;
-                    if ( 0< teta && teta< Math.PI){
-                        if (significantSicks[1]==1 || significantSicks[1]==2) {
-                            yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                        else {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
+                    sickMeasurements = sickData.poll().split(COORDONATE_SEPARATOR);
+                    int dsick =50;
+                    int esick = Integer.parseInt(sickMeasurements[1])- Integer.parseInt(sickMeasurements[2]);
+                    double rapport = esick / dsick;
+                    int xCalcule;
+                    int yCalcule;
+                    double teta;
+
+                    if (ConfigData.COULEUR.toString().equals("jaune")) {
+                        // On différencie les cas où le robot est orienté vers la gauche et la droite
+
+                        teta = Math.atan(rapport);
+                        xCalcule = (int) (1500 - Integer.parseInt(sickMeasurements[1]) * Math.cos(teta));
+                        yCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta));
                     }
-                    else {
-                        if (significantSicks[1]==4 || significantSicks[1]==5) {
-                            yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                        else {
-                            yCalcule = (int) (2000 -(Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
-                        }
-                    }
+
+                     else {
+                        teta = Math.PI - Math.atan(rapport);
+                        xCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta)) - 1500;
+                        yCalcule = (int) (2000 - Integer.parseInt(sickMeasurements[2]) * Math.cos(teta));
+                     }
+
+                    VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
+                    double newOrientation = teta;
+                    XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
+                    Sick.setNewXYO(newXYO);
                 }
-                VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
-                double newOrientation = teta;
-                XYO newXYO = new XYO(newPosition, newOrientation);
-                Sick.setNewXYO(newXYO);
 
 
             }
@@ -174,6 +202,7 @@ public class SensorControler extends Thread implements Service {
 
     @Override
     public void updateConfig(Config config) {
+        this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
     }
 }
