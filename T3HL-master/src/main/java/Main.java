@@ -28,6 +28,7 @@ import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.VectCartesian;
 
 /**
  * @author nayth
@@ -72,11 +73,13 @@ public class Main {
 
             table.initObstacles();
 
-            zone_depart_palets.goToThenExecute(1);
-            zone_chaos_palets.goToThenExecute(1);
-            paletsx6.goToThenExecute(1);
-            paletsx3.goToThenExecute(1);
-            accelerateur.goToThenExecute(1);
+            orderWrapper.moveToPoint(new VectCartesian(1000,1000));
+            orderWrapper.turn(Math.PI);
+            //zone_depart_palets.goToThenExecute(1);
+            //zone_chaos_palets.goToThenExecute(1);
+            //paletsx6.goToThenExecute(1);
+            //paletsx3.goToThenExecute(1);
+            //accelerateur.goToThenExecute(1);
 
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
