@@ -190,7 +190,7 @@ public class SensorControler extends Thread implements Service {
                     int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
                     double rapport = (double) esick / dsick;
                     int xCalcule;
-                    int yCalcule;
+                    int yCalcule; //
                     double teta;
 
                     if (ConfigData.COULEUR.toString().equals("jaune")) {
