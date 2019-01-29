@@ -32,8 +32,11 @@ public class SimulatedRobot {
 
     private SimulatedConnectionManager simulatedLLConnectionManager;
 
+    private float speedFactor;
+
     /** Constructeur */
-    SimulatedRobot(SimulatedConnectionManager simulatedLLConnectionManager){
+    SimulatedRobot(SimulatedConnectionManager simulatedLLConnectionManager, float speedFactor){
+        this.speedFactor=speedFactor;
         this.lastUpdateTime=System.currentTimeMillis();
         this.forwardOrBackward=false;
         this.turning=false;
@@ -132,7 +135,7 @@ public class SimulatedRobot {
 
     /** Renvoie le temps depuis la dernière tryUpdate */
     private long timeSinceLastUpdate(){
-        return (System.currentTimeMillis() - this.lastUpdateTime);
+        return Math.round((System.currentTimeMillis() - this.lastUpdateTime)*this.speedFactor);
     }
 
     /** Renvoie si le robot bouge */

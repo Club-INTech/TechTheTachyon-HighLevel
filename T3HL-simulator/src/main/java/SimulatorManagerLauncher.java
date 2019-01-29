@@ -19,6 +19,7 @@ public class SimulatorManagerLauncher extends Thread{
     private int[] HLports;
     private boolean colorblindMode;
     private boolean launched;
+    private float speedFactor;
 
     /** Constructeur */
     SimulatorManagerLauncher(){
@@ -26,6 +27,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.colorblindMode=false;
         this.LLports=new int[]{};
         this.HLports=new int[]{};
+        this.speedFactor=1;
     }
 
     /** Setter des ports utilisés pour parler au LL */
@@ -58,6 +60,16 @@ public class SimulatorManagerLauncher extends Thread{
         }
     }
 
+    /** Définit le facteur de vitesse de la simulation */
+    void setSpeedFactor(float speedFactor){
+        if (!this.launched) {
+            this.speedFactor = speedFactor;
+        }
+        else{
+            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
+        }
+    }
+
     /** Getter pour les ports utilisés pour parler au LL */
     public int[] getLLports(){
         return this.LLports;
@@ -72,6 +84,12 @@ public class SimulatorManagerLauncher extends Thread{
     public boolean getColorblindMode(){
         return this.colorblindMode;
     }
+
+    /** Getter pour connaitre le speed factor */
+    public float getSpeedFactor(){
+        return this.speedFactor;
+    }
+
 
     /** Fonction qui crée un Thread pour lancer le simualteur */
     public void launchSimulator(){
@@ -139,7 +157,7 @@ public class SimulatorManagerLauncher extends Thread{
         // On créer un robot par port
         for (int port : this.LLports) {
             System.out.println(String.format("(%d) Listener connecté", port));
-            SimulatedRobot simulatedRobot = new SimulatedRobot(this.simulatedLLConnectionManager.get(port));
+            SimulatedRobot simulatedRobot = new SimulatedRobot(this.simulatedLLConnectionManager.get(port), this.speedFactor);
             this.simulatedRobots.put(port, simulatedRobot);
             System.out.println(String.format("(%d) Robot simulé instancié", port));
         }
