@@ -304,24 +304,24 @@ public class Test_Math {
         Assert.assertEquals(new VectCartesian(-40 - radius, 0), rectangle.closestPointToShape(new VectCartesian(-500, 0))); // à l'ouest
 
         // coins
-        // coin nord-ouest
+        // coin sud-ouest
         Assert.assertEquals(
                 new VectCartesian((float) (-40 + radius * Math.cos(3*Math.PI/4)), (float) (-20 - radius * Math.sin(3*Math.PI/4))),
                 rectangle.closestPointToShape(new VectCartesian(-500, -500)));
 
-        // coin nord-est
+        // coin sud-est
         Assert.assertEquals(
                 new VectCartesian((float) (40 + radius * Math.cos(Math.PI/4)), (float) (-20 - radius * Math.sin(Math.PI/4))),
                 rectangle.closestPointToShape(new VectCartesian(500, -500))
         );
 
-        // coin sud-ouest
+        // coin nord-ouest
         Assert.assertEquals(
                 new VectCartesian((float) (-40 + radius * Math.cos(5*Math.PI/4)), (float) (20 - radius * Math.sin(5*Math.PI/4))),
                 rectangle.closestPointToShape(new VectCartesian(-500, 500))
         );
 
-        // coin sud-est
+        // coin nord-est
         Assert.assertEquals(
                 new VectCartesian((float) (40 + radius * Math.cos(7*Math.PI/4)), (float) (20 - radius * Math.sin(7*Math.PI/4))),
                 rectangle.closestPointToShape(new VectCartesian(500, 500))

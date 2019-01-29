@@ -24,7 +24,20 @@ import java.util.ArrayList;
  * Il s'agit d'une classe pour modéliser les obstacles rectangulaires en respectant notre modélisation du robot : On modélise le robot par un point et on grossit
  * tous les obstacles du rayon du robot
  *
- *               _____________
+ *  Y
+ *  ^
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ *  |
+ * -+-------------------------> X
+ *  |            _____________
  *               |            |
  *               |R    (0)    |
  *          __R_0|____________|1__R___
