@@ -91,7 +91,7 @@ public class SensorControler extends Thread implements Service {
         int y;
         double o;
         while (!Thread.currentThread().isInterrupted()) {
-            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null) {
+            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null && couleurPalet.peek()==null) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {

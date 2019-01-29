@@ -21,6 +21,7 @@ package locomotion;
 import data.SensorState;
 import data.Table;
 import data.XYO;
+import data.controlers.SensorControler;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
@@ -104,7 +105,7 @@ public class PathFollower extends Thread implements Service {
      */
     public void moveLenghtwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
         XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
-
+        SensorState.MOVING.setData(true);
         this.orderWrapper.moveLenghtwise(distance);
 
         while ((Boolean) SensorState.MOVING.getData()) {
@@ -134,7 +135,7 @@ public class PathFollower extends Thread implements Service {
      */
     public void turn(double angle, boolean expectedWallImpact) throws UnableToMoveException {
         XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, 2*Math.PI));
-
+        SensorState.MOVING.setData(true);
         this.orderWrapper.turn(angle);
 
         while ((Boolean) SensorState.MOVING.getData()) {
