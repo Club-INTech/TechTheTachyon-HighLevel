@@ -45,15 +45,10 @@ public class Master extends Robot {
     }
 
     public int getNbpaletsdroits (){
-        return this.nbpaletsdroits;
-    }
-    public void decrement(){
-        this.nbpaletsdroits=this.nbpaletsdroits-1;
+        return ascenseurdroite.size();
     }
 
-    public int getNbpaletsgauches(){return this.nbpaletsgauches;}
-    public void decrementgauche(){this.nbpaletsgauches=this.nbpaletsgauches-1;}
-    /** TODO implémenter un ordre sur le couple des XL pour remplacer les nbpaletsdroits et nbpaletsgauches*/
+    public int getNbpaletsgauches(){return ascenseurgauche.size();}
 
     public void pushPaletDroit(){
         ascenseurdroite.push(CouleurPalet.getCouleurPalRecu());

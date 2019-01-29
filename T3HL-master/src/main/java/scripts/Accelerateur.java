@@ -31,6 +31,34 @@ public class Accelerateur extends Script {
         super(robot, table);
     }
 
+    private void actionBras(boolean cotedroite) {
+        try{
+            if(cotedroite=false) {
+                robot.moveLengthwise(palet, false);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+                robot.moveLengthwise(-palet, false);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                ((Master) robot).popPaletGauche();
+            }
+            else{
+                robot.moveLengthwise(palet, false);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
+                robot.moveLengthwise(-palet,false);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                ((Master) robot).popPaletDroit();
+            }
+    } catch (UnableToMoveException a){
+            a.printStackTrace();
+        }
+    }
+
+
     @Override
     public void execute(Integer version) {
         try {
@@ -42,27 +70,13 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            ((Master) robot).decrement();
+            ((Master) robot).popPaletGauche();
             while (((Master) robot).getNbpaletsgauches() > 0) {
-                robot.moveLengthwise(palet, false);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-palet,false);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-                ((Master) robot).decrement();
+              actionBras(false);
             }
             robot.turn(0);
             while(((Master) robot).getNbpaletsdroits() > 0){
-                robot.moveLengthwise(palet, false);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-palet,false);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                ((Master) robot).decrementgauche();
+                actionBras(true);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
