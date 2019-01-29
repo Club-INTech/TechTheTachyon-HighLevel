@@ -161,7 +161,6 @@ public class PathFollower extends Thread implements Service {
      *              en cas de blocage mécanique ou d'adversaire
      */
     private void moveToPoint(Vec2 point) throws UnableToMoveException {
-        XYO aim = new XYO(point, point.minusVector(robotXYO.getPosition()).getA());
         SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 

@@ -33,7 +33,7 @@ public class Accelerateur extends Script {
 
     private void actionBras(boolean cotedroite) {
         try{
-            if(cotedroite=false) {
+            if(!cotedroite) {
                 robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -42,8 +42,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 ((Master) robot).popPaletGauche();
-            }
-            else{
+            } else {
                 robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
