@@ -42,8 +42,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Classe représentant la table et gérant les obstacles
- * // TODO Ajouter des logs
- *
  * @author rem
  */
 public class Table implements Service {
@@ -123,7 +121,6 @@ public class Table implements Service {
      * Initialisation des obstacles fixes de la table
      */
     public void initObstacles() {
-        // TODO : Remplir avec les obstacles de l'année !
         Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
         Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
         this.addFixedObstacle(zoneChaosDroite);
