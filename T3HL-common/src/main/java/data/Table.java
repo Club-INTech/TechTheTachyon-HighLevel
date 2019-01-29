@@ -248,7 +248,7 @@ public class Table implements Service {
         }
 
         synchronized (mobileObstacles) {
-            mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup, CopyOnWriteArrayList est assez lente pour l'écriture donc on accélère comme ça
+            mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup
         }
 
         if (this.graphe != null) {
@@ -351,6 +351,7 @@ public class Table implements Service {
         }
         synchronized (this.fixedObstacles) {
             this.fixedObstacles.add(obstacle);
+            Log.TABLE.debug("ajout de l'obstacle "+obstacle);
         }
         if (this.graphe != null) {
             this.graphe.writeLock().lock();
@@ -371,6 +372,7 @@ public class Table implements Service {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
         this.fixedObstacles.remove(obstacle);
+        Log.TABLE.debug("suppression de l'obstacle "+obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {

@@ -40,6 +40,7 @@ public enum Log
     PATHFINDING(true),
     GRAPHE(true),
     HOOK(true),
+    TABLE(true),
     ;
 
     /**
