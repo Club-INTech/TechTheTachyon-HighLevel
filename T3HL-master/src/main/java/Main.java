@@ -19,6 +19,7 @@
 import connection.ConnectionManager;
 import data.Table;
 import data.controlers.Listener;
+import data.table.Obstacle;
 import orders.OrderWrapper;
 import robot.Master;
 import scripts.Script;
@@ -29,6 +30,8 @@ import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.VectCartesian;
+
+import java.util.ArrayList;
 
 /**
  * @author nayth
@@ -57,6 +60,9 @@ public class Main {
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
             ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
+            Table table = container.getService(Table.class);
+            table.initObstacles();
+
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
             Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
             Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
@@ -69,17 +75,25 @@ public class Main {
             Thread.sleep(2000);
 
             Master robot = container.getService(Master.class);
-            Table table = container.getService(Table.class);
-
-            table.initObstacles();
 
             orderWrapper.moveToPoint(new VectCartesian(1000,1000));
             orderWrapper.turn(Math.PI);
-            //zone_depart_palets.goToThenExecute(1);
-            //zone_chaos_palets.goToThenExecute(1);
-            //paletsx6.goToThenExecute(1);
-            //paletsx3.goToThenExecute(1);
-            //accelerateur.goToThenExecute(1);
+            zone_depart_palets.goToThenExecute(1);
+
+            table.removeFixedObstacle(table.paletRougeDroite);
+            table.removeFixedObstacle(table.paletVertDroite);
+
+
+            zone_chaos_palets.goToThenExecute(1);
+
+            /**
+             * Si tout les palets de la zone de chaos ont été récupérer
+             */
+            table.removeFixedObstacle(table.zoneChaosDroite);
+
+            paletsx6.goToThenExecute(1);
+            paletsx3.goToThenExecute(1);
+            accelerateur.goToThenExecute(1);
 
         } catch (ContainerException | InterruptedException e) {
             e.printStackTrace();
