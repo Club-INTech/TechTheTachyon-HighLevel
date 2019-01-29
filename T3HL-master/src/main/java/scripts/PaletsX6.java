@@ -29,7 +29,7 @@ public class PaletsX6 extends Script {
         versions.add(4);
         versions.add(5);
         /*position des 6 palets ( position dans le tableau positionS ) */
-        this.positions = new ArrayList();
+        this.positions = new ArrayList<>();
     }
     @Override
     public void execute(Integer version) {
@@ -78,6 +78,7 @@ public class PaletsX6 extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             }
         } catch (UnableToMoveException e) {
+            // TODO
         }
     }
     @Override

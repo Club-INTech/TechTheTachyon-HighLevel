@@ -107,8 +107,6 @@ public class Graphe implements Service {
      */
     private void init() {
         Log.GRAPHE.debug("Initialisation du Graphe...");
-        Vec2 pos;
-
         try {
             for (Obstacle obstacle : fixedObstacles) {
                 placeNodes(obstacle);

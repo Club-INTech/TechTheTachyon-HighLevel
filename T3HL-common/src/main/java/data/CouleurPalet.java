@@ -23,20 +23,22 @@ public enum CouleurPalet {
 
 
     public static void setCouleurPalRecu(String couleurRecue) {
-        if(couleurRecue.equals("vert")){
-            couleurPalRecue.complete(CouleurPalet.VERT);
-        }
-        else if(couleurRecue.equals("rouge")){
-            couleurPalRecue.complete(CouleurPalet.ROUGE);
-        }
-        else if(couleurRecue.equals("bleu")){
-            couleurPalRecue.complete(CouleurPalet.BLEU);
-        }
-        else if(couleurRecue.equals("goldenium")){
-            couleurPalRecue.complete(CouleurPalet.GOLDENIUM);
-        }
-        else{
-            couleurPalRecue.complete(CouleurPalet.INVISIBLE);
+        switch (couleurRecue) {
+            case "vert":
+                couleurPalRecue.complete(CouleurPalet.VERT);
+                break;
+            case "rouge":
+                couleurPalRecue.complete(CouleurPalet.ROUGE);
+                break;
+            case "bleu":
+                couleurPalRecue.complete(CouleurPalet.BLEU);
+                break;
+            case "goldenium":
+                couleurPalRecue.complete(CouleurPalet.GOLDENIUM);
+                break;
+            default:
+                couleurPalRecue.complete(CouleurPalet.INVISIBLE);
+                break;
         }
     }
 

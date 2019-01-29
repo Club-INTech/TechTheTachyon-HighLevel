@@ -55,7 +55,7 @@ public class Table implements Service {
     /**
      * Liste des obstacles fixes
      */
-    private ArrayList<Obstacle> fixedObstacles;
+    private final ArrayList<Obstacle> fixedObstacles;
 
     public Obstacle paletRougeDroite;
     public Obstacle paletBleuDroite;
@@ -69,7 +69,7 @@ public class Table implements Service {
     /**
      * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
      */
-    private ArrayList<MobileCircularObstacle> mobileObstacles;
+    private final ArrayList<MobileCircularObstacle> mobileObstacles;
 
     /**
      * Longueur de la table (en x, en mm)

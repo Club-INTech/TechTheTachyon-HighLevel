@@ -26,7 +26,7 @@ package orders.order;
 public enum MiscOrder {
 
     TEST("tests"),
-    PING("?"),
+    PING("ping"),
     ;
     /**
      * Ordre envoyé au LL

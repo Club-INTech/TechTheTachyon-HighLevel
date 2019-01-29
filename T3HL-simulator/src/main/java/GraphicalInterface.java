@@ -116,7 +116,6 @@ class GraphicalInterface extends JFrame {
             for (Obstacle obstacle : this.fixedObstacles) {
                 g.setColor(OBSTACLE_COLOR);
                 Shape shape = obstacle.getShape();
-                Vec2 center = shape.getCenter();
                 if (shape instanceof CircularRectangle) {
                     for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()) {
                         drawPrimitiveShape(g, rectangle);
