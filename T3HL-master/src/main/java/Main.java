@@ -19,6 +19,7 @@
 import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
+import data.XYO;
 import data.controlers.Listener;
 import data.table.Obstacle;
 import orders.OrderWrapper;
@@ -89,6 +90,7 @@ public class Main {
 
             Master robot = container.getService(Master.class);
 
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             orderWrapper.moveToPoint(new VectCartesian(1000,1000));
             orderWrapper.turn(Math.PI);
             zone_depart_palets.goToThenExecute(1);

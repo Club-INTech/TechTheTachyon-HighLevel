@@ -15,7 +15,7 @@ public class SimulatedRobot {
     private final float ORIENTATION_TOLERANCE = 0.001f;  //Tolérance sur l'orientation
 
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
-    private final float ROTATION_SPEED = 0.001f;           //Vitesse de rotation en rad/s
+    private final float ROTATION_SPEED = 0.001f;      //Vitesse de rotation en rad/s
 
     private final Vec2 START_POSITION = new VectCartesian(0,1000);
     private final float START_ORIENTATION = 0;
@@ -66,17 +66,23 @@ public class SimulatedRobot {
     /** Envoie la position à l'instance de HL qui est en relation avec ce robot simulé */
     private void sendRealtimePosition(){
         this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.3f\n",Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",","."));
+        //System.out.println(String.format("%s%d %d %.3f\n",Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()));
     }
 
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
         if (Math.abs(this.orientationTarget - this.orientation) > this.ORIENTATION_TOLERANCE){
-            if (Math.abs(this.orientationTarget -this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
+            if (Math.abs(this.orientationTarget - this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=this.orientationTarget;
                 this.turning=true;
             }
             else {
-                this.orientation+=((this.orientationTarget - this.orientation)/Math.abs(this.orientationTarget - this.orientation))*this.ROTATION_SPEED *this.timeSinceLastUpdate();
+                //Formule permettant de tourner dans le bon sens
+                this.orientation+=
+                        ((this.orientationTarget+2*Math.PI)%(2*Math.PI) - (this.orientation+2*Math.PI)%(2*Math.PI))/
+                        Math.abs((this.orientationTarget+2*Math.PI)%(2*Math.PI) - (this.orientation+2*Math.PI)%(2*Math.PI))
+                        *this.ROTATION_SPEED *this.timeSinceLastUpdate();
+                this.orientation=moduloSpec(this.orientation);
                 this.turning=true;
             }
         }
@@ -121,8 +127,8 @@ public class SimulatedRobot {
     }
 
     /** Fait tourner le robot de delta */
-    void turn(float delta){
-        this.orientationTarget=moduloSpec(this.orientation+delta);
+    void turn(float aim){
+        this.orientationTarget=moduloSpec(aim);
     }
 
     /** Fait arrêter le robot */

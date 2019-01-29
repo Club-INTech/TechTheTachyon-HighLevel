@@ -106,7 +106,7 @@ public class OrderWrapper implements Service {
 
     /**
      * On envoit au bas niveau comme ordre de tourner
-     * @param angle  angle aveclequel on veut tourner
+     * @param angle  angle avec lequel on veut tourner
      */
     public void turn(double angle) {
         if(symetry) {
