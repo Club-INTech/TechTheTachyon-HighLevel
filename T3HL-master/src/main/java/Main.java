@@ -16,6 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
 import data.controlers.Listener;
@@ -56,6 +57,15 @@ public class Main {
         launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
         launcher.setColorblindMode(true);
         launcher.launchSimulator();
+
+        /**
+         * Pour l'électron
+         */
+        final GpioController gpio = GpioFactory.getInstance();
+        final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
+        pin.setShutdownOptions(true, PinState.LOW);
+
+
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
