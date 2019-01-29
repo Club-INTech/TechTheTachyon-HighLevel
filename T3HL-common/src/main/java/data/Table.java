@@ -168,7 +168,6 @@ public class Table implements Service {
 
 
         /**
-         * /!\ /!\ /!\ /!\ /!\ /!\ /!\ Palets devant la zone de départ à supprimer à chaque fois que le palet est prit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          * Couleur représente la couleur de la zone se situant derrière le palet !
          */
 
