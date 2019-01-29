@@ -18,6 +18,8 @@
 
 package utils.communication;
 
+import utils.Log;
+
 import java.io.IOException;
 import java.net.Socket;
 
@@ -45,10 +47,12 @@ public class SocketClientInterface extends SocketInterface {
             while (System.currentTimeMillis() - start < SocketInterface.CONNECTION_TIMEOUT) {
                 synchronized (this) {
                     try {
+                        Log.COMMUNICATION.debug(String.format("Trying to connect to %s on port %d",ipAddress, port));
                         this.socket = new Socket(ipAddress, port);
                         this.initBuffers();
                         break;
                     } catch (IOException | CommunicationException e) {
+                        Log.COMMUNICATION.warning(String.format("Failed trying to connect to %s on port %d",ipAddress, port));
                         e.printStackTrace();
                     }
                 }
@@ -57,6 +61,12 @@ public class SocketClientInterface extends SocketInterface {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            if (System.currentTimeMillis()- start > SocketClientInterface.CONNECTION_TIMEOUT) {
+                Log.COMMUNICATION.critical(String.format("FAILED to connect to %s on port %d",ipAddress, port));
+            }
+            else{
+                Log.COMMUNICATION.debug(String.format("SUCCESS to connect to %s on port %d",ipAddress, port));
             }
         }).start();
     }

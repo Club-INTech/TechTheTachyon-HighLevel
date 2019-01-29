@@ -55,16 +55,19 @@ public class Main {
 
         SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
         launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
+        launcher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
         launcher.setColorblindMode(true);
         launcher.launchSimulator();
 
         /**
          * Pour l'électron
          */
-        final GpioController gpio = GpioFactory.getInstance();
-        final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
-        pin.setShutdownOptions(true, PinState.LOW);
-
+        //On check l'username pour savoir si on est sur la Raspberry Pi
+        if (System.getProperty("user.name").equals("pi")){
+            final GpioController gpio = GpioFactory.getInstance();
+            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
+            pin.setShutdownOptions(true, PinState.LOW);
+        }
 
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);

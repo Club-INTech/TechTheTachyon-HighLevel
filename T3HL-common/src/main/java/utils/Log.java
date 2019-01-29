@@ -85,12 +85,18 @@ public enum Log
     private boolean active;
 
     /**
+     * Builder pour former les messages de logs (plus rapide que String + String)
+     */
+    private StringBuilder toLog;
+
+    /**
      * Pour chaque canaux, on peut spécifier une couleur d'affichage
      * @param defaultActive     true si par défault affiché
      */
     Log(boolean defaultActive)
     {
-        active = defaultActive;
+        this.active = defaultActive;
+        this.toLog = new StringBuilder();
     }
 
     /**
@@ -132,21 +138,47 @@ public enum Log
      */
     private synchronized void writeToLog(String color, String message, boolean active)
     {
-        String hour = calendar.get(Calendar.HOUR_OF_DAY) + "h" +
-                calendar.get(Calendar.MINUTE) + ":" +
-                calendar.get(Calendar.SECOND) + "," +
-                calendar.get(Calendar.MILLISECOND);
+        this.toLog.setLength(0);
+        this.toLog.append("[");
+        this.toLog.append(calendar.get(Calendar.HOUR_OF_DAY));
+        this.toLog.append("h");
+        this.toLog.append(calendar.get(Calendar.MINUTE));
+        this.toLog.append(":");
+        this.toLog.append(calendar.get(Calendar.SECOND));
+        this.toLog.append(",");
+        this.toLog.append(calendar.get(Calendar.MILLISECOND));
+        this.toLog.append("]");
+        String hour = this.toLog.toString();
 
         if(active & printLogs)
         {
             StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
-            System.out.println(color + hour + " " + this.name() + " " +
-                    elem.getClassName() + "." + elem.getMethodName() + ":" + elem.getLineNumber() + " > " + message);
+            this.toLog.setLength(0);
+            this.toLog.append(color);
+            this.toLog.append(hour);
+            this.toLog.append(" ");
+            this.toLog.append(this.name());
+            this.toLog.append(" ");
+            this.toLog.append(elem.getClassName());
+            this.toLog.append(",");
+            this.toLog.append(elem.getMethodName());
+            this.toLog.append(":");
+            this.toLog.append(elem.getLineNumber());
+            this.toLog.append(" >>> ");
+            this.toLog.append(message);
+            this.toLog.append(RESET);
+            System.out.println(this.toLog.toString());
         }
 
         if(saveLogs)
         {
-            writeToFile(hour + " " + this.name() + " > " + message);
+            this.toLog.setLength(0);
+            this.toLog.append(hour);
+            this.toLog.append(" ");
+            this.toLog.append(this.name());
+            this.toLog.append(" > ");
+            this.toLog.append(message);
+            writeToFile(this.toLog.toString());
         }
     }
 
