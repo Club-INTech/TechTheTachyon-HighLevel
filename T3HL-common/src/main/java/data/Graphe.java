@@ -163,7 +163,7 @@ public class Graphe implements Service {
 
         Log.GRAPHE.debug("Placement des noeuds en quadrillage");
         for (int i=0; i<nodeXNbr; i++) {
-            pos.setX(i * xStep);
+            pos.setX(i * xStep - 1500);
             for (int j=0; j<nodeYNbr; j++) {
                 pos.setY(j * yStep);
 

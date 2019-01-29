@@ -130,7 +130,7 @@ public class Locomotion implements Service {
      * @param angle angle relatif de rotation
      */
     public void turnRelative(double angle) throws UnableToMoveException {
-        angle = Calculs.modulo(angle + xyo.getOrientation(), 2*Math.PI);
+        angle = Calculs.modulo(angle + xyo.getOrientation(), Math.PI);
         pathFollower.turn(angle, false);
     }
 
@@ -177,9 +177,7 @@ public class Locomotion implements Service {
         pointsQueue.clear();
         exceptionsQueue.clear();
 
-        System.out.println(SensorState.MOVING.getData());
         while ( ! xyo.getPosition().equals(aim.getPosition())) {
-            System.out.println(aim.getPosition());
             try {
                 graphe.readLock().lock();
                 path = pathfinder.findPath(next, aim);

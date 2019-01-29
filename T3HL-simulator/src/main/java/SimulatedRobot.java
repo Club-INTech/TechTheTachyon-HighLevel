@@ -91,7 +91,6 @@ public class SimulatedRobot {
 
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
-        System.out.println(this.orientation);
         if (Math.abs(this.orientationTarget - this.orientation) > this.ORIENTATION_TOLERANCE){
             if (Math.abs(this.orientationTarget - this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=moduloSpec(this.orientationTarget);
@@ -122,7 +121,6 @@ public class SimulatedRobot {
                     this.forwardOrBackward = true;
                 } else {
                     this.position.plus(this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.timeSinceLastUpdate() / (float) this.positionTarget.minusVector(this.position).getR()));
-                    System.out.println(this.positionTarget.minusVector(this.position).homothetie(this.TRANSLATION_SPEED * this.timeSinceLastUpdate() / (float) this.positionTarget.minusVector(this.position).getR()));
                     this.forwardOrBackward = true;
                 }
             } else {
@@ -169,7 +167,6 @@ public class SimulatedRobot {
             this.forceRaiseStoppedMovingFlag();
         }
         else {
-            System.out.println("pos:"+position);
             this.positionTarget = position;
             this.orientationTarget = (float) position.minusVector(this.position).getA();
         }
@@ -190,8 +187,8 @@ public class SimulatedRobot {
 
     /** Set l'orientation du robot */
     void setOrientation(double orientation){
-        this.orientationTarget=orientation;
-        this.orientation=orientation;
+        this.orientationTarget=moduloSpec(orientation);
+        this.orientation=moduloSpec(orientation);
     }
 
     /** Fait un modulo entre -Pi et Pi d'un angle en radians */

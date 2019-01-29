@@ -105,7 +105,7 @@ public class SensorControler extends Thread implements Service {
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2*Math.PI);
+                    o = Calculs.modulo(Math.PI - o, Math.PI);
                 }
                 XYO.getRobotInstance().update(x, y, o);
             }
@@ -116,7 +116,7 @@ public class SensorControler extends Thread implements Service {
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2*Math.PI);
+                    o = Calculs.modulo(Math.PI - o, Math.PI);
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }

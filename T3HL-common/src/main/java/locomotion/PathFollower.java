@@ -134,7 +134,7 @@ public class PathFollower extends Thread implements Service {
      *              en cas de blocage mécanique ou d'adversaire
      */
     public void turn(double angle, boolean expectedWallImpact) throws UnableToMoveException {
-        XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, 2*Math.PI));
+        XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
         SensorState.MOVING.setData(true);
         this.orderWrapper.turn(angle);
 
@@ -182,7 +182,7 @@ public class PathFollower extends Thread implements Service {
     private boolean isLineObstructed(boolean direction) {
         double orientation = robotXYO.getOrientation();
         if (!direction) {
-            orientation = Calculs.modulo(orientation + Math.PI, 2*Math.PI);
+            orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
         }
         Segment seg = new Segment(robotXYO.getPosition().clone(),
                 robotXYO.getPosition().plusVector(new VectPolar(DISTANCE_CHECK, orientation)));
