@@ -76,7 +76,6 @@ public abstract class Script implements Service {
 
         try {
             this.robot.moveToPoint(entryPosition);
-            System.out.println("test");
         } catch (UnableToMoveException e) {
             // TODO
         }

@@ -165,7 +165,7 @@ public class PathFollower extends Thread implements Service {
         SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 
-        while ((Boolean) SensorState.MOVING.getData()) {
+        while ((boolean)SensorState.MOVING.getData()) {
             try {
                 Thread.sleep(5);
             } catch (InterruptedException e) {

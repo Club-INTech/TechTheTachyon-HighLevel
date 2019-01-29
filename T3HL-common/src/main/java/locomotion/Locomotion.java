@@ -19,6 +19,7 @@
 package locomotion;
 
 import data.Graphe;
+import data.SensorState;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
@@ -94,6 +95,7 @@ public class Locomotion implements Service {
         this.exceptionsQueue = new ConcurrentLinkedQueue<UnableToMoveException>();
         pathFollower.setPointsQueue(pointsQueue);
         pathFollower.setExceptionsQueue(exceptionsQueue);
+        pathFollower.start();
     }
 
     /**
@@ -175,7 +177,9 @@ public class Locomotion implements Service {
         pointsQueue.clear();
         exceptionsQueue.clear();
 
+        System.out.println(SensorState.MOVING.getData());
         while ( ! xyo.getPosition().equals(aim.getPosition())) {
+            System.out.println(aim.getPosition());
             try {
                 graphe.readLock().lock();
                 path = pathfinder.findPath(next, aim);

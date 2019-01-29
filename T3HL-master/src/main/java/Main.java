@@ -23,6 +23,7 @@ import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import data.table.Obstacle;
+import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -34,6 +35,7 @@ import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Calculs;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
@@ -69,7 +71,6 @@ public class Main {
             pin.setShutdownOptions(true, PinState.LOW);
         }
 
-
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
@@ -78,11 +79,11 @@ public class Main {
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Thread.sleep(2000);
-
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+            Thread.sleep(1000);
+
             try {
-                robot.moveToPoint(new VectCartesian(1000,1000));
-                Thread.sleep(1000);
+                robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
@@ -91,7 +92,6 @@ public class Main {
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);
-
 
             zone_chaos_palets.goToThenExecute(1);
 

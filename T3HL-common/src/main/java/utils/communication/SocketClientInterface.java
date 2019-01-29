@@ -53,7 +53,6 @@ public class SocketClientInterface extends SocketInterface {
                         break;
                     } catch (IOException | CommunicationException e) {
                         Log.COMMUNICATION.warning(String.format("Failed trying to connect to %s on port %d",ipAddress, port));
-                        e.printStackTrace();
                     }
                 }
                 try {
