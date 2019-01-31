@@ -17,7 +17,7 @@ public class PaletsZoneDepart extends Script {
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry,yEntry),
             new VectCartesian(xEntry,yEntry+300),
-            new VectCartesian(xEntry,yEntry+600)
+            //new VectCartesian(xEntry,yEntry+600)
     };
 
 
@@ -34,6 +34,7 @@ public class PaletsZoneDepart extends Script {
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
                     robot.moveToPoint(position);
+
                 } else {
                     premierPaletPris = true;
                 }
