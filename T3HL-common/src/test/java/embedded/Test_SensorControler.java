@@ -27,6 +27,7 @@ import data.controlers.SensorControler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import utils.ConfigData;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -50,21 +51,49 @@ public class Test_SensorControler {
     @Test
     public void run() throws Exception {
 
+        int[] sickMeasurements = new int[6];
+        int[] significantSicks = new int[3];
+        sickMeasurements[0]=0 ;
+        sickMeasurements[1]=300 ;
+        sickMeasurements[2]=300 ;
+        sickMeasurements[3]=300 ;
+        sickMeasurements[4]=0 ;
+        significantSicks[0]=3 ;
+        significantSicks[1]=1 ;
+        significantSicks[2]=2 ;
         int dsick = 173;
-        int xtheo = 0;
-        int ytheo = 0;
-        int esick = 173;
-        double rapport= esick/dsick;
-        double teta = Math.atan(rapport);
-        int xCalcule = (int) ((300- xtheo) * Math.cos(teta));
-        int yCalcule = (int) ((300- ytheo) * Math.cos(teta));
+        int esick = sickMeasurements[significantSicks[1]] - sickMeasurements[significantSicks[2]];
+        double rapport = (double) esick / dsick;
+        int xCalcule;
+        int yCalcule;
+        double teta;
+            double orien= 0;
 
-        VectCartesian newPosition = new VectCartesian(xCalcule,yCalcule);
-        double newOrientation = teta;
+            teta = Math.atan(rapport);
+            xCalcule = (int) (1500 - (sickMeasurements[significantSicks[0]]) * Math.cos(teta));
+            if (-Math.PI/2 < orien && orien < Math.PI/2) { //modifier car arctan est toujours inférieur à PI
+                if (significantSicks[1] == 4 || significantSicks[1] == 5) {
+                    yCalcule = (int) (2000 - (sickMeasurements[significantSicks[2]]) * Math.cos(teta));
+                } else {
+                    yCalcule = (int) ((sickMeasurements[significantSicks[2]]) * Math.cos(teta));
+                }
+            } else {
+                if (significantSicks[1] == 4 || significantSicks[1] == 5) {
+                    yCalcule = (int) ((sickMeasurements[significantSicks[2]]) * Math.cos(teta));
+                } else {
+                    yCalcule = (int) (2000 - ((sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                }
+
+            }
+
+        VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
+        Double newOrientation = teta + Math.PI;
         XYO newXYO = new XYO(newPosition, newOrientation);
-        //Assert.assertEquals(new VectCartesian(300,300 ), newPosition);
-        //Assert.assertEquals(0, newOrientation,0.1);
-        System.out.println(teta);
+        VectCartesian vecttest = new VectCartesian(1200 , 300);
+        Double orientest = 0.0 + Math.PI;
+        Assert.assertEquals(vecttest,newPosition);
+        Assert.assertEquals(orientest,newOrientation);
+    }
 
     }
-}
+
