@@ -180,8 +180,7 @@ public class SensorControler extends Thread implements Service {
                     double newOrientation = teta;
                     XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
                     Sick.setNewXYO(newXYO);
-                }
-                else {
+                } else {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int dsick =50;
                     int esick = Integer.parseInt(sickMeasurements[1])- Integer.parseInt(sickMeasurements[2]);
@@ -209,15 +208,12 @@ public class SensorControler extends Thread implements Service {
                     XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
                     Sick.setNewXYO(newXYO);
                 }
-
-
-
             }
+
             if(couleurPalet.peek()!=null){
                 String couleur = couleurPalet.poll();
                 CouleurPalet.setCouleurPalRecu(couleur);
             }
-
         }
     }
 
