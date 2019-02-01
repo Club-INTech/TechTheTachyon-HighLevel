@@ -16,15 +16,13 @@ import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private int[] LLports;
-    private int[] HLports;
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
     private ArrayList<Obstacle> fixedObstacles;
 
     private BufferedImage backgroundImage;
 
-    private boolean drawingPoints;
+    private boolean isDrawingPoints;
 
     private ArrayList<Vec2> pointsToDraw;
 
@@ -41,27 +39,72 @@ class GraphicalInterface extends JFrame {
     private Color OBSTACLE_COLOR = new Color(255,0,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
 
+    private boolean isLaunched = false;
+
+    /** Set les robots qui sont instancié pour qu'ils soient affichés dans le simulateur
+     * @param simulatedRobots HashMap<Integer, SimulatedRobot> des robots instanciés
+     */
+    void setSimulatedRobots(HashMap<Integer, SimulatedRobot> simulatedRobots){
+        if (!this.isLaunched){
+            this.simulatedRobots=simulatedRobots;
+        }
+    }
+
+    /** Set la table
+     * @param table table mdr
+     */
+    void setTable(Table table){
+        if (!this.isLaunched){
+            this.table=table;
+        }
+    }
+
+    /** Set le mode daltonien
+     * @param value mode daltonien activé sur TRUE
+     */
+    void setColorblindMode(boolean value){
+        if (!this.isLaunched){
+            this.setColorSchema(value);
+        }
+    }
+
+    /** Set si les points sont affichés ou non
+     * @param value les points sont affichés si TRUE
+     */
+    void setIsDrawingPoints(boolean value){
+        if (!this.isLaunched){
+            this.isDrawingPoints=value;
+        }
+    }
+
+    /** Lance l'interface graphique */
+    void launch(){
+        this.isLaunched=true;
+    }
+
+    /** Méthode instanciant tous les attributs nécessaires au bon fonctionnement de l'interface graphique
+     *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
+     */
+    void defaultInit(){
+        this.lastTimeUpdate=System.currentTimeMillis();
+        this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
+        this.isDrawingPoints=true;
+        this.pointsToDraw=new ArrayList<Vec2>();
+
+        this.table=null;
+    }
+
 
     /** Constructeur */
-    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode, boolean drawPosition) {
-        this.LLports = LLports;
-        this.LLports = HLports;
-        this.simulatedRobots = simulatedRobots;
-        this.table = table;
-        this.pointsToDraw = new ArrayList<Vec2>();
-        this.setColorSchema(colorblindMode);
-
+    GraphicalInterface() {
+        this.defaultInit();
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        this.lastTimeUpdate=System.currentTimeMillis();
-
         this.setTitle("Simulateur");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         this.panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics graphics) {
@@ -72,12 +115,9 @@ class GraphicalInterface extends JFrame {
         this.panel.setDoubleBuffered(true);
         this.panel.setVisible(true);
         this.panel.setPreferredSize(new Dimension(this.WIDTH_FRAME, this.HEIGHT_FRAME));
-
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
-        this.drawingPoints = drawPosition;
-
     }
 
     /** Définit si on est en mode daltonien */
@@ -105,10 +145,12 @@ class GraphicalInterface extends JFrame {
 
     /** Fonction appelée par le simulateur */
     void tryUpdate(){
-        if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
-            this.lastTimeUpdate=System.currentTimeMillis();
-            this.fixedObstacles = table.getFixedObstacles();
-            this.panel.repaint();
+        if (this.isLaunched) {
+            if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
+                this.lastTimeUpdate = System.currentTimeMillis();
+                this.fixedObstacles = table.getFixedObstacles();
+                this.panel.repaint();
+            }
         }
     }
 
@@ -193,7 +235,7 @@ class GraphicalInterface extends JFrame {
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
             drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
         }
-        if(this.drawingPoints) {
+        if(this.isDrawingPoints) {
             drawPoints(g);
         }
     }

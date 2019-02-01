@@ -96,30 +96,9 @@ public class SimulatorManagerLauncher extends Thread{
     }
 
     /** Supprime tous les points à dessiner */
-    void clearPointsToDraw(){
+    void clearPointsToDraw() {
         this.pointsToDraw.clear();
     }
-
-    /** Getter pour les ports utilisés pour parler au LL */
-    public int[] getLLports(){
-        return this.LLports;
-    }
-
-    /** Getter pour les ports utilisés pour parler entre les HL */
-    public int[] getHLports(){
-        return this.HLports;
-    }
-
-    /** Getter pour savoir si on est en mode colorblind */
-    public boolean getColorblindMode(){
-        return this.colorblindMode;
-    }
-
-    /** Getter pour connaitre le speed factor */
-    public float getSpeedFactor(){
-        return this.speedFactor;
-    }
-
 
     /** Fonction qui crée un Thread pour lancer le simualteur */
     public void launchSimulator(){
@@ -201,11 +180,15 @@ public class SimulatorManagerLauncher extends Thread{
             e.printStackTrace();
         }
 
-
         // On instancie l'interface graphique
-        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, this.colorblindMode,true);
+        this.graphicalInterface = new GraphicalInterface();
+        this.graphicalInterface.setSimulatedRobots(this.simulatedRobots);
+        this.graphicalInterface.setTable(this.table);
+        this.graphicalInterface.setColorblindMode(true);
+        this.graphicalInterface.setIsDrawingPoints(true);
         this.graphicalInterface.setListOfPointsToDraw(this.pointsToDraw);
-        System.out.println(String.format("Interface graphique instanciée"));
+        this.graphicalInterface.launch();
+        System.out.println("Interface graphique instanciée");
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
         this.simulatorManager = new SimulatorManager(LLports, HLports, this.graphicalInterface, this.simulatedLLConnectionManager, this.simulatedHLConnectionManager, this.simulatedRobots);
