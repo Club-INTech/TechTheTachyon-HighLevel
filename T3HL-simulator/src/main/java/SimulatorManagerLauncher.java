@@ -4,6 +4,7 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SimulatorManagerLauncher extends Thread{
@@ -21,6 +22,7 @@ public class SimulatorManagerLauncher extends Thread{
     private int[] HLports;
     private boolean colorblindMode;
     private boolean launched;
+    private ArrayList<Vec2> pointsToDraw;
     private float speedFactor;
 
     /** Constructeur */
@@ -29,6 +31,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.colorblindMode=false;
         this.LLports=new int[]{};
         this.HLports=new int[]{};
+        this.pointsToDraw = new ArrayList<Vec2>();
         this.speedFactor=1;
     }
 
@@ -70,6 +73,31 @@ public class SimulatorManagerLauncher extends Thread{
         else{
             System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
         }
+    }
+
+    /** Définit les points à dessiner */
+    void setPointsToDraw(Vec2[] positions) {
+        this.clearPointsToDraw();
+        for (Vec2 position : positions) {
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Ajoute un point à dessiner */
+    void addPointToDraw(Vec2 position){
+        this.pointsToDraw.add(position);
+    }
+
+    /** Ajout des points à dessiner */
+    void addPointsToDraw(Vec2[] positions){
+        for (Vec2 position : positions){
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Supprime tous les points à dessiner */
+    void clearPointsToDraw(){
+        this.pointsToDraw.clear();
     }
 
     /** Getter pour les ports utilisés pour parler au LL */
@@ -176,6 +204,7 @@ public class SimulatorManagerLauncher extends Thread{
 
         // On instancie l'interface graphique
         this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, this.colorblindMode,true);
+        this.graphicalInterface.setListOfPointsToDraw(this.pointsToDraw);
         System.out.println(String.format("Interface graphique instanciée"));
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
@@ -184,10 +213,6 @@ public class SimulatorManagerLauncher extends Thread{
 
 
 
-    }
-
-   public void drawEntryPositionScript(Vec2[] positions) {
-        this.graphicalInterface.positionToDraw(positions);
     }
 
 }

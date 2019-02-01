@@ -9,6 +9,6 @@ public class Main {
         //launcher.setHLports(new int[]{20001,20002});
         launcher.setColorblindMode(true);
         launcher.launchSimulator();
-        //launcher.drawEntryPositionScript(new VectCartesian(0,1000));
+        //launcher.setPointsToDraw(new VectCartesian(0,1000));
     }
 }

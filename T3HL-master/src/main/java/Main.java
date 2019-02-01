@@ -22,8 +22,6 @@ import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
-import data.table.Obstacle;
-import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -31,15 +29,11 @@ import scripts.Script;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
-import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.util.ArrayList;
 
 /**
  * @author nayth
@@ -84,7 +78,7 @@ public class Main {
             Thread.sleep(1000);
 
             Vec2[] tabVecs = {new VectCartesian(0,1000), new VectCartesian(500,500)};
-            simulatorLauncher.drawEntryPositionScript(tabVecs);
+            simulatorLauncher.setPointsToDraw(tabVecs);
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -93,7 +87,10 @@ public class Main {
                 e.printStackTrace();
             }
 
+
+            simulatorLauncher.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             zone_depart_palets.goToThenExecute(1);
+            simulatorLauncher.clearPointsToDraw();
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);
@@ -137,7 +134,7 @@ public class Main {
         simulatorLauncher = new SimulatorManagerLauncher();
         simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
         simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setColorblindMode(true);
+        simulatorLauncher.setColorblindMode(false);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.launchSimulator();
 

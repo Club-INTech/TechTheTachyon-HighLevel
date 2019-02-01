@@ -24,9 +24,9 @@ class GraphicalInterface extends JFrame {
 
     private BufferedImage backgroundImage;
 
-    private boolean drawPosition;
+    private boolean drawingPoints;
 
-    private Vec2[] positionToDraw;
+    private ArrayList<Vec2> pointsToDraw;
 
     private JPanel panel;
     private long lastTimeUpdate;
@@ -39,7 +39,7 @@ class GraphicalInterface extends JFrame {
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
     private Color OBSTACLE_COLOR = new Color(255,0,0,64);
-    private Color ENTRY_POSITION_SCRIPT = new Color(255,0,255,255);
+    private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
 
 
     /** Constructeur */
@@ -48,6 +48,7 @@ class GraphicalInterface extends JFrame {
         this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
         this.table = table;
+        this.pointsToDraw = new ArrayList<Vec2>();
         this.setColorSchema(colorblindMode);
 
         try {
@@ -75,30 +76,31 @@ class GraphicalInterface extends JFrame {
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
-        this.drawPosition = drawPosition;
+        this.drawingPoints = drawPosition;
 
     }
 
-    public void positionToDraw(Vec2[] pos){
-
-        this.positionToDraw = pos;
-    }
-
+    /** Définit si on est en mode daltonien */
     private void setColorSchema(boolean colorblindMode){
         if (colorblindMode) {
             DEFAULT_COLOR = new Color(0, 0, 0, 255);
             ROBOT_COLOR = new Color(0, 0, 255, 128);
             ORIENTATION_COLOR = new Color(0, 255, 255, 255);
             OBSTACLE_COLOR = new Color(255, 255, 0, 64);
-            ENTRY_POSITION_SCRIPT = new Color(200,150,100);
+            POINTS_TO_DRAW_COLOR = new Color(255,255,255, 255);
         }
         else{
             DEFAULT_COLOR = new Color(0, 0, 0, 255);
             ROBOT_COLOR = new Color(0, 255, 0, 128);
             ORIENTATION_COLOR = new Color(0, 0, 255, 255);
             OBSTACLE_COLOR = new Color(255, 0, 0, 64);
-            ENTRY_POSITION_SCRIPT = new Color(255,0,255,255);
+            POINTS_TO_DRAW_COLOR = new Color(255,255,255,255);
         }
+    }
+
+    /** Set la liste des points à afficher */
+    void setListOfPointsToDraw(ArrayList<Vec2> pointsToDraw){
+        this.pointsToDraw = pointsToDraw;
     }
 
     /** Fonction appelée par le simulateur */
@@ -167,12 +169,13 @@ class GraphicalInterface extends JFrame {
     /**
      * Fonction pour dessiner une liste de points
      */
-    public void drawEntryPositionScript(Graphics g,Vec2[] vecteurs){
-        g.setColor(ENTRY_POSITION_SCRIPT);
-        for(Vec2 vecteur : vecteurs) {
+    public void drawPoints(Graphics g){
+        g.setColor(POINTS_TO_DRAW_COLOR);
+        for(Vec2 vecteur : this.pointsToDraw) {
             vecteur = transformTableCoordsToInterfaceCoords(vecteur);
             g.fillOval(vecteur.getX(), vecteur.getY(), 10, 10);
         }
+        g.setColor(DEFAULT_COLOR);
     }
 
     /** Efface l'affichage */
@@ -190,8 +193,8 @@ class GraphicalInterface extends JFrame {
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
             drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
         }
-        if(drawPosition) {
-            drawEntryPositionScript(g,positionToDraw);
+        if(this.drawingPoints) {
+            drawPoints(g);
         }
     }
 
