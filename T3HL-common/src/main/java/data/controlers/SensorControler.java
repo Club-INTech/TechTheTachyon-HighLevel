@@ -139,7 +139,7 @@ public class SensorControler extends Thread implements Service {
                     VectCartesian vectsick = new VectCartesian(104,87); //Vecteur qui place les sick par rapport à l'origine du robot
                     int dsick = 173;
                     int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
-                    double rapport = (double) esick / dsick;
+                    double rapport = 1.0* esick / dsick;
                     int xCalcule;
                     int yCalcule;
                     double teta;
@@ -191,7 +191,7 @@ public class SensorControler extends Thread implements Service {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int dsick = 50;
                     int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
-                    double rapport = (double) esick / dsick;
+                    double rapport = 1.0 * esick / dsick;
                     int xCalcule;
                     int yCalcule; //
                     double teta;
