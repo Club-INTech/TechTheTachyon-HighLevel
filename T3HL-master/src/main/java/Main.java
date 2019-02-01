@@ -131,7 +131,7 @@ public class Main {
     private static void initSimulator(){
         simulatorLauncher = new SimulatorManagerLauncher();
         simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue(), (int)ConfigData.MASTER_SIMULATEUR.getDefaultValue()});
+        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue());
         simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.launchSimulator();
     }
