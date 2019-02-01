@@ -24,6 +24,10 @@ class GraphicalInterface extends JFrame {
 
     private BufferedImage backgroundImage;
 
+    private boolean drawPosition;
+
+    private Vec2[] positionToDraw;
+
     private JPanel panel;
     private long lastTimeUpdate;
     private final int WIDTH_FRAME = 1200;      //in pixels
@@ -35,10 +39,11 @@ class GraphicalInterface extends JFrame {
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
     private Color OBSTACLE_COLOR = new Color(255,0,0,64);
+    private Color ENTRY_POSITION_SCRIPT = new Color(255,0,255,255);
 
 
     /** Constructeur */
-    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode) {
+    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode, boolean drawPosition) {
         this.LLports = LLports;
         this.LLports = HLports;
         this.simulatedRobots = simulatedRobots;
@@ -70,6 +75,13 @@ class GraphicalInterface extends JFrame {
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
+        this.drawPosition = drawPosition;
+
+    }
+
+    public void positionToDraw(Vec2[] pos){
+
+        this.positionToDraw = pos;
     }
 
     private void setColorSchema(boolean colorblindMode){
@@ -78,12 +90,14 @@ class GraphicalInterface extends JFrame {
             ROBOT_COLOR = new Color(0, 0, 255, 128);
             ORIENTATION_COLOR = new Color(0, 255, 255, 255);
             OBSTACLE_COLOR = new Color(255, 255, 0, 64);
+            ENTRY_POSITION_SCRIPT = new Color(200,150,100);
         }
         else{
             DEFAULT_COLOR = new Color(0, 0, 0, 255);
             ROBOT_COLOR = new Color(0, 255, 0, 128);
             ORIENTATION_COLOR = new Color(0, 0, 255, 255);
             OBSTACLE_COLOR = new Color(255, 0, 0, 64);
+            ENTRY_POSITION_SCRIPT = new Color(255,0,255,255);
         }
     }
 
@@ -150,6 +164,17 @@ class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Fonction pour dessiner une liste de points
+     */
+    public void drawEntryPositionScript(Graphics g,Vec2[] vecteurs){
+        g.setColor(ENTRY_POSITION_SCRIPT);
+        for(Vec2 vecteur : vecteurs) {
+            vecteur = transformTableCoordsToInterfaceCoords(vecteur);
+            g.fillOval(vecteur.getX(), vecteur.getY(), 10, 10);
+        }
+    }
+
     /** Efface l'affichage */
     private void clearScreen(Graphics g){
         g.clearRect(0,0,this.WIDTH_FRAME, this.HEIGHT_FRAME);
@@ -164,6 +189,9 @@ class GraphicalInterface extends JFrame {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
             drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
+        }
+        if(drawPosition) {
+            drawEntryPositionScript(g,positionToDraw);
         }
     }
 
@@ -190,4 +218,7 @@ class GraphicalInterface extends JFrame {
     private Vec2 transformTableCoordsToInterfaceCoords(Vec2 position){
         return transformTableCoordsToInterfaceCoords(position.getX(), position.getY());
     }
+
+
+
 }

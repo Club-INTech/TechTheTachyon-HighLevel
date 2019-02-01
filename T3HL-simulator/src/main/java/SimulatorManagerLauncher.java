@@ -1,6 +1,8 @@
 import data.Table;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 import java.util.HashMap;
 
@@ -152,6 +154,7 @@ public class SimulatorManagerLauncher extends Thread{
                     e.printStackTrace();
                 }
             }
+
         }
 
         // On créer un robot par port
@@ -172,11 +175,19 @@ public class SimulatorManagerLauncher extends Thread{
 
 
         // On instancie l'interface graphique
-        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, this.colorblindMode);
+        this.graphicalInterface = new GraphicalInterface(LLports, HLports, this.simulatedRobots, this.table, this.colorblindMode,true);
         System.out.println(String.format("Interface graphique instanciée"));
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
         this.simulatorManager = new SimulatorManager(LLports, HLports, this.graphicalInterface, this.simulatedLLConnectionManager, this.simulatedHLConnectionManager, this.simulatedRobots);
         System.out.println("Manager instancié");
+
+
+
     }
+
+   public void drawEntryPositionScript(Vec2[] positions) {
+        this.graphicalInterface.positionToDraw(positions);
+    }
+
 }

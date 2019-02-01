@@ -36,6 +36,7 @@ import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Calculs;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
@@ -82,12 +83,16 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
+            Vec2[] tabVecs = {new VectCartesian(0,1000), new VectCartesian(500,500)};
+            simulatorLauncher.drawEntryPositionScript(tabVecs);
+
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+
             zone_depart_palets.goToThenExecute(1);
 
             table.removeFixedObstacle(table.paletRougeDroite);
@@ -135,6 +140,7 @@ public class Main {
         simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.launchSimulator();
+
     }
 
 }
