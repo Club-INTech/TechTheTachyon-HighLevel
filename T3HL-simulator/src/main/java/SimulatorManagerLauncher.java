@@ -99,32 +99,6 @@ public class SimulatorManagerLauncher extends Thread{
         }
     }
 
-    /* ===================================== Méthodes sur le points à dessiner ===================================== */
-    /** Définit les points à dessiner */
-    void setPointsToDraw(Vec2[] positions) {
-        this.clearPointsToDraw();
-        for (Vec2 position : positions) {
-            this.addPointToDraw(position);
-        }
-    }
-
-    /** Ajoute un point à dessiner */
-    void addPointToDraw(Vec2 position){
-        this.pointsToDraw.add(position);
-    }
-
-    /** Ajout des points à dessiner */
-    void addPointsToDraw(Vec2[] positions){
-        for (Vec2 position : positions){
-            this.addPointToDraw(position);
-        }
-    }
-
-    /** Supprime tous les points à dessiner */
-    void clearPointsToDraw() {
-        this.pointsToDraw.clear();
-    }
-
     /* ======================================== Lancement de l'instance ======================================== */
     /** Fonction qui crée un Thread pour lancer le simualteur */
     public void launch(){
@@ -219,7 +193,6 @@ public class SimulatorManagerLauncher extends Thread{
         this.graphicalInterface.setTable(this.table);
         this.graphicalInterface.setColorblindMode(this.colorblindMode);
         this.graphicalInterface.setIsDrawingPoints(true);
-        this.graphicalInterface.setListOfPointsToDraw(this.pointsToDraw);
         this.graphicalInterface.launch();
         System.out.println("Interface graphique instanciée");
 
@@ -230,7 +203,7 @@ public class SimulatorManagerLauncher extends Thread{
     }
 
     /** Getter du manager de la simulation */
-    public SimulatorManager getSimulatorManager(){
+    SimulatorManager getSimulatorManager(){
         if (!this.hasFinished){
             System.out.println("SIMULATEUR : Le lanceur de simulateur n'a pas fini lancer le simulateur");
             return null;

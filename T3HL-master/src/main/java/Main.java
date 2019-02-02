@@ -49,6 +49,7 @@ public class Main {
     private static Table table;
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
+    private static GraphicalInterface interfaceGraphique;
 
     public static void main(String[] args){
         initServices();
@@ -78,7 +79,7 @@ public class Main {
             Thread.sleep(1000);
 
             Vec2[] tabVecs = {new VectCartesian(0,1000), new VectCartesian(500,500)};
-            simulatorLauncher.setPointsToDraw(tabVecs);
+            interfaceGraphique.setPointsToDraw(tabVecs);
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -87,10 +88,9 @@ public class Main {
                 e.printStackTrace();
             }
 
-
-            simulatorLauncher.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
+            interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             zone_depart_palets.goToThenExecute(1);
-            simulatorLauncher.clearPointsToDraw();
+            interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);
@@ -137,6 +137,13 @@ public class Main {
         simulatorLauncher.setColorblindMode(false);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.launch();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
+        interfaceGraphique = simulatorManager.getGraphicalInterface();
     }
 
 }

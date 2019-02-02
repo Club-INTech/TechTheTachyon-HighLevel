@@ -48,6 +48,7 @@ class GraphicalInterface extends JFrame {
     /** Constructeur */
     GraphicalInterface() {
         this.initDefaultPassedParameters();
+        this.pointsToDraw=new ArrayList<Vec2>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
@@ -78,7 +79,6 @@ class GraphicalInterface extends JFrame {
     private void initDefaultPassedParameters(){
         this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
         this.isDrawingPoints=true;
-        this.pointsToDraw=new ArrayList<Vec2>();
         this.colorblindMode=false;
 
         this.table=null;
@@ -117,15 +117,6 @@ class GraphicalInterface extends JFrame {
     void setIsDrawingPoints(boolean value){
         if (canParametersBePassed()){
             this.isDrawingPoints=value;
-        }
-    }
-
-    /** Set, par référence, la liste des points à afficher
-     * @param pointsToDraw référence à la liste des points à afficher
-     */
-    void setListOfPointsToDraw(ArrayList<Vec2> pointsToDraw){
-        if (canParametersBePassed()){
-            this.pointsToDraw = pointsToDraw;
         }
     }
 
@@ -288,5 +279,31 @@ class GraphicalInterface extends JFrame {
             OBSTACLE_COLOR = new Color(255, 0, 0, 64);
             POINTS_TO_DRAW_COLOR = new Color(255,255,255,255);
         }
+    }
+
+    /* ===================================== Méthodes sur le points à dessiner ===================================== */
+    /** Définit les points à dessiner */
+    void setPointsToDraw(Vec2[] positions) {
+        this.clearPointsToDraw();
+        for (Vec2 position : positions) {
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Ajoute un point à dessiner */
+    void addPointToDraw(Vec2 position){
+        this.pointsToDraw.add(position);
+    }
+
+    /** Ajout des points à dessiner */
+    void addPointsToDraw(Vec2[] positions){
+        for (Vec2 position : positions){
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Supprime tous les points à dessiner */
+    void clearPointsToDraw() {
+        this.pointsToDraw.clear();
     }
 }

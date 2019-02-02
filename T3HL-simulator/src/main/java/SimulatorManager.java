@@ -180,8 +180,7 @@ public class SimulatorManager extends Thread {
     }
 
     /** Getter de l'interface graphique */
-    public GraphicalInterface getGraphicalInterface(){
+    GraphicalInterface getGraphicalInterface(){
         return this.graphicalInterface;
     }
-
 }
