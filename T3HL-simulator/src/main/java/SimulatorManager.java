@@ -1,4 +1,3 @@
-import data.controlers.Channel;
 import exceptions.OrderException;
 import orders.order.MotionOrder;
 import orders.order.Order;
@@ -9,6 +8,7 @@ import java.util.HashMap;
 
 public class SimulatorManager extends Thread {
 
+    //Attributs pouvant être modifiés avant le lancement
     private int[] LLports;
     private int[] HLports;
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManagers;
@@ -28,12 +28,12 @@ public class SimulatorManager extends Thread {
         this.simulatedHLConnectionManagers = simulatedHLConectionManagers;
         this.simulatedRobots = simulatedRobots;
 
-
         this.start();
     }
 
-    @Override
+
     /** Manage les messages reçus, le robot et l'interface graphique */
+    @Override
     public void run() {
         String lastMessage;
 
@@ -177,6 +177,11 @@ public class SimulatorManager extends Thread {
         catch (NumberFormatException e){
             throw new OrderException(String.format("Le parser d'integer n'a pas réussi à parser \"%s\"",str));
         }
+    }
+
+    /** Getter de l'interface graphique */
+    public GraphicalInterface getGraphicalInterface(){
+        return this.graphicalInterface;
     }
 
 }
