@@ -101,8 +101,9 @@ public class SimulatorManagerLauncher extends Thread{
 
     /* ======================================== Lancement de l'instance ======================================== */
     /** Fonction qui crée un Thread pour lancer le simualteur */
-    public void launch(){
+    void launch(){
         this.start();
+        System.out.println("Lanceur de simulateur démarré");
     }
 
     @Override
@@ -189,19 +190,29 @@ public class SimulatorManagerLauncher extends Thread{
 
         // On instancie l'interface graphique
         this.graphicalInterface = new GraphicalInterface();
-        this.graphicalInterface.setSimulatedRobots(this.simulatedRobots);
         this.graphicalInterface.setTable(this.table);
+        this.graphicalInterface.setSimulatedRobots(this.simulatedRobots);
         this.graphicalInterface.setColorblindMode(this.colorblindMode);
         this.graphicalInterface.setIsDrawingPoints(true);
         this.graphicalInterface.launch();
         System.out.println("Interface graphique instanciée");
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
-        this.simulatorManager = new SimulatorManager(LLports, HLports, this.graphicalInterface, this.simulatedLLConnectionManager, this.simulatedHLConnectionManager, this.simulatedRobots);
+        this.simulatorManager = new SimulatorManager();
+        this.simulatorManager.setLLports(this.LLports);
+        this.simulatorManager.setHLports(this.HLports);
+        this.simulatorManager.setSimulatedLLConnectionManagers(this.simulatedLLConnectionManager);
+        this.simulatorManager.setSimulatedHLConnectionManagers(this.simulatedHLConnectionManager);
+        this.simulatorManager.setGraphicalInterface(this.graphicalInterface);
+        this.simulatorManager.setSimulatedRobots(this.simulatedRobots);
+        this.simulatorManager.launch();
         System.out.println("Manager de simulation instancié");
+
+        //On indique que tout a bien été instancié
         this.hasFinished = true;
     }
 
+    /* ================================================ Getters ================================================= */
     /** Getter du manager de la simulation */
     SimulatorManager getSimulatorManager(){
         if (!this.hasFinished){

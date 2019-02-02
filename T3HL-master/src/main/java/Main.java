@@ -138,7 +138,7 @@ public class Main {
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.launch();
         try {
-            Thread.sleep(5000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

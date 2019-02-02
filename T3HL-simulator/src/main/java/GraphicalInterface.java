@@ -120,8 +120,7 @@ class GraphicalInterface extends JFrame {
         }
     }
 
-    /** Permet de savoir si on a lancé le robot simulé
-     */
+    /** Permet de savoir si on a lancé le robot simulé */
     private boolean canParametersBePassed(){
         if (this.isLaunched){
             System.out.println("SIMULATEUR : On ne peut pas passer de paramètres à l'interface graphique lorsqu'elle est déjà lancée");
@@ -137,6 +136,7 @@ class GraphicalInterface extends JFrame {
     void launch(){
         this.updateColorSchema(this.colorblindMode);
         this.isLaunched=true;
+        System.out.println("Interface graphique démarrée");
     }
 
     /* ======================================== Méthode d'update général ======================================= */
@@ -233,7 +233,7 @@ class GraphicalInterface extends JFrame {
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
             drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
         }
-        if(this.isDrawingPoints) {
+        if (this.isDrawingPoints) {
             drawPoints(g);
         }
     }

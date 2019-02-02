@@ -92,8 +92,10 @@ public class SimulatedRobot {
         }
     }
     /* ======================================== Lancement de l'instance ======================================== */
-    public void launch(){
+    /** Lance le manager du simulateur */
+    void launch(){
         this.isLaunched=true;
+        System.out.println(String.format("(%d) Robot simulé démarré", this.simulatedLLConnectionManager.getPort()));
     }
 
     /* ======================================== Méthode d'update général ======================================= */

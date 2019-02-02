@@ -12,12 +12,14 @@ public class SimulatedConnectionManager extends Thread {
     private BufferedReader incoming;
     private BufferedWriter outgoing;
 
+    private int port;
     private boolean ready = false;
 
     /** Constructeur
      * @param port port sur lequel écoute le simulateur
      */
     SimulatedConnectionManager(int port){
+        this.port=port;
         //On initialise le dernier message reçu et le serveur Socket
         this.receivedMessage = new ConcurrentLinkedQueue<String>();
         try {
@@ -80,5 +82,10 @@ public class SimulatedConnectionManager extends Thread {
     /** Simule la réception d'un message */
     void SIMULATE_receiveMessage(String message){
         this.receivedMessage.add(message);
+    }
+
+    /** Renvoie le port sur lequel la connection écoute */
+    int getPort(){
+        return this.port;
     }
 }
