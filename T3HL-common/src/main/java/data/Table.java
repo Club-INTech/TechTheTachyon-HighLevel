@@ -65,6 +65,12 @@ public class Table implements Service {
     public Obstacle zoneChaosGauche;
 
     /**
+     * Obstacle mobile simulé
+     */
+
+    private MobileCircularObstacle simulatedObstacle;
+
+    /**
      * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
      */
     private final ArrayList<MobileCircularObstacle> mobileObstacles;
@@ -339,7 +345,7 @@ public class Table implements Service {
     /**
      * Ajoute un obstacle fixe à la table et met à jour le graphe
      * ATTENTION : méthode coûteuse car le graphe doit être recalculé
-     * @param obstacle  nouvel obstacle
+     * @param obstacle nouvel obstacle
      */
     public void addFixedObstacle(Obstacle obstacle) {
         if (obstacle instanceof MobileCircularObstacle) {
@@ -357,7 +363,6 @@ public class Table implements Service {
             Log.LIDAR.warning("Graphe non instancié");
         }
     }
-
     /**
      * Retire un obstacle fixe de la table et met à jour le graphe
      * ATTENTION : méthode coûteuse car le graphe doit être recalculé
@@ -375,6 +380,24 @@ public class Table implements Service {
             Log.LIDAR.warning("Graphe non instancié");
         }
     }
+
+    /**
+     * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
+     */
+    public void SIMULATEDaddMobileObstacle() {
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0,-1000), 100);
+        this.simulatedObstacle.setLifeTime(100000);
+        this.mobileObstacles.add(this.simulatedObstacle);
+    }
+
+    /**
+     * Déplace l'obstacle mobile SIMULÉ à la table
+     * @param newPosition nouvelle position de l'obstacle SIMULÉ
+     */
+    public void SIMULATEDmoveMobileObstacle(Vec2 newPosition) {
+        this.simulatedObstacle.update(newPosition);
+    }
+
 
     /**
      * Getters & Setters

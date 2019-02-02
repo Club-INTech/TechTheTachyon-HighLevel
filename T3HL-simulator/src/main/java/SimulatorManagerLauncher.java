@@ -11,9 +11,10 @@ public class SimulatorManagerLauncher extends Thread{
     //Attributs qui peuvent être modifiés par l'utilisateur avant le lancement
     private int[] LLports;
     private int[] HLports;
-    private boolean colorblindMode;
     private ArrayList<Vec2> pointsToDraw;
     private float speedFactor;
+    private boolean colorblindMode;
+    private boolean isSimulatingObstacleWithMouse;
 
     //Attributs internes
     private GraphicalInterface graphicalInterface;
@@ -41,20 +42,25 @@ public class SimulatorManagerLauncher extends Thread{
      *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
      */
     private void initDefaultPassedParameters(){
-        this.colorblindMode=false;
         this.LLports=new int[]{};
         this.HLports=new int[]{};
         this.pointsToDraw = new ArrayList<Vec2>();
         this.speedFactor=1;
+        this.colorblindMode=false;
+        this.isSimulatingObstacleWithMouse=false;
+    }
+
+    /** Définit si on simule un obstacle avec la souris dans l'interface graphique */
+    void setIsSimulatingObstacleWithMouse(boolean value){
+        if (canParametersBePassed()) {
+            this.isSimulatingObstacleWithMouse = value;
+        }
     }
 
     /** Setter des ports utilisés pour parler au LL */
     void setLLports(int[] LLports){
         if (canParametersBePassed()) {
             this.LLports = LLports;
-        }
-        else{
-            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
         }
     }
 
@@ -63,9 +69,6 @@ public class SimulatorManagerLauncher extends Thread{
         if (canParametersBePassed()) {
             this.HLports = HLports;
         }
-        else{
-            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
-        }
     }
 
     /** Définition du mode daltonien */
@@ -73,18 +76,12 @@ public class SimulatorManagerLauncher extends Thread{
         if (canParametersBePassed()) {
             this.colorblindMode = value;
         }
-        else{
-            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
-        }
     }
 
     /** Définit le facteur de vitesse de la simulation */
     void setSpeedFactor(float speedFactor){
         if (canParametersBePassed()) {
             this.speedFactor = speedFactor;
-        }
-        else{
-            System.out.println("SIMULATEUR : Le simulateur est déjà lancé, vous ne pouvez plus changer ses paramètres");
         }
     }
 
@@ -194,6 +191,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.graphicalInterface.setSimulatedRobots(this.simulatedRobots);
         this.graphicalInterface.setColorblindMode(this.colorblindMode);
         this.graphicalInterface.setIsDrawingPoints(true);
+        this.graphicalInterface.setIsCreatingObstacleWithMouse(this.isSimulatingObstacleWithMouse);
         this.graphicalInterface.launch();
         System.out.println("Interface graphique instanciée");
 
