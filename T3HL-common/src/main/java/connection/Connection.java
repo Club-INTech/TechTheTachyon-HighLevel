@@ -99,6 +99,15 @@ public enum Connection {
     }
 
     /**
+     * Ré-initialise la connexion en cas de perte en cours de match
+     * @throws CommunicationException
+     *                  in case of communication problem
+     */
+    public void reInit() throws CommunicationException {
+        this.communicationInterface.init();
+    }
+
+    /**
      * Envoie un message
      * @param message   le message à envoyer
      * @throws CommunicationException

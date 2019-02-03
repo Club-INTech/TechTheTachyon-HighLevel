@@ -67,7 +67,7 @@ public class OrderWrapper implements Service {
      * @param symmetrizedActuatorOrderMap
      *              service permettant de gérer la symétrie des ordres
      */
-    private OrderWrapper(SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap){
+    private OrderWrapper(SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
         this.symmetrizedActuatorOrderMap = symmetrizedActuatorOrderMap;
     }
 
@@ -75,48 +75,35 @@ public class OrderWrapper implements Service {
      * Permet d'envoyer un ordre au bas niveau
      * @param order ordre quelconque
      */
-    public void useActuator(Order order)
-    {
+    public void useActuator(Order order) {
         Order symetrisedOrder;
-        if(symetry && order instanceof ActuatorsOrder){
+        if(symetry && order instanceof ActuatorsOrder) {
             symetrisedOrder=this.symmetrizedActuatorOrderMap.getSymmetrizedActuatorOrder((ActuatorsOrder) order);
             if(symetrisedOrder != null){
                 order=symetrisedOrder;
             }
         }
-        try {
-            llConnection.send(order.getOrderStr());
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(order.getOrderStr());
     }
 
     /**
      * On envoit au bas niveau comme ordre d'avancer d'une certaine distance
      * @param distance distance dont on avance
      */
-    public void moveLenghtwise(double distance){
-        int d = (int)Math.round(distance);
-        try {
-            llConnection.send(String.format(Locale.US, "%s %d", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+    public void moveLenghtwise(double distance) {
+        int d = (int) Math.round(distance);
+        this.sendString(String.format(Locale.US, "%s %d", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d));
     }
 
     /**
      * On envoit au bas niveau comme ordre de tourner
-     * @param angle  angle aveclequel on veut tourner
+     * @param angle  angle avec lequel on veut tourner
      */
     public void turn(double angle) {
         if(symetry) {
             angle=(Math.PI - angle)%(2*Math.PI);
         }
-        try {
-            llConnection.send(String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), angle));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), angle));
     }
 
     /**
@@ -128,22 +115,14 @@ public class OrderWrapper implements Service {
         if(symetry) {
             p.symetrize();
         }
-        try {
-            llConnection.send(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
     }
 
     /**
      * On envoit au bas niveau comme ordre de s'arrêter
      */
     public void immobilise() {
-        try {
-            llConnection.send(MotionOrder.STOP.getOrderStr());
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(MotionOrder.STOP.getOrderStr());
     }
 
     /**
@@ -151,11 +130,7 @@ public class OrderWrapper implements Service {
      * @param speed la vitesse qu'on veut
      */
     public void setTranslationnalSpeed(float speed) {
-        try {
-            llConnection.send(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
     }
 
     /**
@@ -163,18 +138,14 @@ public class OrderWrapper implements Service {
      * @param rotationSpeed la vitesse de rotation qu'on veut
      */
     public void setRotationnalSpeed(double rotationSpeed) {
-        try {
-            llConnection.send(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
     }
 
     /**
      * Modifie les vitesses de translation et de rotation du robot
      * @param speed enum qui contient les deux vitesses
      */
-    public void setBothSpeed(Speed speed){
+    public void setBothSpeed(Speed speed) {
         this.setTranslationnalSpeed(speed.getTranslationSpeed());
         this.setRotationnalSpeed(speed.getRotationSpeed());
     }
@@ -184,52 +155,36 @@ public class OrderWrapper implements Service {
      * @param pos position du robot
      * @param orientation orientation du robot
      */
-    public void setPositionAndOrientation(Vec2 pos, double orientation)
-    {
+    public void setPositionAndOrientation(Vec2 pos, double orientation) {
         int x=pos.getX();
         int y=pos.getY();
         if(symetry){
             x=-x;
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
-        try {
-            llConnection.send(String.format(Locale.US, "%s %d %d %.3f",
+        this.sendString(String.format(Locale.US, "%s %d %d %.3f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
      * On dit au bas niveau quelle orientation le robot a
      * @param orientation orientation du robot
      */
-    public void setOrientation(double orientation)
-    {
-        if(symetry){
+    public void setOrientation(double orientation) {
+        if(symetry) {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
-        try {
-            llConnection.send(String.format(Locale.US, "%s %.3f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %.3f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
     }
 
     /**
      * Envoyer l'order de récupérer les données des sicks
      */
     public void getSickData() {
-
-        try {
-            llConnection.send(String.format(Locale.US, "%s", PositionAndOrientationOrder.DATA_SICK.getOrderStr()));
-
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s", PositionAndOrientationOrder.DATA_SICK.getOrderStr()));
     }
 
-        /**
+    /**
      * Permet de configurer un hook
      * @param id id du hook
      * @param posTrigger position où on active le hook
@@ -238,7 +193,7 @@ public class OrderWrapper implements Service {
      * @param tolerencyAngle l'angle de tolérance sur l'orientation
      * @param order l'ordre à exécuter pendant que le robot bouge
      */
-    public void configureHook(int id, Vec2 posTrigger, int tolerency, double orientation, double tolerencyAngle, Order order){
+    public void configureHook(int id, Vec2 posTrigger, int tolerency, double orientation, double tolerencyAngle, Order order) {
         Order symetrisedOrder;
         if(symetry){
             posTrigger = posTrigger.symetrizeVector();
@@ -253,12 +208,8 @@ public class OrderWrapper implements Service {
             }
 
         }
-        try {
-            llConnection.send(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
+        this.sendString(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
                     HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -266,36 +217,45 @@ public class OrderWrapper implements Service {
      * @param hook hook à activer
      */
     public void enableHook(HookNames hook) {
-        try {
-            llConnection.send(String.format(Locale.US, "%s %d", HooksOrder.ENABLE_HOOK.getOrderStr(), hook.getId()));
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
+        this.sendString(String.format(Locale.US, "%s %d", HooksOrder.ENABLE_HOOK.getOrderStr(), hook.getId()));
     }
 
     /**
      * Desactive un hook
      * @param hook
      */
-    public void disableHook(HookNames hook){
+    public void disableHook(HookNames hook) {
+        this.sendString(String.format(Locale.US, "%s %d", HooksOrder.DISABLE_HOOK.getOrderStr(), hook.getId()));
+    }
+
+    /**
+     * Envoie un message au ll et traite les potentielles erreurs
+     * @param message
+     *              message à envoyer tel quel
+     */
+    public void sendString(String message) {
         try {
-            llConnection.send(String.format(Locale.US, "%s %d", HooksOrder.DISABLE_HOOK.getOrderStr(), hook.getId()));
+            llConnection.send(message);
         } catch (CommunicationException e) {
             e.printStackTrace();
+            try {
+                llConnection.reInit();
+                while (!llConnection.isInitiated());
+                llConnection.send(message);
+            } catch (CommunicationException ef) {
+                ef.printStackTrace();
+            }
         }
     }
 
-
-
     @Override
     public void updateConfig(Config config) {
-        //On est du côté violet par défaut , le HL pense en violet
-        symetry=config.getString(ConfigData.COULEUR).equals("jaune");
+        // On est du côté violet par défaut , le HL pense en violet
+        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
-        }
-        else {
+        } else {
             this.llConnection = Connection.TEENSY_MASTER;
         }
     }

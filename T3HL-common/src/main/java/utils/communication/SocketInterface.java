@@ -82,6 +82,11 @@ public abstract class SocketInterface implements CommunicationInterface {
     }
 
     @Override
+    public synchronized void init() throws CommunicationException {
+        this.initiated = false;
+    }
+
+    @Override
     public synchronized void send(String message) throws CommunicationException {
         try {
             this.output.write(message);

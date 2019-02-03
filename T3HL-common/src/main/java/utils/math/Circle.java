@@ -67,8 +67,8 @@ public class Circle extends Shape {
     public Circle(Vec2 centre, float radius, double angleStart, double angleEnd) {
         super(centre);
         this.radius = radius;
-        this.angleStart = Calculs.modulo(angleStart, 2*Math.PI);
-        this.angleEnd = Calculs.modulo(angleEnd, 2*Math.PI);
+        this.angleStart = Calculs.modulo(angleStart, Math.PI);
+        this.angleEnd = Calculs.modulo(angleEnd, Math.PI);
     }
 
     /**

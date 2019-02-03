@@ -112,7 +112,6 @@ public class Listener extends Thread implements Service {
                 Log.COMMUNICATION.debug("Simulation");
                 Log.COMMUNICATION.debug("Simulated Teensy Master");
                 connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulation");
                 Log.COMMUNICATION.debug("Simulated Buddy");
             }
             else {

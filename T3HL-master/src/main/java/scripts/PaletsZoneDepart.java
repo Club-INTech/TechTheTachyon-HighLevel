@@ -17,7 +17,7 @@ public class PaletsZoneDepart extends Script {
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry,yEntry),
             new VectCartesian(xEntry,yEntry+300),
-            new VectCartesian(xEntry,yEntry+600)
+            //new VectCartesian(xEntry,yEntry+600)
     };
 
 
@@ -43,11 +43,12 @@ public class PaletsZoneDepart extends Script {
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                     ((Master) robot).pushPaletGauche();
-                }
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-            }catch (UnableToMoveException e) {
-            e.printStackTrace();
+            }
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+        }catch (UnableToMoveException e) {
+        e.printStackTrace();
         }
+
     }
     @Override
     public Shape entryPosition(Integer version) {

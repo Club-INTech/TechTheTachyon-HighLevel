@@ -28,8 +28,7 @@ import utils.Log;
 
 import java.io.*;
 
-public class Test_Log
-{
+public class Test_Log {
     /**
      * Stream & Fichier de sortie pour contrôler le résultat des tests
      */
@@ -37,10 +36,10 @@ public class Test_Log
     private PrintStream systemOut;
     private File file;
     private BufferedReader input;
+    private static final String RESET       = "\u001B[0m";
 
     @Before
-    public void setUp() throws Exception
-    {
+    public void setUp() throws Exception {
         file = new File("LogTest");
         output = new PrintStream(file);
         input = new BufferedReader(new FileReader(file));
@@ -51,8 +50,7 @@ public class Test_Log
     }
 
     @After
-    public void tearDown() throws Exception
-    {
+    public void tearDown() throws Exception {
         file.delete();
         file = null;
         output = null;
@@ -63,8 +61,7 @@ public class Test_Log
     }
 
     @Test
-    public void testLogDebug() throws Exception
-    {
+    public void testLogDebug() throws Exception {
         Log.COMMUNICATION.debug("TC");
         Log.LOCOMOTION.debug("TL");
         Log.DATA_HANDLER.debug("TD");
@@ -72,16 +69,15 @@ public class Test_Log
         output.flush();
 
         Assert.assertTrue(input.readLine().endsWith("DEMARRAGE DU SERVICE DE LOG"));
-        Assert.assertTrue(input.readLine().endsWith(""));
-        Assert.assertTrue(input.readLine().endsWith("TC"));
-        Assert.assertTrue(input.readLine().endsWith("TL"));
-        Assert.assertTrue(input.readLine().endsWith("TD"));
-        Assert.assertTrue(input.readLine().endsWith("TS"));
+        Assert.assertTrue(input.readLine().endsWith(RESET));
+        Assert.assertTrue(input.readLine().endsWith("TC" + RESET));
+        Assert.assertTrue(input.readLine().endsWith("TL" + RESET));
+        Assert.assertTrue(input.readLine().endsWith("TD" + RESET));
+        Assert.assertTrue(input.readLine().endsWith("TS" + RESET));
     }
 
     @Test
-    public void testLogChannel() throws Exception
-    {
+    public void testLogChannel() throws Exception {
         Log.COMMUNICATION.setActive(false);
         Log.DATA_HANDLER.setActive(false);
 
@@ -92,14 +88,13 @@ public class Test_Log
         output.flush();
 
         Assert.assertTrue(input.readLine().endsWith("DEMARRAGE DU SERVICE DE LOG"));
-        Assert.assertTrue(input.readLine().endsWith(""));
-        Assert.assertTrue(input.readLine().endsWith("TL"));
-        Assert.assertTrue(input.readLine().endsWith("TS"));
+        Assert.assertTrue(input.readLine().endsWith(RESET));
+        Assert.assertTrue(input.readLine().endsWith("TL" + RESET));
+        Assert.assertTrue(input.readLine().endsWith("TS" + RESET));
     }
 
     @Test
-    public void testLogCritical() throws Exception
-    {
+    public void testLogCritical() throws Exception {
         Log.COMMUNICATION.setActive(false);
         Log.LOCOMOTION.setActive(false);
 
@@ -107,8 +102,8 @@ public class Test_Log
         Log.LOCOMOTION.critical("SU");
 
         Assert.assertTrue(input.readLine().endsWith("DEMARRAGE DU SERVICE DE LOG"));
-        Assert.assertTrue(input.readLine().endsWith(""));
-        Assert.assertTrue(input.readLine().endsWith("SUUS"));
-        Assert.assertTrue(input.readLine().endsWith("SU"));
+        Assert.assertTrue(input.readLine().endsWith(RESET));
+        Assert.assertTrue(input.readLine().endsWith("SUUS" + RESET));
+        Assert.assertTrue(input.readLine().endsWith("SU" + RESET));
     }
 }

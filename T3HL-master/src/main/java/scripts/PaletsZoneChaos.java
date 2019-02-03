@@ -8,6 +8,7 @@ import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
 import utils.ConfigData;
+import utils.Log;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
@@ -17,8 +18,8 @@ import utils.math.VectCartesian;
 
 public class PaletsZoneChaos extends Script{
 
-    private int xEntry = 1375;
-    private int yEntry = 1800 +  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int xEntry = 0;
+    private int yEntry = 1000;
 
     public PaletsZoneChaos(Master robot, Table table) {
         super(robot, table);
@@ -26,7 +27,7 @@ public class PaletsZoneChaos extends Script{
 
     @Override
     public void execute(Integer version) {
-
+        Log.TABLE.debug("execution zoneChaos");
     }
 
     @Override

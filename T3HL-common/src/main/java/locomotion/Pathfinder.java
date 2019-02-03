@@ -58,7 +58,7 @@ public class Pathfinder implements Service {
      */
     private Pathfinder(Graphe graphe) {
         this.graphe = graphe;
-        this.openList = new PriorityQueue<>();
+        this.openList = new PriorityQueue<>(new ComparatorNode());
         this.closedList = new ArrayList<>();
     }
 

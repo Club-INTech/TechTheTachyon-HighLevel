@@ -114,7 +114,7 @@ public class LidarControler extends Thread implements Service {
             for (String point : points) {
                 Vec2 = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
-                Vec2.setA(Calculs.modulo(Vec2.getA() + XYO.getRobotInstance().getOrientation(), 2*Math.PI));
+                Vec2.setA(Calculs.modulo(Vec2.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
                 Vec2.plus(XYO.getRobotInstance().getPosition());
                 if (symetrie) {
                     Vec2.setX(-Vec2.getX());
