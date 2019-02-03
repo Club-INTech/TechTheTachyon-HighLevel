@@ -18,7 +18,6 @@
 
 package data;
 
-
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import data.table.StillCircularObstacle;
@@ -31,19 +30,14 @@ import utils.math.Circle;
 import utils.math.Segment;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.Shape;
 import utils.math.CircularRectangle;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Classe représentant la table et gérant les obstacles
- * // TODO Ajouter des logs
- *
  * @author rem
  */
 public class Table implements Service {
@@ -55,12 +49,21 @@ public class Table implements Service {
     /**
      * Liste des obstacles fixes
      */
-    private ArrayList<Obstacle> fixedObstacles;
+    private final ArrayList<Obstacle> fixedObstacles;
+
+    public Obstacle paletRougeDroite;
+    public Obstacle paletBleuDroite;
+    public Obstacle paletVertDroite;
+    public Obstacle paletRougeGauche;
+    public Obstacle paletBleuGauche;
+    public Obstacle paletVertGauche;
+    public Obstacle zoneChaosDroite;
+    public Obstacle zoneChaosGauche;
 
     /**
      * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
      */
-    private ArrayList<MobileCircularObstacle> mobileObstacles;
+    private final ArrayList<MobileCircularObstacle> mobileObstacles;
 
     /**
      * Longueur de la table (en x, en mm)
@@ -114,14 +117,15 @@ public class Table implements Service {
      * Initialisation des obstacles fixes de la table
      */
     public void initObstacles() {
-        // TODO : Remplir avec les obstacles de l'année !
         Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
         Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
         this.addFixedObstacle(zoneChaosDroite);
+        this.zoneChaosDroite=zoneChaosDroite;
 
         Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
         Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
         this.addFixedObstacle(zoneChaosGauche);
+        this.zoneChaosGauche=zoneChaosGauche;
 
         Vec2 vecteurRampeCentre = new VectCartesian(0,1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
@@ -160,33 +164,38 @@ public class Table implements Service {
 
 
         /**
-         * /!\ /!\ /!\ /!\ /!\ /!\ /!\ Palets devant la zone de départ à supprimer à chaque fois que le palet est prit !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          * Couleur représente la couleur de la zone se situant derrière le palet !
          */
 
         Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000,450);
         Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre,199);
         this.addFixedObstacle(paletRougeDroite);
+        this.paletRougeDroite=paletRougeDroite;
 
         Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000,750);
         Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre,199);
         this.addFixedObstacle(paletVertDroite);
+        this.paletVertDroite=paletVertDroite;
 
         Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000,1050);
         Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre,199);
         this.addFixedObstacle(paletBleuDroite);
+        this.paletBleuDroite=paletBleuDroite;
 
         Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000,450);
         Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre,199);
         this.addFixedObstacle(paletRougeGauche);
+        this.paletRougeGauche=paletRougeGauche;
 
         Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000,750);
         Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre,199);
         this.addFixedObstacle(paletVertGauche);
+        this.paletVertGauche=paletVertGauche;
 
         Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000,1050);
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre,199);
         this.addFixedObstacle(paletBleuGauche);
+        this.paletBleuGauche=paletBleuGauche;
 
     }
 
@@ -231,7 +240,7 @@ public class Table implements Service {
         }
 
         synchronized (mobileObstacles) {
-            mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup, CopyOnWriteArrayList est assez lente pour l'écriture donc on accélère comme ça
+            mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup
         }
 
         if (this.graphe != null) {
@@ -294,6 +303,11 @@ public class Table implements Service {
         return intersectObstacle(segment, mobileObstacles);
     }
 
+    /**
+     * @param segment   segment à tester
+     * @param obstacles liste d'obstacles à tester
+     * @return  true si le segment intersecte l'un des obstacles
+     */
     private boolean intersectObstacle(Segment segment, List<? extends Obstacle> obstacles) {
         Iterator<? extends Obstacle> iterator = obstacles.iterator();
         Obstacle obstacle;
@@ -334,6 +348,7 @@ public class Table implements Service {
         }
         synchronized (this.fixedObstacles) {
             this.fixedObstacles.add(obstacle);
+            Log.TABLE.debug("ajout de l'obstacle "+obstacle);
         }
         if (this.graphe != null) {
             this.graphe.writeLock().lock();
@@ -354,6 +369,7 @@ public class Table implements Service {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
         this.fixedObstacles.remove(obstacle);
+        Log.TABLE.debug("suppression de l'obstacle "+obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {

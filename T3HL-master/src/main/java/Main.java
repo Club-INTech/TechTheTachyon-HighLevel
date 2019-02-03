@@ -16,74 +16,124 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
+import data.XYO;
 import data.controlers.Listener;
+import data.controlers.SensorControler;
+import data.table.Obstacle;
+import locomotion.PathFollower;
+import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
+import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Calculs;
 import utils.math.VectCartesian;
+
+import java.util.ArrayList;
 
 /**
  * @author nayth
  */
 public class Main {
 
+    private static Container container;
+    private static ScriptManager scriptManager;
+    private static ConnectionManager connectionManager;
+    private static OrderWrapper orderWrapper;
+    private static Listener listener;
+    private static SensorControler sensorControler;
+    private static Table table;
+    private static Master robot;
+    private static SimulatorManagerLauncher simulatorLauncher;
+
     public static void main(String[] args){
-        Container container;
-        String hierarchy;
-        /*
-        try {
-            hierarchy = Files.readAllLines(Paths.get("../config/hierarchy.txt")).get(0);
-        } catch (IOException e) {
-            hierarchy=null;
-            e.printStackTrace();
+        initServices();
+        if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+            initSimulator();
         }
-        */
-        container = Container.getInstance("robot.Master");
 
-
-        SimulatorManagerLauncher launcher = new SimulatorManagerLauncher();
-        launcher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
-        launcher.setColorblindMode(true);
-        launcher.launchSimulator();
+        /**
+         * Pour l'électron
+         */
+        //On check l'username pour savoir si on est sur la Raspberry Pi
+        if (System.getProperty("user.name").equals("pi")){
+            final GpioController gpio = GpioFactory.getInstance();
+            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
+            pin.setShutdownOptions(true, PinState.LOW);
+        }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
-            ScriptManager scriptManager = container.getService(ScriptManagerMaster.class);
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
             Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
             Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
-            ConnectionManager connectionManager = container.getService(ConnectionManager.class);
-            OrderWrapper orderWrapper = container.getService(OrderWrapper.class);
-            Listener listener = container.getService(Listener.class);
-            listener.start();
             Thread.sleep(2000);
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+            Thread.sleep(1000);
 
-            Master robot = container.getService(Master.class);
-            Table table = container.getService(Table.class);
+            try {
+                robot.moveToPoint(new VectCartesian(0,1000));
+                robot.turn(Math.PI);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+            zone_depart_palets.goToThenExecute(1);
 
-            table.initObstacles();
+            table.removeFixedObstacle(table.paletRougeDroite);
+            table.removeFixedObstacle(table.paletVertDroite);
 
-            orderWrapper.moveToPoint(new VectCartesian(1000,1000));
-            orderWrapper.turn(Math.PI);
-            //zone_depart_palets.goToThenExecute(1);
-            //zone_chaos_palets.goToThenExecute(1);
-            //paletsx6.goToThenExecute(1);
-            //paletsx3.goToThenExecute(1);
-            //accelerateur.goToThenExecute(1);
+            zone_chaos_palets.goToThenExecute(1);
 
-        } catch (ContainerException | InterruptedException e) {
+            /**
+             * Si tout les palets de la zone de chaos ont été récupérer
+             */
+            table.removeFixedObstacle(table.zoneChaosDroite);
+
+            paletsx6.goToThenExecute(1);
+            paletsx3.goToThenExecute(1);
+            accelerateur.goToThenExecute(1);
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         Container.resetInstance();
     }
+
+    private static void initServices(){
+        container = Container.getInstance("robot.Master");
+        try {
+            scriptManager = container.getService(ScriptManagerMaster.class);
+            connectionManager = container.getService(ConnectionManager.class);
+            orderWrapper = container.getService(OrderWrapper.class);
+            listener = container.getService(Listener.class);
+            listener.start();
+            sensorControler = container.getService(SensorControler.class);
+            sensorControler.start();
+            table = container.getService(Table.class);
+            table.initObstacles();
+            robot = container.getService(Master.class);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void initSimulator(){
+        simulatorLauncher = new SimulatorManagerLauncher();
+        simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
+        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
+        simulatorLauncher.setColorblindMode(true);
+        simulatorLauncher.launchSimulator();
+    }
+
 }

@@ -12,7 +12,7 @@
     <panel_attributes>Locomotion
 --
 -table :Table
--grpahe : Graphe
+-graphe : Graphe
 -xyo : XYO
 -pointsQueue : Queue&lt;Vec2&gt;
 -exceptionQueue : Queue&lt;Exception&gt;

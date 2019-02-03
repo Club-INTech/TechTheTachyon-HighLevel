@@ -10,11 +10,6 @@ import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.VectCartesian;
-
-
-
-import java.util.concurrent.CompletableFuture;
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -94,7 +89,7 @@ public class SensorControler extends Thread implements Service {
         int y;
         double o;
         while (!Thread.currentThread().isInterrupted()) {
-            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek() == null && eventData.peek() == null) {
+            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null && couleurPalet.peek()==null) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
@@ -108,7 +103,8 @@ public class SensorControler extends Thread implements Service {
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2 * Math.PI);
+                    o = Calculs.modulo(Math.PI - o, Math.PI);
+
                 }
                 XYO.getRobotInstance().update(x, y, o);
             }
@@ -119,7 +115,7 @@ public class SensorControler extends Thread implements Service {
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
-                    o = Calculs.modulo(Math.PI - o, 2 * Math.PI);
+                    o = Calculs.modulo(Math.PI - o, Math.PI);
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }
@@ -133,10 +129,12 @@ public class SensorControler extends Thread implements Service {
             }
             if (sickData.peek() != null) {
 
+
                 if (isMaster) {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int[] significantSicks = Sick.getSignificantSicks();
                     VectCartesian vectsick = new VectCartesian(104,87); //Vecteur qui place les sick par rapport à l'origine du robot
+
                     int dsick = 173;
                     int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
                     double rapport = 1.0* esick / dsick;
@@ -193,7 +191,7 @@ public class SensorControler extends Thread implements Service {
                     int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
                     double rapport = 1.0 * esick / dsick;
                     int xCalcule;
-                    int yCalcule; //
+                    int yCalcule;
                     double teta;
 
                     if (ConfigData.COULEUR.toString().equals("jaune")) {
@@ -214,13 +212,12 @@ public class SensorControler extends Thread implements Service {
                     Sick.setNewXYO(newXYO);
                 }
 
-
             }
+
             if(couleurPalet.peek()!=null){
                 String couleur = couleurPalet.poll();
                 CouleurPalet.setCouleurPalRecu(couleur);
             }
-
         }
     }
 

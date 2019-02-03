@@ -19,6 +19,7 @@
 package locomotion;
 
 import data.Graphe;
+import data.SensorState;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
@@ -94,6 +95,7 @@ public class Locomotion implements Service {
         this.exceptionsQueue = new ConcurrentLinkedQueue<UnableToMoveException>();
         pathFollower.setPointsQueue(pointsQueue);
         pathFollower.setExceptionsQueue(exceptionsQueue);
+        pathFollower.start();
     }
 
     /**
@@ -128,7 +130,7 @@ public class Locomotion implements Service {
      * @param angle angle relatif de rotation
      */
     public void turnRelative(double angle) throws UnableToMoveException {
-        angle = Calculs.modulo(angle + xyo.getOrientation(), 2*Math.PI);
+        angle = Calculs.modulo(angle + xyo.getOrientation(), Math.PI);
         pathFollower.turn(angle, false);
     }
 
@@ -189,12 +191,18 @@ public class Locomotion implements Service {
                     pointsQueue.addAll(path);
                 }
                 while (!graphe.isUpdated() && !xyo.getPosition().equals(aim.getPosition())) {
+
+                    //System.out.println();
+                    //System.out.println(aim);
+                    //System.out.println(xyo.getPosition());
+                    //System.out.println(xyo.getPosition().equals(aim.getPosition()));
+
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
-// TODO: c'est ton pote, on fait quoi?
+                                // TODO: c'est ton pote, on fait quoi?
                             } else { // c'est pas ton pote!
                                 graphe.writeLock().lock();
                                 graphe.removeProvisoryNode(start);

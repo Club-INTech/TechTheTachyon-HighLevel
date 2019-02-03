@@ -40,7 +40,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Classe permettant de paramétrer la table pour faciliter la navigation du robot
- * // TODO Ajouter des logs
  *
  * @author rem
  */
@@ -108,8 +107,6 @@ public class Graphe implements Service {
      */
     private void init() {
         Log.GRAPHE.debug("Initialisation du Graphe...");
-        Vec2 pos;
-
         try {
             for (Obstacle obstacle : fixedObstacles) {
                 placeNodes(obstacle);
@@ -139,6 +136,7 @@ public class Graphe implements Service {
      */
     private void placeNodes(Obstacle obstacle) throws CloneNotSupportedException {
         Vec2 pos = new VectCartesian(0, 0);
+        Log.GRAPHE.debug("Placement de noeuds autour de l'obstacle "+obstacle);
         if (obstacle instanceof StillCircularObstacle) {
             for (int i = 0; i < nodeCricleNbr; i++) {
                 pos.setR(spaceCircleParameter * ((Circle) obstacle.getShape()).getRadius());
@@ -147,9 +145,11 @@ public class Graphe implements Service {
 
                 if (!table.isPositionInFixedObstacle(pos)) {
                     nodes.add(new Node(pos.clone()));
+                    Log.GRAPHE.debug("Ajout d'un noeud en "+pos+" à cause d'un obstacle en "+obstacle);
                 }
             }
         }
+        Log.GRAPHE.debug("Fin du placement de noeuds autour de l'obstacle "+obstacle);
     }
 
     /**
@@ -161,16 +161,19 @@ public class Graphe implements Service {
         int xStep = table.getLength()/nodeXNbr;
         int yStep = table.getWidth()/nodeYNbr;
 
+        Log.GRAPHE.debug("Placement des noeuds en quadrillage");
         for (int i=0; i<nodeXNbr; i++) {
-            pos.setX(i * xStep);
+            pos.setX(i * xStep - 1500);
             for (int j=0; j<nodeYNbr; j++) {
                 pos.setY(j * yStep);
 
                 if (!table.isPositionInFixedObstacle(pos)) {
                     nodes.add(new Node(pos.clone()));
+                    Log.GRAPHE.debug("Ajout d'un noeud en "+pos);
                 }
             }
         }
+        Log.GRAPHE.debug("Fin du placement des noeuds en quadrillage");
     }
 
     /**
@@ -179,6 +182,7 @@ public class Graphe implements Service {
      */
     private void placeRidges() throws CloneNotSupportedException {
         Segment segment = new Segment(new VectCartesian(0, 0), new VectCartesian(0, 0));
+        Log.GRAPHE.debug("Initialisation des arrêtes");
         for (int i = 0; i < nodes.size(); i++) {
             Node node1 = nodes.get(i);
             segment.setPointA(node1.getPosition());
@@ -188,6 +192,7 @@ public class Graphe implements Service {
                 constructRidge(node1, node2, segment);
             }
         }
+        Log.GRAPHE.debug("Fin d'initialisation des arrêtes");
     }
 
     /**
@@ -224,6 +229,7 @@ public class Graphe implements Service {
             }
         }
         if (n != null) {
+            Log.GRAPHE.debug("Le noeud provisoire à "+position+" existe déjà.");
             return n;
         }
         else {
@@ -234,6 +240,7 @@ public class Graphe implements Service {
                     seg.setPointB(neighbour.getPosition());
                     constructRidge(n, neighbour, seg);
                 }
+                Log.GRAPHE.debug("Ajout d'un noeud provisoire à "+position);
                 nodes.add(n);
                 return n;
             } catch (CloneNotSupportedException e) {
@@ -250,6 +257,7 @@ public class Graphe implements Service {
     public void removeProvisoryNode(Node node) {
         if (!node.isPermanent()) {
             nodes.remove(node);
+            Log.GRAPHE.debug("Retrait du noeud provisoire "+node);
             for (Node neighbour : node.getNeighbours().keySet()) {
                 ridges.remove(neighbour.getNeighbours().get(node));
                 neighbour.getNeighbours().remove(node);
@@ -281,6 +289,7 @@ public class Graphe implements Service {
             ridges.add(ridge);
             node1.addNeighbour(node2, ridge);
             node2.addNeighbour(node1, ridge);
+            // ça spamme trop :c Log.GRAPHE.debug("Ajout d'une arrête de "+node1.toString()+" à "+node2.toString());
         }
     }
 
@@ -297,6 +306,10 @@ public class Graphe implements Service {
         return updated;
     }
     public void setUpdated(boolean updated) {
+        if(updated)
+            Log.GRAPHE.debug("Le graphe vient d'être mis à jour.");
+        else
+            Log.GRAPHE.debug("Le graphe ne vient plus d'être tout juste mis à jour.");
         this.updated = updated;
     }
 
