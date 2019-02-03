@@ -39,9 +39,10 @@ public class PaletsZoneDepart extends Script {
                     }
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                    ((Master) robot).pushPaletGauche();
                 }
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
             }catch (UnableToMoveException e) {
