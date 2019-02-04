@@ -44,7 +44,7 @@ public class PaletsZoneChaos extends Script{
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 premierPaletPris = true;
             }
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
         }catch (UnableToMoveException e) {
             e.printStackTrace();
         }
