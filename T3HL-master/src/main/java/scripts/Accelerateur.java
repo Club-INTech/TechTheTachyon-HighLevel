@@ -37,6 +37,7 @@ public class Accelerateur extends Script {
     private void actionBras(boolean cotedroite) {
         try{
             if(!cotedroite) {
+
                 robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -55,7 +56,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 ((Master) robot).popPaletDroit();
             }
-    } catch (UnableToMoveException a){
+        } catch (UnableToMoveException a){
             a.printStackTrace();
         }
     }
@@ -74,7 +75,7 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             ((Master) robot).popPaletGauche();
             while (((Master) robot).getNbpaletsgauches() > 0) {
-              actionBras(false);
+                actionBras(false);
             }
             /**
              * Dire que le goldenium est libéré
