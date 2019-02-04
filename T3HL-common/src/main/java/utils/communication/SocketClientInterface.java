@@ -42,6 +42,7 @@ public class SocketClientInterface extends SocketInterface {
 
     @Override
     public synchronized void init() throws CommunicationException {
+        super.init();
         new Thread(() -> {
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis() - start < SocketInterface.CONNECTION_TIMEOUT) {

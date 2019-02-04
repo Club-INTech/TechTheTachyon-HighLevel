@@ -122,6 +122,7 @@ public class SimulatorManager extends Thread {
             }
             else{
                 // possibilités de traitements et d'exploitation des infos du message avant sa transmission
+                System.out.print(mWithCarryReturn);
                 this.simulatedHLConnectionManagers.get(this.HLports[0]).sendMessage(mWithCarryReturn.toString());
             }
         }

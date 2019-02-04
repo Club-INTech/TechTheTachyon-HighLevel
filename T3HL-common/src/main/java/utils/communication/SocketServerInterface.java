@@ -40,6 +40,7 @@ public class SocketServerInterface extends SocketInterface {
 
     @Override
     public void init() throws CommunicationException {
+        super.init();
         new Thread(() -> {
             try {
                 synchronized (this) {

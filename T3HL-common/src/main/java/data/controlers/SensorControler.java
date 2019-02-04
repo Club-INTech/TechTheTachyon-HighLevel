@@ -10,8 +10,6 @@ import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.VectCartesian;
-
-
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -98,7 +96,7 @@ public class SensorControler extends Thread implements Service {
                     e.printStackTrace();
                 }
             }
-            if (robotPosQueue.peek() !=null) {
+            if (robotPosQueue.peek() != null) {
                 coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
@@ -106,10 +104,11 @@ public class SensorControler extends Thread implements Service {
                 if (symetrie) {
                     x = -x;
                     o = Calculs.modulo(Math.PI - o, Math.PI);
+
                 }
                 XYO.getRobotInstance().update(x, y, o);
             }
-            if (buddyPosQueue.peek() !=null) {
+            if (buddyPosQueue.peek() != null) {
                 coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
                 x = Integer.parseInt(coordonates[0]);
                 y = Integer.parseInt(coordonates[1]);
@@ -120,19 +119,22 @@ public class SensorControler extends Thread implements Service {
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }
-            if (eventData.peek() != null){
+            if (eventData.peek() != null) {
                 event = eventData.poll().split(ARGUMENTS_SEPARATOR);
-                if (event.length==1){
-                    if (event[0].equals("stoppedMoving")){
+                if (event.length == 1) {
+                    if (event[0].equals("stoppedMoving")) {
                         SensorState.MOVING.setData(false);
                     }
                 }
             }
-            if (sickData.peek() !=null) {
+            if (sickData.peek() != null) {
+
 
                 if (isMaster) {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int[] significantSicks = Sick.getSignificantSicks();
+                    VectCartesian vectsick = new VectCartesian(104,87); //Vecteur qui place les sick par rapport à l'origine du robot
+
                     int dsick = 173;
                     int esick = Integer.parseInt(sickMeasurements[significantSicks[1]]) - Integer.parseInt(sickMeasurements[significantSicks[2]]);
                     double rapport = 1.0* esick / dsick;
@@ -142,50 +144,52 @@ public class SensorControler extends Thread implements Service {
 
                     if (ConfigData.COULEUR.toString().equals("jaune")) {
                         // On différencie les cas où le robot est orienté vers la gauche et la droite
+                        double orien= XYO.getRobotInstance().getOrientation();
 
                         teta = Math.atan(rapport);
-                        xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta));
-                        if (0 < teta && teta < Math.PI) { //modifier car arctan est toujours inférieur à PI
+                        xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])+ vectsick.getX()) * Math.cos(teta));
+                        if (-Math.PI/2 < orien && orien < Math.PI/2) { //modifier car arctan est toujours inférieur à PI
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+ vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
                         } else {
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
 
                         }
                     } else {
+                        double orien= XYO.getRobotInstance().getOrientation();
                         teta = Math.PI - Math.atan(rapport);
-                        xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]])) * Math.cos(teta)) - 1500;
-                        if (0 < teta && teta < Math.PI) {
+                        xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]])+vectsick.getX()) * Math.cos(teta)) - 1500;
+                        if (-Math.PI/2 < orien && orien < Math.PI/2) {
                             if (significantSicks[1] == 1 || significantSicks[1] == 2) {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
                         } else {
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])) * Math.cos(teta));
+                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
                         }
                     }
                     VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
-                    double newOrientation = teta;
-                    XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
+                    double newOrientation = teta + Math.PI;
+                    XYO newXYO = new XYO(newPosition, newOrientation);
                     Sick.setNewXYO(newXYO);
                 }
                 else {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
-                    int dsick =50;
-                    int esick = Integer.parseInt(sickMeasurements[1])- Integer.parseInt(sickMeasurements[2]);
-                    double rapport = 1.0* esick / dsick;
+                    int dsick = 50;
+                    int esick = Integer.parseInt(sickMeasurements[1]) - Integer.parseInt(sickMeasurements[2]);
+                    double rapport = 1.0 * esick / dsick;
                     int xCalcule;
                     int yCalcule;
                     double teta;
@@ -196,32 +200,29 @@ public class SensorControler extends Thread implements Service {
                         teta = Math.atan(rapport);
                         xCalcule = (int) (1500 - Integer.parseInt(sickMeasurements[1]) * Math.cos(teta));
                         yCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta));
-                    }
-
-                     else {
+                    } else {
                         teta = Math.PI - Math.atan(rapport);
                         xCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta)) - 1500;
                         yCalcule = (int) (2000 - Integer.parseInt(sickMeasurements[2]) * Math.cos(teta));
-                     }
+                    }
 
                     VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
-                    double newOrientation = teta;
-                    XYO newXYO = new XYO(newPosition, newOrientation + Math.PI);
+                    double newOrientation = teta + Math.PI;
+                    XYO newXYO = new XYO(newPosition, newOrientation);
                     Sick.setNewXYO(newXYO);
                 }
 
-
-
             }
+
             if(couleurPalet.peek()!=null){
                 String couleur = couleurPalet.poll();
                 CouleurPalet.setCouleurPalRecu(couleur);
             }
-
         }
     }
 
     @Override
+
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");

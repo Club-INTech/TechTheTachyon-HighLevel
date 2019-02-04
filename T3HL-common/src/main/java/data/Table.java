@@ -18,7 +18,6 @@
 
 package data;
 
-
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import data.table.StillCircularObstacle;
@@ -31,14 +30,11 @@ import utils.math.Circle;
 import utils.math.Segment;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.Shape;
 import utils.math.CircularRectangle;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -307,6 +303,11 @@ public class Table implements Service {
         return intersectObstacle(segment, mobileObstacles);
     }
 
+    /**
+     * @param segment   segment à tester
+     * @param obstacles liste d'obstacles à tester
+     * @return  true si le segment intersecte l'un des obstacles
+     */
     private boolean intersectObstacle(Segment segment, List<? extends Obstacle> obstacles) {
         Iterator<? extends Obstacle> iterator = obstacles.iterator();
         Obstacle obstacle;
