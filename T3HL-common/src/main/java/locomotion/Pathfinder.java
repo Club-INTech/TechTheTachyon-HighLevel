@@ -19,6 +19,7 @@
 package locomotion;
 
 import data.Graphe;
+import data.XYO;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import pfg.config.Config;

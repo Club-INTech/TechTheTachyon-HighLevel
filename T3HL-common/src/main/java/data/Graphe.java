@@ -235,12 +235,12 @@ public class Graphe implements Service {
         else {
             try {
                 n = new Node(position, false);
-                Segment seg = new Segment(position, new VectCartesian(0, 0));
-                for (Node neighbour : nodes) {
-                    seg.setPointB(neighbour.getPosition());
-                    constructRidge(n, neighbour, seg);
-                }
                 Log.GRAPHE.debug("Ajout d'un noeud provisoire à "+position);
+                Segment seg = new Segment(position, new VectCartesian(0, 0));
+                for (Node node : nodes) {
+                    seg.setPointB(node.getPosition());
+                    constructRidge(n, node, seg);
+                }
                 nodes.add(n);
                 return n;
             } catch (CloneNotSupportedException e) {
@@ -256,12 +256,13 @@ public class Graphe implements Service {
      */
     public void removeProvisoryNode(Node node) {
         if (!node.isPermanent()) {
-            nodes.remove(node);
             Log.GRAPHE.debug("Retrait du noeud provisoire "+node);
             for (Node neighbour : node.getNeighbours().keySet()) {
                 ridges.remove(neighbour.getNeighbours().get(node));
                 neighbour.getNeighbours().remove(node);
             }
+            node.getNeighbours().clear(); //test
+            nodes.remove(node);
         }
     }
 
@@ -289,7 +290,7 @@ public class Graphe implements Service {
             ridges.add(ridge);
             node1.addNeighbour(node2, ridge);
             node2.addNeighbour(node1, ridge);
-            // ça spamme trop :c Log.GRAPHE.debug("Ajout d'une arrête de "+node1.toString()+" à "+node2.toString());
+            // Log.GRAPHE.debug("Ajout d'une arrête de "+node1.toString()+" à "+node2.toString()); //ça spamme trop :c
         }
     }
 

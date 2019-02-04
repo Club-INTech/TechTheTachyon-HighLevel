@@ -170,8 +170,7 @@ public class Locomotion implements Service {
         }
 
         graphe.writeLock().lock();
-        start = graphe.addProvisoryNode(xyo.getPosition());
-        next = start;
+        start = graphe.addProvisoryNode(xyo.getPosition().clone());
         aim = graphe.addProvisoryNode(point);
         graphe.writeLock().unlock();
         pointsQueue.clear();
@@ -180,8 +179,12 @@ public class Locomotion implements Service {
         while ( ! xyo.getPosition().equals(aim.getPosition())) {
             try {
                 graphe.readLock().lock();
-                path = pathfinder.findPath(next, aim);
-                graphe.readLock().unlock();
+                try {
+                    path = pathfinder.findPath(start, aim);
+                }
+                finally {
+                    graphe.readLock().unlock();
+                }
 
                 // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
                 // ce thread pourrait être interrompu entre le addAll et le clear ;(
@@ -191,37 +194,41 @@ public class Locomotion implements Service {
                     pointsQueue.addAll(path);
                 }
                 while (!graphe.isUpdated() && !xyo.getPosition().equals(aim.getPosition())) {
-
-                    //System.out.println();
-                    //System.out.println(aim);
-                    //System.out.println(xyo.getPosition());
-                    //System.out.println(xyo.getPosition().equals(aim.getPosition()));
-
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
 // TODO: c'est ton pote, on fait quoi?
-                            } else { // c'est pas ton pote!
+                            }
+                            else { // c'est pas ton pote!
                                 graphe.writeLock().lock();
-                                graphe.removeProvisoryNode(start);
-                                start = graphe.addProvisoryNode(xyo.getPosition());
-                                graphe.writeLock().unlock();
-                                next = start;
+                                try {
+                                    graphe.removeProvisoryNode(start);
+                                    start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                                    graphe.setUpdated(true);
+                                }
+                                finally {
+                                    graphe.writeLock().unlock();
+                                }
                             }
                         }
                     }
                 }
                 graphe.setUpdated(false);
             } catch (NoPathFound e) {
+                e.printStackTrace();
                 // TODO : Compéter
             }
         }
         graphe.writeLock().lock();
-        graphe.removeProvisoryNode(start);
-        graphe.removeProvisoryNode(aim);
-        graphe.writeLock().unlock();
+        try {
+            graphe.removeProvisoryNode(start);
+            graphe.removeProvisoryNode(aim);
+        }
+        finally {
+            graphe.writeLock().unlock();
+        }
         pointsQueue.clear();
         exceptionsQueue.clear();
     }

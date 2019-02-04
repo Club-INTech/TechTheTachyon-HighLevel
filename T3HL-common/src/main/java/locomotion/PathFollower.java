@@ -21,16 +21,11 @@ package locomotion;
 import data.SensorState;
 import data.Table;
 import data.XYO;
-import data.controlers.SensorControler;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.container.Service;
-import utils.math.Calculs;
-import utils.math.Vec2;
-import utils.math.VectPolar;
-import utils.math.Circle;
-import utils.math.Segment;
+import utils.math.*;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -111,7 +106,7 @@ public class PathFollower extends Thread implements Service {
         while ((Boolean) SensorState.MOVING.getData()) {
             try {
                 Thread.sleep(LOOP_DELAY);
-                if (isLineObstructed(distance > 0)) {
+                if (isLineForwardObstructed(distance > 0)) {
                     orderWrapper.immobilise();
                     throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                 }
@@ -162,12 +157,32 @@ public class PathFollower extends Thread implements Service {
      *              en cas de blocage mécanique ou d'adversaire
      */
     private void moveToPoint(Vec2 point) throws UnableToMoveException {
+        XYO aim = new XYO(point, Calculs.modulo(point.minusVector(robotXYO.getPosition()).getA(), Math.PI));
+        Vec2 nearDirection;
+        Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
+        segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 
-        while ((boolean)SensorState.MOVING.getData()) {
+        while ((Boolean) SensorState.MOVING.getData()) {
             try {
-                Thread.sleep(5);
+                Thread.sleep(LOOP_DELAY);
+                if (isCircleObstructed()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+                nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
+                nearDirection.setR(300);
+                nearDirection.plus(XYO.getRobotInstance().getPosition());
+                segment.setPointB(nearDirection);
+                if (isSegmentObstructed(segment)) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+                if ((Boolean) SensorState.STUCKED.getData()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -179,7 +194,7 @@ public class PathFollower extends Thread implements Service {
      * @param direction true si l'on va vers l'avant du robot
      * @return  true s'il y a un adversaire devant le robot
      */
-    private boolean isLineObstructed(boolean direction) {
+    private boolean isLineForwardObstructed(boolean direction) {
         double orientation = robotXYO.getOrientation();
         if (!direction) {
             orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
@@ -187,6 +202,14 @@ public class PathFollower extends Thread implements Service {
         Segment seg = new Segment(robotXYO.getPosition().clone(),
                 robotXYO.getPosition().plusVector(new VectPolar(DISTANCE_CHECK, orientation)));
         return table.intersectAnyMobileObstacle(seg);
+    }
+
+    /**
+     * Vérifie s'il y a un adversaire sur le segment
+     * @return  true s'il y a un adversaire sur le segment
+     */
+    private boolean isSegmentObstructed(Segment segment) {
+        return table.intersectAnyMobileObstacle(segment);
     }
 
     /**

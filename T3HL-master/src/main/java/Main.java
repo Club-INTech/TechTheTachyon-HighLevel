@@ -78,7 +78,7 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
-            Vec2[] tabVecs = {new VectCartesian(0,1000), new VectCartesian(500,500)};
+            Vec2[] tabVecs = {new VectCartesian(793,631)};
             interfaceGraphique.setPointsToDraw(tabVecs);
 
             try {
