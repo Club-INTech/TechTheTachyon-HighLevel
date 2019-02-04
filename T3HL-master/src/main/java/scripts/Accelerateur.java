@@ -1,5 +1,6 @@
 package scripts;
 
+import data.GameState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -11,6 +12,8 @@ import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
+
+import static data.GameState.GOLDENIUM_LIBERE;
 
 
 public class Accelerateur extends Script {
@@ -73,6 +76,10 @@ public class Accelerateur extends Script {
             while (((Master) robot).getNbpaletsgauches() > 0) {
               actionBras(false);
             }
+            /**
+             * Dire que le goldenium est libéré
+             */
+            GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(0);
             while(((Master) robot).getNbpaletsdroits() > 0){
                 actionBras(true);
