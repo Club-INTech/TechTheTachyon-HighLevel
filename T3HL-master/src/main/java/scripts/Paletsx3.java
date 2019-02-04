@@ -46,10 +46,8 @@ public class Paletsx3 extends Script{
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-<<<<<<< HEAD
-=======
+
                 ((Master) robot).pushPaletDroit();
->>>>>>> dec236d0ce4d8fde6b839a70a2712bfb6e2428d1
                 robot.moveToPoint(positions[j]);
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
@@ -57,10 +55,7 @@ public class Paletsx3 extends Script{
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-<<<<<<< HEAD
-=======
             ((Master) robot).pushPaletDroit();
->>>>>>> dec236d0ce4d8fde6b839a70a2712bfb6e2428d1
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }
