@@ -35,9 +35,6 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-/**
- * @author nayth
- */
 public class Main {
 
     private static Container container;
@@ -78,7 +75,7 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
-            Vec2[] tabVecs = {new VectCartesian(793,631)};
+            Vec2[] tabVecs = {new VectCartesian(0,1000)};
             interfaceGraphique.setPointsToDraw(tabVecs);
 
             try {

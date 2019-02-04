@@ -19,7 +19,6 @@
 package locomotion;
 
 import data.Graphe;
-import data.SensorState;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;

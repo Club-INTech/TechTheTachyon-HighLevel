@@ -173,6 +173,6 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node node) {
-        return this.heuristique-node.heuristique;
+        return this.heuristique;
     }
 }
