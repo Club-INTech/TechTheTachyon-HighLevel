@@ -206,6 +206,7 @@ public class Locomotion implements Service {
                                 try {
                                     graphe.removeProvisoryNode(start);
                                     start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                                    graphe.update();
                                     graphe.setUpdated(true);
                                 }
                                 finally {

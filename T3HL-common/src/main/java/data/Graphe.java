@@ -198,7 +198,7 @@ public class Graphe implements Service {
     /**
      * Met à jour la disponibilité des arrêtes en fonction des obstacles mobiles
      */
-    void update() {
+    public void update() {
         Log.LIDAR.debug("Mise à jour du graphe...");
         int counter = 0;
         synchronized (mobileCircularObstacles) {
