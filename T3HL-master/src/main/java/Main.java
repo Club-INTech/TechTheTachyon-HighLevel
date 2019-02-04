@@ -79,10 +79,13 @@ public class Main {
             Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
+            Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
+
+
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
-
+            goldenium.goToThenExecute(1);
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
@@ -100,6 +103,7 @@ public class Main {
              * Si tout les palets de la zone de chaos ont été récupérer
              */
             table.removeFixedObstacle(table.zoneChaosDroite);
+
 
             paletsx6.goToThenExecute(1);
             paletsx3.goToThenExecute(1);

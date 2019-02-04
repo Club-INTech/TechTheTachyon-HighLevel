@@ -9,7 +9,8 @@ public enum ScriptNamesMaster implements ScriptNames {
     PALETS3(Paletsx3.class),
     PALETS6(PaletsX6.class),
     PALETS_ZONE_DEPART(PaletsZoneDepart.class),
-    PALETS_ZONE_CHAOS(PaletsZoneChaos.class);
+    PALETS_ZONE_CHAOS(PaletsZoneChaos.class),
+    GOLDENIUM(Goldenium.class);
 
 
     private Class<? extends Service> aClass;
