@@ -172,7 +172,7 @@ public class PathFollower extends Thread implements Service {
                     throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                 }
                 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
-                nearDirection.setR(300);
+                nearDirection.setR(this.DISTANCE_CHECK);
                 nearDirection.plus(XYO.getRobotInstance().getPosition());
                 segment.setPointB(nearDirection);
                 if (isSegmentObstructed(segment)) {

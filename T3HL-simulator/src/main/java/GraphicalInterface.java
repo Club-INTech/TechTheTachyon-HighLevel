@@ -239,10 +239,11 @@ class GraphicalInterface extends JFrame {
      * Fonction pour dessiner une liste de points
      */
     public void drawPoints(Graphics g){
+        int pointDiameter=10;
         g.setColor(POINTS_TO_DRAW_COLOR);
         for(Vec2 vecteur : this.pointsToDraw) {
             vecteur = transformTableCoordsToInterfaceCoords(vecteur);
-            g.fillOval(vecteur.getX(), vecteur.getY(), 10, 10);
+            g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
         }
         g.setColor(DEFAULT_COLOR);
     }
