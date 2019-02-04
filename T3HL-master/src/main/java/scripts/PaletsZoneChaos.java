@@ -33,11 +33,11 @@ public class PaletsZoneChaos extends Script{
             robot.turn(Math.PI/2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
             for (Vec2 position : positions) {
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
             }
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         }catch (UnableToMoveException e) {
