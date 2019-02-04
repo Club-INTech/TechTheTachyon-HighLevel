@@ -10,6 +10,7 @@ import robot.Robot;
 import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 // TODO
@@ -17,22 +18,35 @@ import utils.math.VectCartesian;
 
 public class PaletsZoneChaos extends Script{
 
-    private int xEntry = 1375;
-    private int yEntry = 1800 +  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int xEntry = 200;
+    private int yEntry = 1050;
+    private Vec2[] positions = new VectCartesian[]{
+            new VectCartesian(xEntry,yEntry),
+            new VectCartesian(xEntry+ 300,yEntry+250)
+    };
 
-    public PaletsZoneChaos(Master robot, Table table) {
-        super(robot, table);
-    }
+    public PaletsZoneChaos(Master robot, Table table) {super(robot, table); }
 
     @Override
     public void execute(Integer version) {
-
+        try{
+            robot.turn(Math.PI/2);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            for (Vec2 position : positions) {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+            }
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+        }catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(new VectCartesian(xEntry, yEntry), 5);
-    }
+    public Shape entryPosition(Integer version) {return new Circle(new VectCartesian(xEntry, yEntry), 5); }
 
     @Override
     public void finalize(Exception e) { }

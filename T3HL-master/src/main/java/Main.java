@@ -37,6 +37,7 @@ import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Calculs;
 import utils.math.VectCartesian;
+import utils.math.VectPolar;
 
 import java.util.ArrayList;
 
