@@ -85,7 +85,6 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
-            goldenium.goToThenExecute(1);
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
@@ -105,6 +104,7 @@ public class Main {
             table.removeFixedObstacle(table.zoneChaosDroite);
 
 
+            goldenium.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
             paletsx3.goToThenExecute(1);
             accelerateur.goToThenExecute(1);

@@ -13,10 +13,10 @@ import utils.math.VectCartesian;
 public class PaletsZoneDepart extends Script {
 
     private int yEntry = 450;
-    private int xEntry = 225;
+    private int xEntry = 1350;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry,yEntry),
-            new VectCartesian(xEntry,yEntry+300),
+            //new VectCartesian(xEntry,yEntry+300),
             //new VectCartesian(xEntry,yEntry+600)
     };
 
