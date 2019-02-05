@@ -198,7 +198,7 @@ public class Locomotion implements Service {
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
-// TODO: c'est ton pote, on fait quoi?
+                                // TODO: c'est ton pote, on fait quoi?
                             }
                             else { // c'est pas ton pote!
                                 graphe.writeLock().lock();

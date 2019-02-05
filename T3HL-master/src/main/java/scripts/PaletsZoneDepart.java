@@ -17,7 +17,7 @@ public class PaletsZoneDepart extends Script {
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry,yEntry),
             new VectCartesian(xEntry,yEntry+300),
-            new VectCartesian(xEntry,yEntry+600)
+            //new VectCartesian(xEntry,yEntry+600)
     };
 
 
@@ -27,21 +27,22 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public void execute(Integer version) {
-        boolean premierPaletPris = false;
-        try {
-            robot.turn(Math.PI/2);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            for (Vec2 position : positions) {
-                if (premierPaletPris) {
-                    robot.moveToPoint(position);
-                } else {
-                    premierPaletPris = true;
-                }
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+            boolean premierPaletPris = false;
+            try {
+                robot.turn(Math.PI/2);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+                for (Vec2 position : positions) {
+                    if (premierPaletPris) {
+                        robot.moveToPoint(position);
+                    } else {
+                        premierPaletPris = true;
+                    }
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                    ((Master) robot).pushPaletGauche();
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         }catch (UnableToMoveException e) {

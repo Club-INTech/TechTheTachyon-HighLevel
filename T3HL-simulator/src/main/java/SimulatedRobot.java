@@ -155,7 +155,7 @@ public class SimulatedRobot {
     /* ======================== Méthodes de mise à jour de la position et de l'orientation ================== */
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
-        if (Math.abs(this.orientationTarget - this.orientation) > this.ORIENTATION_TOLERANCE){
+        if (Math.abs(moduloSpec(this.orientationTarget) - moduloSpec(this.orientation)) > this.ORIENTATION_TOLERANCE){
             if (Math.abs(this.orientationTarget - this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=moduloSpec(this.orientationTarget);
                 this.turning=true;

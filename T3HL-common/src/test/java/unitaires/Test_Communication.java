@@ -22,6 +22,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import utils.Container;
+import utils.Log;
 import utils.communication.SocketClientInterface;
 import utils.communication.SocketServerInterface;
 
@@ -29,12 +31,16 @@ import java.util.Optional;
 
 public class Test_Communication {
 
+    public Container container;
+
     public SocketServerInterface interface1;
 
     public SocketClientInterface interface2;
 
     @Before
     public void setUp() throws Exception {
+        container = Container.getInstance("Master");
+        Log.init(container.getConfig());
         interface1 = new SocketServerInterface("localhost", 10200);
         interface1.init();
     }
@@ -45,6 +51,8 @@ public class Test_Communication {
         interface2.close();
         interface1 = null;
         interface2 = null;
+        container = null;
+        Container.resetInstance();
         System.gc();
     }
 

@@ -278,6 +278,15 @@ public class Graphe implements Service {
     }
 
     /**
+     * Set l'heuristique de toutes les nodes en fonction du point visé
+     */
+    public void updateHeuristique(Node aim){
+        for (Node node : nodes){
+            node.setHeuristique((int)aim.getPosition().squaredDistanceTo(node.getPosition()));
+        }
+    }
+
+    /**
      * Ajoute une arrête au graphe et lie les noeuds entre eux
      * @param node1 le premier noeud à relier
      * @param node2 le second noeud à relier

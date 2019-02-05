@@ -37,29 +37,29 @@ public class PaletsX6 extends Script {
      Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
      */
         if (version == 0) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         } else if (version == 1) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         } else if (version == 3) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         } else if (version == 4) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         } else if (version == 5) {
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
-            positions.add(new VectCartesian(100, 100));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 800));
         }
         boolean premierPaletPris = false;
         try {
@@ -85,22 +85,28 @@ public class PaletsX6 extends Script {
     public Shape entryPosition(Integer version) {
 
         if (version == 0) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
         else if (version == 1) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
         else if (version == 2) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
         else if (version == 3) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
         else if (version == 4) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
         else if (version == 5) {
-            new Circle(new VectCartesian(100,100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            return positionEntree;
         }
 
         return null;

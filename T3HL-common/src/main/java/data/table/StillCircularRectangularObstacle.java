@@ -7,14 +7,12 @@ import utils.math.CircularRectangle;
  *
  * @author gwenser
  */
-
-public class StillCircularRectangularObstacle extends Obstacle{
+public class StillCircularRectangularObstacle extends Obstacle {
 
     /**
      * Constructeur rectangle arrondi
      * @param   rectangleArrondi  rectangle arrondi
      */
-
     public StillCircularRectangularObstacle(CircularRectangle rectangleArrondi) {
         super(rectangleArrondi);
     }

@@ -20,14 +20,14 @@ public class Paletsx3 extends Script{
      */
 
     private int xEntry = 1375;
-    private int yEntry = 1800 +  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     /**
      * constante
      */
     Vec2[] positions = new Vec2[]{
             new VectCartesian(xEntry,yEntry),
-            new VectCartesian(xEntry-100,yEntry),
-            new VectCartesian(xEntry-200,yEntry)
+            //new VectCartesian(xEntry-100,yEntry),
+            //new VectCartesian(xEntry-200,yEntry)
     };
 
 
@@ -40,19 +40,21 @@ public class Paletsx3 extends Script{
         try {
             robot.turn(Math.PI);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            for (int j = 1; j < 3; j++) {
+            for (int j = 1; j < positions.length; j++) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                ((Master) robot).pushPaletDroit();
                 robot.moveToPoint(positions[j]);
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            ((Master) robot).pushPaletDroit();
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }

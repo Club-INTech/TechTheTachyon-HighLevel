@@ -78,6 +78,7 @@ public enum ConfigData implements ConfigInfo
     LOCALSERVER_PORT(13550),
     MASTER_LL_SIMULATEUR(10001),
     SLAVE_SIMULATEUR(20001),
+    MASTER_SIMULATEUR(20002),
 
     /**
      * Dimensions du robot
@@ -104,7 +105,7 @@ public enum ConfigData implements ConfigInfo
      */
     LOCOMOTION_LOOP_DELAY(20),
     LOCOMOTION_DISTANCE_CHECK(250),
-    LOCOMOTION_RADIUS_CHECK(20)
+    LOCOMOTION_RADIUS_CHECK(20),
     ;
 
     /**

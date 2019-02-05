@@ -59,7 +59,7 @@ public class Pathfinder implements Service {
      */
     private Pathfinder(Graphe graphe) {
         this.graphe = graphe;
-        this.openList = new PriorityQueue<>();
+        this.openList = new PriorityQueue<>(new ComparatorNode());
         this.closedList = new ArrayList<>();
     }
 
@@ -79,6 +79,7 @@ public class Pathfinder implements Service {
         // On clean la liste des noeuds à visiter et on ajoute le noeud de départ
         openList.clear();
         openList.add(start);
+        graphe.updateHeuristique(aim);
 
         // Tant qu'il y a des noeuds à visiter
         while (!openList.isEmpty()) {

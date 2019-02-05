@@ -139,45 +139,45 @@ public enum Log
     private synchronized void writeToLog(String color, String message, boolean active)
     {
         this.toLog.setLength(0);
-        this.toLog.append("[");
-        this.toLog.append(calendar.get(Calendar.HOUR_OF_DAY));
-        this.toLog.append("h");
-        this.toLog.append(calendar.get(Calendar.MINUTE));
-        this.toLog.append(":");
-        this.toLog.append(calendar.get(Calendar.SECOND));
-        this.toLog.append(",");
-        this.toLog.append(calendar.get(Calendar.MILLISECOND));
-        this.toLog.append("]");
+        this.toLog.append("[")
+        .append(calendar.get(Calendar.HOUR_OF_DAY))
+        .append("h")
+        .append(calendar.get(Calendar.MINUTE))
+        .append(":")
+        .append(calendar.get(Calendar.SECOND))
+        .append(",")
+        .append(calendar.get(Calendar.MILLISECOND))
+        .append("]");
         String hour = this.toLog.toString();
 
         if(active & printLogs)
         {
             StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
             this.toLog.setLength(0);
-            this.toLog.append(color);
-            this.toLog.append(hour);
-            this.toLog.append(" ");
-            this.toLog.append(this.name());
-            this.toLog.append(" ");
-            this.toLog.append(elem.getClassName());
-            this.toLog.append(",");
-            this.toLog.append(elem.getMethodName());
-            this.toLog.append(":");
-            this.toLog.append(elem.getLineNumber());
-            this.toLog.append(" >>> ");
-            this.toLog.append(message);
-            this.toLog.append(RESET);
+            this.toLog.append(color)
+            .append(hour)
+            .append(" ")
+            .append(this.name())
+            .append(" ")
+            .append(elem.getClassName())
+            .append(",")
+            .append(elem.getMethodName())
+            .append(":")
+            .append(elem.getLineNumber())
+            .append(" >>> ")
+            .append(message)
+            .append(RESET);
             System.out.println(this.toLog.toString());
         }
 
         if(saveLogs)
         {
             this.toLog.setLength(0);
-            this.toLog.append(hour);
-            this.toLog.append(" ");
-            this.toLog.append(this.name());
-            this.toLog.append(" > ");
-            this.toLog.append(message);
+            this.toLog.append(hour)
+            .append(" ")
+            .append(this.name())
+            .append(" > ")
+            .append(message);
             writeToFile(this.toLog.toString());
         }
     }
