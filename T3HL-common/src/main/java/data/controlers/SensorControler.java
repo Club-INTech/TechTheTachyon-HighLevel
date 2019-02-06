@@ -147,18 +147,18 @@ public class SensorControler extends Thread implements Service {
                         double orien= XYO.getRobotInstance().getOrientation();
 
                         teta = Math.atan(rapport);
-                        xCalcule = (int) (1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])+ vectsick.getX()) * Math.cos(teta));
+                        xCalcule = (int) Math.round((1500 - (Integer.parseInt(sickMeasurements[significantSicks[0]])+ vectsick.getX()) * Math.cos(teta)));
                         if (-Math.PI/2 < orien && orien < Math.PI/2) { //modifier car arctan est toujours inférieur à PI
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+ vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round((2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+ vectsick.getY()) * Math.cos(teta)));
                             } else {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round(((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta)));
                             }
                         } else {
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round(2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
 
                         }
@@ -168,15 +168,15 @@ public class SensorControler extends Thread implements Service {
                         xCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[0]])+vectsick.getX()) * Math.cos(teta)) - 1500;
                         if (-Math.PI/2 < orien && orien < Math.PI/2) {
                             if (significantSicks[1] == 1 || significantSicks[1] == 2) {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round(2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
                         } else {
                             if (significantSicks[1] == 4 || significantSicks[1] == 5) {
-                                yCalcule = (int) ((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round((Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             } else {
-                                yCalcule = (int) (2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
+                                yCalcule = (int) Math.round(2000 - (Integer.parseInt(sickMeasurements[significantSicks[2]])+vectsick.getY()) * Math.cos(teta));
                             }
                         }
                     }
@@ -198,12 +198,12 @@ public class SensorControler extends Thread implements Service {
                         // On différencie les cas où le robot est orienté vers la gauche et la droite
 
                         teta = Math.atan(rapport);
-                        xCalcule = (int) (1500 - Integer.parseInt(sickMeasurements[1]) * Math.cos(teta));
-                        yCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta));
+                        xCalcule = (int) Math.round(1500 - Integer.parseInt(sickMeasurements[1]) * Math.cos(teta));
+                        yCalcule = (int) Math.round(Integer.parseInt(sickMeasurements[0]) * Math.cos(teta));
                     } else {
                         teta = Math.PI - Math.atan(rapport);
-                        xCalcule = (int) (Integer.parseInt(sickMeasurements[0]) * Math.cos(teta)) - 1500;
-                        yCalcule = (int) (2000 - Integer.parseInt(sickMeasurements[2]) * Math.cos(teta));
+                        xCalcule = (int) Math.round(Integer.parseInt(sickMeasurements[0]) * Math.cos(teta)) - 1500;
+                        yCalcule = (int) Math.round(2000 - Integer.parseInt(sickMeasurements[2]) * Math.cos(teta));
                     }
 
                     VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
