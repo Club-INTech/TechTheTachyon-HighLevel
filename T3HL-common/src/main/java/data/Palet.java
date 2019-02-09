@@ -29,6 +29,7 @@ public enum Palet {
     ROUGE_ZONE_X3(23,CouleurPalet.ROUGE,false,false),
     BLEU_ZONE_X3(24,CouleurPalet.BLEU,false,false),
     VERT_ZONE_X3(25,CouleurPalet.VERT,false,false),
+    GOLDENIUM(26,CouleurPalet.GOLDENIUM,false,false),
 
     ;
     private int id;
