@@ -1,5 +1,7 @@
 package goap;
 
+import utils.math.Vec2;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -16,24 +18,15 @@ public class ActionGraph {
          */
         double runningCost;
 
-        /**
-         * Coût d'une action (en temps, en ressources, selon comment on le voit)
-         */
-        private double cost;
-
         private Set<Node> children;
 
         /**
-         * Nom du noeud, utile pour comprendre à quoi il sert
+         * L'action associée à ce noeud
          */
-        private final String name;
+        private final Action action;
 
-
-        // TODO: preconditions
-        // TODO: effects on environment
-        public Node(String name, double baseCost) {
-            this.name = name;
-            this.cost = baseCost;
+        public Node(Action action) {
+            this.action = action;
             this.children = new HashSet<>();
         }
 
@@ -41,8 +34,8 @@ public class ActionGraph {
          * Renvoie le coût de l'action.
          * /!\\ Le coût peut être dynamique!
          */
-        public double getCost() {
-            return cost;
+        public double getCost(EnvironmentInfo info) {
+            return action.getCost(info);
         }
 
         public void addChild(Node child) {
@@ -51,6 +44,30 @@ public class ActionGraph {
 
         public Set<Node> getChildren() {
             return children;
+        }
+
+        public void performAction(EnvironmentInfo info) {
+            action.perform(info);
+        }
+
+        public boolean checkCompletion(EnvironmentInfo info) {
+            return action.isComplete(info);
+        }
+
+        public boolean requiresMovement(EnvironmentInfo info) {
+            return action.requiresMovement(info);
+        }
+
+        public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+            action.updateTargetPosition(info, targetPos);
+        }
+
+        public Action getAction() {
+            return action;
+        }
+
+        public void reset() {
+            action.reset();
         }
     }
 
@@ -63,8 +80,8 @@ public class ActionGraph {
     /**
      * Crée un nouveau noeud et l'ajoute au graphe
      */
-    public Node node(String name, double baseCost) {
-        Node node = new Node(name, baseCost);
+    public Node node(Action action) {
+        Node node = new Node(action);
         nodes.add(node);
         return node;
     }
@@ -72,8 +89,60 @@ public class ActionGraph {
     /**
      * Planifies la meilleure (théoriquement) trajectoire à travers le graphe pour réussir son but
      */
-    public Stack<Node> plan(EnvironmentInfo info) {
-        return null; // TODO
+    public Stack<Node> plan(EnvironmentInfo info, Node goal) {
+        Node startNode = new Node(new Action() {
+
+            // TODO
+
+            @Override
+            public double getCost(EnvironmentInfo info) {
+                return 0;
+            }
+
+            @Override
+            public void perform(EnvironmentInfo info) {
+
+            }
+
+            @Override
+            public boolean isComplete(EnvironmentInfo info) {
+                return false;
+            }
+
+            @Override
+            public boolean requiresMovement(EnvironmentInfo info) {
+                return false;
+            }
+
+            @Override
+            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+
+        nodes.add(startNode); // ajout temporaire
+
+        for (Node node : nodes) {
+            node.reset();
+        }
+
+
+        for(Node potentialAction : nodes) {
+            boolean foundPathToGoal = false; // TODO
+        }
+        // TODO: parcours du graphe
+
+
+        nodes.remove(startNode);
+
+        Stack<Node> result = new Stack<>();
+        // TODO: add to stack
+        return result; // TODO
     }
 
 }

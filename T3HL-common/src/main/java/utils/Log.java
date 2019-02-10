@@ -40,6 +40,7 @@ public enum Log {
     GRAPHE(false),
     HOOK(true),
     TABLE(true),
+    AI(true),
     ;
 
     /**
