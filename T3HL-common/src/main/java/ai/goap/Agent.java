@@ -1,4 +1,4 @@
-package goap;
+package ai.goap;
 
 import utils.Log;
 import utils.math.Vec2;
@@ -46,7 +46,7 @@ public class Agent {
     /**
      * Etat Idle: on réflechit aux prochaines actions
      */
-    private void idleState(FiniteStateMachine fsm, EnvironmentInfo info) {
+    public void idleState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentGoal == null) {
             Log.AI.critical("Tentative de planification alors qu'il n'y a pas de but donné!");
             return;
@@ -64,7 +64,7 @@ public class Agent {
     /**
      * Etat Moving: l'agent est en train de se déplacer
      */
-    private void movingState(FiniteStateMachine fsm, EnvironmentInfo info) {
+    public void movingState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(info.getCurrentPosition().distanceTo(targetPosition) < distanceTolerance) {
             fsm.popState(); // on a fini le mouvement, on passe à l'état d'après
         } else { // on a toujours pas atteint la position
@@ -95,7 +95,7 @@ public class Agent {
     /**
      * Etat Performing: une action est en cours
      */
-    private void performingState(FiniteStateMachine fsm, EnvironmentInfo info) {
+    public void performingState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentPlan != null && !currentPlan.isEmpty()) {
             ActionGraph.Node currentAction = currentPlan.peek();
             if(currentAction.checkCompletion(info)) {
@@ -149,5 +149,9 @@ public class Agent {
 
     public void setCurrentGoal(EnvironmentInfo currentGoal) {
         this.currentGoal = currentGoal;
+    }
+
+    public FiniteStateMachine getFiniteStateMachine() {
+        return fsm;
     }
 }

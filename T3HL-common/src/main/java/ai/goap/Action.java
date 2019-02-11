@@ -1,4 +1,4 @@
-package goap;
+package ai.goap;
 
 import utils.math.Vec2;
 

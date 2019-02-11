@@ -1,4 +1,4 @@
-package goap;
+package ai.goap;
 
 import java.util.Stack;
 
@@ -44,4 +44,7 @@ public class FiniteStateMachine {
         return states.pop();
     }
 
+    public State peekState() {
+        return states.peek();
+    }
 }
