@@ -288,4 +288,11 @@ public abstract class Vec2 {
         this.a = this.computeAngle();
         this.r = this.computeRay();
     }
+
+    public void set(Vec2 other) {
+        this.x = other.getX();
+        this.y = other.getY();
+        this.a = this.computeAngle();
+        this.r = this.computeRay();
+    }
 }

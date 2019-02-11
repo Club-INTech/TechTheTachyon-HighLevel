@@ -108,17 +108,13 @@ public class ActionGraph {
 
         Optional<Node> cheapest = path.stream()
                 .sorted(Comparator.comparingDouble(a -> a.runningCost))
-                .map(n -> {
-                    System.out.println(">>"+n.action);
-                    return n;
-                })
                 .findFirst()
         ;
         Stack<Node> result = new Stack<>();
         Node n = cheapest.get();
         while(n != null) {
             if(n.action != null) { // on évite d'ajouter le noeud de départ au chemin
-                result.insertElementAt(n, 0);
+                result.push(n);
             }
             n = n.parent;
         }
@@ -128,16 +124,13 @@ public class ActionGraph {
     private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
         boolean foundAtLeastOnePath = false;
         for(Node actionNode : usableNodes) {
-            System.out.println(">>> "+actionNode.action);
             if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
-                System.out.println(">>>!! "+actionNode.action);
                 EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction().effects);
 
                 if(goal.isMetByState(newState)) {
                     double runningCost = parent.runningCost + actionNode.getCost(info);
                     path.add(actionNode.cloneWithParent(parent, runningCost));
                     foundAtLeastOnePath = true;
-                    System.out.println("goal!!");
                 } else {
                     // on retire cette action de la liste des actions possibles
                     Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class Agent {
+public abstract class Agent {
 
     private double distanceTolerance = 10.0; // TODO
 
@@ -33,20 +33,61 @@ public class Agent {
      */
     private final List<Exception> movementErrors = new LinkedList<>();
     private EnvironmentInfo currentGoal;
-    // TODO: plus de log
-    // TODO: interface avec le reste du HL
 
+    // ce sont des champs parce qu'il faut pouvoir avoir la même référence pour tester
+    private final FiniteStateMachine.State idleState = new FiniteStateMachine.State() {
+        @Override
+        public void update(FiniteStateMachine fsm, EnvironmentInfo info) {
+            updateIdleState(fsm, info);
+        }
+
+        @Override
+        public String toString() {
+            return "Idle";
+        }
+    };
+    private final FiniteStateMachine.State movingState = new FiniteStateMachine.State() {
+        @Override
+        public void update(FiniteStateMachine fsm, EnvironmentInfo info) {
+            updateMovingState(fsm, info);
+        }
+
+        @Override
+        public String toString() {
+            return "Moving";
+        }
+    };
+    private final FiniteStateMachine.State performingState = new FiniteStateMachine.State() {
+        @Override
+        public void update(FiniteStateMachine fsm, EnvironmentInfo info) {
+            updatePerformingState(fsm, info);
+        }
+
+        @Override
+        public String toString() {
+            String action = "<NO PLAN>";
+            if(currentPlan != null && !currentPlan.isEmpty()) {
+                action = currentPlan.peek().getAction().toString();
+            }
+            return "Performing "+action;
+        }
+    };
+    // TODO: plus de log
+
+    // TODO: interface avec le reste du HL
     public Agent(ActionGraph graph) {
         this.currentPlan = null;
         this.graph = graph;
         this.fsm = new FiniteStateMachine();
-        fsm.pushState(this::idleState); // on commence dans l'état Idle: on va planifier nos actions dès que possible
+        fsm.pushState(this.idleState); // on commence dans l'état Idle: on va planifier nos actions dès que possible
     }
+
+    public abstract EnvironmentInfo gatherEnvironmentInformation();
 
     /**
      * Etat Idle: on réflechit aux prochaines actions
      */
-    public void idleState(FiniteStateMachine fsm, EnvironmentInfo info) {
+    private void updateIdleState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentGoal == null) {
             Log.AI.critical("Tentative de planification alors qu'il n'y a pas de but donné!");
             return;
@@ -55,7 +96,7 @@ public class Agent {
         if(plan != null) { // on a un plan! \o/
            fsm.popState(); // on retire l'état idle courant
            this.currentPlan = plan;
-           fsm.pushState(this::performingState);
+           fsm.pushState(this.performingState);
         } else { // pas de plan, on continue de réfléchir
            ;
         }
@@ -64,8 +105,8 @@ public class Agent {
     /**
      * Etat Moving: l'agent est en train de se déplacer
      */
-    public void movingState(FiniteStateMachine fsm, EnvironmentInfo info) {
-        if(info.getCurrentPosition().distanceTo(targetPosition) < distanceTolerance) {
+    private void updateMovingState(FiniteStateMachine fsm, EnvironmentInfo info) {
+        if(info.getCurrentPosition().distanceTo(targetPosition) <= distanceTolerance) {
             fsm.popState(); // on a fini le mouvement, on passe à l'état d'après
         } else { // on a toujours pas atteint la position
             synchronized (movementErrors) {
@@ -95,35 +136,40 @@ public class Agent {
     /**
      * Etat Performing: une action est en cours
      */
-    public void performingState(FiniteStateMachine fsm, EnvironmentInfo info) {
+    private void updatePerformingState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentPlan != null && !currentPlan.isEmpty()) {
             ActionGraph.Node currentAction = currentPlan.peek();
-            if(currentAction.checkCompletion(info)) {
+            if (currentAction.requiresMovement(info) && checkNotInRange(currentAction, info)) {
+                currentAction.updateTargetPosition(info, targetPosition);
+                fsm.pushState(this.movingState);
+            } else if (currentAction.checkCompletion(info)) {
                 // on applique les effets de cette action
                 Map<String, Object> effects = currentAction.getAction().getEffects();
                 info.getState().putAll(effects);
                 currentPlan.pop(); // on retire l'action qui a fini
-            } else {
-                if(currentAction.requiresMovement(info)) {
-                    currentAction.updateTargetPosition(info, targetPosition);
-                    fsm.pushState(this::movingState);
+
+                if (currentPlan.isEmpty()) {
+                    fsm.popState();
+                    fsm.pushState(this.idleState); // on retourne réfléchir
                 } else {
                     currentAction.performAction(info);
                 }
             }
         } else {
             fsm.popState();
-            fsm.pushState(this::idleState); // on retourne réfléchir
+            fsm.pushState(this.idleState); // on retourne réfléchir
         }
+    }
+
+    private boolean checkNotInRange(ActionGraph.Node node, EnvironmentInfo info) {
+        Vec2 target = new VectCartesian(0,0);
+        node.updateTargetPosition(info, target);
+        return info.getCurrentPosition().distanceTo(target) > distanceTolerance;
     }
 
     public void step() {
         EnvironmentInfo info = gatherEnvironmentInformation();
         fsm.step(info);
-    }
-
-    private EnvironmentInfo gatherEnvironmentInformation() {
-        return null; // TODO
     }
 
     /**
@@ -153,5 +199,17 @@ public class Agent {
 
     public FiniteStateMachine getFiniteStateMachine() {
         return fsm;
+    }
+
+    public FiniteStateMachine.State getIdleState() {
+        return idleState;
+    }
+
+    public FiniteStateMachine.State getMovingState() {
+        return movingState;
+    }
+
+    public FiniteStateMachine.State getPerformingState() {
+        return performingState;
     }
 }
