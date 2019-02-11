@@ -1,10 +1,10 @@
 package goap;
 
+import utils.Log;
 import utils.math.Vec2;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Représente le graphe des actions possibles pour l'agent et leurs dépendances
@@ -18,16 +18,14 @@ public class ActionGraph {
          */
         double runningCost;
 
-        private Set<Node> children;
-
         /**
          * L'action associée à ce noeud
          */
         private final Action action;
+        private Node parent;
 
         public Node(Action action) {
             this.action = action;
-            this.children = new HashSet<>();
         }
 
         /**
@@ -36,14 +34,6 @@ public class ActionGraph {
          */
         public double getCost(EnvironmentInfo info) {
             return action.getCost(info);
-        }
-
-        public void addChild(Node child) {
-            children.add(child);
-        }
-
-        public Set<Node> getChildren() {
-            return children;
         }
 
         public void performAction(EnvironmentInfo info) {
@@ -67,7 +57,19 @@ public class ActionGraph {
         }
 
         public void reset() {
+            runningCost = 0.0;
             action.reset();
+        }
+
+        public Node cloneWithParent(Node parent, double runningCost) {
+            Node clone = new Node(action);
+            clone.parent = parent;
+            clone.runningCost = runningCost;
+            return clone;
+        }
+
+        public Node getParent() {
+            return parent;
         }
     }
 
@@ -89,60 +91,65 @@ public class ActionGraph {
     /**
      * Planifies la meilleure (théoriquement) trajectoire à travers le graphe pour réussir son but
      */
-    public Stack<Node> plan(EnvironmentInfo info, Node goal) {
-        Node startNode = new Node(new Action() {
-
-            // TODO
-
-            @Override
-            public double getCost(EnvironmentInfo info) {
-                return 0;
-            }
-
-            @Override
-            public void perform(EnvironmentInfo info) {
-
-            }
-
-            @Override
-            public boolean isComplete(EnvironmentInfo info) {
-                return false;
-            }
-
-            @Override
-            public boolean requiresMovement(EnvironmentInfo info) {
-                return false;
-            }
-
-            @Override
-            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
-
-            }
-
-            @Override
-            public void reset() {
-
-            }
-        });
-
-        nodes.add(startNode); // ajout temporaire
+    public Stack<Node> plan(EnvironmentInfo info, EnvironmentInfo goal) {
+        Node startNode = new Node(null /* TODO */);
 
         for (Node node : nodes) {
             node.reset();
         }
 
-
-        for(Node potentialAction : nodes) {
-            boolean foundPathToGoal = false; // TODO
+        Set<Node> usableNodes = new HashSet<>(nodes);
+        List<Node> path = new LinkedList<>();
+        boolean foundPath = buildPathToGoal(startNode, path, usableNodes, info, goal);
+        if(!foundPath) {
+            Log.AI.critical("Impossible de planifier des actions! Aucun chemin n'a été trouvé dans le graphe.");
+            return null;
         }
-        // TODO: parcours du graphe
 
-
-        nodes.remove(startNode);
-
+        Optional<Node> cheapest = path.stream()
+                .sorted(Comparator.comparingDouble(a -> a.runningCost))
+                .map(n -> {
+                    System.out.println(">>"+n.action);
+                    return n;
+                })
+                .findFirst()
+        ;
         Stack<Node> result = new Stack<>();
-        // TODO: add to stack
-        return result; // TODO
+        Node n = cheapest.get();
+        while(n != null) {
+            if(n.action != null) { // on évite d'ajouter le noeud de départ au chemin
+                result.insertElementAt(n, 0);
+            }
+            n = n.parent;
+        }
+        return result;
+    }
+
+    private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+        boolean foundAtLeastOnePath = false;
+        for(Node actionNode : usableNodes) {
+            System.out.println(">>> "+actionNode.action);
+            if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
+                System.out.println(">>>!! "+actionNode.action);
+                EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction().effects);
+
+                if(goal.isMetByState(newState)) {
+                    double runningCost = parent.runningCost + actionNode.getCost(info);
+                    path.add(actionNode.cloneWithParent(parent, runningCost));
+                    foundAtLeastOnePath = true;
+                    System.out.println("goal!!");
+                } else {
+                    // on retire cette action de la liste des actions possibles
+                    Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());
+                    boolean foundSubpath = buildPathToGoal(actionNode, path, newUsableNodes, newState, goal); // on continue à parcourir l'arbre
+
+                    if(foundSubpath) {
+                        foundAtLeastOnePath = true;
+                    }
+                }
+            }
+        }
+        return foundAtLeastOnePath;
     }
 
 }

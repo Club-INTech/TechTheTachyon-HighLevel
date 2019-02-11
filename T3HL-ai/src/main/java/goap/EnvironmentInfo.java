@@ -3,6 +3,7 @@ package goap;
 import data.XYO;
 import utils.math.Vec2;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,5 +34,19 @@ public class EnvironmentInfo {
 
     public double getCurrentAngle() {
         return xyo.getOrientation();
+    }
+
+    public EnvironmentInfo copyWithEffects(Map<String, Object> effects) {
+        Map<String, Object> newState = new HashMap<>(state);
+        newState.putAll(effects);
+        return new EnvironmentInfo(xyo, newState);
+    }
+
+    public boolean isMetByState(EnvironmentInfo other) {
+        for (Map.Entry<String, Object> entry : state.entrySet()) {
+            if(!other.state.get(entry.getKey()).equals(entry.getValue()))
+                return false;
+        }
+        return true;
     }
 }

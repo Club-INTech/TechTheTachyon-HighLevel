@@ -32,7 +32,7 @@ public class Agent {
      * Liste des erreurs dans le mouvement, mis à jour via #reportMovementError
      */
     private final List<Exception> movementErrors = new LinkedList<>();
-    private ActionGraph.Node currentGoal;
+    private EnvironmentInfo currentGoal;
     // TODO: plus de log
     // TODO: interface avec le reste du HL
 
@@ -147,7 +147,7 @@ public class Agent {
         return currentPlan;
     }
 
-    public void setCurrentGoal(ActionGraph.Node currentGoal) {
+    public void setCurrentGoal(EnvironmentInfo currentGoal) {
         this.currentGoal = currentGoal;
     }
 }

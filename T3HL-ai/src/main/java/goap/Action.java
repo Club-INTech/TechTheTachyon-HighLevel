@@ -19,6 +19,8 @@ public abstract class Action {
     public boolean arePreconditionsMet(EnvironmentInfo info) {
         for(Map.Entry<String, Object> entry : preconditions.entrySet()) {
             Object requiredState = info.getState().get(entry.getKey());
+            if(requiredState == null && entry.getValue() != null)
+                return false;
             if( ! requiredState.equals(entry.getValue())) { // une condition n'est pas remplie
                 return false;
             }
