@@ -264,6 +264,9 @@ public class Test_GOAP {
             public EnvironmentInfo gatherEnvironmentInformation() {
                 return info;
             }
+
+            @Override
+            protected void orderMove(Vec2 position) {}
         };
         agent.setCurrentGoal(goal);
 
@@ -297,6 +300,9 @@ public class Test_GOAP {
             public EnvironmentInfo gatherEnvironmentInformation() {
                 return fakeInfo;
             }
+
+            @Override
+            protected void orderMove(Vec2 position) {}
         };
         agent.setCurrentGoal(goal);
 

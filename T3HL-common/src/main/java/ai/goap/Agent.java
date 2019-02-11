@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public abstract class Agent {
 
-    private double distanceTolerance = 10.0; // TODO
+    private double distanceTolerance = 10.0;
 
     private final FiniteStateMachine fsm;
 
@@ -74,7 +74,6 @@ public abstract class Agent {
     };
     // TODO: plus de log
 
-    // TODO: interface avec le reste du HL
     public Agent(ActionGraph graph) {
         this.currentPlan = null;
         this.graph = graph;
@@ -82,7 +81,8 @@ public abstract class Agent {
         fsm.pushState(this.idleState); // on commence dans l'état Idle: on va planifier nos actions dès que possible
     }
 
-    public abstract EnvironmentInfo gatherEnvironmentInformation();
+    protected abstract EnvironmentInfo gatherEnvironmentInformation();
+    protected abstract void orderMove(Vec2 position);
 
     /**
      * Etat Idle: on réflechit aux prochaines actions
@@ -128,6 +128,7 @@ public abstract class Agent {
     private void tryToMoveTo(Vec2 position) {
         if(previousTargetPosition.distanceTo(position) > distanceTolerance) { // nouvelle position!
             Log.AI.debug("Envoi de l'ordre de déplacement vers la position "+position);
+            orderMove(position);
             // TODO: envoyer l'ordre de mouvement
         }
         previousTargetPosition.setXY(position.getX(), position.getY());
@@ -139,6 +140,7 @@ public abstract class Agent {
     private void updatePerformingState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentPlan != null && !currentPlan.isEmpty()) {
             ActionGraph.Node currentAction = currentPlan.peek();
+            Log.AI.debug("Performing "+currentAction.getAction());
             if (currentAction.requiresMovement(info) && checkNotInRange(currentAction, info)) {
                 currentAction.updateTargetPosition(info, targetPosition);
                 fsm.pushState(this.movingState);
@@ -151,9 +153,9 @@ public abstract class Agent {
                 if (currentPlan.isEmpty()) {
                     fsm.popState();
                     fsm.pushState(this.idleState); // on retourne réfléchir
-                } else {
-                    currentAction.performAction(info);
                 }
+            } else {
+                currentAction.performAction(info);
             }
         } else {
             fsm.popState();

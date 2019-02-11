@@ -10,8 +10,6 @@ import java.util.Map;
  * Classe représentant toutes les informations sur l'environnement d'un agent. Utilisé par les actions et les états pour savoir ce qu'ils doivent faire
  */
 public class EnvironmentInfo {
-    // TODO
-
     private final Map<String, Object> state;
     private final XYO xyo;
 

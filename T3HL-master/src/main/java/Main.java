@@ -16,14 +16,17 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import ai.AIService;
+import ai.goap.Action;
+import ai.goap.ActionGraph;
+import ai.goap.Agent;
+import ai.goap.EnvironmentInfo;
 import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
-import data.table.Obstacle;
-import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -31,15 +34,15 @@ import scripts.Script;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
-import sun.management.Sensor;
+import sun.management.resources.agent;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-import utils.math.Calculs;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.VectPolar;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author nayth
@@ -55,12 +58,16 @@ public class Main {
     private static Table table;
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
+    // Regardez, c'est GLaDOS!
+    private static AIService ai;
 
     public static void main(String[] args){
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
         }
+
+        initAI();
 
         /**
          * Pour l'électron
@@ -85,6 +92,12 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
+            ai.start();
+
+            while(ai.getAgent() != null) {
+                Thread.sleep(5);
+            }
+
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
@@ -115,6 +128,110 @@ public class Main {
         Container.resetInstance();
     }
 
+    private static void initAI() {
+        // TODO: mettre la création du graphe à un autre endroit
+
+        Action paletsX6Action = new Action() {
+            private Vec2 position = new VectCartesian(0,800);
+            private boolean executed = false;
+
+            {
+                effects.put("PaletsX6", true);
+            }
+
+            @Override
+            public double getCost(EnvironmentInfo info) {
+                return info.getXYO().getPosition().distanceTo(position) + Math.abs(info.getXYO().getPosition().angleTo(position));
+            }
+
+            @Override
+            public void perform(EnvironmentInfo info) {
+                ScriptNamesMaster.PALETS6.getScript().goToThenExecute(0);
+                executed = true;
+            }
+
+            @Override
+            public boolean isComplete(EnvironmentInfo info) {
+                return executed;
+            }
+
+            @Override
+            public boolean requiresMovement(EnvironmentInfo info) {
+                return true;
+            }
+
+            @Override
+            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+                targetPos.set(position);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+
+            @Override
+            public String toString() {
+                return "palets x6";
+            }
+        };
+
+        Action paletsX3Action = new Action() {
+            private Vec2 position = new VectCartesian(1375,1700);
+            private boolean executed;
+
+            {
+                effects.put("PaletsX3", true);
+            }
+
+            @Override
+            public double getCost(EnvironmentInfo info) {
+                return info.getXYO().getPosition().distanceTo(position) + Math.abs(info.getXYO().getPosition().angleTo(position));
+            }
+
+            @Override
+            public void perform(EnvironmentInfo info) {
+                ScriptNamesMaster.PALETS3.getScript().goToThenExecute(0);
+                executed = true;
+            }
+
+            @Override
+            public boolean isComplete(EnvironmentInfo info) {
+                return executed;
+            }
+
+            @Override
+            public boolean requiresMovement(EnvironmentInfo info) {
+                return true;
+            }
+
+            @Override
+            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+                targetPos.set(position);
+            }
+
+            @Override
+            public void reset() {
+
+            }
+
+            @Override
+            public String toString() {
+                return "palets x3";
+            }
+        };
+        ActionGraph graph = ai.getGraph();
+        Agent agent = ai.getAgent();
+        graph.node(paletsX6Action);
+        graph.node(paletsX3Action);
+
+        Map<String, Object> goalState = new HashMap<>();
+        goalState.put("PaletsX6", true);
+        goalState.put("PaletsX3", true);
+        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState);
+        agent.setCurrentGoal(goal);
+    }
+
     private static void initServices(){
         container = Container.getInstance("robot.Master");
         try {
@@ -128,6 +245,7 @@ public class Main {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = container.getService(Master.class);
+            ai = container.getService(AIService.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

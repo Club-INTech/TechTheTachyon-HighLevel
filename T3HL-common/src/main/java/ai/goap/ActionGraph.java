@@ -92,7 +92,8 @@ public class ActionGraph {
      * Planifies la meilleure (théoriquement) trajectoire à travers le graphe pour réussir son but
      */
     public Stack<Node> plan(EnvironmentInfo info, EnvironmentInfo goal) {
-        Node startNode = new Node(null /* TODO */);
+        Log.AI.debug("Début de la planification");
+        Node startNode = new Node(null);
 
         for (Node node : nodes) {
             node.reset();
@@ -142,6 +143,7 @@ public class ActionGraph {
                 }
             }
         }
+
         return foundAtLeastOnePath;
     }
 

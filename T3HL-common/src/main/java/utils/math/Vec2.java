@@ -295,4 +295,10 @@ public abstract class Vec2 {
         this.a = this.computeAngle();
         this.r = this.computeRay();
     }
+
+    public double angleTo(Vec2 other) {
+        double dx = other.getX() - getX();
+        double dy = other.getY() - getY();
+        return Math.atan2(dy, dx);
+    }
 }
