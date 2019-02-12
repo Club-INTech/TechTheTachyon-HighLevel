@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public abstract class Agent {
 
-    private double distanceTolerance = 10.0;
+    private double squaredDistanceTolerancy = 100.0;
 
     private final FiniteStateMachine fsm;
 
@@ -106,15 +106,15 @@ public abstract class Agent {
      * Etat Moving: l'agent est en train de se déplacer
      */
     private void updateMovingState(FiniteStateMachine fsm, EnvironmentInfo info) {
-        if(info.getCurrentPosition().distanceTo(targetPosition) <= distanceTolerance) {
+        if(info.getCurrentPosition().squaredDistanceTo(targetPosition) <= squaredDistanceTolerancy) {
             fsm.popState(); // on a fini le mouvement, on passe à l'état d'après
         } else { // on a toujours pas atteint la position
             synchronized (movementErrors) {
                 if(!movementErrors.isEmpty()) { // on a eu un problème dans le mouvement, on arrête le mouvement et on reréfléchi
                     Log.AI.critical("Impossible de finir le mouvement");
-                    Log.AI.debug("[=== Erreur dans le mouvement à cause des erreurs suivantes: ===]");
+                    Log.AI.debug("Erreur dans le mouvement à cause des erreurs suivantes:");
                     for(Exception error : movementErrors) {
-                        Log.AI.debug("\t-"+error);
+                        Log.AI.debug("\t- "+error);
                     }
                     fsm.popState();
                     movementErrors.clear();
@@ -126,10 +126,9 @@ public abstract class Agent {
     }
 
     private void tryToMoveTo(Vec2 position) {
-        if(previousTargetPosition.distanceTo(position) > distanceTolerance) { // nouvelle position!
+        if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
             Log.AI.debug("Envoi de l'ordre de déplacement vers la position "+position);
             orderMove(position);
-            // TODO: envoyer l'ordre de mouvement
         }
         previousTargetPosition.setXY(position.getX(), position.getY());
     }
@@ -166,7 +165,7 @@ public abstract class Agent {
     private boolean checkNotInRange(ActionGraph.Node node, EnvironmentInfo info) {
         Vec2 target = new VectCartesian(0,0);
         node.updateTargetPosition(info, target);
-        return info.getCurrentPosition().distanceTo(target) > distanceTolerance;
+        return info.getCurrentPosition().squaredDistanceTo(target) > squaredDistanceTolerancy;
     }
 
     public void step() {
@@ -183,12 +182,12 @@ public abstract class Agent {
         }
     }
 
-    public double getDistanceTolerance() {
-        return distanceTolerance;
+    public double getSquaredDistanceTolerancy() {
+        return squaredDistanceTolerancy;
     }
 
-    public void setDistanceTolerance(double distanceTolerance) {
-        this.distanceTolerance = distanceTolerance;
+    public void setSquaredDistanceTolerancy(double squaredDistanceTolerancy) {
+        this.squaredDistanceTolerancy = squaredDistanceTolerancy;
     }
 
     public Stack<ActionGraph.Node> getCurrentPlan() {

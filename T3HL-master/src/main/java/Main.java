@@ -17,6 +17,7 @@
  **/
 
 import ai.AIService;
+import ai.ScriptAction;
 import ai.goap.Action;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
@@ -27,6 +28,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
+import locomotion.Pathfinder;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -67,7 +69,11 @@ public class Main {
             initSimulator();
         }
 
-        initAI();
+        try {
+            initAI();
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
 
         /**
          * Pour l'électron
@@ -128,96 +134,18 @@ public class Main {
         Container.resetInstance();
     }
 
-    private static void initAI() {
+    private static void initAI() throws ContainerException {
         // TODO: mettre la création du graphe à un autre endroit
 
-        Action paletsX6Action = new Action() {
-            private Vec2 position = new VectCartesian(0,800);
-            private boolean executed = false;
-
+        Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0, container.getService(Pathfinder.class), table) {
             {
                 effects.put("PaletsX6", true);
             }
-
-            @Override
-            public double getCost(EnvironmentInfo info) {
-                return info.getXYO().getPosition().distanceTo(position) + Math.abs(info.getXYO().getPosition().angleTo(position));
-            }
-
-            @Override
-            public void perform(EnvironmentInfo info) {
-                ScriptNamesMaster.PALETS6.getScript().goToThenExecute(0);
-                executed = true;
-            }
-
-            @Override
-            public boolean isComplete(EnvironmentInfo info) {
-                return executed;
-            }
-
-            @Override
-            public boolean requiresMovement(EnvironmentInfo info) {
-                return true;
-            }
-
-            @Override
-            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
-                targetPos.set(position);
-            }
-
-            @Override
-            public void reset() {
-
-            }
-
-            @Override
-            public String toString() {
-                return "palets x6";
-            }
         };
 
-        Action paletsX3Action = new Action() {
-            private Vec2 position = new VectCartesian(1375,1700);
-            private boolean executed;
-
+        Action paletsX3Action = new ScriptAction(ScriptNamesMaster.PALETS3, 0, container.getService(Pathfinder.class), table) {
             {
                 effects.put("PaletsX3", true);
-            }
-
-            @Override
-            public double getCost(EnvironmentInfo info) {
-                return info.getXYO().getPosition().distanceTo(position) + Math.abs(info.getXYO().getPosition().angleTo(position));
-            }
-
-            @Override
-            public void perform(EnvironmentInfo info) {
-                ScriptNamesMaster.PALETS3.getScript().goToThenExecute(0);
-                executed = true;
-            }
-
-            @Override
-            public boolean isComplete(EnvironmentInfo info) {
-                return executed;
-            }
-
-            @Override
-            public boolean requiresMovement(EnvironmentInfo info) {
-                return true;
-            }
-
-            @Override
-            public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
-                targetPos.set(position);
-            }
-
-            @Override
-            public void reset() {
-
-            }
-
-            @Override
-            public String toString() {
-                return "palets x3";
             }
         };
         ActionGraph graph = ai.getGraph();

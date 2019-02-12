@@ -37,7 +37,11 @@ public class EnvironmentInfo {
     public EnvironmentInfo copyWithEffects(Map<String, Object> effects) {
         Map<String, Object> newState = new HashMap<>(state);
         newState.putAll(effects);
-        return new EnvironmentInfo(xyo, newState);
+        XYO newXYO = null;
+        if(xyo != null) {
+            newXYO = new XYO(xyo.getPosition(), xyo.getOrientation());
+        }
+        return new EnvironmentInfo(newXYO, newState);
     }
 
     public boolean isMetByState(EnvironmentInfo other) {

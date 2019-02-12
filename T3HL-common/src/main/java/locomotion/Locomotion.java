@@ -215,7 +215,9 @@ public class Locomotion implements Service {
                 }
                 graphe.setUpdated(false);
             } catch (NoPathFound e) {
-                // TODO : Compéter
+                // TODO : Compléter
+                e.printStackTrace();
+                throw new UnableToMoveException(new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
             }
         }
         graphe.writeLock().lock();

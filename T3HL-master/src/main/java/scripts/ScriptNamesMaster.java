@@ -32,6 +32,7 @@ public enum ScriptNamesMaster implements ScriptNames {
         this.aClass=aClass;
     }
 
+    @Override
     public Script getScript() {
         return script;
     }

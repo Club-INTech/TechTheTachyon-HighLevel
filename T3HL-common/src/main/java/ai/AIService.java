@@ -1,19 +1,11 @@
 package ai;
 
-import ai.goap.Action;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
-import ai.goap.EnvironmentInfo;
-import data.XYO;
 import locomotion.Locomotion;
 import pfg.config.Config;
 import utils.Log;
 import utils.container.Service;
-import utils.math.Vec2;
-import utils.math.VectCartesian;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static data.controlers.Listener.TIME_LOOP;
 

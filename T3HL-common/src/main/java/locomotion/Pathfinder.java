@@ -114,7 +114,7 @@ public class Pathfinder implements Service {
             closedList.add(currentNode);
         }
 
-        throw new NoPathFound(aim.getPosition());
+        throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
 
     /**
@@ -137,4 +137,9 @@ public class Pathfinder implements Service {
     public void updateConfig(Config config) {
 
     }
+
+    public Graphe getGraphe() {
+        return graphe;
+    }
+
 }

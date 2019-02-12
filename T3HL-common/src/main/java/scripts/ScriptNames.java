@@ -26,4 +26,6 @@ package scripts;
 public interface ScriptNames {
     @Override
     String toString();
+
+    Script getScript();
 }

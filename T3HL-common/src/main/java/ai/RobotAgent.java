@@ -5,6 +5,7 @@ import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
 import data.XYO;
 import locomotion.Locomotion;
+import locomotion.NoPathFound;
 import locomotion.UnableToMoveException;
 import robot.Robot;
 import utils.math.Vec2;
@@ -35,9 +36,9 @@ public class RobotAgent extends Agent {
     protected void orderMove(Vec2 position) {
         try {
             locomotion.moveToPoint(position);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-            reportMovementError(e); // on transmet l'erreur au système de déplacement de l'agent
+        } catch (UnableToMoveException unableToMove) {
+            unableToMove.printStackTrace();
+            reportMovementError(unableToMove); // on transmet l'erreur au système de déplacement de l'agent
         }
     }
 }

@@ -125,9 +125,14 @@ public class ActionGraph {
     private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
         boolean foundAtLeastOnePath = false;
         for(Node actionNode : usableNodes) {
+            Log.AI.debug("Testing "+actionNode.getAction());
             if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
+                Log.AI.debug("Can be executed: "+actionNode.getAction());
                 EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction().effects);
-
+                if(actionNode.requiresMovement(newState)) {
+                    actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
+                    // TODO: angle
+                }
                 if(goal.isMetByState(newState)) {
                     double runningCost = parent.runningCost + actionNode.getCost(info);
                     path.add(actionNode.cloneWithParent(parent, runningCost));

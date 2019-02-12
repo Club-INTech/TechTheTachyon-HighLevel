@@ -34,10 +34,21 @@ public class NoPathFound extends Exception {
     private Vec2 aim;
 
     /**
+     * Point à partir duquel on part
+     */
+    private Vec2 start;
+
+    /**
      * @param aim   point de visé du pathfinder
      */
-    public NoPathFound(Vec2 aim) {
+    public NoPathFound(Vec2 start, Vec2 aim) {
+        super(start+" -> "+aim);
+        this.start = start;
         this.aim = aim;
+    }
+
+    public Vec2 getStart() {
+        return start;
     }
 
     /**

@@ -1,5 +1,6 @@
 package ai.goap;
 
+import utils.Log;
 import utils.math.Vec2;
 
 import java.util.HashMap;
@@ -19,9 +20,12 @@ public abstract class Action {
     public boolean arePreconditionsMet(EnvironmentInfo info) {
         for(Map.Entry<String, Object> entry : preconditions.entrySet()) {
             Object requiredState = info.getState().get(entry.getKey());
-            if(requiredState == null && entry.getValue() != null)
+            if(requiredState == null && entry.getValue() != null) {
+                Log.AI.debug("failed to meet precondition: "+entry.getKey());
                 return false;
+            }
             if( ! requiredState.equals(entry.getValue())) { // une condition n'est pas remplie
+                Log.AI.debug("failed to meet precondition: "+entry.getKey());
                 return false;
             }
         }
