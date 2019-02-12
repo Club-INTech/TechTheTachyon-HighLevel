@@ -84,6 +84,10 @@ public abstract class Agent {
     protected abstract EnvironmentInfo gatherEnvironmentInformation();
     protected abstract void orderMove(Vec2 position);
 
+    protected void onPlanUpdated(EnvironmentInfo info) {
+
+    }
+
     /**
      * Etat Idle: on réflechit aux prochaines actions
      */
@@ -97,6 +101,7 @@ public abstract class Agent {
            fsm.popState(); // on retire l'état idle courant
            this.currentPlan = plan;
            fsm.pushState(this.performingState);
+           onPlanUpdated(info);
         } else { // pas de plan, on continue de réfléchir
            ;
         }

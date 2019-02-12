@@ -56,7 +56,7 @@ public class Pathfinder implements Service {
      * Construit un pathfinder
      * @param graphe    graphe paramétrant la table
      */
-    private Pathfinder(Graphe graphe) {
+    public Pathfinder(Graphe graphe) {
         this.graphe = graphe;
         this.openList = new PriorityQueue<>(new ComparatorNode());
         this.closedList = new ArrayList<>();

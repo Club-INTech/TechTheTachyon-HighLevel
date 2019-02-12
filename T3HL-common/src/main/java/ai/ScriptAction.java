@@ -6,7 +6,6 @@ import data.Graphe;
 import data.Table;
 import data.graphe.Node;
 import locomotion.NoPathFound;
-import locomotion.Pathfinder;
 import scripts.Script;
 import scripts.ScriptNames;
 import utils.Log;
@@ -34,21 +33,16 @@ public class ScriptAction extends Action {
      */
     private final int version;
 
-    private final Pathfinder pathfinder;
-    private final Table table;
-
     /**
      * Le script a-t-il été exécuté?
      */
     private boolean executed;
 
-    public ScriptAction(ScriptNames scriptName, int version, Pathfinder pathfinder, Table table) {
-        this(scriptName, version, pathfinder, table, 0.0);
+    public ScriptAction(ScriptNames scriptName, int version) {
+        this(scriptName, version, 0.0);
     }
 
-    public ScriptAction(ScriptNames scriptName, int version, Pathfinder pathfinder, Table table, double baseCost) {
-        this.table = table;
-        this.pathfinder = pathfinder;
+    public ScriptAction(ScriptNames scriptName, int version, double baseCost) {
         this.baseCost = baseCost;
         this.version = version;
         this.scriptName = scriptName;
@@ -62,12 +56,13 @@ public class ScriptAction extends Action {
 
     private boolean checkPath(EnvironmentInfo info) {
         boolean result = false;
-        Graphe graph = pathfinder.getGraphe();
+        Graphe graph = info.getSpectre().getSimulatedGraph();
         Vec2 entryPos = script.entryPosition(version).getCenter();
         graph.writeLock().lock();
         Vec2 currentPos = info.getCurrentPosition();
         Node start = graph.addProvisoryNode(currentPos);
         Node aim = graph.addProvisoryNode(entryPos);
+        Table table = info.getSpectre().getSimulatedTable();
 
         if (table.isPositionInFixedObstacle(entryPos) || table.isPositionInFixedObstacle(currentPos)) {
             Log.LOCOMOTION.warning("Points de départ " + currentPos + " ou d'arrivée " + entryPos + " dans un obstacle");
@@ -75,7 +70,7 @@ public class ScriptAction extends Action {
         graph.writeLock().unlock();
         try {
             graph.readLock().lock();
-            pathfinder.findPath(start, aim);
+            info.getSpectre().getSimulationPathfinder().findPath(start, aim);
             result = true;
         } catch (NoPathFound f) {
             System.out.println(">> "+toString());

@@ -1,5 +1,7 @@
 package ai.goap;
 
+import ai.SpectreRobot;
+import data.Table;
 import data.XYO;
 import utils.math.Vec2;
 
@@ -12,10 +14,12 @@ import java.util.Map;
 public class EnvironmentInfo {
     private final Map<String, Object> state;
     private final XYO xyo;
+    private final SpectreRobot robot;
 
-    public EnvironmentInfo(XYO xyo, Map<String, Object> state) {
+    public EnvironmentInfo(XYO xyo, Map<String, Object> state, SpectreRobot robot) {
         this.state = state;
         this.xyo = xyo;
+        this.robot = robot;
     }
 
     public Map<String, Object> getState() {
@@ -41,7 +45,7 @@ public class EnvironmentInfo {
         if(xyo != null) {
             newXYO = new XYO(xyo.getPosition(), xyo.getOrientation());
         }
-        return new EnvironmentInfo(newXYO, newState);
+        return new EnvironmentInfo(newXYO, newState, robot == null ? null : robot.deepCopy());
     }
 
     public boolean isMetByState(EnvironmentInfo other) {
@@ -50,5 +54,9 @@ public class EnvironmentInfo {
                 return false;
         }
         return true;
+    }
+
+    public SpectreRobot getSpectre() {
+        return robot;
     }
 }

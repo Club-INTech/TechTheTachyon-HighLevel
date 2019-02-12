@@ -203,7 +203,7 @@ public class Table implements Service {
      * Met à jour la table à partir d'une liste de points représentant le centre les obstacles détectés
      * @param points    liste des centres des obstacles
      */
-    public void updateMobileObstacles(ArrayList<Vec2> points) {
+    public void updateMobileObstacles(List<Vec2> points) {
         MobileCircularObstacle obstacle;
         Iterator<Vec2> pointIterator = points.iterator();
         Vec2 point;

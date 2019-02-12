@@ -235,4 +235,12 @@ public class Locomotion implements Service {
     public void updateConfig(Config config) {
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
     }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public Graphe getGraphe() {
+        return graphe;
+    }
 }

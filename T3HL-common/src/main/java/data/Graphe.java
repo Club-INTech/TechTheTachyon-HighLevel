@@ -93,7 +93,7 @@ public class Graphe implements Service {
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
      * @param table la table à paramétrer
      */
-    private Graphe(Table table) {
+    public Graphe(Table table) {
         this.table = table;
         table.setGraphe(this);
         this.fixedObstacles = table.getFixedObstacles();
@@ -198,7 +198,7 @@ public class Graphe implements Service {
     /**
      * Met à jour la disponibilité des arrêtes en fonction des obstacles mobiles
      */
-    void update() {
+    public void update() {
         Log.LIDAR.debug("Mise à jour du graphe...");
         int counter = 0;
         synchronized (mobileCircularObstacles) {

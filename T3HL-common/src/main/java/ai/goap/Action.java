@@ -32,6 +32,13 @@ public abstract class Action {
         return true;
     }
 
+    /**
+     * Méthode utile pour simuler le retrait de palets par exemple
+     */
+    protected void applyChangesToEnvironment(EnvironmentInfo info) {
+
+    }
+
     public Map<String, Object> getEffects() {
         return effects;
     }

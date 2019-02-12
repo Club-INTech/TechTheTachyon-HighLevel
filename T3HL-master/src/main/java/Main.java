@@ -137,13 +137,19 @@ public class Main {
     private static void initAI() throws ContainerException {
         // TODO: mettre la création du graphe à un autre endroit
 
-        Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0, container.getService(Pathfinder.class), table) {
+        Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0) {
             {
                 effects.put("PaletsX6", true);
             }
         };
 
-        Action paletsX3Action = new ScriptAction(ScriptNamesMaster.PALETS3, 0, container.getService(Pathfinder.class), table) {
+        Action paletsX3Action = new ScriptAction(ScriptNamesMaster.PALETS3, 0) {
+            {
+                effects.put("PaletsX3", true);
+            }
+        };
+
+        Action zoneDepart = new ScriptAction(ScriptNamesMaster.PALETS_ZONE_DEPART, 0) {
             {
                 effects.put("PaletsX3", true);
             }
@@ -156,7 +162,7 @@ public class Main {
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("PaletsX6", true);
         goalState.put("PaletsX3", true);
-        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState);
+        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
         agent.setCurrentGoal(goal);
     }
 
