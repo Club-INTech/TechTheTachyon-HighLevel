@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018, INTech.
+ * Copyright (c) 2019, INTech.
  * this file is part of INTech's HighLevel.
 
  * INTech's HighLevel is free software: you can redistribute it and/or modify
