@@ -1,4 +1,5 @@
 import connection.Connection;
+import data.Palet;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.communication.CommunicationException;
@@ -25,6 +26,10 @@ public class CommunicationWithBuddy implements Service {
                 ef.printStackTrace();
             }
         }
+    }
+
+    public void paletPris(Palet palet){
+        this.sendString("Palet "+palet.getId()+"pris");
     }
 
     @Override

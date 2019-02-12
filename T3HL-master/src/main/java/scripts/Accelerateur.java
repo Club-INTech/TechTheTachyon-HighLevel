@@ -1,5 +1,6 @@
 package scripts;
 
+import data.GameState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -11,6 +12,8 @@ import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
+
+import static data.GameState.GOLDENIUM_LIBERE;
 
 
 public class Accelerateur extends Script {
@@ -34,6 +37,7 @@ public class Accelerateur extends Script {
     private void actionBras(boolean cotedroite) {
         try{
             if(!cotedroite) {
+
                 robot.moveLengthwise(palet, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -52,7 +56,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 ((Master) robot).popPaletDroit();
             }
-    } catch (UnableToMoveException a){
+        } catch (UnableToMoveException a){
             a.printStackTrace();
         }
     }
@@ -71,8 +75,12 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             ((Master) robot).popPaletGauche();
             while (((Master) robot).getNbpaletsgauches() > 0) {
-              actionBras(false);
+                actionBras(false);
             }
+            /**
+             * Dire que le goldenium est libéré
+             */
+            GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(0);
             while(((Master) robot).getNbpaletsdroits() > 0){
                 actionBras(true);

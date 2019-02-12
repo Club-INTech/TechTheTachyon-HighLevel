@@ -41,6 +41,7 @@ public enum Log
     GRAPHE(true),
     HOOK(true),
     TABLE(true),
+    AI(true),
     ;
 
     /**
@@ -165,7 +166,7 @@ public enum Log
             .append(":")
             .append(elem.getLineNumber())
             .append(" >>> ")
-            .append(message)
+            .append(message )
             .append(RESET);
             System.out.println(this.toLog.toString());
         }

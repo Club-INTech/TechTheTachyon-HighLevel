@@ -34,6 +34,7 @@ import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
+import utils.math.VectPolar;
 
 public class Main {
 
@@ -71,12 +72,12 @@ public class Main {
             Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
+            Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
+
+
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
-
-            Vec2[] tabVecs = {new VectCartesian(0,1000)};
-            interfaceGraphique.setPointsToDraw(tabVecs);
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -99,6 +100,8 @@ public class Main {
              */
             table.removeFixedObstacle(table.zoneChaosDroite);
 
+
+            goldenium.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
             paletsx3.goToThenExecute(1);
             accelerateur.goToThenExecute(1);

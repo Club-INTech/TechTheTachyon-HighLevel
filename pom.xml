@@ -72,5 +72,6 @@
         <module>T3HL-master</module>
         <module>T3HL-slave</module>
         <module>T3HL-simulator</module>
+        <module>T3HL-ai</module>
     </modules>
 </project>
