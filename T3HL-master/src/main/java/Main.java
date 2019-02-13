@@ -151,17 +151,27 @@ public class Main {
 
         Action zoneDepart = new ScriptAction(ScriptNamesMaster.PALETS_ZONE_DEPART, 0) {
             {
-                effects.put("PaletsX3", true);
+                effects.put("ZoneDepart", true);
+            }
+
+            @Override
+            protected void applyChangesToEnvironment(EnvironmentInfo info) {
+                super.applyChangesToEnvironment(info);
+                Table table = info.getSpectre().getSimulatedTable();
+                table.removeFixedObstacle(table.paletRougeDroite);
+                table.removeFixedObstacle(table.paletVertDroite);
             }
         };
         ActionGraph graph = ai.getGraph();
         Agent agent = ai.getAgent();
         graph.node(paletsX6Action);
         graph.node(paletsX3Action);
+        graph.node(zoneDepart);
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("PaletsX6", true);
         goalState.put("PaletsX3", true);
+        goalState.put("ZoneDepart", true);
         EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
         agent.setCurrentGoal(goal);
     }

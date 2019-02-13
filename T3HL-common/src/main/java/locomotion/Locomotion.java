@@ -166,7 +166,7 @@ public class Locomotion implements Service {
          *   4. Clean le graphe : point d'arrivé & de départ
          */
         if (table.isPositionInFixedObstacle(point) || table.isPositionInFixedObstacle(xyo.getPosition())) {
-            Log.LOCOMOTION.warning("Points de départ " + xyo.getOrientation() + " ou d'arriver " + point + " dans un obstacle");
+            Log.LOCOMOTION.warning("Points de départ " + xyo.getPosition() + " ou d'arriver " + point + " dans un obstacle");
         }
 
         graphe.writeLock().lock();

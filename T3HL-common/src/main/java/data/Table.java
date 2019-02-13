@@ -172,7 +172,7 @@ public class Table implements Service {
          * Couleur représente la couleur de la zone se situant derrière le palet !
          */
 
-        /* FIXME: re-add
+        ///* FIXME: re-add
         Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000,450);
         Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre,199);
         this.addFixedObstacleNoGraphChange(paletRougeDroite);
@@ -201,7 +201,7 @@ public class Table implements Service {
         Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000,1050);
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre,199);
         this.addFixedObstacleNoGraphChange(paletBleuGauche);
-        this.paletBleuGauche=paletBleuGauche;*/
+        this.paletBleuGauche=paletBleuGauche;
     }
 
     /**
