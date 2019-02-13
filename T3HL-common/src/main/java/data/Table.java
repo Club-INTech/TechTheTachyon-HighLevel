@@ -57,8 +57,14 @@ public class Table implements Service {
     public Obstacle paletRougeGauche;
     public Obstacle paletBleuGauche;
     public Obstacle paletVertGauche;
-    public Obstacle zoneChaosDroite;
-    public Obstacle zoneChaosGauche;
+    public Obstacle paletRougeUnZoneChaosDroite;
+    public Obstacle paletRougeDeuxZoneChaosDroite;
+    public Obstacle paletVertZoneChaosDroite;
+    public Obstacle paletBleuZoneChaosDroite;
+    public Obstacle paletRougeUnZoneChaosGauche;
+    public Obstacle paletRougeDeuxZoneChaosGauche;
+    public Obstacle paletVertZoneChaosGauche;
+    public Obstacle paletBleuZoneChaosGauche;
 
     /**
      * Obstacle mobile simulé
@@ -123,7 +129,7 @@ public class Table implements Service {
      * Initialisation des obstacles fixes de la table
      */
     public void initObstacles() {
-        Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
+        /*Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
         Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
         this.addFixedObstacle(zoneChaosDroite);
         this.zoneChaosDroite=zoneChaosDroite;
@@ -131,7 +137,7 @@ public class Table implements Service {
         Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
         Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
         this.addFixedObstacle(zoneChaosGauche);
-        this.zoneChaosGauche=zoneChaosGauche;
+        this.zoneChaosGauche=zoneChaosGauche;*/
 
         Vec2 vecteurRampeCentre = new VectCartesian(0,1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
