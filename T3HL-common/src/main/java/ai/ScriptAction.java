@@ -29,6 +29,8 @@ import scripts.ScriptNames;
 import utils.Log;
 import utils.math.Vec2;
 
+import java.util.ArrayList;
+
 public class ScriptAction extends Action {
 
     /**
@@ -69,10 +71,11 @@ public class ScriptAction extends Action {
 
     @Override
     public boolean arePreconditionsMet(EnvironmentInfo info) {
-        return super.arePreconditionsMet(info) && checkPath(info);
+        return !executed && super.arePreconditionsMet(info) && checkPath(info);
     }
 
     private boolean checkPath(EnvironmentInfo info) {
+        Log.AI.debug("test pathfinding "+this);
         boolean result = false;
         Graphe graph = info.getSpectre().getSimulatedGraph();
         Vec2 entryPos = script.entryPosition(version).getCenter();
@@ -88,7 +91,12 @@ public class ScriptAction extends Action {
         graph.writeLock().unlock();
         try {
             graph.readLock().lock();
-            info.getSpectre().getSimulationPathfinder().findPath(start, aim);
+            ArrayList<Vec2> path = info.getSpectre().getSimulationPathfinder().findPath(start, aim);
+            Log.AI.debug("path length for "+this+" is "+path.size()+" "+currentPos+" -> "+entryPos);
+            Log.AI.debug("here's the path:");
+            for(Vec2 nodePos : path) {
+                Log.AI.debug("\t- "+nodePos);
+            }
             result = true;
         } catch (NoPathFound f) {
             System.out.println(">> "+toString());
@@ -111,7 +119,7 @@ public class ScriptAction extends Action {
 
     @Override
     public void perform(EnvironmentInfo info) {
-        script.goToThenExecute(version);
+     // TODO   script.goToThenExecute(version);
         executed = true;
     }
 

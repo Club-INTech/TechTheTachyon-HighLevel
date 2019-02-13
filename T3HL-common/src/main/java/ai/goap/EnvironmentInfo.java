@@ -56,14 +56,15 @@ public class EnvironmentInfo {
         return xyo.getOrientation();
     }
 
-    public EnvironmentInfo copyWithEffects(Map<String, Object> effects) {
+    public EnvironmentInfo copyWithEffects(Action actionWithEffects) {
         Map<String, Object> newState = new HashMap<>(state);
-        newState.putAll(effects);
         XYO newXYO = null;
         if(xyo != null) {
-            newXYO = new XYO(xyo.getPosition(), xyo.getOrientation());
+            newXYO = new XYO(xyo.getPosition().clone(), xyo.getOrientation());
         }
-        return new EnvironmentInfo(newXYO, newState, robot == null ? null : robot.deepCopy());
+        EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot == null ? null : robot.deepCopy());
+        actionWithEffects.applyChangesToEnvironment(newInfo);
+        return newInfo;
     }
 
     public boolean isMetByState(EnvironmentInfo other) {

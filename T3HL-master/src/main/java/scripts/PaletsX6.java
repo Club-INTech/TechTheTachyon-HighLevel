@@ -37,9 +37,9 @@ public class PaletsX6 extends Script {
      Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
      */
         if (version == 0) {
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
+            positions.add(new VectCartesian(0, 500));
+            positions.add(new VectCartesian(0, 500));
+            positions.add(new VectCartesian(0, 500));
         } else if (version == 1) {
             positions.add(new VectCartesian(0, 800));
             positions.add(new VectCartesian(0, 800));
@@ -85,7 +85,7 @@ public class PaletsX6 extends Script {
     public Shape entryPosition(Integer version) {
 
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1050,900), 5);
             return positionEntree;
         }
         else if (version == 1) {

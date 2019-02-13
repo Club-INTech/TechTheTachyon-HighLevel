@@ -54,7 +54,7 @@ public abstract class Action {
      * Méthode utile pour simuler le retrait de palets par exemple
      */
     protected void applyChangesToEnvironment(EnvironmentInfo info) {
-
+        info.getState().putAll(effects);
     }
 
     public Map<String, Object> getEffects() {

@@ -22,6 +22,7 @@ import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import locomotion.Locomotion;
 import pfg.config.Config;
+import utils.Container;
 import utils.Log;
 import utils.container.Service;
 
@@ -32,12 +33,15 @@ public class AIService extends Thread implements Service {
     private final Locomotion locomotion;
     private final ActionGraph graph;
     private final RobotAgent agent;
+    private final SpectreRobot spectre;
+    private final Config config;
 
-    public AIService(Locomotion locomotion) {
+    public AIService(Container container, Locomotion locomotion) {
+        this.config = container.getConfig();
         this.locomotion = locomotion;
         this.graph = new ActionGraph();
 
-        SpectreRobot spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable()); // TODO
+        this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config); // TODO
         this.agent = new RobotAgent(locomotion, graph, spectre);
     }
 
@@ -57,6 +61,7 @@ public class AIService extends Thread implements Service {
 
     @Override
     public void updateConfig(Config config) {
+        spectre.updateConfig(config);
         // TODO: utiliser la config pour changer la valeur de distanceTolerance dans Agent
     }
 

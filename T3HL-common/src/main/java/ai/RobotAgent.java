@@ -24,6 +24,7 @@ import ai.goap.EnvironmentInfo;
 import data.XYO;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
+import utils.Log;
 import utils.math.Vec2;
 
 import java.util.HashMap;
@@ -47,6 +48,12 @@ public class RobotAgent extends Agent {
 
     @Override
     protected void onPlanUpdated(EnvironmentInfo info) {
+        if(getCurrentPlan() != null) {
+            Log.AI.debug("Nouveau plan:");
+            for(ActionGraph.Node actionNode: getCurrentPlan()) {
+                Log.AI.debug("\t- "+actionNode.getAction());
+            }
+        }
         spectre.comeBackToReality(); // resynchronise le spectre sur les valeurs réelles
     }
 

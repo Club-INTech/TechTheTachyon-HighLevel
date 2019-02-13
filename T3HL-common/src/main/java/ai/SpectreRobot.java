@@ -21,6 +21,8 @@ package ai;
 import data.Graphe;
 import data.Table;
 import locomotion.Pathfinder;
+import pfg.config.Config;
+import utils.Log;
 import utils.math.Vec2;
 
 import java.util.List;
@@ -33,21 +35,25 @@ public class SpectreRobot {
     private final Table baseTable;
     private final Graphe fakeGraphe;
     private final Table fakeTable;
+    private final Config config;
 
-    public SpectreRobot(Graphe baseGraphe, Table baseTable) {
+    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config) {
         this.baseGraphe = baseGraphe;
         this.baseTable = baseTable;
+        this.config = config;
 
         this.fakeTable = new Table();
-
         this.fakeGraphe = new Graphe(fakeTable);
 
+        updateConfig(config);
         copyFromBase(fakeGraphe, fakeTable);
-        this.spectrePathfinder = new Pathfinder(baseGraphe);
+
+        this.spectrePathfinder = new Pathfinder(fakeGraphe);
     }
 
     public SpectreRobot deepCopy() {
-        SpectreRobot copy = new SpectreRobot(baseGraphe, baseTable);
+        SpectreRobot copy = new SpectreRobot(fakeGraphe, fakeTable, config); // la copie doit partir de l'état de ce spectre
+        //SpectreRobot copy = new SpectreRobot(baseGraphe, baseTable);
         // TODO
         return copy;
     }
@@ -61,18 +67,19 @@ public class SpectreRobot {
     }
 
     public void copyFromBase(Graphe baseGraphe, Table baseTable) {
+        Log.AI.debug("Copie à partir de la base");
         List<Vec2> mobileObstacles = baseTable.getMobileObstacles().stream()
                 .map(t -> t.getShape().getCenter())
                 .collect(Collectors.toList());
-
-        fakeGraphe.getNodes().clear();
-        fakeGraphe.getNodes().addAll(baseGraphe.getNodes());
-        fakeGraphe.getRidges().clear();
-        fakeGraphe.getRidges().addAll(baseGraphe.getRidges());
-
         fakeTable.getFixedObstacles().clear();
         fakeTable.getFixedObstacles().addAll(baseTable.getFixedObstacles());
+        fakeTable.updateTableAfterFixedObstaclesChanges();
         fakeTable.updateMobileObstacles(mobileObstacles);
+    }
+
+    public void updateConfig(Config config) {
+        fakeTable.updateConfig(config);
+        fakeGraphe.updateConfig(config);
     }
 
     public Graphe getSimulatedGraph() {

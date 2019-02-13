@@ -29,7 +29,7 @@ import java.util.Stack;
 
 public abstract class Agent {
 
-    private double squaredDistanceTolerancy = 100.0;
+    private double squaredDistanceTolerancy = 10.0;
 
     private final FiniteStateMachine fsm;
 
@@ -43,8 +43,8 @@ public abstract class Agent {
      */
     private Stack<ActionGraph.Node> currentPlan;
 
-    private Vec2 targetPosition = new VectCartesian(0.0f, 0.0f);
-    private Vec2 previousTargetPosition = new VectCartesian(0.0f, 0.0f);
+    private Vec2 targetPosition = new VectCartesian(0, 0);
+    private Vec2 previousTargetPosition = new VectCartesian(0, 0);
 
     /**
      * Liste des erreurs dans le mouvement, mis à jour via #reportMovementError
@@ -114,6 +114,11 @@ public abstract class Agent {
             Log.AI.critical("Tentative de planification alors qu'il n'y a pas de but donné!");
             return;
         }
+        if(currentPlan != null && !currentPlan.isEmpty()) {
+            fsm.popState();
+            fsm.pushState(this.performingState);
+            return;
+        }
         Stack<ActionGraph.Node> plan = graph.plan(info, currentGoal);
         if(plan != null) { // on a un plan! \o/
            fsm.popState(); // on retire l'état idle courant
@@ -149,10 +154,10 @@ public abstract class Agent {
     }
 
     private void tryToMoveTo(Vec2 position) {
-        if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
+        //if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
             Log.AI.debug("Envoi de l'ordre de déplacement vers la position "+position);
             orderMove(position);
-        }
+        //}
         previousTargetPosition.setXY(position.getX(), position.getY());
     }
 
@@ -162,14 +167,17 @@ public abstract class Agent {
     private void updatePerformingState(FiniteStateMachine fsm, EnvironmentInfo info) {
         if(currentPlan != null && !currentPlan.isEmpty()) {
             ActionGraph.Node currentAction = currentPlan.peek();
-            Log.AI.debug("Performing "+currentAction.getAction());
-            if (currentAction.requiresMovement(info) && checkNotInRange(currentAction, info)) {
+            Log.AI.debug("Potentially Performing "+currentAction.getAction());
+            if(currentAction.requiresMovement(info)) {
                 currentAction.updateTargetPosition(info, targetPosition);
+            }
+            if (currentAction.requiresMovement(info) && checkNotInRange(currentAction, info)) {
+                Log.AI.debug(currentAction.getAction()+" has set target pos: "+targetPosition);
                 fsm.pushState(this.movingState);
             } else if (currentAction.checkCompletion(info)) {
+                Log.AI.debug("Fin de "+currentAction.getAction());
                 // on applique les effets de cette action
-                Map<String, Object> effects = currentAction.getAction().getEffects();
-                info.getState().putAll(effects);
+                currentAction.getAction().applyChangesToEnvironment(info);
                 currentPlan.pop(); // on retire l'action qui a fini
 
                 if (currentPlan.isEmpty()) {
@@ -177,6 +185,7 @@ public abstract class Agent {
                     fsm.pushState(this.idleState); // on retourne réfléchir
                 }
             } else {
+                Log.AI.debug("Performing "+currentAction.getAction());
                 currentAction.performAction(info);
             }
         } else {
@@ -186,9 +195,11 @@ public abstract class Agent {
     }
 
     private boolean checkNotInRange(ActionGraph.Node node, EnvironmentInfo info) {
-        Vec2 target = new VectCartesian(0,0);
-        node.updateTargetPosition(info, target);
-        return info.getCurrentPosition().squaredDistanceTo(target) > squaredDistanceTolerancy;
+/*        Vec2 target = new VectCartesian(0,0);
+        node.updateTargetPosition(info, target);*/
+        boolean notInRange = info.getCurrentPosition().squaredDistanceTo(targetPosition) > squaredDistanceTolerancy;
+        Log.AI.debug("Check range for action "+node.getAction()+": "+info.getCurrentPosition()+" <-> "+targetPosition+" => in range = "+!notInRange);
+        return notInRange;
     }
 
     public void step() {

@@ -92,6 +92,8 @@ public class Pathfinder implements Service {
             neighbours = currentNode.getNeighbours().keySet();
             for (Node neighbour : neighbours) {
                 Ridge ridge = currentNode.getNeighbours().get(neighbour);
+                if(ridge == null)
+                    continue; // TODO: trouver pourquoi ça arrive avec l'IA
                 // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
                 if (ridge.isReachable()) {
                     currentCost = currentNode.getCout() + ridge.getCost();

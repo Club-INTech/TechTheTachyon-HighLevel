@@ -124,6 +124,10 @@ public class ActionGraph {
             Log.AI.critical("Impossible de planifier des actions! Aucun chemin n'a été trouvé dans le graphe.");
             return null;
         }
+        if(path.isEmpty()) {
+            Log.AI.debug("But déjà atteint!");
+            return new Stack<>();
+        }
 
         Optional<Node> cheapest = path.stream()
                 .sorted(Comparator.comparingDouble(a -> a.runningCost))
@@ -141,12 +145,14 @@ public class ActionGraph {
     }
 
     private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+        if(goal.isMetByState(info)) // on est déjà arrivé au but!
+            return true;
         boolean foundAtLeastOnePath = false;
         for(Node actionNode : usableNodes) {
             Log.AI.debug("Testing "+actionNode.getAction());
             if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
                 Log.AI.debug("Can be executed: "+actionNode.getAction());
-                EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction().effects);
+                EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
                 actionNode.getAction().applyChangesToEnvironment(newState);
                 if(actionNode.requiresMovement(newState)) {
                     actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
