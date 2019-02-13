@@ -139,6 +139,48 @@ public class Table implements Service {
         this.addFixedObstacle(zoneChaosGauche);
         this.zoneChaosGauche=zoneChaosGauche;*/
 
+        Vec2 vecteurPaletRougeUnZoneChaosDroite = new VectCartesian(461,1050);
+        Obstacle paletRougeUnZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosDroite,219);
+        this.addFixedObstacle(paletRougeUnZoneChaosDroite);
+        this.paletRougeUnZoneChaosDroite=paletRougeUnZoneChaosDroite;
+
+        Vec2 vecteurPaletRougeDeuxZoneChaosDroite = new VectCartesian(539,1050);
+        Obstacle paletRougeDeuxZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosDroite,219);
+        this.addFixedObstacle(paletRougeDeuxZoneChaosDroite);
+        this.paletRougeDeuxZoneChaosDroite=paletRougeDeuxZoneChaosDroite;
+
+        Vec2 vecteurPaletRougeUnZoneChaosGauche = new VectCartesian(-461,1050);
+        Obstacle paletRougeUnZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosGauche,219);
+        this.addFixedObstacle(paletRougeUnZoneChaosGauche);
+        this.paletRougeUnZoneChaosGauche=paletRougeUnZoneChaosGauche;
+
+        Vec2 vecteurPaletRougeDeuxZoneChaosGauche = new VectCartesian(-539,1050);
+        Obstacle paletRougeDeuxZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosGauche,219);
+        this.addFixedObstacle(paletRougeDeuxZoneChaosGauche);
+        this.paletRougeDeuxZoneChaosGauche=paletRougeDeuxZoneChaosGauche;
+
+        Vec2 vecteurPaletVertZoneChaosDroite = new VectCartesian(500,1089);
+        Obstacle paletVertZoneChaosDroite = new StillCircularObstacle(vecteurPaletVertZoneChaosDroite,219);
+        this.addFixedObstacle(paletVertZoneChaosDroite);
+        this.paletVertZoneChaosDroite=paletVertZoneChaosDroite;
+
+        Vec2 vecteurPaletVertZoneChaosGauche = new VectCartesian(-500,1089);
+        Obstacle paletVertZoneChaosGauche = new StillCircularObstacle(vecteurPaletVertZoneChaosGauche,219);
+        this.addFixedObstacle(paletVertZoneChaosGauche);
+        this.paletVertZoneChaosGauche=paletVertZoneChaosGauche;
+
+        Vec2 vecteurPaletBleuZoneChaosDroite = new VectCartesian(500,1011);
+        Obstacle paletBleuZoneChaosDroite = new StillCircularObstacle(vecteurPaletBleuZoneChaosDroite,219);
+        this.addFixedObstacle(paletBleuZoneChaosDroite);
+        this.paletBleuZoneChaosDroite=paletBleuZoneChaosDroite;
+
+        Vec2 vecteurPaletBleuZoneChaosGauche = new VectCartesian(-500,1011);
+        Obstacle paletBleuZoneChaosGauche = new StillCircularObstacle(vecteurPaletBleuZoneChaosGauche,219);
+        this.addFixedObstacle(paletBleuZoneChaosGauche);
+        this.paletBleuZoneChaosGauche=paletBleuZoneChaosGauche;
+
+
+
         Vec2 vecteurRampeCentre = new VectCartesian(0,1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
         Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
