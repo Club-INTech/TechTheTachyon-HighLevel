@@ -168,6 +168,7 @@ public class Main {
                 Table table = info.getSpectre().getSimulatedTable();
                 table.removeFixedObstacle(table.paletRougeDroite);
                 table.removeFixedObstacle(table.paletVertDroite);
+                table.removeFixedObstacle(table.paletBleuDroite);
             }
         };
         ActionGraph graph = ai.getGraph();

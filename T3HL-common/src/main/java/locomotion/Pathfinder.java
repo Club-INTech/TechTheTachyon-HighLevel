@@ -76,7 +76,7 @@ public class Pathfinder implements Service {
         Set<Node> neighbours;
         int currentCost;
 
-        // On clean la liste des noeuds à visiter et on ajoute le noeud de départ
+        // On clean la liste des noeuds à visiter et celles des noeuds visités et on ajoute le noeud de départ
         closedList.clear();
         openList.clear();
         openList.add(start);
