@@ -111,6 +111,45 @@ public class Table implements Service {
         this.fixedObstacles = new ArrayList<>();
         this.mobileObstacles = new ArrayList<>();
         this.mobileObstacleBuffer = new ArrayList<>();
+
+        //
+
+        Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
+        Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
+        this.zoneChaosDroite=zoneChaosDroite;
+
+        Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
+        Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
+        this.zoneChaosGauche=zoneChaosGauche;
+
+        /**
+         * Couleur représente la couleur de la zone se situant derrière le palet !
+         */
+
+        ///* FIXME: re-add
+        Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000,450);
+        Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre,199);
+        this.paletRougeDroite=paletRougeDroite;
+
+        Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000,750);
+        Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre,199);
+        this.paletVertDroite=paletVertDroite;
+
+        Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000,1050);
+        Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre,199);
+        this.paletBleuDroite=paletBleuDroite;
+
+        Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000,450);
+        Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre,199);
+        this.paletRougeGauche=paletRougeGauche;
+
+        Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000,750);
+        Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre,199);
+        this.paletVertGauche=paletVertGauche;
+
+        Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000,1050);
+        Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre,199);
+        this.paletBleuGauche=paletBleuGauche;
     }
 
     /**
@@ -122,86 +161,51 @@ public class Table implements Service {
     }
 
     public void initObstaclesNoInit() {
-        Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
-        Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
-        this.addFixedObstacleNoGraphChange(zoneChaosDroite);
-        this.zoneChaosDroite=zoneChaosDroite;
-
-        Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
-        Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
-        this.addFixedObstacleNoGraphChange(zoneChaosGauche);
-        this.zoneChaosGauche=zoneChaosGauche;
-
         Vec2 vecteurRampeCentre = new VectCartesian(0,1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre,2100,422,180);
         Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
-        this.addFixedObstacleNoGraphChange(rampe);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750,1561);           //arrondi
         CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre,600,18,180);
         Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
-        this.addFixedObstacleNoGraphChange(paletSupportRampeDroite);
 
         Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750,1561);           //arrondi
         CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre,600,18,180);
         Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
-        this.addFixedObstacleNoGraphChange(paletSupportRampeGauche);
 
         Vec2 vecteurSeparationRampeCentre = new VectCartesian(0,1478);
         CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre,40,200,180);
         Obstacle separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
-        this.addFixedObstacleNoGraphChange(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0,18);                                 //arrondi
         CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre,2000,36,180);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
-        this.addFixedObstacleNoGraphChange(accelerateur);
 
         Vec2 vecteurGoldeniumDroiteCentre = new VectCartesian(736,46);
         CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre,102,22,180);
         Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
-        this.addFixedObstacleNoGraphChange(goldeniumDroite);
 
         Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736,46);
         CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre,102,22,180);
         Obstacle goldeniumGauche = new StillCircularRectangularObstacle(formeGoldeniumGauche);
+
+        this.addFixedObstacleNoGraphChange(rampe);
+        this.addFixedObstacleNoGraphChange(paletSupportRampeDroite);
+        this.addFixedObstacleNoGraphChange(paletSupportRampeGauche);
+        this.addFixedObstacleNoGraphChange(separationRampe);
+        this.addFixedObstacleNoGraphChange(accelerateur);
+        this.addFixedObstacleNoGraphChange(goldeniumDroite);
         this.addFixedObstacleNoGraphChange(goldeniumGauche);
 
 
-        /**
-         * Couleur représente la couleur de la zone se situant derrière le palet !
-         */
-
-        ///* FIXME: re-add
-        Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000,450);
-        Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre,199);
+        this.addFixedObstacleNoGraphChange(zoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(zoneChaosGauche);
         this.addFixedObstacleNoGraphChange(paletRougeDroite);
-        this.paletRougeDroite=paletRougeDroite;
-
-        Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000,750);
-        Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre,199);
         this.addFixedObstacleNoGraphChange(paletVertDroite);
-        this.paletVertDroite=paletVertDroite;
-
-        Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000,1050);
-        Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre,199);
         this.addFixedObstacleNoGraphChange(paletBleuDroite);
-        this.paletBleuDroite=paletBleuDroite;
-
-        Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000,450);
-        Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre,199);
         this.addFixedObstacleNoGraphChange(paletRougeGauche);
-        this.paletRougeGauche=paletRougeGauche;
-
-        Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000,750);
-        Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre,199);
         this.addFixedObstacleNoGraphChange(paletVertGauche);
-        this.paletVertGauche=paletVertGauche;
-
-        Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000,1050);
-        Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre,199);
         this.addFixedObstacleNoGraphChange(paletBleuGauche);
-        this.paletBleuGauche=paletBleuGauche;
     }
 
     /**

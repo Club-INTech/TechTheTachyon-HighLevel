@@ -43,6 +43,15 @@ public class SpectreRobot {
         this.config = config;
 
         this.fakeTable = new Table();
+        // copie des obstacles, oui c'est dégueulasse
+        fakeTable.paletRougeGauche = baseTable.paletRougeGauche;
+        fakeTable.paletRougeDroite = baseTable.paletRougeDroite;
+        fakeTable.paletVertDroite = baseTable.paletVertDroite;
+        fakeTable.paletBleuDroite = baseTable.paletBleuDroite;
+        fakeTable.paletVertGauche = baseTable.paletVertGauche;
+        fakeTable.paletBleuGauche = baseTable.paletBleuGauche;
+        fakeTable.zoneChaosDroite = baseTable.zoneChaosDroite;
+        fakeTable.zoneChaosGauche = baseTable.zoneChaosGauche;
         this.fakeGraphe = new Graphe(fakeTable);
 
         updateConfig(config);

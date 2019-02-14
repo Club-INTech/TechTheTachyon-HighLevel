@@ -153,7 +153,6 @@ public class ActionGraph {
             if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
                 Log.AI.debug("Can be executed: "+actionNode.getAction());
                 EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
-                actionNode.getAction().applyChangesToEnvironment(newState);
                 if(actionNode.requiresMovement(newState)) {
                     actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
                     // TODO: angle
