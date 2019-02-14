@@ -135,17 +135,16 @@ public abstract class Vec2 {
      * @return  la distance séparant les deux vecteurs
      */
     public double distanceTo(Vec2 other){
-        return Math.sqrt( squaredDistanceTo(other) );
+        return Math.sqrt( this.squaredDistanceTo(other) );
     }
 
     /**
-     * Distance au carré jusqu'à l'autre vecteur
-     * @param other l'autre vecteur
-     * @return la distance au carré
+     * @param other autre vecteur
+     * @return la distance au carré séparant les deux vecteurs
      */
-    public double squaredDistanceTo(Vec2 other) {
-        int x2 = (this.x - other.getX()) * (this.x - other.getX());
-        int y2 = (this.y - other.getY()) * (y - other.getY());
+    public double squaredDistanceTo(Vec2 other){
+        int x2=(this.x - other.getX()) * (this.x - other.getX());
+        int y2=(this.y - other.getY()) * (y - other.getY());
         return x2+y2;
     }
 

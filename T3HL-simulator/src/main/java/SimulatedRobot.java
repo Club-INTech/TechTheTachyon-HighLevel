@@ -6,6 +6,11 @@ import utils.math.VectPolar;
 
 public class SimulatedRobot {
 
+    //Attributs qui peuvent être modifiés avant le lancement
+    private float speedFactor;
+    private SimulatedConnectionManager simulatedLLConnectionManager;
+
+    //Attributs de déplacmeent
     private Vec2 position;          //Position actuelle du robot
     private double orientation;      //Orientation actuelle du robot
 
@@ -24,16 +29,19 @@ public class SimulatedRobot {
     private boolean forwardOrBackward;     //Vrai si le robot avance ou recule, faux sinon
     private boolean turning;    //Vrai si le robot tourne, faux sinon
 
-    private long lastUpdateTime;
-    private final int MILLIS_BETWEEN_UPDATES=10;
-
     private boolean previousMovingState = false;
     private boolean stoppedMovingFlag = false;
 
-    private SimulatedConnectionManager simulatedLLConnectionManager;
+    private long lastUpdateTime;
+    private final int MILLIS_BETWEEN_UPDATES=10;
 
+    //Permet de savoir si cette instance est démarrée
+    private boolean isLaunched;
+
+    /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    SimulatedRobot(SimulatedConnectionManager simulatedLLConnectionManager){
+    SimulatedRobot(){
+        this.initDefaultPassedParameters();
         this.lastUpdateTime=System.currentTimeMillis();
         this.forwardOrBackward=false;
         this.turning=false;
@@ -41,28 +49,77 @@ public class SimulatedRobot {
         this.positionTarget = START_POSITION;
         this.orientation = START_ORIENTATION;
         this.orientationTarget = START_ORIENTATION;
-        this.simulatedLLConnectionManager=simulatedLLConnectionManager;
+        this.isLaunched=false;
     }
 
-    /** Fonction appelée pour tryUpdate la position du robot */
-    void tryUpdate(){
-        if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
-            updateOrientation();
-            updatePosition();
-            tryRaiseStoppedMovingFlag();
-            trySendStoppedMovingMessage();
-            if (this.isMoving()) {
-                sendRealtimePosition();
-            }
-            this.lastUpdateTime = System.currentTimeMillis();
+    /* ================================== Passage et initialisation de paramètres ============================= */
+    /** Méthode instanciant tous les attributs nécessaires au bon fonctionnement d'un robot simulé
+     *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
+     */
+    private void initDefaultPassedParameters(){
+        this.speedFactor=1;
+        this.simulatedLLConnectionManager = null;
+    }
+
+    /** Set le facteur de vitesse de déplacement du robot
+     * TODO : facteur de vitesse de déroulement du match
+     * @param speedFactor
+     */
+    void setSpeedFactor(float speedFactor){
+        if (canParametersBePassed()) {
+            this.speedFactor = speedFactor;
         }
     }
 
+    /** Set la connexion qui utilisée pour envoyer des messages venant du LL vers le HL
+     * @param simulatedLLConnectionManager connexion en question
+     */
+    void setSimulatedLLConnectionManager(SimulatedConnectionManager simulatedLLConnectionManager){
+        if (canParametersBePassed()) {
+            this.simulatedLLConnectionManager = simulatedLLConnectionManager;
+        }
+    }
+
+    /** Permet de savoir si on a lancé le robot simulé
+     */
+    private boolean canParametersBePassed(){
+        if (this.isLaunched){
+            System.out.println("SIMULATEUR : On ne peut pas passer de paramètres au robot simulé lorsqu'il est déjà lancé");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    /* ======================================== Lancement de l'instance ======================================== */
+    /** Lance le manager du simulateur */
+    void launch(){
+        this.isLaunched=true;
+        System.out.println(String.format("(%d) Robot simulé démarré", this.simulatedLLConnectionManager.getPort()));
+    }
+
+    /* ======================================== Méthode d'update général ======================================= */
+    /** Fonction appelée pour tryUpdate la position du robot */
+    void tryUpdate(){
+        if (this.isLaunched) {
+            if (this.timeSinceLastUpdate() > this.MILLIS_BETWEEN_UPDATES) {
+                updateOrientation();
+                updatePosition();
+                tryRaiseStoppedMovingFlag();
+                trySendStoppedMovingMessage();
+                if (this.isMoving()) {
+                    sendRealtimePosition();
+                }
+                this.lastUpdateTime = System.currentTimeMillis();
+            }
+        }
+    }
+
+    /* =============================== Méthodes de signalisation d'arrêt du robot ============================== */
     /** Force the raise of the stoppedMovingFlag */
     public void forceRaiseStoppedMovingFlag(){
         this.stoppedMovingFlag=true;
     }
-
 
     /** Try to raise stoppedMovingFlag */
     private void tryRaiseStoppedMovingFlag() {
@@ -84,14 +141,21 @@ public class SimulatedRobot {
         }
     }
 
+    /** Renvoie si le robot bouge */
+    private boolean isMoving(){
+        return this.turning || this.forwardOrBackward;
+    }
+
+    /* =============================== Méthodes d'envoide la position du robot ============================== */
     /** Envoie la position à l'instance de HL qui est en relation avec ce robot simulé */
     private void sendRealtimePosition(){
         this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.3f\n", Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",", "."));
     }
 
+    /* ======================== Méthodes de mise à jour de la position et de l'orientation ================== */
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
-        if (Math.abs(this.orientationTarget - this.orientation) > this.ORIENTATION_TOLERANCE){
+        if (Math.abs(moduloSpec(this.orientationTarget) - moduloSpec(this.orientation)) > this.ORIENTATION_TOLERANCE){
             if (Math.abs(this.orientationTarget - this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=moduloSpec(this.orientationTarget);
                 this.turning=true;
@@ -132,14 +196,10 @@ public class SimulatedRobot {
 
     /** Renvoie le temps depuis la dernière tryUpdate */
     private long timeSinceLastUpdate(){
-        return (System.currentTimeMillis() - this.lastUpdateTime);
+        return Math.round((System.currentTimeMillis() - this.lastUpdateTime)*this.speedFactor);
     }
 
-    /** Renvoie si le robot bouge */
-    boolean isMoving(){
-        return this.turning || this.forwardOrBackward;
-    }
-
+    /* ======================== Méthodes de modification des objectifs cibles du robot ========================== */
     /** Fait avancer le robot de delta */
     void moveLengthwise(int delta){
         if (delta < this.POSITION_TOLERANCE){
@@ -179,6 +239,13 @@ public class SimulatedRobot {
         this.forceRaiseStoppedMovingFlag();
     }
 
+    /* ========================================= Méthodes de maths ============================================== */
+    /** Fait un modulo entre -Pi et Pi d'un angle en radians */
+    private double moduloSpec(double angle){
+        return Calculs.modulo(angle,Math.PI);
+    }
+
+    /* ======================== Setters de la position et de l'orientation du robot ============================= */
     /** Set la position du robot */
     void setPosition(Vec2 position){
         this.positionTarget=position;
@@ -191,16 +258,17 @@ public class SimulatedRobot {
         this.orientation=moduloSpec(orientation);
     }
 
-    /** Fait un modulo entre -Pi et Pi d'un angle en radians */
-    private double moduloSpec(double angle){
-        return Calculs.modulo(angle,Math.PI);
-    }
-
+    /* ======================== Getters de la position et de l'orientation du robot ========================== */
     /** Renvoie la position en X du robot */
     int getX(){ return this.position.getX(); }
 
     /** Renvoie la position en Y du robot */
     int getY(){ return this.position.getY(); }
+
+    /** Renvoie la position du robot */
+    Vec2 getPosition(){
+        return this.position;
+    }
 
     /** Renvoie l'orientation du robot */
     double getOrientation(){ return this.orientation; }

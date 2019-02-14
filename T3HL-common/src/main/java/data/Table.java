@@ -57,8 +57,20 @@ public class Table implements Service {
     public Obstacle paletRougeGauche;
     public Obstacle paletBleuGauche;
     public Obstacle paletVertGauche;
-    public Obstacle zoneChaosDroite;
-    public Obstacle zoneChaosGauche;
+    public Obstacle paletRougeUnZoneChaosDroite;
+    public Obstacle paletRougeDeuxZoneChaosDroite;
+    public Obstacle paletVertZoneChaosDroite;
+    public Obstacle paletBleuZoneChaosDroite;
+    public Obstacle paletRougeUnZoneChaosGauche;
+    public Obstacle paletRougeDeuxZoneChaosGauche;
+    public Obstacle paletVertZoneChaosGauche;
+    public Obstacle paletBleuZoneChaosGauche;
+
+    /**
+     * Obstacle mobile simulé
+     */
+
+    private MobileCircularObstacle simulatedObstacle;
 
     /**
      * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
@@ -112,15 +124,37 @@ public class Table implements Service {
         this.mobileObstacles = new ArrayList<>();
         this.mobileObstacleBuffer = new ArrayList<>();
 
-        //
+        Vec2 vecteurPaletRougeUnZoneChaosDroite = new VectCartesian(461, 1050);
+        Obstacle paletRougeUnZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosDroite, 219);
+        this.paletRougeUnZoneChaosDroite = paletRougeUnZoneChaosDroite;
 
-        Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
-        Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
-        this.zoneChaosDroite=zoneChaosDroite;
+        Vec2 vecteurPaletRougeDeuxZoneChaosDroite = new VectCartesian(539, 1050);
+        Obstacle paletRougeDeuxZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosDroite, 219);
+        this.paletRougeDeuxZoneChaosDroite = paletRougeDeuxZoneChaosDroite;
 
-        Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
-        Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
-        this.zoneChaosGauche=zoneChaosGauche;
+        Vec2 vecteurPaletRougeUnZoneChaosGauche = new VectCartesian(-461, 1050);
+        Obstacle paletRougeUnZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosGauche, 219);
+        this.paletRougeUnZoneChaosGauche = paletRougeUnZoneChaosGauche;
+
+        Vec2 vecteurPaletRougeDeuxZoneChaosGauche = new VectCartesian(-539, 1050);
+        Obstacle paletRougeDeuxZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosGauche, 219);
+        this.paletRougeDeuxZoneChaosGauche = paletRougeDeuxZoneChaosGauche;
+
+        Vec2 vecteurPaletVertZoneChaosDroite = new VectCartesian(500, 1089);
+        Obstacle paletVertZoneChaosDroite = new StillCircularObstacle(vecteurPaletVertZoneChaosDroite, 219);
+        this.paletVertZoneChaosDroite = paletVertZoneChaosDroite;
+
+        Vec2 vecteurPaletVertZoneChaosGauche = new VectCartesian(-500, 1089);
+        Obstacle paletVertZoneChaosGauche = new StillCircularObstacle(vecteurPaletVertZoneChaosGauche, 219);
+        this.paletVertZoneChaosGauche = paletVertZoneChaosGauche;
+
+        Vec2 vecteurPaletBleuZoneChaosDroite = new VectCartesian(500, 1011);
+        Obstacle paletBleuZoneChaosDroite = new StillCircularObstacle(vecteurPaletBleuZoneChaosDroite, 219);
+        this.paletBleuZoneChaosDroite = paletBleuZoneChaosDroite;
+
+        Vec2 vecteurPaletBleuZoneChaosGauche = new VectCartesian(-500, 1011);
+        Obstacle paletBleuZoneChaosGauche = new StillCircularObstacle(vecteurPaletBleuZoneChaosGauche, 219);
+        this.paletBleuZoneChaosGauche = paletBleuZoneChaosGauche;
 
         /**
          * Couleur représente la couleur de la zone se situant derrière le palet !
@@ -198,8 +232,17 @@ public class Table implements Service {
         this.addFixedObstacleNoGraphChange(goldeniumGauche);
 
 
-        this.addFixedObstacleNoGraphChange(zoneChaosDroite);
-        this.addFixedObstacleNoGraphChange(zoneChaosGauche);
+        // zone de chaos
+        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletVertZoneChaosDroite);
+
+        this.addFixedObstacleNoGraphChange(paletVertZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosGauche);
+
         this.addFixedObstacleNoGraphChange(paletRougeDroite);
         this.addFixedObstacleNoGraphChange(paletVertDroite);
         this.addFixedObstacleNoGraphChange(paletBleuDroite);
@@ -375,7 +418,6 @@ public class Table implements Service {
             Log.LIDAR.warning("Graphe non instancié");
         }
     }
-
     /**
      * Retire un obstacle fixe de la table et met à jour le graphe
      * ATTENTION : méthode coûteuse car le graphe doit être recalculé
@@ -393,6 +435,24 @@ public class Table implements Service {
             Log.LIDAR.warning("Graphe non instancié");
         }
     }
+
+    /**
+     * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
+     */
+    public void SIMULATEDaddMobileObstacle() {
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0,-1000), 100);
+        this.simulatedObstacle.setLifeTime(100000);
+        this.mobileObstacles.add(this.simulatedObstacle);
+    }
+
+    /**
+     * Déplace l'obstacle mobile SIMULÉ à la table
+     * @param newPosition nouvelle position de l'obstacle SIMULÉ
+     */
+    public void SIMULATEDmoveMobileObstacle(Vec2 newPosition) {
+        this.simulatedObstacle.update(newPosition);
+    }
+
 
     /**
      * Getters & Setters

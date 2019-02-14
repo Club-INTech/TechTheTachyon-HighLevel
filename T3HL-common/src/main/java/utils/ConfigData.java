@@ -104,8 +104,8 @@ public enum ConfigData implements ConfigInfo
      * Paramètre Locomotion
      */
     LOCOMOTION_LOOP_DELAY(20),
-    LOCOMOTION_DISTANCE_CHECK(200),
-    LOCOMOTION_RADIUS_CHECK(40)
+    LOCOMOTION_DISTANCE_CHECK(250),
+    LOCOMOTION_RADIUS_CHECK(20),
     ;
 
     /**

@@ -28,7 +28,6 @@ import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
-import locomotion.Pathfinder;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -36,7 +35,6 @@ import scripts.Script;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
-import sun.management.resources.agent;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -62,6 +60,7 @@ public class Main {
     private static SimulatorManagerLauncher simulatorLauncher;
     // Regardez, c'est GLaDOS!
     private static AIService ai;
+    private static GraphicalInterface interfaceGraphique;
 
     public static void main(String[] args){
         initServices();
@@ -110,7 +109,10 @@ public class Main {
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+
+            interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             zone_depart_palets.goToThenExecute(1);
+            interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);
@@ -120,7 +122,7 @@ public class Main {
             /**
              * Si tout les palets de la zone de chaos ont été récupérer
              */
-            table.removeFixedObstacle(table.zoneChaosDroite);
+            // FIXME table.removeFixedObstacle(table.zoneChaosDroite);
 
 
             goldenium.goToThenExecute(1);
@@ -152,6 +154,11 @@ public class Main {
         Action zoneDepart = new ScriptAction(ScriptNamesMaster.PALETS_ZONE_DEPART, 0) {
             {
                 effects.put("ZoneDepart", true);
+            }
+
+            @Override
+            public boolean modifiesTable() {
+                return true;
             }
 
             @Override
@@ -200,7 +207,16 @@ public class Main {
         simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
         simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
         simulatorLauncher.setColorblindMode(true);
-        simulatorLauncher.launchSimulator();
+        simulatorLauncher.setSpeedFactor(1);
+        simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
+        simulatorLauncher.launch();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
+        interfaceGraphique = simulatorManager.getGraphicalInterface();
     }
 
 }

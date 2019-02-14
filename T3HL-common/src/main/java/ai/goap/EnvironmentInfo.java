@@ -19,7 +19,6 @@
 package ai.goap;
 
 import ai.SpectreRobot;
-import data.Table;
 import data.XYO;
 import utils.math.Vec2;
 
@@ -62,7 +61,11 @@ public class EnvironmentInfo {
         if(xyo != null) {
             newXYO = new XYO(xyo.getPosition().clone(), xyo.getOrientation());
         }
-        EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot == null ? null : robot.deepCopy());
+        SpectreRobot robot = this.robot;
+        if(robot != null && actionWithEffects.modifiesTable()) {
+            robot = robot.deepCopy();
+        }
+        EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);
         return newInfo;
     }

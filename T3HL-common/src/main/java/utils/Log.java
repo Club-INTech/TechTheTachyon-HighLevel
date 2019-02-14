@@ -30,14 +30,15 @@ import java.util.GregorianCalendar;
  *
  * @author rem
  */
-public enum Log {
+public enum Log
+{
     COMMUNICATION(true),
     DATA_HANDLER(true),
     LOCOMOTION(true),
     STRATEGY(true),
     LIDAR(true),
     PATHFINDING(true),
-    GRAPHE(false),
+    GRAPHE(true),
     HOOK(true),
     TABLE(true),
     AI(true),
@@ -93,7 +94,8 @@ public enum Log {
      * Pour chaque canaux, on peut spécifier une couleur d'affichage
      * @param defaultActive     true si par défault affiché
      */
-    Log(boolean defaultActive) {
+    Log(boolean defaultActive)
+    {
         this.active = defaultActive;
         this.toLog = new StringBuilder();
     }
@@ -103,7 +105,8 @@ public enum Log {
      *
      * @param message   message à logger
      */
-    public void debug(Object message) {
+    public void debug(Object message)
+    {
         writeToLog(DEBUG, message.toString(), this.active);
     }
 
@@ -112,7 +115,8 @@ public enum Log {
      *
      * @param message   message à logger
      */
-    public void warning(Object message) {
+    public void warning(Object message)
+    {
         writeToLog(WARNING, message.toString(), this.active);
     }
 
@@ -121,9 +125,11 @@ public enum Log {
      *
      * @param message   message à logger
      */
-    public void critical(Object message) {
+    public void critical(Object message)
+    {
         writeToLog(CRITICAL, message.toString(), true);
     }
+
 
     /**
      * Log du message
@@ -131,20 +137,49 @@ public enum Log {
      * @param color     le préfixe pour la couleur en sortie standart
      * @param message   message à affiché
      */
-    private synchronized void writeToLog(String color, String message, boolean active) {
-        String hour = String.format("[%sh%d:%d,%d]", calendar.get(Calendar.HOUR_OF_DAY),
-                calendar.get(Calendar.MINUTE),
-                calendar.get(Calendar.SECOND),
-                calendar.get(Calendar.MILLISECOND));
+    private synchronized void writeToLog(String color, String message, boolean active)
+    {
+        this.toLog.setLength(0);
+        this.toLog.append("[")
+        .append(calendar.get(Calendar.HOUR_OF_DAY))
+        .append("h")
+        .append(calendar.get(Calendar.MINUTE))
+        .append(":")
+        .append(calendar.get(Calendar.SECOND))
+        .append(",")
+        .append(calendar.get(Calendar.MILLISECOND))
+        .append("]");
+        String hour = this.toLog.toString();
 
-        if(active & printLogs) {
+        if(active & printLogs)
+        {
             StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
-            System.out.println(String.format("%s%s %s %s.%s:%d > %s%s", color, hour, this.name(),
-                    elem.getClassName(), elem.getMethodName(), elem.getLineNumber(), message, RESET));
+            this.toLog.setLength(0);
+            this.toLog.append(color)
+            .append(hour)
+            .append(" ")
+            .append(this.name())
+            .append(" ")
+            .append(elem.getClassName())
+            .append(",")
+            .append(elem.getMethodName())
+            .append(":")
+            .append(elem.getLineNumber())
+            .append(" >>> ")
+            .append(message )
+            .append(RESET);
+            System.out.println(this.toLog.toString());
         }
 
-        if(saveLogs) {
-            writeToFile(String.format("%s %s > %s\n",hour, this.name(), message));
+        if(saveLogs)
+        {
+            this.toLog.setLength(0);
+            this.toLog.append(hour)
+            .append(" ")
+            .append(this.name())
+            .append(" > ")
+            .append(message);
+            writeToFile(this.toLog.toString());
         }
     }
 
@@ -153,12 +188,17 @@ public enum Log {
      *
      * @param message le message a logguer
      */
-    private synchronized void writeToFile(String message) {
+    private synchronized void writeToFile(String message)
+    {
         // chaque message sur sa propre ligne
-        try {
+        message += "\n";
+        try
+        {
             writer.write(message);
             writer.flush();
-        } catch(Exception e) {
+        }
+        catch(Exception e)
+        {
             e.printStackTrace();
         }
     }
@@ -166,15 +206,16 @@ public enum Log {
     /**
      * Initialise les flux d'entrée/sortie
      */
-    public static void init(Config config) {
+    public static void init(Config config)
+    {
         boolean ret = true;
         try {
             calendar = new GregorianCalendar();
-            String hour = String.format("%s:%d:%d", calendar.get(Calendar.HOUR),
-                    calendar.get(Calendar.MINUTE),
-                    calendar.get(Calendar.SECOND));
+            String hour = calendar.get(Calendar.HOUR) + ":" +
+                    calendar.get(Calendar.MINUTE) + ":" +
+                    calendar.get(Calendar.SECOND);
             File testFinalRepertoire = new File("../logs");
-            finalSaveFile = String.format("../logs/LOG-%s.txt", hour);
+            finalSaveFile = "../logs/LOG-" + hour + ".txt";
             if (!testFinalRepertoire.exists())
                 ret = testFinalRepertoire.mkdir();
             if (!ret) {
@@ -183,7 +224,7 @@ public enum Log {
             writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(finalSaveFile), StandardCharsets.UTF_8));
             saveLogs = config.getBoolean(ConfigData.SAVE_LOG);
             printLogs = config.getBoolean(ConfigData.PRINT_LOG);
-            System.out.println(String.format("%sDEMARRAGE DU SERVICE DE LOG", LOG_INFO));
+            System.out.println(LOG_INFO + "DEMARRAGE DU SERVICE DE LOG");
             System.out.println(RESET);
         } catch (IOException e) {
             e.printStackTrace();
@@ -193,17 +234,20 @@ public enum Log {
     /**
      * Ferme le log et sauvegarde dans un fichier si besoin
      */
-    public static void close() {
-        System.out.println(String.format("%sFERMETURE DU SERVICE DE LOG", LOG_INFO));
+    public static void close()
+    {
+        System.out.println(LOG_INFO + "FERMETURE DU SERVICE DE LOG");
         if(saveLogs)
             try {
-                System.out.println(String.format("%sSAUVEGARDE DES FICHIERS DE LOG", LOG_INFO));
+                System.out.println(LOG_INFO + "SAUVEGARDE DES FICHIERS DE LOG");
                 System.out.println(RESET);
                 synchronized (values()) {
                     if (writer != null)
                         writer.close();
                 }
-            } catch(Exception e) {
+            }
+            catch(Exception e)
+            {
                 e.printStackTrace();
             }
     }
@@ -211,8 +255,10 @@ public enum Log {
     /**
      * Active tous les channels
      */
-    public static void activeAllChannels() {
-        for (Log log : values()) {
+    public static void activeAllChannels()
+    {
+        for (Log log : values())
+        {
             log.setActive(true);
         }
     }
@@ -220,8 +266,10 @@ public enum Log {
     /**
      * Désactive tout les channels
      */
-    public static void disableAllChannels() {
-        for (Log log : values()) {
+    public static void disableAllChannels()
+    {
+        for (Log log : values())
+        {
             log.setActive(false);
         }
     }

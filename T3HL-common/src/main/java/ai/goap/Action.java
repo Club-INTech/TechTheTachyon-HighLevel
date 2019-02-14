@@ -51,6 +51,14 @@ public abstract class Action {
     }
 
     /**
+     * Est-ce que cette action modifies les obstacles sur la table?
+     * @return
+     */
+    public boolean modifiesTable() {
+        return false;
+    }
+
+    /**
      * Méthode utile pour simuler le retrait de palets par exemple
      */
     protected void applyChangesToEnvironment(EnvironmentInfo info) {

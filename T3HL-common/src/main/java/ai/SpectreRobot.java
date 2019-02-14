@@ -50,8 +50,18 @@ public class SpectreRobot {
         fakeTable.paletBleuDroite = baseTable.paletBleuDroite;
         fakeTable.paletVertGauche = baseTable.paletVertGauche;
         fakeTable.paletBleuGauche = baseTable.paletBleuGauche;
-        fakeTable.zoneChaosDroite = baseTable.zoneChaosDroite;
-        fakeTable.zoneChaosGauche = baseTable.zoneChaosGauche;
+
+        fakeTable.paletBleuZoneChaosDroite = baseTable.paletBleuZoneChaosDroite;
+        fakeTable.paletBleuZoneChaosGauche = baseTable.paletBleuZoneChaosGauche;
+
+        fakeTable.paletRougeUnZoneChaosDroite = baseTable.paletRougeUnZoneChaosDroite;
+        fakeTable.paletRougeDeuxZoneChaosDroite = baseTable.paletRougeDeuxZoneChaosDroite;
+        fakeTable.paletRougeUnZoneChaosGauche = baseTable.paletRougeUnZoneChaosGauche;
+        fakeTable.paletRougeDeuxZoneChaosGauche = baseTable.paletRougeDeuxZoneChaosGauche;
+
+        fakeTable.paletVertZoneChaosDroite = baseTable.paletVertZoneChaosDroite;
+        fakeTable.paletVertZoneChaosGauche = baseTable.paletVertZoneChaosGauche;
+
         this.fakeGraphe = new Graphe(fakeTable);
 
         updateConfig(config);

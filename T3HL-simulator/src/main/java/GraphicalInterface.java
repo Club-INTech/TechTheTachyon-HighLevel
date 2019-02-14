@@ -1,13 +1,13 @@
 import data.Table;
+import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import utils.math.*;
+import utils.math.Rectangle;
+import utils.math.Shape;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Color;
-import java.awt.Toolkit;
-import java.awt.Graphics;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,46 +16,51 @@ import java.util.HashMap;
 
 class GraphicalInterface extends JFrame {
 
-    private int[] LLports;
-    private int[] HLports;
+    //Attributs qui peuvent être modifiés avant le lancement
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
-    private ArrayList<Obstacle> fixedObstacles;
+    private boolean colorblindMode;
+    private boolean isDrawingPoints;
+    private boolean isCreatingObstacleWithMouse;
 
+    //Attributs graphiques
     private BufferedImage backgroundImage;
-
     private JPanel panel;
-    private long lastTimeUpdate;
-    private final int WIDTH_FRAME = 1200;      //in pixels
-    private final int HEIGHT_FRAME = 800;      //in pixels
-    private final int WIDTH_TABLE = 3000;      //in millimeters
-    private final int HEIGHT_TABLE = 2000;     //in millimeters
-    private final int MILLIS_BETWEEN_UPDATES=10;
+    private int WIDTH_FRAME = 1200;      //in pixels
+    private int HEIGHT_FRAME = 800;      //in pixels
     private Color DEFAULT_COLOR = new Color(0,0,0,255);
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
-    private Color OBSTACLE_COLOR = new Color(255,0,0,64);
+    private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
+    private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
+    private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
 
+    //Attributs pas graphiques
+    private ArrayList<Obstacle> fixedObstacles;
+    private ArrayList<MobileCircularObstacle> mobileObstacles;
+    private long lastTimeUpdate;
+    private ArrayList<Vec2> pointsToDraw;
+    private Point mousePosition;
+    private final int MILLIS_BETWEEN_UPDATES=10;
+    private final int WIDTH_TABLE = 3000;      //in millimeters
+    private final int HEIGHT_TABLE = 2000;     //in millimeters
 
+    //Permet de savoir si cette instance est démarrée
+    private boolean isLaunched = false;
+
+    /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    GraphicalInterface(int[] LLports, int[] HLports, HashMap<Integer, SimulatedRobot> simulatedRobots, Table table, boolean colorblindMode) {
-        this.LLports = LLports;
-        this.LLports = HLports;
-        this.simulatedRobots = simulatedRobots;
-        this.table = table;
-        this.setColorSchema(colorblindMode);
-
+    GraphicalInterface() {
+        this.initDefaultPassedParameters();
+        this.pointsToDraw=new ArrayList<Vec2>();
+        this.lastTimeUpdate=System.currentTimeMillis();
         try {
             this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        this.lastTimeUpdate=System.currentTimeMillis();
-
         this.setTitle("Simulateur");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         this.panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics graphics) {
@@ -66,36 +71,105 @@ class GraphicalInterface extends JFrame {
         this.panel.setDoubleBuffered(true);
         this.panel.setVisible(true);
         this.panel.setPreferredSize(new Dimension(this.WIDTH_FRAME, this.HEIGHT_FRAME));
-
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
     }
 
-    private void setColorSchema(boolean colorblindMode){
-        if (colorblindMode) {
-            DEFAULT_COLOR = new Color(0, 0, 0, 255);
-            ROBOT_COLOR = new Color(0, 0, 255, 128);
-            ORIENTATION_COLOR = new Color(0, 255, 255, 255);
-            OBSTACLE_COLOR = new Color(255, 255, 0, 64);
-        }
-        else{
-            DEFAULT_COLOR = new Color(0, 0, 0, 255);
-            ROBOT_COLOR = new Color(0, 255, 0, 128);
-            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
-            OBSTACLE_COLOR = new Color(255, 0, 0, 64);
+    /* ================================== Passage et initialisation de paramètres ============================= */
+    /** Méthode instanciant tous les attributs nécessaires au bon fonctionnement de l'interface graphique
+     *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
+     */
+    private void initDefaultPassedParameters(){
+        this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
+        this.isDrawingPoints=true;
+        this.colorblindMode=false;
+        this.isCreatingObstacleWithMouse=false;
+
+        this.table=null;
+    }
+
+    /** Set les robots qui sont instancié pour qu'ils soient affichés dans le simulateur
+     * @param simulatedRobots HashMap<Integer, SimulatedRobot> des robots instanciés
+     */
+    void setSimulatedRobots(HashMap<Integer, SimulatedRobot> simulatedRobots){
+        if (canParametersBePassed()){
+            this.simulatedRobots=simulatedRobots;
         }
     }
 
+    /** Set si on crée un obstacle en bougeant la souris */
+    void setIsCreatingObstacleWithMouse(boolean value){
+        if (canParametersBePassed()) {
+            this.isCreatingObstacleWithMouse = value;
+        }
+    }
+
+    /** Set la table
+     * @param table table mdr
+     */
+    void setTable(Table table){
+        if (canParametersBePassed()){
+            this.table=table;
+        }
+    }
+
+    /** Set le mode daltonien
+     * @param value mode daltonien activé sur TRUE
+     */
+    void setColorblindMode(boolean value){
+        if (canParametersBePassed()){
+            this.colorblindMode=value;
+        }
+    }
+
+    /** Set si les points sont affichés ou non
+     * @param value les points sont affichés si TRUE
+     */
+    void setIsDrawingPoints(boolean value){
+        if (canParametersBePassed()){
+            this.isDrawingPoints=value;
+        }
+    }
+
+    /** Permet de savoir si on a lancé le robot simulé */
+    private boolean canParametersBePassed(){
+        if (this.isLaunched){
+            System.out.println("SIMULATEUR : On ne peut pas passer de paramètres à l'interface graphique lorsqu'elle est déjà lancée");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /* ======================================== Lancement de l'instance ======================================== */
+    /** Lance l'interface graphique */
+    void launch(){
+        this.updateColorSchema(this.colorblindMode);
+        if (this.isCreatingObstacleWithMouse) {
+            this.addSimulatedObstacleWithMouse();
+        }
+        this.isLaunched=true;
+        System.out.println("Interface graphique démarrée");
+    }
+
+    /* ======================================== Méthode d'update général ======================================= */
     /** Fonction appelée par le simulateur */
     void tryUpdate(){
-        if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
-            this.lastTimeUpdate=System.currentTimeMillis();
-            this.fixedObstacles = table.getFixedObstacles();
-            this.panel.repaint();
+        if (this.isLaunched) {
+            if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
+                this.lastTimeUpdate = System.currentTimeMillis();
+                this.fixedObstacles = table.getFixedObstacles();
+                this.mobileObstacles = table.getMobileObstacles();
+                this.mousePosition = this.panel.getMousePosition();
+                tryMoveSimulatedObstacleWithMouse();
+                this.panel.repaint();
+            }
         }
     }
 
+    /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
     private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
         g.setColor(ROBOT_COLOR);
@@ -112,23 +186,34 @@ class GraphicalInterface extends JFrame {
 
     /** Affiche les obstacles */
     private void drawObstacles(Graphics g){
+        g.setColor(FIXED_OBSTACLE_COLOR);
         synchronized (this.fixedObstacles) {
             for (Obstacle obstacle : this.fixedObstacles) {
-                g.setColor(OBSTACLE_COLOR);
-                Shape shape = obstacle.getShape();
-                if (shape instanceof CircularRectangle) {
-                    for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()) {
-                        drawPrimitiveShape(g, rectangle);
-                    }
-                    for (Circle circle : ((CircularRectangle) shape).getCircleArcs()) {
-                        drawPrimitiveShape(g, circle);
-                    }
-                    drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
-                } else {
-                    drawPrimitiveShape(g, shape);
-                }
-                g.setColor(DEFAULT_COLOR);
+                drawSingleObstacle(g, obstacle);
             }
+        }
+        g.setColor(MOBILE_OBSTACLE_COLOR);
+        synchronized (this.mobileObstacles) {
+            for (Obstacle obstacle : this.mobileObstacles) {
+                drawSingleObstacle(g, obstacle);
+            }
+        }
+        g.setColor(DEFAULT_COLOR);
+    }
+
+    /** Affiche un obstacle */
+    private void drawSingleObstacle(Graphics g, Obstacle obstacle){
+        Shape shape = obstacle.getShape();
+        if (shape instanceof CircularRectangle) {
+            for (Rectangle rectangle : ((CircularRectangle) shape).getSideRectangles()) {
+                drawPrimitiveShape(g, rectangle);
+            }
+            for (Circle circle : ((CircularRectangle) shape).getCircleArcs()) {
+                drawPrimitiveShape(g, circle);
+            }
+            drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
+        } else {
+            drawPrimitiveShape(g, shape);
         }
     }
 
@@ -150,6 +235,19 @@ class GraphicalInterface extends JFrame {
         }
     }
 
+    /**
+     * Fonction pour dessiner une liste de points
+     */
+    public void drawPoints(Graphics g){
+        int pointDiameter=10;
+        g.setColor(POINTS_TO_DRAW_COLOR);
+        for(Vec2 vecteur : this.pointsToDraw) {
+            vecteur = transformTableCoordsToInterfaceCoords(vecteur);
+            g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
+        }
+        g.setColor(DEFAULT_COLOR);
+    }
+
     /** Efface l'affichage */
     private void clearScreen(Graphics g){
         g.clearRect(0,0,this.WIDTH_FRAME, this.HEIGHT_FRAME);
@@ -165,29 +263,114 @@ class GraphicalInterface extends JFrame {
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
             drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
         }
+        if (this.isDrawingPoints) {
+            drawPoints(g);
+        }
     }
 
-
+    /* ============ Méthodes de transformation des coordonnées entre la table et la fenêtre graphique ============= */
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
-    private int transformTableDistanceToInterfaceDistance(int distance){
-        return Math.round(distance * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE));
+    private int transformTableDistanceToInterfaceDistance(int distanceOnTable){
+        return Math.round(distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE));
     }
 
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
-    private float transformTableDistanceToInterfaceDistance(float distance){
-        return distance * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE);
+    private float transformTableDistanceToInterfaceDistance(float distanceOnTable){
+        return distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE);
     }
 
     /** Transforme les coordonnées de la table pour qu'ils soient affichés correction sur l'interface */
-    private Vec2 transformTableCoordsToInterfaceCoords(int x, int y) {
+    private Vec2 transformTableCoordsToInterfaceCoords(int xOnTable, int yOnTable) {
         return new VectCartesian(
-                (x + (this.WIDTH_TABLE / 2.0f)) * (this.WIDTH_FRAME / (float) this.WIDTH_TABLE),
-                (this.HEIGHT_TABLE - y) * (this.HEIGHT_FRAME / (float) this.HEIGHT_TABLE)
+                (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.WIDTH_FRAME / (float) this.WIDTH_TABLE),
+                (this.HEIGHT_TABLE - yOnTable) * (this.HEIGHT_FRAME / (float) this.HEIGHT_TABLE)
         );
     }
 
     /** Transforme les coordonnées de la table pour qu'ils soient affichés correctement sur l'interface */
-    private Vec2 transformTableCoordsToInterfaceCoords(Vec2 position){
-        return transformTableCoordsToInterfaceCoords(position.getX(), position.getY());
+    private Vec2 transformTableCoordsToInterfaceCoords(Vec2 positionOnTable){
+        return transformTableCoordsToInterfaceCoords(positionOnTable.getX(), positionOnTable.getY());
+    }
+
+
+
+    /** Transforme les coordonnées de l'interface pour qu'ils correspondent à ceux de la table */
+    private Vec2 transformInterfaceCoordsToTableCoords(int xOnInterface, int yOnInterface){
+        return new VectCartesian(
+                (xOnInterface - (this.WIDTH_FRAME / 2.0f)) * (this.WIDTH_TABLE / (float) this.WIDTH_FRAME),
+                (this.HEIGHT_FRAME - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.HEIGHT_FRAME)
+        );
+    }
+
+    /** Transforme les coordonnées de l'interface pour qu'ils correspondent à ceux de la table */
+    private Vec2 transformInterfaceCoordsToTableCoords(Vec2 positionOnInterface){
+        return transformInterfaceCoordsToTableCoords(positionOnInterface.getX(), positionOnInterface.getY());
+    }
+
+    /* ===================================== Méthodes sur l'obstacle simulé ===================================== */
+    /** Crée un obstacle simulé avec la souris */
+    private void addSimulatedObstacleWithMouse(){
+        this.table.SIMULATEDaddMobileObstacle();
+    }
+
+    /** Déplace l'obstacle simulé avec la souris */
+    private void tryMoveSimulatedObstacleWithMouse(){
+        if (this.isCreatingObstacleWithMouse){
+            if (this.mousePosition!=null) {
+                this.table.SIMULATEDmoveMobileObstacle(
+                        transformInterfaceCoordsToTableCoords(this.mousePosition.x, this.mousePosition.y)
+                );
+            }
+            else{
+                this.table.SIMULATEDmoveMobileObstacle(new VectCartesian(0, -1000));
+            }
+        }
+    }
+
+    /* ===================================== Méthodes sur le points à dessiner ===================================== */
+    /** Définit les points à dessiner */
+    void setPointsToDraw(Vec2[] positions) {
+        this.clearPointsToDraw();
+        for (Vec2 position : positions) {
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Ajoute un point à dessiner */
+    void addPointToDraw(Vec2 position){
+        this.pointsToDraw.add(position);
+    }
+
+    /** Ajout des points à dessiner */
+    void addPointsToDraw(Vec2[] positions){
+        for (Vec2 position : positions){
+            this.addPointToDraw(position);
+        }
+    }
+
+    /** Supprime tous les points à dessiner */
+    void clearPointsToDraw() {
+        this.pointsToDraw.clear();
+    }
+
+    /* ============================================ Autres méthodes =========================================== */
+    /** Définit si on est en mode daltonien */
+    private void updateColorSchema(boolean colorblindMode){
+        if (colorblindMode) {
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 0, 255, 128);
+            ORIENTATION_COLOR = new Color(0, 255, 255, 255);
+            FIXED_OBSTACLE_COLOR = new Color(255, 255, 0, 64);
+            MOBILE_OBSTACLE_COLOR = new Color(255,0,0,64);
+            POINTS_TO_DRAW_COLOR = new Color(255,255,255, 255);
+        }
+        else{
+            DEFAULT_COLOR = new Color(0, 0, 0, 255);
+            ROBOT_COLOR = new Color(0, 255, 0, 128);
+            ORIENTATION_COLOR = new Color(0, 0, 255, 255);
+            FIXED_OBSTACLE_COLOR = new Color(255, 0, 0, 64);
+            MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
+            POINTS_TO_DRAW_COLOR = new Color(255,255,255,255);
+        }
     }
 }

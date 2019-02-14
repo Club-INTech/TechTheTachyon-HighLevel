@@ -1,4 +1,3 @@
-import data.controlers.Channel;
 import exceptions.OrderException;
 import orders.order.MotionOrder;
 import orders.order.Order;
@@ -9,6 +8,7 @@ import java.util.HashMap;
 
 public class SimulatorManager extends Thread {
 
+    //Attributs pouvant être modifiés avant le lancement
     private int[] LLports;
     private int[] HLports;
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManagers;
@@ -16,24 +16,97 @@ public class SimulatorManager extends Thread {
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private GraphicalInterface graphicalInterface;
 
+    //Permet de savoir si cette instance est démarrée
+    private boolean isLaunched = false;
+
+    /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    SimulatorManager(int[] LLports, int[] HLports, GraphicalInterface graphicalInterace,
-                     HashMap<Integer,SimulatedConnectionManager> simulatedLLConectionManagers,
-                     HashMap<Integer, SimulatedConnectionManager> simulatedHLConectionManagers,
-                     HashMap<Integer, SimulatedRobot> simulatedRobots){
-        this.LLports = LLports;
-        this.HLports = HLports;
-        this.graphicalInterface = graphicalInterace;
-        this.simulatedLLConnectionManagers = simulatedLLConectionManagers;
-        this.simulatedHLConnectionManagers = simulatedHLConectionManagers;
-        this.simulatedRobots = simulatedRobots;
-
-
-        this.start();
+    SimulatorManager(){
+        this.initDefaultPassedParameters();
     }
 
-    @Override
+    /* ================================== Passage et initialisation de paramètres ============================= */
+    /** Méthode instanciant tous les attributs nécessaires au bon fonctionnement d'un robot simulé
+     *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
+     */
+    private void initDefaultPassedParameters(){
+        this.LLports=new int[]{};
+        this.HLports=new int[]{};
+        this.graphicalInterface=null;
+        this.simulatedRobots=null;
+        this.simulatedLLConnectionManagers=new HashMap<>();
+        this.simulatedHLConnectionManagers=null;
+    }
+
+    /** Setter des ports utilisés pour parler au LL */
+    void setLLports(int[] LLports){
+        if (canParametersBePassed()) {
+            this.LLports = LLports;
+        }
+    }
+
+    /** Setter des ports utilisés pour parler entre les HL */
+    void setHLports(int[] HLports){
+        if (canParametersBePassed()) {
+            this.HLports = HLports;
+        }
+    }
+
+    /** Setter de l'interface graphique */
+    void setGraphicalInterface(GraphicalInterface graphicalInterface){
+        if (canParametersBePassed()) {
+            this.graphicalInterface = graphicalInterface;
+        }
+    }
+
+    /** Set les connexions qui sont utilisées pour recevoir les messages venant d'un HL vers son LL
+     * @param simulatedLLConnectionManagers connexion en question
+     */
+    void setSimulatedLLConnectionManagers(HashMap<Integer,SimulatedConnectionManager> simulatedLLConnectionManagers){
+        if (canParametersBePassed()) {
+            this.simulatedLLConnectionManagers = simulatedLLConnectionManagers;
+        }
+    }
+
+    /** Set les connexions qui sont utilisées pour recevoir les messages venant d'un HL vers l'autre HL
+     * @param simulatedHLConnectionManagers connexion en question
+     */
+    void setSimulatedHLConnectionManagers(HashMap<Integer,SimulatedConnectionManager> simulatedHLConnectionManagers){
+        if (canParametersBePassed()) {
+            this.simulatedHLConnectionManagers = simulatedHLConnectionManagers;
+        }
+    }
+
+    /** Set les robots qui sont instancié pour qu'ils executent les ordres
+     * @param simulatedRobots HashMap<Integer, SimulatedRobot> des robots instanciés
+     */
+    void setSimulatedRobots(HashMap<Integer,SimulatedRobot> simulatedRobots){
+        if (canParametersBePassed()) {
+            this.simulatedRobots = simulatedRobots;
+        }
+    }
+
+    /** Permet de savoir si on a lancé le robot simulé */
+    private boolean canParametersBePassed(){
+        if (this.isLaunched){
+            System.out.println("SIMULATEUR : On ne peut pas passer de paramètres à l'interface graphique lorsqu'elle est déjà lancée");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    /* ======================================== Lancement de l'instance ======================================== */
+    /** Lance le manager du simulateur */
+    void launch(){
+        this.isLaunched=true;
+        this.start();
+        System.out.println("Manager de simulation démarré");
+    }
+
     /** Manage les messages reçus, le robot et l'interface graphique */
+    @Override
     public void run() {
         String lastMessage;
 
@@ -41,10 +114,10 @@ public class SimulatorManager extends Thread {
         while (true) {
 
             //On tryUpdate la position du robot
-            for (int port: LLports) {
+            for (int port : LLports) {
                 //On gère les messages d'entrée
-                lastMessage=this.simulatedLLConnectionManagers.get(port).getLastReceivedMessage();
-                if (lastMessage!=null) {
+                lastMessage = this.simulatedLLConnectionManagers.get(port).getLastReceivedMessage();
+                if (lastMessage != null) {
                     handleMessageLL(lastMessage, simulatedRobots.get(port));
                 }
 
@@ -54,8 +127,8 @@ public class SimulatorManager extends Thread {
             //On écoute les ports du HL pour transmettre un éventuel message
             for (int port : HLports) {
                 //On gère les messages d'entrée
-                lastMessage=this.simulatedHLConnectionManagers.get(port).getLastReceivedMessage();
-                if (lastMessage!=null) {
+                lastMessage = this.simulatedHLConnectionManagers.get(port).getLastReceivedMessage();
+                if (lastMessage != null) {
                     handleMessageHL(lastMessage, port);
                 }
             }
@@ -69,9 +142,11 @@ public class SimulatorManager extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
+    /* ================================= Gère les messages qui sont envoyés vers le LL ============================= */
     /** Gère les messages qui sont reçus pour le LL */
     private void handleMessageLL(String m, SimulatedRobot robot){
         System.out.println(String.format("SIMULATEUR-LL : message reçu : %s",m));
@@ -111,6 +186,7 @@ public class SimulatorManager extends Thread {
         }
     }
 
+    /* ================================= Gère les messages qui sont envoyés vers le HL ============================= */
     /** Transmet les messages qui sont reçus pour le HL de l'autre robot à l'autre robot*/
     private void handleMessageHL(String m, int port){
         if (this.HLports.length==2){
@@ -128,6 +204,7 @@ public class SimulatorManager extends Thread {
         }
     }
 
+    /* ========================= Méthodes permettant tester la validité des ordres reçus ========================== */
     /** Compare une string et un ordre
      * @param arguments arguments envoyés au simulateur
      * @param order ordre auquel on compare le message reçu
@@ -180,4 +257,9 @@ public class SimulatorManager extends Thread {
         }
     }
 
+    /* ================================================= Getters ============================================== */
+    /** Getter de l'interface graphique */
+    GraphicalInterface getGraphicalInterface(){
+        return this.graphicalInterface;
+    }
 }
