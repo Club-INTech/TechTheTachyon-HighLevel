@@ -84,8 +84,6 @@ public class Pathfinder implements Service {
 
         graphe.updateHeuristique(aim);
 
-        long startTime = System.currentTimeMillis();
-
         // Tant qu'il y a des noeuds à visiter
         while (!openList.isEmpty()) {
             currentNode = openList.poll();
@@ -109,9 +107,6 @@ public class Pathfinder implements Service {
                     if(neighbour.equals(aim)) {
                         neighbour.setPred(currentNode);
                         neighbour.setCout(currentCost);
-
-                        long elapsed = System.currentTimeMillis() - startTime;
-                        System.out.println(">>>> "+elapsed+" pour findPath pour un voisin");
                         return reconstructPath(start, neighbour);
                     }
                     // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud

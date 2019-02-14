@@ -102,7 +102,6 @@ public class SpectreRobot {
         List<Vec2> mobileObstacles = baseTable.getMobileObstacles().stream()
                 .map(t -> t.getShape().getCenter())
                 .collect(Collectors.toList());
-        fakeTable.getFixedObstacles().clear();
         fakeTable.getFixedObstacles().addAll(baseTable.getFixedObstacles());
         fakeTable.updateTableAfterFixedObstaclesChanges();
         fakeTable.updateMobileObstacles(mobileObstacles);
@@ -110,7 +109,7 @@ public class SpectreRobot {
 
     public void updateConfig(Config config) {
         fakeTable.updateConfig(config);
-        fakeGraphe.updateConfig(config);
+        fakeGraphe.updateConfigNoInit(config); // pas besoin d'init le graphe, l'appel de #updateTableAfterFixedObstaclesChanges va le faire dans copyFromBase
     }
 
     public Graphe getSimulatedGraph() {

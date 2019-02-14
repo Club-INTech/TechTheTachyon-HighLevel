@@ -20,6 +20,7 @@ package ai.goap;
 
 import ai.SpectreRobot;
 import data.XYO;
+import utils.Log;
 import utils.math.Vec2;
 
 import java.util.HashMap;
@@ -63,7 +64,9 @@ public class EnvironmentInfo {
         }
         SpectreRobot robot = this.robot;
         if(robot != null && actionWithEffects.modifiesTable()) {
+            long start = System.currentTimeMillis();
             robot = robot.deepCopy();
+            Log.AI.debug("deepCopy took "+(System.currentTimeMillis()-start));
         }
         EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);

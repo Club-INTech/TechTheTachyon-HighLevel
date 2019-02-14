@@ -345,11 +345,15 @@ public class Graphe implements Service {
      */
     @Override
     public void updateConfig(Config config) {
+        updateConfigNoInit(config);
+        // L'initialisation du Graphe a besoin des données de la config :'(
+        this.init();
+    }
+
+    public void updateConfigNoInit(Config config) {
         nodeXNbr = config.getInt(ConfigData.NBR_NOEUDS_X);
         nodeYNbr = config.getInt(ConfigData.NBR_NOEUDS_Y);
         spaceCircleParameter = config.getDouble(ConfigData.ESPACEMENT_CIRCLE);
         nodeCricleNbr = config.getInt(ConfigData.NBR_NOEUDS_CIRCLE);
-        // L'initialisation du Graphe a besoin des données de la config :'(
-        this.init();
     }
 }
