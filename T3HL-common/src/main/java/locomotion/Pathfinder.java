@@ -23,6 +23,7 @@ import data.XYO;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import pfg.config.Config;
+import utils.Log;
 import utils.container.Service;
 import utils.math.Vec2;
 
@@ -80,7 +81,10 @@ public class Pathfinder implements Service {
         closedList.clear();
         openList.clear();
         openList.add(start);
+
         graphe.updateHeuristique(aim);
+
+        long startTime = System.currentTimeMillis();
 
         // Tant qu'il y a des noeuds à visiter
         while (!openList.isEmpty()) {
@@ -97,9 +101,19 @@ public class Pathfinder implements Service {
                 Ridge ridge = currentNode.getNeighbours().get(neighbour);
                 if(ridge == null)
                     continue; // TODO: trouver pourquoi ça arrive avec l'IA
+
+
                 // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
                 if (ridge.isReachable()) {
                     currentCost = currentNode.getCout() + ridge.getCost();
+                    if(neighbour.equals(aim)) {
+                        neighbour.setPred(currentNode);
+                        neighbour.setCout(currentCost);
+
+                        long elapsed = System.currentTimeMillis() - startTime;
+                        System.out.println(">>>> "+elapsed+" pour findPath pour un voisin");
+                        return reconstructPath(start, neighbour);
+                    }
                     // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
                     if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
                         neighbour.setCout(currentCost);
@@ -118,7 +132,6 @@ public class Pathfinder implements Service {
             }
             closedList.add(currentNode);
         }
-
         throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
 

@@ -90,6 +90,11 @@ public class Graphe implements Service {
     private ReadWriteLock locks = new ReentrantReadWriteLock();
 
     /**
+     * Dernier noeud auquel on a voulu se rendre, utilisé pour l'heuristique
+     */
+    private Node lastAim;
+
+    /**
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
      * @param table la table à paramétrer
      */
@@ -280,7 +285,11 @@ public class Graphe implements Service {
     /**
      * Set l'heuristique de toutes les nodes en fonction du point visé
      */
-    public void updateHeuristique(Node aim){
+    public void updateHeuristique(Node aim) {
+        if(lastAim != null && lastAim.equals(aim)) {
+            return;
+        }
+        lastAim = aim;
         for (Node node : nodes){
             node.setHeuristique((int)aim.getPosition().squaredDistanceTo(node.getPosition()));
         }
