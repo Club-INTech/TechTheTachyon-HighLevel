@@ -77,6 +77,7 @@ public class Pathfinder implements Service {
         int currentCost;
 
         // On clean la liste des noeuds à visiter et on ajoute le noeud de départ
+        closedList.clear();
         openList.clear();
         openList.add(start);
         graphe.updateHeuristique(aim);
@@ -116,7 +117,7 @@ public class Pathfinder implements Service {
             closedList.add(currentNode);
         }
 
-        throw new NoPathFound(aim.getPosition());
+        throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
 
     /**

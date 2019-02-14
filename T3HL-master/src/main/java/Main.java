@@ -98,7 +98,7 @@ public class Main {
             /**
              * Si tout les palets de la zone de chaos ont été récupérer
              */
-            table.removeFixedObstacle(table.zoneChaosDroite);
+            // FIXME table.removeFixedObstacle(table.zoneChaosDroite);
 
 
             goldenium.goToThenExecute(1);
