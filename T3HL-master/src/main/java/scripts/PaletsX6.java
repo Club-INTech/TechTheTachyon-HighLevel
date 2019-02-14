@@ -116,6 +116,8 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+
+        // TODO: push palet
     }
     @Override
     public void updateConfig(Config config) {

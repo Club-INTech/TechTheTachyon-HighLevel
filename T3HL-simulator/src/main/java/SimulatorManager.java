@@ -1,7 +1,6 @@
+import data.CouleurPalet;
 import exceptions.OrderException;
-import orders.order.MotionOrder;
-import orders.order.Order;
-import orders.order.PositionAndOrientationOrder;
+import orders.order.*;
 import utils.math.VectCartesian;
 
 import java.util.HashMap;
@@ -173,6 +172,12 @@ public class SimulatorManager extends Thread {
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_ORIENTATION,2)){
                     robot.setOrientation(parseFloat(arguments[1]));
                 }
+                else if(testOrder(arguments, "torqueBras", 2)) {
+                    // TODO: non random?
+                    // si on attend une couleur de palet, on en envoie une au hasard :)
+                    int rand = (int) (Math.random() * CouleurPalet.values().length);
+                    CouleurPalet.setCouleurPalRecu(CouleurPalet.values()[rand].name().toLowerCase());
+                }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
                 }
@@ -213,7 +218,11 @@ public class SimulatorManager extends Thread {
      * @throws OrderException si un mauvais nombre d'arguments est reçu par le simulateur
      */
     private boolean testOrder(String[] arguments, Order order, int nb_args) throws OrderException {
-        if (arguments[0].equals(order.getOrderStr())){
+        return testOrder(arguments, order.getOrderStr(), nb_args);
+    }
+
+    private boolean testOrder(String[] arguments, String order, int nb_args) throws OrderException{
+        if (arguments[0].equals(order)){
             if (arguments.length==nb_args){
                 return true;
             }
@@ -229,6 +238,7 @@ public class SimulatorManager extends Thread {
         else{
             return false;
         }
+
     }
 
     /** Parser de float

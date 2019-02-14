@@ -119,7 +119,7 @@ public class ScriptAction extends Action {
 
     @Override
     public void perform(EnvironmentInfo info) {
-     // TODO   script.goToThenExecute(version);
+        script.goToThenExecute(version);
         executed = true;
     }
 

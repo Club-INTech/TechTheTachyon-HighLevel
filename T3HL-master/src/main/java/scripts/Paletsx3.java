@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -44,18 +45,26 @@ public class Paletsx3 extends Script{
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+
+                robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT);
+
+                CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
+
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
 
-                ((Master) robot).pushPaletDroit();
+                ((Master) robot).pushPaletDroit(couleur);
                 robot.moveToPoint(positions[j]);
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT);
+
+            CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-            ((Master) robot).pushPaletDroit();
+            ((Master) robot).pushPaletDroit(couleur);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }

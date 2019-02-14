@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -16,8 +17,8 @@ public class PaletsZoneDepart extends Script {
     private int xEntry = 1350;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry,yEntry),
-            //new VectCartesian(xEntry,yEntry+300),
-            //new VectCartesian(xEntry,yEntry+600)
+            new VectCartesian(xEntry,yEntry+300),
+            new VectCartesian(xEntry,yEntry+600)
     };
 
 
@@ -40,9 +41,15 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+
+                robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_GAUCHE);
+
+                CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
+
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                ((Master) robot).pushPaletGauche();
+
+                ((Master) robot).pushPaletGauche(couleur);
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
 

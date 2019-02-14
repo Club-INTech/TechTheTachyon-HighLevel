@@ -21,7 +21,6 @@ public enum CouleurPalet {
         couleurPalRecue = new CompletableFuture<>();
     }
 
-
     public static void setCouleurPalRecu(String couleurRecue) {
         switch (couleurRecue) {
             case "vert":
@@ -42,8 +41,8 @@ public enum CouleurPalet {
         }
     }
 
-    public static CouleurPalet getCouleurPalRecu(){
-        CouleurPalet couleurPalet = CouleurPalet.INVISIBLE ;
+    public static CouleurPalet getCouleurPalRecu() {
+        CouleurPalet couleurPalet = CouleurPalet.INVISIBLE;
         try {
             couleurPalet = couleurPalRecue.get();
         } catch (InterruptedException e) {

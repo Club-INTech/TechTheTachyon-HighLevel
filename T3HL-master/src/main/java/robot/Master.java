@@ -47,12 +47,12 @@ public class Master extends Robot {
 
     public int getNbpaletsgauches(){return ascenseurGauche.size();}
 
-    public void pushPaletDroit(){
-        ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+    public void pushPaletDroit(CouleurPalet colour) {
+        ascenseurDroite.push(colour);
     }
 
-    public void pushPaletGauche(){
-        ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+    public void pushPaletGauche(CouleurPalet colour) {
+        ascenseurGauche.push(colour);
     }
 
     public void popPaletDroit(){
