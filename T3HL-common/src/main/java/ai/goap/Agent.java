@@ -119,7 +119,10 @@ public abstract class Agent {
             fsm.pushState(this.performingState);
             return;
         }
+        long startTime = System.currentTimeMillis();
         Stack<ActionGraph.Node> plan = graph.plan(info, currentGoal);
+        long elapsed = System.currentTimeMillis()-startTime;
+        Log.AI.debug("Planning took "+elapsed+"ms ("+elapsed/1000.0+"s)");
         if(plan != null) { // on a un plan! \o/
            fsm.popState(); // on retire l'état idle courant
            this.currentPlan = plan;
