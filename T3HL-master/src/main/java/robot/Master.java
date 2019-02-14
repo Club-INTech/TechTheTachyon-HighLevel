@@ -22,9 +22,7 @@ import data.CouleurPalet;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
-import orders.order.ActuatorsOrder;
 import pfg.config.Config;
-import robot.Robot;
 
 import java.util.Stack;
 
@@ -34,36 +32,35 @@ import java.util.Stack;
  * @author rem
  */
 public class Master extends Robot {
-    private Stack<CouleurPalet> ascenseurgauche;
-    private Stack<CouleurPalet> ascenseurdroite;
-    private int nbpaletsdroits;
-    private int nbpaletsgauches;
+    private Stack<CouleurPalet> ascenseurGauche;
+    private Stack<CouleurPalet> ascenseurDroite;
+
     public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
         super(locomotion, orderWrapper, hookFactory);
-        this.nbpaletsdroits = 0;
-        this.nbpaletsgauches = 0;
+        this.ascenseurGauche = new Stack<>();
+        this.ascenseurDroite = new Stack<>();
     }
 
     public int getNbpaletsdroits (){
-        return ascenseurdroite.size();
+        return ascenseurDroite.size();
     }
 
-    public int getNbpaletsgauches(){return ascenseurgauche.size();}
+    public int getNbpaletsgauches(){return ascenseurGauche.size();}
 
     public void pushPaletDroit(){
-        ascenseurdroite.push(CouleurPalet.getCouleurPalRecu());
+        ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
     }
 
     public void pushPaletGauche(){
-        ascenseurgauche.push(CouleurPalet.getCouleurPalRecu());
+        ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
     }
 
     public void popPaletDroit(){
-        ascenseurdroite.pop();
+        ascenseurDroite.pop();
     }
 
     public void popPaletGauche(){
-        ascenseurgauche.pop();
+        ascenseurGauche.pop();
     }
 
     @Override
