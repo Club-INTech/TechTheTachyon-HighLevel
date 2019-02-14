@@ -41,7 +41,7 @@ public class AIService extends Thread implements Service {
         this.locomotion = locomotion;
         this.graph = new ActionGraph();
 
-        this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config); // TODO
+        this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config, true);
         this.agent = new RobotAgent(locomotion, graph, spectre);
     }
 

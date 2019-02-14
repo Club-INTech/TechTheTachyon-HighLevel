@@ -37,7 +37,19 @@ public class SpectreRobot {
     private final Table fakeTable;
     private final Config config;
 
+    /**
+     * A défaut d'avoir quelque chose de propre, on vérifie si ce spectre est en fait le vrai robot, comme ça on peut tricher sur la table à renvoyer
+     * dans getSimulatedTable(). Comme ça l'IA va modifier pour de vrai l'état de la table lors de l'exécution
+     */
+    private final boolean isRoot;
+
+
     public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config) {
+        this(baseGraphe, baseTable, config, false);
+    }
+
+    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config, boolean isRoot) {
+        this.isRoot = isRoot;
         this.baseGraphe = baseGraphe;
         this.baseTable = baseTable;
         this.config = config;
@@ -102,11 +114,11 @@ public class SpectreRobot {
     }
 
     public Graphe getSimulatedGraph() {
-        return fakeGraphe;
+        return isRoot ? baseGraphe : fakeGraphe;
     }
 
     public Table getSimulatedTable() {
-        return fakeTable;
+        return isRoot ? baseTable : fakeTable;
     }
 
     public Pathfinder getSimulationPathfinder() {

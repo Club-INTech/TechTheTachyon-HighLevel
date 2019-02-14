@@ -22,6 +22,7 @@ import data.Graphe;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
+import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -30,6 +31,7 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -164,9 +166,11 @@ public class Locomotion implements Service {
          *      Signaler un graphe non mis à jour
          *   4. Clean le graphe : point d'arrivé & de départ
          */
-        if (table.isPositionInFixedObstacle(point) || table.isPositionInFixedObstacle(xyo.getPosition())) {
-            Log.LOCOMOTION.warning("Points de départ " + xyo.getPosition() + " ou d'arriver " + point + " dans un obstacle");
-        }
+
+        Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(xyo.getPosition());
+        obstacleBelowPosition.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle));
+        Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(point);
+        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + point + " dans l'obstacle " + obstacle));
 
         graphe.writeLock().lock();
         start = graphe.addProvisoryNode(xyo.getPosition().clone());

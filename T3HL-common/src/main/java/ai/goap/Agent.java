@@ -90,7 +90,49 @@ public abstract class Agent {
             return "Performing "+action;
         }
     };
-    // TODO: plus de log
+
+    /**
+     * Une action juste pour forcer la copie du graphe et de la table lors de la planification
+     */
+    private Action copyAction = new Action() {
+        @Override
+        public double getCost(EnvironmentInfo info) {
+            return 0;
+        }
+
+        @Override
+        public void perform(EnvironmentInfo info) {
+
+        }
+
+        @Override
+        public boolean isComplete(EnvironmentInfo info) {
+            return false;
+        }
+
+        @Override
+        public boolean requiresMovement(EnvironmentInfo info) {
+            return false;
+        }
+
+        @Override
+        public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+
+        }
+
+        @Override
+        public void reset() {
+
+        }
+
+        @Override
+        public boolean modifiesTable() {
+            return true; // force une copie du graphe et de la table
+        }
+    };
+
+
+    // TODO: plus de log?
 
     public Agent(ActionGraph graph) {
         this.currentPlan = null;
@@ -120,7 +162,10 @@ public abstract class Agent {
             return;
         }
         long startTime = System.currentTimeMillis();
-        Stack<ActionGraph.Node> plan = graph.plan(info, currentGoal);
+
+        // on copie les infos sur l'environnement pour être sûr de rien changer
+        EnvironmentInfo envCopy = info.copyWithEffects(copyAction);
+        Stack<ActionGraph.Node> plan = graph.plan(envCopy, currentGoal);
         long elapsed = System.currentTimeMillis()-startTime;
         Log.AI.debug("Planning took "+elapsed+"ms ("+elapsed/1000.0+"s)");
         if(plan != null) { // on a un plan! \o/

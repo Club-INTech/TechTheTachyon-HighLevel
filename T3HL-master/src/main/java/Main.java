@@ -97,11 +97,11 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
-      /*      ai.start();
+            ai.start();
 
             while(ai.getAgent() != null) {
                 Thread.sleep(5);
-            }*/
+            }
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));

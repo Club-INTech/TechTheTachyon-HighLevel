@@ -135,9 +135,13 @@ public class ActionGraph {
         ;
         Stack<Node> result = new Stack<>();
         Node n = cheapest.get();
+        Log.AI.debug("Création du stack:");
         while(n != null) {
             if(n.action != null) { // on évite d'ajouter le noeud de départ au chemin
-                result.push(n);
+                Log.AI.debug(">> "+n.getAction());
+                result.insertElementAt(n, 0);
+                // TODO: check order
+                //result.push(n);
             }
             n = n.parent;
         }

@@ -35,6 +35,7 @@ import utils.math.CircularRectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -319,6 +320,23 @@ public class Table implements Service {
             }
         }
         return false;
+    }
+
+    /**
+     * Trouve l'obstacle potentiel dans la position
+     * @param point la position à tester
+     * @return <pre>Optional.empty()</pre> s'il n'y a aucun obstacle, <pre>Optional.of(some)</pre> avec <pre>some</pre> un obstacle s'il y en a un
+     */
+    public Optional<Obstacle> findFixedObstacleInPosition(Vec2 point) {
+        Iterator<Obstacle> iterator = fixedObstacles.iterator();
+        Obstacle obstacle;
+        while (iterator.hasNext()) {
+            obstacle = iterator.next();
+            if (obstacle.isInObstacle(point)) {
+                return Optional.of(obstacle);
+            }
+        }
+        return Optional.empty();
     }
 
     /**
