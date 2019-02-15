@@ -22,7 +22,7 @@ public class Accelerateur extends Script {
      */
 
     private int xEntry = -230;
-    private int yEntry = 200;
+    private int yEntry = 250; // TODO: ancienne valeur = 200
 
     /**
      * constante

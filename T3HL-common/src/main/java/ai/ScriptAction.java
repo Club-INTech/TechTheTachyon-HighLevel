@@ -75,8 +75,6 @@ public class ScriptAction extends Action {
     }
 
     private boolean checkPath(EnvironmentInfo info) {
-        long startTime = System.currentTimeMillis();
-
         boolean result = false;
         Graphe graph = info.getSpectre().getSimulatedGraph();
 
@@ -93,15 +91,7 @@ public class ScriptAction extends Action {
         graph.writeLock().unlock();
         try {
             graph.readLock().lock();
-            Log.AI.debug("test pathfinding "+this);
             ArrayList<Vec2> path = info.getSpectre().getSimulationPathfinder().findPath(start, aim);
-            long elapsed = System.currentTimeMillis() - startTime;
-            Log.AI.debug("checkPath took "+elapsed+"ms for "+this);
-            Log.AI.debug("path length for "+this+" is "+path.size()+" "+currentPos+" -> "+entryPos);
-            Log.AI.debug("here's the path:");
-            for(Vec2 nodePos : path) {
-                Log.AI.debug("\t- "+nodePos);
-            }
             result = true;
         } catch (NoPathFound f) {
             System.out.println(">> "+toString());

@@ -173,16 +173,24 @@ public class Main {
                 table.updateTableAfterFixedObstaclesChanges();
             }
         };
+
+        Action accelerateur = new ScriptAction(ScriptNamesMaster.ACCELERATEUR, 0) {
+            {
+                effects.put("Accelerateur", true);
+            }
+        };
         ActionGraph graph = ai.getGraph();
         Agent agent = ai.getAgent();
         graph.node(paletsX6Action);
         graph.node(paletsX3Action);
         graph.node(zoneDepart);
+        graph.node(accelerateur);
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("PaletsX6", true);
         goalState.put("PaletsX3", true);
         goalState.put("ZoneDepart", true);
+        goalState.put("Accelerateur", true);
         EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
         agent.setCurrentGoal(goal);
     }

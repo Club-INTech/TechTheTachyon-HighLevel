@@ -45,6 +45,7 @@ public class RobotAgent extends Agent {
         info.getState().put("PaletsX6", false);
         info.getState().put("PaletsX3", false);
         info.getState().put("ZoneDepart", false);
+        info.getState().put("Accelerateur", false);
     }
 
     @Override
