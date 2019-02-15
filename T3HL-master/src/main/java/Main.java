@@ -166,9 +166,11 @@ public class Main {
             protected void applyChangesToEnvironment(EnvironmentInfo info) {
                 super.applyChangesToEnvironment(info);
                 Table table = info.getSpectre().getSimulatedTable();
-                table.removeFixedObstacle(table.paletRougeDroite);
-                table.removeFixedObstacle(table.paletVertDroite);
-                table.removeFixedObstacle(table.paletBleuDroite);
+                table.removeFixedObstacleNotReInit(table.paletRougeDroite);
+                table.removeFixedObstacleNotReInit(table.paletVertDroite);
+                table.removeFixedObstacleNotReInit(table.paletBleuDroite);
+
+                table.updateTableAfterFixedObstaclesChanges();
             }
         };
         ActionGraph graph = ai.getGraph();

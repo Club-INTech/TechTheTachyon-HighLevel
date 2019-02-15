@@ -436,17 +436,26 @@ public class Table implements Service {
             Log.LIDAR.warning("Graphe non instancié");
         }
     }
+
+    /**
+     * Retire un obstacle fixe de la table sans metre à jour le graphe
+     * @param obstacle
+     */
+    public void removeFixedObstacleNotReInit(Obstacle obstacle) {
+        if (obstacle instanceof MobileCircularObstacle) {
+            throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
+        }
+        this.fixedObstacles.remove(obstacle);
+        Log.TABLE.debug("suppression de l'obstacle "+obstacle);
+    }
+
     /**
      * Retire un obstacle fixe de la table et met à jour le graphe
      * ATTENTION : méthode coûteuse car le graphe doit être recalculé
      * @param obstacle  obstacle à retirer
      */
     public void removeFixedObstacle(Obstacle obstacle) {
-        if (obstacle instanceof MobileCircularObstacle) {
-            throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
-        }
-        this.fixedObstacles.remove(obstacle);
-        Log.TABLE.debug("suppression de l'obstacle "+obstacle);
+        removeFixedObstacleNotReInit(obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {
