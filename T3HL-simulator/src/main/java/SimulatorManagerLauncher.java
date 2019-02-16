@@ -9,8 +9,10 @@ import java.util.HashMap;
 public class SimulatorManagerLauncher extends Thread{
 
     //Attributs qui peuvent être modifiés par l'utilisateur avant le lancement
-    private int[] LLports;
-    private int[] HLports;
+    private int LLMasterPort;
+    private int LLSlavePort;
+    private int HLMasterPort;
+    private int HLSlavePort;
     private ArrayList<Vec2> pointsToDraw;
     private float speedFactor;
     private boolean colorblindMode;
@@ -29,7 +31,9 @@ public class SimulatorManagerLauncher extends Thread{
     private boolean isLaunched = false;
 
     //Permet de savoir si cette instance a fini de faire son travail
-    private boolean hasFinished = false;
+    private boolean finished = false;
+
+
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -42,8 +46,10 @@ public class SimulatorManagerLauncher extends Thread{
      *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
      */
     private void initDefaultPassedParameters(){
-        this.LLports=new int[]{};
-        this.HLports=new int[]{};
+        this.LLMasterPort=0;
+        this.LLSlavePort=0;
+        this.HLMasterPort=0;
+        this.HLSlavePort=0;
         this.pointsToDraw = new ArrayList<Vec2>();
         this.speedFactor=1;
         this.colorblindMode=false;
@@ -57,17 +63,31 @@ public class SimulatorManagerLauncher extends Thread{
         }
     }
 
-    /** Setter des ports utilisés pour parler au LL */
-    void setLLports(int[] LLports){
-        if (canParametersBePassed()) {
-            this.LLports = LLports;
+    /** Setter du port utilisé pour parler au LL master */
+    void setLLMasterPort(int LLMasterPort){
+        if (canParametersBePassed()){
+            this.LLMasterPort=LLMasterPort;
         }
     }
 
-    /** Setter des ports utilisés pour parler entre les HL */
-    void setHLports(int[] HLports) {
-        if (canParametersBePassed()) {
-            this.HLports = HLports;
+    /** Setter du port utilisé pour parler au LL slave */
+    void setLLSlavePort(int LLSlavePort){
+        if (canParametersBePassed()){
+            this.LLSlavePort=LLSlavePort;
+        }
+    }
+
+    /** Setter du port utilisé pour parler au HL master */
+    void setHLMasterPort(int HLMasterPort){
+        if (canParametersBePassed()){
+            this.HLMasterPort=HLMasterPort;
+        }
+    }
+
+    /** Setter du port utilisé pour parler au HL slave */
+    void setHLSlavePort(int HLSlavePort){
+        if (canParametersBePassed()){
+            this.HLSlavePort=HLSlavePort;
         }
     }
 
@@ -112,37 +132,66 @@ public class SimulatorManagerLauncher extends Thread{
     /** Lancer le simulateur */
     private void launchSimulatorManager() {
         this.isLaunched=true;
-        if (this.HLports.length > 2) {
-            System.out.println("SIMULATEUR : Le nombre de ports attendus pour le HL (2ème argument) est de 2 ou moins");
-            return;
-        }
 
-        // On instancie un listener par port, de manière à ce que l'ordre de connexion aux listeners soit sans importance
-        for (int port : this.LLports) {
-            Thread serverThread = new Thread() {
+        // On instancie les listeners sur plusieurs threads
+        // de manière à ce que l'ordre de connexion aux listeners soit sans importance
+
+        // Instanciation du listener LL du Master
+        if (this.LLMasterPort != 0) {
+            new Thread() {
                 @Override
                 public void run() {
-                    simulatedLLConnectionManager.put(port, new SimulatedConnectionManager(port));
+                    simulatedLLConnectionManager.put(LLMasterPort, new SimulatedConnectionManager(LLMasterPort));
                 }
-            };
-            serverThread.start();
-            System.out.println(String.format("Listener LL lancé sur le port %d", port));
+            }.start();
+            System.out.println(String.format("Listener LL-Master lancé sur le port %d", this.LLMasterPort));
         }
 
-        for (int port : this.HLports) {
-            Thread serverThread = new Thread() {
+        // Instanciation du listener LL du Slave
+        if (this.LLSlavePort != 0) {
+            new Thread() {
                 @Override
                 public void run() {
-                    simulatedHLConnectionManager.put(port, new SimulatedConnectionManager(port));
+                    simulatedLLConnectionManager.put(LLSlavePort, new SimulatedConnectionManager(LLSlavePort));
                 }
-            };
-            serverThread.start();
-            System.out.println(String.format("Listener HL lancé sur le port %d", port));
+            }.start();
+            System.out.println(String.format("Listener LL-Slave lancé sur le port %d", this.LLSlavePort));
         }
 
-        // On attend que tous les listeners permettant la communication entre le HL et le LL d'un même robot soient connectés
-        for (int port : this.LLports) {
-            while (this.simulatedLLConnectionManager.get(port) == null || !this.simulatedLLConnectionManager.get(port).isReady()) {
+        // Instanciation du listener HL du Master
+        if (this.HLMasterPort != 0){
+            new Thread() {
+                @Override
+                public void run() {
+                    simulatedHLConnectionManager.put(HLMasterPort, new SimulatedConnectionManager(HLMasterPort));
+                }
+            }.start();
+            System.out.println(String.format("Listener HL-Master lancé sur le port %d", this.HLMasterPort));
+        }
+
+        // Instanciation du listener HL du Slave
+        if (this.HLSlavePort != 0){
+            new Thread() {
+                @Override
+                public void run() {
+                    simulatedHLConnectionManager.put(HLSlavePort, new SimulatedConnectionManager(HLSlavePort));
+                }
+            }.start();
+            System.out.println(String.format("Listener HL-Slave lancé sur le port %d", this.HLSlavePort));
+        }
+
+        //On attend que tous les listeners permettant la communication entre le HL et le LL d'un meme robot soient connectés
+        if (this.LLMasterPort != 0) {
+            while (this.simulatedLLConnectionManager.get(this.LLMasterPort) == null || !this.simulatedLLConnectionManager.get(this.LLMasterPort).isReady()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (this.LLSlavePort != 0) {
+            while (this.simulatedLLConnectionManager.get(this.LLSlavePort) == null || !this.simulatedLLConnectionManager.get(this.LLSlavePort).isReady()) {
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
@@ -152,8 +201,17 @@ public class SimulatorManagerLauncher extends Thread{
         }
 
         //On attend que tous les listeners permettant la communication entre les HL soient connectés
-        for (int port : this.HLports) {
-            while (this.simulatedHLConnectionManager.get(port) == null || !this.simulatedHLConnectionManager.get(port).isReady()) {
+        if (this.HLMasterPort != 0) {
+            while (this.simulatedHLConnectionManager.get(this.HLMasterPort) == null || !this.simulatedHLConnectionManager.get(this.HLMasterPort).isReady()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (this.HLSlavePort != 0) {
+            while (this.simulatedHLConnectionManager.get(this.HLSlavePort) == null || !this.simulatedHLConnectionManager.get(this.HLSlavePort).isReady()) {
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {
@@ -162,8 +220,10 @@ public class SimulatorManagerLauncher extends Thread{
             }
         }
 
+
         // On créer un robot par port
-        for (int port : this.LLports) {
+        for (int port : this.simulatedLLConnectionManager.keySet()) {
+            System.out.println("test");
             System.out.println(String.format("(%d) Listener connecté", port));
 
             //On instancie un robot simulé pour chaque LL instancié
@@ -197,8 +257,10 @@ public class SimulatorManagerLauncher extends Thread{
 
         // On instancie le manager de la simulation (qui va s'occuper de faire les appels à toutes les fonctions)
         this.simulatorManager = new SimulatorManager();
-        this.simulatorManager.setLLports(this.LLports);
-        this.simulatorManager.setHLports(this.HLports);
+        this.simulatorManager.setLLMasterPort(this.LLMasterPort);
+        this.simulatorManager.setLLSlavePort(this.LLSlavePort);
+        this.simulatorManager.setHLMasterPort(this.HLSlavePort);
+        this.simulatorManager.setHLSlavePort(this.HLSlavePort);
         this.simulatorManager.setSimulatedLLConnectionManagers(this.simulatedLLConnectionManager);
         this.simulatorManager.setSimulatedHLConnectionManagers(this.simulatedHLConnectionManager);
         this.simulatorManager.setGraphicalInterface(this.graphicalInterface);
@@ -207,18 +269,22 @@ public class SimulatorManagerLauncher extends Thread{
         System.out.println("Manager de simulation instancié");
 
         //On indique que tout a bien été instancié
-        this.hasFinished = true;
+        this.finished = true;
     }
 
     /* ================================================ Getters ================================================= */
     /** Getter du manager de la simulation */
     SimulatorManager getSimulatorManager(){
-        if (!this.hasFinished){
+        if (!this.finished){
             System.out.println("SIMULATEUR : Le lanceur de simulateur n'a pas fini lancer le simulateur");
             return null;
         }
         else{
             return this.simulatorManager;
         }
+    }
+
+    public boolean isFinished(){
+        return this.finished;
     }
 }

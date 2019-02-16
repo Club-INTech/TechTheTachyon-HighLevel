@@ -34,7 +34,6 @@ import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.VectPolar;
 
 public class Main {
 
@@ -132,16 +131,18 @@ public class Main {
 
     private static void initSimulator(){
         simulatorLauncher = new SimulatorManagerLauncher();
-        simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
+        simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+        simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
         simulatorLauncher.setColorblindMode(false);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (!simulatorLauncher.isFinished()){
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
         interfaceGraphique = simulatorManager.getGraphicalInterface();
