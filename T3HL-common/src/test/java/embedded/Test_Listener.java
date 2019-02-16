@@ -52,7 +52,7 @@ public class Test_Listener {
         Thread.sleep(5000);
         // TODO : lancer le processus de gestion du Lidar !
 
-        Assert.assertTrue(Connection.LIDAR.isInitiated());
+        Assert.assertTrue(Connection.LIDAR_DATA.isInitiated());
         Assert.assertTrue(Connection.TEENSY_MASTER.isInitiated());
         Assert.assertTrue(Connection.SLAVE.isInitiated());
     }
