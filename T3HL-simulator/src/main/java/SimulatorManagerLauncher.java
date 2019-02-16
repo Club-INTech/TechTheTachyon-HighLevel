@@ -13,6 +13,7 @@ public class SimulatorManagerLauncher extends Thread{
     private int LLSlavePort;
     private int HLMasterPort;
     private int HLSlavePort;
+    private int lidarPort;
     private ArrayList<Vec2> pointsToDraw;
     private float speedFactor;
     private boolean colorblindMode;
@@ -24,6 +25,7 @@ public class SimulatorManagerLauncher extends Thread{
     private HashMap<Integer, SimulatedRobot> simulatedRobots = new HashMap<>();
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManager = new HashMap<>();
     private HashMap<Integer, SimulatedConnectionManager> simulatedHLConnectionManager = new HashMap<>();
+    private SimulatedConnectionManager lidarConnection;
     private Container container;
     private Table table;
 
@@ -50,6 +52,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.LLSlavePort=0;
         this.HLMasterPort=0;
         this.HLSlavePort=0;
+        this.lidarPort=0;
         this.pointsToDraw = new ArrayList<Vec2>();
         this.speedFactor=1;
         this.colorblindMode=false;
@@ -88,6 +91,13 @@ public class SimulatorManagerLauncher extends Thread{
     void setHLSlavePort(int HLSlavePort){
         if (canParametersBePassed()){
             this.HLSlavePort=HLSlavePort;
+        }
+    }
+
+    /** Setter du port utilisé pour parler au HL slave */
+    void setLidarPort(int lidarPort){
+        if (canParametersBePassed()){
+            this.lidarPort=lidarPort;
         }
     }
 
@@ -180,6 +190,16 @@ public class SimulatorManagerLauncher extends Thread{
             System.out.println(String.format("Listener HL-Slave lancé sur le port %d", this.HLSlavePort));
         }
 
+        if (this.lidarPort != 0){
+            new Thread() {
+                @Override
+                public void run() {
+                    lidarConnection = new SimulatedConnectionManager(lidarPort);
+                }
+            }.start();
+            System.out.println(String.format("Présence de Lidar simulée sur le port %d", this.lidarPort));
+        }
+
         //On attend que tous les listeners permettant la communication entre le HL et le LL d'un meme robot soient connectés
         if (this.LLMasterPort != 0) {
             while (this.simulatedLLConnectionManager.get(this.LLMasterPort) == null || !this.simulatedLLConnectionManager.get(this.LLMasterPort).isReady()) {
@@ -200,6 +220,7 @@ public class SimulatorManagerLauncher extends Thread{
             }
         }
 
+
         //On attend que tous les listeners permettant la communication entre les HL soient connectés
         if (this.HLMasterPort != 0) {
             while (this.simulatedHLConnectionManager.get(this.HLMasterPort) == null || !this.simulatedHLConnectionManager.get(this.HLMasterPort).isReady()) {
@@ -212,6 +233,17 @@ public class SimulatorManagerLauncher extends Thread{
         }
         if (this.HLSlavePort != 0) {
             while (this.simulatedHLConnectionManager.get(this.HLSlavePort) == null || !this.simulatedHLConnectionManager.get(this.HLSlavePort).isReady()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // On simule une présence de lidar si nécessaire
+        if (this.lidarPort != 0){
+            while (this.lidarConnection == null || !this.lidarConnection.isReady()){
                 try {
                     Thread.sleep(5);
                 } catch (InterruptedException e) {

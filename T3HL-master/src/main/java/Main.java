@@ -131,8 +131,16 @@ public class Main {
 
     private static void initSimulator(){
         simulatorLauncher = new SimulatorManagerLauncher();
+        //On set tous les LL qui sont simulés
         simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+
+        //On set tous les HL qui recevront des messages
         simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+
+        //On set le lidar s'il ne tourne pas
+        simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
+
+
         simulatorLauncher.setColorblindMode(false);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);

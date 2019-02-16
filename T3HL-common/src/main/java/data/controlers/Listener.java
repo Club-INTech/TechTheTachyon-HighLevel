@@ -115,8 +115,6 @@ public class Listener extends Thread implements Service {
                 Log.COMMUNICATION.debug("Simulated Buddy connected");
             }
             else {
-                connectionManager.initConnections(Connection.LIDAR_DATA);
-                Log.COMMUNICATION.debug("Lidar");
                 if (master) {
                     connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
                     Log.COMMUNICATION.debug("Slave");
@@ -128,6 +126,8 @@ public class Listener extends Thread implements Service {
                     Log.COMMUNICATION.debug("Teensy Slave");
                 }
             }
+            connectionManager.initConnections(Connection.LIDAR_DATA);
+            Log.COMMUNICATION.debug("Lidar connected");
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
