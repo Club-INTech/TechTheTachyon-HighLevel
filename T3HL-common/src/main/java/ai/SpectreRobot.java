@@ -30,11 +30,11 @@ import java.util.stream.Collectors;
 
 public class SpectreRobot {
 
-    private final Pathfinder spectrePathfinder;
+    private Pathfinder spectrePathfinder;
     private final Graphe baseGraphe;
     private final Table baseTable;
-    private final Graphe fakeGraphe;
-    private final Table fakeTable;
+    private Graphe fakeGraphe;
+    private Table fakeTable;
     private final Config config;
 
     /**
@@ -54,30 +54,8 @@ public class SpectreRobot {
         this.baseTable = baseTable;
         this.config = config;
 
-        this.fakeTable = new Table();
-        // copie des obstacles, oui c'est dégueulasse
-        fakeTable.paletRougeGauche = baseTable.paletRougeGauche;
-        fakeTable.paletRougeDroite = baseTable.paletRougeDroite;
-        fakeTable.paletVertDroite = baseTable.paletVertDroite;
-        fakeTable.paletBleuDroite = baseTable.paletBleuDroite;
-        fakeTable.paletVertGauche = baseTable.paletVertGauche;
-        fakeTable.paletBleuGauche = baseTable.paletBleuGauche;
-
-        fakeTable.paletBleuZoneChaosDroite = baseTable.paletBleuZoneChaosDroite;
-        fakeTable.paletBleuZoneChaosGauche = baseTable.paletBleuZoneChaosGauche;
-
-        fakeTable.paletRougeUnZoneChaosDroite = baseTable.paletRougeUnZoneChaosDroite;
-        fakeTable.paletRougeDeuxZoneChaosDroite = baseTable.paletRougeDeuxZoneChaosDroite;
-        fakeTable.paletRougeUnZoneChaosGauche = baseTable.paletRougeUnZoneChaosGauche;
-        fakeTable.paletRougeDeuxZoneChaosGauche = baseTable.paletRougeDeuxZoneChaosGauche;
-
-        fakeTable.paletVertZoneChaosDroite = baseTable.paletVertZoneChaosDroite;
-        fakeTable.paletVertZoneChaosGauche = baseTable.paletVertZoneChaosGauche;
-
-        this.fakeGraphe = new Graphe(fakeTable);
-
-        updateConfig(config);
-        copyFromBase(fakeGraphe, fakeTable);
+        this.fakeTable = baseTable;
+        this.fakeGraphe = baseGraphe;
 
         this.spectrePathfinder = new Pathfinder(fakeGraphe);
     }
@@ -94,7 +72,8 @@ public class SpectreRobot {
      * Utilisé avant la planification pour remettre à jour le graphe et la table
      */
     public void comeBackToReality() {
-        copyFromBase(baseGraphe, baseTable);
+        switchTableModel(baseTable, baseGraphe);
+        //copyFromBase(baseGraphe, baseTable);
     }
 
     public void copyFromBase(Graphe baseGraphe, Table baseTable) {
@@ -122,5 +101,12 @@ public class SpectreRobot {
 
     public Pathfinder getSimulationPathfinder() {
         return spectrePathfinder;
+    }
+
+    public void switchTableModel(Table table, Graphe graphe) {
+        this.fakeTable = table;
+        this.fakeGraphe = graphe;
+
+        this.spectrePathfinder = new Pathfinder(fakeGraphe);
     }
 }

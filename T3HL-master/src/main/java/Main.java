@@ -24,6 +24,7 @@ import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
 import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
+import data.Graphe;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
@@ -140,6 +141,16 @@ public class Main {
     private static void initAI() throws ContainerException {
         // TODO: mettre la création du graphe à un autre endroit
 
+        Table tableSansZoneDepart = new Table();
+        Graphe grapheSansZoneDepart = new Graphe(tableSansZoneDepart);
+        grapheSansZoneDepart.updateConfigNoInit(container.getConfig());
+        tableSansZoneDepart.updateConfig(container.getConfig());
+        tableSansZoneDepart.initObstacles();
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.paletBleuDroite);
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.paletRougeDroite);
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.paletVertDroite);
+        tableSansZoneDepart.updateTableAfterFixedObstaclesChanges();
+
         Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0) {
             {
                 effects.put("PaletsX6", true);
@@ -165,12 +176,7 @@ public class Main {
             @Override
             protected void applyChangesToEnvironment(EnvironmentInfo info) {
                 super.applyChangesToEnvironment(info);
-                Table table = info.getSpectre().getSimulatedTable();
-                table.removeFixedObstacleNotReInit(table.paletRougeDroite);
-                table.removeFixedObstacleNotReInit(table.paletVertDroite);
-                table.removeFixedObstacleNotReInit(table.paletBleuDroite);
-
-                table.updateTableAfterFixedObstaclesChanges();
+                info.getSpectre().switchTableModel(tableSansZoneDepart, grapheSansZoneDepart);
             }
         };
 

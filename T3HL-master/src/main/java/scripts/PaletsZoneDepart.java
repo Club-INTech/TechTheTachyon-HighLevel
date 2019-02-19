@@ -53,6 +53,12 @@ public class PaletsZoneDepart extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
 
+
+            table.removeFixedObstacleNotReInit(table.paletRougeDroite);
+            table.removeFixedObstacleNotReInit(table.paletVertDroite);
+            table.removeFixedObstacleNotReInit(table.paletBleuDroite);
+
+            table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
