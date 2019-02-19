@@ -20,6 +20,7 @@ import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
+import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
@@ -43,6 +44,7 @@ public class Main {
     private static OrderWrapper orderWrapper;
     private static Listener listener;
     private static SensorControler sensorControler;
+    private static LidarControler lidarControler;
     private static Table table;
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
@@ -77,6 +79,18 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
+
+
+
+
+            //Tests pour le lidar
+            //robot.setPositionAndOrientation(new VectCartesian(0,1000), Math.PI/2);
+            Thread.sleep(10000000);
+
+
+
+
+
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -123,6 +137,8 @@ public class Main {
             sensorControler.start();
             table = container.getService(Table.class);
             table.initObstacles();
+            lidarControler = container.getService(LidarControler.class);
+            lidarControler.start();
             robot = container.getService(Master.class);
         } catch (ContainerException e) {
             e.printStackTrace();
@@ -138,7 +154,7 @@ public class Main {
         simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
 
         //On set le lidar s'il ne tourne pas
-        simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
+        //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
 
 
         simulatorLauncher.setColorblindMode(false);

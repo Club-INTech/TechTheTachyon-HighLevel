@@ -32,16 +32,16 @@ import java.util.GregorianCalendar;
  */
 public enum Log
 {
-    COMMUNICATION(true),
-    DATA_HANDLER(true),
-    LOCOMOTION(true),
-    STRATEGY(true),
-    LIDAR(true),
-    PATHFINDING(true),
-    GRAPHE(true),
-    HOOK(true),
-    TABLE(true),
-    AI(true),
+    COMMUNICATION(false),
+    DATA_HANDLER(false),
+    LOCOMOTION(false),
+    STRATEGY(false),
+    LIDAR(false),
+    PATHFINDING(false),
+    GRAPHE(false),
+    HOOK(false),
+    TABLE(false),
+    AI(false),
     ;
 
     /**

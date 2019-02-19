@@ -72,7 +72,7 @@ public enum ConfigData implements ConfigInfo
     TEENSY_MASTER_PORT(13500),
     TEENSY_SLAVE_IP("192.168.0.2"),
     TEENSY_SLAVE_PORT(13500),
-    LIDAR_DATA_PORT(17685),
+    LIDAR_DATA_PORT(17865),
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
