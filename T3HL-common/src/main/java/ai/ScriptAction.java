@@ -23,6 +23,7 @@ import ai.goap.EnvironmentInfo;
 import data.Graphe;
 import data.Table;
 import data.graphe.Node;
+import data.table.Obstacle;
 import locomotion.NoPathFound;
 import scripts.Script;
 import scripts.ScriptNames;
@@ -30,6 +31,7 @@ import utils.Log;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class ScriptAction extends Action {
 
@@ -79,29 +81,35 @@ public class ScriptAction extends Action {
         Graphe graph = info.getSpectre().getSimulatedGraph();
 
         Vec2 entryPos = script.entryPosition(version).getCenter();
+        // TODO: vérif des locks & finally
         graph.writeLock().lock();
         Vec2 currentPos = info.getCurrentPosition();
         Node start = graph.addProvisoryNode(currentPos);
         Node aim = graph.addProvisoryNode(entryPos);
         Table table = info.getSpectre().getSimulatedTable();
 
-        if (table.isPositionInFixedObstacle(entryPos) || table.isPositionInFixedObstacle(currentPos)) {
-            Log.LOCOMOTION.warning("Points de départ " + currentPos + " ou d'arrivée " + entryPos + " dans un obstacle");
-        }
+        Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(info.getXYO().getPosition());
+        obstacleBelowPosition.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points de départ " + info.getXYO().getPosition() + " dans l'obstacle " + obstacle));
+        Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(entryPos);
+        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + entryPos + " dans l'obstacle " + obstacle));
+
         graph.writeLock().unlock();
         try {
             graph.readLock().lock();
-            ArrayList<Vec2> path = info.getSpectre().getSimulationPathfinder().findPath(start, aim);
+            info.getSpectre().getSimulationPathfinder().findPath(start, aim);
             result = true;
         } catch (NoPathFound f) {
             System.out.println(">> "+toString());
             f.printStackTrace(); // TODO: debug only
         } finally {
             graph.readLock().unlock();
-            graph.writeLock().lock();
-            graph.removeProvisoryNode(start);
-            graph.removeProvisoryNode(aim);
-            graph.writeLock().unlock();
+            try {
+                graph.writeLock().lock();
+                graph.removeProvisoryNode(start);
+                graph.removeProvisoryNode(aim);
+            } finally {
+                graph.writeLock().unlock();
+            }
         }
 
         return result;
@@ -110,7 +118,7 @@ public class ScriptAction extends Action {
     @Override
     public double getCost(EnvironmentInfo info) {
         Vec2 entryPos = script.entryPosition(version).getCenter();
-        return baseCost + info.getXYO().getPosition().distanceTo(entryPos) + Math.abs(info.getXYO().getPosition().angleTo(entryPos));
+        return baseCost + info.getXYO().getPosition().squaredDistanceTo(entryPos) + Math.abs(info.getXYO().getPosition().angleTo(entryPos));
     }
 
     @Override

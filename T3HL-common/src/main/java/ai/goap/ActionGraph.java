@@ -130,53 +130,115 @@ public class ActionGraph {
         }
 
         Optional<Node> cheapest = path.stream()
-                .sorted(Comparator.comparingDouble(a -> a.runningCost))
-                .findFirst()
-        ;
+                .min(Comparator.comparingDouble(a -> a.runningCost));
         Stack<Node> result = new Stack<>();
         Node n = cheapest.get();
+
+        long startStackTime = System.nanoTime();
         Log.AI.debug("Création du stack:");
         while(n != null) {
             if(n.action != null) { // on évite d'ajouter le noeud de départ au chemin
                 Log.AI.debug(">> "+n.getAction());
-                result.insertElementAt(n, 0);
+                //result.insertElementAt(n, 0);
                 // TODO: check order
-                //result.push(n);
+                // TODO: insertElementAt a l'air d'être un poil plus lent, faudrait voir pour remplacer par une Queue
+                result.push(n);
             }
             n = n.parent;
         }
+        long elapsed = (System.nanoTime()-startStackTime);
+        Log.AI.debug("la création du stack a pris "+elapsed+"ns ("+elapsed/1000000+"ms)");
         return result;
     }
 
-    private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+    private boolean buildPathToGoal(Node startNode, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+        boolean[] subPaths = new boolean[usableNodes.size()];
+        Thread[] subThreads = new Thread[usableNodes.size()];
+        int index = 0;
+        for(Node node : usableNodes) {
+            final int i = index;
+            Thread thread = new Thread(() -> {
+                subPaths[i] = findSubPath(node, startNode, path, usableNodes, info, goal, 0);
+            });
+            thread.setPriority(Thread.MAX_PRIORITY);
+            subThreads[i] = thread;
+           // thread.run();
+            thread.start();
+
+            index++;
+        }
+
+        while(true) {
+            try {
+                boolean allFinished = true;
+                for(Thread t : subThreads) {
+                    if(t.isAlive()) {
+                        allFinished = false;
+                        break;
+                    }
+                }
+                if(allFinished)
+                    break;
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (boolean b : subPaths) {
+            if(b)
+                return true;
+        }
+        return false;
+    }
+
+    private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
         if(goal.isMetByState(info)) // on est déjà arrivé au but!
             return true;
         boolean foundAtLeastOnePath = false;
         for(Node actionNode : usableNodes) {
-            Log.AI.debug("Testing "+actionNode.getAction());
-            if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
-                Log.AI.debug("Can be executed: "+actionNode.getAction());
-                EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
-                if(actionNode.requiresMovement(newState)) {
-                    actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
-                    // TODO: angle
-                }
-                if(goal.isMetByState(newState)) {
-                    double runningCost = parent.runningCost + actionNode.getCost(info);
-                    path.add(actionNode.cloneWithParent(parent, runningCost));
-                    foundAtLeastOnePath = true;
-                } else {
-                    // on retire cette action de la liste des actions possibles
-                    Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());
-                    boolean foundSubpath = buildPathToGoal(actionNode, path, newUsableNodes, newState, goal); // on continue à parcourir l'arbre
+            boolean foundSubPath = findSubPath(actionNode, parent, path, usableNodes, info, goal, depth);
+            if(foundSubPath)
+                foundAtLeastOnePath = true;
+        }
 
-                    if(foundSubpath) {
-                        foundAtLeastOnePath = true;
-                    }
+        return foundAtLeastOnePath;
+    }
+
+    private boolean findSubPath(Node actionNode, Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+        boolean foundAtLeastOnePath = false;
+        long startTime = System.currentTimeMillis();
+        StringBuilder depthStr = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            depthStr.append(">");
+        }
+        Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
+        if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
+            Log.AI.debug("Can be executed: "+actionNode.getAction());
+            EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
+            if(actionNode.requiresMovement(newState)) {
+                actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
+                // TODO: angle
+            }
+            if(goal.isMetByState(newState)) {
+                double runningCost = parent.runningCost + actionNode.getCost(info);
+                synchronized (path) {
+                    path.add(actionNode.cloneWithParent(parent, runningCost));
+                }
+                foundAtLeastOnePath = true;
+            } else {
+                // on retire cette action de la liste des actions possibles
+                Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());
+                boolean foundSubpath = buildPathToGoal(actionNode, path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
+
+                if(foundSubpath) {
+                    foundAtLeastOnePath = true;
                 }
             }
         }
-
+        long elapsed = (System.currentTimeMillis()-startTime);
+        Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
+                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));
         return foundAtLeastOnePath;
     }
 
