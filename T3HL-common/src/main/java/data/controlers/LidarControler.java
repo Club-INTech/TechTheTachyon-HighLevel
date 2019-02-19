@@ -51,7 +51,7 @@ public class LidarControler extends Thread implements Service {
     /**
      * Separateur entre deux coordonnées d'un point
      */
-    private static final String COORDONATE_SEPARATOR    = ",";
+    private static final String COORDONATE_SEPARATOR    = ";";
 
     /**
      * Table à mettre à jour

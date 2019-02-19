@@ -27,7 +27,6 @@ import utils.communication.SocketServerInterface;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.Socket;
 import java.util.Optional;
 
 /**
@@ -38,7 +37,7 @@ import java.util.Optional;
 public enum Connection {
     MASTER(ConfigData.MASTER_IP, ConfigData.MASTER_PORT, SocketClientInterface.class),
     SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class),
-    LIDAR(ConfigData.LOCALHOST, ConfigData.LIDAR_PORT, SocketClientInterface.class),
+    LIDAR_DATA(ConfigData.LOCALHOST, ConfigData.LIDAR_DATA_PORT, SocketClientInterface.class),
     TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SocketClientInterface.class),
     TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketClientInterface.class),
 
