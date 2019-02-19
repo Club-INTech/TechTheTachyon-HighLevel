@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public class ActionGraph {
 
+    private static final Object LOCK = new Object();
+
     public static class Node {
 
         /**
@@ -76,6 +78,7 @@ public class ActionGraph {
 
         public void reset() {
             runningCost = 0.0;
+            parent = null;
             action.reset();
         }
 
@@ -134,11 +137,11 @@ public class ActionGraph {
         Stack<Node> result = new Stack<>();
         Node n = cheapest.get();
 
-        long startStackTime = System.nanoTime();
-        Log.AI.debug("Création du stack:");
+      //  long startStackTime = System.nanoTime();
+      //  Log.AI.debug("Création du stack:");
         while(n != null) {
             if(n.action != null) { // on évite d'ajouter le noeud de départ au chemin
-                Log.AI.debug(">> "+n.getAction());
+             //   Log.AI.debug(">> "+n.getAction());
                 //result.insertElementAt(n, 0);
                 // TODO: check order
                 // TODO: insertElementAt a l'air d'être un poil plus lent, faudrait voir pour remplacer par une Queue
@@ -146,8 +149,8 @@ public class ActionGraph {
             }
             n = n.parent;
         }
-        long elapsed = (System.nanoTime()-startStackTime);
-        Log.AI.debug("la création du stack a pris "+elapsed+"ns ("+elapsed/1000000+"ms)");
+       /* long elapsed = (System.nanoTime()-startStackTime);
+        Log.AI.debug("la création du stack a pris "+elapsed+"ns ("+elapsed/1000000+"ms)");*/
         return result;
     }
 
@@ -162,8 +165,8 @@ public class ActionGraph {
             });
             thread.setPriority(Thread.MAX_PRIORITY);
             subThreads[i] = thread;
-           // thread.run();
-            thread.start();
+            thread.run();
+         //   thread.start();
 
             index++;
         }
@@ -206,39 +209,41 @@ public class ActionGraph {
     }
 
     private boolean findSubPath(Node actionNode, Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+        if(goal.isMetByState(info)) // on est déjà arrivé au but!
+            return true;
         boolean foundAtLeastOnePath = false;
-        long startTime = System.currentTimeMillis();
+      //  long startTime = System.currentTimeMillis();
         StringBuilder depthStr = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             depthStr.append(">");
         }
         Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
         if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
-            Log.AI.debug("Can be executed: "+actionNode.getAction());
+       //     Log.AI.debug("Can be executed: "+actionNode.getAction());
             EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
             if(actionNode.requiresMovement(newState)) {
                 actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
                 // TODO: angle
             }
+            double runningCost = parent.runningCost + actionNode.getCost(info);
             if(goal.isMetByState(newState)) {
-                double runningCost = parent.runningCost + actionNode.getCost(info);
-                synchronized (path) {
+                synchronized (LOCK) {
                     path.add(actionNode.cloneWithParent(parent, runningCost));
                 }
                 foundAtLeastOnePath = true;
             } else {
                 // on retire cette action de la liste des actions possibles
                 Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());
-                boolean foundSubpath = buildPathToGoal(actionNode, path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
+                boolean foundSubpath = buildPathToGoal(actionNode.cloneWithParent(parent, runningCost), path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
 
                 if(foundSubpath) {
                     foundAtLeastOnePath = true;
                 }
             }
         }
-        long elapsed = (System.currentTimeMillis()-startTime);
+      /*  long elapsed = (System.currentTimeMillis()-startTime);
         Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
-                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));
+                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));*/
         return foundAtLeastOnePath;
     }
 

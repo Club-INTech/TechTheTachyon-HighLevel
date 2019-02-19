@@ -17,6 +17,7 @@
  **/
 
 import ai.AIService;
+import ai.MoveToPointAction;
 import ai.ScriptAction;
 import ai.goap.Action;
 import ai.goap.ActionGraph;
@@ -192,11 +193,37 @@ public class Main {
         graph.node(zoneDepart);
         graph.node(accelerateur);
 
+        // TODO: remove, test only
+        int nMoves = 1;//8-4;
+        for (int i = 0; i < nMoves; i++) {
+            double x = 0;
+            double y = 500;
+            Vec2 pos = new VectCartesian((int)x, (int)y);
+            int finalI = i;
+            Action action = new MoveToPointAction(pos) {
+                @Override
+                protected void applyChangesToEnvironment(EnvironmentInfo info) {
+                    super.applyChangesToEnvironment(info);
+                    int movesDone = (int) info.getState().get("movesDone");
+                    info.getState().put("movesDone", movesDone+1);
+                }
+
+                @Override
+                public String toString() {
+                    return "MoveTo("+this.aim+") #"+(finalI +1);
+                }
+            };
+            graph.node(action);
+        }
+
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("PaletsX6", true);
         goalState.put("PaletsX3", true);
         goalState.put("ZoneDepart", true);
         goalState.put("Accelerateur", true);
+
+
+        goalState.put("movesDone", nMoves);
         EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
         agent.setCurrentGoal(goal);
     }

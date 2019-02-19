@@ -89,9 +89,15 @@ public class ScriptAction extends Action {
         Table table = info.getSpectre().getSimulatedTable();
 
         Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(info.getXYO().getPosition());
-        obstacleBelowPosition.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points de départ " + info.getXYO().getPosition() + " dans l'obstacle " + obstacle));
+        if(obstacleBelowPosition.isPresent()) {
+            Log.LOCOMOTION.warning("Points de départ " + info.getXYO().getPosition() + " dans l'obstacle " + obstacleBelowPosition.get());
+            return false;
+        }
         Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(entryPos);
-        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + entryPos + " dans l'obstacle " + obstacle));
+        if(obstacleBelowPoint.isPresent()) {
+            Log.LOCOMOTION.warning("Points d'arrivée " + entryPos + " dans l'obstacle " + obstacleBelowPoint.get());
+            return false;
+        }
 
         graph.writeLock().unlock();
         try {
@@ -99,8 +105,8 @@ public class ScriptAction extends Action {
             info.getSpectre().getSimulationPathfinder().findPath(start, aim);
             result = true;
         } catch (NoPathFound f) {
-            System.out.println(">> "+toString());
-            f.printStackTrace(); // TODO: debug only
+    /*        System.out.println(">> "+toString());
+            f.printStackTrace(); // TODO: debug only*/
         } finally {
             graph.readLock().unlock();
             try {

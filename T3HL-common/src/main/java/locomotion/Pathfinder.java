@@ -87,6 +87,8 @@ public class Pathfinder implements Service {
         // Tant qu'il y a des noeuds à visiter
         while (!openList.isEmpty()) {
             currentNode = openList.poll();
+            if(currentNode == null)
+                continue;
 
             // Si c'est le noeud d'arrivé, on s'arrête
             if (currentNode.equals(aim)) {
