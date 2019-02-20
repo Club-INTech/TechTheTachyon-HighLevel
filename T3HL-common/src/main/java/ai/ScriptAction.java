@@ -79,45 +79,50 @@ public class ScriptAction extends Action {
     private boolean checkPath(EnvironmentInfo info) {
         boolean result = false;
         Graphe graph = info.getSpectre().getSimulatedGraph();
+            Node start = null;
+            Node aim = null;
+            try {
 
-        Vec2 entryPos = script.entryPosition(version).getCenter();
-        // TODO: vérif des locks & finally
-        graph.writeLock().lock();
-        Vec2 currentPos = info.getCurrentPosition();
-        Node start = graph.addProvisoryNode(currentPos);
-        Node aim = graph.addProvisoryNode(entryPos);
-        Table table = info.getSpectre().getSimulatedTable();
+                Vec2 entryPos = script.entryPosition(version).getCenter();
+                // TODO: vérif des locks & finally
+     //           graph.writeLock().lock();
+                Vec2 currentPos = info.getCurrentPosition();
+                start = graph.addProvisoryNode(currentPos);
+                aim = graph.addProvisoryNode(entryPos);
+                Table table = info.getSpectre().getSimulatedTable();
 
-        Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(info.getXYO().getPosition());
-        if(obstacleBelowPosition.isPresent()) {
-            Log.LOCOMOTION.warning("Points de départ " + info.getXYO().getPosition() + " dans l'obstacle " + obstacleBelowPosition.get());
-            return false;
-        }
-        Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(entryPos);
-        if(obstacleBelowPoint.isPresent()) {
-            Log.LOCOMOTION.warning("Points d'arrivée " + entryPos + " dans l'obstacle " + obstacleBelowPoint.get());
-            return false;
-        }
+                Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(info.getXYO().getPosition());
+                if(obstacleBelowPosition.isPresent()) {
+             //       Log.LOCOMOTION.warning("Points de départ " + info.getXYO().getPosition() + " dans l'obstacle " + obstacleBelowPosition.get());
+                    // graph.writeLock().unlock();
+                    return false;
+                }
+                Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(entryPos);
+                if(obstacleBelowPoint.isPresent()) {
+                //    Log.LOCOMOTION.warning("Points d'arrivée " + entryPos + " dans l'obstacle " + obstacleBelowPoint.get());
+                    //graph.writeLock().unlock();
+                    return false;
+                }
 
-        graph.writeLock().unlock();
-        try {
-            graph.readLock().lock();
-            info.getSpectre().getSimulationPathfinder().findPath(start, aim);
-            result = true;
-        } catch (NoPathFound f) {
+             //   graph.writeLock().unlock();
+                try {
+                    info.getSpectre().getSimulationPathfinder().findPath(start, aim);
+                    result = true;
+                } catch (NoPathFound f) {
     /*        System.out.println(">> "+toString());
             f.printStackTrace(); // TODO: debug only*/
-        } finally {
-            graph.readLock().unlock();
-            try {
-                graph.writeLock().lock();
-                graph.removeProvisoryNode(start);
-                graph.removeProvisoryNode(aim);
+                }
             } finally {
-                graph.writeLock().unlock();
+                try {
+               //     graph.writeLock().lock();
+                  /*  if(start != null)
+                        graph.removeProvisoryNode(start);
+                    if(aim != null)
+                        graph.removeProvisoryNode(aim);*/
+                } finally {
+                 //   graph.writeLock().unlock();
+                }
             }
-        }
-
         return result;
     }
 

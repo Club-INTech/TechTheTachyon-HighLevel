@@ -1,6 +1,8 @@
 import data.Table;
+import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
+import utils.ConfigData;
 import utils.math.*;
 import utils.math.Rectangle;
 import utils.math.Shape;
@@ -266,6 +268,19 @@ class GraphicalInterface extends JFrame {
         if (this.isDrawingPoints) {
             drawPoints(g);
         }
+
+        drawGraphe(g);
+    }
+
+    private void drawGraphe(Graphics g) {
+        int pointDiameter=10;
+        g.setColor(POINTS_TO_DRAW_COLOR);
+        for(Node node : table.getGraphe().getNodes()) {
+            Vec2 vecteur = node.getPosition();
+            vecteur = transformTableCoordsToInterfaceCoords(vecteur);
+            g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
+        }
+        g.setColor(DEFAULT_COLOR);
     }
 
     /* ============ Méthodes de transformation des coordonnées entre la table et la fenêtre graphique ============= */

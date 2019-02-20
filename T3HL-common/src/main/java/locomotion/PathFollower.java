@@ -25,6 +25,7 @@ import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.container.Service;
+import utils.container.ServiceThread;
 import utils.math.*;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -34,7 +35,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class PathFollower extends Thread implements Service {
+public class PathFollower extends ServiceThread {
 
     /**
      * Order Wrapper

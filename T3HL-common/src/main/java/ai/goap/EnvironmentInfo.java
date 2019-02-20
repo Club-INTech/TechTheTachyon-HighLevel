@@ -63,10 +63,10 @@ public class EnvironmentInfo {
             newXYO = new XYO(xyo.getPosition().clone(), xyo.getOrientation());
         }
         SpectreRobot robot = this.robot;
-        if(robot != null && actionWithEffects.modifiesTable()) {
-            long start = System.currentTimeMillis();
+        if(robot != null/* && actionWithEffects.modifiesTable()*/) {
+//            long start = System.currentTimeMillis();
             robot = robot.deepCopy();
-            Log.AI.debug("deepCopy took "+(System.currentTimeMillis()-start));
+  //          Log.AI.debug("deepCopy took "+(System.currentTimeMillis()-start));
         }
         EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);

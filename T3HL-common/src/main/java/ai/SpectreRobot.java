@@ -44,24 +44,22 @@ public class SpectreRobot {
     private final boolean isRoot;
 
 
-    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config) {
-        this(baseGraphe, baseTable, config, false);
+    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config, Pathfinder basePathfinder) {
+        this(baseGraphe, baseTable, config, basePathfinder, false);
     }
 
-    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config, boolean isRoot) {
+    public SpectreRobot(Graphe baseGraphe, Table baseTable, Config config, Pathfinder basePathfinder, boolean isRoot) {
         this.isRoot = isRoot;
         this.baseGraphe = baseGraphe;
         this.baseTable = baseTable;
         this.config = config;
 
-        this.fakeTable = baseTable;
-        this.fakeGraphe = baseGraphe;
-
-        this.spectrePathfinder = new Pathfinder(fakeGraphe);
+        this.spectrePathfinder = basePathfinder;
+        switchTableModel(baseTable, baseGraphe, basePathfinder);
     }
 
     public SpectreRobot deepCopy() {
-        SpectreRobot copy = new SpectreRobot(fakeGraphe, fakeTable, config); // la copie doit partir de l'état de ce spectre
+        SpectreRobot copy = new SpectreRobot(fakeGraphe, fakeTable, config, new Pathfinder(fakeGraphe)); // la copie doit partir de l'état de ce spectre
         //SpectreRobot copy = new SpectreRobot(baseGraphe, baseTable);
         // TODO
         return copy;
@@ -72,7 +70,7 @@ public class SpectreRobot {
      * Utilisé avant la planification pour remettre à jour le graphe et la table
      */
     public void comeBackToReality() {
-        switchTableModel(baseTable, baseGraphe);
+        switchTableModel(baseTable, baseGraphe, spectrePathfinder);
         //copyFromBase(baseGraphe, baseTable);
     }
 
@@ -103,10 +101,10 @@ public class SpectreRobot {
         return spectrePathfinder;
     }
 
-    public void switchTableModel(Table table, Graphe graphe) {
+    public void switchTableModel(Table table, Graphe graphe, Pathfinder pathfinder) {
         this.fakeTable = table;
         this.fakeGraphe = graphe;
 
-        this.spectrePathfinder = new Pathfinder(fakeGraphe);
+        this.spectrePathfinder.setGraphe(fakeGraphe);
     }
 }

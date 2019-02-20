@@ -95,8 +95,8 @@ public enum ConfigData implements ConfigInfo
     /**
      * Paramètres du Graphe
      */
-    NBR_NOEUDS_X(30),
-    NBR_NOEUDS_Y(20),
+    NBR_NOEUDS_X(/*30*/45),
+    NBR_NOEUDS_Y(/*20*/30),
     NBR_NOEUDS_CIRCLE(12),
     ESPACEMENT_CIRCLE(1.2),
 

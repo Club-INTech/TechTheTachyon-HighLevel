@@ -82,52 +82,54 @@ public class Pathfinder implements Service {
         openList.clear();
         openList.add(start);
 
-        graphe.updateHeuristique(aim);
+        synchronized (graphe) {
+            graphe.updateHeuristique(aim);
 
-        // Tant qu'il y a des noeuds à visiter
-        while (!openList.isEmpty()) {
-            currentNode = openList.poll();
-            if(currentNode == null)
-                continue;
+            // Tant qu'il y a des noeuds à visiter
+            while (!openList.isEmpty()) {
+                currentNode = openList.poll();
+                if(currentNode == null)
+                    continue;
 
-            // Si c'est le noeud d'arrivé, on s'arrête
-            if (currentNode.equals(aim)) {
-                return reconstructPath(start, aim);
-            }
+                // Si c'est le noeud d'arrivé, on s'arrête
+                if (currentNode.equals(aim)) {
+                    return reconstructPath(start, aim);
+                }
 
-            // Sinon on parcours tout ses voisins
-            neighbours = currentNode.getNeighbours().keySet();
-            for (Node neighbour : neighbours) {
-                Ridge ridge = currentNode.getNeighbours().get(neighbour);
-                if(ridge == null)
-                    continue; // TODO: trouver pourquoi ça arrive avec l'IA
+                // Sinon on parcours tout ses voisins
+                neighbours = currentNode.getNeighbours().keySet();
+                for (Node neighbour : neighbours) {
+                    Ridge ridge = currentNode.getNeighbours().get(neighbour);
+                    if(ridge == null)
+                        continue; // TODO: trouver pourquoi ça arrive avec l'IA
 
 
-                // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
-                if (ridge.isReachable()) {
-                    currentCost = currentNode.getCout() + ridge.getCost();
-                    if(neighbour.equals(aim)) {
-                        neighbour.setPred(currentNode);
-                        neighbour.setCout(currentCost);
-                        return reconstructPath(start, neighbour);
-                    }
-                    // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
-                    if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
-                        neighbour.setCout(currentCost);
-                        neighbour.setPred(currentNode);
-                        if (closedList.contains(neighbour)) {
-                            closedList.remove(neighbour);
+                    // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
+                    if (ridge.isReachable()) {
+                        currentCost = currentNode.getCout() + ridge.getCost();
+                        if(neighbour.equals(aim)) {
+                            neighbour.setPred(currentNode);
+                            neighbour.setCout(currentCost);
+                            return reconstructPath(start, neighbour);
+                        }
+                        // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
+                        if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
+                            neighbour.setCout(currentCost);
+                            neighbour.setPred(currentNode);
+                            if (closedList.contains(neighbour)) {
+                                closedList.remove(neighbour);
+                                openList.add(neighbour);
+                            }
+                        } else if (!(openList.contains(neighbour) || closedList.contains(neighbour))) {
+                            // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
+                            neighbour.setCout(currentCost);
+                            neighbour.setPred(currentNode);
                             openList.add(neighbour);
                         }
-                    } else if (!(openList.contains(neighbour) || closedList.contains(neighbour))) {
-                        // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
-                        neighbour.setCout(currentCost);
-                        neighbour.setPred(currentNode);
-                        openList.add(neighbour);
                     }
                 }
+                closedList.add(currentNode);
             }
-            closedList.add(currentNode);
         }
         throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
@@ -141,10 +143,12 @@ public class Pathfinder implements Service {
         Node currentNode = aim;
         ArrayList<Vec2> path = new ArrayList<>();
 
-        do {
-            path.add(0, currentNode.getPosition());
-            currentNode = currentNode.getPred();
-        } while (currentNode != null && !(currentNode.equals(start)));
+        synchronized (graphe) {
+            do {
+                path.add(0, currentNode.getPosition());
+                currentNode = currentNode.getPred();
+            } while (currentNode != null && !(currentNode.equals(start)));
+        }
         return path;
     }
 
@@ -157,4 +161,7 @@ public class Pathfinder implements Service {
         return graphe;
     }
 
+    public void setGraphe(Graphe graphe) {
+        this.graphe = graphe;
+    }
 }

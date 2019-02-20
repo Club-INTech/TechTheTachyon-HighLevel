@@ -93,6 +93,7 @@ public class Graphe implements Service {
      * Dernier noeud auquel on a voulu se rendre, utilisé pour l'heuristique
      */
     private Node lastAim;
+    private Node[][] nodeMap;
 
     /**
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
@@ -113,6 +114,7 @@ public class Graphe implements Service {
     private void init() {
         Log.GRAPHE.debug("Initialisation du Graphe...");
         try {
+            nodeMap = new Node[nodeXNbr+1][nodeYNbr+1];
             for (Obstacle obstacle : fixedObstacles) {
                 placeNodes(obstacle);
             }
@@ -149,12 +151,34 @@ public class Graphe implements Service {
                 pos.plus(obstacle.getPosition());
 
                 if (!table.isPositionInFixedObstacle(pos)) {
-                    nodes.add(new Node(pos.clone()));
+                    addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos+" à cause d'un obstacle en "+obstacle);
                 }
             }
         }
         Log.GRAPHE.debug("Fin du placement de noeuds autour de l'obstacle "+obstacle);
+    }
+
+    private void addNode(Node node) {
+        nodes.add(node);
+        int indexX = indexX(node.getPosition());
+        int indexY = indexY(node.getPosition());
+/*        System.out.println(">>>> "+indexX+"/"+indexY+" ("+nodeMap.length+"/"+nodeMap[0].length+")");
+        System.out.println(">> "+node.getPosition()+" ("+table.getLength()+"/"+table.getWidth()+")");*/
+        nodeMap[indexX][indexY] = node;
+    }
+
+    private int indexX(Vec2 pos) {
+        return index(pos.getX()+table.getLength()/2, nodeXNbr, table.getLength()); // +w/2 pour prendre en compte les positions < 0
+    }
+
+    private int indexY(Vec2 pos) {
+        return index(pos.getY(), nodeYNbr, table.getWidth());
+    }
+
+    private int index(int val, int count, int size) {
+        int step = size/count;
+        return val / step;
     }
 
     /**
@@ -168,12 +192,12 @@ public class Graphe implements Service {
 
         Log.GRAPHE.debug("Placement des noeuds en quadrillage");
         for (int i=0; i<nodeXNbr; i++) {
-            pos.setX(i * xStep - 1500);
+            pos.setX(i * xStep - table.getLength()/2);
             for (int j=0; j<nodeYNbr; j++) {
                 pos.setY(j * yStep);
 
                 if (!table.isPositionInFixedObstacle(pos)) {
-                    nodes.add(new Node(pos.clone()));
+                    addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos);
                 }
             }
@@ -227,12 +251,7 @@ public class Graphe implements Service {
      * @return le noeud qui est à la position souhaitée
      */
     public Node addProvisoryNode(Vec2 position) {
-        Node n = null;
-        for (Node node : nodes) {
-            if (node.getPosition().equals(position)) {
-                n = node;
-            }
-        }
+        Node n = nodeMap[indexX(position)][indexY(position)];
         if (n != null) {
             Log.GRAPHE.debug("Le noeud provisoire à "+position+" existe déjà.");
             return n;
@@ -246,7 +265,7 @@ public class Graphe implements Service {
                     seg.setPointB(node.getPosition());
                     constructRidge(n, node, seg);
                 }
-                nodes.add(n);
+                addNode(n);
                 return n;
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();

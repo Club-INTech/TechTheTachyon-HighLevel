@@ -30,6 +30,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
+import locomotion.Pathfinder;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Master;
@@ -144,6 +145,7 @@ public class Main {
 
         Table tableSansZoneDepart = new Table();
         Graphe grapheSansZoneDepart = new Graphe(tableSansZoneDepart);
+        Pathfinder pathfinder = new Pathfinder(grapheSansZoneDepart);
         grapheSansZoneDepart.updateConfigNoInit(container.getConfig());
         tableSansZoneDepart.updateConfig(container.getConfig());
         tableSansZoneDepart.initObstacles();
@@ -177,7 +179,7 @@ public class Main {
             @Override
             protected void applyChangesToEnvironment(EnvironmentInfo info) {
                 super.applyChangesToEnvironment(info);
-                info.getSpectre().switchTableModel(tableSansZoneDepart, grapheSansZoneDepart);
+                info.getSpectre().switchTableModel(tableSansZoneDepart, grapheSansZoneDepart, pathfinder);
             }
         };
 
@@ -194,7 +196,7 @@ public class Main {
         graph.node(accelerateur);
 
         // TODO: remove, test only
-        int nMoves = 1;//8-4;
+        int nMoves = 3;//8-4;
         for (int i = 0; i < nMoves; i++) {
             double x = 0;
             double y = 500;

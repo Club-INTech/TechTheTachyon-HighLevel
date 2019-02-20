@@ -25,6 +25,7 @@ import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.Service;
+import utils.container.ServiceThread;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class Listener extends Thread implements Service {
+public class Listener extends ServiceThread {
 
     /**
      * Temps d'attente entre chaque boucle pour l'initialisation des connexions

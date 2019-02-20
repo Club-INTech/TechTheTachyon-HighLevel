@@ -153,13 +153,18 @@ public enum Log
 
         if(active & printLogs)
         {
-            StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
+            Thread currentThread = Thread.currentThread();
+        //    if(!message.contains("> ") || message.contains(">>")) // FIXME: remove
+        //        return;
+            StackTraceElement elem = currentThread.getStackTrace()[3];
             this.toLog.setLength(0);
             this.toLog.append(color)
             .append(hour)
             .append(" ")
             .append(this.name())
-            .append(" ")
+            .append("(")
+            .append(currentThread.getName())
+            .append(") ")
             .append(elem.getClassName())
             .append(",")
             .append(elem.getMethodName())

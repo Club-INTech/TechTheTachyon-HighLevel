@@ -21,14 +21,15 @@ package ai;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import locomotion.Locomotion;
+import locomotion.Pathfinder;
 import pfg.config.Config;
 import utils.Container;
 import utils.Log;
-import utils.container.Service;
+import utils.container.ServiceThread;
 
 import static data.controlers.Listener.TIME_LOOP;
 
-public class AIService extends Thread implements Service {
+public class AIService extends ServiceThread {
 
     private final Locomotion locomotion;
     private final ActionGraph graph;
@@ -36,12 +37,12 @@ public class AIService extends Thread implements Service {
     private final SpectreRobot spectre;
     private final Config config;
 
-    public AIService(Container container, Locomotion locomotion) {
+    public AIService(Container container, Locomotion locomotion, Pathfinder pathfinder) {
         this.config = container.getConfig();
         this.locomotion = locomotion;
         this.graph = new ActionGraph();
 
-        this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config, true);
+        this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config, pathfinder, true);
         this.agent = new RobotAgent(locomotion, graph, spectre);
     }
 

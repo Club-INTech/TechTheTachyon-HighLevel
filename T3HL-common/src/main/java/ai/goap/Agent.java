@@ -90,48 +90,6 @@ public abstract class Agent {
             return "Performing "+action;
         }
     };
-
-    /**
-     * Une action juste pour forcer la copie du graphe et de la table lors de la planification
-     */
-    private Action copyAction = new Action() {
-        @Override
-        public double getCost(EnvironmentInfo info) {
-            return 0;
-        }
-
-        @Override
-        public void perform(EnvironmentInfo info) {
-
-        }
-
-        @Override
-        public boolean isComplete(EnvironmentInfo info) {
-            return false;
-        }
-
-        @Override
-        public boolean requiresMovement(EnvironmentInfo info) {
-            return false;
-        }
-
-        @Override
-        public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
-
-        }
-
-        @Override
-        public void reset() {
-
-        }
-
-        @Override
-        public boolean modifiesTable() {
-            return true; // force une copie du graphe et de la table
-        }
-    };
-
-
     // TODO: plus de log?
 
     public Agent(ActionGraph graph) {
@@ -164,7 +122,7 @@ public abstract class Agent {
         long startTime = System.currentTimeMillis();
 
         // on copie les infos sur l'environnement pour être sûr de rien changer
-        EnvironmentInfo envCopy = info.copyWithEffects(copyAction);
+        EnvironmentInfo envCopy = info.copyWithEffects(graph.getCopyAction());
         Stack<ActionGraph.Node> plan = graph.plan(envCopy, currentGoal);
         long elapsed = System.currentTimeMillis()-startTime;
         Log.AI.debug("Planning took "+elapsed+"ms ("+elapsed/1000.0+"s)");
@@ -202,10 +160,10 @@ public abstract class Agent {
     }
 
     private void tryToMoveTo(Vec2 position) {
-        //if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
+        if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
             Log.AI.debug("Envoi de l'ordre de déplacement vers la position "+position);
-            orderMove(position);
-        //}
+            orderMove(position.clone());
+        }
         previousTargetPosition.setXY(position.getX(), position.getY());
     }
 

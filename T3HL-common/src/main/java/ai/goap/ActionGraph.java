@@ -22,6 +22,10 @@ import utils.Log;
 import utils.math.Vec2;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -52,7 +56,7 @@ public class ActionGraph {
          * Renvoie le coût de l'action.
          * /!\\ Le coût peut être dynamique!
          */
-        public double getCost(EnvironmentInfo info) {
+        public double getCost(EnvironmentInfo info, int depth) {
             return action.getCost(info);
         }
 
@@ -93,6 +97,46 @@ public class ActionGraph {
             return parent;
         }
     }
+
+    /**
+     * Une action juste pour forcer la copie du graphe et de la table lors de la planification
+     */
+    private Action copyAction = new Action() {
+        @Override
+        public double getCost(EnvironmentInfo info) {
+            return 0;
+        }
+
+        @Override
+        public void perform(EnvironmentInfo info) {
+
+        }
+
+        @Override
+        public boolean isComplete(EnvironmentInfo info) {
+            return false;
+        }
+
+        @Override
+        public boolean requiresMovement(EnvironmentInfo info) {
+            return false;
+        }
+
+        @Override
+        public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
+
+        }
+
+        @Override
+        public void reset() {
+
+        }
+
+        @Override
+        public boolean modifiesTable() {
+            return true; // force une copie du graphe et de la table
+        }
+    };
 
     private Set<Node> nodes;
 
@@ -156,36 +200,32 @@ public class ActionGraph {
 
     private boolean buildPathToGoal(Node startNode, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
         boolean[] subPaths = new boolean[usableNodes.size()];
-        Thread[] subThreads = new Thread[usableNodes.size()];
         int index = 0;
+
+        ExecutorService executor = Executors.newWorkStealingPool();
         for(Node node : usableNodes) {
             final int i = index;
-            Thread thread = new Thread(() -> {
-                subPaths[i] = findSubPath(node, startNode, path, usableNodes, info, goal, 0);
-            });
-            thread.setPriority(Thread.MAX_PRIORITY);
-            subThreads[i] = thread;
-            thread.run();
-         //   thread.start();
+            Runnable action = () -> {
+                boolean result = findSubPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
+                Log.AI.debug("> Finished with "+node.getAction()+" result is "+result);
+                subPaths[i] = result;
+                Log.AI.debug("> Set result "+result);
+            };
+            //action.run();
+            executor.submit(action);
+            //   thread.start();
 
             index++;
         }
 
-        while(true) {
-            try {
-                boolean allFinished = true;
-                for(Thread t : subThreads) {
-                    if(t.isAlive()) {
-                        allFinished = false;
-                        break;
-                    }
-                }
-                if(allFinished)
-                    break;
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            executor.shutdown();
+            boolean terminated = executor.awaitTermination(120, TimeUnit.SECONDS);
+            if(!terminated) { // timeout
+                throw new RuntimeException("Timeout while building AI path");
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         for (boolean b : subPaths) {
@@ -212,12 +252,13 @@ public class ActionGraph {
         if(goal.isMetByState(info)) // on est déjà arrivé au but!
             return true;
         boolean foundAtLeastOnePath = false;
-      //  long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         StringBuilder depthStr = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             depthStr.append(">");
         }
-        Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
+        if(depth == 0)
+            Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
         if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
        //     Log.AI.debug("Can be executed: "+actionNode.getAction());
             EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
@@ -225,10 +266,11 @@ public class ActionGraph {
                 actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
                 // TODO: angle
             }
-            double runningCost = parent.runningCost + actionNode.getCost(info);
+            double runningCost = parent.runningCost + actionNode.getCost(info, depth);
             if(goal.isMetByState(newState)) {
+                Node clone = actionNode.cloneWithParent(parent, runningCost);
                 synchronized (LOCK) {
-                    path.add(actionNode.cloneWithParent(parent, runningCost));
+                    path.add(clone);
                 }
                 foundAtLeastOnePath = true;
             } else {
@@ -241,10 +283,14 @@ public class ActionGraph {
                 }
             }
         }
-      /*  long elapsed = (System.currentTimeMillis()-startTime);
-        Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
-                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));*/
+        long elapsed = (System.currentTimeMillis()-startTime);
+        if(depth == 0)
+            Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
+                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));
         return foundAtLeastOnePath;
     }
 
+    public Action getCopyAction() {
+        return copyAction;
+    }
 }
