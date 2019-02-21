@@ -18,6 +18,7 @@
 
 package locomotion;
 
+import ai.AIService;
 import data.SensorState;
 import data.Table;
 import data.XYO;

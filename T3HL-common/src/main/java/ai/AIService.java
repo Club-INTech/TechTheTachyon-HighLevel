@@ -44,6 +44,7 @@ public class AIService extends ServiceThread {
 
         this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config, pathfinder, true);
         this.agent = new RobotAgent(locomotion, graph, spectre);
+        locomotion.setAI(this);
     }
 
     @Override

@@ -18,6 +18,7 @@
 
 package locomotion;
 
+import ai.AIService;
 import data.Graphe;
 import data.Table;
 import data.XYO;
@@ -71,6 +72,8 @@ public class Locomotion implements Service {
      */
     private ConcurrentLinkedQueue<Vec2> pointsQueue;
     private ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue;
+
+    private AIService ai;
 
     /**
      * Seuil de distance par rapport à un point pour savoir si un point est considéré comme dans l'autre robot
@@ -214,6 +217,8 @@ public class Locomotion implements Service {
                                     start = graphe.addProvisoryNode(xyo.getPosition().clone());
                                     graphe.update();
                                     graphe.setUpdated(true);
+                                    if(ai != null)
+                                        ai.getAgent().reportMovementError(exception);
                                 }
                                 finally {
                                     graphe.writeLock().unlock();
@@ -226,11 +231,15 @@ public class Locomotion implements Service {
             } catch (NoPathFound e) {
                 // TODO : Compléter
                 e.printStackTrace();
-                throw new UnableToMoveException(new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
+                throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
             }
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+    }
+
+    public void setAI(AIService ai) {
+        this.ai = ai;
     }
 
     /**

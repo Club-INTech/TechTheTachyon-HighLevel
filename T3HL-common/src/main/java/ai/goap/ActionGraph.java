@@ -164,7 +164,7 @@ public class ActionGraph {
             node.reset();
         }
 
-        Set<Node> usableNodes = new HashSet<>(nodes);
+        List<Node> usableNodes = new LinkedList<>(nodes);
         List<Node> path = new LinkedList<>();
         boolean foundPath = buildPathToGoal(startNode, path, usableNodes, info, goal);
         if(!foundPath) {
@@ -198,7 +198,7 @@ public class ActionGraph {
         return result;
     }
 
-    private boolean buildPathToGoal(Node startNode, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+    private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
         boolean[] subPaths = new boolean[usableNodes.size()];
         int index = 0;
 
@@ -235,12 +235,12 @@ public class ActionGraph {
         return false;
     }
 
-    private boolean buildPathToGoal(Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+    private boolean buildPathToGoal(Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
         if(goal.isMetByState(info)) // on est déjà arrivé au but!
             return true;
         boolean foundAtLeastOnePath = false;
-        for(Node actionNode : usableNodes) {
-            boolean foundSubPath = findSubPath(actionNode, parent, path, usableNodes, info, goal, depth);
+        for (int i = 0; i < usableNodes.size(); i++) {
+            boolean foundSubPath = findSubPath(usableNodes.get(i), parent, path, usableNodes, info, goal, depth);
             if(foundSubPath)
                 foundAtLeastOnePath = true;
         }
@@ -248,7 +248,7 @@ public class ActionGraph {
         return foundAtLeastOnePath;
     }
 
-    private boolean findSubPath(Node actionNode, Node parent, List<Node> path, Set<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+    private boolean findSubPath(Node actionNode, Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
         if(goal.isMetByState(info)) // on est déjà arrivé au but!
             return true;
         boolean foundAtLeastOnePath = false;
@@ -275,7 +275,7 @@ public class ActionGraph {
                 foundAtLeastOnePath = true;
             } else {
                 // on retire cette action de la liste des actions possibles
-                Set<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toSet());
+                List<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toList());
                 boolean foundSubpath = buildPathToGoal(actionNode.cloneWithParent(parent, runningCost), path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
 
                 if(foundSubpath) {

@@ -172,9 +172,9 @@ public class Graphe implements Service {
 
     private void addNode(Node node) {
         nodes.add(node);
-        int indexX = partionIndexX(node.getPosition());
+        int indexX = partitionIndexX(node.getPosition());
         int indexY = partitionIndexY(node.getPosition());
-/*        System.out.println(">>>> "+partionIndexX+"/"+partitionIndexY+" ("+nodeMap.length+"/"+nodeMap[0].length+")");
+/*        System.out.println(">>>> "+partitionIndexX+"/"+partitionIndexY+" ("+nodeMap.length+"/"+nodeMap[0].length+")");
         System.out.println(">> "+node.getPosition()+" ("+table.getLength()+"/"+table.getWidth()+")");*/
         NodeList list = partition(indexX, indexY);
         if(list == null) {
@@ -184,7 +184,7 @@ public class Graphe implements Service {
         }
     }
 
-    private int partionIndexX(Vec2 pos) {
+    private int partitionIndexX(Vec2 pos) {
         return partitionIndex(pos.getX()+table.getLength()/2, partitioningX, table.getLength()); // +w/2 pour prendre en compte les positions < 0
     }
 
@@ -277,7 +277,7 @@ public class Graphe implements Service {
         Node n = null; // closest
        // double closestDist = Double.POSITIVE_INFINITY;
 
-        int px = partionIndexX(position);
+        int px = partitionIndexX(position);
         int py = partitionIndexY(position);
         // recherche du plus proche dans les partitions autour
         for (int dx = -1; dx <= 1; dx++) {

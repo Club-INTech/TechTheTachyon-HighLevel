@@ -56,7 +56,7 @@ public class UnableToMoveException extends Exception {
      *              raison de blocage
      */
     public UnableToMoveException(String s, XYO aim, UnableToMoveReason reason) {
-        super(s+"["+reason.name()+"]");
+        super(s+"["+reason.name()+"] Aim is "+aim.getPosition());
         this.aim = aim;
         this.reason = reason;
     }

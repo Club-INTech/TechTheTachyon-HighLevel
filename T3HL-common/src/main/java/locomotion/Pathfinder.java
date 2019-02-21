@@ -90,6 +90,9 @@ public class Pathfinder implements Service {
         openList.clear();
         openList.add(start);
 
+        costs.clear();
+        parents.clear();
+
         try {
             graphe.readLock().lock();
             graphe.updateHeuristique(aim, lastAim, heuristiques);
@@ -115,14 +118,14 @@ public class Pathfinder implements Service {
 
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
                     if (ridge.isReachable()) {
-                        currentCost = currentNode.getCout() + ridge.getCost();
+                        currentCost = costs.getOrDefault(currentNode, 0) + ridge.getCost();
                         if(neighbour.equals(aim)) {
                             costs.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             return reconstructPath(start, neighbour);
                         }
                         // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
-                        if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
+                        if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < costs.getOrDefault(neighbour, 0)) {
                             costs.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             if (closedList.contains(neighbour)) {
@@ -157,7 +160,7 @@ public class Pathfinder implements Service {
 
         do {
             path.add(0, currentNode.getPosition());
-            currentNode = currentNode.getPred();
+            currentNode = parents.getOrDefault(currentNode, null);
         } while (currentNode != null && !(currentNode.equals(start)));
         return path;
     }
