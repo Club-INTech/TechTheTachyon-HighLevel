@@ -30,6 +30,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
+import locomotion.PathFollower;
 import locomotion.Pathfinder;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -196,7 +197,7 @@ public class Main {
         graph.node(accelerateur);
 
         // TODO: remove, test only
-        int nMoves = 3;//8-4;
+        int nMoves = 4;//8-4;
         for (int i = 0; i < nMoves; i++) {
             double x = 0;
             double y = 500;
@@ -253,6 +254,11 @@ public class Main {
         simulatorLauncher = new SimulatorManagerLauncher();
         simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
         simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
+        try {
+            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue());
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
         simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);

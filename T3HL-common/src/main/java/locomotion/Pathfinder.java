@@ -27,9 +27,7 @@ import utils.Log;
 import utils.container.Service;
 import utils.math.Vec2;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service déstiner à calculer un chemin entre deux points de la table
@@ -54,13 +52,23 @@ public class Pathfinder implements Service {
      */
     private ArrayList<Node> closedList;
 
+    private Map<Node, Integer> costs;
+    private Map<Node, Node> parents;
+    private Map<Node, Double> heuristiques;
+
+    private Node lastAim;
+
     /**
      * Construit un pathfinder
      * @param graphe    graphe paramétrant la table
      */
     public Pathfinder(Graphe graphe) {
+        heuristiques = new HashMap<>();
+        costs = new HashMap<>();
+        parents = new HashMap<>();
+
         this.graphe = graphe;
-        this.openList = new PriorityQueue<>(new ComparatorNode());
+        this.openList = new PriorityQueue<>(new ComparatorNode(heuristiques));
         this.closedList = new ArrayList<>();
     }
 
@@ -82,9 +90,10 @@ public class Pathfinder implements Service {
         openList.clear();
         openList.add(start);
 
-        synchronized (graphe) {
-            graphe.updateHeuristique(aim);
-
+        try {
+            graphe.readLock().lock();
+            graphe.updateHeuristique(aim, lastAim, heuristiques);
+            lastAim = aim;
             // Tant qu'il y a des noeuds à visiter
             while (!openList.isEmpty()) {
                 currentNode = openList.poll();
@@ -108,29 +117,32 @@ public class Pathfinder implements Service {
                     if (ridge.isReachable()) {
                         currentCost = currentNode.getCout() + ridge.getCost();
                         if(neighbour.equals(aim)) {
-                            neighbour.setPred(currentNode);
-                            neighbour.setCout(currentCost);
+                            costs.put(neighbour, currentCost);
+                            parents.put(neighbour, currentNode);
                             return reconstructPath(start, neighbour);
                         }
                         // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
                         if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
-                            neighbour.setCout(currentCost);
-                            neighbour.setPred(currentNode);
+                            costs.put(neighbour, currentCost);
+                            parents.put(neighbour, currentNode);
                             if (closedList.contains(neighbour)) {
                                 closedList.remove(neighbour);
                                 openList.add(neighbour);
                             }
                         } else if (!(openList.contains(neighbour) || closedList.contains(neighbour))) {
                             // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
-                            neighbour.setCout(currentCost);
-                            neighbour.setPred(currentNode);
+                            costs.put(neighbour, currentCost);
+                            parents.put(neighbour, currentNode);
                             openList.add(neighbour);
                         }
                     }
                 }
                 closedList.add(currentNode);
             }
+        } finally {
+            graphe.readLock().unlock();
         }
+
         throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
 
@@ -143,12 +155,10 @@ public class Pathfinder implements Service {
         Node currentNode = aim;
         ArrayList<Vec2> path = new ArrayList<>();
 
-        synchronized (graphe) {
-            do {
-                path.add(0, currentNode.getPosition());
-                currentNode = currentNode.getPred();
-            } while (currentNode != null && !(currentNode.equals(start)));
-        }
+        do {
+            path.add(0, currentNode.getPosition());
+            currentNode = currentNode.getPred();
+        } while (currentNode != null && !(currentNode.equals(start)));
         return path;
     }
 

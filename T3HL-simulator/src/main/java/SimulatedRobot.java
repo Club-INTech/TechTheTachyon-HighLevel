@@ -6,6 +6,7 @@ import utils.math.VectPolar;
 
 public class SimulatedRobot {
 
+    private final int port;
     //Attributs qui peuvent être modifiés avant le lancement
     private float speedFactor;
     private SimulatedConnectionManager simulatedLLConnectionManager;
@@ -40,7 +41,8 @@ public class SimulatedRobot {
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    SimulatedRobot(){
+    SimulatedRobot(int port){
+        this.port = port;
         this.initDefaultPassedParameters();
         this.lastUpdateTime=System.currentTimeMillis();
         this.forwardOrBackward=false;
@@ -272,4 +274,12 @@ public class SimulatedRobot {
 
     /** Renvoie l'orientation du robot */
     double getOrientation(){ return this.orientation; }
+
+    Vec2 getTargetPosition() {
+        return positionTarget;
+    }
+
+    public int getPort() {
+        return port;
+    }
 }

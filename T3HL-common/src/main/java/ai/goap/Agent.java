@@ -140,7 +140,9 @@ public abstract class Agent {
      * Etat Moving: l'agent est en train de se déplacer
      */
     private void updateMovingState(FiniteStateMachine fsm, EnvironmentInfo info) {
+        Log.AI.debug("MOVING");
         if(info.getCurrentPosition().squaredDistanceTo(targetPosition) <= squaredDistanceTolerancy) {
+            Log.AI.debug("MOVING pop");
             fsm.popState(); // on a fini le mouvement, on passe à l'état d'après
         } else { // on a toujours pas atteint la position
             synchronized (movementErrors) {
@@ -153,6 +155,7 @@ public abstract class Agent {
                     fsm.popState();
                     movementErrors.clear();
                 } else {
+                    Log.AI.debug("try to move "+previousTargetPosition+" / "+targetPosition+" / "+info.getCurrentPosition());
                     tryToMoveTo(targetPosition);
                 }
             }
@@ -160,11 +163,11 @@ public abstract class Agent {
     }
 
     private void tryToMoveTo(Vec2 position) {
-        if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
+      //  if(previousTargetPosition.squaredDistanceTo(position) > squaredDistanceTolerancy) { // nouvelle position!
             Log.AI.debug("Envoi de l'ordre de déplacement vers la position "+position);
             orderMove(position.clone());
-        }
-        previousTargetPosition.setXY(position.getX(), position.getY());
+            previousTargetPosition.setXY(position.getX(), position.getY());
+       // }
     }
 
     /**
@@ -178,7 +181,7 @@ public abstract class Agent {
                 currentAction.updateTargetPosition(info, targetPosition);
             }
             if (currentAction.requiresMovement(info) && checkNotInRange(currentAction, info)) {
-                Log.AI.debug(currentAction.getAction()+" has set target pos: "+targetPosition);
+                Log.AI.debug(currentAction.getAction()+" has set target pos: "+targetPosition+" last = "+this.previousTargetPosition);
                 fsm.pushState(this.movingState);
             } else if (currentAction.checkCompletion(info)) {
                 Log.AI.debug("Fin de "+currentAction.getAction());

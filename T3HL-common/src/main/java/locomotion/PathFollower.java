@@ -255,6 +255,10 @@ public class PathFollower extends ServiceThread {
         // TODO
     }
 
+    public ConcurrentLinkedQueue<Vec2> getQueue() {
+        return pointsQueue;
+    }
+
     /**
      * @see Service#updateConfig(Config)
      */

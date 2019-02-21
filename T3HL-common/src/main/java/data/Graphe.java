@@ -33,7 +33,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -44,6 +44,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author rem
  */
 public class Graphe implements Service {
+
+    // pour pouvoir créer des tableaux d'arraylist
+    private static class NodeList extends ArrayList<Node> {}
+
     /**
      * Table
      */
@@ -87,13 +91,15 @@ public class Graphe implements Service {
     /**
      * Verrous de synchronisation
      */
-    private ReadWriteLock locks = new ReentrantReadWriteLock();
+    private ReadWriteLock locks = new ReentrantReadWriteLock(true);
 
     /**
      * Dernier noeud auquel on a voulu se rendre, utilisé pour l'heuristique
      */
-    private Node lastAim;
-    private Node[][] nodeMap;
+    private NodeList[][] partitions;
+
+    private int partitioningX = 25;
+    private int partitioningY = 25;
 
     /**
      * Construit un graphe : un ensemble de noeuds relié par des arrêtes servant à discrétiser la surface de la table pour simplifier la navigation du robot
@@ -114,7 +120,12 @@ public class Graphe implements Service {
     private void init() {
         Log.GRAPHE.debug("Initialisation du Graphe...");
         try {
-            nodeMap = new Node[nodeXNbr+1][nodeYNbr+1];
+            partitions = new NodeList[partitioningX][partitioningY];
+            for (int x = 0; x < partitioningX; x++) {
+                for (int y = 0; y < partitioningY; y++) {
+                    partitions[x][y] = new NodeList();
+                }
+            }
             for (Obstacle obstacle : fixedObstacles) {
                 placeNodes(obstacle);
             }
@@ -161,22 +172,27 @@ public class Graphe implements Service {
 
     private void addNode(Node node) {
         nodes.add(node);
-        int indexX = indexX(node.getPosition());
-        int indexY = indexY(node.getPosition());
-/*        System.out.println(">>>> "+indexX+"/"+indexY+" ("+nodeMap.length+"/"+nodeMap[0].length+")");
+        int indexX = partionIndexX(node.getPosition());
+        int indexY = partitionIndexY(node.getPosition());
+/*        System.out.println(">>>> "+partionIndexX+"/"+partitionIndexY+" ("+nodeMap.length+"/"+nodeMap[0].length+")");
         System.out.println(">> "+node.getPosition()+" ("+table.getLength()+"/"+table.getWidth()+")");*/
-        nodeMap[indexX][indexY] = node;
+        NodeList list = partition(indexX, indexY);
+        if(list == null) {
+            Log.GRAPHE.critical("Impossible d'ajouter un noeud dans les partitions à la position "+node.getPosition()+"! Ca déborde de la table :(");
+        } else {
+            list.add(node);
+        }
     }
 
-    private int indexX(Vec2 pos) {
-        return index(pos.getX()+table.getLength()/2, nodeXNbr, table.getLength()); // +w/2 pour prendre en compte les positions < 0
+    private int partionIndexX(Vec2 pos) {
+        return partitionIndex(pos.getX()+table.getLength()/2, partitioningX, table.getLength()); // +w/2 pour prendre en compte les positions < 0
     }
 
-    private int indexY(Vec2 pos) {
-        return index(pos.getY(), nodeYNbr, table.getWidth());
+    private int partitionIndexY(Vec2 pos) {
+        return partitionIndex(pos.getY(), partitioningY, table.getWidth());
     }
 
-    private int index(int val, int count, int size) {
+    private int partitionIndex(int val, int count, int size) {
         int step = size/count;
         return val / step;
     }
@@ -245,20 +261,53 @@ public class Graphe implements Service {
         Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
     }
 
+    private NodeList partition(int indexX, int indexY) {
+        if(indexX < 0 || indexX >= partitioningX
+        || indexY < 0 || indexY >= partitioningY)
+            return null;
+        return partitions[indexX][indexY];
+    }
+
     /**
      * Créé un noeud provisoire si un noeud permanent n'existe pas déjà à la position souhaitée
      * @param position  position du noeud
      * @return le noeud qui est à la position souhaitée
      */
     public Node addProvisoryNode(Vec2 position) {
-        Node n = nodeMap[indexX(position)][indexY(position)];
+        Node n = null; // closest
+       // double closestDist = Double.POSITIVE_INFINITY;
+
+        int px = partionIndexX(position);
+        int py = partitionIndexY(position);
+        // recherche du plus proche dans les partitions autour
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                NodeList list = partition(px+dx, py+dy);
+                if(list != null) {
+                    // on n'utilise pas un foreach pour éviter de créer des itérateurs pour rien!
+                    for (int i = 0; i < list.size(); i++) {
+                        Node nodeI = list.get(i);
+                     /*   FIXME: plus proche ou égalité ??
+                        double distSq = nodeI.getPosition().squaredDistanceTo(position);
+                        if(closestDist > distSq) {
+                            n = nodeI;
+                            closestDist = distSq;
+                        }*/
+                        if(nodeI.getPosition().equals(position)) {
+                            n = nodeI;
+                        }
+                    }
+                }
+            }
+        }
         if (n != null) {
             Log.GRAPHE.debug("Le noeud provisoire à "+position+" existe déjà.");
             return n;
         }
         else {
             try {
-                n = new Node(position, false);
+                writeLock().lock();
+                n = new Node(position, true);
                 Log.GRAPHE.debug("Ajout d'un noeud provisoire à "+position);
                 Segment seg = new Segment(position, new VectCartesian(0, 0));
                 for (Node node : nodes) {
@@ -269,6 +318,8 @@ public class Graphe implements Service {
                 return n;
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
+            } finally {
+                writeLock().unlock();
             }
             return null;
         }
@@ -280,13 +331,18 @@ public class Graphe implements Service {
      */
     public void removeProvisoryNode(Node node) {
         if (!node.isPermanent()) {
-            Log.GRAPHE.debug("Retrait du noeud provisoire "+node);
-            for (Node neighbour : node.getNeighbours().keySet()) {
-                ridges.remove(neighbour.getNeighbours().get(node));
-                neighbour.getNeighbours().remove(node);
+            try {
+                writeLock().lock();
+                Log.GRAPHE.debug("Retrait du noeud provisoire "+node);
+                for (Node neighbour : node.getNeighbours().keySet()) {
+                    ridges.remove(neighbour.getNeighbours().get(node));
+                    neighbour.getNeighbours().remove(node);
+                }
+                node.getNeighbours().clear(); //test
+                nodes.remove(node);
+            } finally {
+                writeLock().unlock();
             }
-            node.getNeighbours().clear(); //test
-            nodes.remove(node);
         }
     }
 
@@ -304,13 +360,12 @@ public class Graphe implements Service {
     /**
      * Set l'heuristique de toutes les nodes en fonction du point visé
      */
-    public void updateHeuristique(Node aim) {
+    public void updateHeuristique(Node aim, Node lastAim, Map<Node, Double> heuristiques) {
         if(lastAim != null && lastAim.equals(aim)) {
             return;
         }
-        lastAim = aim;
         for (Node node : nodes){
-            node.setHeuristique((int)aim.getPosition().squaredDistanceTo(node.getPosition()));
+            heuristiques.put(node, aim.getPosition().squaredDistanceTo(node.getPosition()));
         }
     }
 

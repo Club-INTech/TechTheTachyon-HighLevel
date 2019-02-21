@@ -1,4 +1,5 @@
 import data.Table;
+import locomotion.PathFollower;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -25,6 +26,10 @@ public class SimulatorManagerLauncher extends Thread{
     private Container container;
     private Table table;
 
+    // PathFollower à montrer si non nul (permet de connaître le chemin du robot)
+    private PathFollower pathfollowerToShow;
+    private int pathfollowerToShowPort;
+
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched = false;
 
@@ -48,6 +53,11 @@ public class SimulatorManagerLauncher extends Thread{
         this.speedFactor=1;
         this.colorblindMode=false;
         this.isSimulatingObstacleWithMouse=false;
+    }
+
+    public void setPathfollowerToShow(PathFollower follower, int port) {
+        this.pathfollowerToShow = follower;
+        this.pathfollowerToShowPort = port;
     }
 
     /** Définit si on simule un obstacle avec la souris dans l'interface graphique */
@@ -167,7 +177,7 @@ public class SimulatorManagerLauncher extends Thread{
             System.out.println(String.format("(%d) Listener connecté", port));
 
             //On instancie un robot simulé pour chaque LL instancié
-            SimulatedRobot simulatedRobot = new SimulatedRobot();
+            SimulatedRobot simulatedRobot = new SimulatedRobot(port);
             simulatedRobot.setSimulatedLLConnectionManager(this.simulatedLLConnectionManager.get(port));
             simulatedRobot.setSpeedFactor(this.speedFactor);
             simulatedRobot.launch();
@@ -187,10 +197,13 @@ public class SimulatorManagerLauncher extends Thread{
 
         // On instancie l'interface graphique
         this.graphicalInterface = new GraphicalInterface();
+        this.graphicalInterface.setPathfollowerToShow(pathfollowerToShow, pathfollowerToShowPort);
         this.graphicalInterface.setTable(this.table);
         this.graphicalInterface.setSimulatedRobots(this.simulatedRobots);
         this.graphicalInterface.setColorblindMode(this.colorblindMode);
         this.graphicalInterface.setIsDrawingPoints(true);
+        this.graphicalInterface.setDrawingPaths(true);
+        this.graphicalInterface.setDrawingGraph(true);
         this.graphicalInterface.setIsCreatingObstacleWithMouse(this.isSimulatingObstacleWithMouse);
         this.graphicalInterface.launch();
         System.out.println("Interface graphique instanciée");
@@ -221,4 +234,5 @@ public class SimulatorManagerLauncher extends Thread{
             return this.simulatorManager;
         }
     }
+
 }

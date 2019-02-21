@@ -172,10 +172,13 @@ public class Locomotion implements Service {
         Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(point);
         obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + point + " dans l'obstacle " + obstacle));
 
-        graphe.writeLock().lock();
-        start = graphe.addProvisoryNode(xyo.getPosition().clone());
-        aim = graphe.addProvisoryNode(point);
-        graphe.writeLock().unlock();
+        try {
+            graphe.writeLock().lock();
+            start = graphe.addProvisoryNode(xyo.getPosition().clone());
+            aim = graphe.addProvisoryNode(point);
+        } finally {
+            graphe.writeLock().unlock();
+        }
         pointsQueue.clear();
         exceptionsQueue.clear();
 
@@ -225,14 +228,6 @@ public class Locomotion implements Service {
                 e.printStackTrace();
                 throw new UnableToMoveException(new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
             }
-        }
-        graphe.writeLock().lock();
-        try {
-            graphe.removeProvisoryNode(start);
-            graphe.removeProvisoryNode(aim);
-        }
-        finally {
-            graphe.writeLock().unlock();
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
