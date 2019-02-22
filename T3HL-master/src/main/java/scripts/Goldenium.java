@@ -38,9 +38,10 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_GOLDONIUM);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR); //chelou
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+        robot.increaseScore(20);
 
     }
 
