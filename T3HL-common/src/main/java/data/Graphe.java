@@ -33,6 +33,8 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -44,6 +46,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author rem
  */
 public class Graphe implements Service {
+
+    /**
+     * Mémoire qui contient les chemins déjà calculés pour le pathfinding (vidée dès que le graphe change)
+     */
+    public final Map<Node, Map<Node, LinkedList<Vec2>>> cache = new HashMap<>();
 
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
@@ -106,6 +113,7 @@ public class Graphe implements Service {
      * @param table la table à paramétrer
      */
     public Graphe(Table table) {
+        partitions = new NodeList[partitioningX][partitioningY];
         this.table = table;
         table.setGraphe(this);
         this.fixedObstacles = table.getFixedObstacles();
@@ -118,9 +126,9 @@ public class Graphe implements Service {
      * Place les noeuds & arrêtes du graphe
      */
     private void init() {
+        cache.clear();
         Log.GRAPHE.debug("Initialisation du Graphe...");
         try {
-            partitions = new NodeList[partitioningX][partitioningY];
             for (int x = 0; x < partitioningX; x++) {
                 for (int y = 0; y < partitioningY; y++) {
                     partitions[x][y] = new NodeList();
@@ -258,6 +266,8 @@ public class Graphe implements Service {
                 }
             }
         }
+        // reset cache
+        cache.clear();
         Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
     }
 
@@ -315,6 +325,9 @@ public class Graphe implements Service {
                     constructRidge(n, node, seg);
                 }
                 addNode(n);
+
+                // reset cache
+                cache.clear();
                 return n;
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
@@ -340,6 +353,8 @@ public class Graphe implements Service {
                 }
                 node.getNeighbours().clear(); //test
                 nodes.remove(node);
+                // reset cache
+                cache.clear();
             } finally {
                 writeLock().unlock();
             }
@@ -355,6 +370,7 @@ public class Graphe implements Service {
             node.setCout(Node.getDefaultCost());
             node.setHeuristique(Node.getDefaultHeuristic());
         }
+        cache.clear();
     }
 
     /**
@@ -364,7 +380,7 @@ public class Graphe implements Service {
         if(lastAim != null && lastAim.equals(aim)) {
             return;
         }
-        for (Node node : nodes){
+        for (Node node : nodes) {
             heuristiques.put(node, aim.getPosition().squaredDistanceTo(node.getPosition()));
         }
     }

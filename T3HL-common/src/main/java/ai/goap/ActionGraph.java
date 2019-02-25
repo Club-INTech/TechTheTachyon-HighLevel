@@ -22,11 +22,10 @@ import utils.Log;
 import utils.math.Vec2;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Représente le graphe des actions possibles pour l'agent et leurs dépendances
@@ -140,6 +139,9 @@ public class ActionGraph {
 
     private Set<Node> nodes;
 
+    public static AtomicLong checkPrecondsTimeProfiler = new AtomicLong(0);
+    public static AtomicLong pathfinderProfiler = new AtomicLong(0);
+
     public ActionGraph() {
         nodes = new HashSet<>();
     }
@@ -166,7 +168,19 @@ public class ActionGraph {
 
         List<Node> usableNodes = new LinkedList<>(nodes);
         List<Node> path = new LinkedList<>();
+
+        EnvironmentInfo.copyWithEffectsProfiler.set(0);
+        checkPrecondsTimeProfiler.set(0);
+        pathfinderProfiler.set(0);
         boolean foundPath = buildPathToGoal(startNode, path, usableNodes, info, goal);
+        long time = EnvironmentInfo.copyWithEffectsProfiler.getAndSet(0);
+        Log.AI.debug("copyWithEffects: "+time+" ns ("+time/1_000_000+"ms)");
+
+        time = checkPrecondsTimeProfiler.getAndSet(0);
+        Log.AI.debug("checkPrecondsTimeProfiler: "+time+" ns ("+time/1_000_000+"ms)");
+
+        time = pathfinderProfiler.getAndSet(0);
+        Log.AI.debug("pathfinderProfiler: "+time+" ns ("+time/1_000_000+"ms)");
         if(!foundPath) {
             Log.AI.critical("Impossible de planifier des actions! Aucun chemin n'a été trouvé dans le graphe.");
             return null;
@@ -199,26 +213,26 @@ public class ActionGraph {
     }
 
     private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
-        boolean[] subPaths = new boolean[usableNodes.size()];
-        int index = 0;
+        ExecutorService executor = Executors.newWorkStealingPool(1); // FIXME
+        Stream<Boolean> futures = usableNodes.parallelStream()
+                .map(node -> {
+                    try {
+                        return executor.submit(() -> {
+                            boolean result = findSubPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
+                            Log.AI.debug("> Finished with "+node.getAction()+" result is "+result);
+                            Log.AI.debug("> Set result "+result);
+                            return result;
+                        }).get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                });
 
-        ExecutorService executor = Executors.newWorkStealingPool();
-        for(Node node : usableNodes) {
-            final int i = index;
-            Runnable action = () -> {
-                boolean result = findSubPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
-                Log.AI.debug("> Finished with "+node.getAction()+" result is "+result);
-                subPaths[i] = result;
-                Log.AI.debug("> Set result "+result);
-            };
-            //action.run();
-            executor.submit(action);
-            //   thread.start();
+        //info.getSpectre().destroy();
+        return futures.findAny().get();
 
-            index++;
-        }
-
-        try {
+/*        try {
             executor.shutdown();
             boolean terminated = executor.awaitTermination(120, TimeUnit.SECONDS);
             if(!terminated) { // timeout
@@ -232,7 +246,7 @@ public class ActionGraph {
             if(b)
                 return true;
         }
-        return false;
+        return false;*/
     }
 
     private boolean buildPathToGoal(Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
@@ -259,7 +273,10 @@ public class ActionGraph {
         }
         if(depth == 0)
             Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
-        if(actionNode.getAction().arePreconditionsMet(info)) { // noeud utilisable
+        //long startPrecondTime = System.nanoTime();
+        boolean checkPreconds = actionNode.getAction().arePreconditionsMet(info);
+        //checkPrecondsTimeProfiler.addAndGet(System.nanoTime()-startPrecondTime);
+        if(checkPreconds) { // noeud utilisable
        //     Log.AI.debug("Can be executed: "+actionNode.getAction());
             EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
             if(actionNode.requiresMovement(newState)) {
@@ -282,6 +299,7 @@ public class ActionGraph {
                     foundAtLeastOnePath = true;
                 }
             }
+            //newState.getSpectre().destroy();
         }
         long elapsed = (System.currentTimeMillis()-startTime);
         if(depth == 0)

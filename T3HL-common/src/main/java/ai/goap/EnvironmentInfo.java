@@ -20,16 +20,18 @@ package ai.goap;
 
 import ai.SpectreRobot;
 import data.XYO;
-import utils.Log;
 import utils.math.Vec2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Classe représentant toutes les informations sur l'environnement d'un agent. Utilisé par les actions et les états pour savoir ce qu'ils doivent faire
  */
 public class EnvironmentInfo {
+    public static AtomicLong copyWithEffectsProfiler = new AtomicLong(0);
+
     private final Map<String, Object> state;
     private final XYO xyo;
     private final SpectreRobot robot;
@@ -57,6 +59,7 @@ public class EnvironmentInfo {
     }
 
     public EnvironmentInfo copyWithEffects(Action actionWithEffects) {
+      //  long startTime = System.nanoTime();
         Map<String, Object> newState = new HashMap<>(state);
         XYO newXYO = null;
         if(xyo != null) {
@@ -70,6 +73,7 @@ public class EnvironmentInfo {
         }
         EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);
+        //copyWithEffectsProfiler.addAndGet(System.nanoTime()-startTime);
         return newInfo;
     }
 

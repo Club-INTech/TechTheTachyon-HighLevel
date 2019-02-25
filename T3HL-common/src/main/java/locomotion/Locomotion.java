@@ -32,6 +32,7 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -147,7 +148,7 @@ public class Locomotion implements Service {
         Node start;
         Node aim;
         Node next;
-        ArrayList<Vec2> path;
+        LinkedList<Vec2> path;
         UnableToMoveException exception;
 
         /* Algo :

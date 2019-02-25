@@ -59,10 +59,21 @@ public class SpectreRobot {
     }
 
     public SpectreRobot deepCopy() {
-        SpectreRobot copy = new SpectreRobot(fakeGraphe, fakeTable, config, new Pathfinder(fakeGraphe)); // la copie doit partir de l'état de ce spectre
+        Pathfinder pathfinder = Pathfinder.get(fakeGraphe);
+        SpectreRobot copy = new SpectreRobot(fakeGraphe, fakeTable, config, pathfinder); // la copie doit partir de l'état de ce spectre
         //SpectreRobot copy = new SpectreRobot(baseGraphe, baseTable);
         // TODO
         return copy;
+    }
+
+    public void destroy() {
+        Pathfinder.free(spectrePathfinder);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        destroy();
     }
 
     /**
