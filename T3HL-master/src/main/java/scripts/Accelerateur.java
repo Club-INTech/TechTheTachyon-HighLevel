@@ -76,14 +76,17 @@ public class Accelerateur extends Script {
             ((Master) robot).popPaletGauche();
             while (((Master) robot).getNbpaletsgauches() > 0) {
                 actionBras(false);
+                robot.increaseScore(10);
             }
             /**
              * Dire que le goldenium est libéré
              */
             GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(0);
+            robot.increaseScore(10);
             while(((Master) robot).getNbpaletsdroits() > 0){
                 actionBras(true);
+                robot.increaseScore(10);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

@@ -43,6 +43,9 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class Robot implements Service {
 
+    public int score ;
+
+
     /**
      * Service qui permet au robot de bouger
      */
@@ -73,6 +76,11 @@ public abstract class Robot implements Service {
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
+    }
+
+
+    public void increaseScore(int points){
+        this.score = this.score + points;
     }
 
     /**

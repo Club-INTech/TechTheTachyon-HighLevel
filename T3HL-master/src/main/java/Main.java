@@ -23,7 +23,6 @@ import ai.goap.Action;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
-import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Graphe;
 import data.Table;
@@ -76,16 +75,6 @@ public class Main {
             initAI();
         } catch (ContainerException e) {
             e.printStackTrace();
-        }
-
-        /**
-         * Pour l'électron
-         */
-        //On check l'username pour savoir si on est sur la Raspberry Pi
-        if (System.getProperty("user.name").equals("pi")){
-            final GpioController gpio = GpioFactory.getInstance();
-            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
-            pin.setShutdownOptions(true, PinState.LOW);
         }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
