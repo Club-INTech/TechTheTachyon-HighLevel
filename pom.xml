@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.pi4j</groupId>
             <artifactId>pi4j-core</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.2-20190226.134306-38</version>
         </dependency>
     </dependencies>
 
