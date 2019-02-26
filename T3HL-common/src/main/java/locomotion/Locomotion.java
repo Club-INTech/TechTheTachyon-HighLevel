@@ -188,8 +188,8 @@ public class Locomotion implements Service {
 
         while ( ! xyo.getPosition().equals(aim.getPosition())) {
             try {
-                graphe.readLock().lock();
                 try {
+                    graphe.readLock().lock();
                     path = pathfinder.findPath(start, aim);
                 }
                 finally {
@@ -212,8 +212,8 @@ public class Locomotion implements Service {
                                 // TODO: c'est ton pote, on fait quoi?
                             }
                             else { // c'est pas ton pote!
-                                graphe.writeLock().lock();
                                 try {
+                                    graphe.writeLock().lock();
                                     graphe.removeProvisoryNode(start);
                                     start = graphe.addProvisoryNode(xyo.getPosition().clone());
                                     graphe.update();

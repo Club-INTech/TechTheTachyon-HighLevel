@@ -52,7 +52,7 @@ public class Graphe implements Service {
      */
     public final Map<Node, Map<Node, LinkedList<Vec2>>> cache = new HashMap<>();
 
-    public final ReentrantReadWriteLock cacheLocks = new ReentrantReadWriteLock();
+    public final ReentrantReadWriteLock cacheLocks = new ReentrantReadWriteLock(true);
 
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
@@ -100,7 +100,7 @@ public class Graphe implements Service {
     /**
      * Verrous de synchronisation
      */
-    private ReadWriteLock locks = new ReentrantReadWriteLock(true);
+    private ReadWriteLock locks = new ReentrantReadWriteLock(false);
 
     /**
      * Dernier noeud auquel on a voulu se rendre, utilisé pour l'heuristique
@@ -128,7 +128,7 @@ public class Graphe implements Service {
      * Place les noeuds & arrêtes du graphe
      */
     private void init() {
-        cache.clear();
+        resetCache();
         Log.GRAPHE.debug("Initialisation du Graphe...");
         try {
             for (int x = 0; x < partitioningX; x++) {
@@ -269,7 +269,7 @@ public class Graphe implements Service {
             }
         }
         // reset cache
-        cache.clear();
+        resetCache();
         Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
     }
 
@@ -329,7 +329,7 @@ public class Graphe implements Service {
                 addNode(n);
 
                 // reset cache
-                cache.clear();
+                resetCache();
                 return n;
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
@@ -356,7 +356,7 @@ public class Graphe implements Service {
                 node.getNeighbours().clear(); //test
                 nodes.remove(node);
                 // reset cache
-                cache.clear();
+                resetCache();
             } finally {
                 writeLock().unlock();
             }
@@ -372,7 +372,16 @@ public class Graphe implements Service {
             node.setCout(Node.getDefaultCost());
             node.setHeuristique(Node.getDefaultHeuristic());
         }
-        cache.clear();
+        resetCache();
+    }
+
+    private void resetCache() {
+        try {
+            cacheLocks.writeLock().lock();
+            cache.clear();
+        } finally {
+            cacheLocks.writeLock().unlock();
+        }
     }
 
     /**

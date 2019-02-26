@@ -213,7 +213,7 @@ public class ActionGraph {
     }
 
     private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
-        ExecutorService executor = Executors.newWorkStealingPool(1); // FIXME
+        ExecutorService executor = Executors.newWorkStealingPool(); // FIXME
         Stream<Boolean> futures = usableNodes.parallelStream()
                 .map(node -> {
                     try {
@@ -230,7 +230,8 @@ public class ActionGraph {
                 });
 
         //info.getSpectre().destroy();
-        return futures.findAny().get();
+        List<Boolean> futureList = futures.collect(Collectors.toList());
+        return futureList.stream().findAny().get();
 
 /*        try {
             executor.shutdown();

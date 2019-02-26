@@ -297,9 +297,12 @@ public class Table implements Service {
         }
 
         if (this.graphe != null) {
-            this.graphe.writeLock().lock();
-            this.graphe.update();
-            this.graphe.writeLock().unlock();
+            try {
+                this.graphe.writeLock().lock();
+                this.graphe.update();
+            } finally {
+                this.graphe.writeLock().unlock();
+            }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }
@@ -429,9 +432,12 @@ public class Table implements Service {
 
     public void updateTableAfterFixedObstaclesChanges() {
         if (this.graphe != null) {
-            this.graphe.writeLock().lock();
-            this.graphe.reInit();
-            this.graphe.writeLock().unlock();
+            try {
+                this.graphe.writeLock().lock();
+                this.graphe.reInit();
+            } finally {
+                this.graphe.writeLock().unlock();
+            }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }

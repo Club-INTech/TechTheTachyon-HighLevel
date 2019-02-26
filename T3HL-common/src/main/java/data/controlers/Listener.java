@@ -168,7 +168,7 @@ public class Listener extends ServiceThread {
                 }
             }
             try {
-                Thread.sleep(TIME_LOOP);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

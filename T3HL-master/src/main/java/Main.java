@@ -186,7 +186,7 @@ public class Main {
         graph.node(accelerateur);
 
         // TODO: remove, test only
-        int nMoves = 2;//8-4;
+        int nMoves = 5;//8-4;
         for (int i = 0; i < nMoves; i++) {
             double x = 0;
             double y = 500;

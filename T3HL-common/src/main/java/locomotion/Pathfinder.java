@@ -108,7 +108,6 @@ public class Pathfinder implements Service {
                 }
             }
         } finally {
-
             graphe.cacheLocks.readLock().unlock();
         }
 
@@ -124,8 +123,9 @@ public class Pathfinder implements Service {
         costs.clear();
         parents.clear();
 
-        graphe.readLock().lock();
         try {
+            System.err.println("Lock taken by "+Thread.currentThread().getName());
+            graphe.readLock().lock();
             graphe.updateHeuristique(aim, lastAim, heuristiques);
 
             lastAim = aim;
@@ -181,6 +181,7 @@ public class Pathfinder implements Service {
                 closedList.add(currentNode);
             }
         } finally {
+            System.err.println("Lock released by "+Thread.currentThread().getName());
             graphe.readLock().unlock();
         }
 
