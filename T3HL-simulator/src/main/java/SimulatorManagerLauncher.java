@@ -223,7 +223,18 @@ public class SimulatorManagerLauncher extends Thread{
         this.hasFinished = true;
     }
 
+    public void waitForLaunchCompletion() {
+        while(!hasFinished) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /* ================================================ Getters ================================================= */
+
     /** Getter du manager de la simulation */
     SimulatorManager getSimulatorManager(){
         if (!this.hasFinished){
