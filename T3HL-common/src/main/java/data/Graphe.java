@@ -52,6 +52,8 @@ public class Graphe implements Service {
      */
     public final Map<Node, Map<Node, LinkedList<Vec2>>> cache = new HashMap<>();
 
+    public final ReentrantReadWriteLock cacheLocks = new ReentrantReadWriteLock();
+
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
 

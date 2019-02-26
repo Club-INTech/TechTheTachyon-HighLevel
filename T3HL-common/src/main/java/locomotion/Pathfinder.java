@@ -98,13 +98,18 @@ public class Pathfinder implements Service {
      *              s'il n'existe pas de chemin entre les deux noeuds
      */
     public LinkedList<Vec2> findPath(Node start, Node aim) throws NoPathFound {
-        synchronized (graphe.cache) {
+        graphe.cacheLocks.readLock().lock();
+        try {
             Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.get(start);
             if(alreadyComputedPaths != null) {
                 LinkedList<Vec2> computedPath = alreadyComputedPaths.get(aim);
-                if(computedPath != null)
+                if(computedPath != null) {
                     return computedPath;
+                }
             }
+        } finally {
+
+            graphe.cacheLocks.readLock().unlock();
         }
 
         Node currentNode;
@@ -197,9 +202,12 @@ public class Pathfinder implements Service {
             currentNode = parents.getOrDefault(currentNode, null);
         } while (currentNode != null && !(currentNode.equals(start)));
 
-        synchronized (graphe.cache) {
+        graphe.cacheLocks.writeLock().lock();
+        try {
             Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.computeIfAbsent(start, k -> new HashMap<>());
             alreadyComputedPaths.put(aim, path);
+        } finally {
+            graphe.cacheLocks.writeLock().unlock();
         }
         return path;
     }
