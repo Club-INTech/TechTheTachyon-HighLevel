@@ -69,11 +69,6 @@
             <artifactId>config</artifactId>
             <version>1.4</version>
         </dependency>
-        <dependency>
-            <groupId>com.pi4j</groupId>
-            <artifactId>pi4j-core</artifactId>
-            <version>1.2-20190226.134306-38</version>
-        </dependency>
     </dependencies>
 
     <!-- SubModules -->

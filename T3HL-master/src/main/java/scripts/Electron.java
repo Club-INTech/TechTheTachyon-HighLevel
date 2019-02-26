@@ -1,10 +1,10 @@
 package scripts;
-
+/*
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListener;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
-import com.pi4j.util.CommandArgumentParser;
+import com.pi4j.util.CommandArgumentParser;*/
 import data.Table;
 import pfg.config.Config;
 import robot.Master;
@@ -21,7 +21,7 @@ public class Electron extends Script{
 
     @Override
     public void execute(Integer version) {
-
+/* FIXME: A refaire
         final GpioController gpio = GpioFactory.getInstance();
         final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32_depart", PinState.LOW);
 
@@ -42,7 +42,7 @@ public class Electron extends Script{
                     Log.STRATEGY.debug("Electron arrivee");
                 }
             }
-        });
+        });*/
 
 
     }

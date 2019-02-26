@@ -16,7 +16,6 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
@@ -53,16 +52,6 @@ public class Main {
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
-        }
-
-        /**
-         * Pour l'électron
-         */
-        //On check l'username pour savoir si on est sur la Raspberry Pi
-        if (System.getProperty("user.name").equals("pi")){
-            final GpioController gpio = GpioFactory.getInstance();
-            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
-            pin.setShutdownOptions(true, PinState.LOW);
         }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
