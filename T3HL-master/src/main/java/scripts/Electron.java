@@ -26,6 +26,7 @@ public class Electron extends Script{
         final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32_depart", PinState.LOW);
 
         pin.high();
+        robot.increaseScore(20);
 
         PinPullResistance pull = PinPullResistance.PULL_UP;
         final GpioPinDigitalInput testArrivee = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, pull);
@@ -36,6 +37,7 @@ public class Electron extends Script{
                 if (event.getState().isHigh()){
 
                     //TODO ajouter au calcul des points
+                    robot.increaseScore(20);
 
                     Log.STRATEGY.debug("Electron arrivee");
                 }

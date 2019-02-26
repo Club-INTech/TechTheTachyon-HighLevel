@@ -115,7 +115,7 @@ public class Listener extends Thread implements Service {
                 Log.COMMUNICATION.debug("Simulated Buddy");
             }
             else {
-                connectionManager.initConnections(Connection.LIDAR);
+                connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar");
                 if (master) {
                     connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
