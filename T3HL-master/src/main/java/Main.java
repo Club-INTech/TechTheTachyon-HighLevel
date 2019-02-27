@@ -64,6 +64,7 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
 
+            orderWrapper.sendString("ping");
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
@@ -75,9 +76,9 @@ public class Main {
                 e.printStackTrace();
             }
 
-            interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
+           // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             zone_depart_palets.goToThenExecute(1);
-            interfaceGraphique.clearPointsToDraw();
+          //  interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);

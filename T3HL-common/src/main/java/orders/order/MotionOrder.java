@@ -29,7 +29,7 @@ public enum MotionOrder implements Order {
     /**Tourner*/
     TURN("t"),
     /** Aller jusqu'à un point */
-    MOVE_TO_POINT("p"),
+    MOVE_TO_POINT("goto"),
     /**S'arrêter*/
     STOP("stop"),
     ;
