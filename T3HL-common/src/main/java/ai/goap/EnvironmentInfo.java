@@ -59,7 +59,7 @@ public class EnvironmentInfo {
     }
 
     public EnvironmentInfo copyWithEffects(Action actionWithEffects) {
-      //  long startTime = System.nanoTime();
+        long startTime = System.nanoTime();
         Map<String, Object> newState = new HashMap<>(state);
         XYO newXYO = null;
         if(xyo != null) {
@@ -73,7 +73,7 @@ public class EnvironmentInfo {
         }
         EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);
-        //copyWithEffectsProfiler.addAndGet(System.nanoTime()-startTime);
+        copyWithEffectsProfiler.addAndGet(System.nanoTime()-startTime);
         return newInfo;
     }
 

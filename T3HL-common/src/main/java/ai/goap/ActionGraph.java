@@ -141,6 +141,7 @@ public class ActionGraph {
 
     public static AtomicLong checkPrecondsTimeProfiler = new AtomicLong(0);
     public static AtomicLong pathfinderProfiler = new AtomicLong(0);
+    public static AtomicLong precondMet = new AtomicLong(0);
 
     public ActionGraph() {
         nodes = new HashSet<>();
@@ -172,6 +173,7 @@ public class ActionGraph {
         EnvironmentInfo.copyWithEffectsProfiler.set(0);
         checkPrecondsTimeProfiler.set(0);
         pathfinderProfiler.set(0);
+        precondMet.set(0);
         boolean foundPath = buildPathToGoal(startNode, path, usableNodes, info, goal);
         long time = EnvironmentInfo.copyWithEffectsProfiler.getAndSet(0);
         Log.AI.debug("copyWithEffects: "+time+" ns ("+time/1_000_000+"ms)");
@@ -181,6 +183,9 @@ public class ActionGraph {
 
         time = pathfinderProfiler.getAndSet(0);
         Log.AI.debug("pathfinderProfiler: "+time+" ns ("+time/1_000_000+"ms)");
+
+        time = precondMet.getAndSet(0);
+        Log.AI.debug("precondMet: "+time+" ns ("+time/1_000_000+"ms)");
         if(!foundPath) {
             Log.AI.critical("Impossible de planifier des actions! Aucun chemin n'a été trouvé dans le graphe.");
             return null;
@@ -213,7 +218,7 @@ public class ActionGraph {
     }
 
     private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
-        ExecutorService executor = Executors.newWorkStealingPool(); // FIXME
+        ExecutorService executor = Executors.newWorkStealingPool(1); // FIXME
         Stream<Boolean> futures = usableNodes.parallelStream()
                 .map(node -> {
                     try {
@@ -274,9 +279,9 @@ public class ActionGraph {
         }
         if(depth == 0)
             Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
-        //long startPrecondTime = System.nanoTime();
+        long startPrecondTime = System.nanoTime();
         boolean checkPreconds = actionNode.getAction().arePreconditionsMet(info);
-        //checkPrecondsTimeProfiler.addAndGet(System.nanoTime()-startPrecondTime);
+        checkPrecondsTimeProfiler.addAndGet(System.nanoTime()-startPrecondTime);
         if(checkPreconds) { // noeud utilisable
        //     Log.AI.debug("Can be executed: "+actionNode.getAction());
             EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());

@@ -78,9 +78,8 @@ public class ScriptAction extends Action {
     }
 
     private boolean checkPath(EnvironmentInfo info) {
-
         try {
-
+            long startTime = System.nanoTime();
             boolean result = false;
             Graphe graph = info.getSpectre().getSimulatedGraph();
             Vec2 entryPos = script.entryPosition(version).getCenter();
@@ -103,10 +102,10 @@ public class ScriptAction extends Action {
                 result = true;
             } catch (NoPathFound f) {
             }
+            ActionGraph.pathfinderProfiler.getAndAdd(System.nanoTime()-startTime);
             return result;
         } finally {
         }
-
     }
 
     @Override

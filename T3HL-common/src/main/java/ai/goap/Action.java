@@ -36,17 +36,21 @@ public abstract class Action {
      * Est-ce que les préconditions pour cette action sont remplies ? NE PREND PAS EN COMPTE LA POSITION ACTUELLE
      */
     public boolean arePreconditionsMet(EnvironmentInfo info) {
+        long startTime = System.nanoTime();
         for(Map.Entry<String, Object> entry : preconditions.entrySet()) {
             Object requiredState = info.getState().get(entry.getKey());
             if(requiredState == null && entry.getValue() != null) {
                 Log.AI.debug("failed to meet precondition: "+entry.getKey());
+                ActionGraph.precondMet.getAndAdd(System.nanoTime()-startTime);
                 return false;
             }
             if( ! requiredState.equals(entry.getValue())) { // une condition n'est pas remplie
                 Log.AI.debug("failed to meet precondition: "+entry.getKey());
+                ActionGraph.precondMet.getAndAdd(System.nanoTime()-startTime);
                 return false;
             }
         }
+        ActionGraph.precondMet.getAndAdd(System.nanoTime()-startTime);
         return true;
     }
 
