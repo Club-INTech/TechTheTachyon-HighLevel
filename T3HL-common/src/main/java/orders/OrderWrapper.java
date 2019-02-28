@@ -254,7 +254,7 @@ public class OrderWrapper implements Service {
         symetry = config.getString(ConfigData.COULEUR).equals("jaune");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
-            this.llConnection = Connection.MASTER_LL_SIMULATEUR;
+            this.llConnection = Connection.LL_MASTER_SIMULATEUR;
         } else {
             this.llConnection = Connection.TEENSY_MASTER;
         }

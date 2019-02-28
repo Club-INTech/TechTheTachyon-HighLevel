@@ -67,6 +67,10 @@ class GraphicalInterface extends JFrame {
     /** Constructeur */
     GraphicalInterface() {
         this.initDefaultPassedParameters();
+
+        this.fixedObstacles = new ArrayList<Obstacle>();
+        this.mobileObstacles = new ArrayList<MobileCircularObstacle>();
+
         this.pointsToDraw=new ArrayList<Vec2>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {

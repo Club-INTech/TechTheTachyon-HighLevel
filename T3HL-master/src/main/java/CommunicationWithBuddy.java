@@ -38,7 +38,7 @@ public class CommunicationWithBuddy implements Service {
         symetry = config.getString(ConfigData.COULEUR).equals("jaune");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
-            this.ConnectionWithBuddy = Connection.SLAVE_SIMULATEUR;
+            this.ConnectionWithBuddy = Connection.HL_SLAVE_SIMULATEUR;
         } else {
             this.ConnectionWithBuddy = Connection.SLAVE;
         }

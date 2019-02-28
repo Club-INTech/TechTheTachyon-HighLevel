@@ -47,12 +47,12 @@ public class LidarControler extends ServiceThread {
     /**
      * Separateur entre deux points
      */
-    private static final String POINT_SEPARATOR         = ":";
+    private static final String POINT_SEPARATOR         = ";";
 
     /**
      * Separateur entre deux coordonnées d'un point
      */
-    private static final String COORDONATE_SEPARATOR    = ";";
+    private static final String COORDONATE_SEPARATOR    = ":";
 
     /**
      * Table à mettre à jour

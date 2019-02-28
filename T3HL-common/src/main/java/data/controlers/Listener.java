@@ -100,7 +100,7 @@ public class Listener extends ServiceThread {
     public void run() {
         Connection buddy;
         if (simulation){
-            buddy = Connection.SLAVE_SIMULATEUR;
+            buddy = Connection.HL_SLAVE_SIMULATEUR;
         }
         else {
             buddy = Connection.SLAVE;
@@ -109,15 +109,13 @@ public class Listener extends ServiceThread {
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
             if (simulation){
-                connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulation");
-                Log.COMMUNICATION.debug("Simulated Teensy Master");
-                connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulated Buddy");
+                Log.COMMUNICATION.debug("Simulation initializing connections...");
+                connectionManager.initConnections(Connection.LL_MASTER_SIMULATEUR);
+                Log.COMMUNICATION.debug("Simulated Teensy Master connected");
+                connectionManager.initConnections(Connection.HL_SLAVE_SIMULATEUR);
+                Log.COMMUNICATION.debug("Simulated Buddy connected");
             }
             else {
-                connectionManager.initConnections(Connection.LIDAR_DATA);
-                Log.COMMUNICATION.debug("Lidar");
                 if (master) {
                     connectionManager.initConnections(Connection.SLAVE, Connection.TEENSY_MASTER);
                     Log.COMMUNICATION.debug("Slave");
@@ -129,6 +127,8 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.debug("Teensy Slave");
                 }
             }
+            connectionManager.initConnections(Connection.LIDAR_DATA);
+            Log.COMMUNICATION.debug("Lidar connected");
         } catch (CommunicationException e) {
             e.printStackTrace();
         }

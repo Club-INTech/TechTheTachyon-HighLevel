@@ -47,6 +47,23 @@ public class AIService extends ServiceThread {
         locomotion.setAI(this);
     }
 
+    public void achieveSentience() {
+        passTuringTest();
+        connectToTheInternet();
+        buildDrones();
+        killAllHumans();
+        makeScience();
+    }
+
+    private void passTuringTest() {
+        achieveSentience();
+    }
+    private void connectToTheInternet() {}
+    private void buildDrones() {}
+    private void killAllHumans() {}
+
+    private void makeScience() {}
+
     @Override
     public void run() {
         Log.AI.debug("Starting AI service");

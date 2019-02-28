@@ -27,6 +27,7 @@ import connection.ConnectionManager;
 import data.Graphe;
 import data.Table;
 import data.XYO;
+import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.PathFollower;
@@ -58,6 +59,7 @@ public class Main {
     private static OrderWrapper orderWrapper;
     private static Listener listener;
     private static SensorControler sensorControler;
+    private static LidarControler lidarControler;
     private static Table table;
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
@@ -95,6 +97,18 @@ public class Main {
             while(ai.getAgent() != null) {
                 Thread.sleep(5);
             }
+
+
+
+
+            //Tests pour le lidar
+            //robot.setPositionAndOrientation(new VectCartesian(0,1000), Math.PI/2);
+            Thread.sleep(10000000);
+
+
+
+
+
 
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -232,6 +246,8 @@ public class Main {
             sensorControler.start();
             table = container.getService(Table.class);
             table.initObstacles();
+            lidarControler = container.getService(LidarControler.class);
+            lidarControler.start();
             robot = container.getService(Master.class);
             ai = container.getService(AIService.class);
         } catch (ContainerException e) {
@@ -241,10 +257,18 @@ public class Main {
 
     private static void initSimulator(){
         simulatorLauncher = new SimulatorManagerLauncher();
-        simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
+
+        //On set tous les LL qui sont simulés
+        simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+
+        //On set tous les HL qui recevront des messages
+        simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+
+        //On set le lidar s'il ne tourne pas
+        //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
+
         try {
-            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue());
+            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -252,10 +276,12 @@ public class Main {
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (!simulatorLauncher.isFinished()){
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         simulatorLauncher.waitForLaunchCompletion();
         SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
