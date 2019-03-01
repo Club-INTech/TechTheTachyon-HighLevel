@@ -17,12 +17,14 @@
  **/
 
 import connection.ConnectionManager;
+import data.Sick;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
@@ -69,6 +71,10 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
+            while(robot != null) {
+                robot.computeNewPositionAndOrientation();
+                Thread.sleep(1000);
+            }
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);

@@ -129,9 +129,14 @@ public class SensorControler extends Thread implements Service {
             }
             if (sickData.peek() != null) {
 
-
                 if (isMaster) {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
+                    System.out.println("=== SICK ===");
+                    for(String s : sickMeasurements) {
+                        System.out.print(s+" ");
+                    }
+                    System.out.println();
+                    System.out.println("============");
                     int[] significantSicks = Sick.getSignificantSicks();
                     VectCartesian vectsick = new VectCartesian(104,87); //Vecteur qui place les sick par rapport à l'origine du robot
 
