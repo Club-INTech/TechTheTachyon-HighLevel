@@ -55,6 +55,18 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+
+
+        <repository>
+            <id>Jitpack.io</id>
+            <url>https://jitpack.io</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <!-- Dependencies -->

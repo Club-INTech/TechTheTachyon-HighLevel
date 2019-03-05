@@ -29,6 +29,7 @@ import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.Speed;
+import orders.order.MontlheryOrder;
 import pfg.config.Config;
 import utils.container.Service;
 import utils.math.Vec2;
@@ -165,6 +166,13 @@ public abstract class Robot implements Service {
         XYO newXYO = Sick.getNewXYO();
         this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
 
+    }
+
+    /**
+     * Actives le mode montlhery
+     */
+    public void switchToMontlheryMode() {
+        this.orderWrapper.sendString(MontlheryOrder.MONTLHERY.getOrderStr());
     }
 
     public XYO getXyo() { return this.xyo;}

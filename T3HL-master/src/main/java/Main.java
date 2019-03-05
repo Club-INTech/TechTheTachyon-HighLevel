@@ -49,6 +49,7 @@ public class Main {
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
     private static GraphicalInterface interfaceGraphique;
+    private static MontlheryController controller;
 
     public static void main(String[] args){
         initServices();
@@ -71,9 +72,13 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
-            while(robot != null) {
+/* TODO: décommenter pour tester les SICK en boucle            while(robot != null) {
                 robot.computeNewPositionAndOrientation();
                 Thread.sleep(1000);
+            }*/
+            controller.start();
+            while(robot != null) { // on boucle à l'infini pour laisser le controlleur gérer (oui c'est dégueu)
+                Thread.sleep(1);
             }
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
@@ -121,6 +126,7 @@ public class Main {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = container.getService(Master.class);
+            controller = new MontlheryController(robot, orderWrapper);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
