@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 public class ActionGraph {
 
     private static final Object LOCK = new Object();
+    private final Comparator<EnvironmentInfo> stateComparator;
 
     public static class Node {
 
@@ -144,7 +145,12 @@ public class ActionGraph {
     public static AtomicLong precondMet = new AtomicLong(0);
 
     public ActionGraph() {
+        this((o1, o2) -> 0); // aucun tri par défaut
+    }
+
+    public ActionGraph(Comparator<EnvironmentInfo> stateComparator) {
         nodes = new HashSet<>();
+        this.stateComparator = stateComparator;
     }
 
     /**
@@ -218,7 +224,7 @@ public class ActionGraph {
     }
 
     private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
-        ExecutorService executor = Executors.newWorkStealingPool(1); // FIXME
+        ExecutorService executor = Executors.newWorkStealingPool();
         Stream<Boolean> futures = usableNodes.parallelStream()
                 .map(node -> {
                     try {
@@ -234,25 +240,8 @@ public class ActionGraph {
                     return false;
                 });
 
-        //info.getSpectre().destroy();
         List<Boolean> futureList = futures.collect(Collectors.toList());
         return futureList.stream().findAny().get();
-
-/*        try {
-            executor.shutdown();
-            boolean terminated = executor.awaitTermination(120, TimeUnit.SECONDS);
-            if(!terminated) { // timeout
-                throw new RuntimeException("Timeout while building AI path");
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        for (boolean b : subPaths) {
-            if(b)
-                return true;
-        }
-        return false;*/
     }
 
     private boolean buildPathToGoal(Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {

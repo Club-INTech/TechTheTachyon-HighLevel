@@ -35,25 +35,6 @@ import java.util.*;
  */
 public class Pathfinder implements Service {
 
-    private static final HashMap<Graphe, Pathfinder> pool = new HashMap<>();
-
-    public static Pathfinder get(Graphe graphe) {
-        Pathfinder path = null;
-        synchronized (pool) {
-            path = pool.get(graphe);
-        }
-        if(path == null) {
-            return new Pathfinder(graphe);
-        }
-        return path;
-    }
-
-    public static void free(Pathfinder pathfinder) {
-        synchronized (pool) {
-            pool.put(pathfinder.graphe, pathfinder);
-        }
-    }
-
     /**
      * Graphe de recherche de chemin
      */
@@ -124,7 +105,6 @@ public class Pathfinder implements Service {
         parents.clear();
 
         try {
-            System.err.println("Lock taken by "+Thread.currentThread().getName());
             graphe.readLock().lock();
             graphe.updateHeuristique(aim, lastAim, heuristiques);
 
@@ -180,13 +160,10 @@ public class Pathfinder implements Service {
                 }
                 closedList.add(currentNode);
             }
+            throw new NoPathFound(start.getPosition(), aim.getPosition());
         } finally {
-            System.err.println("Lock released by "+Thread.currentThread().getName());
             graphe.readLock().unlock();
         }
-
-
-        throw new NoPathFound(start.getPosition(), aim.getPosition());
     }
 
     /**
