@@ -40,7 +40,7 @@ public class AIService extends ServiceThread {
     public AIService(Container container, Locomotion locomotion, Pathfinder pathfinder) {
         this.config = container.getConfig();
         this.locomotion = locomotion;
-        this.graph = new ActionGraph(new AINodeComparator());
+        this.graph = new ActionGraph();
 
         this.spectre = new SpectreRobot(locomotion.getGraphe(), locomotion.getTable(), config, pathfinder, true);
         this.agent = new RobotAgent(locomotion, graph, spectre);

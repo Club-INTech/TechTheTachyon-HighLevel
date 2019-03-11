@@ -101,4 +101,8 @@ public abstract class Action {
 
 
     public abstract void reset();
+
+    public int getScoreGranted() {
+        return 0;
+    }
 }
