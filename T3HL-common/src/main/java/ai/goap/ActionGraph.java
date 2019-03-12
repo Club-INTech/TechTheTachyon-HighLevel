@@ -32,10 +32,10 @@ import java.util.stream.Stream;
  */
 public class ActionGraph {
 
-    public static class Node {
+    private static final Object LOCK = new Object();
+    private final Comparator<EnvironmentInfo> stateComparator;
 
-        private ThreadLocal<Node> parentForCurrentThread = ThreadLocal.withInitial(() -> null);
-        private ThreadLocal<Double> runningCostForCurrentThread = ThreadLocal.withInitial(() -> 0.0);
+    public static class Node {
 
         /**
          * Coût courant d'un chemin, utilisé lors de la planification
@@ -96,31 +96,6 @@ public class ActionGraph {
         public Node getParent() {
             return parent;
         }
-
-        @Override
-        public boolean equals(Object obj) {
-            if(obj instanceof Node) {
-                Node other = (Node)obj;
-                return other.getAction() == getAction();
-            }
-            return false;
-        }
-
-        public void setParentForCurrentThread(Node parentForCurrentThread) {
-            this.parentForCurrentThread.set(parentForCurrentThread);
-        }
-
-        public Node getParentForCurrentThread() {
-            return parentForCurrentThread.get();
-        }
-
-        public double getRunningCostForCurrentThread() {
-            return runningCostForCurrentThread.get();
-        }
-
-        public void setRunningCostForCurrentThread(double runningCostForCurrentThread) {
-            this.runningCostForCurrentThread.set(runningCostForCurrentThread);
-        }
     }
 
     /**
@@ -170,7 +145,12 @@ public class ActionGraph {
     public static AtomicLong precondMet = new AtomicLong(0);
 
     public ActionGraph() {
+        this((o1, o2) -> 0); // aucun tri par défaut
+    }
+
+    public ActionGraph(Comparator<EnvironmentInfo> stateComparator) {
         nodes = new HashSet<>();
+        this.stateComparator = stateComparator;
     }
 
     /**
@@ -243,14 +223,13 @@ public class ActionGraph {
         return result;
     }
 
-    private boolean buildPathToGoal(ActionGraph.Node startNode, List<ActionGraph.Node> path, List<ActionGraph.Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
+    private boolean buildPathToGoal(Node startNode, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal) {
         ExecutorService executor = Executors.newWorkStealingPool();
         Stream<Boolean> futures = usableNodes.parallelStream()
                 .map(node -> {
                     try {
                         return executor.submit(() -> {
-                            ActionGraphPathfinder pathfinder = new ActionGraphPathfinder(this);
-                            boolean result = pathfinder.findPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
+                            boolean result = findSubPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
                             Log.AI.debug("> Finished with "+node.getAction()+" result is "+result);
                             Log.AI.debug("> Set result "+result);
                             return result;
@@ -263,6 +242,65 @@ public class ActionGraph {
 
         List<Boolean> futureList = futures.collect(Collectors.toList());
         return futureList.stream().findAny().get();
+    }
+
+    private boolean buildPathToGoal(Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+        if(goal.isMetByState(info)) // on est déjà arrivé au but!
+            return true;
+        boolean foundAtLeastOnePath = false;
+        for (int i = 0; i < usableNodes.size(); i++) {
+            boolean foundSubPath = findSubPath(usableNodes.get(i), parent, path, usableNodes, info, goal, depth);
+            if(foundSubPath)
+                foundAtLeastOnePath = true;
+        }
+
+        return foundAtLeastOnePath;
+    }
+
+    private boolean findSubPath(Node actionNode, Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
+        if(goal.isMetByState(info)) // on est déjà arrivé au but!
+            return true;
+        boolean foundAtLeastOnePath = false;
+        long startTime = System.currentTimeMillis();
+        StringBuilder depthStr = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            depthStr.append(">");
+        }
+        if(depth == 0)
+            Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
+        long startPrecondTime = System.nanoTime();
+        boolean checkPreconds = actionNode.getAction().arePreconditionsMet(info);
+        checkPrecondsTimeProfiler.addAndGet(System.nanoTime()-startPrecondTime);
+        if(checkPreconds) { // noeud utilisable
+       //     Log.AI.debug("Can be executed: "+actionNode.getAction());
+            EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
+            if(actionNode.requiresMovement(newState)) {
+                actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
+                // TODO: angle
+            }
+            double runningCost = parent.runningCost + actionNode.getCost(info, depth);
+            if(goal.isMetByState(newState)) {
+                Node clone = actionNode.cloneWithParent(parent, runningCost);
+                synchronized (LOCK) {
+                    path.add(clone);
+                }
+                foundAtLeastOnePath = true;
+            } else {
+                // on retire cette action de la liste des actions possibles
+                List<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toList());
+                boolean foundSubpath = buildPathToGoal(actionNode.cloneWithParent(parent, runningCost), path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
+
+                if(foundSubpath) {
+                    foundAtLeastOnePath = true;
+                }
+            }
+            //newState.getSpectre().destroy();
+        }
+        long elapsed = (System.currentTimeMillis()-startTime);
+        if(depth == 0)
+            Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
+                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));
+        return foundAtLeastOnePath;
     }
 
     public Action getCopyAction() {

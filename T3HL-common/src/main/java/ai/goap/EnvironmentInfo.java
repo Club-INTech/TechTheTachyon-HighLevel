@@ -24,7 +24,6 @@ import utils.math.Vec2;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -36,17 +35,11 @@ public class EnvironmentInfo {
     private final Map<String, Object> state;
     private final XYO xyo;
     private final SpectreRobot robot;
-    private final int score;
 
-    public EnvironmentInfo(XYO xyo, Map<String, Object> state, SpectreRobot robot, int score) {
+    public EnvironmentInfo(XYO xyo, Map<String, Object> state, SpectreRobot robot) {
         this.state = state;
         this.xyo = xyo;
         this.robot = robot;
-        this.score = score;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public Map<String, Object> getState() {
@@ -78,7 +71,7 @@ public class EnvironmentInfo {
             robot = robot.deepCopy();
   //          Log.AI.debug("deepCopy took "+(System.currentTimeMillis()-start));
         }
-        EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot, score+actionWithEffects.getScoreGranted());
+        EnvironmentInfo newInfo = new EnvironmentInfo(newXYO, newState, robot);
         actionWithEffects.applyChangesToEnvironment(newInfo);
         copyWithEffectsProfiler.addAndGet(System.nanoTime()-startTime);
         return newInfo;
@@ -89,26 +82,10 @@ public class EnvironmentInfo {
             if(!other.state.get(entry.getKey()).equals(entry.getValue()))
                 return false;
         }
-        return other.score >= score;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(obj instanceof EnvironmentInfo) {
-            EnvironmentInfo other = ((EnvironmentInfo) obj);
-            boolean statesEqual = other.isMetByState(this) && this.isMetByState(other);
-         //   System.out.println(">> States equal: "+statesEqual+" ("+this+"/"+other+")");
-            boolean xyoEqual = xyo.getPosition().equals(other.getXYO().getPosition());
-            return statesEqual && xyoEqual && robot.getSimulatedGraph() == other.getSpectre().getSimulatedGraph() && score == other.score;
-        }
-        return false;
+        return true;
     }
 
     public SpectreRobot getSpectre() {
         return robot;
-    }
-
-    public double distanceTo(EnvironmentInfo info) {
-        return Math.abs(info.score - score);
     }
 }

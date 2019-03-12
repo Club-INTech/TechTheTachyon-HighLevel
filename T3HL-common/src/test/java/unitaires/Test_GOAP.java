@@ -236,11 +236,11 @@ public class Test_GOAP {
         Map<String, Object> baseState = new HashMap<>();
         baseState.put("axe in inventory", false);
         baseState.put("make firewood", false);
-        EnvironmentInfo base = new EnvironmentInfo(null, baseState, null, 0);
+        EnvironmentInfo base = new EnvironmentInfo(null, baseState, null);
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("make firewood", true);
-        EnvironmentInfo goal = new EnvironmentInfo(null, goalState, null, 0);
+        EnvironmentInfo goal = new EnvironmentInfo(null, goalState, null);
         Stack<ActionGraph.Node> plan = firewoodGraph.plan(base, goal);
         Assert.assertEquals(getAxe, plan.pop().getAction());
         Assert.assertEquals(chopLog, plan.pop().getAction());
@@ -256,9 +256,9 @@ public class Test_GOAP {
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("make firewood", true);
-        EnvironmentInfo goal = new EnvironmentInfo(xyo, goalState, null, 0);
+        EnvironmentInfo goal = new EnvironmentInfo(xyo, goalState, null);
 
-        EnvironmentInfo info = new EnvironmentInfo(xyo, baseState, null, 0);
+        EnvironmentInfo info = new EnvironmentInfo(xyo, baseState, null);
         Agent agent = new Agent(firewoodGraph) {
             @Override
             public EnvironmentInfo gatherEnvironmentInformation() {
@@ -292,9 +292,9 @@ public class Test_GOAP {
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("make firewood", true);
-        EnvironmentInfo goal = new EnvironmentInfo(xyo, goalState, null, 0);
+        EnvironmentInfo goal = new EnvironmentInfo(xyo, goalState, null);
 
-        EnvironmentInfo fakeInfo = new EnvironmentInfo(xyo, baseState, null, 0);
+        EnvironmentInfo fakeInfo = new EnvironmentInfo(xyo, baseState, null);
         Agent agent = new Agent(firewoodGraph2) {
             @Override
             public EnvironmentInfo gatherEnvironmentInformation() {

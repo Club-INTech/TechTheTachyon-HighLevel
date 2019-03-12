@@ -38,7 +38,7 @@ public class RobotAgent extends Agent {
         super(graph);
         this.spectre = spectre;
         this.locomotion = locomotion;
-        this.info = new EnvironmentInfo(XYO.getRobotInstance(), new HashMap<>(), spectre, 0);
+        this.info = new EnvironmentInfo(XYO.getRobotInstance(), new HashMap<>(), spectre);
 
         // TODO: init de 'state' dans 'info'
 

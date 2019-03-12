@@ -230,7 +230,7 @@ public class Main {
 
 
         goalState.put("movesDone", nMoves);
-        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null, 0 /* TODO */);
+        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
         agent.setCurrentGoal(goal);
     }
 
