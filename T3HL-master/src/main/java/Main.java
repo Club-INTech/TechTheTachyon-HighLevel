@@ -30,6 +30,7 @@ import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
+import data.graphe.Node;
 import locomotion.PathFollower;
 import locomotion.Pathfinder;
 import locomotion.UnableToMoveException;
@@ -200,10 +201,13 @@ public class Main {
         graph.node(accelerateur);
 
         // TODO: remove, test only
-        int nMoves = 5;//8-4;
+        int nMoves = 20;//8-4;
+        Graphe grapheDeBase = table.getGraphe();
         for (int i = 0; i < nMoves; i++) {
-            double x = 0;
-            double y = 500;
+            int randomIndex = (int) Math.floor(Math.random()*grapheDeBase.getNodes().size());
+            Node n = grapheDeBase.getNodes().get(randomIndex);
+            double x = n.getPosition().getX();
+            double y = n.getPosition().getY();
             Vec2 pos = new VectCartesian((int)x, (int)y);
             int finalI = i;
             Action action = new MoveToPointAction(pos) {
@@ -216,7 +220,7 @@ public class Main {
 
                 @Override
                 public String toString() {
-                    return "MoveTo("+this.aim+") #"+(finalI +1);
+                    return "MoveTo("+this.aim+") #"+(finalI +1)+" (done: "+executed+")";
                 }
             };
             graph.node(action);

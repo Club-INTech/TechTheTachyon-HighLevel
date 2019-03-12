@@ -7,7 +7,7 @@ import utils.math.Vec2;
 public class MoveToPointAction extends Action {
 
     protected final Vec2 aim;
-    private boolean executed;
+    protected boolean executed;
 
     public MoveToPointAction(Vec2 aim) {
         this.aim = aim;
@@ -26,6 +26,11 @@ public class MoveToPointAction extends Action {
     @Override
     public boolean isComplete(EnvironmentInfo info) {
         return executed;
+    }
+
+    @Override
+    public boolean arePreconditionsMet(EnvironmentInfo info) {
+        return !executed && super.arePreconditionsMet(info);
     }
 
     @Override

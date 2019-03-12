@@ -229,7 +229,7 @@ public class ActionGraph {
                 .map(node -> {
                     try {
                         return executor.submit(() -> {
-                            boolean result = findSubPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
+                            boolean result = GoapPathfinder.findPath(node, startNode, path, usableNodes, info.copyWithEffects(copyAction), goal, 0);
                             Log.AI.debug("> Finished with "+node.getAction()+" result is "+result);
                             Log.AI.debug("> Set result "+result);
                             return result;
@@ -244,64 +244,7 @@ public class ActionGraph {
         return futureList.stream().findAny().get();
     }
 
-    private boolean buildPathToGoal(Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
-        if(goal.isMetByState(info)) // on est déjà arrivé au but!
-            return true;
-        boolean foundAtLeastOnePath = false;
-        for (int i = 0; i < usableNodes.size(); i++) {
-            boolean foundSubPath = findSubPath(usableNodes.get(i), parent, path, usableNodes, info, goal, depth);
-            if(foundSubPath)
-                foundAtLeastOnePath = true;
-        }
 
-        return foundAtLeastOnePath;
-    }
-
-    private boolean findSubPath(Node actionNode, Node parent, List<Node> path, List<Node> usableNodes, EnvironmentInfo info, EnvironmentInfo goal, int depth) {
-        if(goal.isMetByState(info)) // on est déjà arrivé au but!
-            return true;
-        boolean foundAtLeastOnePath = false;
-        long startTime = System.currentTimeMillis();
-        StringBuilder depthStr = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            depthStr.append(">");
-        }
-        if(depth == 0)
-            Log.AI.debug(">"+depthStr+" Testing "+actionNode.getAction());
-        long startPrecondTime = System.nanoTime();
-        boolean checkPreconds = actionNode.getAction().arePreconditionsMet(info);
-        checkPrecondsTimeProfiler.addAndGet(System.nanoTime()-startPrecondTime);
-        if(checkPreconds) { // noeud utilisable
-       //     Log.AI.debug("Can be executed: "+actionNode.getAction());
-            EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
-            if(actionNode.requiresMovement(newState)) {
-                actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
-                // TODO: angle
-            }
-            double runningCost = parent.runningCost + actionNode.getCost(info, depth);
-            if(goal.isMetByState(newState)) {
-                Node clone = actionNode.cloneWithParent(parent, runningCost);
-                synchronized (LOCK) {
-                    path.add(clone);
-                }
-                foundAtLeastOnePath = true;
-            } else {
-                // on retire cette action de la liste des actions possibles
-                List<Node> newUsableNodes = usableNodes.stream().filter(n -> n != actionNode).collect(Collectors.toList());
-                boolean foundSubpath = buildPathToGoal(actionNode.cloneWithParent(parent, runningCost), path, newUsableNodes, newState, goal, depth+1); // on continue à parcourir l'arbre
-
-                if(foundSubpath) {
-                    foundAtLeastOnePath = true;
-                }
-            }
-            //newState.getSpectre().destroy();
-        }
-        long elapsed = (System.currentTimeMillis()-startTime);
-        if(depth == 0)
-            Log.AI.debug(">"+depthStr+" "+elapsed+" for "+actionNode.getAction()+" usableNodes = "+
-                usableNodes.stream().map(n -> n.getAction().toString()).collect(Collectors.joining(", ")));
-        return foundAtLeastOnePath;
-    }
 
     public Action getCopyAction() {
         return copyAction;
