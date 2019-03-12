@@ -1,5 +1,6 @@
 import com.studiohartman.jamepad.*;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import orders.order.MontlheryOrder;
 import pfg.config.Config;
 import robot.Robot;
@@ -7,9 +8,21 @@ import utils.container.Service;
 
 public class MontlheryController extends Thread implements Service {
 
+    enum ArmState {
+        GROUND, ELEVATOR, NO_IDEA
+    }
+
     private static final float EPSILON = 0.35f;
+    private boolean wasAPressed;
+    private boolean wasBPressed;
+    private boolean wasXPressed;
+    private boolean wasYPressed;
+    private boolean wasLeftTriggerPressed;
+    private boolean wasRightTriggerPressed;
+    private boolean wasMoving;
     private final OrderWrapper orders;
     private Robot robot;
+    private ArmState armPosition = ArmState.NO_IDEA;
 
     public MontlheryController(Robot robot, OrderWrapper orders) {
         this.robot = robot;
@@ -32,6 +45,48 @@ public class MontlheryController extends Thread implements Service {
                     float leftAxisY = controller.getAxisState(ControllerAxis.LEFTY);
                     float rightAxisX = controller.getAxisState(ControllerAxis.RIGHTX);
 
+                    boolean aPressed = controller.isButtonPressed(ControllerButton.A);
+                    boolean bPressed = controller.isButtonPressed(ControllerButton.B);
+                    boolean xPressed = controller.isButtonPressed(ControllerButton.X);
+                    boolean yPressed = controller.isButtonPressed(ControllerButton.Y);
+                    boolean leftTriggerPressed = controller.isButtonPressed(ControllerButton.LEFTBUMPER);
+                    boolean rightTriggerPressed = controller.isButtonPressed(ControllerButton.RIGHTBUMPER);
+                    // A: Goto GROUND
+                    // B: Goto ELEVATOR
+                    // X: monter asc droit
+                    // Y: descendre asc droit
+                    // LEFT TRIGGER: active pompe droite
+                    // RIGHT TRIGGER: désactive pompe droite
+                    if(aPressed && !wasAPressed && armPosition != ArmState.GROUND) {
+                        armPosition = ArmState.GROUND;
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
+                    }
+                    if(bPressed && !wasBPressed && armPosition != ArmState.ELEVATOR) {
+                        armPosition = ArmState.ELEVATOR;
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                    }
+                    if(xPressed && !wasXPressed) {
+                        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                    }
+                    if(yPressed && !wasYPressed) {
+                        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    }
+                    if(leftTriggerPressed && !wasLeftTriggerPressed) {
+                        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                    }
+                    if(rightTriggerPressed && !wasRightTriggerPressed) {
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                    }
+
+                    wasAPressed = aPressed;
+                    wasBPressed = bPressed;
+                    wasXPressed = xPressed;
+                    wasYPressed = yPressed;
+                    wasLeftTriggerPressed = leftTriggerPressed;
+                    wasRightTriggerPressed = rightTriggerPressed;
+
                     boolean moving = false;
                     if(epsilonCheck(leftAxisY)) {
                         float forward = leftAxisY;
@@ -52,9 +107,10 @@ public class MontlheryController extends Thread implements Service {
                         }
                     }
 
-                    if(!moving) {
+                    if(!moving && wasMoving) {
                         orders.sendString(MontlheryOrder.STOP.getOrderStr());
                     }
+                    wasMoving = moving;
                 } catch (ControllerUnpluggedException e) {
                     e.printStackTrace();
                 }
