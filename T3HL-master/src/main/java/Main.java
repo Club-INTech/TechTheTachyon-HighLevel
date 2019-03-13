@@ -58,6 +58,7 @@ public class Main {
         }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
+        waitForLLConnection();
         try {
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
             Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
@@ -111,6 +112,16 @@ public class Main {
             e.printStackTrace();
         }
         Container.resetInstance();
+    }
+
+    private static void waitForLLConnection() {
+        while(!connectionManager.areConnectionsInitiated()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void initServices(){

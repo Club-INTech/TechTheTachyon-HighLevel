@@ -56,7 +56,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Simulation active
      */
-    SIMULATION(true),
+    SIMULATION(false),
 
     /**
      * Si on utilise le Lidar
