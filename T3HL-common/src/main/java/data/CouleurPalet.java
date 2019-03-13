@@ -11,7 +11,7 @@ public enum CouleurPalet {
     /**
      * Le bas niveau renvoit un message d'erreur: pas de couleur
      */
-    INVISIBLE,
+    PAS_DE_PALET,
     ;
 
     static CompletableFuture<CouleurPalet> couleurPalRecue;
@@ -37,13 +37,13 @@ public enum CouleurPalet {
                 couleurPalRecue.complete(CouleurPalet.GOLDENIUM);
                 break;
             default:
-                couleurPalRecue.complete(CouleurPalet.INVISIBLE);
+                couleurPalRecue.complete(CouleurPalet.PAS_DE_PALET);
                 break;
         }
     }
 
     public static CouleurPalet getCouleurPalRecu(){
-        CouleurPalet couleurPalet = CouleurPalet.INVISIBLE ;
+        CouleurPalet couleurPalet = CouleurPalet.PAS_DE_PALET;
         try {
             couleurPalet = couleurPalRecue.get();
         } catch (InterruptedException e) {
