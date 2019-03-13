@@ -173,6 +173,8 @@ public abstract class Robot implements Service {
      */
     public void switchToMontlheryMode() {
         this.orderWrapper.sendString(MontlheryOrder.MONTLHERY.getOrderStr());
+        this.orderWrapper.sendString(MontlheryOrder.MAX_ROTATION_SPEED.getOrderStr()+" "+Math.PI/16f); // 1/8 de tour par seconde
+        this.orderWrapper.sendString(MontlheryOrder.MAX_TRANSLATION_SPEED.getOrderStr()+" 30"); // 30 mm/s
     }
 
     public XYO getXyo() { return this.xyo;}

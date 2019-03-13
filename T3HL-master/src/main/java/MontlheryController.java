@@ -32,6 +32,7 @@ public class MontlheryController extends Thread implements Service {
     @Override
     public void run() {
         robot.switchToMontlheryMode();
+
         // initialisation du manager pour les manettes
         ControllerManager controllers = new ControllerManager();
         controllers.initSDLGamepad();

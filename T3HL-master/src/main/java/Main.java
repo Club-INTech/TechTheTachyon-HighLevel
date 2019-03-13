@@ -16,6 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import connection.Connection;
 import connection.ConnectionManager;
 import data.Sick;
 import data.Table;
@@ -58,7 +59,6 @@ public class Main {
         }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
-        waitForLLConnection();
         try {
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
             Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
@@ -67,7 +67,8 @@ public class Main {
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
-
+            waitForLLConnection();
+            Thread.sleep(1000*5);
             orderWrapper.sendString("ping");
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
@@ -117,7 +118,7 @@ public class Main {
     private static void waitForLLConnection() {
         while(!connectionManager.areConnectionsInitiated()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

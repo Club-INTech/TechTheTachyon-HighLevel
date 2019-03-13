@@ -20,10 +20,7 @@ package connection;
 
 import pfg.config.Config;
 import utils.ConfigData;
-import utils.communication.CommunicationException;
-import utils.communication.CommunicationInterface;
-import utils.communication.SocketClientInterface;
-import utils.communication.SocketServerInterface;
+import utils.communication.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +36,7 @@ public enum Connection {
     SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class),
     LIDAR_DATA(ConfigData.LOCALHOST, ConfigData.LIDAR_DATA_PORT, SocketClientInterface.class),
     TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SocketClientInterface.class),
+    TEENSY_MASTER_MONTHLERY(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SerialInterface.class),
     TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketClientInterface.class),
 
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
