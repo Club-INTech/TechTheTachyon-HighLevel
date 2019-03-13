@@ -16,14 +16,15 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import com.pi4j.io.gpio.*;
 import connection.ConnectionManager;
+import data.Sick;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
@@ -55,16 +56,6 @@ public class Main {
             initSimulator();
         }
 
-        /**
-         * Pour l'électron
-         */
-        //On check l'username pour savoir si on est sur la Raspberry Pi
-        if (System.getProperty("user.name").equals("pi")){
-            final GpioController gpio = GpioFactory.getInstance();
-            final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32", PinState.LOW);
-            pin.setShutdownOptions(true, PinState.LOW);
-        }
-
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
             Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
@@ -75,10 +66,15 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
 
+            orderWrapper.sendString("ping");
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
+            while(robot != null) {
+                robot.computeNewPositionAndOrientation();
+                Thread.sleep(1000);
+            }
             try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
@@ -86,9 +82,9 @@ public class Main {
                 e.printStackTrace();
             }
 
-            interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
+           // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             zone_depart_palets.goToThenExecute(1);
-            interfaceGraphique.clearPointsToDraw();
+          //  interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.paletRougeDroite);
             table.removeFixedObstacle(table.paletVertDroite);
