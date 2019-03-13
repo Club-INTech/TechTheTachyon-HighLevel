@@ -2,6 +2,7 @@ import com.studiohartman.jamepad.*;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
 import orders.order.MontlheryOrder;
+import orders.order.Order;
 import pfg.config.Config;
 import robot.Robot;
 import utils.container.Service;
@@ -23,6 +24,7 @@ public class MontlheryController extends Thread implements Service {
     private final OrderWrapper orders;
     private Robot robot;
     private ArmState armPosition = ArmState.NO_IDEA;
+    private Order lastOrder;
 
     public MontlheryController(Robot robot, OrderWrapper orders) {
         this.robot = robot;
@@ -92,9 +94,9 @@ public class MontlheryController extends Thread implements Service {
                     if(epsilonCheck(leftAxisY)) {
                         float forward = leftAxisY;
                         if(forward > 0) {
-                            orders.sendString(MontlheryOrder.AVANCE.getOrderStr());
+                            order(MontlheryOrder.AVANCE);
                         } else {
-                            orders.sendString(MontlheryOrder.RECULE.getOrderStr());
+                            order(MontlheryOrder.RECULE);
                         }
                         moving = true;
                     }
@@ -102,16 +104,23 @@ public class MontlheryController extends Thread implements Service {
                     if(epsilonCheck(rightAxisX)) {
                         moving = true;
                         if(rightAxisX < 0) {
-                            orders.sendString(MontlheryOrder.LEFT.getOrderStr());
+                            if(leftAxisY > 0) {
+                                order(MontlheryOrder.LEFT);
+                            } else {
+                                order(MontlheryOrder.RIGHT);
+                            }
                         } else {
-                            orders.sendString(MontlheryOrder.RIGHT.getOrderStr());
+                            if(leftAxisY > 0) {
+                                order(MontlheryOrder.RIGHT);
+                            } else {
+                                order(MontlheryOrder.LEFT);
+                            }
                         }
                     }
 
-                    if(!moving && wasMoving) {
-                        orders.sendString(MontlheryOrder.STOP.getOrderStr());
+                    if(!moving) {
+                        order(MontlheryOrder.STOP);
                     }
-                    wasMoving = moving;
                 } catch (ControllerUnpluggedException e) {
                     e.printStackTrace();
                 }
@@ -132,6 +141,13 @@ public class MontlheryController extends Thread implements Service {
         }
 
         controllers.quitSDLGamepad();
+    }
+
+    private void order(MontlheryOrder order) {
+        if(lastOrder != order) {
+            orders.sendString(order.getOrderStr());
+            lastOrder = order;
+        }
     }
 
     /**

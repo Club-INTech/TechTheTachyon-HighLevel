@@ -27,7 +27,8 @@ public class SerialInterface implements CommunicationInterface {
     @Override
     public void send(String message) throws CommunicationException {
         if(port != null) {
-            printer.println(message);
+            printer.println(message+"\n");
+            printer.flush();
         }
     }
 
@@ -53,6 +54,9 @@ public class SerialInterface implements CommunicationInterface {
         this.port = SerialPort.getCommPort("/dev/ttyACM0");
         Log.COMMUNICATION.debug("Ouverture de "+port.getSystemPortName());
         port.setBaudRate(115200);
+        port.setNumStopBits(1);
+        port.setParity(0);
+        port.setNumDataBits(8);
         boolean result = port.openPort();
         if(!result) {
             Log.COMMUNICATION.critical("Echec de l'ouverture du port!");
