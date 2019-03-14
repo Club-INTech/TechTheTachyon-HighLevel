@@ -94,6 +94,9 @@ public abstract class Obstacle {
     public Vec2 getPosition() {
         return shape.getCenter();
     }
+    public void setPosition(Vec2 position){
+        this.shape.setCenter(position);
+    }
     public Shape getShape() {
         return shape;
     }
