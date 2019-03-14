@@ -123,7 +123,7 @@ public class Graphe implements Service {
      * Ré-initialise totalement le graphe
      * ATTENTION : opération coûteuse !
      */
-    void reInit() {
+    public void reInit() {
         this.nodes.clear();
         this.ridges.clear();
         init();

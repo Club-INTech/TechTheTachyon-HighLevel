@@ -80,8 +80,8 @@ public class Main {
             zone_depart_palets.goToThenExecute(1);
           //  interfaceGraphique.clearPointsToDraw();
 
-            table.removeFixedObstacle(table.paletRougeDroite);
-            table.removeFixedObstacle(table.paletVertDroite);
+            table.removeFixedObstacle(table.getPaletRougeDroite());
+            table.removeFixedObstacle(table.getPaletVertDroite());
 
             zone_chaos_palets.goToThenExecute(1);
 
