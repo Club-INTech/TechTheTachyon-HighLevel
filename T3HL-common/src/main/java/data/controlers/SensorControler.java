@@ -1,15 +1,15 @@
 package data.controlers;
 
-import data.CouleurPalet;
-import data.SensorState;
-import data.Sick;
-import data.XYO;
+import data.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
+
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -63,6 +63,7 @@ public class SensorControler extends Thread implements Service {
         this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
         this.couleurPalet =new ConcurrentLinkedQueue<>();
+
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
         listener.addQueue(Channel.EVENT, eventData);
@@ -83,6 +84,7 @@ public class SensorControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
         String[] coordonates;
+
         String[] sickMeasurements;
         String[] event;
         int x;
@@ -119,6 +121,8 @@ public class SensorControler extends Thread implements Service {
                 }
                 XYO.getBuddyInstance().update(x, y, o);
             }
+
+
             if (eventData.peek() != null) {
                 event = eventData.poll().split(ARGUMENTS_SEPARATOR);
                 if (event.length == 1) {
@@ -128,8 +132,6 @@ public class SensorControler extends Thread implements Service {
                 }
             }
             if (sickData.peek() != null) {
-
-
                 if (isMaster) {
                     sickMeasurements = sickData.poll().split(ARGUMENTS_SEPARATOR);
                     int[] significantSicks = Sick.getSignificantSicks();
