@@ -112,6 +112,7 @@ public class Table implements Service {
      */
     private final List<MobileCircularObstacle> mobileObstacleBuffer;
 
+
     /**
      * Constructeur de la table
      */

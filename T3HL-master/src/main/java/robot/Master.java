@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2018, INTech.
  * this file is part of INTech's HighLevel.
- *
+ * <p>
  * INTech's HighLevel is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p>
  * INTech's HighLevel is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
@@ -41,25 +41,31 @@ public class Master extends Robot {
         this.ascenseurDroite = new Stack<>();
     }
 
-    public int getNbpaletsdroits (){
+    public int getNbpaletsdroits() {
         return ascenseurDroite.size();
     }
 
-    public int getNbpaletsgauches(){return ascenseurGauche.size();}
-
-    public void pushPaletDroit(){
-        ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+    public int getNbpaletsgauches() {
+        return ascenseurGauche.size();
     }
 
-    public void pushPaletGauche(){
-        ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+    public void pushPaletDroit() {
+        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+            ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+        }
     }
 
-    public void popPaletDroit(){
+    public void pushPaletGauche() {
+        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+            ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+        }
+    }
+
+    public void popPaletDroit() {
         ascenseurDroite.pop();
     }
 
-    public void popPaletGauche(){
+    public void popPaletGauche() {
         ascenseurGauche.pop();
     }
 

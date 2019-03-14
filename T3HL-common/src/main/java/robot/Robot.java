@@ -160,7 +160,6 @@ public abstract class Robot implements Service {
      * Méthode qui permet le recalage avec les sicks
      */
     public void computeNewPositionAndOrientation(Sick... significantSicks){
-        //TODO 1) Envoyer l'ordre au bas niveau pour récupérer les données, 2) récupérer le nouveau XYO de l'énum Sick 3)setLa nouvelle Position et orientation
         this.orderWrapper.getSickData();
         XYO newXYO = Sick.getNewXYO();
         this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
