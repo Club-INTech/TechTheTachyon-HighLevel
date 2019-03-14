@@ -30,6 +30,7 @@ public enum Channel {
     EVENT((char) 0x21, (char) 0x24),
     SICK((char)0x21, (char)0x25),
     COULEUR_PALET_PRIS((char)0x21,(char)0x26),
+    PALETS_POSITION((char)0x21,(char)0x27),
     ;
 
     /**

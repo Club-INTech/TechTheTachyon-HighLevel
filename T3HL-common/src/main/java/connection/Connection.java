@@ -46,6 +46,8 @@ public enum Connection {
 
     MASTER_LL_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.MASTER_LL_SIMULATEUR, SocketClientInterface.class),
     SLAVE_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.SLAVE_SIMULATEUR, SocketClientInterface.class),
+
+    BALISE(ConfigData.BALISE_IP,ConfigData.BALISE_PORT,SocketClientInterface.class)
     ;
 
     /**
