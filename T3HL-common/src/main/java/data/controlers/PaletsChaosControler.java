@@ -53,6 +53,7 @@ public class PaletsChaosControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler Palets Chaos opérationnel");
         while (!Thread.currentThread().isInterrupted()) {
             while (paletsPosAndColorQueue.peek() == null) {
+                System.out.println("je n'ai rien reçu");
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
@@ -61,6 +62,7 @@ public class PaletsChaosControler extends Thread implements Service {
             }
 
             if (paletsPosAndColorQueue.peek() != null) {
+                Log.DATA_HANDLER.debug("oh oh oh oh oh oh oh oh oh oh oh oh oh ");
 
                 JSONParser parser = new JSONParser();
                 String paletsPosAndColorJson = paletsPosAndColorQueue.poll();

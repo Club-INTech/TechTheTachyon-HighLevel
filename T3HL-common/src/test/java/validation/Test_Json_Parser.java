@@ -1,12 +1,20 @@
 package validation;
 
+import connection.Connection;
+import connection.ConnectionManager;
 import data.PaletsZoneChaos;
+import data.controlers.Listener;
+import data.controlers.PaletsChaosControler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import utils.Container;
+import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -19,8 +27,24 @@ import static java.lang.Math.toIntExact;
 
 public class Test_Json_Parser {
 
+    private ConnectionManager connectionManager;
+    private Container container;
+    private Listener listener;
+    private PaletsChaosControler paletsChaosControler;
+
+    @Before
+    public void setUp() throws Exception {
+        container = Container.getInstance("Master");
+        connectionManager = container.getService(ConnectionManager.class);
+        listener = container.getService(Listener.class);
+        listener.start();
+        connectionManager.initConnections(Connection.BALISE);
+        paletsChaosControler = container.getService(PaletsChaosControler.class);
+    }
+
     @Test
     public void testParse() {
+
 
         JSONParser parser = new JSONParser();
         try {
@@ -76,4 +100,15 @@ public class Test_Json_Parser {
             e.printStackTrace();
         }
     }
+    @Test
+    public void testAvecZoneChaosControle(){
+        paletsChaosControler.run();
+        System.out.println(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition());
+        System.out.println(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition());
+        System.out.println(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition());
+        System.out.println(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition());
+
+    }
+
+
 }
