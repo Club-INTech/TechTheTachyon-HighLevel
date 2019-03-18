@@ -71,19 +71,24 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
-            while(robot != null) {
+            /*while(robot != null) {
                 robot.computeNewPositionAndOrientation();
                 Thread.sleep(1000);
-            }
-            try {
+            }*/
+            /*try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
-            }
+            }*/
 
            // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
-            zone_depart_palets.goToThenExecute(1);
+            //zone_depart_palets.goToThenExecute(1);
+            zone_depart_palets.execute(0);
+            while(robot != null) {
+                System.out.println("Finished!");
+                Thread.sleep(1000);
+            }
           //  interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.getPaletRougeDroite());
