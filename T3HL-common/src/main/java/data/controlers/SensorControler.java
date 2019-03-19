@@ -124,10 +124,31 @@ public class SensorControler extends Thread implements Service {
 
 
             if (eventData.peek() != null) {
-                event = eventData.poll().split(ARGUMENTS_SEPARATOR);
+                String data = eventData.poll();
+                Log.COMMUNICATION.debug("Got event from LL: "+data);
+                event = data.split(ARGUMENTS_SEPARATOR);
                 if (event.length == 1) {
-                    if (event[0].equals("stoppedMoving")) {
-                        SensorState.MOVING.setData(false);
+                    switch(event[0]) {
+                        case "stoppedMoving":
+                            SensorState.MOVING.setData(false);
+                            break;
+
+                        case "leftElevatorStopped":
+                            if(symetrie) {
+                                SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                            } else {
+                                SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                            }
+                            break;
+
+                        case "rightElevatorStopped":
+                            if(symetrie) {
+                                SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                            } else {
+                                SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                            }
+                            break;
+
                     }
                 }
             }
@@ -150,6 +171,7 @@ public class SensorControler extends Thread implements Service {
                     int yCalcule;
                     double teta;
 
+                    // FIXME
                     if (ConfigData.COULEUR.toString().equals("jaune")) {
                         // On différencie les cas où le robot est orienté vers la gauche et la droite
                         double orien= XYO.getRobotInstance().getOrientation();

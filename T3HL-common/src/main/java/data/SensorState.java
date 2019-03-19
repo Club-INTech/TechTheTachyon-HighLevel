@@ -30,6 +30,8 @@ public enum SensorState {
     CUBE_PRIS(0, Integer.class),
     MOVING(false, Boolean.class),
     STUCKED(false, Boolean.class),
+    LEFT_ELEVATOR_MOVING(false, Boolean.class),
+    RIGHT_ELEVATOR_MOVING(false, Boolean.class),
     ;
 
     /**

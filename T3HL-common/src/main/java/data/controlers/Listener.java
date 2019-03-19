@@ -115,12 +115,12 @@ public class Listener extends Thread implements Service {
                 Log.COMMUNICATION.debug("Simulated Buddy");
             }
             else {
-                connectionManager.initConnections(Connection.LIDAR_DATA, Connection.BALISE);
+                // FIXME connectionManager.initConnections(Connection.LIDAR_DATA, Connection.BALISE);
               //  connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar");
                 Log.COMMUNICATION.debug("Balise");
                 if (master) {
-                    connectionManager.initConnections(/*Connection.SLAVE, */Connection.TEENSY_MASTER);
+                    connectionManager.initConnections(/*Connection.SLAVE, */Connection.TEENSY_MASTER_MONTHLERY);
                     Log.COMMUNICATION.debug("Slave");
                     Log.COMMUNICATION.debug("Teensy Master");
                 } else {

@@ -236,6 +236,7 @@ public class OrderWrapper implements Service {
     public void sendString(String message) {
         try {
             llConnection.send(message);
+            System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
@@ -256,7 +257,7 @@ public class OrderWrapper implements Service {
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            this.llConnection = Connection.TEENSY_MASTER;
+            this.llConnection = Connection.TEENSY_MASTER_MONTHLERY;//Connection.TEENSY_MASTER;
         }
     }
 

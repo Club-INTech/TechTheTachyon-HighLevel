@@ -6,6 +6,9 @@ import utils.math.VectPolar;
 
 public class SimulatedRobot {
 
+    private static final float MONTLHERY_SPEED = 2f; // mm/<tick du simulateur>
+    private static final float MONTLHERY_ROT_SPEED = (float) (Math.PI/2f); // rad/s
+
     //Attributs qui peuvent être modifiés avant le lancement
     private float speedFactor;
     private SimulatedConnectionManager simulatedLLConnectionManager;
@@ -37,6 +40,12 @@ public class SimulatedRobot {
 
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched;
+
+    // variables utiles pour le mode montlhery
+    private boolean montlheryMode;
+    private boolean forcedMovement;
+    private float forcedTranslationSpeed;
+    private float forcedRotationSpeed;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -155,6 +164,14 @@ public class SimulatedRobot {
     /* ======================== Méthodes de mise à jour de la position et de l'orientation ================== */
     /** Update l'orientation pas à pas en fonction du delta entre l'orientation actuelle et l'orientation cible */
     private void updateOrientation(){
+        if(montlheryMode) {
+            this.turning = Math.abs(forcedRotationSpeed) > 0.1;
+            if(turning) {
+                this.orientation += forcedRotationSpeed * MILLIS_BETWEEN_UPDATES/1000.0;
+            }
+
+            return;
+        }
         if (Math.abs(moduloSpec(this.orientationTarget) - moduloSpec(this.orientation)) > this.ORIENTATION_TOLERANCE){
             if (Math.abs(this.orientationTarget - this.orientation) < this.ROTATION_SPEED * this.timeSinceLastUpdate()){
                 this.orientation=moduloSpec(this.orientationTarget);
@@ -179,6 +196,17 @@ public class SimulatedRobot {
     /** Update la position pas à pas en fonction de la distance restante entre la position actuelle et la position cible */
     private void updatePosition(){
         if (!this.turning) {
+            if(montlheryMode) {
+                forwardOrBackward = Math.abs(forcedTranslationSpeed) > 0.01f;
+                if(forwardOrBackward) {
+                    float dirX = (float) (Math.cos(orientation)*forcedTranslationSpeed);
+                    float dirY = (float) (Math.sin(orientation)*forcedTranslationSpeed);
+                    setPosition(position.plusVector(new VectCartesian(dirX, dirY)));
+                }
+
+                return;
+            }
+
             if (this.positionTarget.distanceTo(this.position) > this.POSITION_TOLERANCE) {
                 if (this.positionTarget.distanceTo(this.position) < this.TRANSLATION_SPEED * this.timeSinceLastUpdate()) {
                     this.position = this.positionTarget;
@@ -272,4 +300,43 @@ public class SimulatedRobot {
 
     /** Renvoie l'orientation du robot */
     double getOrientation(){ return this.orientation; }
+
+    /* ======================== Tout ce qui touche au mode Montlhery pour le tester ======================== */
+    public void setMontlheryMode() {
+        montlheryMode = true;
+    }
+
+    public void goForward() {
+        if(!montlheryMode) return;
+        forcedTranslationSpeed = +MONTLHERY_SPEED;
+        forcedRotationSpeed = 0f;
+        forcedMovement = true;
+    }
+
+    public void goBackwards() {
+        if(!montlheryMode) return;
+        forcedTranslationSpeed = -MONTLHERY_SPEED;
+        forcedRotationSpeed = 0f;
+        forcedMovement = true;
+    }
+
+    public void turnLeft() {
+        if(!montlheryMode) return;
+        forcedRotationSpeed = +MONTLHERY_ROT_SPEED;
+        forcedTranslationSpeed = 0f;
+        forcedMovement = true;
+    }
+
+    public void turnRight() {
+        if(!montlheryMode) return;
+        forcedRotationSpeed = -MONTLHERY_ROT_SPEED;
+        forcedTranslationSpeed = 0f;
+        forcedMovement = true;
+    }
+
+    public void sstop() {
+        forcedTranslationSpeed = 0f;
+        forcedRotationSpeed = 0f;
+        forcedMovement = false;
+    }
 }

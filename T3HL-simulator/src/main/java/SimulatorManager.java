@@ -1,4 +1,5 @@
 import exceptions.OrderException;
+import orders.order.MontlheryOrder;
 import orders.order.MotionOrder;
 import orders.order.Order;
 import orders.order.PositionAndOrientationOrder;
@@ -172,6 +173,24 @@ public class SimulatorManager extends Thread {
                 }
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_ORIENTATION,2)){
                     robot.setOrientation(parseFloat(arguments[1]));
+                }
+                else if(testOrder(arguments, MontlheryOrder.MONTLHERY, 1)) {
+                    robot.setMontlheryMode();
+                }
+                else if(testOrder(arguments, MontlheryOrder.AVANCE, 1)) {
+                    robot.goForward();
+                }
+                else if(testOrder(arguments, MontlheryOrder.RECULE, 1)) {
+                    robot.goBackwards();
+                }
+                else if(testOrder(arguments, MontlheryOrder.LEFT, 1)) {
+                    robot.turnLeft();
+                }
+                else if(testOrder(arguments, MontlheryOrder.RIGHT, 1)) {
+                    robot.turnRight();
+                }
+                else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
+                    robot.sstop();
                 }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));

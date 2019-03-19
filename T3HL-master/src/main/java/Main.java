@@ -16,6 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import connection.Connection;
 import connection.ConnectionManager;
 import data.Sick;
 import data.Table;
@@ -49,6 +50,7 @@ public class Main {
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
     private static GraphicalInterface interfaceGraphique;
+    private static MontlheryController controller;
 
     public static void main(String[] args){
         initServices();
@@ -65,7 +67,8 @@ public class Main {
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
-
+            waitForLLConnection();
+            Thread.sleep(1000*5);
             orderWrapper.sendString("ping");
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
@@ -76,6 +79,15 @@ public class Main {
                 Thread.sleep(1000);
             }*/
             /*try {
+/* TODO: décommenter pour tester les SICK en boucle            while(robot != null) {
+                robot.computeNewPositionAndOrientation();
+                Thread.sleep(1000);
+            }*/
+            /*controller.start();
+            while(robot != null) { // on boucle à l'infini pour laisser le controlleur gérer (oui c'est dégueu)
+                Thread.sleep(1);
+            }
+            try {
                 robot.moveToPoint(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
@@ -113,6 +125,16 @@ public class Main {
         Container.resetInstance();
     }
 
+    private static void waitForLLConnection() {
+        while(!connectionManager.areConnectionsInitiated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static void initServices(){
         container = Container.getInstance("robot.Master");
         try {
@@ -126,6 +148,7 @@ public class Main {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = container.getService(Master.class);
+            controller = new MontlheryController(robot, orderWrapper);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
