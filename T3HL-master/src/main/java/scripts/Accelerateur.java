@@ -7,13 +7,10 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import robot.Robot;
 import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
-
-import static data.GameState.GOLDENIUM_LIBERE;
 
 
 public class Accelerateur extends Script {
@@ -65,7 +62,7 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.moveToPoint(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
+            robot.followPathTo(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
             robot.turn(Math.PI);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);

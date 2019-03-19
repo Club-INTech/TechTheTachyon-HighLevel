@@ -2,17 +2,13 @@ package scripts;
 
 import data.Table;
 import locomotion.UnableToMoveException;
-import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.awt.*;
 
 public class Paletsx3 extends Script{
     /**
@@ -48,7 +44,7 @@ public class Paletsx3 extends Script{
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
 
                 ((Master) robot).pushPaletDroit();
-                robot.moveToPoint(positions[j]);
+                robot.followPathTo(positions[j]);
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);

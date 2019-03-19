@@ -21,7 +21,6 @@ package robot;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
-import data.controlers.SensorControler;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -34,8 +33,6 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.container.Service;
 import utils.math.Vec2;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -117,14 +114,24 @@ public abstract class Robot implements Service {
     }
 
     /**
+     * Ordonnes un 'goto' vers le LL. ATTENTION! Cette méthode ne prend PAS en compte le pathfinding! Si ça va dans le mur c'est votre faute
+     * @param point le point vers lequel aller
+     * @throws UnableToMoveException
+     *              en cas de problème de blocage/adversaire
+     */
+    public void gotoPoint(Vec2 point) throws UnableToMoveException {
+        this.locomotion.gotoPoint(point);
+    }
+
+    /**
      * Permet au robot d'aller jusqu'à un point donnée
      * @param point
      *              le point visé
      * @throws UnableToMoveException
      *              en cas de problème de blocage/adversaire
      */
-    public void moveToPoint(Vec2 point) throws UnableToMoveException {
-        this.locomotion.moveToPoint(point);
+    public void followPathTo(Vec2 point) throws UnableToMoveException {
+        this.locomotion.followPathTo(point);
     }
 
     /**

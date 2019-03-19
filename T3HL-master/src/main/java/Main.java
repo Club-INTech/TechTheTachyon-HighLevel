@@ -16,16 +16,13 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import connection.Connection;
 import connection.ConnectionManager;
-import data.Sick;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
@@ -34,9 +31,7 @@ import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.VectPolar;
 
 public class Main {
 
@@ -88,7 +83,7 @@ public class Main {
                 Thread.sleep(1);
             }
             try {
-                robot.moveToPoint(new VectCartesian(0,1000));
+                robot.followPathTo(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
@@ -96,6 +91,10 @@ public class Main {
 
            // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             //zone_depart_palets.goToThenExecute(1);
+
+            XYO.getRobotInstance().getPosition().setXY(1350, 450);
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+
             zone_depart_palets.execute(0);
             while(robot != null) {
                 System.out.println("Finished!");

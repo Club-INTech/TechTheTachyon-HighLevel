@@ -90,6 +90,29 @@ public class PathFollower extends Thread implements Service {
     }
 
     /**
+     * Méthode permettant d'envoyer l'ordre 'goto' au LL. ça réfléchit pas, ça fonce tout droit
+     * @param aim le point à atteindre
+     */
+    public void gotoPoint(Vec2 aim) throws UnableToMoveException {
+        SensorState.MOVING.setData(true);
+        orderWrapper.gotoPoint(aim);
+
+        while ((Boolean) SensorState.MOVING.getData()) {
+
+            try {
+                Thread.sleep(LOOP_DELAY);
+                if ((Boolean) SensorState.STUCKED.getData()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(new XYO(aim, 0.0), UnableToMoveReason.PHYSICALLY_STUCKED);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("finished gotoPoint");
+    }
+
+    /**
      * Méthode permettant d'envoyer l'ordre d'avancer au LL et détecter les anomalies jusqu'à être arrivé
      * @param distance
      *              distance de mouvement
@@ -273,4 +296,5 @@ public class PathFollower extends Thread implements Service {
     void setExceptionsQueue(ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue) {
         this.exceptionsQueue = exceptionsQueue;
     }
+
 }

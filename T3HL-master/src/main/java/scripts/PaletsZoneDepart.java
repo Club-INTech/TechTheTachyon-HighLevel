@@ -14,8 +14,8 @@ import utils.math.VectCartesian;
 public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
-    private int yEntry = 450;
     private int xEntry = 1350;
+    private int yEntry = 450;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
             new VectCartesian(xEntry,yEntry+300),
@@ -30,13 +30,14 @@ public class PaletsZoneDepart extends Script {
     public void execute(Integer version) {
         boolean premierPaletPris = false;
         try {
+            System.out.println("HELLO");
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                    robot.moveLengthwise(DISTANCE_INTERPALET, false);
-                    //robot.moveToPoint(position);
+                    //robot.moveLengthwise(DISTANCE_INTERPALET, false);
+                    robot.gotoPoint(position);
                 } else {
                     premierPaletPris = true;
                 }

@@ -134,10 +134,20 @@ public class Locomotion implements Service {
     }
 
     /**
+     * Tournes le robot vers le point et l'atteint en ligne droite. Si ça mange un mur c'est votre faute
+     * @param point là où on veut aller
+     * @throws UnableToMoveException
+     *          Quand problème de déplacement
+     */
+    public void gotoPoint(Vec2 point) throws UnableToMoveException {
+        pathFollower.gotoPoint(point);
+    }
+
+    /**
      * Méthode permettant au robot de se déplacer jusqu'à un point de la table
      * @param point point à atteindre
      */
-    public void moveToPoint(Vec2 point) throws UnableToMoveException {
+    public void followPathTo(Vec2 point) throws UnableToMoveException {
         // TODO : Synchroniser
         Node start;
         Node aim;
@@ -240,4 +250,5 @@ public class Locomotion implements Service {
     public void updateConfig(Config config) {
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
     }
+
 }

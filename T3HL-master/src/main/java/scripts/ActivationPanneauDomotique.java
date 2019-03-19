@@ -44,7 +44,7 @@ public class ActivationPanneauDomotique extends Script{
             robot.turn(-Math.PI/2);
 
             /** Fait avancer vers le point de coordonnée (xEntry, yEntry) */
-            robot.moveToPoint(new VectCartesian(xEntry, yEntry));
+            robot.followPathTo(new VectCartesian(xEntry, yEntry));
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

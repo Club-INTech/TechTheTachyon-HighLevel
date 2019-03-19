@@ -3,7 +3,6 @@ import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import robot.Robot;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -66,7 +65,7 @@ public class PaletsX6 extends Script {
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 if (premierPaletPris) {
-                    robot.moveToPoint(position);
+                    robot.followPathTo(position);
                 } else {
                     premierPaletPris = true;
                 }

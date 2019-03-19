@@ -82,8 +82,16 @@ public class OrderWrapper implements Service {
             if(symetrisedOrder != null){
                 order=symetrisedOrder;
             }
+
         }
         this.sendString(order.getOrderStr());
+        if(order instanceof ActuatorsOrder) {
+            try {
+                Thread.sleep(((ActuatorsOrder) order).getActionDuration());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -210,6 +218,14 @@ public class OrderWrapper implements Service {
         }
         this.sendString(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
                     HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
+    }
+
+    /**
+     * Ordre 'goto' du LL
+     * @param point
+     */
+    public void gotoPoint(Vec2 point) {
+        this.sendString("goto "+point.getX()+" "+point.getY());
     }
 
     /**

@@ -75,7 +75,7 @@ public abstract class Script implements Service {
         }
 
         try {
-            this.robot.moveToPoint(entryPosition);
+            this.robot.followPathTo(entryPosition);
         } catch (UnableToMoveException e) {
             // TODO
         }
