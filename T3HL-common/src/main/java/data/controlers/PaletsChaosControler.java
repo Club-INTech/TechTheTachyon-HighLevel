@@ -41,7 +41,6 @@ public class PaletsChaosControler extends Thread implements Service {
     @Override
     public void run() {
         Log.DATA_HANDLER.debug("Controler lancé : en attente du listener...");
-        String[] coordonatesAndColorsPaletsChaosS;
         while (!listener.isAlive()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
@@ -53,7 +52,6 @@ public class PaletsChaosControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler Palets Chaos opérationnel");
         while (!Thread.currentThread().isInterrupted()) {
             while (paletsPosAndColorQueue.peek() == null) {
-                System.out.println("je n'ai rien reçu");
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
@@ -66,7 +64,7 @@ public class PaletsChaosControler extends Thread implements Service {
 
                 JSONParser parser = new JSONParser();
                 String paletsPosAndColorJson = paletsPosAndColorQueue.poll();
-
+                Log.DATA_HANDLER.debug(paletsPosAndColorJson);
                 try {
                     Object obj = parser.parse(paletsPosAndColorJson);
 

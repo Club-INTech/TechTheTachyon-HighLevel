@@ -2,7 +2,9 @@ package validation;
 
 import connection.Connection;
 import connection.ConnectionManager;
+import data.Graphe;
 import data.PaletsZoneChaos;
+import data.Table;
 import data.controlers.Listener;
 import data.controlers.PaletsChaosControler;
 import org.json.simple.JSONArray;
@@ -31,14 +33,21 @@ public class Test_Json_Parser {
     private Container container;
     private Listener listener;
     private PaletsChaosControler paletsChaosControler;
+    private Table table;
+    private Graphe graphe;
 
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
         connectionManager = container.getService(ConnectionManager.class);
-        listener = container.getService(Listener.class);
-        listener.start();
         connectionManager.initConnections(Connection.BALISE);
+        listener = container.getService(Listener.class);
+        table = container.getService(Table.class);
+        graphe = container.getService(Graphe.class);
+        graphe.reInit();
+        table.initObstacles();
+        table.setGraphe(graphe);
+        listener.start();
         paletsChaosControler = container.getService(PaletsChaosControler.class);
     }
 

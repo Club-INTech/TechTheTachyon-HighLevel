@@ -452,7 +452,7 @@ public class Table implements Service {
         return this.graphe;
     }
 
-    void setGraphe(Graphe graphe) {
+    public void setGraphe(Graphe graphe) {
         this.graphe = graphe;
     }
 
