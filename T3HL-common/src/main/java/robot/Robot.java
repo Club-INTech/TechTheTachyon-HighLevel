@@ -21,7 +21,6 @@ package robot;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
-import data.controlers.SensorControler;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -29,11 +28,11 @@ import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.Speed;
+import orders.order.MontlheryOrder;
 import pfg.config.Config;
+import utils.ConfigData;
 import utils.container.Service;
 import utils.math.Vec2;
-
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -65,6 +64,7 @@ public abstract class Robot implements Service {
      * Position et Orientation du robot
      */
     protected XYO xyo;
+    private long LOOP_SLEEP_TIME;
 
     /**
      * @param locomotion
@@ -83,6 +83,46 @@ public abstract class Robot implements Service {
         this.score = this.score + points;
     }
 
+    public void waitForLeftElevator() {
+        waitForElevator("left");
+    }
+
+    public void waitForRightElevator() {
+        waitForElevator("right");
+    }
+
+    public void waitForElevator(String side) {
+        SensorState state;
+        switch (side.toLowerCase()) {
+            case "left":
+                state = SensorState.LEFT_ELEVATOR_MOVING;
+                break;
+            case "right":
+                state = SensorState.RIGHT_ELEVATOR_MOVING;
+                break;
+            default:
+                throw new IllegalArgumentException("Côté non reconnu: "+side);
+        }
+        state.setData(true);
+        while((boolean)state.getData()) { // tant que l'ascenseur bouge
+            try {
+                Thread.sleep(LOOP_SLEEP_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Ordonnes un 'goto' vers le LL. ATTENTION! Cette méthode ne prend PAS en compte le pathfinding! Si ça va dans le mur c'est votre faute
+     * @param point le point vers lequel aller
+     * @throws UnableToMoveException
+     *              en cas de problème de blocage/adversaire
+     */
+    public void gotoPoint(Vec2 point) throws UnableToMoveException {
+        this.locomotion.gotoPoint(point);
+    }
+
     /**
      * Permet au robot d'aller jusqu'à un point donnée
      * @param point
@@ -90,8 +130,8 @@ public abstract class Robot implements Service {
      * @throws UnableToMoveException
      *              en cas de problème de blocage/adversaire
      */
-    public void moveToPoint(Vec2 point) throws UnableToMoveException {
-        this.locomotion.moveToPoint(point);
+    public void followPathTo(Vec2 point) throws UnableToMoveException {
+        this.locomotion.followPathTo(point);
     }
 
     /**
@@ -166,9 +206,20 @@ public abstract class Robot implements Service {
 
     }
 
+    /**
+     * Actives le mode montlhery
+     */
+    public void switchToMontlheryMode() {
+        this.orderWrapper.sendString(MontlheryOrder.MONTLHERY.getOrderStr());
+        this.orderWrapper.sendString(MontlheryOrder.MAX_ROTATION_SPEED.getOrderStr()+" "+Math.PI/8f); // 1/4 de tour par seconde
+        this.orderWrapper.sendString(MontlheryOrder.MAX_TRANSLATION_SPEED.getOrderStr()+" 90"); // 30 mm/s
+    }
+
     public XYO getXyo() { return this.xyo;}
 
 
     @Override
-    public void updateConfig(Config config) {}
+    public void updateConfig(Config config) {
+        LOOP_SLEEP_TIME = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
+    }
 }

@@ -19,6 +19,7 @@
 package orders;
 
 import connection.Connection;
+import data.SensorState;
 import orders.order.MotionOrder;
 import orders.order.ActuatorsOrder;
 import orders.order.Order;
@@ -82,8 +83,19 @@ public class OrderWrapper implements Service {
             if(symetrisedOrder != null){
                 order=symetrisedOrder;
             }
+
         }
         this.sendString(order.getOrderStr());
+        if(order instanceof ActuatorsOrder) {
+            //if(((ActuatorsOrder) order).shouldIncrementWaitingIndex()) {
+                Log.COMMUNICATION.debug("Actuator waiting index is now: "+SensorState.ACTUATOR_WAITING_INDEX.getData());
+               // TODO if(((ActuatorsOrder) order).shouldWaitForFinish()) {
+                    SensorState.ACTUATOR_ACTUATING.setData(true);
+                    waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+              //  }
+                SensorState.ACTUATOR_WAITING_INDEX.setData(SensorState.ACTUATOR_WAITING_INDEX.getData()+1);
+            //}
+        }
     }
 
     /**
@@ -213,6 +225,14 @@ public class OrderWrapper implements Service {
     }
 
     /**
+     * Ordre 'goto' du LL
+     * @param point
+     */
+    public void gotoPoint(Vec2 point) {
+        this.sendString("goto "+point.getX()+" "+point.getY());
+    }
+
+    /**
      * Active un hook
      * @param hook hook à activer
      */
@@ -236,6 +256,7 @@ public class OrderWrapper implements Service {
     public void sendString(String message) {
         try {
             llConnection.send(message);
+            System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
@@ -256,7 +277,7 @@ public class OrderWrapper implements Service {
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            this.llConnection = Connection.TEENSY_MASTER;
+            this.llConnection = Connection.TEENSY_MASTER_MONTHLERY;//Connection.TEENSY_MASTER;
         }
     }
 

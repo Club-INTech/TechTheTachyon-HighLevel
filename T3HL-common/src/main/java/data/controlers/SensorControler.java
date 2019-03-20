@@ -124,11 +124,44 @@ public class SensorControler extends Thread implements Service {
 
 
             if (eventData.peek() != null) {
-                event = eventData.poll().split(ARGUMENTS_SEPARATOR);
-                if (event.length == 1) {
-                    if (event[0].equals("stoppedMoving")) {
+                String data = eventData.poll();
+                Log.COMMUNICATION.debug("Got event from LL: "+data);
+                event = data.split(ARGUMENTS_SEPARATOR);
+                switch(event[0]) {
+                    case "stoppedMoving":
                         SensorState.MOVING.setData(false);
-                    }
+                        break;
+
+                    case "leftElevatorStopped":
+                        if(symetrie) {
+                            SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                        } else {
+                            SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                        }
+                        break;
+
+                    case "rightElevatorStopped":
+                        if(symetrie) {
+                            SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                        } else {
+                            SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                        }
+                        break;
+
+                    case "actuatorFinished":
+                        if(event.length >= 2) {
+                            long index = Long.parseUnsignedLong(event[1]);
+                            Log.COMMUNICATION.debug("Received confirmation for actuator action #"+index);
+                            if(index == SensorState.ACTUATOR_WAITING_INDEX.getData()) {
+                                SensorState.ACTUATOR_ACTUATING.setData(false);
+                            } else {
+                                Log.COMMUNICATION.debug("Currently waiting on #"+SensorState.ACTUATOR_WAITING_INDEX.getData());
+                            }
+                        } else {
+                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'indice!");
+                        }
+                        break;
+
                 }
             }
             if (sickData.peek() != null) {
@@ -150,6 +183,7 @@ public class SensorControler extends Thread implements Service {
                     int yCalcule;
                     double teta;
 
+                    // FIXME
                     if (ConfigData.COULEUR.toString().equals("jaune")) {
                         // On différencie les cas où le robot est orienté vers la gauche et la droite
                         double orien= XYO.getRobotInstance().getOrientation();

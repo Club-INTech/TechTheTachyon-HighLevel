@@ -17,14 +17,12 @@
  **/
 
 import connection.ConnectionManager;
-import data.Sick;
 import data.Table;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
@@ -33,9 +31,7 @@ import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
-import utils.math.VectPolar;
 
 public class Main {
 
@@ -49,6 +45,7 @@ public class Main {
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
     private static GraphicalInterface interfaceGraphique;
+    private static MontlheryController controller;
 
     public static void main(String[] args){
         initServices();
@@ -65,25 +62,44 @@ public class Main {
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
-
+            waitForLLConnection();
+            Thread.sleep(1000*5);
             orderWrapper.sendString("ping");
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
 
-            while(robot != null) {
+            /*while(robot != null) {
                 robot.computeNewPositionAndOrientation();
                 Thread.sleep(1000);
+            }*/
+            /*try {
+/* TODO: décommenter pour tester les SICK en boucle            while(robot != null) {
+                robot.computeNewPositionAndOrientation();
+                Thread.sleep(1000);
+            }*/
+            /*controller.start();
+            while(robot != null) { // on boucle à l'infini pour laisser le controlleur gérer (oui c'est dégueu)
+                Thread.sleep(1);
             }
             try {
-                robot.moveToPoint(new VectCartesian(0,1000));
+                robot.followPathTo(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
-            }
+            }*/
 
            // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
-            zone_depart_palets.goToThenExecute(1);
+            //zone_depart_palets.goToThenExecute(1);
+
+            XYO.getRobotInstance().getPosition().setXY(1350, 450);
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+
+            zone_depart_palets.execute(0);
+            while(robot != null) {
+                System.out.println("Finished!");
+                Thread.sleep(1000);
+            }
           //  interfaceGraphique.clearPointsToDraw();
 
             table.removeFixedObstacle(table.getPaletRougeDroite());
@@ -108,6 +124,16 @@ public class Main {
         Container.resetInstance();
     }
 
+    private static void waitForLLConnection() {
+        while(!connectionManager.areConnectionsInitiated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private static void initServices(){
         container = Container.getInstance("robot.Master");
         try {
@@ -121,6 +147,7 @@ public class Main {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = container.getService(Master.class);
+            controller = new MontlheryController(robot, orderWrapper);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

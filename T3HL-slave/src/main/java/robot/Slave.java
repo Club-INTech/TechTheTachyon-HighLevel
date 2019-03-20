@@ -45,7 +45,9 @@ public class Slave extends Robot {
     }
 
     public void pushPalet(){
+        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET){
         ascenseur.push(CouleurPalet.getCouleurPalRecu());
+        }
     }
 
     public void popPalet(){

@@ -27,7 +27,7 @@ public enum Channel {
     LIDAR((char) 0x21, (char) 0x21),
     ROBOT_POSITION((char) 0x21, (char) 0x22),
     BUDDY_POSITION((char) 0x21, (char) 0x23),
-    EVENT((char) 0x21, (char) 0x24),
+    EVENT((char) 0x40, (char) 0x42),
     SICK((char)0x40, (char)0x41),
     COULEUR_PALET_PRIS((char)0x21,(char)0x26),
     PALETS_POSITION((char)0x21,(char)0x2D),

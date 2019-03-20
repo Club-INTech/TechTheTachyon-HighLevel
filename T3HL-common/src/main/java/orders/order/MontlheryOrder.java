@@ -31,6 +31,8 @@ public enum MontlheryOrder implements Order {
     LEFT("tg"),
     RIGHT("td"),
     STOP("sstop"),
+    MAX_TRANSLATION_SPEED("maxtr"),
+    MAX_ROTATION_SPEED("maxro"),
     ;
 
     /**
