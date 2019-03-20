@@ -20,6 +20,9 @@ package utils.container;
 
 import pfg.config.Config;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
 /**
  * Interface servant à définir un service : un service est un singleton qui doit implémenter la méthode updateConfig,
  * et être instancié par le container
@@ -28,9 +31,43 @@ import pfg.config.Config;
  */
 public interface Service
 {
+    int WAIT_LOOP_DELAY = 5;
+
+    default int getWaitLoopDelay() {
+        return WAIT_LOOP_DELAY;
+    }
+
     /**
      * Cette méthode est appelée par le container après instanciation du service.
      * Elle sert à attribuer à des attributs des valeurs contenus dans la config.
      */
     void updateConfig(Config config);
+
+    /**
+     * Boucle qui dure tant que la condition donnée est à 'true'
+     * @param condition une fonction renvoyant un booléen
+     */
+    default void waitWhileTrue(Supplier<Boolean> condition) {
+        waitWhileTrue(condition, () -> {});
+    }
+
+    /**
+     * Boucle qui dure tant que la condition donnée est à 'true'
+     * @param condition une fonction renvoyant un booléen
+     * @param additionalAction une fonction ou lambda qui apporte un comportement additionnel à l'attente
+     */
+    default <ExceptionType extends Throwable> void waitWhileTrue(Supplier<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
+        while(condition.get()) {
+            try {
+                Thread.sleep(WAIT_LOOP_DELAY);
+                additionalAction.act();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    interface AdditionalAction<ExceptionType extends Throwable> {
+        void act() throws ExceptionType;
+    }
 }

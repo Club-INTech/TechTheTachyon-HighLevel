@@ -19,6 +19,7 @@
 package orders;
 
 import connection.Connection;
+import data.SensorState;
 import orders.order.MotionOrder;
 import orders.order.ActuatorsOrder;
 import orders.order.Order;
@@ -86,11 +87,14 @@ public class OrderWrapper implements Service {
         }
         this.sendString(order.getOrderStr());
         if(order instanceof ActuatorsOrder) {
-            try {
-                Thread.sleep(((ActuatorsOrder) order).getActionDuration());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            //if(((ActuatorsOrder) order).shouldIncrementWaitingIndex()) {
+                Log.COMMUNICATION.debug("Actuator waiting index is now: "+SensorState.ACTUATOR_WAITING_INDEX.getData());
+               // TODO if(((ActuatorsOrder) order).shouldWaitForFinish()) {
+                    SensorState.ACTUATOR_ACTUATING.setData(true);
+                    waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+              //  }
+                SensorState.ACTUATOR_WAITING_INDEX.setData(SensorState.ACTUATOR_WAITING_INDEX.getData()+1);
+            //}
         }
     }
 

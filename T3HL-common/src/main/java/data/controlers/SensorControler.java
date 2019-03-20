@@ -127,29 +127,41 @@ public class SensorControler extends Thread implements Service {
                 String data = eventData.poll();
                 Log.COMMUNICATION.debug("Got event from LL: "+data);
                 event = data.split(ARGUMENTS_SEPARATOR);
-                if (event.length == 1) {
-                    switch(event[0]) {
-                        case "stoppedMoving":
-                            SensorState.MOVING.setData(false);
-                            break;
+                switch(event[0]) {
+                    case "stoppedMoving":
+                        SensorState.MOVING.setData(false);
+                        break;
 
-                        case "leftElevatorStopped":
-                            if(symetrie) {
-                                SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                    case "leftElevatorStopped":
+                        if(symetrie) {
+                            SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                        } else {
+                            SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                        }
+                        break;
+
+                    case "rightElevatorStopped":
+                        if(symetrie) {
+                            SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                        } else {
+                            SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
+                        }
+                        break;
+
+                    case "actuatorFinished":
+                        if(event.length >= 2) {
+                            long index = Long.parseUnsignedLong(event[1]);
+                            Log.COMMUNICATION.debug("Received confirmation for actuator action #"+index);
+                            if(index == SensorState.ACTUATOR_WAITING_INDEX.getData()) {
+                                SensorState.ACTUATOR_ACTUATING.setData(false);
                             } else {
-                                SensorState.LEFT_ELEVATOR_MOVING.setData(false);
+                                Log.COMMUNICATION.debug("Currently waiting on #"+SensorState.ACTUATOR_WAITING_INDEX.getData());
                             }
-                            break;
+                        } else {
+                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'indice!");
+                        }
+                        break;
 
-                        case "rightElevatorStopped":
-                            if(symetrie) {
-                                SensorState.LEFT_ELEVATOR_MOVING.setData(false);
-                            } else {
-                                SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
-                            }
-                            break;
-
-                    }
                 }
             }
             if (sickData.peek() != null) {

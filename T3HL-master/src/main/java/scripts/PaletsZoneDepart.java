@@ -52,9 +52,7 @@ public class PaletsZoneDepart extends Script {
             // ""recalage""
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-            robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
 
             // TODO: juste pour le testo

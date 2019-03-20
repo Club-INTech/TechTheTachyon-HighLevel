@@ -25,29 +25,31 @@ import java.util.concurrent.CompletableFuture;
  *
  * @author william
  */
-public enum SensorState {
-    EXEMPLE(1.5, Double.class),
-    CUBE_PRIS(0, Integer.class),
-    MOVING(false, Boolean.class),
-    STUCKED(false, Boolean.class),
-    LEFT_ELEVATOR_MOVING(false, Boolean.class),
-    RIGHT_ELEVATOR_MOVING(false, Boolean.class),
+public class SensorState<DataType> {
+    public static final SensorState<Double> EXEMPLE = new SensorState<>(1.5, Double.class);
+    public static final SensorState<Integer> CUBE_PRIS = new SensorState<>(0, Integer.class);
+    public static final SensorState<Boolean> MOVING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> STUCKED = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> LEFT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> RIGHT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Long> ACTUATOR_WAITING_INDEX = new SensorState<>(0L, Long.class);
     ;
 
     /**
      * La donnée
      */
-    private Object data;
+    private DataType data;
 
     /**
      * La classe de la donnée : évite un transtypage après instanciation
      */
-    private Class c;
+    private Class<DataType> c;
 
     /**
      * Construit un SensorState
      */
-    SensorState(Object object, Class<?> c) {
+    private SensorState(DataType object, Class<DataType> c) {
         this.data = object;
         this.c = c;
     }
@@ -55,7 +57,7 @@ public enum SensorState {
     /**
      * Renvoie la valeur
      */
-    public synchronized Object getData() {
+    public synchronized DataType getData() {
         return this.data;
     }
 
@@ -64,7 +66,7 @@ public enum SensorState {
      * @param object    valeur à écrire
      * @throws ClassCastException   si l'on essai d'assigner à un paramètre un objet d'une autre classe
      */
-    public synchronized void setData(Object object) {
+    public synchronized void setData(DataType object) {
         if (object.getClass() != this.c) {
             throw new ClassCastException("Cette donnée est de type " + this.c + ", trouvé : " + object.getClass());
         }

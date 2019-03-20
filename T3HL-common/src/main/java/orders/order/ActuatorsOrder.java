@@ -45,18 +45,18 @@ public enum ActuatorsOrder implements Order {
     ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_GOLDONIUM("gold left"),
     ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE("bal right"),
     ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE("bal left"),
-    MONTE_ASCENCEUR_DROIT_DE_UN_PALET("up right"),
-    MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET("up left"),
-    DESCEND_ASCENSEUR_DROIT_DE_UN_PALET("down right"),
-    DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET("down left"),
-    ACTIVE_LA_POMPE_DROITE("suck right"),
-    ACTIVE_LA_POMPE_GAUCHE("suck left"),
-    DESACTIVE_LA_POMPE_DROITE("unsuck right"),
-    DESACTIVE_LA_POMPE_GAUCHE("unsuck left"),
-    ACTIVE_ELECTROVANNE_DROITE("valveon right"),
-    ACTIVE_ELECTROVANNE_GAUCHE("valveon left"),
-    DESACTIVE_ELECTROVANNE_DROITE("valveoff right"),
-    DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left", 3000), // TODO
+    MONTE_ASCENCEUR_DROIT_DE_UN_PALET("up right", false, false),
+    MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET("up left", false, false),
+    DESCEND_ASCENSEUR_DROIT_DE_UN_PALET("down right", false, false),
+    DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET("down left", false, false),
+    ACTIVE_LA_POMPE_DROITE("suck right", true),
+    ACTIVE_LA_POMPE_GAUCHE("suck left", true),
+    DESACTIVE_LA_POMPE_DROITE("unsuck right", true),
+    DESACTIVE_LA_POMPE_GAUCHE("unsuck left", true),
+    ACTIVE_ELECTROVANNE_DROITE("valveon right", true),
+    ACTIVE_ELECTROVANNE_GAUCHE("valveon left", true),
+    DESACTIVE_ELECTROVANNE_DROITE("valveoff right", true),
+    DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left", true), // TODO
     ENVOIE_UN_XL_A_ANGLE_VOULU("XLm"),
     ENVOIE_UN_XL_A_LA_VITESSE_VOULUE("XLs"),
     TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT("torqueBras right"),
@@ -68,28 +68,46 @@ public enum ActuatorsOrder implements Order {
      * Ordre envoyé au LL
      */
     private String orderStr;
-    
+
     /**
-     * Durée de l'action en ms
+     * Doit-on attendre que l'actionneur ait fini son action?
      */
-    private int actionDuration;
+    private boolean waitForFinish;
+
+    /**
+     * Cet ordre incrémente-t-il l'indice de synchronisation? (mis à false pour les ordres qui sont fait en parallèle d'autres dans le LL, eg les ascenseurs)
+     */
+    private final boolean incrementWaitingIndex;
 
     /**
      * Constructeur qui ne précise pas la durée l'action
      * @param orderStr action à faire
      */
     ActuatorsOrder(String orderStr){
-        this(orderStr, 0);
+        this(orderStr, false, true);
     }
 
     /**
      * Constructeur qui précise l'action et sa durée
-     * @param orderStr : action à faire 
-     * @param actionDuration : durée de l'action
+     * @param orderStr : action à faire
+     * @param waitForFinish doit-on attendre la fin de l'action?
      */
-    ActuatorsOrder(String orderStr, int actionDuration){
-        this.orderStr=orderStr;
-        this.actionDuration=actionDuration;
+    ActuatorsOrder(String orderStr, boolean waitForFinish) {
+        this(orderStr, waitForFinish, true);
+    }
+
+
+    /**
+     * Constructeur qui précise l'action et sa durée
+     * @param orderStr : action à faire
+     * @param waitForFinish doit-on attendre la fin de l'action?
+     * @param incrementWaitingIndex cet ordre incrémente-t-il l'indice de synchronisation? (mis à false pour les ordres qui sont fait en parallèle d'autres dans le LL, eg les ascenseurs)
+     *                              'waitForFinish' est ignoré si ce paramètre est à 'true'
+     */
+    ActuatorsOrder(String orderStr, boolean waitForFinish, boolean incrementWaitingIndex) {
+        this.orderStr = orderStr;
+        this.waitForFinish = waitForFinish;
+        this.incrementWaitingIndex = incrementWaitingIndex;
     }
 
     /**
@@ -101,12 +119,18 @@ public enum ActuatorsOrder implements Order {
     }
 
     /**
-     * Getter de la durée de l'action
-     * @return durée de l'action
+     * Doit-on attendre que l'actionneur est fini son action?
+     * @return 'true' si on doit attendre
      */
-    public int getActionDuration(){
-        return this.actionDuration;
+    public boolean shouldWaitForFinish() {
+        return waitForFinish;
     }
 
-   
+    /**
+     * Cet ordre incrémente-t-il l'indice de synchronisation? (mis à false pour les ordres qui sont fait en parallèle d'autres dans le LL, eg les ascenseurs)
+     * @return
+     */
+    public boolean shouldIncrementWaitingIndex() {
+        return incrementWaitingIndex;
+    }
 }

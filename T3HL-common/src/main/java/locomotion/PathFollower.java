@@ -97,19 +97,12 @@ public class PathFollower extends Thread implements Service {
         SensorState.MOVING.setData(true);
         orderWrapper.gotoPoint(aim);
 
-        while ((Boolean) SensorState.MOVING.getData()) {
-
-            try {
-                Thread.sleep(LOOP_DELAY);
-                if ((Boolean) SensorState.STUCKED.getData()) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(new XYO(aim, 0.0), UnableToMoveReason.PHYSICALLY_STUCKED);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        waitWhileTrue(SensorState.MOVING::getData, () -> {
+            if (SensorState.STUCKED.getData()) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(new XYO(aim, 0.0), UnableToMoveReason.PHYSICALLY_STUCKED);
             }
-        }
-        System.out.println("finished gotoPoint");
+        });
     }
 
     /**
@@ -126,21 +119,16 @@ public class PathFollower extends Thread implements Service {
         SensorState.MOVING.setData(true);
         this.orderWrapper.moveLenghtwise(distance);
 
-        while ((Boolean) SensorState.MOVING.getData()) {
-            try {
-                Thread.sleep(LOOP_DELAY);
-                if (isLineForwardObstructed(distance > 0)) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
-                if ((Boolean) SensorState.STUCKED.getData() && !expectedWallImpact) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        waitWhileTrue(SensorState.MOVING::getData, () -> {
+            if (isLineForwardObstructed(distance > 0)) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
-        }
+            if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+            }
+        });
     }
 
     /**
@@ -156,21 +144,16 @@ public class PathFollower extends Thread implements Service {
         SensorState.MOVING.setData(true);
         this.orderWrapper.turn(angle);
 
-        while ((Boolean) SensorState.MOVING.getData()) {
-            try {
-                Thread.sleep(LOOP_DELAY);
-                if (isCircleObstructed()) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
-                if ((Boolean) SensorState.STUCKED.getData() && !expectedWallImpact) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        waitWhileTrue(SensorState.MOVING::getData, () -> {
+            if (isCircleObstructed()) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
-        }
+            if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+            }
+        });
     }
 
     /**
@@ -181,35 +164,29 @@ public class PathFollower extends Thread implements Service {
      */
     private void moveToPoint(Vec2 point) throws UnableToMoveException {
         XYO aim = new XYO(point, Calculs.modulo(point.minusVector(robotXYO.getPosition()).getA(), Math.PI));
-        Vec2 nearDirection;
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
         this.orderWrapper.moveToPoint(point);
 
-        while ((Boolean) SensorState.MOVING.getData()) {
-            try {
-                Thread.sleep(LOOP_DELAY);
-                if (isCircleObstructed()) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
-                nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
-                nearDirection.setR(this.DISTANCE_CHECK);
-                nearDirection.plus(XYO.getRobotInstance().getPosition());
-                segment.setPointB(nearDirection);
-                if (isSegmentObstructed(segment)) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
-                if ((Boolean) SensorState.STUCKED.getData()) {
-                    orderWrapper.immobilise();
-                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        waitWhileTrue(SensorState.MOVING::getData, () -> {
+            if (isCircleObstructed()) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
-        }
+            Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
+            nearDirection.setR(this.DISTANCE_CHECK);
+            nearDirection.plus(XYO.getRobotInstance().getPosition());
+            segment.setPointB(nearDirection);
+            if (isSegmentObstructed(segment)) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+            }
+            if (SensorState.STUCKED.getData()) {
+                orderWrapper.immobilise();
+                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+            }
+        });
     }
 
     /**
