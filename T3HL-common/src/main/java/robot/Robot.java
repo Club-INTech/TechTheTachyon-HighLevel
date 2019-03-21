@@ -162,10 +162,22 @@ public abstract class Robot implements Service {
      * Permet au robot d'utiliser un actionneur
      * @param order
      *              l'ordre que l'on veut executer
+     * @param waitForConfirmation
+     *              Attendre une confirmation du LL avant de continuer?
+     */
+    public void useActuator(ActuatorsOrder order, boolean waitForConfirmation) {
+        this.orderWrapper.useActuator(order, waitForConfirmation);
+    }
+
+    /**
+     * Permet au robot d'utiliser un actionneur
+     * @param order
+     *              l'ordre que l'on veut executer
      */
     public void useActuator(ActuatorsOrder order) {
-        this.orderWrapper.useActuator(order);
+        this.orderWrapper.useActuator(order, false);
     }
+
 
     /**
      * Change la vitesse du LL

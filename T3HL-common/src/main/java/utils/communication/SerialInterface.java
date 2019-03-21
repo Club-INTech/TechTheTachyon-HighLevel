@@ -28,7 +28,6 @@ public class SerialInterface implements CommunicationInterface {
     public void send(String message) throws CommunicationException {
         if(port != null) {
             printer.println(message+"\n");
-            printer.flush();
         }
     }
 

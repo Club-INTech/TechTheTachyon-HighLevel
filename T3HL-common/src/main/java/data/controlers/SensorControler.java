@@ -148,17 +148,12 @@ public class SensorControler extends Thread implements Service {
                         }
                         break;
 
-                    case "actuatorFinished":
+                    case "confirmOrder":
                         if(event.length >= 2) {
-                            long index = Long.parseUnsignedLong(event[1]);
-                            Log.COMMUNICATION.debug("Received confirmation for actuator action #"+index);
-                            if(index == SensorState.ACTUATOR_WAITING_INDEX.getData()) {
-                                SensorState.ACTUATOR_ACTUATING.setData(false);
-                            } else {
-                                Log.COMMUNICATION.debug("Currently waiting on #"+SensorState.ACTUATOR_WAITING_INDEX.getData());
-                            }
+                            Log.COMMUNICATION.debug("Received confirmation for order ("+event[1]+")");
+                            SensorState.ACTUATOR_ACTUATING.setData(false);
                         } else {
-                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'indice!");
+                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'ordre!");
                         }
                         break;
 

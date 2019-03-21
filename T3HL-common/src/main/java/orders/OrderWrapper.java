@@ -77,6 +77,15 @@ public class OrderWrapper implements Service {
      * @param order ordre quelconque
      */
     public void useActuator(Order order) {
+        useActuator(order, false);
+    }
+
+    /**
+     * Permet d'envoyer un ordre au bas niveau
+     * @param order ordre quelconque
+     * @param waitForConfirmation wait for confirmation of order
+     */
+    public void useActuator(Order order, boolean waitForConfirmation) {
         Order symetrisedOrder;
         if(symetry && order instanceof ActuatorsOrder) {
             symetrisedOrder=this.symmetrizedActuatorOrderMap.getSymmetrizedActuatorOrder((ActuatorsOrder) order);
@@ -85,16 +94,14 @@ public class OrderWrapper implements Service {
             }
 
         }
-        this.sendString(order.getOrderStr());
-        if(order instanceof ActuatorsOrder) {
-            //if(((ActuatorsOrder) order).shouldIncrementWaitingIndex()) {
-                Log.COMMUNICATION.debug("Actuator waiting index is now: "+SensorState.ACTUATOR_WAITING_INDEX.getData());
-               // TODO if(((ActuatorsOrder) order).shouldWaitForFinish()) {
-                    SensorState.ACTUATOR_ACTUATING.setData(true);
-                    waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-              //  }
-                SensorState.ACTUATOR_WAITING_INDEX.setData(SensorState.ACTUATOR_WAITING_INDEX.getData()+1);
-            //}
+        if(waitForConfirmation) {
+            Log.COMMUNICATION.debug("Asking for confirmation for "+order.getOrderStr());
+            this.sendString("!"+order.getOrderStr());
+            SensorState.ACTUATOR_ACTUATING.setData(true);
+            waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+            Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+        } else {
+            this.sendString(order.getOrderStr());
         }
     }
 
