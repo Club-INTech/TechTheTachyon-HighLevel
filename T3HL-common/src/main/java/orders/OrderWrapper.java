@@ -100,6 +100,16 @@ public class OrderWrapper implements Service {
             SensorState.ACTUATOR_ACTUATING.setData(true);
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
             Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+            if(order instanceof ActuatorsOrder) {
+                long duration = ((ActuatorsOrder) order).getActionDuration();
+                if(duration > 0) {
+                    try {
+                        Thread.sleep(duration);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         } else {
             this.sendString(order.getOrderStr());
         }
@@ -284,7 +294,7 @@ public class OrderWrapper implements Service {
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            this.llConnection = Connection.TEENSY_MASTER_MONTHLERY;//Connection.TEENSY_MASTER;
+            this.llConnection = Connection.TEENSY_MASTER;
         }
     }
 

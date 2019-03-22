@@ -53,10 +53,11 @@ public enum ActuatorsOrder implements Order {
     ACTIVE_LA_POMPE_GAUCHE("suck left"),
     DESACTIVE_LA_POMPE_DROITE("unsuck right"),
     DESACTIVE_LA_POMPE_GAUCHE("unsuck left"),
-    ACTIVE_ELECTROVANNE_DROITE("valveon right"),
-    ACTIVE_ELECTROVANNE_GAUCHE("valveon left"),
-    DESACTIVE_ELECTROVANNE_DROITE("valveoff right"),
-    DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left"), // TODO
+    ACTIVE_ELECTROVANNE_DROITE("valveon right", 300),
+    ACTIVE_ELECTROVANNE_GAUCHE("valveon left", 300),
+    DESACTIVE_ELECTROVANNE_DROITE("valveoff right", 300),
+    DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left", 300),
+
     ENVOIE_UN_XL_A_ANGLE_VOULU("XLm"),
     ENVOIE_UN_XL_A_LA_VITESSE_VOULUE("XLs"),
     TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT("torqueBras right"),
@@ -68,12 +69,26 @@ public enum ActuatorsOrder implements Order {
      * Ordre envoyé au LL
      */
     private String orderStr;
+    private long actionDuration;
 
     /**
      * Constructeur qui ne précise pas la durée l'action
      */
     ActuatorsOrder(String orderStr) {
+        this(orderStr, 0);
+    }
+
+    ActuatorsOrder(String orderStr, long actionDuration) {
         this.orderStr = orderStr;
+        this.actionDuration = actionDuration;
+    }
+
+    /**
+     * Durée de l'action
+     * @return
+     */
+    public long getActionDuration() {
+        return actionDuration;
     }
 
     /**
