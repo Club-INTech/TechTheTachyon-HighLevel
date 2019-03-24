@@ -37,7 +37,7 @@ public class PaletsZoneDepart extends Script {
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
                     //robot.moveLengthwise(DISTANCE_INTERPALET, false);
-                    robot.gotoPoint(position);
+                    robot.followPathTo(position);
                 } else {
                     premierPaletPris = true;
                 }

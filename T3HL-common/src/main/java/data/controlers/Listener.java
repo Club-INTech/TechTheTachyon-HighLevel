@@ -158,7 +158,9 @@ public class Listener extends Thread implements Service {
                         message = buffer.get().substring(2);
                         handleMessage(header, message);
                         if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                            buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                            if(buddy.isInitiated()) {
+                                buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                            }
                         }
                     }
                 } catch (CommunicationException e) {

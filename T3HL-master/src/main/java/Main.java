@@ -95,7 +95,7 @@ public class Main {
             XYO.getRobotInstance().getPosition().setXY(1350, 450);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-            zone_depart_palets.execute(0);
+            zone_depart_palets.goToThenExecute(0);
             while(robot != null) {
                 System.out.println("Finished!");
                 Thread.sleep(1000);

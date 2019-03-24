@@ -119,6 +119,13 @@ public class Graphe implements Service {
         Log.GRAPHE.debug("Initialisation terminée : " + this.nodes.size() + " noeuds, " + this.ridges.size() + " arrêtes");
     }
 
+    public void clear() {
+        fixedObstacles.clear();
+        mobileCircularObstacles.clear();
+        nodes.clear();
+        ridges.clear();
+    }
+
     /**
      * Ré-initialise totalement le graphe
      * ATTENTION : opération coûteuse !

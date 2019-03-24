@@ -38,7 +38,7 @@ public enum Log
     STRATEGY(true),
     LIDAR(true),
     PATHFINDING(true),
-    GRAPHE(false),
+    GRAPHE(true),
     HOOK(true),
     TABLE(true),
     AI(true),

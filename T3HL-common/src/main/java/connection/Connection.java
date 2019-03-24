@@ -139,6 +139,8 @@ public enum Connection {
      * @return true si la connection est prête
      */
     public boolean isInitiated() {
+        if(communicationInterface == null)
+            return false;
         return communicationInterface.isInterfaceOpen();
     }
 }

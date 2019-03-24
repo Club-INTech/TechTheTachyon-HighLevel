@@ -100,8 +100,8 @@ public class SensorControler extends Thread implements Service {
             }
             if (robotPosQueue.peek() != null) {
                 coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
-                x = Integer.parseInt(coordonates[0]);
-                y = Integer.parseInt(coordonates[1]);
+                x = Math.round(Float.parseFloat(coordonates[0]));
+                y = Math.round(Float.parseFloat(coordonates[1]));
                 o = Double.parseDouble(coordonates[2]);
                 if (symetrie) {
                     x = -x;
@@ -263,5 +263,6 @@ public class SensorControler extends Thread implements Service {
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+
     }
 }

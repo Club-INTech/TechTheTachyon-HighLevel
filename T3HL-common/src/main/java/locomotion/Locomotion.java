@@ -185,7 +185,7 @@ public class Locomotion implements Service {
         pointsQueue.clear();
         exceptionsQueue.clear();
 
-        while ( ! xyo.getPosition().equals(aim.getPosition())) {
+        while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold) {
             try {
                 graphe.readLock().lock();
                 try {
@@ -202,7 +202,7 @@ public class Locomotion implements Service {
                     pointsQueue.clear();
                     pointsQueue.addAll(path);
                 }
-                while (!graphe.isUpdated() && !xyo.getPosition().equals(aim.getPosition())) {
+                while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold) {
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
@@ -241,6 +241,7 @@ public class Locomotion implements Service {
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+
     }
 
     /**
