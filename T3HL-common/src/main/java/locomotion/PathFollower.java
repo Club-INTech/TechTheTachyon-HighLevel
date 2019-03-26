@@ -24,6 +24,7 @@ import data.XYO;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.Log;
 import utils.container.Service;
 import utils.math.*;
 
@@ -238,6 +239,7 @@ public class PathFollower extends Thread implements Service {
             try {
                 do {
                     aim = pointsQueue.poll();
+                    Log.LOCOMOTION.debug("Move to "+aim);
                     this.moveToPoint(aim);
                     hasNext = !pointsQueue.isEmpty();
                 } while (hasNext);

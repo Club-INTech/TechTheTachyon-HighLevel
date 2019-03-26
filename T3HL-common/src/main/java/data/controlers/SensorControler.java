@@ -106,7 +106,6 @@ public class SensorControler extends Thread implements Service {
                 if (symetrie) {
                     x = -x;
                     o = Calculs.modulo(Math.PI - o, Math.PI);
-
                 }
                 XYO.getRobotInstance().update(x, y, o);
             }

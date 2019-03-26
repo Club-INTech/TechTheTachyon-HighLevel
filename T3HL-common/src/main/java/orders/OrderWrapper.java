@@ -142,9 +142,9 @@ public class OrderWrapper implements Service {
     public void moveToPoint(Vec2 point) {
         Vec2 p = point;
         if(symetry) {
-            p.symetrize();
+            p = p.symetrizeVector();
         }
-        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
+        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), p.getX(), p.getY()));
     }
 
     /**

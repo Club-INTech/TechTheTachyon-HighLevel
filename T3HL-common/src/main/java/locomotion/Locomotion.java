@@ -180,7 +180,7 @@ public class Locomotion implements Service {
 
         graphe.writeLock().lock();
         start = graphe.addProvisoryNode(xyo.getPosition().clone());
-        aim = graphe.addProvisoryNode(point);
+        aim = graphe.addProvisoryNode(point.clone());
         graphe.writeLock().unlock();
         pointsQueue.clear();
         exceptionsQueue.clear();
@@ -195,6 +195,7 @@ public class Locomotion implements Service {
                     graphe.readLock().unlock();
                 }
 
+
                 // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
                 // ce thread pourrait être interrompu entre le addAll et le clear ;(
                 // ça a pas beaucoup de conséquences dans notre cas mais si on peut sauver 20ms au HL, c'est pas mal (cf Thread.sleep(20) de PathFollower)
@@ -208,6 +209,7 @@ public class Locomotion implements Service {
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
+
                                 // TODO: c'est ton pote, on fait quoi?
                             }
                             else { // c'est pas ton pote!
@@ -224,13 +226,21 @@ public class Locomotion implements Service {
                             }
                         }
                     }
+
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 graphe.setUpdated(false);
             } catch (NoPathFound e) {
                 e.printStackTrace();
                 // TODO : Compéter
             }
         }
+
         graphe.writeLock().lock();
         try {
             graphe.removeProvisoryNode(start);

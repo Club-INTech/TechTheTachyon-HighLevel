@@ -76,7 +76,7 @@ public class XYO {
     public static XYO getBuddyInstance() {
         // TODO : Décider comment ca fonctionne ! et virer l'instanciation qui sert pour les tests
         if (buddyXYO == null) {
-            buddyXYO = new XYO(new VectCartesian(0, 0), 0);
+            buddyXYO = new XYO(new VectCartesian(100000, 100000), 0);
         }
         return buddyXYO;
     }
