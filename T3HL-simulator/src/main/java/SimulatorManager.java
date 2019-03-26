@@ -193,13 +193,18 @@ public class SimulatorManager extends Thread {
                 else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
                     robot.sstop();
                 }
-                else if(testOrder(arguments, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, 2)
-                        || testOrder(arguments, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, 2)) {
-                    robot.sendConfirmationForElevator("left");
-                }
-                else if(testOrder(arguments, ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, 2)
-                        || testOrder(arguments, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, 2)) {
-                    robot.sendConfirmationForElevator("right");
+                else if(testOrder(arguments, "down", 2)
+                        || testOrder(arguments, "up", 2)) {
+                    // désolé
+                    // TODO: tmp
+                    new Thread(() -> {
+                        try {
+                            Thread.sleep(1000);
+                            robot.sendConfirmationForElevator(arguments[1]);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
@@ -241,7 +246,11 @@ public class SimulatorManager extends Thread {
      * @throws OrderException si un mauvais nombre d'arguments est reçu par le simulateur
      */
     private boolean testOrder(String[] arguments, Order order, int nb_args) throws OrderException {
-        if (arguments[0].equals(order.getOrderStr())){
+        return testOrder(arguments, order.getOrderStr(), nb_args);
+    }
+
+    private boolean testOrder(String[] arguments, String orderStr, int nb_args) throws OrderException {
+        if (arguments[0].equals(orderStr)){
             if (arguments.length==nb_args){
                 return true;
             }
