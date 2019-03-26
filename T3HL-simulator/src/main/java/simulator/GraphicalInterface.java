@@ -1,3 +1,5 @@
+package simulator;
+
 import data.Table;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
@@ -14,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-class GraphicalInterface extends JFrame {
+public class GraphicalInterface extends JFrame {
 
     //Attributs qui peuvent être modifiés avant le lancement
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
@@ -55,7 +57,7 @@ class GraphicalInterface extends JFrame {
         this.pointsToDraw=new ArrayList<Vec2>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
-            this.backgroundImage = ImageIO.read(new File("resources/Table2019.png"));
+            this.backgroundImage = ImageIO.read(getClass().getResourceAsStream("/Table2019.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,4 +1,4 @@
-package exceptions;
+package simulator.exceptions;
 
 public class OrderException extends Exception {
 

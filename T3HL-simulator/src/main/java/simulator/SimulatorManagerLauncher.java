@@ -1,3 +1,5 @@
+package simulator;
+
 import data.Table;
 import utils.Container;
 import utils.container.ContainerException;
@@ -33,7 +35,7 @@ public class SimulatorManagerLauncher extends Thread{
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    SimulatorManagerLauncher(){
+    public SimulatorManagerLauncher(){
         this.initDefaultPassedParameters();
     }
 
@@ -51,35 +53,35 @@ public class SimulatorManagerLauncher extends Thread{
     }
 
     /** Définit si on simule un obstacle avec la souris dans l'interface graphique */
-    void setIsSimulatingObstacleWithMouse(boolean value){
+    public void setIsSimulatingObstacleWithMouse(boolean value){
         if (canParametersBePassed()) {
             this.isSimulatingObstacleWithMouse = value;
         }
     }
 
     /** Setter des ports utilisés pour parler au LL */
-    void setLLports(int[] LLports){
+    public void setLLports(int[] LLports){
         if (canParametersBePassed()) {
             this.LLports = LLports;
         }
     }
 
     /** Setter des ports utilisés pour parler entre les HL */
-    void setHLports(int[] HLports) {
+    public void setHLports(int[] HLports) {
         if (canParametersBePassed()) {
             this.HLports = HLports;
         }
     }
 
     /** Définition du mode daltonien */
-    void setColorblindMode(boolean value){
+    public void setColorblindMode(boolean value){
         if (canParametersBePassed()) {
             this.colorblindMode = value;
         }
     }
 
     /** Définit le facteur de vitesse de la simulation */
-    void setSpeedFactor(float speedFactor){
+    public void setSpeedFactor(float speedFactor){
         if (canParametersBePassed()) {
             this.speedFactor = speedFactor;
         }
@@ -97,8 +99,18 @@ public class SimulatorManagerLauncher extends Thread{
     }
 
     /* ======================================== Lancement de l'instance ======================================== */
+    public void waitForInterface() {
+        while(!hasFinished) {
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /** Fonction qui crée un Thread pour lancer le simualteur */
-    void launch(){
+    public void launch(){
         this.start();
         System.out.println("Lanceur de simulateur démarré");
     }
@@ -212,7 +224,7 @@ public class SimulatorManagerLauncher extends Thread{
 
     /* ================================================ Getters ================================================= */
     /** Getter du manager de la simulation */
-    SimulatorManager getSimulatorManager(){
+    public SimulatorManager getSimulatorManager(){
         if (!this.hasFinished){
             System.out.println("SIMULATEUR : Le lanceur de simulateur n'a pas fini lancer le simulateur");
             return null;

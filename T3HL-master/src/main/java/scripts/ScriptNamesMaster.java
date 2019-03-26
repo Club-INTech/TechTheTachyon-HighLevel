@@ -18,6 +18,38 @@ public enum ScriptNamesMaster implements ScriptNames {
     private Script script;
 
     static {
+       // reInit();
+    }
+
+    ScriptNamesMaster(Class<? extends Service> aClass){
+        this.aClass=aClass;
+    }
+
+    public Script getScript() {
+        if(script == null) {
+            Container container = Container.getInstance("Master");
+            try {
+                script = (Script)container.getService(aClass);
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        }
+        return script;
+    }
+
+    /**
+     * JUSTE POUR LE TEST
+     */
+    public static void cleanup() {
+        for(ScriptNamesMaster name : values()) {
+            name.script = null;
+        }
+    }
+
+    /**
+     * JUSTE POUR LE TEST
+     */
+    public static void reInit() {
         try {
             Container container = Container.getInstance("Master");
             for (ScriptNamesMaster scriptNames : ScriptNamesMaster.values()) {
@@ -26,13 +58,5 @@ public enum ScriptNamesMaster implements ScriptNames {
         } catch (ContainerException e){
             e.printStackTrace();
         }
-    }
-
-    ScriptNamesMaster(Class<? extends Service> aClass){
-        this.aClass=aClass;
-    }
-
-    public Script getScript() {
-        return script;
     }
 }

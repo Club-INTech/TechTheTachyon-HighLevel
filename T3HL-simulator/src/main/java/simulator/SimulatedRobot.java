@@ -1,3 +1,5 @@
+package simulator;
+
 import data.controlers.Channel;
 import utils.math.Calculs;
 import utils.math.Vec2;

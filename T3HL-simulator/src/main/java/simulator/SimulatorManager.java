@@ -1,4 +1,6 @@
-import exceptions.OrderException;
+package simulator;
+
+import simulator.exceptions.OrderException;
 import orders.order.*;
 import utils.math.VectCartesian;
 
@@ -296,7 +298,7 @@ public class SimulatorManager extends Thread {
 
     /* ================================================= Getters ============================================== */
     /** Getter de l'interface graphique */
-    GraphicalInterface getGraphicalInterface(){
+    public GraphicalInterface getGraphicalInterface(){
         return this.graphicalInterface;
     }
 }
