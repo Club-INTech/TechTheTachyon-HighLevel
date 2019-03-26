@@ -92,10 +92,13 @@ public class Main {
            // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
             //zone_depart_palets.goToThenExecute(1);
 
+            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             XYO.getRobotInstance().getPosition().setXY(1350, 450);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             zone_depart_palets.goToThenExecute(0);
+            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
+
             while(robot != null) {
                 System.out.println("Finished!");
                 Thread.sleep(1000);
