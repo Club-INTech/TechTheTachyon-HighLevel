@@ -49,16 +49,18 @@ public class Master extends Robot {
         return ascenseurGauche.size();
     }
 
-    public void pushPaletDroit() {
-        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
-            ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
-        }
+    public void pushPaletDroit(CouleurPalet palet) {
+        //if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+           // ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        ascenseurDroite.push(palet);
     }
 
-    public void pushPaletGauche() {
-        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
-            ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
-        }
+    public void pushPaletGauche(CouleurPalet palet) {
+       // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+            //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        ascenseurGauche.push(palet);
     }
 
     public void popPaletDroit() {

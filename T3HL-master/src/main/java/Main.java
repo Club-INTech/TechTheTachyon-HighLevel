@@ -23,11 +23,9 @@ import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import robot.Master;
-import scripts.Script;
-import scripts.ScriptManager;
-import scripts.ScriptManagerMaster;
-import scripts.ScriptNamesMaster;
+import scripts.*;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -93,12 +91,15 @@ public class Main {
             //zone_depart_palets.goToThenExecute(1);
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
-            XYO.getRobotInstance().getPosition().setXY(1350, 450);
+            XYO.getRobotInstance().getPosition().setXY(-730, 470);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-            zone_depart_palets.goToThenExecute(0);
-            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
+
+            accelerateur.goToThenExecute(0);
+
+
+            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             while(robot != null) {
                 System.out.println("Finished!");
                 Thread.sleep(1000);

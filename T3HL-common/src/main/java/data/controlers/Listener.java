@@ -79,6 +79,7 @@ public class Listener extends Thread implements Service {
      * @param message   corps du message
      */
     private void handleMessage(String header, String message) {
+      //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
         for (Channel registeredChannel : queueMap.keySet()) {
             if (registeredChannel.getHeaders().equals(header)) {
                 queueMap.get(registeredChannel).add(message);

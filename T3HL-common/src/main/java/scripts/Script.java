@@ -76,7 +76,9 @@ public abstract class Script implements Service {
 
         try {
             this.robot.followPathTo(entryPosition);
+            System.out.println("dqiojzdoizqhdozqhdzoudh");
         } catch (UnableToMoveException e) {
+            e.printStackTrace();
             // TODO
         }
 
@@ -84,6 +86,7 @@ public abstract class Script implements Service {
             this.execute(version);
         } catch (Exception e) {
             this.finalize(e);
+            e.printStackTrace();
             // TODO
         }
     }
