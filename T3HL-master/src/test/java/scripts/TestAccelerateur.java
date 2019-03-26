@@ -1,10 +1,10 @@
 package scripts;
 
-public class TestZoneDeDepart extends TestScriptBase {
+public class TestAccelerateur extends TestScriptBase {
 
     @Override
     public ScriptNamesMaster getScript() {
-        return ScriptNamesMaster.PALETS_ZONE_DEPART;
+        return ScriptNamesMaster.ACCELERATEUR;
     }
 
     @Override
