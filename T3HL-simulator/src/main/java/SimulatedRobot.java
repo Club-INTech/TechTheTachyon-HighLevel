@@ -124,6 +124,15 @@ public class SimulatedRobot {
         }
     }
 
+    /* =============================== Méthodes de synchronisation LL<->HL ===================================== */
+    public void confirmOrder(String givenOrder) {
+        simulatedLLConnectionManager.sendMessage(String.format("%s%s %s\n", Channel.EVENT.getHeaders(), "confirmOrder", givenOrder));
+    }
+
+    public void sendConfirmationForElevator(String side) {
+        simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENT.getHeaders(), side));
+    }
+
     /* =============================== Méthodes de signalisation d'arrêt du robot ============================== */
     /** Force the raise of the stoppedMovingFlag */
     public void forceRaiseStoppedMovingFlag(){

@@ -132,4 +132,11 @@ public enum ConfigData implements ConfigInfo
         return defaultValue;
     }
 
+    /**
+     * Permet de changer la valeur par défaut
+     * @param defaultValue
+     */
+    public void setDefaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
+    }
 }

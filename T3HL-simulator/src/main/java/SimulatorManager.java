@@ -1,8 +1,5 @@
 import exceptions.OrderException;
-import orders.order.MontlheryOrder;
-import orders.order.MotionOrder;
-import orders.order.Order;
-import orders.order.PositionAndOrientationOrder;
+import orders.order.*;
 import utils.math.VectCartesian;
 
 import java.util.HashMap;
@@ -151,6 +148,10 @@ public class SimulatorManager extends Thread {
     /** Gère les messages qui sont reçus pour le LL */
     private void handleMessageLL(String m, SimulatedRobot robot){
         System.out.println(String.format("SIMULATEUR-LL : message reçu : %s",m));
+        if(m.startsWith("!")) { // ordre qui demande une synchronisation
+            m = m.substring(1);
+            robot.confirmOrder(m);
+        }
         String[] arguments = m.split(" ");
         if (arguments.length>0) {
             String order = arguments[0];
@@ -191,6 +192,14 @@ public class SimulatorManager extends Thread {
                 }
                 else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
                     robot.sstop();
+                }
+                else if(testOrder(arguments, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, 2)
+                        || testOrder(arguments, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, 2)) {
+                    robot.sendConfirmationForElevator("left");
+                }
+                else if(testOrder(arguments, ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, 2)
+                        || testOrder(arguments, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, 2)) {
+                    robot.sendConfirmationForElevator("right");
                 }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
