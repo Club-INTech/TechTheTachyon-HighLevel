@@ -77,7 +77,6 @@ public class Accelerateur extends Script {
             System.out.println("debug 3");
             robot.turn(0);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
