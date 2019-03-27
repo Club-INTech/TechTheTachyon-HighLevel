@@ -71,7 +71,6 @@ public abstract class TestBaseHL {
             Table table = container.getService(Table.class);
             table.initObstacles();
             ScriptNamesMaster.reInit();
-            initState(container);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -98,6 +97,7 @@ public abstract class TestBaseHL {
         waitForLLConnection();
 
         try {
+            initState(container);
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
         } catch (ContainerException e) {

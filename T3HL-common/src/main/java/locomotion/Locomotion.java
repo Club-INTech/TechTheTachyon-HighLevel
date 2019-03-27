@@ -148,6 +148,8 @@ public class Locomotion implements Service {
      * @param point point à atteindre
      */
     public void followPathTo(Vec2 point) throws UnableToMoveException {
+        new Exception().printStackTrace();
+
         // TODO : Synchroniser
         Node start;
         Node aim;
