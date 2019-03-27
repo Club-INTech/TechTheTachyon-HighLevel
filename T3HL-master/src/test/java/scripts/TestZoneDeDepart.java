@@ -1,6 +1,13 @@
 package scripts;
 
+import utils.Container;
+
 public class TestZoneDeDepart extends TestScriptBase {
+
+    @Override
+    public void initState(Container container) {
+        // NOP
+    }
 
     @Override
     public ScriptNamesMaster getScript() {

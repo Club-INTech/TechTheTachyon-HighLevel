@@ -87,6 +87,7 @@ public abstract class Script implements Service {
         } catch (Exception e) {
             this.finalize(e);
             e.printStackTrace();
+            throw e;
             // TODO
         }
     }
