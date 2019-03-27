@@ -84,6 +84,7 @@ public class Main {
             try {
                 robot.followPathTo(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
+                robot.moveToPoint(new VectCartesian(0,500));
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }*/
@@ -122,6 +123,8 @@ public class Main {
             paletsx6.goToThenExecute(1);
             paletsx3.goToThenExecute(1);
             accelerateur.goToThenExecute(1);
+
+
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -167,7 +170,7 @@ public class Main {
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
