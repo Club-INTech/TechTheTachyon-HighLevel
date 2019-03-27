@@ -96,7 +96,7 @@ public class Main {
             XYO.getRobotInstance().getPosition().setXY(-730, 470);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-
+            //robot.goto(0,400);
 
             accelerateur.goToThenExecute(0);
 
