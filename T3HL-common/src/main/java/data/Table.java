@@ -540,4 +540,16 @@ public class Table implements Service {
     public Obstacle getPaletBlueZoneChaosYellow() {
         return paletBlueZoneChaosYellow;
     }
+
+    public void removeAllChaosObstacles() {
+        removeFixedObstacle(paletRedUnZoneChaosPurple);
+        removeFixedObstacle(paletRedDeuxZoneChaosPurple);
+        removeFixedObstacle(paletGreenZoneChaosPurple);
+        removeFixedObstacle(paletBlueZoneChaosPurple);
+
+        removeFixedObstacle(paletRedUnZoneChaosYellow);
+        removeFixedObstacle(paletRedDeuxZoneChaosYellow);
+        removeFixedObstacle(paletGreenZoneChaosYellow);
+        removeFixedObstacle(paletBlueZoneChaosYellow);
+    }
 }

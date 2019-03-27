@@ -24,6 +24,8 @@ public abstract class TestScriptBase {
     public void initHL() {
     }
 
+    public abstract void initState(Container container) throws ContainerException;
+
     @Test
     public void simulate() {
         setup(true);
@@ -74,6 +76,8 @@ public abstract class TestScriptBase {
             Table table = container.getService(Table.class);
             table.initObstacles();
             ScriptNamesMaster.reInit();
+
+            initState(container);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
