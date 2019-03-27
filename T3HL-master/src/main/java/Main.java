@@ -28,6 +28,7 @@ import robot.Master;
 import scripts.*;
 import utils.ConfigData;
 import utils.Container;
+import utils.communication.KeepAlive;
 import utils.container.ContainerException;
 import utils.math.VectCartesian;
 import simulator.*;
@@ -155,6 +156,8 @@ public class Main {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = container.getService(Master.class);
+            KeepAlive keepAliveService = container.getService(KeepAlive.class);
+            keepAliveService.start();
             controller = new MontlheryController(robot, orderWrapper);
         } catch (ContainerException e) {
             e.printStackTrace();

@@ -208,6 +208,9 @@ public class SimulatorManager extends Thread {
                         }
                     }).start();
                 }
+                else if(testOrder(arguments, MiscOrder.PING, 1)) {
+                    robot.sendPong();
+                }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
                 }

@@ -135,6 +135,10 @@ public class SimulatedRobot {
         simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENT.getHeaders(), side));
     }
 
+    public void sendPong() {
+        simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(), "pong"));
+    }
+
     /* =============================== Méthodes de signalisation d'arrêt du robot ============================== */
     /** Force the raise of the stoppedMovingFlag */
     public void forceRaiseStoppedMovingFlag(){

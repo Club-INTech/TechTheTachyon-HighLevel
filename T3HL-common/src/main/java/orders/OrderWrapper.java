@@ -20,12 +20,7 @@ package orders;
 
 import connection.Connection;
 import data.SensorState;
-import orders.order.MotionOrder;
-import orders.order.ActuatorsOrder;
-import orders.order.Order;
-import orders.order.SpeedOrder;
-import orders.order.PositionAndOrientationOrder;
-import orders.order.HooksOrder;
+import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
 import utils.ConfigData;
@@ -284,6 +279,13 @@ public class OrderWrapper implements Service {
                 ef.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Envoie un ping au LL pour vérifier que la connexion est encore active
+     */
+    public void ping() {
+        sendString(MiscOrder.PING.getOrderStr());
     }
 
     @Override

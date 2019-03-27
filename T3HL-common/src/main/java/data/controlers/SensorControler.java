@@ -127,6 +127,10 @@ public class SensorControler extends Thread implements Service {
                 Log.COMMUNICATION.debug("Got event from LL: "+data);
                 event = data.split(ARGUMENTS_SEPARATOR);
                 switch(event[0]) {
+                    case "pong":
+                        SensorState.LAST_PONG.setData(System.currentTimeMillis());
+                        break;
+
                     case "stoppedMoving":
                         SensorState.MOVING.setData(false);
                         break;

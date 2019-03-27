@@ -82,6 +82,9 @@ public enum ConfigData implements ConfigInfo
     SLAVE_SIMULATEUR(20001),
     MASTER_SIMULATEUR(20002),
 
+    PING_INTERVAL(300), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
+    PING_TIMEOUT(1500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
+
     /**
      * Dimensions du robot
      */
