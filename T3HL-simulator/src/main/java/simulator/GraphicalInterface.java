@@ -1,8 +1,10 @@
 package simulator;
 
 import data.Table;
+import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
+import locomotion.PathFollower;
 import utils.math.*;
 import utils.math.Rectangle;
 import utils.math.Shape;
@@ -23,6 +25,15 @@ public class GraphicalInterface extends JFrame {
     private Table table;
     private boolean colorblindMode;
     private boolean isDrawingPoints;
+
+    /**
+     * Dessin des chemins que les robots doivent suivre?
+     */
+    private boolean isDrawingPaths;
+    /**
+     * Dessin du graphe?
+     */
+    private boolean isDrawingGraph;
     private boolean isCreatingObstacleWithMouse;
 
     //Attributs graphiques
@@ -36,6 +47,7 @@ public class GraphicalInterface extends JFrame {
     private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
     private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
+    private Color PATH_COLOR = new Color(255,0,0,255);
 
     //Attributs pas graphiques
     private ArrayList<Obstacle> fixedObstacles;
@@ -49,11 +61,18 @@ public class GraphicalInterface extends JFrame {
 
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched = false;
+    private PathFollower pathfollowerToShow;
+
+    private int pathfollowerToShowPort;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
     GraphicalInterface() {
         this.initDefaultPassedParameters();
+
+        this.fixedObstacles = new ArrayList<Obstacle>();
+        this.mobileObstacles = new ArrayList<MobileCircularObstacle>();
+
         this.pointsToDraw=new ArrayList<Vec2>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
@@ -85,6 +104,8 @@ public class GraphicalInterface extends JFrame {
     private void initDefaultPassedParameters(){
         this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
         this.isDrawingPoints=true;
+        this.isDrawingGraph=true;
+        this.isDrawingPaths=true;
         this.colorblindMode=false;
         this.isCreatingObstacleWithMouse=false;
 
@@ -173,11 +194,26 @@ public class GraphicalInterface extends JFrame {
 
     /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
-    private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
+    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
         g.drawLine(x, y, Math.round(x+(float)Math.cos(orientation)*diameter), Math.round(y-(float)Math.sin(orientation)*diameter));
+
+        if(this.isDrawingPaths) {
+            if(pathfollowerToShow != null && simulatedRobot.getPort() == pathfollowerToShowPort) {
+                g.setColor(PATH_COLOR);
+                Vec2 prev = transformTableCoordsToInterfaceCoords(simulatedRobot.getPosition());
+                Vec2 target = transformTableCoordsToInterfaceCoords(simulatedRobot.getTargetPosition());
+                g.drawLine(prev.getX(), prev.getY(), target.getX(), target.getY());
+                prev = target;
+                for(Vec2 p : pathfollowerToShow.getQueue()) {
+                    Vec2 screenPos = transformTableCoordsToInterfaceCoords(p);
+                    g.drawLine(prev.getX(), prev.getY(), screenPos.getX(), screenPos.getY());
+                    prev = screenPos;
+                }
+            }
+        }
         g.setColor(DEFAULT_COLOR);
     }
 
@@ -263,11 +299,31 @@ public class GraphicalInterface extends JFrame {
         for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
-            drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
+            drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
         }
         if (this.isDrawingPoints) {
             drawPoints(g);
         }
+
+        if(this.isDrawingGraph) {
+            drawGraphe(g);
+        }
+    }
+
+    private void drawGraphe(Graphics g) {
+        int pointDiameter=10;
+        g.setColor(POINTS_TO_DRAW_COLOR);
+        try {
+            table.getGraphe().readLock().lock();
+            for(Node node : table.getGraphe().getNodes()) {
+                Vec2 vecteur = node.getPosition();
+                vecteur = transformTableCoordsToInterfaceCoords(vecteur);
+                g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
+            }
+        } finally {
+            table.getGraphe().readLock().unlock();
+        }
+        g.setColor(DEFAULT_COLOR);
     }
 
     /* ============ Méthodes de transformation des coordonnées entre la table et la fenêtre graphique ============= */
@@ -374,5 +430,30 @@ public class GraphicalInterface extends JFrame {
             MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
             POINTS_TO_DRAW_COLOR = new Color(255,255,255,255);
         }
+    }
+
+    public boolean isDrawingPaths() {
+        return isDrawingPaths;
+    }
+
+    public void setDrawingPaths(boolean drawingPaths) {
+        isDrawingPaths = drawingPaths;
+    }
+
+    public boolean isDrawingGraph() {
+        return isDrawingGraph;
+    }
+
+    public void setDrawingGraph(boolean drawingGraph) {
+        isDrawingGraph = drawingGraph;
+    }
+
+    public void setPathfollowerToShow(PathFollower follower, int port) {
+        this.pathfollowerToShow = follower;
+        this.pathfollowerToShowPort = port;
+    }
+
+    public PathFollower getPathfollowerToShow() {
+        return pathfollowerToShow;
     }
 }

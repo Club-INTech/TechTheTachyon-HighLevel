@@ -25,6 +25,7 @@ import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.Service;
+import utils.container.ServiceThread;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,7 +38,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class Listener extends Thread implements Service {
+public class Listener extends ServiceThread {
 
     /**
      * Temps d'attente entre chaque boucle pour l'initialisation des connexions
@@ -63,6 +64,11 @@ public class Listener extends Thread implements Service {
      * Si on est en simulation
      */
     private boolean simulation;
+
+    /**
+     * Est-ce qu'on utilise le Lidar?
+     */
+    private boolean useLidar;
 
     /**
      * Construit un listener
@@ -109,11 +115,11 @@ public class Listener extends Thread implements Service {
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
             if (simulation){
+                Log.COMMUNICATION.debug("Simulation initializing connections...");
                 connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulation");
-                Log.COMMUNICATION.debug("Simulated Teensy Master");
+                Log.COMMUNICATION.debug("Simulated Teensy Master connected");
                 connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulated Buddy");
+                Log.COMMUNICATION.debug("Simulated Buddy connected");
             }
             else {
                 // FIXME :) connectionManager.initConnections(Connection.LIDAR_DATA, Connection.BALISE);
@@ -130,6 +136,10 @@ public class Listener extends Thread implements Service {
                     Log.COMMUNICATION.debug("Teensy Slave");
                 }
             }
+            if(useLidar) {
+                connectionManager.initConnections(Connection.LIDAR_DATA);
+            }
+            Log.COMMUNICATION.debug("Lidar connected");
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
@@ -170,6 +180,11 @@ public class Listener extends Thread implements Service {
                     iterator.remove();
                 }
             }
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -187,5 +202,6 @@ public class Listener extends Thread implements Service {
     public void updateConfig(Config config) {
         this.master = config.getBoolean(ConfigData.MASTER);
         this.simulation=config.getBoolean(ConfigData.SIMULATION);
+        this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
     }
 }

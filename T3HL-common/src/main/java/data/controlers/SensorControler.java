@@ -156,7 +156,7 @@ public class SensorControler extends Thread implements Service {
                             Log.COMMUNICATION.debug("Received confirmation for order ("+event[1]+")");
                             SensorState.ACTUATOR_ACTUATING.setData(false);
                         } else {
-                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'ordre!");
+                            Log.COMMUNICATION.critical("Erreur dans l'event 'confirmOrder', il manque l'ordre!");
                         }
                         break;
 

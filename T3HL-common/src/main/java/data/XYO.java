@@ -69,7 +69,7 @@ public class XYO {
      */
     public static XYO getRobotInstance() {
         if (robotXYO == null) {
-            robotXYO = new XYO(new VectCartesian(1200,300), Math.PI);
+            robotXYO = new XYO(new VectCartesian(1350,300), Math.PI);
         }
         return robotXYO;
     }

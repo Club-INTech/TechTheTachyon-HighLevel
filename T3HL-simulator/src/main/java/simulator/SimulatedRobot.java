@@ -11,6 +11,7 @@ public class SimulatedRobot {
     private static final float MONTLHERY_SPEED = 2f; // mm/<tick du simulateur>
     private static final float MONTLHERY_ROT_SPEED = (float) (Math.PI/2f); // rad/s
 
+    private final int port;
     //Attributs qui peuvent être modifiés avant le lancement
     private float speedFactor;
     private SimulatedConnectionManager simulatedLLConnectionManager;
@@ -51,7 +52,8 @@ public class SimulatedRobot {
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
-    SimulatedRobot(){
+    SimulatedRobot(int port){
+        this.port = port;
         this.initDefaultPassedParameters();
         this.lastUpdateTime=System.currentTimeMillis();
         this.forwardOrBackward=false;
@@ -353,5 +355,13 @@ public class SimulatedRobot {
         forcedTranslationSpeed = 0f;
         forcedRotationSpeed = 0f;
         forcedMovement = false;
+    }
+
+    Vec2 getTargetPosition() {
+        return positionTarget;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

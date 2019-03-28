@@ -3,6 +3,8 @@ package scripts;
 import data.Table;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class TestPaletsX6 extends TestScriptBase {
 
@@ -10,6 +12,11 @@ public class TestPaletsX6 extends TestScriptBase {
     public void initState(Container container) throws ContainerException {
         Table table = container.getService(Table.class);
         table.removeAllChaosObstacles();
+    }
+
+    @Override
+    public Vec2 startPosition() {
+        return new VectCartesian(-730, 470);
     }
 
     @Override

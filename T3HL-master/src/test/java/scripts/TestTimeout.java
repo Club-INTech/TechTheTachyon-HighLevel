@@ -2,6 +2,8 @@ package scripts;
 
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class TestTimeout extends TestBaseHL {
     @Override
@@ -20,4 +22,10 @@ public class TestTimeout extends TestBaseHL {
         }
         // TODO: test qui peut échouer
     }
+
+    @Override
+    public Vec2 startPosition() {
+        return new VectCartesian(0, 0);
+    }
+
 }

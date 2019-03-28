@@ -18,6 +18,7 @@
 
 package locomotion;
 
+import ai.AIService;
 import data.SensorState;
 import data.Table;
 import data.XYO;
@@ -26,6 +27,7 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
+import utils.container.ServiceThread;
 import utils.math.*;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -35,7 +37,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class PathFollower extends Thread implements Service {
+public class PathFollower extends ServiceThread {
 
     /**
      * Order Wrapper
@@ -254,6 +256,10 @@ public class PathFollower extends Thread implements Service {
     @Override
     public void interrupt() {
         // TODO
+    }
+
+    public ConcurrentLinkedQueue<Vec2> getQueue() {
+        return pointsQueue;
     }
 
     /**

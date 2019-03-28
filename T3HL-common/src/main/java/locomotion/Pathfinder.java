@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018, INTech.
+ * Copyright (c) 2019, INTech.
  * this file is part of INTech's HighLevel.
 
  * INTech's HighLevel is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@
 package locomotion;
 
 import data.Graphe;
-import data.XYO;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import pfg.config.Config;
@@ -27,9 +26,7 @@ import utils.Log;
 import utils.container.Service;
 import utils.math.Vec2;
 
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Service déstiner à calculer un chemin entre deux points de la table
@@ -52,16 +49,26 @@ public class Pathfinder implements Service {
     /**
      * Liste des noeuds déjà visités
      */
-    private ArrayList<Node> closedList;
+    private LinkedList<Node> closedList;
+
+    private Map<Node, Integer> costs;
+    private Map<Node, Node> parents;
+    private Map<Node, Double> heuristiques;
+
+    private Node lastAim;
 
     /**
      * Construit un pathfinder
      * @param graphe    graphe paramétrant la table
      */
-    private Pathfinder(Graphe graphe) {
+    public Pathfinder(Graphe graphe) {
+        heuristiques = new HashMap<>();
+        costs = new HashMap<>();
+        parents = new HashMap<>();
+
         this.graphe = graphe;
-        this.openList = new PriorityQueue<>(new ComparatorNode());
-        this.closedList = new ArrayList<>();
+        this.openList = new PriorityQueue<>(new ComparatorNode(heuristiques));
+        this.closedList = new LinkedList<>();
     }
 
     /**
@@ -72,53 +79,92 @@ public class Pathfinder implements Service {
      * @throws NoPathFound
      *              s'il n'existe pas de chemin entre les deux noeuds
      */
-    public ArrayList<Vec2> findPath(Node start, Node aim) throws NoPathFound {
+    public LinkedList<Vec2> findPath(Node start, Node aim) throws NoPathFound {
+        graphe.cacheLocks.readLock().lock();
+        try {
+            Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.get(start);
+            if(alreadyComputedPaths != null) {
+                LinkedList<Vec2> computedPath = alreadyComputedPaths.get(aim);
+                if(computedPath != null) {
+                    return computedPath;
+                }
+            }
+        } finally {
+            graphe.cacheLocks.readLock().unlock();
+        }
+
         Node currentNode;
         Set<Node> neighbours;
         int currentCost;
 
-        // On clean la liste des noeuds à visiter et on ajoute le noeud de départ
+        // On clean la liste des noeuds à visiter et celles des noeuds visités et on ajoute le noeud de départ
         closedList.clear();
         openList.clear();
         openList.add(start);
-        graphe.updateHeuristique(aim);
 
-        // Tant qu'il y a des noeuds à visiter
-        while (!openList.isEmpty()) {
-            currentNode = openList.poll();
+        costs.clear();
+        parents.clear();
 
-            // Si c'est le noeud d'arrivé, on s'arrête
-            if (currentNode.equals(aim)) {
-                return reconstructPath(start, aim);
-            }
+        try {
+            graphe.readLock().lock();
+            graphe.updateHeuristique(aim, lastAim, heuristiques);
 
-            // Sinon on parcours tout ses voisins
-            neighbours = currentNode.getNeighbours().keySet();
-            for (Node neighbour : neighbours) {
-                Ridge ridge = currentNode.getNeighbours().get(neighbour);
-                // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
-                if (ridge.isReachable()) {
-                    currentCost = currentNode.getCout() + ridge.getCost();
-                    // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
-                    if ((openList.contains(neighbour) || closedList.contains(neighbour)) && currentCost < neighbour.getCout()) {
-                        neighbour.setCout(currentCost);
-                        neighbour.setPred(currentNode);
-                        if (closedList.contains(neighbour)) {
-                            closedList.remove(neighbour);
+            lastAim = aim;
+
+
+            // Tant qu'il y a des noeuds à visiter
+            while (!openList.isEmpty()) {
+                currentNode = openList.poll();
+                if(currentNode == null)
+                    continue;
+
+                // Si c'est le noeud d'arrivé, on s'arrête
+                if (currentNode.equals(aim)) {
+                    return reconstructPath(start, aim);
+                }
+
+                // Sinon on parcours tout ses voisins
+                neighbours = currentNode.getNeighbours().keySet();
+                for (Node neighbour : neighbours) {
+                    Ridge ridge = currentNode.getNeighbours().get(neighbour);
+                    if(ridge == null)
+                        continue; // TODO: trouver pourquoi ça arrive avec l'IA
+
+
+
+                    // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
+                    if (ridge.isReachable()) {
+                        currentCost = costs.getOrDefault(currentNode, 0) + ridge.getCost();
+                        if(neighbour.equals(aim)) {
+                            parents.put(neighbour, currentNode);
+                            return reconstructPath(start, neighbour);
+                        }
+
+                        // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
+                        boolean visited = (openList.contains(neighbour) || closedList.contains(neighbour));
+                        if (visited && currentCost < costs.getOrDefault(neighbour, 0)) {
+                            costs.put(neighbour, currentCost);
+                            parents.put(neighbour, currentNode);
+                            if (closedList.contains(neighbour)) {
+                                closedList.remove(neighbour);
+                                openList.add(neighbour);
+                            }
+                        } else if (!visited) {
+                            // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
+                            costs.put(neighbour, currentCost);
+                            parents.put(neighbour, currentNode);
                             openList.add(neighbour);
                         }
-                    } else if (!(openList.contains(neighbour) || closedList.contains(neighbour))) {
-                        // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
-                        neighbour.setCout(currentCost);
-                        neighbour.setPred(currentNode);
-                        openList.add(neighbour);
-                    }
-                }
-            }
-            closedList.add(currentNode);
-        }
 
-        throw new NoPathFound(start.getPosition(), aim.getPosition());
+                    }
+
+                }
+                closedList.add(currentNode);
+            }
+            throw new NoPathFound(start.getPosition(), aim.getPosition());
+        } finally {
+            graphe.readLock().unlock();
+        }
     }
 
     /**
@@ -126,14 +172,22 @@ public class Pathfinder implements Service {
      * @param start noeud de départ du chemin
      * @param aim   noeud d'arriver
      */
-    private ArrayList<Vec2> reconstructPath(Node start, Node aim) {
+    private LinkedList<Vec2> reconstructPath(Node start, Node aim) {
         Node currentNode = aim;
-        ArrayList<Vec2> path = new ArrayList<>();
+        LinkedList<Vec2> path = new LinkedList<>();
 
         do {
             path.add(0, currentNode.getPosition());
-            currentNode = currentNode.getPred();
+            currentNode = parents.getOrDefault(currentNode, null);
         } while (currentNode != null && !(currentNode.equals(start)));
+
+        graphe.cacheLocks.writeLock().lock();
+        try {
+            Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.computeIfAbsent(start, k -> new HashMap<>());
+            alreadyComputedPaths.put(aim, path);
+        } finally {
+            graphe.cacheLocks.writeLock().unlock();
+        }
         return path;
     }
 
@@ -141,4 +195,13 @@ public class Pathfinder implements Service {
     public void updateConfig(Config config) {
 
     }
+
+    public Graphe getGraphe() {
+        return graphe;
+    }
+
+    public void setGraphe(Graphe graphe) {
+        this.graphe = graphe;
+    }
+
 }

@@ -176,7 +176,7 @@ public class Container implements Service {
      * Gère automatiquement les dépendances entre les classes, et détecte automatiquement les dépendances circulaires
      *
      * @param   service   classe demandée
-     * @param   stack     pile de services servant à détecter les dépendances circulaire
+     * @param   stack     pile de services servant à détecter les dépendances circulaires
      * @return  référence de l'objet créé
      * @throws  ContainerException  en cas d'exception relative à l'instanciation d'objet ou de détection de dépendance
      *                              circulaire

@@ -24,10 +24,7 @@ import data.graphe.Node;
 import data.graphe.Ridge;
 import data.table.StillCircularObstacle;
 import data.table.StillRectangularObstacle;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import utils.Container;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -93,6 +90,8 @@ public class Test_Graphe {
         Assert.assertEquals(nbNode + 1, graphe.getNodes().size());
     }
 
+    // TODO: Retirer? Les noeuds provisoires ne sont plus retirés maintenant
+    @Ignore
     @Test
     public void testRemoveProvisoryNode1() throws Exception {
         graphe = container.getService(Graphe.class);
@@ -105,6 +104,7 @@ public class Test_Graphe {
         Assert.assertEquals(nbNode, graphe.getNodes().size());
     }
 
+    @Ignore
     @Test
     public void testRemoveProvisoryNode2() throws Exception {
         graphe = container.getService(Graphe.class);

@@ -25,6 +25,7 @@ public enum ScriptNamesMaster implements ScriptNames {
         this.aClass=aClass;
     }
 
+    @Override
     public Script getScript() {
         if(script == null) {
             Container container = Container.getInstance("Master");

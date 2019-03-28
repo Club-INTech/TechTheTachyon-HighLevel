@@ -4,6 +4,8 @@ import data.CouleurPalet;
 import robot.Master;
 import utils.Container;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class TestAccelerateur extends TestScriptBase {
 
@@ -24,5 +26,10 @@ public class TestAccelerateur extends TestScriptBase {
     @Override
     public int[] versionsToTest() {
         return new int[] {0};
+    }
+
+    @Override
+    public Vec2 startPosition() {
+        return new VectCartesian(-730, 470);
     }
 }

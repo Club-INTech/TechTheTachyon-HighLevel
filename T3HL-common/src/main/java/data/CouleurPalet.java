@@ -21,7 +21,6 @@ public enum CouleurPalet {
         couleurPalRecue = new CompletableFuture<>();
     }
 
-
     public static void setCouleurPalRecu(String couleurRecue) {
         switch (couleurRecue) {
             case "vert":
