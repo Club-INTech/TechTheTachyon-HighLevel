@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +38,9 @@ public class GraphicalInterface extends JFrame {
     //Attributs graphiques
     private BufferedImage backgroundImage;
     private JPanel panel;
-    private int WIDTH_FRAME = 1200;      //in pixels
-    private int HEIGHT_FRAME = 800;      //in pixels
+    private int TABLE_PIXEL_WIDTH = 1200;      //in pixels
+    private int TABLE_PIXEL_HEIGHT = 800;      //in pixels
+    private int STACKS_PIXEL_WIDTH = 100;
     private Color DEFAULT_COLOR = new Color(0,0,0,255);
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
@@ -91,7 +91,7 @@ public class GraphicalInterface extends JFrame {
         };
         this.panel.setDoubleBuffered(true);
         this.panel.setVisible(true);
-        this.panel.setPreferredSize(new Dimension(this.WIDTH_FRAME, this.HEIGHT_FRAME));
+        this.panel.setPreferredSize(new Dimension(this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT));
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
@@ -219,7 +219,7 @@ public class GraphicalInterface extends JFrame {
 
     /** Affiche le background */
     private void drawBackground(Graphics g){
-        g.drawImage(this.backgroundImage,0,0, this.WIDTH_FRAME, this.HEIGHT_FRAME, null);
+        g.drawImage(this.backgroundImage,0,0, this.TABLE_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT, null);
     }
 
     /** Affiche les obstacles */
@@ -288,7 +288,7 @@ public class GraphicalInterface extends JFrame {
 
     /** Efface l'affichage */
     private void clearScreen(Graphics g){
-        g.clearRect(0,0,this.WIDTH_FRAME, this.HEIGHT_FRAME);
+        g.clearRect(0,0,this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT);
     }
 
     /** Met à jour l'affichage */
@@ -308,6 +308,7 @@ public class GraphicalInterface extends JFrame {
         if(this.isDrawingGraph) {
             drawGraphe(g);
         }
+
     }
 
     private void drawGraphe(Graphics g) {
@@ -329,19 +330,19 @@ public class GraphicalInterface extends JFrame {
     /* ============ Méthodes de transformation des coordonnées entre la table et la fenêtre graphique ============= */
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
     private int transformTableDistanceToInterfaceDistance(int distanceOnTable){
-        return Math.round(distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE));
+        return Math.round(distanceOnTable * (this.TABLE_PIXEL_WIDTH / (float)this.WIDTH_TABLE));
     }
 
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
     private float transformTableDistanceToInterfaceDistance(float distanceOnTable){
-        return distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE);
+        return distanceOnTable * (this.TABLE_PIXEL_WIDTH / (float)this.WIDTH_TABLE);
     }
 
     /** Transforme les coordonnées de la table pour qu'ils soient affichés correction sur l'interface */
     private Vec2 transformTableCoordsToInterfaceCoords(int xOnTable, int yOnTable) {
         return new VectCartesian(
-                (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.WIDTH_FRAME / (float) this.WIDTH_TABLE),
-                (this.HEIGHT_TABLE - yOnTable) * (this.HEIGHT_FRAME / (float) this.HEIGHT_TABLE)
+                (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.TABLE_PIXEL_WIDTH / (float) this.WIDTH_TABLE),
+                (this.HEIGHT_TABLE - yOnTable) * (this.TABLE_PIXEL_HEIGHT / (float) this.HEIGHT_TABLE)
         );
     }
 
@@ -355,8 +356,8 @@ public class GraphicalInterface extends JFrame {
     /** Transforme les coordonnées de l'interface pour qu'ils correspondent à ceux de la table */
     private Vec2 transformInterfaceCoordsToTableCoords(int xOnInterface, int yOnInterface){
         return new VectCartesian(
-                (xOnInterface - (this.WIDTH_FRAME / 2.0f)) * (this.WIDTH_TABLE / (float) this.WIDTH_FRAME),
-                (this.HEIGHT_FRAME - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.HEIGHT_FRAME)
+                (xOnInterface - (this.TABLE_PIXEL_WIDTH / 2.0f)) * (this.WIDTH_TABLE / (float) this.TABLE_PIXEL_WIDTH),
+                (this.TABLE_PIXEL_HEIGHT - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.TABLE_PIXEL_HEIGHT)
         );
     }
 

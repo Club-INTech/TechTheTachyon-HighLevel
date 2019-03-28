@@ -3,6 +3,7 @@ package simulator;
 import data.Table;
 import locomotion.PathFollower;
 import utils.Container;
+import utils.RobotSide;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 

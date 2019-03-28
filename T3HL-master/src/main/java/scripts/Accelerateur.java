@@ -80,7 +80,7 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             ((Master) robot).popPaletDroit();
-            while (((Master) robot).getNbpaletsdroits() > 0) {
+            while (((Master) robot).getNbPaletsDroits() > 0) {
                 actionBras(true);
                 robot.increaseScore(10);
             }
@@ -90,7 +90,7 @@ public class Accelerateur extends Script {
             GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(Math.PI);
             robot.increaseScore(10);
-            while(((Master) robot).getNbpaletsgauches() > 0){
+            while(((Master) robot).getNbPaletsGauches() > 0){
                 actionBras(false);
                 robot.increaseScore(10);
             }

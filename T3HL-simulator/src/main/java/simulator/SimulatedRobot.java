@@ -1,10 +1,15 @@
 package simulator;
 
+import data.CouleurPalet;
 import data.controlers.Channel;
+import utils.RobotSide;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 import utils.math.VectPolar;
+
+import java.util.HashMap;
+import java.util.Stack;
 
 public class SimulatedRobot {
 

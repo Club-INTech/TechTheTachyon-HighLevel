@@ -18,6 +18,7 @@
 
 package robot;
 
+import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
@@ -33,6 +34,9 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.container.Service;
 import utils.math.Vec2;
+
+import java.util.Objects;
+import java.util.Stack;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -65,6 +69,9 @@ public abstract class Robot implements Service {
      */
     protected XYO xyo;
     private long LOOP_SLEEP_TIME;
+
+    private Stack<CouleurPalet> leftElevator;
+    private Stack<CouleurPalet> rightElevator;
 
     /**
      * @param locomotion
@@ -227,8 +234,98 @@ public abstract class Robot implements Service {
         this.orderWrapper.sendString(MontlheryOrder.MAX_TRANSLATION_SPEED.getOrderStr()+" 90"); // 30 mm/s
     }
 
-    public XYO getXyo() { return this.xyo;}
+    // Gestion des ascenseurs
 
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsDroits() {
+        Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return rightElevator.size();
+    }
+
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsGauches() {
+        Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return leftElevator.size();
+    }
+
+    // TODO: FIXME
+    /**
+     * Initialises l'ascenseur de droite
+     */
+    protected void createRightElevator() {
+        this.rightElevator = new Stack<>();
+    }
+
+    /**
+     * Initialises l'ascenseur de gauche
+     */
+    protected void createLeftElevator() {
+        this.leftElevator = new Stack<>();
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletDroit(CouleurPalet palet) {
+        //if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+        // ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        rightElevator.push(palet);
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletGauche(CouleurPalet palet) {
+        // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+        //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        leftElevator.push(palet);
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletDroit() {
+        Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return rightElevator.pop();
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletGauche() {
+        Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return leftElevator.pop();
+    }
+
+    /**
+     * Renvoies l'ascenseur de gauche, ou 'null' s'il n'existe pas
+     */
+    public Stack<CouleurPalet> getLeftElevatorOrNull() {
+        return leftElevator;
+    }
+
+    /**
+     * Renvoies l'ascenseur de droite, ou 'null' s'il n'existe pas
+     */
+    public Stack<CouleurPalet> getRightElevatorOrNull() {
+        return rightElevator;
+    }
+
+    public XYO getXyo() { return this.xyo;}
 
     @Override
     public void updateConfig(Config config) {
