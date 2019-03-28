@@ -18,10 +18,7 @@
 
 package data;
 
-import data.table.MobileCircularObstacle;
-import data.table.Obstacle;
-import data.table.StillCircularObstacle;
-import data.table.StillCircularRectangularObstacle;
+import data.table.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -178,39 +175,63 @@ public class Table implements Service {
 
 
         Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
-        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, 180);
+        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, robotRay);
         Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
         this.addFixedObstacle(rampe);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, 180);
+        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, robotRay);
         Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
         this.addFixedObstacle(paletSupportRampeDroite);
 
         Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600, 18, 180);
+        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600, 18, robotRay);
         Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
         this.addFixedObstacle(paletSupportRampeGauche);
 
         Vec2 vecteurSeparationRampeCentre = new VectCartesian(0, 1478);
-        CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, 180);
+        CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, robotRay);
         Obstacle separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
         this.addFixedObstacle(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0, 18);                                 //arrondi
-        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000, 36, 180);
+        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000, 36, robotRay);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
         this.addFixedObstacle(accelerateur);
 
         Vec2 vecteurGoldeniumDroiteCentre = new VectCartesian(736, 46);
-        CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 22, 180);
+        CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 22, robotRay);
         Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
         this.addFixedObstacle(goldeniumDroite);
 
         Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736, 46);
-        CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 22, 180);
+        CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 22, robotRay);
         Obstacle goldeniumGauche = new StillCircularRectangularObstacle(formeGoldeniumGauche);
         this.addFixedObstacle(goldeniumGauche);
+
+        /**
+         * Bord de la table !
+         */
+
+        Vec2 vecteurTableBordDroit = new VectCartesian(1500,1000);
+        Rectangle formeTableBordDroit = new Rectangle(vecteurTableBordDroit, 2*robotRay,2000);
+        Obstacle tableBordDroit = new StillRectangularObstacle(formeTableBordDroit);
+        this.addFixedObstacle(tableBordDroit);
+
+        Vec2 vecteurTableBordGauche = new VectCartesian(-1500,1000);
+        Rectangle formeTableBordGauche = new Rectangle(vecteurTableBordGauche, 2*robotRay,2000);
+        Obstacle tableBordGauche = new StillRectangularObstacle(formeTableBordGauche);
+        this.addFixedObstacle(tableBordGauche);
+
+        Vec2 vecteurTableBordHaut = new VectCartesian(0,2000);
+        Rectangle formeTableBordHaut = new Rectangle(vecteurTableBordHaut, 3000,2*robotRay);
+        Obstacle tableBordHaut = new StillRectangularObstacle(formeTableBordHaut);
+        this.addFixedObstacle(tableBordHaut);
+
+        Vec2 vecteurTableBordBas = new VectCartesian(0,0);
+        Rectangle formeTableBordBas = new Rectangle(vecteurTableBordBas, 3000,2*robotRay);
+        Obstacle tableBordBas = new StillRectangularObstacle(formeTableBordBas);
+        this.addFixedObstacle(tableBordBas);
 
 
         /**
