@@ -115,6 +115,7 @@ public abstract class TestBaseHL {
         waitForLLConnection();
 
         try {
+            initState(container);
             Vec2 start = startPosition();
             XYO.getRobotInstance().update(start.getX(), start.getY(), 0.0 /* TODO Angle ?*/);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());

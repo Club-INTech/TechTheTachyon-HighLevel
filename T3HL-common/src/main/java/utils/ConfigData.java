@@ -88,7 +88,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Dimensions du robot
      */
-    ROBOT_RAY(220),
+    ROBOT_RAY(190),
     BUDDY_RAY(150),
     ENNEMY_RAY(220),
 

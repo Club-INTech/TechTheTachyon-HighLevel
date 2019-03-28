@@ -26,6 +26,6 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public int[] versionsToTest() {
-        return new int[] {0,1,2,3,4,5};
+        return new int[] {0};
     }
 }
