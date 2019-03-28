@@ -32,6 +32,8 @@ import orders.Speed;
 import orders.order.MontlheryOrder;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.RobotSide;
+import utils.communication.SimulatorDebug;
 import utils.container.Service;
 import utils.math.Vec2;
 
@@ -46,6 +48,10 @@ import java.util.Stack;
  */
 public abstract class Robot implements Service {
 
+    /**
+     * Permet d'envoyer des infos de debug
+     */
+    private SimulatorDebug simulatorDebug;
     public int score ;
 
 
@@ -79,7 +85,8 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
+    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+        this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
@@ -270,6 +277,16 @@ public abstract class Robot implements Service {
     }
 
     /**
+     * Envoie une mise à jour de la liste de palets au simulateur si jamais il est connecté
+     */
+    private void sendElevatorUpdate() {
+        if(leftElevator != null)
+            simulatorDebug.sendElevatorContents(RobotSide.LEFT, leftElevator);
+        if(rightElevator != null)
+            simulatorDebug.sendElevatorContents(RobotSide.RIGHT, rightElevator);
+    }
+
+    /**
      * Ajoute un palet dans l'ascenseur de droite
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
@@ -279,6 +296,7 @@ public abstract class Robot implements Service {
         //}
         Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         rightElevator.push(palet);
+        sendElevatorUpdate();
     }
 
     /**
@@ -289,8 +307,9 @@ public abstract class Robot implements Service {
         // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
         //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
         //}
-        Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        Objects.requireNonNull(leftElevator, "Tentative d'insérer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         leftElevator.push(palet);
+        sendElevatorUpdate();
     }
 
     /**
@@ -299,7 +318,9 @@ public abstract class Robot implements Service {
      */
     public CouleurPalet popPaletDroit() {
         Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
-        return rightElevator.pop();
+        CouleurPalet result = rightElevator.pop();
+        sendElevatorUpdate();
+        return result;
     }
 
     /**
@@ -307,8 +328,10 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletGauche() {
-        Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
-        return leftElevator.pop();
+        Objects.requireNonNull(leftElevator, "Tentative de retirer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        CouleurPalet result = leftElevator.pop();
+        sendElevatorUpdate();
+        return result;
     }
 
     /**

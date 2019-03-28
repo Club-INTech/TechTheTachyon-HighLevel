@@ -120,6 +120,9 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Simulated Teensy Master connected");
                 connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
                 Log.COMMUNICATION.debug("Simulated Buddy connected");
+                Log.COMMUNICATION.debug("Debug connection init...");
+                connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
+                Log.COMMUNICATION.debug("Debug connection ready!");
             }
             else {
                 // FIXME :) connectionManager.initConnections(Connection.LIDAR_DATA, Connection.BALISE);

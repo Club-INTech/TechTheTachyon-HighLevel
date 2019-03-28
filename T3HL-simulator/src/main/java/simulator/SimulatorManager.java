@@ -1,8 +1,10 @@
 package simulator;
 
+import connection.Connection;
 import simulator.exceptions.OrderException;
 import data.CouleurPalet;
 import orders.order.*;
+import utils.RobotSide;
 import utils.math.VectCartesian;
 
 import java.util.HashMap;
@@ -21,6 +23,7 @@ public class SimulatorManager extends Thread {
 
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched = false;
+    private SimulatedConnectionManager debugServerConnection;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -106,6 +109,15 @@ public class SimulatorManager extends Thread {
         }
     }
 
+    /**
+     * Set le serveur de debug pour que les robots simulés envoient des infos complémentaires
+     */
+    void setDebugServerConnection(SimulatedConnectionManager debugServerConnection) {
+        if(canParametersBePassed()) {
+            this.debugServerConnection = debugServerConnection;
+        }
+    }
+
     /** Permet de savoir si on a lancé le robot simulé */
     private boolean canParametersBePassed(){
         if (this.isLaunched){
@@ -152,6 +164,12 @@ public class SimulatorManager extends Thread {
                 }
             }
 
+            // On écoute le port de débug
+            String lastDebugMessage = debugServerConnection.getLastReceivedMessage();
+            if(lastDebugMessage != null) {
+                handleMessageDebug(lastDebugMessage);
+            }
+
             //On tryUpdate l'interface graphique
             this.graphicalInterface.tryUpdate();
 
@@ -162,6 +180,24 @@ public class SimulatorManager extends Thread {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    /**
+     * Gère les messages reçus des HL simulés
+     * @param message le message de debug
+     */
+    private void handleMessageDebug(String message) {
+        String[] data = message.split(" ");
+        int senderPort = Integer.parseInt(data[0]);
+        String type = data[1];
+        switch (type) {
+            case "elevatorContents":
+            {
+                RobotSide side = RobotSide.valueOf(data[2]);
+                simulatedRobots.get(senderPort).setElevatorContents(side, data, 3);
+            }
+            break;
         }
     }
 

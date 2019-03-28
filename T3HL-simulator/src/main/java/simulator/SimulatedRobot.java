@@ -9,6 +9,8 @@ import utils.math.VectCartesian;
 import utils.math.VectPolar;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 public class SimulatedRobot {
@@ -55,6 +57,10 @@ public class SimulatedRobot {
     private float forcedTranslationSpeed;
     private float forcedRotationSpeed;
 
+    // Ascenseurs
+    private List<CouleurPalet> leftStack;
+    private List<CouleurPalet> rightStack;
+
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
     SimulatedRobot(int port){
@@ -68,6 +74,8 @@ public class SimulatedRobot {
         this.orientation = START_ORIENTATION;
         this.orientationTarget = START_ORIENTATION;
         this.isLaunched=false;
+        this.leftStack=new LinkedList<>();
+        this.rightStack=new LinkedList<>();
     }
 
     /* ================================== Passage et initialisation de paramètres ============================= */
@@ -175,6 +183,43 @@ public class SimulatedRobot {
     /** Renvoie si le robot bouge */
     private boolean isMoving(){
         return this.turning || this.forwardOrBackward;
+    }
+
+    /* =============================== Méthodes de gestion des ascenseurs =================================== */
+    public void setElevatorContents(RobotSide side, String[] contents, int startIndex) {
+        List<CouleurPalet> stack;
+        switch (side) {
+            case LEFT:
+                stack = leftStack;
+                break;
+
+            case RIGHT:
+                stack = rightStack;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Side: "+side);
+        }
+
+        synchronized (stack) {
+            stack.clear();
+            for (int i = startIndex; i < contents.length; i++) {
+                stack.add(CouleurPalet.valueOf(contents[i]));
+            }
+        }
+    }
+
+    public List<CouleurPalet> getElevatorOrNull(RobotSide side) {
+        switch (side) {
+            case LEFT:
+                return leftStack;
+
+            case RIGHT:
+                return rightStack;
+
+            default: // ne doit jamais arriver
+                return null;
+        }
     }
 
     /* =============================== Méthodes d'envoide la position du robot ============================== */
@@ -369,4 +414,5 @@ public class SimulatedRobot {
     public int getPort() {
         return port;
     }
+
 }

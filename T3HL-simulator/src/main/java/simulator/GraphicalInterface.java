@@ -1,16 +1,20 @@
 package simulator;
 
+import data.CouleurPalet;
 import data.Table;
 import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import locomotion.PathFollower;
+import robot.Robot;
+import utils.RobotSide;
 import utils.math.*;
 import utils.math.Rectangle;
 import utils.math.Shape;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,6 +22,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GraphicalInterface extends JFrame {
+
+    private static final float ASPECT_RATIO = 16f/9f;
+
+    /**
+     * Police utilisée pour écrire à l'écran
+     */
+    private final Font font;
 
     //Attributs qui peuvent être modifiés avant le lancement
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
@@ -38,9 +49,9 @@ public class GraphicalInterface extends JFrame {
     //Attributs graphiques
     private BufferedImage backgroundImage;
     private JPanel panel;
-    private int TABLE_PIXEL_WIDTH = 1200;      //in pixels
-    private int TABLE_PIXEL_HEIGHT = 800;      //in pixels
-    private int STACKS_PIXEL_WIDTH = 100;
+    private int TABLE_PIXEL_WIDTH = 980;      //in pixels
+    private int STACKS_PIXEL_WIDTH = 300;
+    private int TABLE_PIXEL_HEIGHT = (int) ((TABLE_PIXEL_WIDTH+STACKS_PIXEL_WIDTH)/ASPECT_RATIO);      //in pixels
     private Color DEFAULT_COLOR = new Color(0,0,0,255);
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
@@ -81,10 +92,12 @@ public class GraphicalInterface extends JFrame {
             e.printStackTrace();
         }
         this.setTitle("Simulateur");
+        this.font = new Font("Consolas", Font.PLAIN, 15);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics graphics) {
+                graphics.setFont(font);
                 updateGraphics(graphics);
                 Toolkit.getDefaultToolkit().sync();
             }
@@ -194,7 +207,7 @@ public class GraphicalInterface extends JFrame {
 
     /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
-    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter){
+    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter, int index){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
@@ -214,7 +227,69 @@ public class GraphicalInterface extends JFrame {
                 }
             }
         }
+        drawElevators(g, simulatedRobot, index);
+
         g.setColor(DEFAULT_COLOR);
+    }
+
+    private void drawElevators(Graphics g, SimulatedRobot simulatedRobot, int index) {
+        g.setColor(Color.BLACK);
+
+        int totalElevatorPanelHeight = 100;
+        int baseY = index*totalElevatorPanelHeight;
+        int margin = 10;
+        int baseX = TABLE_PIXEL_WIDTH + margin;
+        int textHeight = g.getFontMetrics().getHeight();
+        g.drawString("Robot(port="+simulatedRobot.getPort()+")", baseX, baseY+textHeight);
+
+        for(RobotSide side : RobotSide.values()) {
+            g.setColor(Color.BLACK); // on reset la couleur car le dessin des palets peut changer la couleur
+
+            List<CouleurPalet> elevator = simulatedRobot.getElevatorOrNull(side);
+            if(elevator == null)
+                continue;
+            int paletHeight = 20;
+            int paletSpacing = 2;
+            int paletWidth = 50;
+            int innerSpacing = 2;
+
+            int elevatorBottomY = baseY + textHeight + (paletHeight + paletSpacing) * 5 + innerSpacing;
+            g.drawLine(baseX, baseY+textHeight, baseX, elevatorBottomY);
+            g.drawLine(baseX, elevatorBottomY, baseX+paletWidth+innerSpacing*2, elevatorBottomY);
+            g.drawLine(baseX+paletWidth+innerSpacing*2, baseY+textHeight, baseX+paletWidth+innerSpacing*2, elevatorBottomY);
+
+            g.drawString(side.toString(), baseX, elevatorBottomY+textHeight);
+
+            // render palets
+            int paletYOffset = -paletHeight-innerSpacing*2;
+            for(CouleurPalet colour : elevator) {
+                switch (colour) {
+                    case ROUGE:
+                        g.setColor(Color.RED);
+                        break;
+
+                    case BLEU:
+                        g.setColor(Color.BLUE);
+                        break;
+
+                    case VERT:
+                        g.setColor(Color.GREEN);
+                        break;
+
+                    case GOLDENIUM:
+                        g.setColor(Color.ORANGE);
+                        break;
+
+                    case PAS_DE_PALET:
+                        g.setColor(Color.DARK_GRAY);
+                        break;
+                }
+                g.fillRect(baseX+innerSpacing, elevatorBottomY+paletYOffset+innerSpacing, paletWidth, paletHeight);
+                paletYOffset -= paletHeight+paletSpacing;
+            }
+
+            baseX += paletWidth + innerSpacing*2 + margin;
+        }
     }
 
     /** Affiche le background */
@@ -296,10 +371,12 @@ public class GraphicalInterface extends JFrame {
         clearScreen(g);
         drawBackground(g);
         drawObstacles(g);
+        int index = 0;
         for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
-            drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
+            drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface, index);
+            index++;
         }
         if (this.isDrawingPoints) {
             drawPoints(g);

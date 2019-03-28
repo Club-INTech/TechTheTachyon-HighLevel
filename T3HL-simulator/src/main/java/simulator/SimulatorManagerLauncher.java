@@ -2,8 +2,8 @@ package simulator;
 
 import data.Table;
 import locomotion.PathFollower;
+import utils.ConfigData;
 import utils.Container;
-import utils.RobotSide;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -290,6 +290,7 @@ public class SimulatorManagerLauncher extends Thread{
             e.printStackTrace();
         }
 
+        SimulatedConnectionManager debugServerConnection = new SimulatedConnectionManager((Integer) ConfigData.DEBUG_SIMULATEUR_PORT.getDefaultValue());
         // On instancie l'interface graphique
         this.graphicalInterface = new GraphicalInterface();
         this.graphicalInterface.setPathfollowerToShow(pathfollowerToShow, pathfollowerToShowPort);
@@ -313,6 +314,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.simulatorManager.setSimulatedHLConnectionManagers(this.simulatedHLConnectionManager);
         this.simulatorManager.setGraphicalInterface(this.graphicalInterface);
         this.simulatorManager.setSimulatedRobots(this.simulatedRobots);
+        this.simulatorManager.setDebugServerConnection(debugServerConnection);
         this.simulatorManager.launch();
         System.out.println("Manager de simulation instancié");
 

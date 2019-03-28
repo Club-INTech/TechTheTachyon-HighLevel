@@ -1,5 +1,6 @@
 package scripts;
 
+import connection.Connection;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
@@ -18,6 +19,7 @@ import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.Container;
 import utils.communication.KeepAlive;
+import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -81,7 +83,6 @@ public abstract class TestBaseHL {
             table.initObstacles();
             robot = getRobot();
             ScriptNamesMaster.reInit();
-            initState(container);
 
         } catch (ContainerException e) {
             e.printStackTrace();
@@ -115,7 +116,12 @@ public abstract class TestBaseHL {
         waitForLLConnection();
 
         try {
+            if(simulationMode) {
+                SimulatorDebug debug = container.getService(SimulatorDebug.class);
+                debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            }
             initState(container);
+
             Vec2 start = startPosition();
             XYO.getRobotInstance().update(start.getX(), start.getY(), 0.0 /* TODO Angle ?*/);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());

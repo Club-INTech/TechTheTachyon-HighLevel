@@ -80,15 +80,7 @@ public class Accelerateur extends Script {
                 actionBras(true);
                 robot.increaseScore(10);
             }
-            robot.followPathTo(new VectCartesian(-730, 460));
-            robot.turn(0);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
 
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             /**
              * Dire que le goldenium est libéré
              */

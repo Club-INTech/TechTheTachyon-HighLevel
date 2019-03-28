@@ -22,6 +22,7 @@ import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import pfg.config.Config;
+import utils.communication.SimulatorDebug;
 
 /**
  * robot.Robot secondaire !
@@ -30,8 +31,8 @@ import pfg.config.Config;
  */
 public class Slave extends Robot {
 
-    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
-        super(locomotion, orderWrapper, hookFactory);
+    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+        super(locomotion, orderWrapper, hookFactory, simulatorDebug);
         createRightElevator();
     }
 

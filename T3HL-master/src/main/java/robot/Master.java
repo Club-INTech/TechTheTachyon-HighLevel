@@ -23,6 +23,7 @@ import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import pfg.config.Config;
+import utils.communication.SimulatorDebug;
 
 import java.util.Stack;
 
@@ -33,8 +34,8 @@ import java.util.Stack;
  */
 public class Master extends Robot {
 
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
-        super(locomotion, orderWrapper, hookFactory);
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+        super(locomotion, orderWrapper, hookFactory, simulatorDebug);
         createLeftElevator();
         createRightElevator();
     }
