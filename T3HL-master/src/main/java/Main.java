@@ -35,10 +35,7 @@ import locomotion.PathFollower;
 import locomotion.Pathfinder;
 import orders.OrderWrapper;
 import robot.Master;
-import scripts.Script;
-import scripts.ScriptManager;
-import scripts.ScriptManagerMaster;
-import scripts.ScriptNamesMaster;
+import scripts.*;
 import simulator.GraphicalInterface;
 import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
@@ -99,18 +96,18 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
-            ai.start();
+            //ai.start();
 
-            while(ai.getAgent() != null) {
-                Thread.sleep(5);
-            }
+            //while(ai.getAgent() != null) {
+            //    Thread.sleep(5);
+            //}
 
 
 
 
             //Tests pour le lidar
             //robot.setPositionAndOrientation(new VectCartesian(0,1000), Math.PI/2);
-            Thread.sleep(10000000);
+            //Thread.sleep(10000000);
 
 
 
@@ -143,11 +140,13 @@ public class Main {
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             XYO.getRobotInstance().getPosition().setXY(-730, 470);
+
+            System.out.println(XYO.getRobotInstance().getPosition());
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             //robot.goto(0,400);
 
-            accelerateur.goToThenExecute(0);
+            zone_chaos_palets.goToThenExecute(0);
 
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///

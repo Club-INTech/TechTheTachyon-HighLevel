@@ -34,20 +34,9 @@ public class ScriptPaletsZoneChaos extends Script{
         signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
         signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
 
-        for (int i=1;i<positions.length;i++) {
-            if(i==1){
-                positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*221,PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-            }
-            if(i==2){
-                positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*221,PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-            }
-            if(i==3){
-                positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*221,PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
-            }
-
-        }
-
-
+        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*221,PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*221,PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*221,PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
 
 
         try{
@@ -57,21 +46,22 @@ public class ScriptPaletsZoneChaos extends Script{
             int numero = 0;
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
+                robot.turn(Math.PI/2);
                 if(signes[numero]==-1){
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE,true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
-                if (position == positions[0]){
-                    table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
-                }
-                if (position == positions[1]){
-                    table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
-                }
-                if (position == positions[2]){
-                    table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
-                }
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE,true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
+                    if (position == positions[0]){
+                        table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
+                    }
+                    if (position == positions[1]){
+                        table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
+                    }
+                    if (position == positions[2]){
+                        table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
+                    }
                 }
                 else{
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
@@ -92,8 +82,8 @@ public class ScriptPaletsZoneChaos extends Script{
                 numero=numero+1;
 
             }
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
         }catch (UnableToMoveException e) {
             e.printStackTrace();
         }

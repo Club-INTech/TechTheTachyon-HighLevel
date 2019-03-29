@@ -467,7 +467,9 @@ public class Table implements Service {
         if (obstacle instanceof MobileCircularObstacle) {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
-        this.fixedObstacles.remove(obstacle);
+        synchronized(this.fixedObstacles) {
+            this.fixedObstacles.remove(obstacle);
+        }
         Log.TABLE.debug("suppression de l'obstacle " + obstacle);
     }
 
