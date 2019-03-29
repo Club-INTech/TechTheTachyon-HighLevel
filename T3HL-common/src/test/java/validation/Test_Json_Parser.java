@@ -12,17 +12,14 @@ import org.json.simple.JSONObject;
 
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Container;
-import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import static java.lang.Math.toIntExact;
