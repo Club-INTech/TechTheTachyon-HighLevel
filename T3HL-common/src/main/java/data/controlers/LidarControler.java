@@ -24,6 +24,7 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
+import utils.container.ServiceThread;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectPolar;
@@ -36,7 +37,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class LidarControler extends Thread implements Service {
+public class LidarControler extends ServiceThread {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -46,12 +47,12 @@ public class LidarControler extends Thread implements Service {
     /**
      * Separateur entre deux points
      */
-    private static final String POINT_SEPARATOR         = ":";
+    private static final String POINT_SEPARATOR         = ";";
 
     /**
      * Separateur entre deux coordonnées d'un point
      */
-    private static final String COORDONATE_SEPARATOR    = ";";
+    private static final String COORDONATE_SEPARATOR    = ":";
 
     /**
      * Table à mettre à jour

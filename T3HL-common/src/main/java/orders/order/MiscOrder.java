@@ -23,7 +23,7 @@ package orders.order;
  *
  * @author rem
  */
-public enum MiscOrder {
+public enum MiscOrder implements Order {
 
     TEST("tests"),
     PING("ping"),

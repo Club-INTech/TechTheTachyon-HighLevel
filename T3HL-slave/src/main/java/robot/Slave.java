@@ -18,14 +18,11 @@
 
 package robot;
 
-import data.CouleurPalet;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import pfg.config.Config;
-import robot.Robot;
-
-import java.util.Stack;
+import utils.communication.SimulatorDebug;
 
 /**
  * robot.Robot secondaire !
@@ -34,24 +31,9 @@ import java.util.Stack;
  */
 public class Slave extends Robot {
 
-    private Stack<CouleurPalet> ascenseur;
-
-    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
-        super(locomotion, orderWrapper, hookFactory);
-        this.ascenseur= new Stack<>();
-    }
-    public int getNbpalets (){
-        return ascenseur.size();
-    }
-
-    public void pushPalet(){
-        if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET){
-        ascenseur.push(CouleurPalet.getCouleurPalRecu());
-        }
-    }
-
-    public void popPalet(){
-        ascenseur.pop();
+    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+        super(locomotion, orderWrapper, hookFactory, simulatorDebug);
+        createRightElevator();
     }
 
     @Override

@@ -127,6 +127,10 @@ public class SensorControler extends Thread implements Service {
                 Log.COMMUNICATION.debug("Got event from LL: "+data);
                 event = data.split(ARGUMENTS_SEPARATOR);
                 switch(event[0]) {
+                    case "pong":
+                        SensorState.LAST_PONG.setData(System.currentTimeMillis());
+                        break;
+
                     case "stoppedMoving":
                         SensorState.MOVING.setData(false);
                         break;
@@ -152,7 +156,7 @@ public class SensorControler extends Thread implements Service {
                             Log.COMMUNICATION.debug("Received confirmation for order ("+event[1]+")");
                             SensorState.ACTUATOR_ACTUATING.setData(false);
                         } else {
-                            Log.COMMUNICATION.critical("Erreur dans l'event 'actuatorFinished', il manque l'ordre!");
+                            Log.COMMUNICATION.critical("Erreur dans l'event 'confirmOrder', il manque l'ordre!");
                         }
                         break;
 

@@ -62,11 +62,11 @@ public class SocketClientInterface extends SocketInterface {
                     e.printStackTrace();
                 }
             }
-            if (System.currentTimeMillis()- start > SocketClientInterface.CONNECTION_TIMEOUT) {
-                Log.COMMUNICATION.critical(String.format("FAILED to connect to %s on port %d",ipAddress, port));
+            if (System.currentTimeMillis() - start > SocketClientInterface.CONNECTION_TIMEOUT) {
+                Log.COMMUNICATION.critical(String.format("FAILED to connect to %s on port %d", ipAddress, port));
             }
             else{
-                Log.COMMUNICATION.debug(String.format("SUCCESS to connect to %s on port %d",ipAddress, port));
+                Log.COMMUNICATION.debug(String.format("SUCCESS to connect to %s on port %d", ipAddress, port));
             }
         }).start();
     }

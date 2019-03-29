@@ -25,6 +25,7 @@ package locomotion;
  */
 public enum UnableToMoveReason {
     PHYSICALLY_STUCKED,
-    TRAJECTORY_OBSTRUCTED
+    TRAJECTORY_OBSTRUCTED,
+    NO_PATH
     ;
 }

@@ -38,7 +38,7 @@ public enum Log
     STRATEGY(true),
     LIDAR(true),
     PATHFINDING(true),
-    GRAPHE(true),
+    GRAPHE(false),
     HOOK(true),
     TABLE(true),
     AI(true),
@@ -153,12 +153,15 @@ public enum Log
 
         if(active & printLogs)
         {
-            StackTraceElement elem = Thread.currentThread().getStackTrace()[3];
+            Thread currentThread = Thread.currentThread();
+            StackTraceElement elem = currentThread.getStackTrace()[3];
             this.toLog.setLength(0);
             this.toLog.append(color)
             .append(hour)
             .append(" ")
             .append(this.name())
+            .append("/")
+            .append(currentThread.getName())
             .append(" ")
             .append(elem.getClassName())
             .append(",")

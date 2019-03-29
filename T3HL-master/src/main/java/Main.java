@@ -16,21 +16,45 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import ai.AIService;
+import ai.MoveToPointAction;
+import ai.ScriptAction;
+import ai.goap.Action;
+import ai.goap.ActionGraph;
+import ai.goap.Agent;
+import ai.goap.EnvironmentInfo;
 import connection.ConnectionManager;
+import data.Graphe;
 import data.Table;
 import data.XYO;
+import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
-import locomotion.UnableToMoveException;
+import data.graphe.Node;
+import locomotion.PathFollower;
+import locomotion.Pathfinder;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import robot.Master;
-import scripts.*;
+import scripts.Script;
+import scripts.ScriptManager;
+import scripts.ScriptManagerMaster;
+import scripts.ScriptNamesMaster;
+import simulator.GraphicalInterface;
+import simulator.SimulatorManager;
+import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.Container;
+import utils.communication.KeepAlive;
 import utils.container.ContainerException;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author nayth
+ */
 public class Main {
 
     private static Container container;
@@ -39,9 +63,12 @@ public class Main {
     private static OrderWrapper orderWrapper;
     private static Listener listener;
     private static SensorControler sensorControler;
+    private static LidarControler lidarControler;
     private static Table table;
     private static Master robot;
     private static SimulatorManagerLauncher simulatorLauncher;
+    // Regardez, c'est GLaDOS!
+    private static AIService ai;
     private static GraphicalInterface interfaceGraphique;
     private static MontlheryController controller;
 
@@ -49,6 +76,12 @@ public class Main {
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
+        }
+
+        try {
+            initAI();
+        } catch (ContainerException e) {
+            e.printStackTrace();
         }
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
@@ -66,6 +99,23 @@ public class Main {
             Thread.sleep(2000);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             Thread.sleep(1000);
+            ai.start();
+
+            while(ai.getAgent() != null) {
+                Thread.sleep(5);
+            }
+
+
+
+
+            //Tests pour le lidar
+            //robot.setPositionAndOrientation(new VectCartesian(0,1000), Math.PI/2);
+            Thread.sleep(10000000);
+
+
+
+
+
 
             /*while(robot != null) {
                 robot.computeNewPositionAndOrientation();
@@ -83,6 +133,7 @@ public class Main {
             try {
                 robot.followPathTo(new VectCartesian(0,1000));
                 robot.turn(Math.PI);
+                robot.moveToPoint(new VectCartesian(0,500));
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }*/
@@ -94,7 +145,7 @@ public class Main {
             XYO.getRobotInstance().getPosition().setXY(-730, 470);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-
+            //robot.goto(0,400);
 
             accelerateur.goToThenExecute(0);
 
@@ -122,6 +173,8 @@ public class Main {
             paletsx3.goToThenExecute(1);
             accelerateur.goToThenExecute(1);
 
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -129,13 +182,106 @@ public class Main {
     }
 
     private static void waitForLLConnection() {
-        while(!connectionManager.areConnectionsInitiated()) {
+        while (!connectionManager.areConnectionsInitiated()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static void initAI() throws ContainerException {
+        // TODO: mettre la création du graphe à un autre endroit
+
+        Table tableSansZoneDepart = new Table();
+        Graphe grapheSansZoneDepart = new Graphe(tableSansZoneDepart);
+        Pathfinder pathfinder = new Pathfinder(grapheSansZoneDepart);
+        grapheSansZoneDepart.updateConfigNoInit(container.getConfig());
+        tableSansZoneDepart.updateConfig(container.getConfig());
+        tableSansZoneDepart.initObstacles();
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletBleuDroite());
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletRougeDroite());
+        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletVertDroite());
+        tableSansZoneDepart.updateTableAfterFixedObstaclesChanges();
+
+        Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0) {
+            {
+                effects.put("PaletsX6", true);
+            }
+        };
+
+        Action paletsX3Action = new ScriptAction(ScriptNamesMaster.PALETS3, 0) {
+            {
+                effects.put("PaletsX3", true);
+            }
+        };
+
+        Action zoneDepart = new ScriptAction(ScriptNamesMaster.PALETS_ZONE_DEPART, 0) {
+            {
+                effects.put("ZoneDepart", true);
+            }
+
+            @Override
+            public boolean modifiesTable() {
+                return true;
+            }
+
+            @Override
+            protected void applyChangesToEnvironment(EnvironmentInfo info) {
+                super.applyChangesToEnvironment(info);
+                info.getSpectre().switchTableModel(tableSansZoneDepart, grapheSansZoneDepart, pathfinder);
+            }
+        };
+
+        Action accelerateur = new ScriptAction(ScriptNamesMaster.ACCELERATEUR, 0) {
+            {
+                effects.put("Accelerateur", true);
+            }
+        };
+        ActionGraph graph = ai.getGraph();
+        Agent agent = ai.getAgent();
+        graph.node(paletsX6Action);
+        graph.node(paletsX3Action);
+        graph.node(zoneDepart);
+        graph.node(accelerateur);
+
+        // TODO: remove, test only
+        int nMoves = 20;//8-4;
+        Graphe grapheDeBase = table.getGraphe();
+        for (int i = 0; i < nMoves; i++) {
+            int randomIndex = (int) Math.floor(Math.random()*grapheDeBase.getNodes().size());
+            Node n = grapheDeBase.getNodes().get(randomIndex);
+            double x = n.getPosition().getX();
+            double y = n.getPosition().getY();
+            Vec2 pos = new VectCartesian((int)x, (int)y);
+            int finalI = i;
+            Action action = new MoveToPointAction(pos) {
+                @Override
+                protected void applyChangesToEnvironment(EnvironmentInfo info) {
+                    super.applyChangesToEnvironment(info);
+                    int movesDone = (int) info.getState().get("movesDone");
+                    info.getState().put("movesDone", movesDone+1);
+                }
+
+                @Override
+                public String toString() {
+                    return "MoveTo("+this.aim+") #"+(finalI +1)+" (done: "+executed+")";
+                }
+            };
+            graph.node(action);
+        }
+
+        Map<String, Object> goalState = new HashMap<>();
+        goalState.put("PaletsX6", true);
+        goalState.put("PaletsX3", true);
+        goalState.put("ZoneDepart", true);
+        goalState.put("Accelerateur", true);
+
+
+        goalState.put("movesDone", nMoves);
+        EnvironmentInfo goal = new EnvironmentInfo(new XYO(new VectCartesian(0,0),0.0), goalState, null);
+        agent.setCurrentGoal(goal);
     }
 
     private static void initServices(){
@@ -150,8 +296,13 @@ public class Main {
             sensorControler.start();
             table = container.getService(Table.class);
             table.initObstacles();
+            lidarControler = container.getService(LidarControler.class);
+            lidarControler.start();
             robot = container.getService(Master.class);
+            KeepAlive keepAliveService = container.getService(KeepAlive.class);
+            keepAliveService.start();
             controller = new MontlheryController(robot, orderWrapper);
+            ai = container.getService(AIService.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -159,17 +310,31 @@ public class Main {
 
     private static void initSimulator(){
         simulatorLauncher = new SimulatorManagerLauncher();
-        simulatorLauncher.setLLports(new int[]{(int)ConfigData.MASTER_LL_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setHLports(new int[]{(int)ConfigData.SLAVE_SIMULATEUR.getDefaultValue()});
-        simulatorLauncher.setColorblindMode(false);
+
+        //On set tous les LL qui sont simulés
+        simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+
+        //On set tous les HL qui recevront des messages
+        simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+
+        //On set le lidar s'il ne tourne pas
+        //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
+
+        try {
+            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+        simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        simulatorLauncher.waitForLaunchCompletion();
         SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
         interfaceGraphique = simulatorManager.getGraphicalInterface();
     }

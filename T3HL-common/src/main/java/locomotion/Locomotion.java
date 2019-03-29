@@ -18,10 +18,12 @@
 
 package locomotion;
 
+import ai.AIService;
 import data.Graphe;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
+import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -30,6 +32,8 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -69,6 +73,8 @@ public class Locomotion implements Service {
      */
     private ConcurrentLinkedQueue<Vec2> pointsQueue;
     private ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue;
+
+    private AIService ai;
 
     /**
      * Seuil de distance par rapport à un point pour savoir si un point est considéré comme dans l'autre robot
@@ -152,7 +158,7 @@ public class Locomotion implements Service {
         Node start;
         Node aim;
         Node next;
-        ArrayList<Vec2> path;
+        LinkedList<Vec2> path;
         UnableToMoveException exception;
 
         /* Algo :
@@ -174,21 +180,26 @@ public class Locomotion implements Service {
          *      Signaler un graphe non mis à jour
          *   4. Clean le graphe : point d'arrivé & de départ
          */
-        if (table.isPositionInFixedObstacle(point) || table.isPositionInFixedObstacle(xyo.getPosition())) {
-            Log.LOCOMOTION.warning("Points de départ " + xyo.getOrientation() + " ou d'arriver " + point + " dans un obstacle");
-        }
 
-        graphe.writeLock().lock();
-        start = graphe.addProvisoryNode(xyo.getPosition().clone());
-        aim = graphe.addProvisoryNode(point.clone());
-        graphe.writeLock().unlock();
+        Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(xyo.getPosition());
+        obstacleBelowPosition.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle));
+        Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(point);
+        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + point + " dans l'obstacle " + obstacle));
+
+        try {
+            graphe.writeLock().lock();
+            start = graphe.addProvisoryNode(xyo.getPosition().clone());
+            aim = graphe.addProvisoryNode(point);
+        } finally {
+            graphe.writeLock().unlock();
+        }
         pointsQueue.clear();
         exceptionsQueue.clear();
 
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold) {
             try {
-                graphe.readLock().lock();
                 try {
+                    graphe.readLock().lock();
                     path = pathfinder.findPath(start, aim);
                 }
                 finally {
@@ -204,6 +215,7 @@ public class Locomotion implements Service {
                     pointsQueue.addAll(path);
                 }
                 while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold) {
+                //    System.out.println("xyo: "+xyo.getPosition()+" / aim: "+aim.getPosition());
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
@@ -213,12 +225,14 @@ public class Locomotion implements Service {
                                 // TODO: c'est ton pote, on fait quoi?
                             }
                             else { // c'est pas ton pote!
-                                graphe.writeLock().lock();
                                 try {
+                                    graphe.writeLock().lock();
                                     graphe.removeProvisoryNode(start);
                                     start = graphe.addProvisoryNode(xyo.getPosition().clone());
                                     graphe.update();
                                     graphe.setUpdated(true);
+                                    if(ai != null)
+                                        ai.getAgent().reportMovementError(exception);
                                 }
                                 finally {
                                     graphe.writeLock().unlock();
@@ -236,22 +250,17 @@ public class Locomotion implements Service {
 
                 graphe.setUpdated(false);
             } catch (NoPathFound e) {
+                // TODO : Compléter
                 e.printStackTrace();
-                // TODO : Compéter
+                throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
             }
-        }
-
-        graphe.writeLock().lock();
-        try {
-            graphe.removeProvisoryNode(start);
-            graphe.removeProvisoryNode(aim);
-        }
-        finally {
-            graphe.writeLock().unlock();
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+    }
 
+    public void setAI(AIService ai) {
+        this.ai = ai;
     }
 
     /**
@@ -262,4 +271,11 @@ public class Locomotion implements Service {
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
     }
 
+    public Table getTable() {
+        return table;
+    }
+
+    public Graphe getGraphe() {
+        return graphe;
+    }
 }

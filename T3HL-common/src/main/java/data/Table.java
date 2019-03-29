@@ -18,10 +18,7 @@
 
 package data;
 
-import data.table.MobileCircularObstacle;
-import data.table.Obstacle;
-import data.table.StillCircularObstacle;
-import data.table.StillCircularRectangularObstacle;
+import data.table.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -31,6 +28,7 @@ import utils.math.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -125,93 +123,107 @@ public class Table implements Service {
     /**
      * Initialisation des obstacles fixes de la table
      */
-    public void initObstacles() {
-        /*Vec2 vecteurChaosDroiteCentre = new VectCartesian(500,1050);
-        Obstacle zoneChaosDroite = new StillCircularObstacle(vecteurChaosDroiteCentre, 330);
-        this.addFixedObstacle(zoneChaosDroite);
-        this.zoneChaosDroite=zoneChaosDroite;
-
-        Vec2 vecteurChaosGaucheCentre = new VectCartesian(-500,1050);
-        Obstacle zoneChaosGauche = new StillCircularObstacle(vecteurChaosGaucheCentre, 330);
-        this.addFixedObstacle(zoneChaosGauche);
-        this.zoneChaosGauche=zoneChaosGauche;*/
-
+    public void initObstaclesNoInit() {
         Vec2 vecteurPaletRougeUnZoneChaosDroite = PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletRougeUnZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosDroite, 219);
-        this.addFixedObstacle(paletRougeUnZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosDroite);
         this.paletRedUnZoneChaosPurple = paletRougeUnZoneChaosDroite;
 
         Vec2 vecteurPaletRougeDeuxZoneChaosDroite = PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletRougeDeuxZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosDroite, 219);
-        this.addFixedObstacle(paletRougeDeuxZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosDroite);
         this.paletRedDeuxZoneChaosPurple = paletRougeDeuxZoneChaosDroite;
 
         Vec2 vecteurPaletRougeUnZoneChaosGauche = PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletRougeUnZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosGauche, 219);
-        this.addFixedObstacle(paletRougeUnZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosGauche);
         this.paletRedUnZoneChaosYellow = paletRougeUnZoneChaosGauche;
 
         Vec2 vecteurPaletRougeDeuxZoneChaosGauche = PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletRougeDeuxZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosGauche, 219);
-        this.addFixedObstacle(paletRougeDeuxZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosGauche);
         this.paletRedDeuxZoneChaosYellow = paletRougeDeuxZoneChaosGauche;
 
         Vec2 vecteurPaletVertZoneChaosDroite = PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletVertZoneChaosDroite = new StillCircularObstacle(vecteurPaletVertZoneChaosDroite, 219);
-        this.addFixedObstacle(paletVertZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletVertZoneChaosDroite);
         this.paletGreenZoneChaosPurple = paletVertZoneChaosDroite;
 
         Vec2 vecteurPaletVertZoneChaosGauche = PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletVertZoneChaosGauche = new StillCircularObstacle(vecteurPaletVertZoneChaosGauche, 219);
-        this.addFixedObstacle(paletVertZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletVertZoneChaosGauche);
         this.paletGreenZoneChaosYellow = paletVertZoneChaosGauche;
 
         Vec2 vecteurPaletBleuZoneChaosDroite = PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletBleuZoneChaosDroite = new StillCircularObstacle(vecteurPaletBleuZoneChaosDroite, 219);
-        this.addFixedObstacle(paletBleuZoneChaosDroite);
+        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosDroite);
         this.paletBlueZoneChaosPurple = paletBleuZoneChaosDroite;
 
         Vec2 vecteurPaletBleuZoneChaosGauche = PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletBleuZoneChaosGauche = new StillCircularObstacle(vecteurPaletBleuZoneChaosGauche, 219);
-        this.addFixedObstacle(paletBleuZoneChaosGauche);
+        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosGauche);
         this.paletBlueZoneChaosYellow = paletBleuZoneChaosGauche;
 
-
         Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
-        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, 180);
+        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, robotRay);
         Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
-        this.addFixedObstacle(rampe);
+        this.addFixedObstacleNoGraphChange(rampe);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, 180);
+        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, robotRay);
         Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
-        this.addFixedObstacle(paletSupportRampeDroite);
+        this.addFixedObstacleNoGraphChange(paletSupportRampeDroite);
 
         Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600, 18, 180);
+        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600, 18, robotRay);
         Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
-        this.addFixedObstacle(paletSupportRampeGauche);
+        this.addFixedObstacleNoGraphChange(paletSupportRampeGauche);
 
         Vec2 vecteurSeparationRampeCentre = new VectCartesian(0, 1478);
-        CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, 180);
+        CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, robotRay);
         Obstacle separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
-        this.addFixedObstacle(separationRampe);
+        this.addFixedObstacleNoGraphChange(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0, 18);                                 //arrondi
-        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000, 36, 180);
+        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000, 36, robotRay);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
-        this.addFixedObstacle(accelerateur);
+        this.addFixedObstacleNoGraphChange(accelerateur);
 
         Vec2 vecteurGoldeniumDroiteCentre = new VectCartesian(736, 46);
-        CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 22, 180);
+        CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 22, robotRay);
         Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
-        this.addFixedObstacle(goldeniumDroite);
+        this.addFixedObstacleNoGraphChange(goldeniumDroite);
 
         Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736, 46);
-        CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 22, 180);
+        CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 22, robotRay);
         Obstacle goldeniumGauche = new StillCircularRectangularObstacle(formeGoldeniumGauche);
         this.addFixedObstacle(goldeniumGauche);
 
+        /**
+         * Bord de la table !
+         */
+
+        Vec2 vecteurTableBordDroit = new VectCartesian(1500,1000);
+        Rectangle formeTableBordDroit = new Rectangle(vecteurTableBordDroit, 2*robotRay,2000);
+        Obstacle tableBordDroit = new StillRectangularObstacle(formeTableBordDroit);
+        this.addFixedObstacleNoGraphChange(tableBordDroit);
+
+        Vec2 vecteurTableBordGauche = new VectCartesian(-1500,1000);
+        Rectangle formeTableBordGauche = new Rectangle(vecteurTableBordGauche, 2*robotRay,2000);
+        Obstacle tableBordGauche = new StillRectangularObstacle(formeTableBordGauche);
+        this.addFixedObstacleNoGraphChange(tableBordGauche);
+
+        Vec2 vecteurTableBordHaut = new VectCartesian(0,2000);
+        Rectangle formeTableBordHaut = new Rectangle(vecteurTableBordHaut, 3000,2*robotRay);
+        Obstacle tableBordHaut = new StillRectangularObstacle(formeTableBordHaut);
+        this.addFixedObstacleNoGraphChange(tableBordHaut);
+
+        Vec2 vecteurTableBordBas = new VectCartesian(0,0);
+        Rectangle formeTableBordBas = new Rectangle(vecteurTableBordBas, 3000,2*robotRay);
+        Obstacle tableBordBas = new StillRectangularObstacle(formeTableBordBas);
+        this.addFixedObstacleNoGraphChange(tableBordBas);
+
+        this.addFixedObstacleNoGraphChange(goldeniumGauche);
 
         /**
          * Couleur représente la couleur de la zone se situant derrière le palet !
@@ -219,41 +231,48 @@ public class Table implements Service {
 
         Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000, 450);
         Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre, 199);
-        this.addFixedObstacle(paletRougeDroite);
+        this.addFixedObstacleNoGraphChange(paletRougeDroite);
         this.paletRougeDroite = paletRougeDroite;
 
         Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000, 750);
         Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre, 199);
-        this.addFixedObstacle(paletVertDroite);
+        this.addFixedObstacleNoGraphChange(paletVertDroite);
         this.paletVertDroite = paletVertDroite;
 
         Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000, 1050);
         Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre, 199);
-        this.addFixedObstacle(paletBleuDroite);
+        this.addFixedObstacleNoGraphChange(paletBleuDroite);
         this.paletBleuDroite = paletBleuDroite;
 
         Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000, 450);
         Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre, 199);
-        this.addFixedObstacle(paletRougeGauche);
+        this.addFixedObstacleNoGraphChange(paletRougeGauche);
         this.paletRougeGauche = paletRougeGauche;
 
         Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000, 750);
         Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre, 199);
-        this.addFixedObstacle(paletVertGauche);
+        this.addFixedObstacleNoGraphChange(paletVertGauche);
         this.paletVertGauche = paletVertGauche;
 
         Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000, 1050);
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre, 199);
-        this.addFixedObstacle(paletBleuGauche);
+        this.addFixedObstacleNoGraphChange(paletBleuGauche);
         this.paletBleuGauche = paletBleuGauche;
+    }
 
+    /**
+     * Initialisation des obstacles fixes de la table
+     */
+    public void initObstacles() {
+        initObstaclesNoInit();
+        this.updateTableAfterFixedObstaclesChanges();
     }
 
     /**
      * Met à jour la table à partir d'une liste de points représentant le centre les obstacles détectés
      * @param points    liste des centres des obstacles
      */
-    public void updateMobileObstacles(ArrayList<Vec2> points) {
+    public void updateMobileObstacles(List<Vec2> points) {
         MobileCircularObstacle obstacle;
         Iterator<Vec2> pointIterator = points.iterator();
         Vec2 point;
@@ -294,9 +313,12 @@ public class Table implements Service {
         }
 
         if (this.graphe != null) {
-            this.graphe.writeLock().lock();
-            this.graphe.update();
-            this.graphe.writeLock().unlock();
+            try {
+                this.graphe.writeLock().lock();
+                this.graphe.update();
+            } finally {
+                this.graphe.writeLock().unlock();
+            }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }
@@ -317,6 +339,23 @@ public class Table implements Service {
             }
         }
         return false;
+    }
+
+    /**
+     * Trouve l'obstacle potentiel dans la position
+     * @param point la position à tester
+     * @return <pre>Optional.empty()</pre> s'il n'y a aucun obstacle, <pre>Optional.of(some)</pre> avec <pre>some</pre> un obstacle s'il y en a un
+     */
+    public Optional<Obstacle> findFixedObstacleInPosition(Vec2 point) {
+        Iterator<Obstacle> iterator = fixedObstacles.iterator();
+        Obstacle obstacle;
+        while (iterator.hasNext()) {
+            obstacle = iterator.next();
+            if (obstacle.isInObstacle(point)) {
+                return Optional.of(obstacle);
+            }
+        }
+        return Optional.empty();
     }
 
     /**
@@ -387,12 +426,7 @@ public class Table implements Service {
         return false;
     }
 
-    /**
-     * Ajoute un obstacle fixe à la table et met à jour le graphe
-     * ATTENTION : méthode coûteuse car le graphe doit être recalculé
-     * @param obstacle nouvel obstacle
-     */
-    public void addFixedObstacle(Obstacle obstacle) {
+    public void addFixedObstacleNoGraphChange(Obstacle obstacle) {
         if (obstacle instanceof MobileCircularObstacle) {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
@@ -400,13 +434,41 @@ public class Table implements Service {
             this.fixedObstacles.add(obstacle);
             Log.TABLE.debug("ajout de l'obstacle " + obstacle);
         }
+    }
+
+    /**
+     * Ajoute un obstacle fixe à la table et met à jour le graphe
+     * ATTENTION : méthode coûteuse car le graphe doit être recalculé
+     * @param obstacle  nouvel obstacle
+     */
+    public void addFixedObstacle(Obstacle obstacle) {
+        addFixedObstacleNoGraphChange(obstacle);
+        updateTableAfterFixedObstaclesChanges();
+    }
+
+    public void updateTableAfterFixedObstaclesChanges() {
         if (this.graphe != null) {
-            this.graphe.writeLock().lock();
-            this.graphe.reInit();
-            this.graphe.writeLock().unlock();
+            try {
+                this.graphe.writeLock().lock();
+                this.graphe.reInit();
+            } finally {
+                this.graphe.writeLock().unlock();
+            }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
         }
+    }
+
+    /**
+     * Retire un obstacle fixe de la table sans metre à jour le graphe
+     * @param obstacle
+     */
+    public void removeFixedObstacleNotReInit(Obstacle obstacle) {
+        if (obstacle instanceof MobileCircularObstacle) {
+            throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
+        }
+        this.fixedObstacles.remove(obstacle);
+        Log.TABLE.debug("suppression de l'obstacle " + obstacle);
     }
 
     /**
@@ -415,11 +477,7 @@ public class Table implements Service {
      * @param obstacle  obstacle à retirer
      */
     public void removeFixedObstacle(Obstacle obstacle) {
-        if (obstacle instanceof MobileCircularObstacle) {
-            throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
-        }
-        this.fixedObstacles.remove(obstacle);
-        Log.TABLE.debug("suppression de l'obstacle " + obstacle);
+        removeFixedObstacleNotReInit(obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {
@@ -539,5 +597,17 @@ public class Table implements Service {
 
     public Obstacle getPaletBlueZoneChaosYellow() {
         return paletBlueZoneChaosYellow;
+    }
+
+    public void removeAllChaosObstacles() {
+        removeFixedObstacle(paletRedUnZoneChaosPurple);
+        removeFixedObstacle(paletRedDeuxZoneChaosPurple);
+        removeFixedObstacle(paletGreenZoneChaosPurple);
+        removeFixedObstacle(paletBlueZoneChaosPurple);
+
+        removeFixedObstacle(paletRedUnZoneChaosYellow);
+        removeFixedObstacle(paletRedDeuxZoneChaosYellow);
+        removeFixedObstacle(paletGreenZoneChaosYellow);
+        removeFixedObstacle(paletBlueZoneChaosYellow);
     }
 }

@@ -28,14 +28,17 @@ import utils.math.Vec2;
  */
 public class NoPathFound extends Exception {
 
-    private final Vec2 start;
     /**
      * Point auquel on veut aller
      */
     private Vec2 aim;
 
     /**
-     * @param start
+     * Point à partir duquel on part
+     */
+    private Vec2 start;
+
+    /**
      * @param aim   point de visé du pathfinder
      */
     public NoPathFound(Vec2 start, Vec2 aim) {

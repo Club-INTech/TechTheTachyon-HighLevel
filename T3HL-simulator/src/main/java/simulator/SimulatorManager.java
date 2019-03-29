@@ -1,5 +1,10 @@
-import exceptions.OrderException;
+package simulator;
+
+import connection.Connection;
+import simulator.exceptions.OrderException;
+import data.CouleurPalet;
 import orders.order.*;
+import utils.RobotSide;
 import utils.math.VectCartesian;
 
 import java.util.HashMap;
@@ -7,8 +12,10 @@ import java.util.HashMap;
 public class SimulatorManager extends Thread {
 
     //Attributs pouvant être modifiés avant le lancement
-    private int[] LLports;
-    private int[] HLports;
+    private int LLMasterPort;
+    private int LLSlavePort;
+    private int HLMasterPort;
+    private int HLSlavePort;
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManagers;
     private HashMap<Integer, SimulatedConnectionManager> simulatedHLConnectionManagers;
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
@@ -16,6 +23,7 @@ public class SimulatorManager extends Thread {
 
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched = false;
+    private SimulatedConnectionManager debugServerConnection;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -28,25 +36,42 @@ public class SimulatorManager extends Thread {
      *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
      */
     private void initDefaultPassedParameters(){
-        this.LLports=new int[]{};
-        this.HLports=new int[]{};
+        this.LLMasterPort=0;
+        this.LLSlavePort=0;
+        this.HLMasterPort=0;
+        this.HLSlavePort=0;
         this.graphicalInterface=null;
         this.simulatedRobots=null;
         this.simulatedLLConnectionManagers=new HashMap<>();
         this.simulatedHLConnectionManagers=null;
     }
 
-    /** Setter des ports utilisés pour parler au LL */
-    void setLLports(int[] LLports){
-        if (canParametersBePassed()) {
-            this.LLports = LLports;
+
+    /** Setter du port utilisé pour parler au LL master */
+    void setLLMasterPort(int LLMasterPort){
+        if (canParametersBePassed()){
+            this.LLMasterPort=LLMasterPort;
         }
     }
 
-    /** Setter des ports utilisés pour parler entre les HL */
-    void setHLports(int[] HLports){
-        if (canParametersBePassed()) {
-            this.HLports = HLports;
+    /** Setter du port utilisé pour parler au LL slave */
+    void setLLSlavePort(int LLSlavePort){
+        if (canParametersBePassed()){
+            this.LLSlavePort=LLSlavePort;
+        }
+    }
+
+    /** Setter du port utilisé pour parler au HL master */
+    void setHLMasterPort(int HLMasterPort){
+        if (canParametersBePassed()){
+            this.HLMasterPort=HLMasterPort;
+        }
+    }
+
+    /** Setter du port utilisé pour parler au HL slave */
+    void setHLSlavePort(int HLSlavePort){
+        if (canParametersBePassed()){
+            this.HLSlavePort=HLSlavePort;
         }
     }
 
@@ -84,6 +109,15 @@ public class SimulatorManager extends Thread {
         }
     }
 
+    /**
+     * Set le serveur de debug pour que les robots simulés envoient des infos complémentaires
+     */
+    void setDebugServerConnection(SimulatedConnectionManager debugServerConnection) {
+        if(canParametersBePassed()) {
+            this.debugServerConnection = debugServerConnection;
+        }
+    }
+
     /** Permet de savoir si on a lancé le robot simulé */
     private boolean canParametersBePassed(){
         if (this.isLaunched){
@@ -112,23 +146,28 @@ public class SimulatorManager extends Thread {
         while (true) {
 
             //On tryUpdate la position du robot
-            for (int port : LLports) {
+            for (int port : simulatedLLConnectionManagers.keySet()) {
                 //On gère les messages d'entrée
                 lastMessage = this.simulatedLLConnectionManagers.get(port).getLastReceivedMessage();
                 if (lastMessage != null) {
                     handleMessageLL(lastMessage, simulatedRobots.get(port));
                 }
-
                 simulatedRobots.get(port).tryUpdate();
             }
 
             //On écoute les ports du HL pour transmettre un éventuel message
-            for (int port : HLports) {
+            for (int port : simulatedHLConnectionManagers.keySet()) {
                 //On gère les messages d'entrée
                 lastMessage = this.simulatedHLConnectionManagers.get(port).getLastReceivedMessage();
                 if (lastMessage != null) {
                     handleMessageHL(lastMessage, port);
                 }
+            }
+
+            // On écoute le port de débug
+            String lastDebugMessage = debugServerConnection.getLastReceivedMessage();
+            if(lastDebugMessage != null) {
+                handleMessageDebug(lastDebugMessage);
             }
 
             //On tryUpdate l'interface graphique
@@ -141,6 +180,24 @@ public class SimulatorManager extends Thread {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    /**
+     * Gère les messages reçus des HL simulés
+     * @param message le message de debug
+     */
+    private void handleMessageDebug(String message) {
+        String[] data = message.split(" ");
+        int senderPort = Integer.parseInt(data[0]);
+        String type = data[1];
+        switch (type) {
+            case "elevatorContents":
+            {
+                RobotSide side = RobotSide.valueOf(data[2]);
+                simulatedRobots.get(senderPort).setElevatorContents(side, data, 3);
+            }
+            break;
         }
     }
 
@@ -206,6 +263,15 @@ public class SimulatorManager extends Thread {
                         }
                     }).start();
                 }
+                else if(testOrder(arguments, MiscOrder.PING, 1)) {
+                    robot.sendPong();
+                }
+                else if(testOrder(arguments, "torqueBras", 2)) {
+                    // TODO: non random?
+                    // si on attend une couleur de palet, on en envoie une au hasard :)
+                    int rand = (int) (Math.random() * CouleurPalet.values().length);
+                    CouleurPalet.setCouleurPalRecu(CouleurPalet.values()[rand].name().toLowerCase());
+                }
                 else {
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
                 }
@@ -222,17 +288,17 @@ public class SimulatorManager extends Thread {
     /* ================================= Gère les messages qui sont envoyés vers le HL ============================= */
     /** Transmet les messages qui sont reçus pour le HL de l'autre robot à l'autre robot*/
     private void handleMessageHL(String m, int port){
-        if (this.HLports.length==2){
+        if (this.HLMasterPort != 0 && this.HLSlavePort!=0){
             StringBuilder mWithCarryReturn = new StringBuilder(m);
             mWithCarryReturn.append("\n");
-            if (port==this.HLports[0]){
+            if (port==this.HLMasterPort){
                 // possibilités de traitements et d'exploitation des infos du message avant sa transmission
-                this.simulatedHLConnectionManagers.get(this.HLports[1]).sendMessage(mWithCarryReturn.toString());
+                this.simulatedHLConnectionManagers.get(this.HLSlavePort).sendMessage(mWithCarryReturn.toString());
             }
             else{
                 // possibilités de traitements et d'exploitation des infos du message avant sa transmission
                 System.out.print(mWithCarryReturn);
-                this.simulatedHLConnectionManagers.get(this.HLports[0]).sendMessage(mWithCarryReturn.toString());
+                this.simulatedHLConnectionManagers.get(this.HLMasterPort).sendMessage(mWithCarryReturn.toString());
             }
         }
     }
@@ -266,6 +332,7 @@ public class SimulatorManager extends Thread {
         else{
             return false;
         }
+
     }
 
     /** Parser de float
@@ -296,7 +363,7 @@ public class SimulatorManager extends Thread {
 
     /* ================================================= Getters ============================================== */
     /** Getter de l'interface graphique */
-    GraphicalInterface getGraphicalInterface(){
+    public GraphicalInterface getGraphicalInterface(){
         return this.graphicalInterface;
     }
 }

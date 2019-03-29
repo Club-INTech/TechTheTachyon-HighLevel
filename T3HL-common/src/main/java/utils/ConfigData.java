@@ -78,14 +78,18 @@ public enum ConfigData implements ConfigInfo
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
-    MASTER_LL_SIMULATEUR(10001),
-    SLAVE_SIMULATEUR(20001),
-    MASTER_SIMULATEUR(20002),
+    LL_MASTER_SIMULATEUR(10001),
+    HL_SLAVE_SIMULATEUR(20001),
+    HL_MASTER_SIMULATEUR(20002),
+    DEBUG_SIMULATEUR_PORT(19999), //
+
+    PING_INTERVAL(300), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
+    PING_TIMEOUT(1500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
 
     /**
      * Dimensions du robot
      */
-    ROBOT_RAY(220),
+    ROBOT_RAY(190),
     BUDDY_RAY(150),
     ENNEMY_RAY(220),
 
@@ -97,8 +101,8 @@ public enum ConfigData implements ConfigInfo
     /**
      * Paramètres du Graphe
      */
-    NBR_NOEUDS_X(30),
-    NBR_NOEUDS_Y(20),
+    NBR_NOEUDS_X(/*30*/45),
+    NBR_NOEUDS_Y(/*20*/30),
     NBR_NOEUDS_CIRCLE(12),
     ESPACEMENT_CIRCLE(1.2),
 

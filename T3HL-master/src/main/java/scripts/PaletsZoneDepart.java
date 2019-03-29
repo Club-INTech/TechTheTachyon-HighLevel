@@ -5,7 +5,6 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -61,9 +60,16 @@ public class PaletsZoneDepart extends Script {
             // TODO: juste pour le testo
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, true);
+
+            table.removeFixedObstacleNotReInit(table.getPaletRougeDroite());
+            table.removeFixedObstacleNotReInit(table.getPaletVertDroite());
+            table.removeFixedObstacleNotReInit(table.getPaletBleuDroite());
+
+            table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+
 
     }
 
