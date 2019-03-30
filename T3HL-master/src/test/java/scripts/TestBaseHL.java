@@ -26,7 +26,7 @@ import utils.math.Vec2;
 public abstract class TestBaseHL {
 
     private ConnectionManager connectionManager;
-    private Container container;
+    protected Container container;
     protected OrderWrapper orderWrapper;
     protected Robot robot;
 
@@ -39,18 +39,18 @@ public abstract class TestBaseHL {
     public abstract Vec2 startPosition();
 
     @Test
-    public void simulate() {
+    public void simulate() throws Exception {
         setup(true);
         action();
     }
 
     @Test
-    public void runOnRobot() {
+    public void runOnRobot() throws Exception {
         setup(false);
         action();
     }
 
-    public abstract void action();
+    public abstract void action() throws Exception;
 
     @After
     public void cleanup() {
@@ -68,7 +68,7 @@ public abstract class TestBaseHL {
         }
     }
 
-    private void setup(boolean simulationMode) {
+    protected void setup(boolean simulationMode) {
         ConfigData.SIMULATION.setDefaultValue(simulationMode);
         container = Container.getInstance("robot.Master");
         try {

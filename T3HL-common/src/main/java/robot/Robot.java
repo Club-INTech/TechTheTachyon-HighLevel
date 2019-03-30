@@ -228,8 +228,12 @@ public abstract class Robot implements Service {
     public void computeNewPositionAndOrientation(Sick... significantSicks){
         this.orderWrapper.getSickData();
         XYO newXYO = Sick.getNewXYO();
-        this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
 
+        // remplacement de la position dans le HL
+        XYO.getRobotInstance().update(newXYO.getPosition().getX(), newXYO.getPosition().getY(), newXYO.getOrientation());
+
+        // remplacement de la position dans le LL
+        this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
     }
 
     /**
