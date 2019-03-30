@@ -125,7 +125,7 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Debug connection ready!");
             }
             else {
-                // FIXME :) connectionManager.initConnections(Connection.LIDAR_DATA, Connection.BALISE);
+                // FIXME :) connectionManager.initConnections(Connection.BALISE);
                 Log.COMMUNICATION.debug("Lidar");
                 Log.COMMUNICATION.debug("Balise");
                 if (master) {

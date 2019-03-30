@@ -1,9 +1,9 @@
 package scripts;
 
-import connection.Connection;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
+import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
 import locomotion.PathFollower;
@@ -75,10 +75,17 @@ public abstract class TestBaseHL {
 //            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
             orderWrapper = container.getService(OrderWrapper.class);
-            Listener listener = container.getService(Listener.class);
-            listener.start();
             SensorControler sensorControler = container.getService(SensorControler.class);
             sensorControler.start();
+
+            if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
+                LidarControler lidarControler = container.getService(LidarControler.class);
+                lidarControler.start();
+            }
+
+            Listener listener = container.getService(Listener.class);
+            listener.start();
+
             Table table = container.getService(Table.class);
             table.initObstacles();
             robot = getRobot();

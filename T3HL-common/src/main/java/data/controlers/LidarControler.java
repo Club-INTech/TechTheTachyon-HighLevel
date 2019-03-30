@@ -23,12 +23,14 @@ import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.communication.CopyIOThread;
 import utils.container.Service;
 import utils.container.ServiceThread;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectPolar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -89,7 +91,15 @@ public class LidarControler extends ServiceThread {
     @Override
     public void run() {
         Log.LIDAR.debug("Controller lancé : en attente du listener...");
-        // TODO : lancer le processus du Lidar !
+        Log.LIDAR.debug("Démarrage du processus LiDAR_UST_10LX...");
+        try {
+            Process lidarProcess = new ProcessBuilder("../bin/LiDAR_UST_10LX").start();
+            new CopyIOThread(lidarProcess, Log.LIDAR).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.LIDAR.debug("Processus OK");
+
         while (!listener.isAlive()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
