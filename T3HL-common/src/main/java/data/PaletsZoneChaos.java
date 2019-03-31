@@ -18,7 +18,7 @@ public enum PaletsZoneChaos {
     RED_1_ZONE_CHAOS_YELLOW(7,CouleurPalet.ROUGE,false,false,new VectCartesian(-461,1050)),
     RED_2_ZONE_CHAOS_YELLOW(8,CouleurPalet.ROUGE,false,false,new VectCartesian(-539,1050)),
     BLUE_ZONE_CHAOS_YELLOW(9,CouleurPalet.BLEU,false,false,new VectCartesian(-500,1011)),
-    GREEN_ZONE_CHAOS_YELLOW(10,CouleurPalet.VERT,false,false,new VectCartesian(-500,1089)),
+    GREEN_ZONE_CHAOS_YELLOW(10,CouleurPalet.VERT,false,false,new VectCartesian(-502,1089)),
     ;
 
     private int id;

@@ -18,6 +18,7 @@
 
 package robot;
 
+import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
@@ -31,8 +32,13 @@ import orders.Speed;
 import orders.order.MontlheryOrder;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.RobotSide;
+import utils.communication.SimulatorDebug;
 import utils.container.Service;
 import utils.math.Vec2;
+
+import java.util.Objects;
+import java.util.Stack;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -42,6 +48,10 @@ import utils.math.Vec2;
  */
 public abstract class Robot implements Service {
 
+    /**
+     * Permet d'envoyer des infos de debug
+     */
+    private SimulatorDebug simulatorDebug;
     public int score ;
 
 
@@ -66,13 +76,17 @@ public abstract class Robot implements Service {
     protected XYO xyo;
     private long LOOP_SLEEP_TIME;
 
+    private Stack<CouleurPalet> leftElevator;
+    private Stack<CouleurPalet> rightElevator;
+
     /**
      * @param locomotion
      *              service de mouvement du robot
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory) {
+    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+        this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
@@ -211,11 +225,15 @@ public abstract class Robot implements Service {
     /**
      * Méthode qui permet le recalage avec les sicks
      */
-    public void computeNewPositionAndOrientation(Sick... significantSicks){
+    public void computeNewPositionAndOrientation(){
         this.orderWrapper.getSickData();
         XYO newXYO = Sick.getNewXYO();
-        this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
 
+        // remplacement de la position dans le HL
+        XYO.getRobotInstance().update(newXYO.getPosition().getX(), newXYO.getPosition().getY(), newXYO.getOrientation());
+
+        // remplacement de la position dans le LL
+        this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
     }
 
     /**
@@ -227,8 +245,114 @@ public abstract class Robot implements Service {
         this.orderWrapper.sendString(MontlheryOrder.MAX_TRANSLATION_SPEED.getOrderStr()+" 90"); // 30 mm/s
     }
 
-    public XYO getXyo() { return this.xyo;}
+    // Gestion des ascenseurs
 
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsDroits() {
+        Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return rightElevator.size();
+    }
+
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsGauches() {
+        Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        return leftElevator.size();
+    }
+
+    // TODO: FIXME
+    /**
+     * Initialises l'ascenseur de droite
+     */
+    protected void createRightElevator() {
+        this.rightElevator = new Stack<>();
+    }
+
+    /**
+     * Initialises l'ascenseur de gauche
+     */
+    protected void createLeftElevator() {
+        this.leftElevator = new Stack<>();
+    }
+
+    /**
+     * Envoie une mise à jour de la liste de palets au simulateur si jamais il est connecté
+     */
+    private void sendElevatorUpdate() {
+        if(leftElevator != null)
+            simulatorDebug.sendElevatorContents(RobotSide.LEFT, leftElevator);
+        if(rightElevator != null)
+            simulatorDebug.sendElevatorContents(RobotSide.RIGHT, rightElevator);
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletDroit(CouleurPalet palet) {
+        //if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+        // ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        rightElevator.push(palet);
+        sendElevatorUpdate();
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletGauche(CouleurPalet palet) {
+        // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
+        //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
+        //}
+        Objects.requireNonNull(leftElevator, "Tentative d'insérer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        leftElevator.push(palet);
+        sendElevatorUpdate();
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletDroit() {
+        Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        CouleurPalet result = rightElevator.pop();
+        sendElevatorUpdate();
+        return result;
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletGauche() {
+        Objects.requireNonNull(leftElevator, "Tentative de retirer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
+        CouleurPalet result = leftElevator.pop();
+        sendElevatorUpdate();
+        return result;
+    }
+
+    /**
+     * Renvoies l'ascenseur de gauche, ou 'null' s'il n'existe pas
+     */
+    public Stack<CouleurPalet> getLeftElevatorOrNull() {
+        return leftElevator;
+    }
+
+    /**
+     * Renvoies l'ascenseur de droite, ou 'null' s'il n'existe pas
+     */
+    public Stack<CouleurPalet> getRightElevatorOrNull() {
+        return rightElevator;
+    }
+
+    public XYO getXyo() { return this.xyo;}
 
     @Override
     public void updateConfig(Config config) {

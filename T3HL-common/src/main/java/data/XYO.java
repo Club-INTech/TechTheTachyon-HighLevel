@@ -69,7 +69,7 @@ public class XYO {
      */
     public static XYO getRobotInstance() {
         if (robotXYO == null) {
-            robotXYO = new XYO(new VectCartesian(1200,300), Math.PI);
+            robotXYO = new XYO(new VectCartesian(200000,200000), Math.PI);
         }
         return robotXYO;
     }
@@ -85,5 +85,10 @@ public class XYO {
     }
     public double getOrientation() {
         return orientation;
+    }
+
+    @Override
+    public String toString() {
+        return "XYO(xy="+position+", o="+orientation+")";
     }
 }

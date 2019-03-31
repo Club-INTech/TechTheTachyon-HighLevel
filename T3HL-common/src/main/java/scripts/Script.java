@@ -69,6 +69,7 @@ public abstract class Script implements Service {
     public void goToThenExecute(Integer version) {
         System.out.println("I'm alive");
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
+        System.out.println(entryPosition);
         System.out.println("Still alive");
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe

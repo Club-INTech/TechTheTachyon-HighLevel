@@ -1,6 +1,8 @@
 package scripts;
 
 import utils.Container;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class TestZoneDeDepart extends TestScriptBase {
 
@@ -18,4 +20,10 @@ public class TestZoneDeDepart extends TestScriptBase {
     public int[] versionsToTest() {
         return new int[] {0};
     }
+
+    @Override
+    public Vec2 startPosition() {
+        return new VectCartesian(-730, 470);
+    }
+
 }

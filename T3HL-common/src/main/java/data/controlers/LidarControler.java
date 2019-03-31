@@ -18,16 +18,19 @@
 
 package data.controlers;
 
+import connection.Connection;
 import data.Table;
 import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.communication.CommunicationException;
+import utils.communication.CopyIOThread;
 import utils.container.Service;
-import utils.math.Calculs;
-import utils.math.Vec2;
-import utils.math.VectPolar;
+import utils.container.ServiceThread;
+import utils.math.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -36,7 +39,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author rem
  */
-public class LidarControler extends Thread implements Service {
+public class LidarControler extends ServiceThread {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -46,12 +49,12 @@ public class LidarControler extends Thread implements Service {
     /**
      * Separateur entre deux points
      */
-    private static final String POINT_SEPARATOR         = ":";
+    private static final String POINT_SEPARATOR         = ";";
 
     /**
      * Separateur entre deux coordonnées d'un point
      */
-    private static final String COORDONATE_SEPARATOR    = ";";
+    private static final String COORDONATE_SEPARATOR    = ":";
 
     /**
      * Table à mettre à jour
@@ -88,7 +91,15 @@ public class LidarControler extends Thread implements Service {
     @Override
     public void run() {
         Log.LIDAR.debug("Controller lancé : en attente du listener...");
-        // TODO : lancer le processus du Lidar !
+        Log.LIDAR.debug("Démarrage du processus LiDAR_UST_10LX...");
+        try {
+            Process lidarProcess = new ProcessBuilder("../bin/LiDAR_UST_10LX").start();
+            new CopyIOThread(lidarProcess, Log.LIDAR).start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.LIDAR.debug("Processus OK");
+
         while (!listener.isAlive()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
@@ -96,11 +107,17 @@ public class LidarControler extends Thread implements Service {
                 e.printStackTrace();
             }
         }
+        try {
+            Connection.LIDAR_DATA.send("R");
+        } catch (CommunicationException e) {
+            e.printStackTrace();
+        }
+
         Log.LIDAR.debug("Controller opérationnel");
 
         String[] points;
-        ArrayList<Vec2> Vec2s = new ArrayList<>();
-        Vec2 Vec2;
+        ArrayList<Vec2> mobileObstacles = new ArrayList<>();
+        Rectangle tableBB = new Rectangle(new VectCartesian(0,1000), 1500, 1000);
         while (!Thread.currentThread().isInterrupted()) {
             while (messageQueue.peek() == null) {
                 try {
@@ -110,18 +127,21 @@ public class LidarControler extends Thread implements Service {
                 }
             }
             points = messageQueue.poll().split(POINT_SEPARATOR);
-            Vec2s.clear();
+            mobileObstacles.clear();
             for (String point : points) {
-                Vec2 = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
+                Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
-                Vec2.setA(Calculs.modulo(Vec2.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
-                Vec2.plus(XYO.getRobotInstance().getPosition());
+                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
+                obstacleCenter.plus(XYO.getRobotInstance().getPosition());
                 if (symetrie) {
-                    Vec2.setX(-Vec2.getX());
+                    obstacleCenter.setX(-obstacleCenter.getX());
                 }
-                Vec2s.add(Vec2);
+                // on ajoute l'obstacle que s'il est dans la table
+//                if(tableBB.isInShape(obstacleCenter)) {
+                    mobileObstacles.add(obstacleCenter);
+  //              }
             }
-            table.updateMobileObstacles(Vec2s);
+            table.updateMobileObstacles(mobileObstacles);
             synchronized (table.getGraphe()) {
                 table.getGraphe().setUpdated(true);
             }

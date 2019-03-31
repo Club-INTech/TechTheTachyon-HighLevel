@@ -1,9 +1,6 @@
 package scripts;
 
-import robot.Master;
-import robot.Robot;
-import utils.Container;
-import utils.container.ContainerException;
+import utils.math.Vec2;
 
 public abstract class TestScriptBase extends TestBaseHL {
 
@@ -17,14 +14,7 @@ public abstract class TestScriptBase extends TestBaseHL {
         }
     }
 
-    private Robot getRobot() throws ContainerException {
-        Container container = Container.getInstance("robot.Master");
-
-        return container.getService(Master.class);
-    }
-
     public abstract ScriptNamesMaster getScript();
 
     public abstract int[] versionsToTest();
-
 }

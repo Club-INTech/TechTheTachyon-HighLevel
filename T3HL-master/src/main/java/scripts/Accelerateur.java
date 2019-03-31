@@ -76,26 +76,18 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
             ((Master) robot).popPaletDroit();
-            while (((Master) robot).getNbpaletsdroits() > 0) {
+            while (((Master) robot).getNbPaletsDroits() > 0) {
                 actionBras(true);
                 robot.increaseScore(10);
             }
-            robot.followPathTo(new VectCartesian(-730, 460));
-            robot.turn(0);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
 
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             /**
              * Dire que le goldenium est libéré
              */
             GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(Math.PI);
             robot.increaseScore(10);
-            while(((Master) robot).getNbpaletsgauches() > 0){
+            while(((Master) robot).getNbPaletsGauches() > 0){
                 actionBras(false);
                 robot.increaseScore(10);
             }

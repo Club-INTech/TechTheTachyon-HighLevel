@@ -1,41 +1,64 @@
 package simulator;
 
+import data.CouleurPalet;
 import data.Table;
+import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
+import locomotion.PathFollower;
+import robot.Robot;
+import utils.RobotSide;
 import utils.math.*;
 import utils.math.Rectangle;
 import utils.math.Shape;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GraphicalInterface extends JFrame {
 
+    private static final float ASPECT_RATIO = 16f/9f;
+
+    /**
+     * Police utilisée pour écrire à l'écran
+     */
+    private final Font font;
+
     //Attributs qui peuvent être modifiés avant le lancement
     private HashMap<Integer, SimulatedRobot> simulatedRobots;
     private Table table;
     private boolean colorblindMode;
     private boolean isDrawingPoints;
+
+    /**
+     * Dessin des chemins que les robots doivent suivre?
+     */
+    private boolean isDrawingPaths;
+    /**
+     * Dessin du graphe?
+     */
+    private boolean isDrawingGraph;
     private boolean isCreatingObstacleWithMouse;
 
     //Attributs graphiques
     private BufferedImage backgroundImage;
     private JPanel panel;
-    private int WIDTH_FRAME = 1200;      //in pixels
-    private int HEIGHT_FRAME = 800;      //in pixels
+    private int TABLE_PIXEL_WIDTH = 980;      //in pixels
+    private int STACKS_PIXEL_WIDTH = 300;
+    private int TABLE_PIXEL_HEIGHT = (int) ((TABLE_PIXEL_WIDTH+STACKS_PIXEL_WIDTH)/ASPECT_RATIO);      //in pixels
     private Color DEFAULT_COLOR = new Color(0,0,0,255);
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
     private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
     private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
+    private Color PATH_COLOR = new Color(255,0,0,255);
 
     //Attributs pas graphiques
     private ArrayList<Obstacle> fixedObstacles;
@@ -49,11 +72,18 @@ public class GraphicalInterface extends JFrame {
 
     //Permet de savoir si cette instance est démarrée
     private boolean isLaunched = false;
+    private PathFollower pathfollowerToShow;
+
+    private int pathfollowerToShowPort;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
     GraphicalInterface() {
         this.initDefaultPassedParameters();
+
+        this.fixedObstacles = new ArrayList<Obstacle>();
+        this.mobileObstacles = new ArrayList<MobileCircularObstacle>();
+
         this.pointsToDraw=new ArrayList<Vec2>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
@@ -62,17 +92,19 @@ public class GraphicalInterface extends JFrame {
             e.printStackTrace();
         }
         this.setTitle("Simulateur");
+        this.font = new Font("Consolas", Font.PLAIN, 15);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.panel = new JPanel(){
             @Override
             protected void paintComponent(Graphics graphics) {
+                graphics.setFont(font);
                 updateGraphics(graphics);
                 Toolkit.getDefaultToolkit().sync();
             }
         };
         this.panel.setDoubleBuffered(true);
         this.panel.setVisible(true);
-        this.panel.setPreferredSize(new Dimension(this.WIDTH_FRAME, this.HEIGHT_FRAME));
+        this.panel.setPreferredSize(new Dimension(this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT));
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
@@ -85,6 +117,8 @@ public class GraphicalInterface extends JFrame {
     private void initDefaultPassedParameters(){
         this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
         this.isDrawingPoints=true;
+        this.isDrawingGraph=true;
+        this.isDrawingPaths=true;
         this.colorblindMode=false;
         this.isCreatingObstacleWithMouse=false;
 
@@ -173,17 +207,94 @@ public class GraphicalInterface extends JFrame {
 
     /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
-    private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
+    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter, int index){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
         g.drawLine(x, y, Math.round(x+(float)Math.cos(orientation)*diameter), Math.round(y-(float)Math.sin(orientation)*diameter));
+
+        if(this.isDrawingPaths) {
+            if(pathfollowerToShow != null && simulatedRobot.getPort() == pathfollowerToShowPort) {
+                g.setColor(PATH_COLOR);
+                Vec2 prev = transformTableCoordsToInterfaceCoords(simulatedRobot.getPosition());
+                Vec2 target = transformTableCoordsToInterfaceCoords(simulatedRobot.getTargetPosition());
+                g.drawLine(prev.getX(), prev.getY(), target.getX(), target.getY());
+                prev = target;
+                for(Vec2 p : pathfollowerToShow.getQueue()) {
+                    Vec2 screenPos = transformTableCoordsToInterfaceCoords(p);
+                    g.drawLine(prev.getX(), prev.getY(), screenPos.getX(), screenPos.getY());
+                    prev = screenPos;
+                }
+            }
+        }
+        drawElevators(g, simulatedRobot, index);
+
         g.setColor(DEFAULT_COLOR);
+    }
+
+    private void drawElevators(Graphics g, SimulatedRobot simulatedRobot, int index) {
+        g.setColor(Color.BLACK);
+
+        int totalElevatorPanelHeight = 100;
+        int baseY = index*totalElevatorPanelHeight;
+        int margin = 10;
+        int baseX = TABLE_PIXEL_WIDTH + margin;
+        int textHeight = g.getFontMetrics().getHeight();
+        g.drawString("Robot(port="+simulatedRobot.getPort()+")", baseX, baseY+textHeight);
+
+        for(RobotSide side : RobotSide.values()) {
+            g.setColor(Color.BLACK); // on reset la couleur car le dessin des palets peut changer la couleur
+
+            List<CouleurPalet> elevator = simulatedRobot.getElevatorOrNull(side);
+            if(elevator == null)
+                continue;
+            int paletHeight = 20;
+            int paletSpacing = 2;
+            int paletWidth = 50;
+            int innerSpacing = 2;
+
+            int elevatorBottomY = baseY + textHeight + (paletHeight + paletSpacing) * 5 + innerSpacing;
+            g.drawLine(baseX, baseY+textHeight, baseX, elevatorBottomY);
+            g.drawLine(baseX, elevatorBottomY, baseX+paletWidth+innerSpacing*2, elevatorBottomY);
+            g.drawLine(baseX+paletWidth+innerSpacing*2, baseY+textHeight, baseX+paletWidth+innerSpacing*2, elevatorBottomY);
+
+            g.drawString(side.toString(), baseX, elevatorBottomY+textHeight);
+
+            // render palets
+            int paletYOffset = -paletHeight-innerSpacing*2;
+            for(CouleurPalet colour : elevator) {
+                switch (colour) {
+                    case ROUGE:
+                        g.setColor(Color.RED);
+                        break;
+
+                    case BLEU:
+                        g.setColor(Color.BLUE);
+                        break;
+
+                    case VERT:
+                        g.setColor(Color.GREEN);
+                        break;
+
+                    case GOLDENIUM:
+                        g.setColor(Color.ORANGE);
+                        break;
+
+                    case PAS_DE_PALET:
+                        g.setColor(Color.DARK_GRAY);
+                        break;
+                }
+                g.fillRect(baseX+innerSpacing, elevatorBottomY+paletYOffset+innerSpacing, paletWidth, paletHeight);
+                paletYOffset -= paletHeight+paletSpacing;
+            }
+
+            baseX += paletWidth + innerSpacing*2 + margin;
+        }
     }
 
     /** Affiche le background */
     private void drawBackground(Graphics g){
-        g.drawImage(this.backgroundImage,0,0, this.WIDTH_FRAME, this.HEIGHT_FRAME, null);
+        g.drawImage(this.backgroundImage,0,0, this.TABLE_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT, null);
     }
 
     /** Affiche les obstacles */
@@ -252,7 +363,7 @@ public class GraphicalInterface extends JFrame {
 
     /** Efface l'affichage */
     private void clearScreen(Graphics g){
-        g.clearRect(0,0,this.WIDTH_FRAME, this.HEIGHT_FRAME);
+        g.clearRect(0,0,this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT);
     }
 
     /** Met à jour l'affichage */
@@ -260,32 +371,55 @@ public class GraphicalInterface extends JFrame {
         clearScreen(g);
         drawBackground(g);
         drawObstacles(g);
+        int index = 0;
         for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
-            drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
+            drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface, index);
+            index++;
         }
         if (this.isDrawingPoints) {
             drawPoints(g);
         }
+
+        if(this.isDrawingGraph) {
+            drawGraphe(g);
+        }
+
+    }
+
+    private void drawGraphe(Graphics g) {
+        int pointDiameter=10;
+        g.setColor(POINTS_TO_DRAW_COLOR);
+        try {
+            table.getGraphe().readLock().lock();
+            for(Node node : table.getGraphe().getNodes()) {
+                Vec2 vecteur = node.getPosition();
+                vecteur = transformTableCoordsToInterfaceCoords(vecteur);
+                g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
+            }
+        } finally {
+            table.getGraphe().readLock().unlock();
+        }
+        g.setColor(DEFAULT_COLOR);
     }
 
     /* ============ Méthodes de transformation des coordonnées entre la table et la fenêtre graphique ============= */
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
     private int transformTableDistanceToInterfaceDistance(int distanceOnTable){
-        return Math.round(distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE));
+        return Math.round(distanceOnTable * (this.TABLE_PIXEL_WIDTH / (float)this.WIDTH_TABLE));
     }
 
     /** Transforme une distance de la table pour qu'elle soit affichée correction sur l'interface */
     private float transformTableDistanceToInterfaceDistance(float distanceOnTable){
-        return distanceOnTable * (this.WIDTH_FRAME / (float)this.WIDTH_TABLE);
+        return distanceOnTable * (this.TABLE_PIXEL_WIDTH / (float)this.WIDTH_TABLE);
     }
 
     /** Transforme les coordonnées de la table pour qu'ils soient affichés correction sur l'interface */
     private Vec2 transformTableCoordsToInterfaceCoords(int xOnTable, int yOnTable) {
         return new VectCartesian(
-                (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.WIDTH_FRAME / (float) this.WIDTH_TABLE),
-                (this.HEIGHT_TABLE - yOnTable) * (this.HEIGHT_FRAME / (float) this.HEIGHT_TABLE)
+                (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.TABLE_PIXEL_WIDTH / (float) this.WIDTH_TABLE),
+                (this.HEIGHT_TABLE - yOnTable) * (this.TABLE_PIXEL_HEIGHT / (float) this.HEIGHT_TABLE)
         );
     }
 
@@ -299,8 +433,8 @@ public class GraphicalInterface extends JFrame {
     /** Transforme les coordonnées de l'interface pour qu'ils correspondent à ceux de la table */
     private Vec2 transformInterfaceCoordsToTableCoords(int xOnInterface, int yOnInterface){
         return new VectCartesian(
-                (xOnInterface - (this.WIDTH_FRAME / 2.0f)) * (this.WIDTH_TABLE / (float) this.WIDTH_FRAME),
-                (this.HEIGHT_FRAME - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.HEIGHT_FRAME)
+                (xOnInterface - (this.TABLE_PIXEL_WIDTH / 2.0f)) * (this.WIDTH_TABLE / (float) this.TABLE_PIXEL_WIDTH),
+                (this.TABLE_PIXEL_HEIGHT - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.TABLE_PIXEL_HEIGHT)
         );
     }
 
@@ -374,5 +508,30 @@ public class GraphicalInterface extends JFrame {
             MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
             POINTS_TO_DRAW_COLOR = new Color(255,255,255,255);
         }
+    }
+
+    public boolean isDrawingPaths() {
+        return isDrawingPaths;
+    }
+
+    public void setDrawingPaths(boolean drawingPaths) {
+        isDrawingPaths = drawingPaths;
+    }
+
+    public boolean isDrawingGraph() {
+        return isDrawingGraph;
+    }
+
+    public void setDrawingGraph(boolean drawingGraph) {
+        isDrawingGraph = drawingGraph;
+    }
+
+    public void setPathfollowerToShow(PathFollower follower, int port) {
+        this.pathfollowerToShow = follower;
+        this.pathfollowerToShowPort = port;
+    }
+
+    public PathFollower getPathfollowerToShow() {
+        return pathfollowerToShow;
     }
 }
