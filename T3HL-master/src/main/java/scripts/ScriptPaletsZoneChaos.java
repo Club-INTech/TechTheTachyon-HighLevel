@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.PaletsZoneChaos;
 import data.Table;
 import locomotion.UnableToMoveException;
@@ -55,12 +56,15 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
                     if (position == positions[0]){
                         table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
+                        robot.pushPaletDroit(CouleurPalet.ROUGE);
                     }
                     if (position == positions[1]){
                         table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
+                        robot.pushPaletDroit(CouleurPalet.ROUGE);
                     }
                     if (position == positions[2]){
                         table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
+                        robot.pushPaletDroit(CouleurPalet.VERT);
                     }
                 }
                 else{
@@ -71,12 +75,15 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                     if (position == positions[0]){
                         table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
                     if (position == positions[1]){
                         table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
                     if (position == positions[2]){
                         table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
+                        robot.pushPaletGauche(CouleurPalet.VERT);
                     }
                 }
                 numero=numero+1;
