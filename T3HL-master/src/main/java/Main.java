@@ -94,12 +94,13 @@ public class Main {
             //zone_depart_palets.goToThenExecute(1);
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
-            XYO.getRobotInstance().getPosition().setXY(-730, 470);
+            XYO.getRobotInstance().getPosition().setXY(-730, 450);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             //robot.goto(0,400);
 
-            accelerateur.goToThenExecute(0);
+            //accelerateur.goToThenExecute(0);
+            //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
 
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
