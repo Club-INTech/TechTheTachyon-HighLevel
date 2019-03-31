@@ -1,6 +1,7 @@
 package scripts;
 
 import data.Sick;
+import data.XYO;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -11,9 +12,20 @@ import utils.math.VectCartesian;
  * Test du recalage avec les SICK
  */
 public class TestSICK extends TestBaseHL {
+
+    @Override
+    protected void setup(boolean simulationMode) {
+        super.setup(simulationMode);
+    }
+
     @Override
     public void initState(Container container) throws ContainerException {
 
+    }
+
+    @Override
+    public double startOrientation() {
+        return Math.PI;
     }
 
     @Override
@@ -28,7 +40,8 @@ public class TestSICK extends TestBaseHL {
             // impossible de tester en mode simulation
         } else {
             // test avec tous les SICK
-            robot.computeNewPositionAndOrientation(Sick.values());
+            robot.computeNewPositionAndOrientation();
+            System.out.println(XYO.getRobotInstance());
         }
     }
 }

@@ -86,4 +86,9 @@ public class XYO {
     public double getOrientation() {
         return orientation;
     }
+
+    @Override
+    public String toString() {
+        return "XYO(xy="+position+", o="+orientation+")";
+    }
 }
