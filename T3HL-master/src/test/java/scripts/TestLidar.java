@@ -24,8 +24,15 @@ public class TestLidar extends TestBaseHL {
     }
 
     @Override
+    public double startOrientation() {
+        // coin droit de la table
+        return Math.PI/2;
+    }
+
+    @Override
     public Vec2 startPosition() {
-        return new VectCartesian(0,500);
+        // coin droit de la table
+        return new VectCartesian(-260,590);
     }
 
     @Override
@@ -43,8 +50,8 @@ public class TestLidar extends TestBaseHL {
                 System.out.println("[=== === === === === === ===]");
             }
             try {
-                // Attente de 1s avant de redonner les positions
-                Thread.sleep(1000);
+                // Attente de 5s avant de redonner les positions
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

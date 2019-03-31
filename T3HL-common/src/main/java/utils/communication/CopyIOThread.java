@@ -18,9 +18,9 @@ public class CopyIOThread extends Thread {
     public CopyIOThread(Process process, Log output) {
         super(process.toString());
         setDaemon(true);
+        this.output = output;
         this.stdoutReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
         this.errReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        this.output = output;
     }
 
     @Override

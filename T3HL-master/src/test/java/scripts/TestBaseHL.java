@@ -38,6 +38,10 @@ public abstract class TestBaseHL {
 
     public abstract Vec2 startPosition();
 
+    public double startOrientation() {
+        return 0.0;
+    }
+
     @Test
     public void simulate() throws Exception {
         setup(true);
@@ -130,7 +134,7 @@ public abstract class TestBaseHL {
             initState(container);
 
             Vec2 start = startPosition();
-            XYO.getRobotInstance().update(start.getX(), start.getY(), 0.0 /* TODO Angle ?*/);
+            XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
