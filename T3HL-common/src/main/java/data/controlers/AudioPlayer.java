@@ -58,29 +58,35 @@ public class AudioPlayer {
     }
 
     public void play() {
-        try {
-            audioLine.open(audioFormat);
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-            return;
-        }
+        Thread thread = new Thread(){
+            public void run(){
+                System.out.println("Audio Thread Running");
+                try {
+                    audioLine.open(audioFormat);
+                } catch (LineUnavailableException e) {
+                    e.printStackTrace();
+                    return;
+                }
 
-        audioLine.start();
+                audioLine.start();
 
-        try {
-            byte bytes[] = new byte[1024];
-            int bytesRead=0;
-            while (((bytesRead = audioInputStream.read(bytes, 0, bytes.length)) != -1)) {
+                try {
+                    byte bytes[] = new byte[1024];
+                    int bytesRead=0;
+                    while (((bytesRead = audioInputStream.read(bytes, 0, bytes.length)) != -1)) {
 
-                audioLine.write(bytes, 0, bytesRead);
+                        audioLine.write(bytes, 0, bytesRead);
+                    }
+                } catch (IOException io) {
+                    io.printStackTrace();
+                    return;
+                }
+
+                audioLine.close();
+                System.out.println("Audio Thread Finished");
             }
-        } catch (IOException io) {
-            io.printStackTrace();
-            return;
-        }
+        };
 
-        audioLine.close();
+        thread.start();
     }
-
-
 }
