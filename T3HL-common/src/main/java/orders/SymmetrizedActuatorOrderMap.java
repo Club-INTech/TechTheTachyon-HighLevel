@@ -73,7 +73,8 @@ public class SymmetrizedActuatorOrderMap implements Service {
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_INTERMEDIAIRE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
-
+        correspondenceMap.put(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
     }
 
     /**

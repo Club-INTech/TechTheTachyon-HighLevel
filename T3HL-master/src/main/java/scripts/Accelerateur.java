@@ -20,38 +20,44 @@ public class Accelerateur extends Script {
      */
 
     private int xEntry = -170;
-    private int yEntry = 370;
+    private int yEntry = 340;
 
     /**
      * constante
      */
     private int distavance = 0;
     private int palet = 90;
+    private final int ecartement = 20;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
     }
 
-    private void actionBras(boolean cotedroite) {
-        try{
+    private void actionBras(boolean cotedroite, boolean monteAsc /*TODO: tmp*/) {
+        try {
             if(!cotedroite) {
-
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-                robot.moveLengthwise(palet+10, false);
+                if(monteAsc) {
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                }
+                robot.moveLengthwise(-palet-ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-palet-10, false);
+                robot.moveLengthwise(palet+ecartement, false);
+                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE);
                 ((Master) robot).popPaletGauche();
             } else {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                robot.moveLengthwise(palet+10, false);
+                if(monteAsc) {
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                }
+                robot.moveLengthwise(palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-palet-10,false);
+                robot.moveLengthwise(-palet-ecartement,false);
+                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
                 ((Master) robot).popPaletDroit();
@@ -70,16 +76,19 @@ public class Accelerateur extends Script {
             System.out.println("debug 3");
             robot.turn(0);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
+            robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
             ((Master) robot).popPaletDroit();
             while (((Master) robot).getNbPaletsDroits() > 0) {
-                actionBras(true);
+                actionBras(true, true);
                 robot.increaseScore(10);
             }
+
 
             /**
              * Dire que le goldenium est libéré
@@ -87,9 +96,11 @@ public class Accelerateur extends Script {
             GameState.GOLDENIUM_LIBERE.setData(true);
             robot.turn(Math.PI);
             robot.increaseScore(10);
-            while(((Master) robot).getNbPaletsGauches() > 0){
-                actionBras(false);
+            boolean first = false;
+            while(((Master) robot).getNbPaletsGauches() > 0) {
+                actionBras(false, first);
                 robot.increaseScore(10);
+                first = true;
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

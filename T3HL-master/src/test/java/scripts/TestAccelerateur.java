@@ -33,6 +33,6 @@ public class TestAccelerateur extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-730, 470);
+        return new VectCartesian(-750, 440);
     }
 }

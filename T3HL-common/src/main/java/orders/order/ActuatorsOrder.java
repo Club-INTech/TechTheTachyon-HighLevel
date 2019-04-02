@@ -47,6 +47,8 @@ public enum ActuatorsOrder implements Order {
     ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE("bal left"),
     ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE("brasRecule right"),
     ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE("brasRecule left"),
+    POUSSE_LE_PALET_BRAS_DROIT("pushPalet right"),
+    POUSSE_LE_PALET_BRAS_GAUCHE("pushPalet left"),
     MONTE_ASCENCEUR_DROIT_DE_UN_PALET("up right"),
     MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET("up left"),
     DESCEND_ASCENSEUR_DROIT_DE_UN_PALET("down right"),
