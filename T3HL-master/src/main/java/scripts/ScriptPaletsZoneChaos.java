@@ -7,6 +7,7 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
 import utils.Log;
 import utils.math.Circle;
 import utils.math.Shape;
@@ -20,9 +21,12 @@ public class ScriptPaletsZoneChaos extends Script{
 
 
     private int xEntry = 0;
-    private int yEntry = 355;
+    private int yEntry = 450;
     private Vec2[] positions = new VectCartesian[3];
     VectCartesian positionentre = new VectCartesian(xEntry,yEntry);
+    int rayonRobot = 0;
+    int rayonPalet= 38;
+
 
 
 
@@ -35,9 +39,9 @@ public class ScriptPaletsZoneChaos extends Script{
         signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
         signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
 
-        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*221,PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*221,PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*221,PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*(rayonRobot+rayonPalet),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
 
 
         try{
@@ -106,5 +110,7 @@ public class ScriptPaletsZoneChaos extends Script{
     public void finalize(Exception e) { }
 
     @Override
-    public void updateConfig(Config config) { }
+    public void updateConfig(Config config) {
+        rayonRobot=config.getInt(ConfigData.ROBOT_RAY)+1;
+    }
 }
