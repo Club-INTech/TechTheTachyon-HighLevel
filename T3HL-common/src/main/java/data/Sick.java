@@ -16,14 +16,31 @@ public enum Sick {
     SICK_AVANT_DROIT(5),
 
     ;
+
+    // =====================================================================
+    // ==== Capteurs SICK à utiliser selon l'orientation et la position ====
+    // =====================================================================
+    public static final Sick[] LOWER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
+    public static final Sick[] UPPER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
+
+    // TODO: Vérifier tous ceux en dessous
+    public static final Sick[] LOWER_RIGHT_CORNER_TOWARDS_0 = {SICK_AVANT, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
+    public static final Sick[] UPPER_RIGHT_CORNER_TOWARDS_0 = {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
+
+    // Symétries côté gauche
+    public static final Sick[] LOWER_LEFT_CORNER_TOWARDS_0 = {SICK_ARRIERE, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
+    public static final Sick[] UPPER_LEFT_CORNER_TOWARDS_0 = {SICK_ARRIERE, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
+
+    // Symétries côté droit
+    public static final Sick[] LOWER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
+    public static final Sick[] UPPER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
+
     /**
      * Indice du capteur sick
      */
     private final int indiceSick;
-    /**
-     * Indique si on prend en compte les mesures du sick ou pas
-     */
-    private boolean significant;
+
+    private static Sick[] significantSicks = LOWER_LEFT_CORNER_TOWARDS_PI;
 
     /**
      * La nouvelle position et orientation du robot après calcul
@@ -33,7 +50,7 @@ public enum Sick {
      * Bloc statique pour instancier les variables statiques
      */
     static {
-        newXYO=new CompletableFuture<>();
+        newXYO = new CompletableFuture<>();
     }
 
     /**
@@ -45,25 +62,12 @@ public enum Sick {
     }
 
     /**
-     * Indique si le sick est signifiant ou pas
-     * @return
-     */
-    public boolean isSignificant() {
-        return significant;
-    }
-
-    public void setSignificant(boolean significant) {
-        this.significant = significant;
-    }
-
-    /**
      * Set la valeur du completable
      * @param newXYO
      */
     public static void setNewXYO(XYO newXYO) {
         Sick.newXYO.complete(newXYO);
     }
-
 
     /**
      * Get la valeur du XYO
@@ -85,15 +89,16 @@ public enum Sick {
      * Renvoie les indices des sicks qui sont activés
      * @return
      */
-    public static int[] getSignificantSicks(){
-        //TODO Définir les véritables SignificantSicks
-
-        // Il faut impérativement que int[0] soit égal à 0 ou 3
-        int[] tab = new int[3];
-        tab[1]=4;
-        tab[2]=5;
-        return tab;
+    public static Sick[] getSignificantSicks() {
+        return significantSicks;
     }
 
 
+    public static void setSignificantSicks(Sick[] sicks) {
+        significantSicks = sicks;
+    }
+
+    public int getIndex() {
+        return indiceSick;
+    }
 }
