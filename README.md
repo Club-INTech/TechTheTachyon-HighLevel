@@ -1,8 +1,8 @@
-## TechTheTachion-HighLevel - T³HL
+# TechTheTachion-HighLevel - T3HL
 
 Code de l'année 2019 
 
-### TODO
+## TODO
 * [ ] Découvrir le HL et sa doc
 * [ ] Script
 * [ ] Cas particulier pathfinding
@@ -11,26 +11,26 @@ Code de l'année 2019
 * [ ] Com avec l'électron
 * [ ] IA
 
-### Installation - IntelliJ
-#### Prérequis
+## Installation - IntelliJ
+### Prérequis
 1. Installer Java (Par défaut sur beacoup de distribution)
 2. Installer Maven (gestionnaire de dépendance, compilation, ...)
 
-##### Si un projet est ouvert 
+#### Si un projet est ouvert 
 File -\> New... -\> Project from Existing Sources... -\> Import Project from external models (Maven)
 
 Laissez tout par défaut
-##### Si sur la fenêtre de démarrage 
+#### Si sur la fenêtre de démarrage 
 Import Project -\> Choisir le dossier du dépôt cloné -\> Import Project from external models (Maven)
 
 Laissez tout par défaut
 
-#### Installer les dépendances
+### Installer les dépendances
 Alt+F12 pour ouvrir le terminal : 
 
     mvn clean install -DskipTests
 
-#### Installer les plugins
+### Installer les plugins
 File -\> Settings... -\> Plugins
 
 Installer les plugins Checkstyle-IDEA et MarkDown Navigator (ou MarkDown support)
@@ -41,17 +41,19 @@ Sous _Configuration File_, ajouter le fichier _resources/intcheckstyle.xml_
 
 Vous êtes parrés pour naviguer dans le HL !
 
-### Architecture générale
+## Architecture générale
 Le HL est composé de trois modules Maven :
     
-* **T³HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
+* **T3HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
     des mouvements du robot et la gestion des ordres à envoyer au LL
     
-* **T³HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
+* **T3HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
 
-* **T³HL-slave** : IA du robot secondaire
+* **T3HL-slave** : IA du robot secondaire
 
-#### T³HL-common
+* **T3HL-simulator** : Simulateur du LL permettant de faire tourner le HL
+
+### T3HL-common
 
 L'architecture de ce projet est orientée micro-services : l'IA se base sur plusieurs modules qui ont tous une tâche bien
 définie, et qui communiquent entre eux si besoin. Elle est construite de manière à ce qu'elle soit maintenable, 
@@ -97,13 +99,13 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 **Pour une vue plus précise, voir les annexes. Il existe un MEMO uml si besoin (doc/MEMO.md)**
 
-#### T³HL-master
-#### T³HL-slave
+### T3HL-master
+### T3HL-slave
 
-### Architecture détaillée
+## Architecture détaillée
 Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
-#### T³HL-common
-##### Utils 
+### T3HL-common
+#### Utils 
 * **Log**
 
 Le service de log est une `enum` : chaque instance représente un canal de journalisation que l'on peut activer et
@@ -112,30 +114,31 @@ fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il
 Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche toujours, que le canal
 spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas instancié !
 Utilisation :
-    
+```Java
     Log.CANNAL.setActive(true);
     Log.CANNAL.debug("Debut de la methode A");  // Ca s'affiche !
     Log.CANNAL.setActive(false);
     Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
     Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
+```
 
 * **Config**
 
 La config est une librairie externe utilisée pour changer des paramètres dans le Haut Niveau sans avoir à recompiler. Par 
-exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui aussi géré par le 
-container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
+exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui
+aussi géré par le container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
 les valeurs des paramètres par défaut. Les valeurs chargées par le container à l'instanciation des services sont 
 présentes dans le fichier `config.txt`. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
 
 * **Container**
 
 Le container fait office à la fois de factory .ie il instancie les services(toutes les classes qui implémentent l'interface Service), 
-et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va instancier
-tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
-    
+et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va
+instancier tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
+```Java
     Container container = Container.getInstance("Master");
     MonService service = container.getService(MonService.class);
-    
+```
 "Tu nous parles de service depuis tout à l'heure mais c'est quoi au juste un service ???"
 
 Et bien c'est un **singleton** offrant des **fonctionnalités** bien définies ! Dans notre cas c'est une interface qui 
@@ -143,20 +146,22 @@ doit surcharger la méthode `updateConfig(Config config)`, qui permet justement 
 On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
 
 ConfigData.java :
-
+```Java
     import pfg.config.ConfigInfo;
     
     public enum ConfigData implements ConfigInfo {
         PARAM_MONSERVICE(18)
         ;
     }
+```
 config/config.txt :
 
     ...
     PARAM_MONSERVICE =              24
     ...
+    
 MonService.java :
-
+```Java
     import utils.container.Service
     
     public class MonService implements Service {
@@ -167,15 +172,16 @@ MonService.java :
             this.param = config.getInt(ConfigData.PARAM_MONSERVICE);
         }
     }
+```
 
-##### Connection
+#### Connection
 * **ConnectionManager**
 
 Ce service sert à gérer des IO (Input Output) du HL, c'est-à-dire l'échange de messages entre le HL et le LL,
 mais aussi avec le Lidar, et la communication Master-Slave. Il se base sur l'enum Connection qui répertorie les
 connections du HL. Après avoir initialiser les connections à l'aide de la méthode `initConnections(Connection... connections)`,
 on peut simplement envoyer et lire des messages grâce aux autres méthodes :
-
+```Java
     import connection.ConnectionManager
     import connection.Connection
 
@@ -191,10 +197,11 @@ on peut simplement envoyer et lire des messages grâce aux autres méthodes :
             mess = m.get();
         }
     }
+```
 
 **ATTENTION** : Dans le HL, les connections sont initialisées dans le `Listener` ! (voir plus bas)
 
-##### Orders
+#### Orders
 * **OrderWrapper**
 
 L'order wrapper est un service servant à simplifier l'envoi d'ordres au bas niveau via des méthodes plus simples
@@ -219,18 +226,19 @@ La première chose à faire est de se mettre d'accord avec le bas niveau sur la 
 et le format d'envoi si nécéssaire. Une fois ceci fait, c'est tout simple si c'est un actionneur !
 
 orders.order.ActuatorsOrder.java:
-
+```Java
     public enum ActuatorsOrder {
         ...
         MON_ORDRE_ACTIONNEUR("ordre LL", 100);
         MON_ORDRE_SYMETRIQUE("ordre LL 2", 100); // S'il a besoin d'être symétrisé
         ...
     }
+```
 
 Si l'ordre a besoin d'être symétrisé (si l'actionneur à bouger dépend du côté de la couleur qui nous a été attribuée) :
 
 orders.SymmetrizedActuatorOrderMap.java:
-
+```Java
     public class SymmetrizedActuatorOrderMap implement Service {
         ...
         private SymmetrizedActuatorOrderMap {
@@ -238,6 +246,7 @@ orders.SymmetrizedActuatorOrderMap.java:
         }
         ...
     }
+```
 
 Voilà pour un ordre de type actionneur, la méthode `useActuator(ActuatorOrder order, boolean waitForCompletion)`
 s'occupe du reste !
@@ -258,16 +267,17 @@ qui permet d'effectuer une action en mouvement. C'est le LL qui s'occupe d'exéc
 crée les hooks et décide s'ils doivent être activés ou non. Pour créer un hook, rien de plus simple :
 
 oders.hooks.HookNames.java:
-
+```Java
     public enum HookNames {
         ...
         MON_HOOK(1, new VectCartesian(500, 400), 10, Math.PI/2, Math.PI/8, ActuatorsOrder.MON_ORDRE_ACTIONNEUR),
         ...
     }
+```
 
 Le hook est maintenant créé ! Mais il faut le configurer, c'est-à-dire dire au LL qu'il existe lors de l'exécution,
 et l'activer. Par exemple dans la classe Main.java:
-
+```Java
     public class Main {
         Container container;
         HookFactory factory;
@@ -282,15 +292,15 @@ et l'activer. Par exemple dans la classe Main.java:
             // Do what you want !
         }
     }
-
-##### Data
+```
+#### Data
 * **Table**
 
 Cette classe représente la table et contient donc les obstacles et tout ce qu'on peut faire avec, les supprimer ou les
 bouger par exemple. Cette classe s'appuie donc sur la classe Obstacle est ses classes filles. La principale modification
 effectuée dans cette classe est l'ajout des obstacles fixes (les élements de jeu dont on connait la position exacte au top
 départ)
-
+```Java
     public class Table {
         ...
         private void initObstacle() {
@@ -300,7 +310,7 @@ départ)
         }
         ...
     }
-
+```
 * **Graphe**
 
 Le Graphe sert à paramétrer la table pour qu'elle soit plus facilement navigable : on la modélise sous forme de noeuds,
@@ -313,11 +323,12 @@ de support à la réflexion pour le parcours de la table en évitant tous les ob
 
 Cette enum regroupe l'état des capteurs du robots qui ne nécessite pas de traitement, comme des contacteurs ou certains
 capteurs de présence. Pour ajouter un capteur, rien de plus simple, on spécifie son type :
-
+```Java
     public enum SensorState {
         EXEMPLE(1.8, Double.class),
         ;
     }
+```
 
 * **XYO**
 
@@ -332,14 +343,15 @@ indiqué par le header du message. Ces headers sont définis dans l'enum data.co
 caractère à un type enuméré (instance d'enum). Ces messages sont redistribués aux controlers, qui traitent et stockent
 les données reçues. Un controler "s'abonne" à un cannal via le Listener pour recevoir et traiter les données :
 data.controlers.Channel.java :
-
+```Java
     public enum Channel {
         MY_CHANNEL((char) 0x28, (char) 0x22),
         ;
     }
+```
 
 data.controlers.MonControler.java :
-
+```Java
     public class MonContoler extends Thread implement Service {
         ...
         private boolean symetry;
@@ -361,11 +373,12 @@ data.controlers.MonControler.java :
             this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
         }
     }
+```
 
 Les controlers ont aussi un rôle de symetrisation ! Il symetrise, si besoin, les données envoyées, afin que le HL s'y
 retrouve.
 
-##### Locomotion
+#### Locomotion
 * **PathFollower**
 
 Le PathFollower est un service de suivit du chemin : ce service est chargé d'envoyer les ordres appropriés au bas niveau
@@ -382,10 +395,16 @@ atteindre. Cela permet d'anticiper les changements du graphe, i.e les mouvements
 Bien entendus, on ne peut pas tout voir dans le futur : c'est pourquoi il y a beaucoup de cas à traiter. Pour plus
 d'informations, voir les commentaires.
 
-#### T³HL-master
-#### T³HL-slave
+### T3HL-master
+A compléter...
+
+### T3HL-slave
+A compléter...
+
+### T3HL-simulator
+A compléter...
     
-### Tests
+## Tests
 Les tests, indispensables pour la maintenabilité du HL, et permettant d'être efficace pour trouver l'origine de vos bugs
 lorsque vous développez de nouvelles fonctionnalités, sont découpés ici en trois packages :
 
@@ -405,7 +424,7 @@ lorsque vous développez de nouvelles fonctionnalités, sont découpés ici en t
 Ces tests sont destinés à être exécutés quotidiennement par un bot Jenkins (excépté pour les réels), vous permettant de 
 vite voir si un bug a été introduit par une feature et d'indentifier plus rapidement son origine.
 
-### Annexes
+## Annexes
 * **Utils** :
 
 ![utils.communication](doc/uml/utils.communication.png)
