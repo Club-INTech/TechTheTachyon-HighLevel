@@ -31,8 +31,8 @@ public class TestLidar extends TestBaseHL {
 
     @Override
     public Vec2 startPosition() {
-        // coin droit de la table
-        return new VectCartesian(-260,590);
+        // coin bas-droit de la table
+        return new VectCartesian(table.getLength(),0);
     }
 
     @Override

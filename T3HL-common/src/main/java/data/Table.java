@@ -280,7 +280,6 @@ public class Table implements Service {
 
         mobileObstacleBuffer.clear();
         synchronized (mobileObstacles) {
-            mobileObstacles.clear();
             Iterator<MobileCircularObstacle> mobileObstacleIterator = mobileObstacles.iterator();
 
             while (mobileObstacleIterator.hasNext()) {

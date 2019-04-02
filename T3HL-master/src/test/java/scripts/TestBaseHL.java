@@ -29,6 +29,7 @@ public abstract class TestBaseHL {
     protected Container container;
     protected OrderWrapper orderWrapper;
     protected Robot robot;
+    protected Table table;
 
     @Before
     public void initHL() {
@@ -90,7 +91,7 @@ public abstract class TestBaseHL {
             Listener listener = container.getService(Listener.class);
             listener.start();
 
-            Table table = container.getService(Table.class);
+            table = container.getService(Table.class);
             table.initObstacles();
             robot = getRobot();
             ScriptNamesMaster.reInit();
