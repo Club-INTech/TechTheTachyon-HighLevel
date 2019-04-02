@@ -18,6 +18,7 @@
 
 package robot;
 
+import data.controlers.AudioPlayer;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -31,9 +32,13 @@ import utils.communication.SimulatorDebug;
  */
 public class Slave extends Robot {
 
+    protected AudioPlayer audioPlayer;
+
     public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
         super(locomotion, orderWrapper, hookFactory, simulatorDebug);
         createRightElevator();
+
+        audioPlayer = new AudioPlayer();
     }
 
     @Override

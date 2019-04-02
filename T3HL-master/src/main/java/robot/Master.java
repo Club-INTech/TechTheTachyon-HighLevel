@@ -19,6 +19,7 @@
 package robot;
 
 import data.CouleurPalet;
+import data.controlers.AudioPlayer;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -34,14 +35,21 @@ import java.util.Stack;
  */
 public class Master extends Robot {
 
+    private AudioPlayer audioPlayer;
+
     public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
         super(locomotion, orderWrapper, hookFactory, simulatorDebug);
         createLeftElevator();
         createRightElevator();
+        audioPlayer = new AudioPlayer();
     }
 
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }

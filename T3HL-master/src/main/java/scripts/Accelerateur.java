@@ -3,6 +3,7 @@ package scripts;
 import data.CouleurPalet;
 import data.GameState;
 import data.Table;
+import data.controlers.AudioPlayer;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -27,9 +28,12 @@ public class Accelerateur extends Script {
      */
     private int distavance = 0;
     private int palet = 90;
+    
+    private AudioPlayer audioPlayer;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
+        this.audioPlayer = ((Master)robot).getAudioPlayer();
     }
 
     private void actionBras(boolean cotedroite) {
@@ -68,6 +72,9 @@ public class Accelerateur extends Script {
             System.out.println("debug 2");
             //robot.followPathTo(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
             System.out.println("debug 3");
+            audioPlayer.loadFile("DEJAVU");
+            audioPlayer.play();
+
             robot.turn(0);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
@@ -79,6 +86,8 @@ public class Accelerateur extends Script {
             while (((Master) robot).getNbPaletsDroits() > 0) {
                 actionBras(true);
                 robot.increaseScore(10);
+                audioPlayer.loadFile("AH");
+                audioPlayer.play();
             }
 
             /**
@@ -90,6 +99,8 @@ public class Accelerateur extends Script {
             while(((Master) robot).getNbPaletsGauches() > 0){
                 actionBras(false);
                 robot.increaseScore(10);
+                audioPlayer.loadFile("AH");
+                audioPlayer.play();
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
