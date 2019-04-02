@@ -25,10 +25,7 @@ import utils.Log;
 import utils.container.Service;
 import utils.math.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -315,6 +312,9 @@ public class Table implements Service {
             try {
                 this.graphe.writeLock().lock();
                 this.graphe.update();
+                this.graphe.setUpdated(true);
+            } catch (ConcurrentModificationException e) {
+                e.printStackTrace(); // eh
             } finally {
                 this.graphe.writeLock().unlock();
             }

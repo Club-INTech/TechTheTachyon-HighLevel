@@ -96,6 +96,8 @@ public abstract class TestBaseHL {
             robot = getRobot();
             ScriptNamesMaster.reInit();
 
+            Vec2 start = startPosition();
+            XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -134,8 +136,6 @@ public abstract class TestBaseHL {
             }
             initState(container);
 
-            Vec2 start = startPosition();
-            XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             KeepAlive keepAliveService = container.getService(KeepAlive.class);

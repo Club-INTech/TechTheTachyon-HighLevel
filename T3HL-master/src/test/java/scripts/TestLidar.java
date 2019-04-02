@@ -26,18 +26,22 @@ public class TestLidar extends TestBaseHL {
     @Override
     public double startOrientation() {
         // coin droit de la table
-        return Math.PI/2;
+        return Math.PI;
     }
 
     @Override
     public Vec2 startPosition() {
         // coin bas-droit de la table
-        return new VectCartesian(table.getLength(),0);
+        return new VectCartesian(table.getLength()/2-215,1000);
     }
 
     @Override
     public void action() throws Exception {
-        final int testCount = 60;
+ /*       robot.followPathTo(new VectCartesian(-1200,1000));
+        robot.followPathTo(new VectCartesian(1200,1000));
+        robot.followPathTo(new VectCartesian(-1200,1000));*/
+        Thread.sleep(16000000);
+        /*final int testCount = 60;
         Table table = container.getService(Table.class);
 
         for (int i = 0; i < testCount; i++) {
@@ -55,6 +59,6 @@ public class TestLidar extends TestBaseHL {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 }

@@ -34,9 +34,9 @@ public class MobileCircularObstacle extends Obstacle {
 
     /**
      * Temps de vie lors de la création
-     * override par la config
+     * override par la config500
      */
-    private static final int DEFAULT_LIFE_TIME    = 500;
+    private static final int DEFAULT_LIFE_TIME    = 100;
 
     /**
      * Constructeur à partir d'une position et d'un rayon

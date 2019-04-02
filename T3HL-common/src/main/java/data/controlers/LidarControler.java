@@ -32,6 +32,8 @@ import utils.math.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -44,7 +46,7 @@ public class LidarControler extends ServiceThread {
     /**
      * Temps d'attente entre deux vérification de la queue
      */
-    private static final int TIME_LOOP                  = 20;
+    private static final int TIME_LOOP                  = 25;
 
     /**
      * Separateur entre deux points
@@ -75,6 +77,8 @@ public class LidarControler extends ServiceThread {
      * True si autre couleur
      */
     private boolean symetrie;
+    private int robotRadius;
+    private int enemyRadius;
 
     /**
      * Construit un gestionnaire des données du Lidar
@@ -94,6 +98,9 @@ public class LidarControler extends ServiceThread {
         Log.LIDAR.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
             Process lidarProcess = new ProcessBuilder("../bin/LiDAR_UST_10LX").start();
+
+            // force l'extinction du programme quand la VM s'arrête
+            Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
             new CopyIOThread(lidarProcess, Log.LIDAR).start();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,18 +114,24 @@ public class LidarControler extends ServiceThread {
                 e.printStackTrace();
             }
         }
+
+        /* Si jamais besoin du mode RAW:
         try {
-            Connection.LIDAR_DATA.send("R");
+            Log.LIDAR.debug("Setting mode to RAW data...");
+            waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
+            Connection.LIDAR_DATA.send("!!R");
+            Log.LIDAR.debug("Mode RAW set!");
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
+*/
 
         Log.LIDAR.debug("Controller opérationnel");
 
         String[] points;
-        ArrayList<Vec2> mobileObstacles = new ArrayList<>();
-        Rectangle tableBB = new Rectangle(new VectCartesian(table.getLength()/2, table.getWidth()/2), table.getLength(), table.getWidth());
-        while (!Thread.currentThread().isInterrupted()) {
+        List<Vec2> mobileObstacles = new LinkedList<>();
+        Rectangle tableBB = new Rectangle(new VectCartesian(table.getLength()/2, table.getWidth()/2), table.getLength()-2*enemyRadius, table.getWidth()-2*enemyRadius);
+        while (true) {
             while (messageQueue.peek() == null) {
                 try {
                     Thread.sleep(TIME_LOOP);
@@ -131,25 +144,30 @@ public class LidarControler extends ServiceThread {
             for (String point : points) {
                 Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
+                if(obstacleCenter.getR() <= robotRadius)
+                    continue;
                 obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
                 obstacleCenter.plus(XYO.getRobotInstance().getPosition());
                 if (symetrie) {
-                    obstacleCenter.setX(-obstacleCenter.getX());
+                    obstacleCenter.symetrize();
                 }
                 // on ajoute l'obstacle que s'il est dans la table
-//                if(tableBB.isInShape(obstacleCenter)) {
+         //       if(tableBB.isInShape(obstacleCenter)) {
                     mobileObstacles.add(obstacleCenter);
-  //              }
+           //     }
             }
+            //table.getGraphe().writeLock().lock();
+
+            long start = System.currentTimeMillis();
             table.updateMobileObstacles(mobileObstacles);
-            synchronized (table.getGraphe()) {
-                table.getGraphe().setUpdated(true);
-            }
+            System.out.println(">>> "+(System.currentTimeMillis()-start)+" ms");
         }
     }
 
     @Override
     public void updateConfig(Config config) {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
+        this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
     }
 }

@@ -268,7 +268,7 @@ public class OrderWrapper implements Service {
     public void sendString(String message) {
         try {
             llConnection.send(message);
-            System.out.println("=> Sending "+message);
+            // DEBUG System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {

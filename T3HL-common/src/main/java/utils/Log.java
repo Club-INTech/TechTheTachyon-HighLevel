@@ -36,7 +36,7 @@ public enum Log
     DATA_HANDLER(true),
     LOCOMOTION(true),
     STRATEGY(true),
-    LIDAR(true),
+    LIDAR(false),
     PATHFINDING(true),
     GRAPHE(false),
     HOOK(true),

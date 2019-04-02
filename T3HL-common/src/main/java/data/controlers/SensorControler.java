@@ -126,7 +126,8 @@ public class SensorControler extends Thread implements Service {
 
             if (eventData.peek() != null) {
                 String data = eventData.poll();
-                Log.COMMUNICATION.debug("Got event from LL: "+data);
+                if(!data.equals("pong")) // ne log pas les pongs
+                    Log.COMMUNICATION.debug("Got event from LL: "+data);
                 event = data.split(ARGUMENTS_SEPARATOR);
                 switch(event[0]) {
                     case "pong":

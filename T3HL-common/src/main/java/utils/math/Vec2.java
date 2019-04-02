@@ -117,6 +117,8 @@ public abstract class Vec2 {
     public void plus(Vec2 vecteur){
         this.x+=vecteur.getX();
         this.y+=vecteur.getY();
+        this.r = computeRay();
+        this.a = computeAngle();
     }
 
     /**
@@ -127,6 +129,8 @@ public abstract class Vec2 {
     public void minus(Vec2 vecteur){
         this.x-=vecteur.getX();
         this.y-=vecteur.getY();
+        this.r = computeRay();
+        this.a = computeAngle();
     }
 
     /**

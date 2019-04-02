@@ -28,7 +28,7 @@ public enum Channel {
     ROBOT_POSITION('@', 'P'),
     BUDDY_POSITION((char) 0x21, (char) 0x23),
     EVENT('@', 'B'),
-    SICK('@', 'A'),
+    SICK('@', (char)'A'),
     COULEUR_PALET_PRIS((char)0x21,(char)0x26),
     PALETS_POSITION((char)0x21,(char)0x2D),
     ;
