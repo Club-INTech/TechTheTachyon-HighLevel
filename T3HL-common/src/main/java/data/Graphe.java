@@ -464,5 +464,7 @@ Graphe implements Service {
         nodeYNbr = config.getInt(ConfigData.NBR_NOEUDS_Y);
         spaceCircleParameter = config.getDouble(ConfigData.ESPACEMENT_CIRCLE);
         nodeCricleNbr = config.getInt(ConfigData.NBR_NOEUDS_CIRCLE);
+        partitioningX = config.getInt(ConfigData.PARTITION_WIDTH);
+        partitioningY = config.getInt(ConfigData.PARTITION_HEIGHT);
     }
 }

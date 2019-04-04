@@ -72,7 +72,7 @@ public class Test_OrderWrapper_Symetry {
      */
     @Test
     public void turnTestWithSymetry() throws Exception {
-        orderWrapper.turn(Math.PI / 3);
+        orderWrapper.turn(2* Math.PI / 3);
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
@@ -101,7 +101,7 @@ public class Test_OrderWrapper_Symetry {
      */
     @Test
     public void configureHookTestWithSymetry() throws Exception {
-        orderWrapper.configureHook(0, new VectCartesian(2, 3), 2, Math.PI / 3, 2, ActuatorsOrder.FERME_PORTE_DROITE);
+        orderWrapper.configureHook(0, new VectCartesian(2, 3), 2, 2*Math.PI / 3, 2, ActuatorsOrder.FERME_PORTE_DROITE);
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
@@ -117,7 +117,7 @@ public class Test_OrderWrapper_Symetry {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        Assert.assertEquals("p -158 587", m.get());
+        Assert.assertEquals("goto -158 587", m.get());
     }
 
     /**

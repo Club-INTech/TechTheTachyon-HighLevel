@@ -105,6 +105,8 @@ public enum ConfigData implements ConfigInfo
     NBR_NOEUDS_Y(/*20*/30),
     NBR_NOEUDS_CIRCLE(12),
     ESPACEMENT_CIRCLE(1.2),
+    PARTITION_WIDTH(25),
+    PARTITION_HEIGHT(25),
 
     /**
      * Paramètre Locomotion

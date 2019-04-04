@@ -227,7 +227,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        Assert.assertEquals("p 54 647", m.get());
+        Assert.assertEquals("goto 54 647", m.get());
     }
 
     /**

@@ -151,7 +151,7 @@ public class Test_Table {
 
     @Test
     public void testUpdateMobileObstaclesTableOnly() throws Exception {
-        XYO.getBuddyInstance();
+        XYO.getBuddyInstance().update(20, 10, 0);
         ArrayList<Vec2> points = new ArrayList<>();
         points.add(new VectCartesian(300, 100));
         points.add(new VectCartesian(800, 150));
@@ -177,7 +177,8 @@ public class Test_Table {
     @Test
     public void testUpdateMobileObstaclesFull() throws Exception {
         Graphe graphe = container.getService(Graphe.class);
-        XYO.getBuddyInstance();
+        graphe.reInit();
+        XYO.getBuddyInstance().update(20, 10, 0.0);
         ArrayList<Vec2> points = new ArrayList<>();
         points.add(new VectCartesian(300, 100));
         points.add(new VectCartesian(800, 150));
@@ -189,7 +190,9 @@ public class Test_Table {
         obstacles.add(new MobileCircularObstacle(points.get(2), (int) ConfigData.BUDDY_RAY.getDefaultValue()));
         boolean intersect;
 
+        long start = System.currentTimeMillis();
         table.updateMobileObstacles(points);
+        System.out.println(">> "+(System.currentTimeMillis()-start)+" ms");
 
         Assert.assertEquals(obstacles, table.getMobileObstacles());
         for (Ridge ridge : graphe.getRidges()) {
