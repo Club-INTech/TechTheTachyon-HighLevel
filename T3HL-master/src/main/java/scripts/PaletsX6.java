@@ -37,15 +37,15 @@ public class PaletsX6 extends Script {
      */
 
         if (version == 0) { //rouge droite
-            positions.add(new VectCartesian(1000, 1300));
-            positions.add(new VectCartesian(850, 1300));
-            positions.add(new VectCartesian(450, 1300));
+            positions.add(new VectCartesian(-1000, 1225));
+            positions.add(new VectCartesian(-850, 1225));
+            positions.add(new VectCartesian(-450, 1225));
         } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(900, 1300));
-            positions.add(new VectCartesian(500, 1300));
+            positions.add(new VectCartesian(-900, 1225));
+            positions.add(new VectCartesian(-500, 1225));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {  //bleu droite
-            positions.add(new VectCartesian(834, 1300));
+            positions.add(new VectCartesian(-834, 1225));
             //positions.add(new VectCartesian(0, 800));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 3) {  //rouge gauche On doit symetriser la partie droite pas la peine d'écrire des cordonnées
@@ -61,21 +61,23 @@ public class PaletsX6 extends Script {
             positions.add(new VectCartesian(0, 800));
             positions.add(new VectCartesian(0, 800));
         }
-
+        boolean premierdeplacement = false;
         try {
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
-               // if (premierPaletPris) {
+               //
                     robot.followPathTo(position);
-                //} else {
-                 //   premierPaletPris = true;
-               // }
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                    if (premierdeplacement) {}
+                    else {
+                    premierdeplacement = true;
+                    robot.turn(0 );}
+
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
