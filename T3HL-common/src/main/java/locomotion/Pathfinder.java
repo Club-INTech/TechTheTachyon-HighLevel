@@ -133,7 +133,7 @@ public class Pathfinder implements Service {
 
 
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
-                    if (ridge.isReachable()) {
+                    if (ridge.isReachable(graphe)) {
                         currentCost = costs.getOrDefault(currentNode, 0) + ridge.getCost();
                         if(neighbour.equals(aim)) {
                             parents.put(neighbour, currentNode);

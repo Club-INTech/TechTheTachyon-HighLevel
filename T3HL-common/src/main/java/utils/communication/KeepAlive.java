@@ -1,9 +1,11 @@
 package utils.communication;
 
+import connection.Connection;
 import data.SensorState;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.Log;
 import utils.container.Service;
 
 public class KeepAlive extends Thread implements Service {
@@ -11,6 +13,7 @@ public class KeepAlive extends Thread implements Service {
     private final OrderWrapper orderWrapper;
     private long pingInterval;
     private long pingTimeout;
+    private Connection llConnection;
 
     public KeepAlive(OrderWrapper orderWrapper) {
         this.orderWrapper = orderWrapper;
@@ -24,7 +27,14 @@ public class KeepAlive extends Thread implements Service {
 
             long time = System.currentTimeMillis();
             if(time-SensorState.LAST_PONG.getData() >= pingTimeout) {
-                throw new RuntimeException("Timeout HL<->LL");
+                Log.COMMUNICATION.critical("TIMEOUT! Attempting reconnection...");
+                try {
+                    llConnection.reInit();
+                    SensorState.LAST_PONG.setData(System.currentTimeMillis());
+                } catch (CommunicationException e) {
+                    e.printStackTrace();
+                }
+                //throw new RuntimeException("Timeout HL<->LL");
                 // TODO: que faire quand il y a un timeout?
             }
             try {
@@ -39,5 +49,16 @@ public class KeepAlive extends Thread implements Service {
     public void updateConfig(Config config) {
         pingInterval = config.getLong(ConfigData.PING_INTERVAL);
         pingTimeout = config.getLong(ConfigData.PING_TIMEOUT);
+
+        boolean isMaster = config.getBoolean(ConfigData.MASTER);
+        if(config.getBoolean(ConfigData.SIMULATION)) {
+            llConnection = Connection.MASTER_LL_SIMULATEUR;
+        } else {
+            if(isMaster) {
+                llConnection = Connection.TEENSY_MASTER;
+            } else {
+                llConnection = Connection.TEENSY_SLAVE;
+            }
+        }
     }
 }

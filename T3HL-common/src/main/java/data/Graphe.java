@@ -32,10 +32,7 @@ import utils.math.Segment;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -262,9 +259,9 @@ Graphe implements Service {
      * Met à jour la disponibilité des arrêtes en fonction des obstacles mobiles
      */
     public void update() {
-        Log.LIDAR.debug("Mise à jour du graphe...");
+      //  Log.LIDAR.debug("Mise à jour du graphe...");
         int counter = 0;
-        synchronized (mobileCircularObstacles) {
+       /* synchronized (mobileCircularObstacles) {
             for (Ridge ridge : ridges) {
                 ridge.setReachable(true);
                 for (MobileCircularObstacle obstacle : mobileCircularObstacles) {
@@ -275,10 +272,10 @@ Graphe implements Service {
                     }
                 }
             }
-        }
+        }*/
         // reset cache
         resetCache();
-        Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
+      //  Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
     }
 
     private NodeList partition(int indexX, int indexY) {
@@ -430,6 +427,11 @@ Graphe implements Service {
     public ArrayList<Ridge> getRidges() {
         return ridges;
     }
+
+    public List<MobileCircularObstacle> getMobileObstacles() {
+        return mobileCircularObstacles;
+    }
+
     public boolean isUpdated() {
         return updated;
     }

@@ -20,11 +20,13 @@ package connection;
 
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.Log;
 import utils.communication.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Defines all the communication interfaces
@@ -106,6 +108,8 @@ public enum Connection {
      *                  in case of communication problem
      */
     public void reInit() throws CommunicationException {
+        Log.COMMUNICATION.critical("Had to reset connection "+this+"!");
+        this.communicationInterface.close();
         this.communicationInterface.init();
     }
 
@@ -116,6 +120,14 @@ public enum Connection {
      *                  in case of communication problem
      */
     public void send(String message) throws CommunicationException {
+        while(!this.communicationInterface.isInterfaceOpen()) {
+            try {
+                Log.COMMUNICATION.critical("WAITING FOR OPENNESS");
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         this.communicationInterface.send(message);
     }
 

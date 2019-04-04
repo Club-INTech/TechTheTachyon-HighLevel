@@ -18,6 +18,7 @@
 
 package data.graphe;
 
+import data.Graphe;
 import utils.math.Segment;
 
 /**
@@ -37,11 +38,6 @@ public class Ridge {
     private final int cost;
 
     /**
-     * Disponibilité : true si franchissable
-     */
-    private boolean reachable;
-
-    /**
      * Coût fixe de l'arrête
      */
     private static int staticCost;
@@ -53,7 +49,6 @@ public class Ridge {
      */
     public Ridge(int cost, Segment segment) {
         this.cost = cost + staticCost;
-        this.reachable = true;
         this.seg = segment;
     }
 
@@ -64,12 +59,12 @@ public class Ridge {
     public int getCost() {
         return cost;
     }
-    public boolean isReachable() {
-        return reachable;
+
+    public boolean isReachable(Graphe graphe) {
+        return graphe.getMobileObstacles().stream()
+                .noneMatch(o -> o.getShape().intersect(seg));
     }
-    public void setReachable(boolean reachable) {
-        this.reachable = reachable;
-    }
+
     public static void setStaticCost(int staticCost) {
         Ridge.staticCost = staticCost;
     }

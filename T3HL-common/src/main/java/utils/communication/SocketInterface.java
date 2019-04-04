@@ -18,6 +18,8 @@
 
 package utils.communication;
 
+import utils.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

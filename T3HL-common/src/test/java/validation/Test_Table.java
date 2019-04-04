@@ -202,7 +202,7 @@ public class Test_Table {
                     intersect = true;
                 }
             }
-            Assert.assertEquals(!intersect, ridge.isReachable());
+            Assert.assertEquals(!intersect, ridge.isReachable(graphe));
         }
 
         Thread.sleep(MobileCircularObstacle.getDefaultLifeTime() + 1);
@@ -211,7 +211,7 @@ public class Test_Table {
 
         Assert.assertEquals(new ArrayList<>(), table.getMobileObstacles());
         for (Ridge ridge : graphe.getRidges()) {
-            Assert.assertTrue(ridge.isReachable());
+            Assert.assertTrue(ridge.isReachable(graphe));
         }
     }
 }

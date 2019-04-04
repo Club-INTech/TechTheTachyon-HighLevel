@@ -158,9 +158,9 @@ public class LidarControler extends ServiceThread {
             }
             //table.getGraphe().writeLock().lock();
 
-            long start = System.currentTimeMillis();
+         //   long start = System.currentTimeMillis();
             table.updateMobileObstacles(mobileObstacles);
-            System.out.println(">>> "+(System.currentTimeMillis()-start)+" ms");
+       //     System.out.println(">>> "+(System.currentTimeMillis()-start)+" ms");
         }
     }
 
