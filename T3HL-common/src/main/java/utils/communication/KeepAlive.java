@@ -9,10 +9,8 @@ import utils.container.Service;
 public class KeepAlive extends Thread implements Service {
 
     private final OrderWrapper orderWrapper;
-    private long lastPingTime = 0L;
     private long pingInterval;
     private long pingTimeout;
-    private long firstPingTime;
 
     public KeepAlive(OrderWrapper orderWrapper) {
         this.orderWrapper = orderWrapper;
@@ -20,16 +18,14 @@ public class KeepAlive extends Thread implements Service {
 
     @Override
     public void run() {
-        firstPingTime = System.currentTimeMillis();
+        SensorState.LAST_PONG.setData(System.currentTimeMillis());
         while(!isInterrupted()) {
             orderWrapper.ping();
 
             long time = System.currentTimeMillis();
-            if(time-firstPingTime >= pingTimeout) { // ne pas faire d'erreur dès le premier test (le LL n'a pas encore eu le temps de répondre)
-                if(time-SensorState.LAST_PONG.getData() >= pingTimeout) {
-                    throw new RuntimeException("Timeout HL<->LL");
-                    // TODO: que faire quand il y a un timeout?
-                }
+            if(time-SensorState.LAST_PONG.getData() >= pingTimeout) {
+                throw new RuntimeException("Timeout HL<->LL");
+                // TODO: que faire quand il y a un timeout?
             }
             try {
                 Thread.sleep(pingInterval); // toutes les 1/2 secondes
