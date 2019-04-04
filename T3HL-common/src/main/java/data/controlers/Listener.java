@@ -168,12 +168,14 @@ public class Listener extends ServiceThread {
                 try {
                     buffer = current.read();
                     if (buffer.isPresent()) {
-                        header = buffer.get().substring(0, 2);
-                        message = buffer.get().substring(2);
-                        handleMessage(header, message);
-                        if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                            if(buddy.isInitiated()) {
-                                buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                        if(buffer.get().length() >= 2) {
+                            header = buffer.get().substring(0, 2);
+                            message = buffer.get().substring(2);
+                            handleMessage(header, message);
+                            if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
+                                if(buddy.isInitiated()) {
+                                    buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                                }
                             }
                         }
                     }
