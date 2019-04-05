@@ -27,8 +27,9 @@ Laissez tout par défaut
 
 ### Installer les dépendances
 Alt+F12 pour ouvrir le terminal : 
-
-    mvn clean install -DskipTests
+```bash
+mvn clean install -DskipTests
+```
 
 ### Installer les plugins
 File -\> Settings... -\> Plugins
@@ -115,11 +116,11 @@ Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de l
 spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas instancié !
 Utilisation :
 ```Java
-    Log.CANNAL.setActive(true);
-    Log.CANNAL.debug("Debut de la methode A");  // Ca s'affiche !
-    Log.CANNAL.setActive(false);
-    Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
-    Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
+Log.CANNAL.setActive(true);
+Log.CANNAL.debug("Debut de la methode A");  // Ca s'affiche !
+Log.CANNAL.setActive(false);
+Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
+Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
 ```
 
 * **Config**
@@ -136,8 +137,8 @@ Le container fait office à la fois de factory .ie il instancie les services(tou
 et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va
 instancier tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
 ```Java
-    Container container = Container.getInstance("Master");
-    MonService service = container.getService(MonService.class);
+Container container = Container.getInstance("Master");
+MonService service = container.getService(MonService.class);
 ```
 "Tu nous parles de service depuis tout à l'heure mais c'est quoi au juste un service ???"
 
@@ -147,31 +148,32 @@ On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
 
 ConfigData.java :
 ```Java
-    import pfg.config.ConfigInfo;
+import pfg.config.ConfigInfo;
     
-    public enum ConfigData implements ConfigInfo {
-        PARAM_MONSERVICE(18)
-        ;
-    }
+public enum ConfigData implements ConfigInfo {
+    PARAM_MONSERVICE(18)
+    ;
+}
 ```
 config/config.txt :
-
-    ...
-    PARAM_MONSERVICE =              24
-    ...
+```
+...
+PARAM_MONSERVICE =              24
+...
+```
     
 MonService.java :
 ```Java
-    import utils.container.Service
+import utils.container.Service
     
-    public class MonService implements Service {
-        private int param;
-        public MonService(MonAutreService ah) {...}
-        @Override
-        public void updateConfig(Config config) {
-            this.param = config.getInt(ConfigData.PARAM_MONSERVICE);
-        }
+public class MonService implements Service {
+    private int param;
+    public MonService(MonAutreService ah) {...}
+    @Override
+    public void updateConfig(Config config) {
+        this.param = config.getInt(ConfigData.PARAM_MONSERVICE);
     }
+}
 ```
 
 #### Connection
@@ -182,21 +184,21 @@ mais aussi avec le Lidar, et la communication Master-Slave. Il se base sur l'enu
 connections du HL. Après avoir initialiser les connections à l'aide de la méthode `initConnections(Connection... connections)`,
 on peut simplement envoyer et lire des messages grâce aux autres méthodes :
 ```Java
-    import connection.ConnectionManager
-    import connection.Connection
+import connection.ConnectionManager
+import connection.Connection
 
-    public static void main(String[] args) {
-        Container container = Container.getInstance("Master");
-        ConnectionManager connectionManager = container.getService(ConnectionManager.class);
+public static void main(String[] args) {
+    Container container = Container.getInstance("Master");
+    ConnectionManager connectionManager = container.getService(ConnectionManager.class);
 
-        connectionManager.initConnections(Connection.LOCALHOST_SERVER, Connection.LOCALHOST_CLIENT);
-        Connection.LOCALHOST_SERVER.send("Hello !");
-        Optional<String> m = Connection.LOCALHOST_CLIENT.read();
-        String mess;
-        if (m.isPresent()) {
-            mess = m.get();
-        }
+    connectionManager.initConnections(Connection.LOCALHOST_SERVER, Connection.LOCALHOST_CLIENT);
+    Connection.LOCALHOST_SERVER.send("Hello !");
+    Optional<String> m = Connection.LOCALHOST_CLIENT.read();
+    String mess;
+    if (m.isPresent()) {
+        mess = m.get();
     }
+}
 ```
 
 **ATTENTION** : Dans le HL, les connections sont initialisées dans le `Listener` ! (voir plus bas)
@@ -227,25 +229,25 @@ et le format d'envoi si nécéssaire. Une fois ceci fait, c'est tout simple si c
 
 orders.order.ActuatorsOrder.java:
 ```Java
-    public enum ActuatorsOrder {
-        ...
-        MON_ORDRE_ACTIONNEUR("ordre LL", 100);
-        MON_ORDRE_SYMETRIQUE("ordre LL 2", 100); // S'il a besoin d'être symétrisé
-        ...
-    }
+public enum ActuatorsOrder {
+    ...
+    MON_ORDRE_ACTIONNEUR("ordre LL", 100);
+    MON_ORDRE_SYMETRIQUE("ordre LL 2", 100); // S'il a besoin d'être symétrisé
+    ...
+}
 ```
 
 Si l'ordre a besoin d'être symétrisé (si l'actionneur à bouger dépend du côté de la couleur qui nous a été attribuée) :
 
 orders.SymmetrizedActuatorOrderMap.java:
 ```Java
-    public class SymmetrizedActuatorOrderMap implement Service {
-        ...
-        private SymmetrizedActuatorOrderMap {
-            correspondanceMap.put(ActuatorOrder.MON_ORDRE_ACTIONNEUR, ActuatorOrder.MON_ORDRE_SYMETRIQUE);
-        }
-        ...
+public class SymmetrizedActuatorOrderMap implement Service {
+    ...
+    private SymmetrizedActuatorOrderMap {
+        correspondanceMap.put(ActuatorOrder.MON_ORDRE_ACTIONNEUR, ActuatorOrder.MON_ORDRE_SYMETRIQUE);
     }
+    ...
+}
 ```
 
 Voilà pour un ordre de type actionneur, la méthode `useActuator(ActuatorOrder order, boolean waitForCompletion)`
@@ -268,30 +270,30 @@ crée les hooks et décide s'ils doivent être activés ou non. Pour créer un h
 
 oders.hooks.HookNames.java:
 ```Java
-    public enum HookNames {
-        ...
-        MON_HOOK(1, new VectCartesian(500, 400), 10, Math.PI/2, Math.PI/8, ActuatorsOrder.MON_ORDRE_ACTIONNEUR),
-        ...
-    }
+public enum HookNames {
+    ...
+    MON_HOOK(1, new VectCartesian(500, 400), 10, Math.PI/2, Math.PI/8, ActuatorsOrder.MON_ORDRE_ACTIONNEUR),
+    ...
+}
 ```
 
 Le hook est maintenant créé ! Mais il faut le configurer, c'est-à-dire dire au LL qu'il existe lors de l'exécution,
 et l'activer. Par exemple dans la classe Main.java:
 ```Java
-    public class Main {
-        Container container;
-        HookFactory factory;
+public class Main {
+    Container container;
+    HookFactory factory;
+    ...
+    public static void main(String[] args) {
+        container = Container.getInstance("Master");
+        factory = container.getService(HookFactory.class);
         ...
-        public static void main(String[] args) {
-            container = Container.getInstance("Master");
-            factory = container.getService(HookFactory.class);
-            ...
-            factory.configureHook(HookNames.MON_HOOK);
-            factory.enableHook(HookNames.MON_HOOK);
-            ...
-            // Do what you want !
-        }
+        factory.configureHook(HookNames.MON_HOOK);
+        factory.enableHook(HookNames.MON_HOOK);
+        ...
+        // Do what you want !
     }
+}
 ```
 #### Data
 * **Table**
@@ -301,15 +303,15 @@ bouger par exemple. Cette classe s'appuie donc sur la classe Obstacle est ses cl
 effectuée dans cette classe est l'ajout des obstacles fixes (les élements de jeu dont on connait la position exacte au top
 départ)
 ```Java
-    public class Table {
-        ...
-        private void initObstacle() {
-            StillRectangularObstacle monObstacle = new StillRectangularObstacle(
-                new VectCartesian(0, 1800), 1600 + 2* this.robotRay, 300 + 2* this.robotRay);
-            this.fixedObstacles.add(monObstacle);
-        }
-        ...
+public class Table {
+    ...
+    private void initObstacle() {
+        StillRectangularObstacle monObstacle = new StillRectangularObstacle(
+            new VectCartesian(0, 1800), 1600 + 2* this.robotRay, 300 + 2* this.robotRay);
+        this.fixedObstacles.add(monObstacle);
     }
+    ...
+}
 ```
 * **Graphe**
 
@@ -324,10 +326,10 @@ de support à la réflexion pour le parcours de la table en évitant tous les ob
 Cette enum regroupe l'état des capteurs du robots qui ne nécessite pas de traitement, comme des contacteurs ou certains
 capteurs de présence. Pour ajouter un capteur, rien de plus simple, on spécifie son type :
 ```Java
-    public enum SensorState {
-        EXEMPLE(1.8, Double.class),
-        ;
-    }
+public enum SensorState {
+    EXEMPLE(1.8, Double.class),
+    ;
+}
 ```
 
 * **XYO**
@@ -344,35 +346,35 @@ caractère à un type enuméré (instance d'enum). Ces messages sont redistribu�
 les données reçues. Un controler "s'abonne" à un cannal via le Listener pour recevoir et traiter les données :
 data.controlers.Channel.java :
 ```Java
-    public enum Channel {
-        MY_CHANNEL((char) 0x28, (char) 0x22),
-        ;
-    }
+public enum Channel {
+    MY_CHANNEL((char) 0x28, (char) 0x22),
+    ;
+}
 ```
 
 data.controlers.MonControler.java :
 ```Java
-    public class MonContoler extends Thread implement Service {
-        ...
-        private boolean symetry;
-        private ConcurrentLinkedQueue<String> messageQueue;
+public class MonContoler extends Thread implement Service {
+    ...
+    private boolean symetry;
+    private ConcurrentLinkedQueue<String> messageQueue;
 
-        private MonControler(Listener listener) {
-            messageQueue = new ConcurrentLinkedQueue<>();
-            listener.addQueue(Channel.MY_CHANNEL, messageQueue);
-        }
-
-        ...
-        @Override
-        public void run() {
-            ...
-        }
-
-        @Override
-        public void updateConfig(Config config) {
-            this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
-        }
+    private MonControler(Listener listener) {
+        messageQueue = new ConcurrentLinkedQueue<>();
+        listener.addQueue(Channel.MY_CHANNEL, messageQueue);
     }
+
+    ...
+    @Override
+    public void run() {
+        ...
+    }
+
+    @Override
+    public void updateConfig(Config config) {
+        this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
+    }
+}
 ```
 
 Les controlers ont aussi un rôle de symetrisation ! Il symetrise, si besoin, les données envoyées, afin que le HL s'y
