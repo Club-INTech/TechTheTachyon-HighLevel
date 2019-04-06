@@ -37,9 +37,9 @@ public enum Connection {
     MASTER(ConfigData.MASTER_IP, ConfigData.MASTER_PORT, SocketClientInterface.class),
     SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class),
     LIDAR_DATA(ConfigData.LOCALHOST, ConfigData.LIDAR_DATA_PORT, SocketClientInterface.class),
-    TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SocketClientInterface.class),
+    TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SocketServerInterface.class),
     TEENSY_MASTER_MONTHLERY(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SerialInterface.class),
-    TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketClientInterface.class),
+    TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketServerInterface.class),
 
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
     LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class),

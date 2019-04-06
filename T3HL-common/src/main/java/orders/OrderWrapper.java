@@ -187,7 +187,7 @@ public class OrderWrapper implements Service {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
         this.sendString(String.format(Locale.US, "%s %d %d %.3f",
-                    PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
+                PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
     }
 
     /**
@@ -233,7 +233,7 @@ public class OrderWrapper implements Service {
 
         }
         this.sendString(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
-                    HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
+                HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
     }
 
     /**
@@ -272,11 +272,12 @@ public class OrderWrapper implements Service {
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
-                llConnection.reInit();
-                while (!llConnection.isInitiated());
+                while (!llConnection.isInitiated()) {
+                    Thread.sleep(5);
+                }
                 llConnection.send(message);
-            } catch (CommunicationException ef) {
-                ef.printStackTrace();
+            } catch (CommunicationException | InterruptedException e1) {
+                e1.printStackTrace();
             }
         }
     }

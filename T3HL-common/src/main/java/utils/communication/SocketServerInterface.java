@@ -18,8 +18,11 @@
 
 package utils.communication;
 
+import utils.Log;
+
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Définit l'interface de connexion utilisant une socket serveur
@@ -39,19 +42,38 @@ public class SocketServerInterface extends SocketInterface {
     }
 
     @Override
-    public void init() throws CommunicationException {
+    public void init() {
         this.initiated = false;
-        new Thread(() -> {
-            try {
-                synchronized (this) {
-                    ServerSocket serverSocket = new ServerSocket(port);
+        Thread thread = new Thread(){
+            @Override
+            public void run() {
+                ServerSocket serverSocket = null;
+                Socket privSocket = null;
+                try {
+                    serverSocket = new ServerSocket(port);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
-                    this.socket = serverSocket.accept();
-                    this.initBuffers();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } catch (IOException | CommunicationException e) {
-                e.printStackTrace();
+                while (!isInterrupted()) {
+                    try {
+                        synchronized (this) {
+                            Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
+                            Log.COMMUNICATION.debug(String.format("Socket created. Waiting connection on port %d", port));
+                            privSocket = serverSocket.accept();
+                            if (privSocket != null){
+                                socket = privSocket;
+                            }
+                            Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
+                            initBuffers();
+                            Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
+                        }
+                    } catch (IOException | CommunicationException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }).start();
+        };
+        thread.start();
     }
 }

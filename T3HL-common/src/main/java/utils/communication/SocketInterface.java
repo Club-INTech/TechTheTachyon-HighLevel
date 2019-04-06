@@ -89,9 +89,11 @@ public abstract class SocketInterface implements CommunicationInterface {
     @Override
     public synchronized void send(String message) throws CommunicationException {
         try {
-            this.output.write(message);
-            this.output.newLine();
-            this.output.flush();
+            if (this.initiated) {
+                this.output.write(message);
+                this.output.newLine();
+                this.output.flush();
+            }
         } catch (IOException e) {
             throw new CommunicationException("Envoie du message " + message + " impossible");
         }
