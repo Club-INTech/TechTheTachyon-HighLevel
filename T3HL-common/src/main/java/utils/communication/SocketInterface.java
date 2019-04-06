@@ -65,7 +65,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     /**
      * True si la connexion a été initialisée
      */
-    private boolean initiated;
+    protected boolean initiated;
 
     /**
      * Timeout de connexion du server
@@ -84,9 +84,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     }
 
     @Override
-    public synchronized void init() throws CommunicationException {
-        this.initiated = false;
-    }
+    public abstract void init() throws CommunicationException;
 
     @Override
     public synchronized void send(String message) throws CommunicationException {
@@ -118,8 +116,12 @@ public abstract class SocketInterface implements CommunicationInterface {
             if (this.initiated) {
                 this.initiated = false;
                 this.input.close();
+                this.input = null;
                 this.output.close();
+                this.output = null;
                 this.socket.close();
+                this.socket = null;
+                System.gc();
             }
         } catch (IOException e) {
             throw new CommunicationException("Impossible de fermer la communication");

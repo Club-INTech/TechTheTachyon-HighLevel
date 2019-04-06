@@ -42,7 +42,7 @@ public class SocketClientInterface extends SocketInterface {
 
     @Override
     public synchronized void init() throws CommunicationException {
-        super.init();
+        this.initiated = false;
         new Thread(() -> {
             long start = System.currentTimeMillis();
             while (System.currentTimeMillis() - start < SocketInterface.CONNECTION_TIMEOUT) {
@@ -50,6 +50,7 @@ public class SocketClientInterface extends SocketInterface {
                     try {
                         Log.COMMUNICATION.debug(String.format("Trying to connect to %s on port %d",ipAddress, port));
                         this.socket = new Socket(ipAddress, port);
+                        Log.COMMUNICATION.debug(String.format("Socket created to %s on port %d", ipAddress, port));
                         this.initBuffers();
                         break;
                     } catch (IOException | CommunicationException e) {

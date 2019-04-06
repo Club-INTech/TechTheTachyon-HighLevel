@@ -56,7 +56,7 @@ public enum Log
     /**
      * Instance permettant d'avoir la date et l'heure
      */
-    private static GregorianCalendar calendar;
+    private static Calendar calendar;
 
     /**
      * Buffer d'écriture dans un fichier de log
@@ -140,6 +140,7 @@ public enum Log
     private synchronized void writeToLog(String color, String message, boolean active)
     {
         this.toLog.setLength(0);
+        calendar = Calendar.getInstance();
         this.toLog.append("[")
         .append(calendar.get(Calendar.HOUR_OF_DAY))
         .append("h")
@@ -213,7 +214,7 @@ public enum Log
     {
         boolean ret = true;
         try {
-            calendar = new GregorianCalendar();
+            calendar = Calendar.getInstance();
             String hour = calendar.get(Calendar.HOUR) + ":" +
                     calendar.get(Calendar.MINUTE) + ":" +
                     calendar.get(Calendar.SECOND);

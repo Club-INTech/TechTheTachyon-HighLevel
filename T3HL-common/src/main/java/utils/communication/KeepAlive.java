@@ -4,7 +4,6 @@ import connection.Connection;
 import data.SensorState;
 import orders.OrderWrapper;
 import pfg.config.Config;
-import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
