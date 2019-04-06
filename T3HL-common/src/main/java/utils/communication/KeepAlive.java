@@ -30,16 +30,18 @@ public class KeepAlive extends Thread implements Service {
             if (!llConnection.isInitiated()){
                 SensorState.LAST_PONG.setData(time);
             }
-            if(llConnection.isInitiated() && time-SensorState.LAST_PONG.getData() >= pingTimeout) {
-                Log.COMMUNICATION.critical("TIMEOUT! Attempting reconnection...");
-                try {
-                    llConnection.reInit();
-                    SensorState.LAST_PONG.setData(System.currentTimeMillis());
-                } catch (CommunicationException e) {
-                    e.printStackTrace();
+            else {
+                if (time - SensorState.LAST_PONG.getData() >= pingTimeout) {
+                    Log.COMMUNICATION.critical("TIMEOUT! Attempting reconnection...");
+                    try {
+                        llConnection.reInit();
+                        SensorState.LAST_PONG.setData(System.currentTimeMillis());
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                    }
+                    //throw new RuntimeException("Timeout HL<->LL");
+                    // TODO: que faire quand il y a un timeout?
                 }
-                //throw new RuntimeException("Timeout HL<->LL");
-                // TODO: que faire quand il y a un timeout?
             }
             try {
                 Thread.sleep(pingInterval); // toutes les 1/2 secondes
