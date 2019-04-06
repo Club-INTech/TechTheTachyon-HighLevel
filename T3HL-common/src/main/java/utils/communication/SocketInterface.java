@@ -103,7 +103,7 @@ public abstract class SocketInterface implements CommunicationInterface {
     public synchronized Optional<String> read() throws CommunicationException {
         Optional<String> message = Optional.empty();
         try {
-            if (this.input.ready() && initiated) {
+            if (this.initiated && this.input.ready()) {
                 message = Optional.of(input.readLine());
             }
         } catch (IOException e) {
@@ -116,10 +116,10 @@ public abstract class SocketInterface implements CommunicationInterface {
     public synchronized void close() throws CommunicationException {
         try {
             if (this.initiated) {
+                this.initiated = false;
                 this.input.close();
                 this.output.close();
                 this.socket.close();
-                this.initiated = false;
             }
         } catch (IOException e) {
             throw new CommunicationException("Impossible de fermer la communication");

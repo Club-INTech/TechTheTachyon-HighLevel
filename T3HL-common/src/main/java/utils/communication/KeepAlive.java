@@ -4,6 +4,7 @@ import connection.Connection;
 import data.SensorState;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
@@ -26,7 +27,10 @@ public class KeepAlive extends Thread implements Service {
             orderWrapper.ping();
 
             long time = System.currentTimeMillis();
-            if(time-SensorState.LAST_PONG.getData() >= pingTimeout) {
+            if (!llConnection.isInitiated()){
+                SensorState.LAST_PONG.setData(time);
+            }
+            if(llConnection.isInitiated() && time-SensorState.LAST_PONG.getData() >= pingTimeout) {
                 Log.COMMUNICATION.critical("TIMEOUT! Attempting reconnection...");
                 try {
                     llConnection.reInit();
