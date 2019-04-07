@@ -2,6 +2,8 @@ package data.controlers;
 
 import data.*;
 import pfg.config.Config;
+import sun.nio.cs.UTF_32;
+import sun.text.normalizer.UTF16;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
@@ -9,6 +11,9 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -59,20 +64,23 @@ public class SensorControler extends Thread implements Service {
 
     private int[] sickMeasurements = new int[Sick.values().length];
 
+    private PrintWriter sickWriter;
+
+    int nb_times = 0;
 
     /**
      * Construit un gestionnaire de capteur
      * @param listener
      *              le listener
      */
-    public SensorControler(Listener listener) {
+    public SensorControler(Listener listener) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
         this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
         this.couleurPalet =new ConcurrentLinkedQueue<>();
-
+        this.sickWriter = new PrintWriter("./sick.txt", "UTF16");
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
         listener.addQueue(Channel.EVENT, eventData);
@@ -203,8 +211,15 @@ public class SensorControler extends Thread implements Service {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
             System.out.print(sickMeasurementsStr[i]+" ");
             sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
+
         }
         System.out.println();
+        nb_times++;
+        sickWriter.println(sickMeasurements[0]);
+        if(nb_times == 200){
+            System.out.println("////////CLOSED///////////////");
+            sickWriter.close();
+        }
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         int dsick;

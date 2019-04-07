@@ -44,10 +44,12 @@ public class TestSICK extends TestBaseHL {
             // impossible de tester en mode simulation
         } else {
             // test avec tous les SICK
-            for (int i=0;i < 100;i++) {
+            int m = 0;
+            for (int i=0;i < 201;i++) {
             robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(10);
             System.out.println(XYO.getRobotInstance());
+
             }
         }
     }
