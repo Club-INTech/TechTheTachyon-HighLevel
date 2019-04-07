@@ -29,16 +29,10 @@ public class ScriptPaletsZoneChaos extends Script{
     int rayonRobot = 0;
     int rayonPalet= 38;
 
-
-
-
     public ScriptPaletsZoneChaos(Master robot, Table table) {super(robot, table); }
 
     @Override
     public void execute(Integer version) {
-        table.removeFixedObstacle(table.getPaletBleuGauche());
-        table.removeFixedObstacle(table.getPaletRougeGauche());
-        table.removeFixedObstacle(table.getPaletVertGauche());
         float[] signes= new float[3];
         signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
         signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);

@@ -17,8 +17,10 @@ public class TestZoneChaos extends TestScriptBase {
     }
 
     @Override
-    public void initState(Container container) throws ContainerException {
-
+    public void initState(Container container) {
+        table.removeFixedObstacle(table.getPaletBleuGauche());
+        table.removeFixedObstacle(table.getPaletRougeGauche());
+        table.removeFixedObstacle(table.getPaletVertGauche());
     }
 
     @Override

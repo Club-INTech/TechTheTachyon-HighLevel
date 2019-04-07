@@ -9,6 +9,7 @@
 # Logs & Config files
 logs/
 config/hierarchy.txt
+sick-*.csv
 
 # Doc
 doc/formation/*.pdf

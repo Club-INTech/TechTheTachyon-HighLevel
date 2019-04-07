@@ -1,20 +1,20 @@
 package data.controlers;
 
-import data.*;
+import data.CouleurPalet;
+import data.SensorState;
+import data.Sick;
+import data.XYO;
 import pfg.config.Config;
-import sun.nio.cs.UTF_32;
-import sun.text.normalizer.UTF16;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -66,7 +66,7 @@ public class SensorControler extends Thread implements Service {
 
     private PrintWriter sickWriter;
 
-    int nb_times = 0;
+    private int measureIndex = 0;
 
     /**
      * Construit un gestionnaire de capteur
@@ -80,7 +80,12 @@ public class SensorControler extends Thread implements Service {
         this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
         this.couleurPalet =new ConcurrentLinkedQueue<>();
-        this.sickWriter = new PrintWriter("./sick.txt", "UTF16");
+        this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
+        sickWriter.print("Indice");
+        for (Sick sick : Sick.values()) {
+            sickWriter.print("\t"+sick.name());
+        }
+        sickWriter.println();
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
         listener.addQueue(Channel.EVENT, eventData);
@@ -209,17 +214,13 @@ public class SensorControler extends Thread implements Service {
         System.out.println("=== SICK ===");
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
-            System.out.print(sickMeasurementsStr[i]+" ");
             sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
+            System.out.print(sickMeasurementsStr[i]+" ");
 
         }
         System.out.println();
-        nb_times++;
-        sickWriter.println(sickMeasurements[0]);
-        if(nb_times == 200){
-            System.out.println("////////CLOSED///////////////");
-            sickWriter.close();
-        }
+        sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
+        sickWriter.flush();
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         int dsick;
@@ -306,5 +307,11 @@ public class SensorControler extends Thread implements Service {
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        sickWriter.close();
     }
 }
