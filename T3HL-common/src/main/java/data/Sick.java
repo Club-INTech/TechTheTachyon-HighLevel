@@ -23,7 +23,7 @@ public enum Sick {
     public static final Sick[] LOWER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
     public static final Sick[] UPPER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
 
-    // TODO: Vérifier tous ceux en dessous
+
     public static final Sick[] LOWER_RIGHT_CORNER_TOWARDS_0 = {SICK_AVANT, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
     public static final Sick[] UPPER_RIGHT_CORNER_TOWARDS_0 = {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
 

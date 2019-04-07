@@ -138,6 +138,14 @@ public enum Connection {
      *                  in case of communication problem
      */
     public Optional<String> read() throws CommunicationException {
+        while(!this.communicationInterface.isInterfaceOpen()) {
+            try {
+                Log.COMMUNICATION.critical("WAITING FOR OPENNESS");
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return this.communicationInterface.read();
     }
 

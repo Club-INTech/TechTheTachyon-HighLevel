@@ -8,6 +8,10 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
+
 /**
  * Test du recalage avec les SICK
  */
@@ -35,13 +39,16 @@ public class TestSICK extends TestBaseHL {
     }
 
     @Override
-    public void action() {
+    public void action() throws InterruptedException {
         if((boolean)ConfigData.SIMULATION.getDefaultValue()) {
             // impossible de tester en mode simulation
         } else {
             // test avec tous les SICK
+            for (int i=0;i < 100;i++) {
             robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
+            TimeUnit.SECONDS.sleep(1);
             System.out.println(XYO.getRobotInstance());
+            }
         }
     }
 }
