@@ -268,6 +268,7 @@ public class OrderWrapper implements Service {
     public void sendString(String message) {
         try {
             llConnection.send(message);
+            Log.ORDERS.debug("Sent to LL: "+message);
             // DEBUG System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
@@ -276,6 +277,7 @@ public class OrderWrapper implements Service {
                     Thread.sleep(5);
                 }
                 llConnection.send(message);
+                Log.ORDERS.debug("Sent to LL: "+message);
             } catch (CommunicationException | InterruptedException e1) {
                 e1.printStackTrace();
             }

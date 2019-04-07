@@ -50,6 +50,7 @@ public class SocketServerInterface extends SocketInterface {
                 ServerSocket serverSocket = null;
                 Socket privSocket = null;
                 try {
+                    Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
                     serverSocket = new ServerSocket(port);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
                 } catch (IOException e) {
@@ -58,8 +59,7 @@ public class SocketServerInterface extends SocketInterface {
                 while (!isInterrupted()) {
                     try {
                         synchronized (this) {
-                            Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
-                            Log.COMMUNICATION.debug(String.format("Socket created. Waiting connection on port %d", port));
+                            Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
                             privSocket = serverSocket.accept();
                             if (privSocket != null){
                                 socket = privSocket;

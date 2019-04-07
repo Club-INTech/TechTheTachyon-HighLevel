@@ -34,7 +34,7 @@ public class KeepAlive extends Thread implements Service {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        while(!isInterrupted()) {
+        /*while(!isInterrupted()) {
             orderWrapper.ping();
 
             long time = System.currentTimeMillis();
@@ -53,7 +53,7 @@ public class KeepAlive extends Thread implements Service {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     @Override
