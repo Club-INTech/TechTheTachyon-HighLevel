@@ -38,9 +38,9 @@ public class ScriptPaletsZoneChaos extends Script{
         signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
         signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
 
-        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet+5),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet+5),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*(rayonRobot+rayonPalet+5),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
 
 
         try{
