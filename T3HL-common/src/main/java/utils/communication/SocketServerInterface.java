@@ -23,6 +23,7 @@ import utils.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 /**
  * Définit l'interface de connexion utilisant une socket serveur
@@ -59,14 +60,18 @@ public class SocketServerInterface extends SocketInterface {
                 while (!isInterrupted()) {
                     try {
                         synchronized (this) {
-                            Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
-                            privSocket = serverSocket.accept();
-                            if (privSocket != null){
-                                socket = privSocket;
+                            try {
+                                Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
+                                privSocket = serverSocket.accept();
+                                if (privSocket != null){
+                                    socket = privSocket;
+                                }
+                                Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
+                                initBuffers();
+                                Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
+                            } catch (SocketTimeoutException e) {
+                                e.printStackTrace();
                             }
-                            Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
-                            initBuffers();
-                            Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
                         }
                     } catch (IOException | CommunicationException e) {
                         e.printStackTrace();

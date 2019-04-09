@@ -47,7 +47,7 @@ public class RunConfigGenerator {
             }
 
             // Génération des nouvelles configs
-            String[] scripts = {"ZoneDeDepart", "PaletsX6", "Accelerateur", "Timeout", "AI", "SICK", "Lidar", "ZoneChaos", "PathfindingMobileObstacles"};
+            String[] scripts = {"ZoneDeDepart", "PaletsX6", "Accelerateur", "Timeout", "AI", "SICK", "Lidar", "ZoneChaos", "PathfindingMobileObstacles", "Positions"};
             String[] configTypes = {"runOnRobot", "simulate"};
             for (String runConfig: scripts) {
                 for (String runConfigType : configTypes) {
