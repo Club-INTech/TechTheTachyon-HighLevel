@@ -137,7 +137,6 @@ public class SensorControler extends Thread implements Service {
             x = -x;
             o = Calculs.modulo(Math.PI - o, Math.PI);
         }
-        System.out.println(x+" "+y+" "+o);
         XYO.getRobotInstance().update(x, y, o);
     }
 
