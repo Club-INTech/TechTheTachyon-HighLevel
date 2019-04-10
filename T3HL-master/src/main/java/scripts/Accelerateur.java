@@ -13,6 +13,9 @@ import utils.math.VectCartesian;
 
 
 public class Accelerateur extends Script {
+    private final VectCartesian positionEcartementPalet;
+    private final VectCartesian positionCoin;
+    private final VectCartesian positionDepart;
     /**
      * Position d'entrée du script
      */
@@ -26,27 +29,18 @@ public class Accelerateur extends Script {
     private int distavance = 0;
     private int palet = 90;
     private final int ecartement = 20;
+    private final int distanceToCorner = 30;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
+        positionEcartementPalet = new VectCartesian(xEntry+palet+ecartement, yEntry);
+        positionCoin = new VectCartesian(xEntry-distanceToCorner, yEntry);
+        positionDepart = new VectCartesian(xEntry, yEntry);
     }
 
     private void actionBras(boolean cotedroite, boolean monteAsc /*TODO: tmp*/) {
         try {
-            if(!cotedroite) {
-                if(monteAsc) {
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-                }
-                robot.moveLengthwise(-palet-ecartement, false);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(palet+ecartement, false);
-                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE);
-                robot.popPaletGauche();
-            } else {
+            if (cotedroite) {
                 if(monteAsc) {
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
@@ -55,10 +49,27 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
                 robot.moveLengthwise(-palet-ecartement,false);
-                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
+                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
+                robot.moveLengthwise(-distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
+                robot.moveLengthwise(distanceToCorner, false);
                 robot.popPaletDroit();
+            } else {
+                if(monteAsc) {
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                }
+                robot.moveLengthwise(-palet-ecartement, false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
+                robot.moveLengthwise(palet+ecartement, false);
+                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
+                robot.moveLengthwise(distanceToCorner, false);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
+                robot.moveLengthwise(-distanceToCorner, false);
+                robot.popPaletGauche();
             }
         } catch (UnableToMoveException a){
             a.printStackTrace();
@@ -92,7 +103,9 @@ public class Accelerateur extends Script {
              * Dire que le goldenium est libéré
              */
             GameState.GOLDENIUM_LIBERE.setData(true);
+            robot.followPathTo(positionDepart);
             robot.turn(Math.PI);
+//            robot.moveLengthwise(palet+ecartement, false);
             robot.increaseScore(10);
             boolean first = false;
             while(robot.getNbPaletsGauches() > 0) {
