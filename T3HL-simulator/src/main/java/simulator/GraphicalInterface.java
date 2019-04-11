@@ -227,9 +227,27 @@ public class GraphicalInterface extends JFrame {
                 }
             }
         }
-        drawElevators(g, simulatedRobot, index);
+        drawDebug(g, simulatedRobot, index);
 
         g.setColor(DEFAULT_COLOR);
+    }
+
+    private void drawDebug(Graphics g, SimulatedRobot simulatedRobot, int index) {
+        drawElevators(g, simulatedRobot, index);
+        drawArmPositions(g, simulatedRobot, index);
+    }
+
+    private void drawArmPositions(Graphics g, SimulatedRobot simulatedRobot, int index) {
+        g.setColor(Color.BLACK);
+
+        int totalElevatorPanelHeight = 100;
+        int margin = 10;
+        int baseY = index*totalElevatorPanelHeight+margin;
+        int baseX = TABLE_PIXEL_WIDTH + margin*2 + 120;
+        int textHeight = g.getFontMetrics().getHeight();
+
+        g.drawString("Lpos: "+simulatedRobot.getLeftArmPosition(), baseX, baseY+textHeight);
+        g.drawString("Rpos: "+simulatedRobot.getRightArmPosition(), baseX, baseY+textHeight*2+margin);
     }
 
     private void drawElevators(Graphics g, SimulatedRobot simulatedRobot, int index) {

@@ -61,6 +61,10 @@ public class SimulatedRobot {
     private List<CouleurPalet> leftStack;
     private List<CouleurPalet> rightStack;
 
+    // Positions des bras (pour le debug)
+    private String leftArmPosition = "unknown";
+    private String rightArmPosition = "unknown";
+
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
     SimulatedRobot(int port){
@@ -297,7 +301,7 @@ public class SimulatedRobot {
     /* ======================== Méthodes de modification des objectifs cibles du robot ========================== */
     /** Fait avancer le robot de delta */
     void moveLengthwise(int delta){
-        if (delta < this.POSITION_TOLERANCE){
+        if (Math.abs(delta) < this.POSITION_TOLERANCE){
             this.forceRaiseStoppedMovingFlag();
         }
         else {
@@ -415,4 +419,23 @@ public class SimulatedRobot {
         return port;
     }
 
+    public String getLeftArmPosition() {
+        return leftArmPosition;
+    }
+
+    public String getRightArmPosition() {
+        return rightArmPosition;
+    }
+
+    public void setArmPosition(RobotSide side, String position) {
+        switch (side) {
+            case LEFT:
+                leftArmPosition = position;
+                break;
+
+            case RIGHT:
+                rightArmPosition = position;
+                break;
+        }
+    }
 }

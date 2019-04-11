@@ -80,6 +80,11 @@ public class PathFollower extends ServiceThread {
     private int RADIUS_CHECK;
 
     /**
+     * Actions exécutées en parallèle du mouvement
+     */
+    private Runnable[] parallelActions;
+
+    /**
      * Construit le service de suivit de chemin
      * @param orderWrapper
      *              order wrapper
@@ -117,10 +122,10 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas d'évènents inattendus
      */
-    public void moveLenghtwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
+    public void moveLenghtwise(int distance, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
         XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
         SensorState.MOVING.setData(true);
-        this.orderWrapper.moveLenghtwise(distance);
+        this.orderWrapper.moveLenghtwise(distance, parallelActions);
 
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (isLineForwardObstructed(distance > 0)) {
@@ -142,10 +147,10 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas de blocage mécanique ou d'adversaire
      */
-    public void turn(double angle, boolean expectedWallImpact) throws UnableToMoveException {
+    public void turn(double angle, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
         XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
         SensorState.MOVING.setData(true);
-        this.orderWrapper.turn(angle);
+        this.orderWrapper.turn(angle, parallelActions);
 
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (isCircleObstructed()) {
@@ -165,12 +170,12 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas de blocage mécanique ou d'adversaire
      */
-    private void moveToPoint(Vec2 point) throws UnableToMoveException {
+    private void moveToPoint(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
         XYO aim = new XYO(point, Calculs.modulo(point.minusVector(robotXYO.getPosition()).getA(), Math.PI));
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
-        this.orderWrapper.moveToPoint(point);
+        this.orderWrapper.moveToPoint(point, parallelActions);
 
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (isCircleObstructed()) {
@@ -242,7 +247,8 @@ public class PathFollower extends ServiceThread {
                 do {
                     aim = pointsQueue.poll();
                     Log.LOCOMOTION.debug("Move to "+aim);
-                    this.moveToPoint(aim);
+                    this.moveToPoint(aim, parallelActions);
+                    parallelActions = new Runnable[0];
                     hasNext = !pointsQueue.isEmpty();
                 } while (hasNext);
             } catch (UnableToMoveException e) {
@@ -251,6 +257,14 @@ public class PathFollower extends ServiceThread {
                 exceptionsQueue.add(e);
             }
         }
+    }
+
+    /**
+     * Setter des actions à exécuter en parallèle du mouvement. Attention! Le champ est reset à un tableau vide dès qu'un mouvement est fini
+     * @param parallelActions
+     */
+    public void setParallelActions(Runnable[] parallelActions) {
+        this.parallelActions = parallelActions;
     }
 
     @Override
@@ -271,15 +285,14 @@ public class PathFollower extends ServiceThread {
         this.DISTANCE_CHECK = config.getInt(ConfigData.LOCOMOTION_DISTANCE_CHECK);
         this.RADIUS_CHECK = config.getInt(ConfigData.LOCOMOTION_RADIUS_CHECK);
     }
-
     /**
      * Getters & Setters
      */
     void setPointsQueue(ConcurrentLinkedQueue<Vec2> pointsQueue) {
         this.pointsQueue = pointsQueue;
     }
+
     void setExceptionsQueue(ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue) {
         this.exceptionsQueue = exceptionsQueue;
     }
-
 }

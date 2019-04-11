@@ -76,7 +76,7 @@ public class JUnit_ScriptPaletsZoneChaos {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             for (Vec2 position : positions) {
                 if(premierPaletPris == false){
-                    robot.gotoPoint(position);
+                    robot.followPathTo(position);
                 } else{ premierPaletPris=true;}
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);

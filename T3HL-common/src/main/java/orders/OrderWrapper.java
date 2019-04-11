@@ -114,32 +114,35 @@ public class OrderWrapper implements Service {
      * On envoit au bas niveau comme ordre d'avancer d'une certaine distance
      * @param distance distance dont on avance
      */
-    public void moveLenghtwise(double distance) {
+    public void moveLenghtwise(double distance, Runnable... parallelActions) {
         int d = (int) Math.round(distance);
         this.sendString(String.format(Locale.US, "%s %d", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d));
+        runAll(parallelActions);
     }
 
     /**
      * On envoit au bas niveau comme ordre de tourner
      * @param angle  angle avec lequel on veut tourner
      */
-    public void turn(double angle) {
+    public void turn(double angle, Runnable... parallelActions) {
         if(symetry) {
             angle=(Math.PI - angle)%(2*Math.PI);
         }
         this.sendString(String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), angle));
+        runAll(parallelActions);
     }
 
     /**
      * On envoit au LL l'ordre d'aller en ligne droite jusqu'à un point
      * @param point point visé
      */
-    public void moveToPoint(Vec2 point) {
+    public void moveToPoint(Vec2 point, Runnable... parallelActions) {
         Vec2 p = point;
         if(symetry) {
             p = p.symetrizeVector();
         }
         this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), p.getX(), p.getY()));
+        runAll(parallelActions);
     }
 
     /**
@@ -284,6 +287,16 @@ public class OrderWrapper implements Service {
             } catch (CommunicationException | InterruptedException e1) {
                 e1.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * Exécute toutes les actions du tableau donné
+     * @param actions les actions à exécuter
+     */
+    private void runAll(Runnable[] actions) {
+        for (Runnable action : actions) {
+            action.run();
         }
     }
 
