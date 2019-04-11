@@ -297,7 +297,7 @@ public class SimulatedRobot {
     /* ======================== Méthodes de modification des objectifs cibles du robot ========================== */
     /** Fait avancer le robot de delta */
     void moveLengthwise(int delta){
-        if (delta < this.POSITION_TOLERANCE){
+        if (Math.abs(delta) < this.POSITION_TOLERANCE){
             this.forceRaiseStoppedMovingFlag();
         }
         else {
