@@ -87,11 +87,22 @@ public enum ActuatorsOrder implements Order {
             REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,
     };
 
+    static {
+        for(ActuatorsOrder order : ARM_ORDERS) {
+            order.setArmOrder();
+        }
+    }
+
     /**
      * Ordre envoyé au LL
      */
     private String orderStr;
     private long actionDuration;
+
+    /**
+     * Cet ordre est-il un ordre qui bouge un bras?
+     */
+    private boolean isArmOrder = false;
 
     /**
      * Constructeur qui ne précise pas la durée l'action
@@ -103,6 +114,17 @@ public enum ActuatorsOrder implements Order {
     ActuatorsOrder(String orderStr, long actionDuration) {
         this.orderStr = orderStr;
         this.actionDuration = actionDuration;
+    }
+
+    /**
+     * Permet d'indiquer que l'ordre concerne un bras (utile pour le simulateur)
+     */
+    private void setArmOrder() {
+        this.isArmOrder = true;
+    }
+
+    public boolean isArmOrder() {
+        return isArmOrder;
     }
 
     /**

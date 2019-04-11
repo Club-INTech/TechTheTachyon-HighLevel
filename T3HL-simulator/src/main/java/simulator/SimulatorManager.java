@@ -8,6 +8,7 @@ import utils.RobotSide;
 import utils.math.VectCartesian;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class SimulatorManager extends Thread {
 
@@ -273,6 +274,25 @@ public class SimulatorManager extends Thread {
                     CouleurPalet.setCouleurPalRecu(CouleurPalet.values()[rand].name().toLowerCase());
                 }
                 else {
+                    ActuatorsOrder correspondingOrder = null;
+                    if(arguments.length == 2) {
+                        for(ActuatorsOrder actuatorOrder : ActuatorsOrder.values()) {
+                            if(actuatorOrder.getOrderStr().equals(m)) {
+                                correspondingOrder = actuatorOrder;
+                            }
+                        }
+                        if(correspondingOrder != null && correspondingOrder.isArmOrder()) {
+                            String position = arguments[0];
+                            RobotSide side = RobotSide.valueOf(arguments[1].toUpperCase());
+                            robot.setArmPosition(side, position);
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(750); // simulation du mouvement
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            return;
+                        }
+                    }
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
                 }
             }
