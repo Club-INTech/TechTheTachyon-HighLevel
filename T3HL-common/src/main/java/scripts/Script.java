@@ -79,7 +79,7 @@ public abstract class Script implements Service {
 
         try {
             System.out.println("coucou");
-            this.robot.followPathTo(entryPosition);
+            this.robot.followPathTo(entryPosition, () -> this.executeWhileMovingToEntry(version));
             System.out.println("dqiojzdoizqhdozqhdzoudh");
         } catch (UnableToMoveException e) {
             e.printStackTrace();
@@ -96,6 +96,12 @@ public abstract class Script implements Service {
             // TODO
         }
     }
+
+    /**
+     * Exécution d'actions pendant le mouvement jusqu'à la position d'entrée du script. Utile pour mettre les bras à la bonne position, baisser un ascenseur, etc.
+     * @param version la version du script
+     */
+    public void executeWhileMovingToEntry(int version) {}
 
     /**
      * Methode d'execution du script !

@@ -84,10 +84,6 @@ public class Accelerateur extends Script {
             //robot.followPathTo(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
             System.out.println("debug 3");
             robot.turn(0);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
@@ -116,8 +112,16 @@ public class Accelerateur extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
     }
+
+    @Override
+    public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+    }
+
     @Override
     public Shape entryPosition(Integer version) {
         return new Circle(new VectCartesian(xEntry, yEntry), 5);

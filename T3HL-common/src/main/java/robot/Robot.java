@@ -144,8 +144,8 @@ public abstract class Robot implements Service {
      * @throws UnableToMoveException
      *              en cas de problème de blocage/adversaire
      */
-    public void followPathTo(Vec2 point) throws UnableToMoveException {
-        this.locomotion.followPathTo(point);
+    public void followPathTo(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
+        this.locomotion.followPathTo(point, parallelActions);
     }
 
     /**

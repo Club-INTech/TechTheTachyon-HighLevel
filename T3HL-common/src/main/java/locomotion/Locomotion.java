@@ -153,7 +153,7 @@ public class Locomotion implements Service {
      * Méthode permettant au robot de se déplacer jusqu'à un point de la table
      * @param point point à atteindre
      */
-    public void followPathTo(Vec2 point) throws UnableToMoveException {
+    public void followPathTo(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
         // TODO : Synchroniser
         Node start;
         Node aim;
@@ -195,6 +195,8 @@ public class Locomotion implements Service {
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+
+        pathFollower.setParallelActions(parallelActions);
 
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
             try {
