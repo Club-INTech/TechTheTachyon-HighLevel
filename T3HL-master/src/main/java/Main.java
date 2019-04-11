@@ -24,6 +24,7 @@ import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
 import connection.ConnectionManager;
+import data.CouleurPalet;
 import data.Graphe;
 import data.Table;
 import data.XYO;
@@ -91,11 +92,6 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
             waitForLLConnection();
-            Thread.sleep(1000*5);
-            orderWrapper.sendString("ping");
-            Thread.sleep(2000);
-            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-            Thread.sleep(1000);
             //ai.start();
 
             //while(ai.getAgent() != null) {
@@ -140,13 +136,17 @@ public class Main {
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
-            XYO.getRobotInstance().getPosition().setXY(-730, 450);
+            XYO.getRobotInstance().getPosition().setXY(-730, 442);
 
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
             //robot.goto(0,400);
+            for (int i = 0; i < 5; i++) {
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
+                robot.pushPaletGauche(CouleurPalet.ROUGE);
+            }
 
-            //accelerateur.goToThenExecute(0);
+            accelerateur.goToThenExecute(0);
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             //zone_chaos_palets.goToThenExecute(0);
 

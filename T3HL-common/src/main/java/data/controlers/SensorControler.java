@@ -140,7 +140,6 @@ public class SensorControler extends Thread implements Service {
             o = Calculs.modulo(Math.PI - o, Math.PI);
         }
         XYO.getRobotInstance().update(x, y, o);
-        System.out.println("Update from LL "+XYO.getRobotInstance());
     }
 
     private void handleBuddyPos(){
