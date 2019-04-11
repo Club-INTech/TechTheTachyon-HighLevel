@@ -15,6 +15,9 @@ ESPACEMENT_CIRCLE                   = 1.2
 #Couleur
 COULEUR                             =violet
 
+#CHEMIN D'EXECUTION DU PROCESSUS LIDAR
+LIDAR_PROCESS_PATH=./bin/LiDAR_UST_10LX
+
 #________________________________________________________________________________________________________________________
 
 [Master]

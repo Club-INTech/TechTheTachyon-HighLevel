@@ -81,6 +81,11 @@ public class LidarControler extends ServiceThread {
     private int enemyRadius;
 
     /**
+     * Chemin du processus gèrant le Lidar (absolu ou relatif au dossier d'exécution)
+     */
+    private String processPath;
+
+    /**
      * Construit un gestionnaire des données du Lidar
      * @param table     la table
      * @param listener  le listener
@@ -97,7 +102,7 @@ public class LidarControler extends ServiceThread {
         Log.LIDAR.debug("Controller lancé : en attente du listener...");
         Log.LIDAR.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
-            Process lidarProcess = new ProcessBuilder("../bin/LiDAR_UST_10LX").start();
+            Process lidarProcess = new ProcessBuilder(processPath).start();
 
             // force l'extinction du programme quand la VM s'arrête
             Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
@@ -169,5 +174,6 @@ public class LidarControler extends ServiceThread {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
         this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
         this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
+        this.processPath = config.getString(ConfigData.LIDAR_PROCESS_PATH);
     }
 }
