@@ -11,6 +11,12 @@ Code de l'année 2019
 * [ ] Com avec l'électron
 * [ ] IA
 
+## Setup sur le robot
+1. Cloner le repo sur la Rapsi
+2. Lancer le script 'setup' dans le dossier racine du projet
+3. ???
+4. Profit. Tout est déjà fait!
+
 ## Installation - IntelliJ
 ### Prérequis
 1. Installer Java (Par défaut sur beacoup de distribution)

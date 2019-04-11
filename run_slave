@@ -1,0 +1,3 @@
+#!/bin/bash
+cd bin/
+java -jar TTHL-slave-1.0.jar

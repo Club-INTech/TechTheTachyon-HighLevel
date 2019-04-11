@@ -1,0 +1,49 @@
+#!/bin/bash
+echo "cd bin"
+cd bin
+echo $PWD
+
+# Préparation du code pour le lidar
+if [ ! -d "UST-10LX" ]; then
+    echo "Pas de dossier UST_10LX, clonage depuis GitHub"
+    echo "git clone https://github.com/Club-INTech/UST-10LX"
+    git clone https://github.com/Club-INTech/UST-10LX
+fi
+
+echo "cd UST-10LX"
+cd UST-10LX
+echo $PWD
+
+echo "Compilation du code du Lidar..."
+echo "chmod u+x compile"
+chmod u+x compile
+
+echo "./compile"
+./compile
+echo "cp build/LiDAR_UST_10LX ./bin"
+cp build/LiDAR_UST_10LX ../
+
+echo "cd ../.."
+cd ../..
+echo $PWD
+
+#Build de tout!
+echo "mvn package -DskipTests"
+mvn package -DskipTests
+
+echo "mkdir ./bin/lib/"
+mkdir ./bin/lib/
+
+# Copie des fichiers compilés et des libs du maître
+echo "cp -r T3HL-master/target/lib ./bin/"
+cp -r T3HL-master/target/lib ./bin/
+
+echo "cp T3HL-master/target/TTHL-master-1.0.jar ./bin/"
+cp T3HL-master/target/TTHL-master-1.0.jar ./bin/
+
+# Copie des fichiers compilés et des libs de l'esclave
+echo "cp -r T3HL-slave/target/lib ./bin/"
+cp -r T3HL-slave/target/lib ./bin/
+
+echo "cp T3HL-slave/target/TTHL-slave-1.0.jar ./bin/"
+cp T3HL-slave/target/TTHL-slave-1.0.jar ./bin/
