@@ -136,7 +136,9 @@ public abstract class TestBaseHL {
             }
             initState(container);
 
-            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+            Vec2 start = startPosition();
+            XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
+            robot.setPositionAndOrientation(start, startOrientation());
 
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
