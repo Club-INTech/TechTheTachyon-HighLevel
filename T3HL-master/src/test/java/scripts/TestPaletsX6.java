@@ -12,11 +12,14 @@ public class TestPaletsX6 extends TestScriptBase {
     public void initState(Container container) throws ContainerException {
         Table table = container.getService(Table.class);
         table.removeAllChaosObstacles();
+        table.removeFixedObstacle(table.getPaletBleuGauche());
+        table.removeFixedObstacle(table.getPaletRougeGauche());
+        table.removeFixedObstacle(table.getPaletVertGauche());
     }
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-730, 470);
+        return new VectCartesian(-1309, 226);
     }
 
     @Override
@@ -26,6 +29,6 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public int[] versionsToTest() {
-        return new int[] {1};
+        return new int[] {0};
     }
 }

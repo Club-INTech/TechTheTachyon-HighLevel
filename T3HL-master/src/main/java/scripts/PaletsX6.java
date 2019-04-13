@@ -37,12 +37,12 @@ public class PaletsX6 extends Script {
      */
 
         if (version == 0) { //rouge droite
-            positions.add(new VectCartesian(-1000, 1225));
-            positions.add(new VectCartesian(-850, 1225));
-            positions.add(new VectCartesian(-450, 1225));
+            positions.add(new VectCartesian(-1000, 1186));
+            positions.add(new VectCartesian(-805 , 1186));
+            positions.add(new VectCartesian(-597, 1186));
         } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(-900, 1225));
-            positions.add(new VectCartesian(-500, 1225));
+            positions.add(new VectCartesian(-905, 1186));
+            positions.add(new VectCartesian(-505, 1186));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {  //bleu droite
             positions.add(new VectCartesian(-834, 1225));
@@ -72,12 +72,15 @@ public class PaletsX6 extends Script {
                     premierdeplacement = true;
                     robot.turn(0 );}
 
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+
+               // robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+                robot.turn(0 );
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
@@ -88,11 +91,11 @@ public class PaletsX6 extends Script {
     public Shape entryPosition(Integer version) {
 
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(500,500), 5);
+            Shape positionEntree = new Circle(new VectCartesian(-1000,1186), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            Shape positionEntree = new Circle(new VectCartesian(-1000,1186), 5);
             return positionEntree;
         }
         else if (version == 2) {
