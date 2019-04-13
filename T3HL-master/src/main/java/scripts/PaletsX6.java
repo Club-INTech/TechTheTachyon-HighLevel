@@ -65,10 +65,10 @@ public class PaletsX6 extends Script {
         try {
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
-               //
-                    robot.followPathTo(position);
-                    if (premierdeplacement) {}
-                    else {
+                //
+                robot.followPathTo(position);
+                if (premierdeplacement) {}
+                else {
                     premierdeplacement = true;
                     robot.turn(0 );}
 
