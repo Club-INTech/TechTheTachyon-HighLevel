@@ -24,16 +24,6 @@ public class ComparatorNode implements Comparator<Node> {
             return 1;
         if(n2 == null)
             return -1;
-        if(heuristiques.get(n1) == null)
-            return -1;
-        if(heuristiques.get(n2) == null)
-            return -1;
-        if (heuristiques.get(n1) > heuristiques.get(n2)){
-            return 1;
-        } else if (heuristiques.get(n1) < heuristiques.get(n2)) {
-            return -1;
-        } else {
-            return 0;
-        }
+        return Double.compare(heuristiques.getOrDefault(n1, Node.DEFAULT_HEURISTIC), heuristiques.getOrDefault(n2, Node.DEFAULT_HEURISTIC));
     }
 }

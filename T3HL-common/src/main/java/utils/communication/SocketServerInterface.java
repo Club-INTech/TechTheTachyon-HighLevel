@@ -23,6 +23,7 @@ import utils.Log;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 /**
@@ -32,6 +33,8 @@ import java.net.SocketTimeoutException;
  * @author william, rem
  */
 public class SocketServerInterface extends SocketInterface {
+
+    private ServerSocket serverSocket = null;
 
     /**
      * Construit une interface de connexion point-à-point attendant la connexion
@@ -48,7 +51,6 @@ public class SocketServerInterface extends SocketInterface {
         Thread thread = new Thread(){
             @Override
             public void run() {
-                ServerSocket serverSocket = null;
                 Socket privSocket = null;
                 try {
                     Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
@@ -75,10 +77,28 @@ public class SocketServerInterface extends SocketInterface {
                         }
                     } catch (IOException | CommunicationException e) {
                         e.printStackTrace();
+                        if(e instanceof SocketException) {
+                            if(((SocketException) e).getMessage().contains("Socket is closed")) {
+                                break;
+                            }
+                        }
                     }
                 }
             }
         };
+        thread.setDaemon(true);
         thread.start();
+    }
+
+    @Override
+    public synchronized void close() throws CommunicationException {
+        super.close();
+        if(serverSocket != null) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

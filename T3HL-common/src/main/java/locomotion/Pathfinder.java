@@ -51,7 +51,7 @@ public class Pathfinder implements Service {
      */
     private LinkedList<Node> closedList;
 
-    private Map<Node, Integer> costs;
+    private Map<Node, Double> costs;
     private Map<Node, Node> parents;
     private Map<Node, Double> heuristiques;
 
@@ -95,7 +95,6 @@ public class Pathfinder implements Service {
 
         Node currentNode;
         Set<Node> neighbours;
-        int currentCost;
 
         // On clean la liste des noeuds à visiter et celles des noeuds visités et on ajoute le noeud de départ
         closedList.clear();
@@ -134,7 +133,8 @@ public class Pathfinder implements Service {
 
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
                     if (ridge.isReachable(graphe)) {
-                        currentCost = costs.getOrDefault(currentNode, 0) + ridge.getCost();
+                        double ridgeCost = ridge.getCost();
+                        double currentCost = costs.getOrDefault(currentNode, Node.DEFAULT_COST) + ridgeCost;
                         if(neighbour.equals(aim)) {
                             parents.put(neighbour, currentNode);
                             return reconstructPath(start, neighbour);
@@ -142,7 +142,7 @@ public class Pathfinder implements Service {
 
                         // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
                         boolean visited = (openList.contains(neighbour) || closedList.contains(neighbour));
-                        if (visited && currentCost < costs.getOrDefault(neighbour, 0)) {
+                        if (visited && currentCost < costs.getOrDefault(neighbour, Node.DEFAULT_COST)) {
                             costs.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             if (closedList.contains(neighbour)) {
@@ -155,7 +155,6 @@ public class Pathfinder implements Service {
                             parents.put(neighbour, currentNode);
                             openList.add(neighbour);
                         }
-
                     }
 
                 }

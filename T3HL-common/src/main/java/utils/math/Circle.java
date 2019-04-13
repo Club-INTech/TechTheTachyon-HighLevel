@@ -84,10 +84,10 @@ public class Circle extends Shape {
      */
     @Override
     public boolean intersect(Segment segment) {
-        return Line2D.ptSegDist(
+        return Line2D.ptSegDistSq(
                 segment.getPointA().getX(), segment.getPointA().getY(),
                 segment.getPointB().getX(), segment.getPointB().getY(),
-                this.getCenter().getX(), this.getCenter().getY())<=this.getRadius();
+                this.getCenter().getX(), this.getCenter().getY()) <= this.getRadius()*this.getRadius();
     }
 
     /**

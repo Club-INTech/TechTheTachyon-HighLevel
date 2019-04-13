@@ -3,10 +3,12 @@ package simulator;
 import data.CouleurPalet;
 import data.Table;
 import data.graphe.Node;
+import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import locomotion.PathFollower;
 import robot.Robot;
+import utils.ConfigData;
 import utils.RobotSide;
 import utils.math.*;
 import utils.math.Rectangle;
@@ -58,6 +60,7 @@ public class GraphicalInterface extends JFrame {
     private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
     private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
+    private Color RIDGE_COLOR = new Color(0,0,0,200);
     private Color PATH_COLOR = new Color(255,0,0,255);
 
     //Attributs pas graphiques
@@ -344,7 +347,14 @@ public class GraphicalInterface extends JFrame {
             }
             drawPrimitiveShape(g, ((CircularRectangle) shape).getMainRectangle());
         } else {
-            drawPrimitiveShape(g, shape);
+            if(obstacle instanceof MobileCircularObstacle) {
+                Circle pathShape = ((MobileCircularObstacle) obstacle).getPathfindingShape();
+                Vec2 center = transformTableCoordsToInterfaceCoords(pathShape.getCenter());
+                float diameter = transformTableDistanceToInterfaceDistance(pathShape.getRadius()*2);
+                g.drawOval(center.getX()-Math.round(diameter/2), center.getY()-Math.round(diameter/2), Math.round(diameter), Math.round(diameter));
+
+                drawPrimitiveShape(g, shape);
+            }
         }
     }
 
@@ -392,7 +402,7 @@ public class GraphicalInterface extends JFrame {
         int index = 0;
         for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
-            int diameterOnInterface = transformTableDistanceToInterfaceDistance(250);
+            int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue()*2);
             drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface, index);
             index++;
         }
@@ -416,6 +426,15 @@ public class GraphicalInterface extends JFrame {
                 vecteur = transformTableCoordsToInterfaceCoords(vecteur);
                 g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
             }
+
+/*            g.setColor(RIDGE_COLOR);
+            for(Ridge ridge : table.getGraphe().getRidges()) {
+                Vec2 pointA = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointA());
+                Vec2 pointB = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointB());
+                if(Math.random() < 0.025 && ridge.isReachable(table.getGraphe())) {
+                    g.drawLine(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY());
+                }
+            }*/
         } finally {
             table.getGraphe().readLock().unlock();
         }

@@ -220,6 +220,7 @@ public class Locomotion implements Service {
                 //    System.out.println("xyo: "+xyo.getPosition()+" / aim: "+aim.getPosition());
                     if (exceptionsQueue.peek() != null) {
                         exception = exceptionsQueue.poll();
+                        exception.printStackTrace();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
@@ -235,6 +236,7 @@ public class Locomotion implements Service {
                                     graphe.setUpdated(true);
                                     if(ai != null)
                                         ai.getAgent().reportMovementError(exception);
+                                    break; // on sort, il faut retrouver un autre chemin
                                 }
                                 finally {
                                     graphe.writeLock().unlock();

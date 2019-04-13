@@ -32,8 +32,8 @@ public class Node {
     /**
      * Variables static pour l'initialistation des noeuds
      */
-    private static final int DEFAULT_HEURISTIC      = 1000000;
-    private static final int DEFAULT_COST           = 1000000;
+    public static final double DEFAULT_HEURISTIC      = 10_000_000_00;
+    public static final double DEFAULT_COST           = 10_000_000_00;
     private static final int FIX_COST               = 0;
 
     /**
@@ -44,12 +44,12 @@ public class Node {
     /**
      * Heuristique : variable servant à évaluer la distance entre le ce noeud et le noeud visé lors d'un éxecution du Pathfinder
      */
-    private int heuristique;
+    private double heuristique;
 
     /**
      * Coût du noeud : coût du point de départ jusqu'à ce noeud
      */
-    private int cost;
+    private double cost;
 
     /**
      * Dis si le noeud est permanent (si c'est un noeud ajouté pour le Pathfinder)
@@ -134,16 +134,16 @@ public class Node {
     }
 
     /** Getters & Setters */
-    public int getHeuristique() {
+    public double getHeuristique() {
         return heuristique;
     }
-    public void setHeuristique(int heuristique) {
+    public void setHeuristique(double heuristique) {
         this.heuristique = heuristique;
     }
-    public int getCout() {
+    public double getCout() {
         return cost;
     }
-    public void setCout(int cout) {
+    public void setCout(double cout) {
         this.cost = cout;
     }
     public boolean isPermanent() {
@@ -161,10 +161,10 @@ public class Node {
     public HashMap<Node, Ridge> getNeighbours() {
         return neighbours;
     }
-    public static int getDefaultHeuristic() {
+    public static double getDefaultHeuristic() {
         return DEFAULT_HEURISTIC;
     }
-    public static int getDefaultCost() {
+    public static double getDefaultCost() {
         return DEFAULT_COST;
     }
     public static int getFixCost() {

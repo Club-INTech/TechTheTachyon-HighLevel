@@ -19,6 +19,8 @@
 package data.table;
 
 import utils.math.Circle;
+import utils.math.Segment;
+import utils.math.Shape;
 import utils.math.Vec2;
 
 /**
@@ -39,22 +41,35 @@ public class MobileCircularObstacle extends Obstacle {
     private static final int DEFAULT_LIFE_TIME    = 100;
 
     /**
+     * Marge par défaut (en mm) pour éviter que les robots se cognent
+     */
+    private static final int DEFAULT_MARGIN = 30;
+
+    private Circle pathShape;
+
+    /**
      * Constructeur à partir d'une position et d'un rayon
      * @param position  position du centre du cercle représentant l'avdversaire
      * @param ray       rayon du cercle représentant l'adversaire
      */
     public MobileCircularObstacle(Vec2 position, int ray) {
-        super(new Circle(position, ray));
-        this.outDatedTime = DEFAULT_LIFE_TIME + System.currentTimeMillis();
+        this(new Circle(position, ray), new Circle(position, ray+DEFAULT_MARGIN));
     }
 
     /**
      * Constructeur à partir d'un cercle
      * @param circle    cercle représentant l'obstacle
      */
-    public MobileCircularObstacle(Circle circle) {
+    private MobileCircularObstacle(Circle circle, Circle pathShape) {
         super(circle);
+        this.pathShape = pathShape;
         this.outDatedTime = DEFAULT_LIFE_TIME + System.currentTimeMillis();
+    }
+
+    @Override
+    public void setPosition(Vec2 position) {
+        super.setPosition(position);
+        pathShape.setCenter(position);
     }
 
     /**
@@ -63,12 +78,28 @@ public class MobileCircularObstacle extends Obstacle {
      */
     public void update(Vec2 newPosition) {
         this.shape.setCenter(newPosition);
+        this.pathShape.setCenter(newPosition);
         this.outDatedTime = DEFAULT_LIFE_TIME + System.currentTimeMillis();
+    }
+
+    /**
+     * Forme géométrique utilisée pour le pathfinding. C'est celle de {@link #getShape()} gonflée de qq cm pour laisser
+     * une marge entre les robots adversaires et notre robot
+     */
+    public Circle getPathfindingShape() {
+        return pathShape;
     }
 
     @Override
     public Obstacle clone() throws CloneNotSupportedException {
-        return new MobileCircularObstacle((Circle) this.shape.clone());
+        Circle clonedShape = (Circle) this.shape.clone();
+        // nécessite le même centre (pas juste en égalité mais en référence)
+        return new MobileCircularObstacle(clonedShape, new Circle(clonedShape.getCenter(), pathShape.getRadius()));
+    }
+
+    @Override
+    public boolean intersect(Segment segment) {
+        return this.pathShape.intersect(segment);
     }
 
     @Override

@@ -58,14 +58,14 @@ public class Segment implements Cloneable {
      * @return  true si intersection des segments
      */
     public boolean intersect(Segment segment){
-        int xA1=this.getPointA().getX();
-        int yA1=this.getPointA().getY();
-        int xB1=this.getPointB().getX();
-        int yB1=this.getPointB().getY();
-        int xA2=segment.getPointA().getX();
-        int yA2=segment.getPointA().getY();
-        int xB2=segment.getPointB().getX();
-        int yB2=segment.getPointB().getY();
+        double xA1=this.getPointA().getX();
+        double yA1=this.getPointA().getY();
+        double xB1=this.getPointB().getX();
+        double yB1=this.getPointB().getY();
+        double xA2=segment.getPointA().getX();
+        double yA2=segment.getPointA().getY();
+        double xB2=segment.getPointB().getX();
+        double yB2=segment.getPointB().getY();
         return Line2D.linesIntersect(xA1,yA1,xB1,yB1,xA2,yA2,xB2,yB2);
     }
 
@@ -130,10 +130,10 @@ public class Segment implements Cloneable {
      * Cette méthode retourne la longueur d'un segment
      */
     private double computeLength(){
-        int xB=pointB.getX();
-        int yB=pointB.getY();
-        int xA=pointA.getX();
-        int yA=pointA.getY();
+        double xB=pointB.getX();
+        double yB=pointB.getY();
+        double xA=pointA.getX();
+        double yA=pointA.getY();
         return Math.sqrt((xB - xA)*(xB - xA) + (yB - yA)*(yB - yA));
     }
 

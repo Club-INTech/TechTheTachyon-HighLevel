@@ -20,6 +20,7 @@ package validation;
 
 import connection.Connection;
 import connection.ConnectionManager;
+import data.SensorState;
 import orders.OrderWrapper;
 import orders.hooks.HookNames;
 import orders.order.*;
@@ -28,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pfg.config.Config;
+import sun.management.Sensor;
 import utils.Container;
 import utils.math.VectCartesian;
 
@@ -157,7 +159,7 @@ public class Test_OrderWrapper {
      */
     @Test
     public void setPositionAndOrientationTest() throws Exception {
-        orderWrapper.setPositionAndOrientation(new VectCartesian(2, 3), Math.PI / 2);
+        orderWrapper.setPositionAndOrientation(new VectCartesian(2, 3), Math.PI / 2, false);
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());

@@ -34,7 +34,7 @@ public class SimulatedRobot {
     private final float ORIENTATION_TOLERANCE = 0.005f;  //Tolérance sur l'orientation
 
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
-    private final float ROTATION_SPEED = 0.001f;      //Vitesse de rotation en rad/s
+    private final float ROTATION_SPEED = 0.002f;      //Vitesse de rotation en rad/s
 
     private Vec2 START_POSITION = new VectCartesian(0,1000);
     private float START_ORIENTATION = 0;

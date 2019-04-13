@@ -86,7 +86,7 @@ public class Test_OrderWrapper_Symetry {
      */
     @Test
     public void setPositionAndOrientationTestWithSymetry() throws Exception {
-        orderWrapper.setPositionAndOrientation(new VectCartesian(2, 3), Math.PI / 3);
+        orderWrapper.setPositionAndOrientation(new VectCartesian(2, 3), Math.PI / 3, false);
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());

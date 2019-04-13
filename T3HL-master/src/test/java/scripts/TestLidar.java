@@ -2,6 +2,7 @@ package scripts;
 
 import data.Table;
 import data.table.MobileCircularObstacle;
+import locomotion.UnableToMoveException;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -9,12 +10,13 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class TestLidar extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
-        ConfigData.USING_LIDAR.setDefaultValue(true);
+        //ConfigData.USING_LIDAR.setDefaultValue(true);
         super.setup(simulationMode);
     }
 
@@ -32,15 +34,22 @@ public class TestLidar extends TestBaseHL {
     @Override
     public Vec2 startPosition() {
         // coin bas-droit de la table
-        return new VectCartesian(table.getLength()/2-215,1000);
+//        return new VectCartesian(table.getLength()/2-215,1000);
+        return new VectCartesian(-500,500);
     }
 
     @Override
     public void action() throws Exception {
- /*       robot.followPathTo(new VectCartesian(-1200,1000));
-        robot.followPathTo(new VectCartesian(1200,1000));
-        robot.followPathTo(new VectCartesian(-1200,1000));*/
-        Thread.sleep(16000000);
+        while(true) {
+            try {
+                robot.followPathTo(new VectCartesian(-500,500));
+                TimeUnit.MILLISECONDS.sleep(500);
+                robot.followPathTo(new VectCartesian(500,500));
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+        }
         /*final int testCount = 60;
         Table table = container.getService(Table.class);
 

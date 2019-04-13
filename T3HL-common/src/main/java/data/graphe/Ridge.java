@@ -35,7 +35,7 @@ public class Ridge {
     /**
      * Coût de l'arrête
      */
-    private final int cost;
+    private final double cost;
 
     /**
      * Coût fixe de l'arrête
@@ -47,7 +47,7 @@ public class Ridge {
      * @param cost  coût pour franchire l'arrête
      * @param segment   segment représentant l'arrête
      */
-    public Ridge(int cost, Segment segment) {
+    public Ridge(double cost, Segment segment) {
         this.cost = cost + staticCost;
         this.seg = segment;
     }
@@ -56,13 +56,13 @@ public class Ridge {
     public Segment getSeg() {
         return seg;
     }
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
     public boolean isReachable(Graphe graphe) {
         return graphe.getMobileObstacles().stream()
-                .noneMatch(o -> o.getShape().intersect(seg));
+                .noneMatch(o -> o.getPathfindingShape().intersect(seg));
     }
 
     public static void setStaticCost(int staticCost) {

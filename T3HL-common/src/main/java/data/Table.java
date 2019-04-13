@@ -490,7 +490,7 @@ public class Table implements Service {
      * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
      */
     public void SIMULATEDaddMobileObstacle() {
-        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), 100);
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay);
         this.simulatedObstacle.setLifeTime(100000);
         this.mobileObstacles.add(this.simulatedObstacle);
     }
@@ -501,6 +501,19 @@ public class Table implements Service {
      */
     public void SIMULATEDmoveMobileObstacle(Vec2 newPosition) {
         this.simulatedObstacle.update(newPosition);
+        if (this.graphe != null) {
+            try {
+                this.graphe.writeLock().lock();
+                this.graphe.update();
+                this.graphe.setUpdated(true);
+            } catch (ConcurrentModificationException e) {
+                e.printStackTrace(); // eh
+            } finally {
+                this.graphe.writeLock().unlock();
+            }
+        } else {
+            Log.LIDAR.warning("Graphe non instancié");
+        }
     }
 
 

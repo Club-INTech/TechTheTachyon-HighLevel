@@ -183,6 +183,10 @@ public class OrderWrapper implements Service {
      * @param orientation orientation du robot
      */
     public void setPositionAndOrientation(Vec2 pos, double orientation) {
+        setPositionAndOrientation(pos, orientation, true);
+    }
+
+    public void setPositionAndOrientation(Vec2 pos, double orientation, boolean synchronize) {
         int x=pos.getX();
         int y=pos.getY();
         if(symetry){
@@ -190,10 +194,15 @@ public class OrderWrapper implements Service {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
         // cette demande nécessite une synchro
-        SensorState.ACTUATOR_ACTUATING.setData(true);
-        this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
-                PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
-        waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+        if(synchronize) {
+            SensorState.ACTUATOR_ACTUATING.setData(true);
+            this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
+                    PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
+            waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+        } else {
+            this.sendString(String.format(Locale.US, "%s %d %d %.3f",
+                    PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
+        }
     }
 
     /**

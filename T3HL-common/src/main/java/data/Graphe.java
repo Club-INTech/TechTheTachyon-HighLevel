@@ -410,7 +410,7 @@ Graphe implements Service {
      */
     private void constructRidge(Node node1, Node node2, Segment segment) throws CloneNotSupportedException {
         if (!table.intersectAnyFixedObstacle(segment)) {
-            Ridge ridge = new Ridge((int) node1.getPosition().distanceTo(node2.getPosition()), segment.clone());
+            Ridge ridge = new Ridge(node1.getPosition().distanceTo(node2.getPosition()), segment.clone());
             ridges.add(ridge);
             node1.addNeighbour(node2, ridge);
             node2.addNeighbour(node1, ridge);

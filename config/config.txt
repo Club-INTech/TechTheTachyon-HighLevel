@@ -24,7 +24,7 @@ LIDAR_PROCESS_PATH=./LiDAR_UST_10LX
 MASTER                              = true
 
 # DIMENSIONS DES ROBOTS
-ROBOT_RAY                           = 240
+ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 
 #________________________________________________________________________________________________________________________
@@ -35,4 +35,4 @@ MASTER_ROBOT_IP                     = localhost
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
-BUDDY_RAY                           = 240
+BUDDY_RAY                           = 190
