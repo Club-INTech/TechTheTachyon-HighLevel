@@ -258,11 +258,11 @@ public class OrderWrapper implements Service {
     }
 
     /**
-     * Ordre 'goto' du LL
-     * @param point
+     * Envoie l'ordre moveToPoint (goto) au LL (ne prend pas en compte les obstacles)
+     * @param point point auquel le LL doit se rendre
      */
     public void gotoPoint(Vec2 point) {
-        this.sendString("goto "+point.getX()+" "+point.getY());
+        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
     }
 
     /**

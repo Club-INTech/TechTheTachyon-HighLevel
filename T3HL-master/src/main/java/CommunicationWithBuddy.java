@@ -1,105 +1,91 @@
 import connection.Connection;
 import data.Palet;
 import data.XYO;
-import orders.order.Order;
+import data.controlers.Channel;
 import pfg.config.Config;
-import scripts.Script;
+import scripts.ScriptNamesMaster;
 import utils.ConfigData;
 import utils.Container;
+import utils.Log;
 import utils.communication.CommunicationException;
-import utils.container.ContainerException;
 import utils.container.Service;
+import utils.math.Vec2;
 
-import java.util.Optional;
+import java.util.Locale;
 
-public class CommunicationWithBuddy extends Thread implements Service {
+public class CommunicationWithBuddy implements Service {
 
+    /**
+     * Boolean de symétrie
+     */
     private boolean symetry;
-
+    /**
+     * Boolean de simulation
+     */
     private boolean simulation;
-
-    private Connection ConnectionWithBuddy;
-
+    /**
+     * Connection avec buddy
+     */
+    private Connection buddyConnection;
+    /**
+     * Container
+     */
     private Container container;
 
+    /**
+     * Constructeur
+     */
     public CommunicationWithBuddy(Container container){
         this.container=container;
     }
 
-    @Override
-    public void run() {
-        while (!isInterrupted()) {
-            try {
-                Optional<String> message = ConnectionWithBuddy.read();
-                if(message.isPresent()) {
-                    String msg =message.get();
-                }
-
-
-            } catch (CommunicationException e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(5);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
+    /**
+     * Envoie un message à buddy. NE REESSAYE PAS EN CAS D'ERREUR POUR EVITER UN BLOCAGE
+     * @param message message à envoyer tel quel
+     */
     public void sendString(String message) {
         try {
-            ConnectionWithBuddy.send(message);
+            buddyConnection.send(message);
+            Log.ORDERS.debug("Sent to BUDDY: "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
-            try {
-                ConnectionWithBuddy.reInit();
-                while (!ConnectionWithBuddy.isInitiated());
-                ConnectionWithBuddy.send(message);
-            } catch (CommunicationException ef) {
-                ef.printStackTrace();
-            }
         }
     }
 
+    /**
+     * Envoie notre position à l'autre robot
+     */
     public void sendPosition(){
-        this.sendString("Pos "+ XYO.getRobotInstance());
+        Vec2 currentPos = XYO.getRobotInstance().getPosition();
+        this.sendString(String.format(Locale.US, "%s %d %d", Channel.BUDDY_POSITION, currentPos.getX(), currentPos.getY()));
     }
 
-    public void sendOrder(Script script){
-        this.sendString("Order "+ script.getClass().getCanonicalName());
+    /**
+     * Envoie un ordre de script au secondaire, le secondaire va ensuite executer ce script
+     * @param script script du secondaire à executer
+     * @param version version du script à executer
+     */
+    public void sendScriptOrder(ScriptNamesMaster script, int version){
+        this.sendString(String.format(Locale.US, "%s %s %d", Channel.BUDDY_SCRIPT_ORDER, script.getName(), version));
     }
 
-    public void doScript(String scriptName,int version){
-        try {
-            Class scriptClass = Class.forName(scriptName);
-            Script script = (Script)container.getService(scriptClass);
-            script.goToThenExecute(version);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (ContainerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void paletPris(Palet palet){
-        this.sendString("Palet "+palet.getId()+"pris");
+    /**
+     * Envoie une confirmation de palet pris au robot secondaire
+     * @param palet quel palet a été pris
+     */
+    public void sendPaletPris(Palet palet){
+        this.sendString(String.format(Locale.US, "%s %d", Channel.BUDDY_PALETS, palet.getId()));
     }
 
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("jaune");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
-            this.ConnectionWithBuddy = Connection.SLAVE_SIMULATEUR;
+            this.buddyConnection = Connection.SLAVE_SIMULATEUR;
         } else {
-            this.ConnectionWithBuddy = Connection.SLAVE;
+            this.buddyConnection = Connection.SLAVE;
         }
-    }
-
-    public void setConnection(Connection connection) {
-        this.ConnectionWithBuddy = connection;
     }
 }

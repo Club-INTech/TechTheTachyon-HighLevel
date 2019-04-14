@@ -1,20 +1,19 @@
 package data.controlers;
 
-import data.CouleurPalet;
-import data.SensorState;
-import data.Sick;
-import data.XYO;
+import data.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Service;
 import utils.math.Calculs;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -44,6 +43,9 @@ public class SensorControler extends Thread implements Service {
      */
     private ConcurrentLinkedQueue<String> robotPosQueue;
     private ConcurrentLinkedQueue<String> buddyPosQueue;
+    private ConcurrentLinkedQueue<String> buddyPathQueue;
+    private ConcurrentLinkedQueue<String> buddyScriptOrderQueue;
+    private ConcurrentLinkedQueue<String> buddyPaletsQueue;
     private ConcurrentLinkedQueue<String> eventData;
     private ConcurrentLinkedQueue<String> sickData;
     private ConcurrentLinkedQueue<String> couleurPalet;
@@ -79,6 +81,9 @@ public class SensorControler extends Thread implements Service {
         this.listener = listener;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
+        this.buddyPathQueue = new ConcurrentLinkedQueue<>();
+        this.buddyScriptOrderQueue = new ConcurrentLinkedQueue<>();
+        this.buddyPaletsQueue = new ConcurrentLinkedQueue<>();
         this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
         this.couleurPalet =new ConcurrentLinkedQueue<>();
@@ -90,6 +95,9 @@ public class SensorControler extends Thread implements Service {
         sickWriter.println();
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
+        listener.addQueue(Channel.BUDDY_PATH, buddyPathQueue);
+        listener.addQueue(Channel.BUDDY_SCRIPT_ORDER, buddyScriptOrderQueue);
+        listener.addQueue(Channel.BUDDY_PALETS, buddyPaletsQueue);
         listener.addQueue(Channel.EVENT, eventData);
         listener.addQueue(Channel.SICK, sickData);
         listener.addQueue(Channel.COULEUR_PALET_PRIS, couleurPalet);
@@ -108,33 +116,41 @@ public class SensorControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
         while (!Thread.currentThread().isInterrupted()) {
-            while (robotPosQueue.peek() == null && buddyPosQueue.peek() == null && sickData.peek()==null && eventData.peek()==null && couleurPalet.peek()==null) {
-                try {
-                    Thread.sleep(TIME_LOOP);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            if (!robotPosQueue.isEmpty()){
+                handleRobotPos();
             }
-            handleBuddyPos();
-            handleRobotPos();
-            handleEvent();
-            handleSick();
-            handleCouleurPalet();
+            if (!buddyPosQueue.isEmpty()){
+                handleBuddyPos();
+            }
+            if (!buddyPathQueue.isEmpty()){
+                handleBuddyPath();
+            }
+            if (!buddyPaletsQueue.isEmpty()){
+                handleBuddyPalets();
+            }
+            if (!buddyScriptOrderQueue.isEmpty()){
+                handleBuddyScriptOrder();
+            }
+            if (!sickData.isEmpty()){
+                handleSick();
+            }
+            if (!eventData.isEmpty()){
+                handleEvent();
+            }
+            if (!couleurPalet.isEmpty()){
+                handleEvent();
+            }
         }
     }
 
+    /**
+     * POSITION
+     */
     private void handleRobotPos() {
-        if (robotPosQueue.peek() == null) {
-            return;
-        }
-        String[] coordonates;
-        int x;
-        int y;
-        double o;
-        coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
-        x = Math.round(Float.parseFloat(coordonates[0]));
-        y = Math.round(Float.parseFloat(coordonates[1]));
-        o = Double.parseDouble(coordonates[2]);
+        String[] coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
+        int x = Math.round(Float.parseFloat(coordonates[0]));
+        int y = Math.round(Float.parseFloat(coordonates[1]));
+        double o = Double.parseDouble(coordonates[2]);
         if (symetrie) {
             x = -x;
             o = Calculs.modulo(Math.PI - o, Math.PI);
@@ -142,29 +158,10 @@ public class SensorControler extends Thread implements Service {
         XYO.getRobotInstance().update(x, y, o);
     }
 
-    private void handleBuddyPos(){
-        if (buddyPosQueue.peek() == null) {
-            return;
-        }
-        String[] coordonates;
-        int x;
-        int y;
-        double o;
-        coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
-        x = Integer.parseInt(coordonates[0]);
-        y = Integer.parseInt(coordonates[1]);
-        o = Double.parseDouble(coordonates[2]);
-        if (symetrie) {
-            x = -x;
-            o = Calculs.modulo(Math.PI - o, Math.PI);
-        }
-        XYO.getBuddyInstance().update(x, y, o);
-    }
-
+    /**
+     * EVENT
+     */
     private void handleEvent() {
-        if (eventData.peek() == null) {
-            return;
-        }
         String[] event;
         String data = eventData.poll();
         if (!data.equals("pong")) { // ne log pas les pongs
@@ -207,10 +204,10 @@ public class SensorControler extends Thread implements Service {
         }
     }
 
+    /**
+     * SICK
+     */
     private void handleSick(){
-        if (sickData.peek() == null) {
-            return;
-        }
         String[] sickMeasurementsStr = sickData.poll().split(ARGUMENTS_SEPARATOR);
         System.out.println("=== SICK ===");
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
@@ -296,13 +293,62 @@ public class SensorControler extends Thread implements Service {
         Sick.setNewXYO(newXYO);
     }
 
+    /**
+     * COULEUR_PALETS
+     */
     private void handleCouleurPalet(){
-        if(couleurPalet.peek()==null) {
-            return;
-        }
         String couleur = couleurPalet.poll();
         CouleurPalet.setCouleurPalRecu(couleur);
     }
+
+    /**
+     * BUDDY : position
+     */
+    private void handleBuddyPos(){
+        String[] coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
+        int x = Integer.parseInt(coordonates[0]);
+        int y = Integer.parseInt(coordonates[1]);
+        double o = Double.parseDouble(coordonates[2]);
+        if (symetrie) {
+            x = -x;
+            o = Calculs.modulo(Math.PI - o, Math.PI);
+        }
+        XYO.getBuddyInstance().update(x, y, o);
+    }
+
+    /**
+     * BUDDY : chemin du buddy
+     */
+    private void handleBuddyPath(){
+        String[] pathString = buddyPathQueue.poll().split(ARGUMENTS_SEPARATOR);
+        ArrayList<Vec2> path = new ArrayList<Vec2>();
+        for(int i=0; i < pathString.length; i+=2){
+            path.add(new VectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
+        }
+        //TODO : metter à jour une variable permettant de savoir quel chemin utilise buddy
+    }
+
+    /**
+     * BUDDY : palets pris par le buddy
+     */
+    private void handleBuddyPalets(){
+        String[] paletsString = buddyPaletsQueue.poll().split(ARGUMENTS_SEPARATOR);
+        Palet palet = Palet.getPaletById(Integer.parseInt(paletsString[0]));
+        if (palet != null) {
+            palet.setPaletPris(true);
+        }
+    }
+
+    /**
+     * BUDDY : ordres donnés par le principal
+     */
+    private void handleBuddyScriptOrder(){
+        String[] scriptString = buddyScriptOrderQueue.poll().split(ARGUMENTS_SEPARATOR);
+        String script = scriptString[0];
+        int version = Integer.parseInt(scriptString[1]);
+        //TODO : metter à jour une variable permettant de savoir quel script nous est ordonné (de préférence une liste)
+    }
+
 
     @Override
     public void updateConfig(Config config) {

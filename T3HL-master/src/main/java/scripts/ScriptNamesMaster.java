@@ -5,24 +5,26 @@ import utils.container.ContainerException;
 import utils.container.Service;
 
 public enum ScriptNamesMaster implements ScriptNames {
-    ACCELERATEUR(Accelerateur.class),
-    PALETS3(Paletsx3.class),
-    PALETS6(PaletsX6.class),
-    PALETS_ZONE_DEPART(PaletsZoneDepart.class),
-    PALETS_ZONE_CHAOS(ScriptPaletsZoneChaos.class),
-    GOLDENIUM(Goldenium.class);
+    ACCELERATEUR(Accelerateur.class, "accelerateur"),
+    PALETS3(Paletsx3.class, "paletsx3"),
+    PALETS6(PaletsX6.class, "paletsx6"),
+    PALETS_ZONE_DEPART(PaletsZoneDepart.class, "palets_zone_depart"),
+    PALETS_ZONE_CHAOS(ScriptPaletsZoneChaos.class, "palet_zone_chaos"),
+    GOLDENIUM(Goldenium.class,"goldenium");
 
 
     private Class<? extends Service> aClass;
 
     private Script script;
+    private String scriptName;
 
     static {
        // reInit();
     }
 
-    ScriptNamesMaster(Class<? extends Service> aClass){
+    ScriptNamesMaster(Class<? extends Service> aClass, String scriptName){
         this.aClass=aClass;
+        this.scriptName = scriptName;
     }
 
     @Override
@@ -36,6 +38,14 @@ public enum ScriptNamesMaster implements ScriptNames {
             }
         }
         return script;
+    }
+
+    /**
+     * Renvoie le nom du script
+     * @return String du nom du script
+     */
+    public String getName(){
+        return this.scriptName;
     }
 
     /**
