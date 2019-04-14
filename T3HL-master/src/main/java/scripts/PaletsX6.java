@@ -1,5 +1,6 @@
 package scripts;
 import data.CouleurPalet;
+import data.Sick;
 import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -10,6 +11,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 import locomotion.UnableToMoveException;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
@@ -38,9 +40,9 @@ public class PaletsX6 extends Script {
      */
 
         if (version == 0) { //rouge droite
-            positions.add(new VectCartesian(-1000, 1186));
-            positions.add(new VectCartesian(-805 , 1186));
-            positions.add(new VectCartesian(-597, 1186));
+            positions.add(new VectCartesian(-1000, 1206));
+            positions.add(new VectCartesian(-805 , 1206));
+            positions.add(new VectCartesian(-597, 1206));
         } else if (version == 1) {  //vert droite
             positions.add(new VectCartesian(-905, 1186));
             positions.add(new VectCartesian(-505, 1186));
@@ -64,6 +66,13 @@ public class PaletsX6 extends Script {
         }
         boolean premierdeplacement = false;
         try {
+            robot.turn(0.0);
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //
@@ -71,17 +80,18 @@ public class PaletsX6 extends Script {
                 if (premierdeplacement) {}
                 else {
                     premierdeplacement = true;
-                    robot.turn(0 );}
+                }
+                robot.turn(0);
 
+                // on suposse que l'ascenseur est monté au mx au début
 
-               // robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
                 //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                robot.turn(0 );
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 if(version == 1) {
                     // TODO
                     robot.pushPaletGauche(CouleurPalet.VERT);
@@ -96,11 +106,11 @@ public class PaletsX6 extends Script {
     public Shape entryPosition(Integer version) {
 
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(-1000,1186), 5);
+            Shape positionEntree = new Circle(new VectCartesian(-1500+280,1206), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(-1000,1186), 5);
+            Shape positionEntree = new Circle(new VectCartesian(-1500+280,1206), 5);
             return positionEntree;
         }
         else if (version == 2) {

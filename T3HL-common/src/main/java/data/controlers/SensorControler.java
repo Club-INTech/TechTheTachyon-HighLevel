@@ -155,6 +155,7 @@ public class SensorControler extends Thread implements Service {
             x = -x;
             o = Calculs.modulo(Math.PI - o, Math.PI);
         }
+        System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
     }
 
@@ -212,7 +213,7 @@ public class SensorControler extends Thread implements Service {
         System.out.println("=== SICK ===");
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
-            sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]) +6;
+            sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
             System.out.print(sickMeasurementsStr[i]+" ");
 
         }
@@ -253,9 +254,8 @@ public class SensorControler extends Thread implements Service {
 
                 }
             } else {
-                teta = Math.atan(rapport);
-                xCalcule = (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta)) - 1500;
                 System.out.println(orien);
+                teta = Math.atan(-rapport);
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
@@ -269,6 +269,7 @@ public class SensorControler extends Thread implements Service {
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 }
+                xCalcule = (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta)) - 1500;
             }
         }
         else {
@@ -289,6 +290,10 @@ public class SensorControler extends Thread implements Service {
         }
         VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
         double newOrientation = teta + Math.PI;
+        double orien = XYO.getRobotInstance().getOrientation();
+        if (-Math.PI/2 < orien && orien < Math.PI/2) {
+            newOrientation -= Math.PI;
+        }
         XYO newXYO = new XYO(newPosition, newOrientation);
         Sick.setNewXYO(newXYO);
     }

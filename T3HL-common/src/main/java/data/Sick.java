@@ -98,6 +98,11 @@ public enum Sick {
         significantSicks = sicks;
     }
 
+    public static void resetNewXYO() {
+        // on ne peut pas complete un CompletableFuture deux fois de suite
+        newXYO = new CompletableFuture<>();
+    }
+
     public int getIndex() {
         return indiceSick;
     }

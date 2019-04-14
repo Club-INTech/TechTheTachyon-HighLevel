@@ -1,5 +1,6 @@
 package scripts;
 
+import data.Sick;
 import data.Table;
 import utils.Container;
 import utils.container.ContainerException;
@@ -15,6 +16,17 @@ public class TestPaletsX6 extends TestScriptBase {
         table.removeFixedObstacle(table.getPaletBleuGauche());
         table.removeFixedObstacle(table.getPaletRougeGauche());
         table.removeFixedObstacle(table.getPaletVertGauche());
+    }
+
+    @Override
+    public void action() {
+        robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+        super.action();
+    }
+
+    @Override
+    public double startOrientation() {
+        return 0.0;
     }
 
     @Override

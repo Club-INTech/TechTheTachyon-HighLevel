@@ -2,6 +2,7 @@ package scripts;
 
 import data.Sick;
 import data.XYO;
+import locomotion.UnableToMoveException;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -29,7 +30,7 @@ public class TestSICK extends TestBaseHL {
 
     @Override
     public double startOrientation() {
-        return Math.PI;
+        return 0;
     }
 
     @Override
@@ -44,12 +45,17 @@ public class TestSICK extends TestBaseHL {
             // impossible de tester en mode simulation
         } else {
             // test avec tous les SICK
-            /*for (int i=0; i < 1000;i++) {
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_PI);
-                TimeUnit.MILLISECONDS.sleep(20);
+            for (int i=0; i < 1000;i++) {
+                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                TimeUnit.MILLISECONDS.sleep(200);
+                try {
+                    robot.turn(0);
+                } catch (UnableToMoveException e) {
+                    e.printStackTrace();
+                }
+                TimeUnit.MILLISECONDS.sleep(200);
                 System.out.println(XYO.getRobotInstance());
-            }*/
-            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
+            }
             System.out.println(XYO.getRobotInstance());
         }
     }

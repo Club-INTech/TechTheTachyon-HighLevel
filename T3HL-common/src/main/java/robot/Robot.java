@@ -227,6 +227,7 @@ public abstract class Robot implements Service {
      * Méthode qui permet le recalage avec les sicks
      */
     public void computeNewPositionAndOrientation(Sick[] significantSicks){
+        Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
         XYO newXYO = Sick.getNewXYO();
