@@ -30,6 +30,7 @@ import utils.container.Service;
 import utils.math.Vec2;
 
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Classe qui permet d'envoyer tous les ordres
@@ -199,6 +200,11 @@ public class OrderWrapper implements Service {
             this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             this.sendString(String.format(Locale.US, "%s %d %d %.3f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));

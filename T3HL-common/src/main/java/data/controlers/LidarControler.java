@@ -119,11 +119,11 @@ public class LidarControler extends ServiceThread {
                 e.printStackTrace();
             }
         }
+        waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
 
         /* Si jamais besoin du mode RAW:
         try {
             Log.LIDAR.debug("Setting mode to RAW data...");
-            waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
             Connection.LIDAR_DATA.send("!!R");
             Log.LIDAR.debug("Mode RAW set!");
         } catch (CommunicationException e) {

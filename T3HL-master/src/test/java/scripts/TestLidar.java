@@ -16,7 +16,7 @@ public class TestLidar extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
-        //ConfigData.USING_LIDAR.setDefaultValue(true);
+        ConfigData.USING_LIDAR.setDefaultValue(true);
         super.setup(simulationMode);
     }
 
@@ -28,7 +28,8 @@ public class TestLidar extends TestBaseHL {
     @Override
     public double startOrientation() {
         // coin droit de la table
-        return Math.PI;
+        //return Math.PI;
+        return 0.0;
     }
 
     @Override
@@ -69,5 +70,6 @@ public class TestLidar extends TestBaseHL {
                 e.printStackTrace();
             }
         }*/
+//        Thread.sleep(1600000);
     }
 }

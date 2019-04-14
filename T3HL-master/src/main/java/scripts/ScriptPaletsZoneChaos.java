@@ -77,11 +77,11 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                    if (position == positions[0]){
+                    if (position == positions[0]) {
                         table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
-                    if (position == positions[1]){
+                    if (position == positions[1]) {
                         table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }

@@ -24,10 +24,7 @@ import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
 import connection.ConnectionManager;
-import data.CouleurPalet;
-import data.Graphe;
-import data.Table;
-import data.XYO;
+import data.*;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.SensorControler;
@@ -35,6 +32,7 @@ import data.graphe.Node;
 import locomotion.PathFollower;
 import locomotion.Pathfinder;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.*;
 import simulator.GraphicalInterface;
@@ -43,6 +41,7 @@ import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.Container;
 import utils.communication.KeepAlive;
+import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -92,63 +91,20 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
             waitForLLConnection();
-            //ai.start();
-
-            //while(ai.getAgent() != null) {
-            //    Thread.sleep(5);
-            //}
-
-
-
-
-            //Tests pour le lidar
-            //robot.setPositionAndOrientation(new VectCartesian(0,1000), Math.PI/2);
-            //Thread.sleep(10000000);
-
-
-
-
-
-
-            /*while(robot != null) {
-                robot.computeNewPositionAndOrientation();
-                Thread.sleep(1000);
-            }*/
-            /*try {
-/* TODO: décommenter pour tester les SICK en boucle            while(robot != null) {
-                robot.computeNewPositionAndOrientation();
-                Thread.sleep(1000);
-            }*/
-            /*controller.start();
-            while(robot != null) { // on boucle à l'infini pour laisser le controlleur gérer (oui c'est dégueu)
-                Thread.sleep(1);
-            }
-            try {
-                robot.followPathTo(new VectCartesian(0,1000));
-                robot.turn(Math.PI);
-                robot.moveToPoint(new VectCartesian(0,500));
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            }*/
-
-           // interfaceGraphique.addPointsToDraw(new Vec2[]{new VectCartesian(0,750), new VectCartesian(0,500), new VectCartesian(0, 250)});
-            //zone_depart_palets.goToThenExecute(1);
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
-            XYO.getRobotInstance().getPosition().setXY(-730, 442);
-
+            XYO.getRobotInstance().update(-1500+191, 550, Math.PI);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-            //robot.goto(0,400);
-            for (int i = 0; i < 5; i++) {
-                robot.pushPaletDroit(CouleurPalet.ROUGE);
-                robot.pushPaletGauche(CouleurPalet.ROUGE);
-            }
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
+            table.removeAllChaosObstacles();
 
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+            zone_depart_palets.goToThenExecute(1);
+            paletsx6.goToThenExecute(1);
             accelerateur.goToThenExecute(0);
-            //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            //zone_chaos_palets.goToThenExecute(0);
 
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
@@ -157,9 +113,6 @@ public class Main {
                 Thread.sleep(1000);
             }
           //  interfaceGraphique.clearPointsToDraw();
-
-            table.removeFixedObstacle(table.getPaletRougeDroite());
-            table.removeFixedObstacle(table.getPaletVertDroite());
 
             zone_chaos_palets.goToThenExecute(1);
 
@@ -300,6 +253,10 @@ public class Main {
             lidarControler = container.getService(LidarControler.class);
             lidarControler.start();
             robot = container.getService(Master.class);
+            if((boolean) ConfigData.SIMULATION.getDefaultValue()) {
+                SimulatorDebug debug = container.getService(SimulatorDebug.class);
+                debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            }
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
             controller = new MontlheryController(robot, orderWrapper);

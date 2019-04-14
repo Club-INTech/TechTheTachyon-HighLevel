@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -13,8 +14,8 @@ import utils.math.VectCartesian;
 public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
-    private int xEntry = 1350;
-    private int yEntry = 450;
+    private int xEntry = -1500+191+65;//1350;
+    private int yEntry = 430;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
             new VectCartesian(xEntry,yEntry+300),
@@ -40,12 +41,13 @@ public class PaletsZoneDepart extends Script {
                 } else {
                     premierPaletPris = true;
                 }
+                robot.turn(-Math.PI/2.0); // FIXME: retirer
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                // FIXME ((Master) robot).pushPaletGauche();
+                robot.pushPaletGauche(CouleurPalet.ROUGE); // FIXME: corriger couleur
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
@@ -56,14 +58,15 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-
-            // TODO: juste pour le testo
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, true);
-
+/*
+FIXME REMETTRE:
             table.removeFixedObstacleNotReInit(table.getPaletRougeDroite());
             table.removeFixedObstacleNotReInit(table.getPaletVertDroite());
             table.removeFixedObstacleNotReInit(table.getPaletBleuDroite());
+*/
+            table.removeFixedObstacleNotReInit(table.getPaletRougeGauche());
+            table.removeFixedObstacleNotReInit(table.getPaletVertGauche());
+            table.removeFixedObstacleNotReInit(table.getPaletBleuGauche());
 
             table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {

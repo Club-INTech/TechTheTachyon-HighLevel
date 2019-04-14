@@ -32,6 +32,7 @@ import orders.Speed;
 import orders.order.MontlheryOrder;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.Log;
 import utils.RobotSide;
 import utils.communication.SimulatorDebug;
 import utils.container.Service;
@@ -233,6 +234,7 @@ public abstract class Robot implements Service {
         // remplacement de la position dans le HL
         XYO.getRobotInstance().update(newXYO.getPosition().getX(), newXYO.getPosition().getY(), newXYO.getOrientation());
 
+        Log.LOCOMOTION.debug("New position with SICKs: "+newXYO);
         // remplacement de la position dans le LL
         this.orderWrapper.setPositionAndOrientation(newXYO.getPosition(), newXYO.getOrientation());
     }

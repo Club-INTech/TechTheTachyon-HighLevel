@@ -60,7 +60,7 @@ public class GraphicalInterface extends JFrame {
     private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
     private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
-    private Color RIDGE_COLOR = new Color(0,0,0,200);
+    private Color RIDGE_COLOR = new Color(0,0,0,255);
     private Color PATH_COLOR = new Color(255,0,0,255);
 
     //Attributs pas graphiques
@@ -400,6 +400,11 @@ public class GraphicalInterface extends JFrame {
         drawBackground(g);
         drawObstacles(g);
         int index = 0;
+
+        if(this.isDrawingGraph) {
+            drawGraphe(g);
+        }
+
         for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue()*2);
@@ -410,31 +415,31 @@ public class GraphicalInterface extends JFrame {
             drawPoints(g);
         }
 
-        if(this.isDrawingGraph) {
-            drawGraphe(g);
-        }
-
     }
 
     private void drawGraphe(Graphics g) {
         int pointDiameter=10;
-        g.setColor(POINTS_TO_DRAW_COLOR);
         try {
             table.getGraphe().readLock().lock();
+
+            /*
+            g.setColor(RIDGE_COLOR);
+            for(Ridge ridge : table.getGraphe().getRidges()) {
+                Vec2 pointA = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointA());
+                Vec2 pointB = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointB());
+                //  if(simulatedRobots.values().stream().anyMatch(it -> ridge.getSeg().getPointA().distanceTo(it.getPosition()) <= 100 || ridge.getSeg().getPointB().distanceTo(it.getPosition()) <= 100)) {
+                if(Math.random() < 0.025 && ridge.isReachable(table.getGraphe())) {
+                    g.drawLine(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY());
+                }
+                // }
+            }*/
+
+            g.setColor(POINTS_TO_DRAW_COLOR);
             for(Node node : table.getGraphe().getNodes()) {
                 Vec2 vecteur = node.getPosition();
                 vecteur = transformTableCoordsToInterfaceCoords(vecteur);
                 g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
             }
-
-/*            g.setColor(RIDGE_COLOR);
-            for(Ridge ridge : table.getGraphe().getRidges()) {
-                Vec2 pointA = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointA());
-                Vec2 pointB = transformTableCoordsToInterfaceCoords(ridge.getSeg().getPointB());
-                if(Math.random() < 0.025 && ridge.isReachable(table.getGraphe())) {
-                    g.drawLine(pointA.getX(), pointA.getY(), pointB.getX(), pointB.getY());
-                }
-            }*/
         } finally {
             table.getGraphe().readLock().unlock();
         }
@@ -490,9 +495,10 @@ public class GraphicalInterface extends JFrame {
     private void tryMoveSimulatedObstacleWithMouse(){
         if (this.isCreatingObstacleWithMouse){
             if (this.mousePosition!=null) {
-                this.table.SIMULATEDmoveMobileObstacle(
-                        transformInterfaceCoordsToTableCoords(this.mousePosition.x, this.mousePosition.y)
-                );
+                Vec2 tableCoords = transformInterfaceCoordsToTableCoords(this.mousePosition.x, this.mousePosition.y);
+                if(!tableCoords.equals(table.getSimulatedObstacle().getPosition())) {
+                    this.table.SIMULATEDmoveMobileObstacle(tableCoords);
+                }
             }
             else{
                 this.table.SIMULATEDmoveMobileObstacle(new VectCartesian(0, -1000));

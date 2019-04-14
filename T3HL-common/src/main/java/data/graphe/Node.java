@@ -103,6 +103,10 @@ public class Node {
         }
     }
 
+    public double costTo(Node neighbour) {
+        return this.getPosition().distanceTo(neighbour.getPosition());
+    }
+
     /**
      * @see Object#equals(Object)
      */

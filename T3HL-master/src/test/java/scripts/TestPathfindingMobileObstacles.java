@@ -1,6 +1,7 @@
 package scripts;
 
 import data.XYO;
+import locomotion.UnableToMoveException;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -20,9 +21,18 @@ public class TestPathfindingMobileObstacles extends TestBaseHL {
     public void action() throws Exception {
         Vec2 pointA = new VectCartesian(1300, 500);
         Vec2 pointB = pointA.symetrizeVector();
-        for (int i = 0; i < 10; i++) {
-            robot.followPathTo(pointA);
-            robot.followPathTo(pointB);
+        for (int i = 0; i < 100; i++) {
+            try {
+                robot.followPathTo(pointA);
+                robot.followPathTo(pointB);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @Override
+    public double startOrientation() {
+        return super.startOrientation();
     }
 }

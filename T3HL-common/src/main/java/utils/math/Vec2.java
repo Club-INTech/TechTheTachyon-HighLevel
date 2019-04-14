@@ -148,7 +148,7 @@ public abstract class Vec2 {
      */
     public double squaredDistanceTo(Vec2 other){
         int x2=(this.x - other.getX()) * (this.x - other.getX());
-        int y2=(this.y - other.getY()) * (y - other.getY());
+        int y2=(this.y - other.getY()) * (this.y - other.getY());
         return x2+y2;
     }
 

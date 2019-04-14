@@ -37,11 +37,11 @@ public enum Log
     LOCOMOTION(true),
     STRATEGY(true),
     ORDERS(true),
-    LIDAR(false),
+    LIDAR(true),
     PATHFINDING(true),
     GRAPHE(false),
     HOOK(true),
-    TABLE(true),
+    TABLE(false),
     AI(true),
     ;
 

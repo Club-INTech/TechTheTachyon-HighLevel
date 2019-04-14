@@ -22,7 +22,6 @@ import data.Graphe;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import pfg.config.Config;
-import utils.Log;
 import utils.container.Service;
 import utils.math.Vec2;
 
@@ -51,7 +50,7 @@ public class Pathfinder implements Service {
      */
     private LinkedList<Node> closedList;
 
-    private Map<Node, Double> costs;
+    private Map<Node, Double> gScore;
     private Map<Node, Node> parents;
     private Map<Node, Double> heuristiques;
 
@@ -63,7 +62,7 @@ public class Pathfinder implements Service {
      */
     public Pathfinder(Graphe graphe) {
         heuristiques = new HashMap<>();
-        costs = new HashMap<>();
+        gScore = new HashMap<>();
         parents = new HashMap<>();
 
         this.graphe = graphe;
@@ -101,7 +100,7 @@ public class Pathfinder implements Service {
         openList.clear();
         openList.add(start);
 
-        costs.clear();
+        gScore.clear();
         parents.clear();
 
         try {
@@ -110,7 +109,7 @@ public class Pathfinder implements Service {
 
             lastAim = aim;
 
-
+/*
             // Tant qu'il y a des noeuds à visiter
             while (!openList.isEmpty()) {
                 currentNode = openList.poll();
@@ -129,12 +128,11 @@ public class Pathfinder implements Service {
                     if(ridge == null)
                         continue; // TODO: trouver pourquoi ça arrive avec l'IA
 
-
-
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
                     if (ridge.isReachable(graphe)) {
                         double ridgeCost = ridge.getCost();
-                        double currentCost = costs.getOrDefault(currentNode, Node.DEFAULT_COST) + ridgeCost;
+
+                        double currentCost = gScore.getOrDefault(currentNode, Node.DEFAULT_COST) + ridgeCost;
                         if(neighbour.equals(aim)) {
                             parents.put(neighbour, currentNode);
                             return reconstructPath(start, neighbour);
@@ -142,16 +140,17 @@ public class Pathfinder implements Service {
 
                         // Si l'on a déjà visiter ce noeud et que l'on a trouvé un meilleur chemin, on met à jour le noeud
                         boolean visited = (openList.contains(neighbour) || closedList.contains(neighbour));
-                        if (visited && currentCost < costs.getOrDefault(neighbour, Node.DEFAULT_COST)) {
-                            costs.put(neighbour, currentCost);
+                        if (visited && currentCost < gScore.getOrDefault(neighbour, Node.DEFAULT_COST)) {
+                            gScore.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
+
                             if (closedList.contains(neighbour)) {
                                 closedList.remove(neighbour);
                                 openList.add(neighbour);
                             }
                         } else if (!visited) {
                             // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
-                            costs.put(neighbour, currentCost);
+                            gScore.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             openList.add(neighbour);
                         }
@@ -159,10 +158,75 @@ public class Pathfinder implements Service {
 
                 }
                 closedList.add(currentNode);
+            }*/
+
+            // Theta*
+            // https://en.wikipedia.org/wiki/Theta*
+            closedList.clear();
+            openList.clear();
+            parents.clear();
+            gScore.clear();
+            heuristiques.clear();
+
+            gScore.put(start, 0.0);
+            parents.put(start, start);
+            openList.add(start);
+            while(!openList.isEmpty()) {
+                Node s = openList.poll();
+                if (s.equals(aim)) {
+                    return reconstructPath(start, aim);
+                }
+
+                closedList.push(s);
+
+                neighbours = s.getNeighbours().keySet();
+                for (Node neighbour : neighbours) {
+                    Ridge ridge = s.getNeighbours().get(neighbour);
+                    if( ! ridge.isReachable(graphe)) {
+                        continue;
+                    }
+                    if (!closedList.contains(neighbour)) {
+                        if (!openList.contains(neighbour)) {
+                            gScore.put(neighbour, Double.POSITIVE_INFINITY);
+                            parents.put(neighbour, null);
+                        }
+                        updateVertex(aim, s, neighbour);
+                    }
+                }
             }
             throw new NoPathFound(start.getPosition(), aim.getPosition());
         } finally {
             graphe.readLock().unlock();
+        }
+    }
+
+    private void updateVertex(Node aim, Node s, Node neighbour) {
+        boolean canUseParent;
+        do {
+            Node parent = parents.get(s);
+            Ridge lineOfSight = parent.getNeighbours().get(neighbour);
+            canUseParent =  ! parent.equals(s) && lineOfSight != null && lineOfSight.isReachable(graphe);
+            if(canUseParent) { // différence avec A* => on regarde s'il est possible d'y aller en ligne droite
+                s = parent;
+                if(s.getPosition().getX() > 0) {
+              //      System.err.println("s: "+s+"; parent: "+parent);
+                }
+            }
+            updateOpenListIfNecessary(aim, s, neighbour);
+        } while(canUseParent);
+    }
+
+    private void updateOpenListIfNecessary(Node aim, Node s, Node neighbour) {
+        Ridge ridge = s.getNeighbours().get(neighbour);
+        double costToNeighbourFromS = gScore.get(s) + ridge.getCost();
+        if(costToNeighbourFromS < gScore.get(neighbour)) {
+            gScore.put(neighbour, costToNeighbourFromS);
+            parents.put(neighbour, s);
+            double heuristicNeighbour = neighbour.costTo(aim);
+            heuristiques.put(neighbour, gScore.get(neighbour) + heuristicNeighbour);
+            if( ! openList.contains(neighbour)) {
+                openList.add(neighbour);
+            }
         }
     }
 

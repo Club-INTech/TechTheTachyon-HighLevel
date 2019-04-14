@@ -61,8 +61,10 @@ public class Ridge {
     }
 
     public boolean isReachable(Graphe graphe) {
-        return graphe.getMobileObstacles().stream()
-                .noneMatch(o -> o.getPathfindingShape().intersect(seg));
+        synchronized (graphe.getMobileObstacles()) {
+            return graphe.getMobileObstacles().stream()
+                    .noneMatch(o -> o.getPathfindingShape().intersect(seg));
+        }
     }
 
     public static void setStaticCost(int staticCost) {

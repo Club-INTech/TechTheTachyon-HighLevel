@@ -500,10 +500,10 @@ public class Table implements Service {
      * @param newPosition nouvelle position de l'obstacle SIMULÉ
      */
     public void SIMULATEDmoveMobileObstacle(Vec2 newPosition) {
-        this.simulatedObstacle.update(newPosition);
         if (this.graphe != null) {
             try {
                 this.graphe.writeLock().lock();
+                this.simulatedObstacle.update(newPosition);
                 this.graphe.update();
                 this.graphe.setUpdated(true);
             } catch (ConcurrentModificationException e) {
@@ -542,6 +542,10 @@ public class Table implements Service {
 
     public int getWidth() {
         return width;
+    }
+
+    public MobileCircularObstacle getSimulatedObstacle() {
+        return simulatedObstacle;
     }
 
     /**
@@ -614,14 +618,15 @@ public class Table implements Service {
     }
 
     public void removeAllChaosObstacles() {
-        removeFixedObstacle(paletRedUnZoneChaosPurple);
-        removeFixedObstacle(paletRedDeuxZoneChaosPurple);
-        removeFixedObstacle(paletGreenZoneChaosPurple);
-        removeFixedObstacle(paletBlueZoneChaosPurple);
+        removeFixedObstacleNotReInit(paletRedUnZoneChaosPurple);
+        removeFixedObstacleNotReInit(paletRedDeuxZoneChaosPurple);
+        removeFixedObstacleNotReInit(paletGreenZoneChaosPurple);
+        removeFixedObstacleNotReInit(paletBlueZoneChaosPurple);
 
-        removeFixedObstacle(paletRedUnZoneChaosYellow);
-        removeFixedObstacle(paletRedDeuxZoneChaosYellow);
-        removeFixedObstacle(paletGreenZoneChaosYellow);
-        removeFixedObstacle(paletBlueZoneChaosYellow);
+        removeFixedObstacleNotReInit(paletRedUnZoneChaosYellow);
+        removeFixedObstacleNotReInit(paletRedDeuxZoneChaosYellow);
+        removeFixedObstacleNotReInit(paletGreenZoneChaosYellow);
+        removeFixedObstacleNotReInit(paletBlueZoneChaosYellow);
+        updateTableAfterFixedObstaclesChanges();
     }
 }

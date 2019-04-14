@@ -1,4 +1,5 @@
 package scripts;
+import data.CouleurPalet;
 import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -81,6 +82,10 @@ public class PaletsX6 extends Script {
                 //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                 robot.turn(0 );
+                if(version == 1) {
+                    // TODO
+                    robot.pushPaletGauche(CouleurPalet.VERT);
+                }
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

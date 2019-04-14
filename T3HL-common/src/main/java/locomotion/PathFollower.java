@@ -245,16 +245,22 @@ public class PathFollower extends ServiceThread {
             }
             try {
                 do {
-                    aim = pointsQueue.poll();
-                    Log.LOCOMOTION.debug("Move to "+aim);
-                    this.moveToPoint(aim, parallelActions);
-                    parallelActions = new Runnable[0];
-                    hasNext = !pointsQueue.isEmpty();
+                    synchronized (pointsQueue) {
+                        aim = pointsQueue.poll();
+                        Log.LOCOMOTION.debug("Move to "+aim+", current pos: "+XYO.getRobotInstance());
+                        this.moveToPoint(aim, parallelActions);
+                        parallelActions = new Runnable[0];
+                        hasNext = !pointsQueue.isEmpty();
+                    }
                 } while (hasNext);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
-                this.pointsQueue.clear();
-                exceptionsQueue.add(e);
+                synchronized (pointsQueue) {
+                    this.pointsQueue.clear();
+                }
+                synchronized (exceptionsQueue) {
+                    exceptionsQueue.add(e);
+                }
             }
         }
     }

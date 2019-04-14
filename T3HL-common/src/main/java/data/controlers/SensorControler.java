@@ -215,7 +215,7 @@ public class SensorControler extends Thread implements Service {
         System.out.println("=== SICK ===");
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
-            sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
+            sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]) +6;
             System.out.print(sickMeasurementsStr[i]+" ");
 
         }

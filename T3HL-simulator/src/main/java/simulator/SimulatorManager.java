@@ -196,7 +196,9 @@ public class SimulatorManager extends Thread {
             case "elevatorContents":
             {
                 RobotSide side = RobotSide.valueOf(data[2]);
-                simulatedRobots.get(senderPort).setElevatorContents(side, data, 3);
+                if(simulatedRobots.get(senderPort) != null) {
+                    simulatedRobots.get(senderPort).setElevatorContents(side, data, 3);
+                }
             }
             break;
         }

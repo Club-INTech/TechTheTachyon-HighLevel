@@ -80,11 +80,15 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            System.out.println("debug 2");
-            //robot.followPathTo(new VectCartesian(xEntry,yEntry-distavance + (int) ConfigData.ROBOT_RAY.getDefaultValue()) );
-            System.out.println("debug 3");
             robot.turn(0);
+
+            // FIXME: juste pour la précoupe: on pousse le palet bleu de l'accélérateur
+            robot.moveLengthwise(palet+ecartement, false);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
+            robot.moveLengthwise(-palet-ecartement,false);
+            robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
+
+/*            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
@@ -93,7 +97,7 @@ public class Accelerateur extends Script {
                 actionBras(true, true);
                 robot.increaseScore(10);
             }
-
+*/
 
             /**
              * Dire que le goldenium est libéré
