@@ -1,5 +1,6 @@
 package scripts;
 
+import data.Sick;
 import data.Table;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
@@ -22,7 +23,7 @@ public class TestLidar extends TestBaseHL {
 
     @Override
     public void initState(Container container) throws ContainerException {
-
+        table.removeAllChaosObstacles();
     }
 
     @Override
@@ -36,16 +37,17 @@ public class TestLidar extends TestBaseHL {
     public Vec2 startPosition() {
         // coin bas-droit de la table
 //        return new VectCartesian(table.getLength()/2-215,1000);
-        return new VectCartesian(-500,500);
+        return new VectCartesian(-750,500);
     }
 
     @Override
     public void action() throws Exception {
+        robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         while(true) {
             try {
-                robot.followPathTo(new VectCartesian(-500,500));
+                robot.followPathTo(new VectCartesian(-750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
-                robot.followPathTo(new VectCartesian(500,500));
+                robot.followPathTo(new VectCartesian(750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
@@ -70,6 +72,6 @@ public class TestLidar extends TestBaseHL {
                 e.printStackTrace();
             }
         }*/
-//        Thread.sleep(1600000);
+        //Thread.sleep(1600000);
     }
 }

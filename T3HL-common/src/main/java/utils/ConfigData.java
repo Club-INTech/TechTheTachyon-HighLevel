@@ -68,7 +68,7 @@ public enum ConfigData implements ConfigInfo
      */
     MASTER_IP("192.168.0.3"),
     MASTER_PORT(14500),
-    TEENSY_MASTER_IP("192.168.0.1"),
+    TEENSY_MASTER_IP("192.168.1.1"),
     TEENSY_MASTER_PORT(13500),
     TEENSY_SLAVE_IP("192.168.0.2"),
     TEENSY_SLAVE_PORT(13500),

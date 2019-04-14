@@ -364,10 +364,12 @@ public class Table implements Service {
     public boolean isPositionInMobileObstacle(Vec2 point) {
         Iterator<MobileCircularObstacle> iterator = mobileObstacles.iterator();
         MobileCircularObstacle obstacle;
-        while (iterator.hasNext()) {
-            obstacle = iterator.next();
-            if (obstacle.isInObstacle(point)) {
-                return true;
+        synchronized (mobileObstacles) {
+            while (iterator.hasNext()) {
+                obstacle = iterator.next();
+                if (obstacle.isInObstacle(point)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -399,10 +401,12 @@ public class Table implements Service {
     private boolean intersectObstacle(Segment segment, List<? extends Obstacle> obstacles) {
         Iterator<? extends Obstacle> iterator = obstacles.iterator();
         Obstacle obstacle;
-        while (iterator.hasNext()) {
-            obstacle = iterator.next();
-            if (obstacle.intersect(segment)) {
-                return true;
+        synchronized (obstacles) {
+            while (iterator.hasNext()) {
+                obstacle = iterator.next();
+                if (obstacle.intersect(segment)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -416,10 +420,12 @@ public class Table implements Service {
     public boolean intersectAnyMobileObstacle(Circle circle) {
         Iterator<MobileCircularObstacle> iterator = mobileObstacles.iterator();
         MobileCircularObstacle obstacle;
-        while (iterator.hasNext()) {
-            obstacle = iterator.next();
-            if (obstacle.getPosition().distanceTo(circle.getCenter()) < ((Circle) obstacle.getShape()).getRadius() + circle.getRadius()) {
-                return true;
+        synchronized (mobileObstacles) {
+            while (iterator.hasNext()) {
+                obstacle = iterator.next();
+                if (obstacle.getPosition().distanceTo(circle.getCenter()) < ((Circle) obstacle.getShape()).getRadius() + circle.getRadius()) {
+                    return true;
+                }
             }
         }
         return false;

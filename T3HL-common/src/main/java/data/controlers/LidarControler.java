@@ -110,6 +110,7 @@ public class LidarControler extends ServiceThread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
         Log.LIDAR.debug("Processus OK");
 
         while (!listener.isAlive()) {
@@ -119,7 +120,6 @@ public class LidarControler extends ServiceThread {
                 e.printStackTrace();
             }
         }
-        waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
 
         /* Si jamais besoin du mode RAW:
         try {
@@ -135,7 +135,7 @@ public class LidarControler extends ServiceThread {
 
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
-        Rectangle tableBB = new Rectangle(new VectCartesian(table.getLength()/2, table.getWidth()/2), table.getLength()-2*enemyRadius, table.getWidth()-2*enemyRadius);
+        Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius, table.getWidth()-2*enemyRadius);
         while (true) {
             while (messageQueue.peek() == null) {
                 try {

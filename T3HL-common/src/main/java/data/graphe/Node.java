@@ -34,7 +34,7 @@ public class Node {
      */
     public static final double DEFAULT_HEURISTIC      = 10_000_000_00;
     public static final double DEFAULT_COST           = 10_000_000_00;
-    private static final int FIX_COST               = 0;
+    private static final int FIX_COST               = 1000;
 
     /**
      * Position du noeud
@@ -104,7 +104,7 @@ public class Node {
     }
 
     public double costTo(Node neighbour) {
-        return this.getPosition().distanceTo(neighbour.getPosition());
+        return this.getPosition().distanceTo(neighbour.getPosition()) + FIX_COST;
     }
 
     /**
