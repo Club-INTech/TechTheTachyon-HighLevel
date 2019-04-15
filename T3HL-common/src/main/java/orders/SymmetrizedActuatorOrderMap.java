@@ -85,7 +85,7 @@ public class SymmetrizedActuatorOrderMap implements Service {
      */
     public Order getSymmetrizedActuatorOrder(ActuatorsOrder order)
     {
-        return correspondenceMap.get(order);
+        return correspondenceMap.getOrDefault(order,order);
     }
 
     @Override
