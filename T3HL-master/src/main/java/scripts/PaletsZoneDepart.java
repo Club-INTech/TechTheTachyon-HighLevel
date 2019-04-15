@@ -60,13 +60,13 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
 /*
 FIXME REMETTRE:
-            table.removeFixedObstacleNotReInit(table.getPaletRougeDroite());
-            table.removeFixedObstacleNotReInit(table.getPaletVertDroite());
-            table.removeFixedObstacleNotReInit(table.getPaletBleuDroite());
+            table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+            table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
 */
-            table.removeFixedObstacleNotReInit(table.getPaletRougeGauche());
-            table.removeFixedObstacleNotReInit(table.getPaletVertGauche());
-            table.removeFixedObstacleNotReInit(table.getPaletBleuGauche());
+            table.removeFixedObstacleNoReInit(table.getPaletRougeGauche());
+            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+            table.removeFixedObstacleNoReInit(table.getPaletBleuGauche());
 
             table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {

@@ -1,8 +1,6 @@
 package scripts;
 
 import data.Sick;
-import data.Table;
-import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
 import utils.ConfigData;
 import utils.Container;
@@ -10,7 +8,6 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class TestLidar extends TestBaseHL {
@@ -23,6 +20,10 @@ public class TestLidar extends TestBaseHL {
 
     @Override
     public void initState(Container container) throws ContainerException {
+        table.removeFixedObstacleNoReInit(table.getPaletRougeGauche());
+        table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+        table.removeFixedObstacleNoReInit(table.getPaletBleuGauche());
+        table.updateTableAfterFixedObstaclesChanges();
         table.removeAllChaosObstacles();
     }
 
@@ -50,7 +51,8 @@ public class TestLidar extends TestBaseHL {
                 robot.followPathTo(new VectCartesian(750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (UnableToMoveException e) {
-                e.printStackTrace();
+               // System.err.println(e.getMessage());
+                //e.printStackTrace();
             }
         }
         /*final int testCount = 60;

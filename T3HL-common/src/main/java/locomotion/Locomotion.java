@@ -23,6 +23,7 @@ import data.Graphe;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
+import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
@@ -184,7 +185,7 @@ public class Locomotion implements Service {
 
 
         Optional<Obstacle> obstacleBelowPoint = table.findFixedObstacleInPosition(point);
-        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Points d'arrivée " + point + " dans l'obstacle " + obstacle));
+        obstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle " + obstacle));
 
         try {
             graphe.writeLock().lock();
@@ -192,7 +193,7 @@ public class Locomotion implements Service {
             final Node[] startHack = {start};
             Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(xyo.getPosition());
             obstacleBelowPosition.ifPresent(obstacle -> {
-                Log.LOCOMOTION.warning("Points de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle);
+                Log.LOCOMOTION.warning("Point de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle);
                 startHack[0] = graphe.addProvisoryNode(obstacle.getShape().closestPointToShape(new VectCartesian(0, 500)/*Centre*/));
             });
             start = startHack[0];
@@ -200,6 +201,10 @@ public class Locomotion implements Service {
         } finally {
             graphe.writeLock().unlock();
         }
+
+        Optional<MobileCircularObstacle> mobileObstacleBelowPoint = table.findMobileObstacleInPosition(point);
+        mobileObstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle));
+
         pointsQueue.clear();
         exceptionsQueue.clear();
 
@@ -229,9 +234,10 @@ public class Locomotion implements Service {
                         synchronized (exceptionsQueue) {
                             exception = exceptionsQueue.poll();
                         }
-                        exception.printStackTrace();
+                        //exception.printStackTrace();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
                             XYO buddyPos = XYO.getBuddyInstance();
+                            Log.PATHFINDING.critical("Trajectory obstructed, recomputing");
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
                                 Log.PATHFINDING.critical("POTO TODO!! "+buddyPos+" aim: "+exception.getAim());
                                 // TODO: c'est ton pote, on fait quoi?
@@ -263,7 +269,7 @@ public class Locomotion implements Service {
                 graphe.setUpdated(false);
             } catch (NoPathFound e) {
                 // TODO : Compléter
-                e.printStackTrace();
+                //e.printStackTrace();
                 throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
             }
         }

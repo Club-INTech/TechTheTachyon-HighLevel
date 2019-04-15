@@ -43,7 +43,7 @@ public class MobileCircularObstacle extends Obstacle {
     /**
      * Marge par défaut (en mm) pour éviter que les robots se cognent
      */
-    private static final int DEFAULT_MARGIN = 30;
+    private static final int DEFAULT_MARGIN = 60;
 
     private Circle pathShape;
 
@@ -53,7 +53,11 @@ public class MobileCircularObstacle extends Obstacle {
      * @param ray       rayon du cercle représentant l'adversaire
      */
     public MobileCircularObstacle(Vec2 position, int ray) {
-        this(new Circle(position, ray), new Circle(position, ray+DEFAULT_MARGIN));
+        this(position, ray, DEFAULT_MARGIN);
+    }
+
+    public MobileCircularObstacle(Vec2 position, int ray, int margin) {
+        this(new Circle(position, ray), new Circle(position, ray+margin));
     }
 
     /**
@@ -95,11 +99,6 @@ public class MobileCircularObstacle extends Obstacle {
         Circle clonedShape = (Circle) this.shape.clone();
         // nécessite le même centre (pas juste en égalité mais en référence)
         return new MobileCircularObstacle(clonedShape, new Circle(clonedShape.getCenter(), pathShape.getRadius()));
-    }
-
-    @Override
-    public boolean intersect(Segment segment) {
-        return this.pathShape.intersect(segment);
     }
 
     @Override

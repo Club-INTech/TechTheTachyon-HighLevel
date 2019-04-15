@@ -35,6 +35,7 @@ import utils.container.ContainerException;
 import utils.math.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Test_Table {
     /**
@@ -163,9 +164,10 @@ public class Test_Table {
         table.updateMobileObstacles(points);
 
         Assert.assertEquals(3, table.getMobileObstacles().size());
-        Assert.assertEquals(ennemyRay, ((Circle) table.getMobileObstacles().get(0).getShape()).getRadius(), 0.1);
-        Assert.assertEquals(ennemyRay, ((Circle) table.getMobileObstacles().get(1).getShape()).getRadius(), 0.1);
-        Assert.assertEquals(buddyRay, ((Circle) table.getMobileObstacles().get(2).getShape()).getRadius(), 0.1);
+        List<MobileCircularObstacle> obstaclesCopy = new ArrayList<>(table.getMobileObstacles());
+        Assert.assertEquals(ennemyRay, ((Circle) obstaclesCopy.get(0).getShape()).getRadius(), 0.1);
+        Assert.assertEquals(ennemyRay, ((Circle) obstaclesCopy.get(1).getShape()).getRadius(), 0.1);
+        Assert.assertEquals(buddyRay, ((Circle) obstaclesCopy.get(2).getShape()).getRadius(), 0.1);
 
         Thread.sleep(MobileCircularObstacle.getDefaultLifeTime() + 1);
 

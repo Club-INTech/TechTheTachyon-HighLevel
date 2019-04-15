@@ -26,6 +26,7 @@ import utils.container.Service;
 import utils.math.*;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Classe représentant la table et gérant les obstacles
@@ -66,7 +67,7 @@ public class Table implements Service {
     /**
      * Liste des obstacles mobiles. SYNCHRONISER LES ACCES!
      */
-    private final ArrayList<MobileCircularObstacle> mobileObstacles;
+    private final ConcurrentLinkedQueue<MobileCircularObstacle> mobileObstacles;
 
     /**
      * Longueur de la table (en x, en mm)
@@ -113,7 +114,7 @@ public class Table implements Service {
      */
     public Table() {
         this.fixedObstacles = new ArrayList<>();
-        this.mobileObstacles = new ArrayList<>();
+        this.mobileObstacles = new ConcurrentLinkedQueue<>();
         this.mobileObstacleBuffer = new ArrayList<>();
     }
 
@@ -345,6 +346,23 @@ public class Table implements Service {
      * @param point la position à tester
      * @return <pre>Optional.empty()</pre> s'il n'y a aucun obstacle, <pre>Optional.of(some)</pre> avec <pre>some</pre> un obstacle s'il y en a un
      */
+    public Optional<MobileCircularObstacle> findMobileObstacleInPosition(Vec2 point) {
+        Iterator<MobileCircularObstacle> iterator = mobileObstacles.iterator();
+        MobileCircularObstacle obstacle;
+        while (iterator.hasNext()) {
+            obstacle = iterator.next();
+            if (obstacle.isInObstacle(point)) {
+                return Optional.of(obstacle);
+            }
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Trouve l'obstacle potentiel dans la position
+     * @param point la position à tester
+     * @return <pre>Optional.empty()</pre> s'il n'y a aucun obstacle, <pre>Optional.of(some)</pre> avec <pre>some</pre> un obstacle s'il y en a un
+     */
     public Optional<Obstacle> findFixedObstacleInPosition(Vec2 point) {
         Iterator<Obstacle> iterator = fixedObstacles.iterator();
         Obstacle obstacle;
@@ -398,7 +416,7 @@ public class Table implements Service {
      * @param obstacles liste d'obstacles à tester
      * @return true si le segment intersecte l'un des obstacles
      */
-    private boolean intersectObstacle(Segment segment, List<? extends Obstacle> obstacles) {
+    private boolean intersectObstacle(Segment segment, Collection<? extends Obstacle> obstacles) {
         Iterator<? extends Obstacle> iterator = obstacles.iterator();
         Obstacle obstacle;
         synchronized (obstacles) {
@@ -468,7 +486,7 @@ public class Table implements Service {
      * Retire un obstacle fixe de la table sans metre à jour le graphe
      * @param obstacle
      */
-    public void removeFixedObstacleNotReInit(Obstacle obstacle) {
+    public void removeFixedObstacleNoReInit(Obstacle obstacle) {
         if (obstacle instanceof MobileCircularObstacle) {
             throw new IllegalArgumentException("L'obstacle ajouté n'est pas fixe !");
         }
@@ -484,7 +502,7 @@ public class Table implements Service {
      * @param obstacle  obstacle à retirer
      */
     public void removeFixedObstacle(Obstacle obstacle) {
-        removeFixedObstacleNotReInit(obstacle);
+        removeFixedObstacleNoReInit(obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {
@@ -538,7 +556,7 @@ public class Table implements Service {
         return fixedObstacles;
     }
 
-    public ArrayList<MobileCircularObstacle> getMobileObstacles() {
+    public ConcurrentLinkedQueue<MobileCircularObstacle> getMobileObstacles() {
         return mobileObstacles;
     }
 
@@ -624,15 +642,15 @@ public class Table implements Service {
     }
 
     public void removeAllChaosObstacles() {
-        removeFixedObstacleNotReInit(paletRedUnZoneChaosPurple);
-        removeFixedObstacleNotReInit(paletRedDeuxZoneChaosPurple);
-        removeFixedObstacleNotReInit(paletGreenZoneChaosPurple);
-        removeFixedObstacleNotReInit(paletBlueZoneChaosPurple);
+        removeFixedObstacleNoReInit(paletRedUnZoneChaosPurple);
+        removeFixedObstacleNoReInit(paletRedDeuxZoneChaosPurple);
+        removeFixedObstacleNoReInit(paletGreenZoneChaosPurple);
+        removeFixedObstacleNoReInit(paletBlueZoneChaosPurple);
 
-        removeFixedObstacleNotReInit(paletRedUnZoneChaosYellow);
-        removeFixedObstacleNotReInit(paletRedDeuxZoneChaosYellow);
-        removeFixedObstacleNotReInit(paletGreenZoneChaosYellow);
-        removeFixedObstacleNotReInit(paletBlueZoneChaosYellow);
+        removeFixedObstacleNoReInit(paletRedUnZoneChaosYellow);
+        removeFixedObstacleNoReInit(paletRedDeuxZoneChaosYellow);
+        removeFixedObstacleNoReInit(paletGreenZoneChaosYellow);
+        removeFixedObstacleNoReInit(paletBlueZoneChaosYellow);
         updateTableAfterFixedObstaclesChanges();
     }
 }

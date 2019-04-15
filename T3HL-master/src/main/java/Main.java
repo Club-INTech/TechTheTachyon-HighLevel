@@ -154,9 +154,9 @@ public class Main {
         grapheSansZoneDepart.updateConfigNoInit(container.getConfig());
         tableSansZoneDepart.updateConfig(container.getConfig());
         tableSansZoneDepart.initObstacles();
-        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletBleuDroite());
-        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletRougeDroite());
-        tableSansZoneDepart.removeFixedObstacleNotReInit(tableSansZoneDepart.getPaletVertDroite());
+        tableSansZoneDepart.removeFixedObstacleNoReInit(tableSansZoneDepart.getPaletBleuDroite());
+        tableSansZoneDepart.removeFixedObstacleNoReInit(tableSansZoneDepart.getPaletRougeDroite());
+        tableSansZoneDepart.removeFixedObstacleNoReInit(tableSansZoneDepart.getPaletVertDroite());
         tableSansZoneDepart.updateTableAfterFixedObstaclesChanges();
 
         Action paletsX6Action = new ScriptAction(ScriptNamesMaster.PALETS6, 0) {

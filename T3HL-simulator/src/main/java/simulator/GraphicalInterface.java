@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GraphicalInterface extends JFrame {
 
@@ -65,7 +66,7 @@ public class GraphicalInterface extends JFrame {
 
     //Attributs pas graphiques
     private ArrayList<Obstacle> fixedObstacles;
-    private ArrayList<MobileCircularObstacle> mobileObstacles;
+    private ConcurrentLinkedQueue<MobileCircularObstacle> mobileObstacles;
     private long lastTimeUpdate;
     private ArrayList<Vec2> pointsToDraw;
     private Point mousePosition;
@@ -84,10 +85,10 @@ public class GraphicalInterface extends JFrame {
     GraphicalInterface() {
         this.initDefaultPassedParameters();
 
-        this.fixedObstacles = new ArrayList<Obstacle>();
-        this.mobileObstacles = new ArrayList<MobileCircularObstacle>();
+        this.fixedObstacles = new ArrayList<>();
+        this.mobileObstacles = new ConcurrentLinkedQueue<>();
 
-        this.pointsToDraw=new ArrayList<Vec2>();
+        this.pointsToDraw=new ArrayList<>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
             this.backgroundImage = ImageIO.read(getClass().getResourceAsStream("/Table2019.png"));

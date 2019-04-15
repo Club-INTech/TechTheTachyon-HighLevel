@@ -113,7 +113,7 @@ public enum ConfigData implements ConfigInfo
      */
     LOCOMOTION_LOOP_DELAY(20),
     LOCOMOTION_DISTANCE_CHECK(250),
-    LOCOMOTION_RADIUS_CHECK(20),
+    LOCOMOTION_RADIUS_CHECK(200),
 
     /**
      * Paramètres de chemins

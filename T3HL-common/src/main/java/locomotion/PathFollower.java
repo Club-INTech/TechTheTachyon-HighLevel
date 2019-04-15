@@ -22,6 +22,7 @@ import ai.AIService;
 import data.SensorState;
 import data.Table;
 import data.XYO;
+import data.table.MobileCircularObstacle;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
@@ -30,6 +31,7 @@ import utils.container.Service;
 import utils.container.ServiceThread;
 import utils.math.*;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -128,9 +130,10 @@ public class PathFollower extends ServiceThread {
         this.orderWrapper.moveLenghtwise(distance, parallelActions);
 
         waitWhileTrue(SensorState.MOVING::getData, () -> {
-            if (isLineForwardObstructed(distance > 0)) {
+            Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
+            if (enemy.isPresent()) {
                 orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                throw new UnableToMoveException("Enemy pos is "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
             if (SensorState.STUCKED.getData() && !expectedWallImpact) {
                 orderWrapper.immobilise();
@@ -155,7 +158,7 @@ public class PathFollower extends ServiceThread {
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (isCircleObstructed()) {
                 orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
             if (SensorState.STUCKED.getData() && !expectedWallImpact) {
                 orderWrapper.immobilise();
@@ -180,15 +183,17 @@ public class PathFollower extends ServiceThread {
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (isCircleObstructed()) {
                 orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
             Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
             nearDirection.setR(this.DISTANCE_CHECK);
             nearDirection.plus(XYO.getRobotInstance().getPosition());
             segment.setPointB(nearDirection);
-            if (isSegmentObstructed(segment)) {
+
+            Optional<MobileCircularObstacle> enemy = getEnemyInSegment(segment);
+            if (enemy.isPresent()) {
                 orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
             if (SensorState.STUCKED.getData()) {
                 orderWrapper.immobilise();
@@ -200,16 +205,16 @@ public class PathFollower extends ServiceThread {
     /**
      * Vérifie en fonction de la vitesse s'il y a un adversaire en face du robot
      * @param direction true si l'on va vers l'avant du robot
-     * @return  true s'il y a un adversaire devant le robot
+     * @return <pre>Optional.none()</pre> s'il n'y a pas d'ennemi, <pre>Optional.of(&lt;some&gt;)</pre> s'il y en a un
      */
-    private boolean isLineForwardObstructed(boolean direction) {
+    private Optional<MobileCircularObstacle> getEnemyForward(boolean direction) {
         double orientation = robotXYO.getOrientation();
         if (!direction) {
             orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
         }
         Segment seg = new Segment(robotXYO.getPosition().clone(),
                 robotXYO.getPosition().plusVector(new VectPolar(DISTANCE_CHECK, orientation)));
-        return table.intersectAnyMobileObstacle(seg);
+        return getEnemyInSegment(seg);
     }
 
     /**
@@ -220,13 +225,22 @@ public class PathFollower extends ServiceThread {
         return table.intersectAnyMobileObstacle(segment);
     }
 
+    private Optional<MobileCircularObstacle> getEnemyInSegment(Segment segment) {
+        synchronized (table.getMobileObstacles()) {
+            return table.getMobileObstacles().stream()
+                    .filter(it -> it.intersect(segment))
+                    .findFirst();
+        }
+    }
+
     /**
      * Vérifie s'il y a un adversaire dans le cercle donné
      * @return  true s'il y a un adversaire autour du robot
      */
     private boolean isCircleObstructed() {
-        Circle circle = new Circle(robotXYO.getPosition().clone(), RADIUS_CHECK);
-        return table.intersectAnyMobileObstacle(circle);
+       /* Circle circle = new Circle(robotXYO.getPosition().clone(), RADIUS_CHECK);
+        return table.intersectAnyMobileObstacle(circle);*/
+       return false;
     }
 
     @Override

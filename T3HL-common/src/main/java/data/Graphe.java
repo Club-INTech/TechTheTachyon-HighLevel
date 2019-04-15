@@ -33,6 +33,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -70,7 +71,7 @@ Graphe implements Service {
      * Liste des obstacles mobiles
      * @see Table#mobileObstacles
      */
-    private final ArrayList<MobileCircularObstacle> mobileCircularObstacles;
+    private final ConcurrentLinkedQueue<MobileCircularObstacle> mobileCircularObstacles;
 
     /**
      * Liste des noeuds
@@ -428,7 +429,7 @@ Graphe implements Service {
         return ridges;
     }
 
-    public List<MobileCircularObstacle> getMobileObstacles() {
+    public ConcurrentLinkedQueue<MobileCircularObstacle> getMobileObstacles() {
         return mobileCircularObstacles;
     }
 
