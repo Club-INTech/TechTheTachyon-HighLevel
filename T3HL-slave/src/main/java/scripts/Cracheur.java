@@ -17,16 +17,20 @@ public class Cracheur extends Script {
     private int xEntry = 2000;
     private int yEntry = 2000;
 
+    private int nbPalets = 3;
+
+
     public Cracheur(Slave robot, Table table) {
         super(robot, table);
     }
 
     @Override
     public void execute(Integer version) {
-        //implémenter une boucle en fonction du nombre de palets à cracher, ou bien deux options (ascenseur plein ou non)
-        // afin de savoir si l'on commence par l'action de l'ascenseur
-        robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
+        //situation de départ avec 3 palets dans l'ascenseur
+        for (int j = 1; j<= nbPalets; j++) {
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
+        }
     }
     @Override //à adapter
     public Shape entryPosition(Integer version) { return new Circle(new VectCartesian(xEntry, yEntry), 1000); }
