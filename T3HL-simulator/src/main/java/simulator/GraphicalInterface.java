@@ -2,7 +2,6 @@ package simulator;
 
 import data.CouleurPalet;
 import data.Table;
-import data.XYO;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
@@ -49,10 +48,6 @@ public class GraphicalInterface extends JFrame {
      */
     private boolean isDrawingGraph;
     private boolean isCreatingObstacleWithMouse;
-    /**
-     * Affichage du robot principal
-     */
-    private boolean showingRealRobot;
 
     //Attributs graphiques
     private BufferedImage backgroundImage;
@@ -130,7 +125,6 @@ public class GraphicalInterface extends JFrame {
         this.isDrawingPaths=true;
         this.colorblindMode=false;
         this.isCreatingObstacleWithMouse=false;
-        this.showingRealRobot=false;
 
         this.table=null;
     }
@@ -178,15 +172,6 @@ public class GraphicalInterface extends JFrame {
         }
     }
 
-    /** Set si le vrai robot est affiché
-     * @param value le vrai robot est affiché si TRUE
-     */
-    void setShowingRealRobot(boolean value){
-        if (canParametersBePassed()){
-            this.showingRealRobot=value;
-        }
-    }
-
     /** Permet de savoir si on a lancé le robot simulé */
     private boolean canParametersBePassed(){
         if (this.isLaunched){
@@ -226,16 +211,12 @@ public class GraphicalInterface extends JFrame {
 
     /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
-    private void drawRobot(Graphics g, int x, int y, double orientation, int diameter){
+    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter, int index){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
         g.drawLine(x, y, Math.round(x+(float)Math.cos(orientation)*diameter), Math.round(y-(float)Math.sin(orientation)*diameter));
-        g.setColor(DEFAULT_COLOR);
-    }
 
-    /** Affiche le chemin du robot */
-    private void drawRobotPath(Graphics g, SimulatedRobot simulatedRobot, int index){
         if(this.isDrawingPaths) {
             if(pathfollowerToShow != null && simulatedRobot.getPort() == pathfollowerToShowPort) {
                 g.setColor(PATH_COLOR);
@@ -251,6 +232,8 @@ public class GraphicalInterface extends JFrame {
             }
         }
         drawDebug(g, simulatedRobot, index);
+
+        g.setColor(DEFAULT_COLOR);
     }
 
     private void drawDebug(Graphics g, SimulatedRobot simulatedRobot, int index) {
@@ -413,30 +396,21 @@ public class GraphicalInterface extends JFrame {
     }
 
     /** Met à jour l'affichage */
-    private void updateGraphics(Graphics g) {
+    private void updateGraphics(Graphics g){
         clearScreen(g);
         drawBackground(g);
         drawObstacles(g);
         int index = 0;
 
-        if (this.isDrawingGraph) {
+        if(this.isDrawingGraph) {
             drawGraphe(g);
         }
 
-        if (this.showingRealRobot) {
-            Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY());
-            int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue() * 2);
-            drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), XYO.getRobotInstance().getOrientation(), diameterOnInterface);
-        }
-        else{
-            for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
-                Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
-                int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue() * 2);
-                drawRobot(g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface);
-                drawRobotPath(g, simulatedRobot, index);
-                index++;
-            }
-
+        for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
+            Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
+            int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue()*2);
+            drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface, index);
+            index++;
         }
         if (this.isDrawingPoints) {
             drawPoints(g);
