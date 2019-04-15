@@ -71,6 +71,8 @@ public class Listener extends ServiceThread {
      */
     private boolean useLidar;
 
+    private boolean visualize;
+
     /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
@@ -138,6 +140,12 @@ public class Listener extends ServiceThread {
                     buddy = Connection.MASTER;
                     Log.COMMUNICATION.debug("Master");
                     Log.COMMUNICATION.debug("Teensy Slave");
+                }
+
+                if(visualize) {
+                    Log.COMMUNICATION.debug("Debug connection init...");
+                    connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
+                    Log.COMMUNICATION.debug("Debug connection ready!");
                 }
             }
             if(useLidar) {
@@ -214,5 +222,6 @@ public class Listener extends ServiceThread {
         this.master = config.getBoolean(ConfigData.MASTER);
         this.simulation=config.getBoolean(ConfigData.SIMULATION);
         this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
+        this.visualize = config.getBoolean(ConfigData.VISUALISATION);
     }
 }

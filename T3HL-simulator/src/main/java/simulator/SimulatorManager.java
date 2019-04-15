@@ -19,7 +19,7 @@ public class SimulatorManager extends Thread {
     private int HLSlavePort;
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManagers;
     private HashMap<Integer, SimulatedConnectionManager> simulatedHLConnectionManagers;
-    private HashMap<Integer, SimulatedRobot> simulatedRobots;
+    private HashMap<Integer, IRobot> simulatedRobots;
     private GraphicalInterface graphicalInterface;
 
     //Permet de savoir si cette instance est démarrée
@@ -104,7 +104,7 @@ public class SimulatorManager extends Thread {
     /** Set les robots qui sont instancié pour qu'ils executent les ordres
      * @param simulatedRobots HashMap<Integer, SimulatedRobot> des robots instanciés
      */
-    void setSimulatedRobots(HashMap<Integer,SimulatedRobot> simulatedRobots){
+    void setSimulatedRobots(HashMap<Integer,IRobot> simulatedRobots){
         if (canParametersBePassed()) {
             this.simulatedRobots = simulatedRobots;
         }
@@ -148,12 +148,15 @@ public class SimulatorManager extends Thread {
 
             //On tryUpdate la position du robot
             for (int port : simulatedLLConnectionManagers.keySet()) {
+                if(port == SimulatedConnectionManager.VISUALISATION_PORT)
+                    continue;
                 //On gère les messages d'entrée
                 lastMessage = this.simulatedLLConnectionManagers.get(port).getLastReceivedMessage();
+                SimulatedRobot robot = (SimulatedRobot) simulatedRobots.get(port);
                 if (lastMessage != null) {
-                    handleMessageLL(lastMessage, simulatedRobots.get(port));
+                    handleMessageLL(lastMessage, robot);
                 }
-                simulatedRobots.get(port).tryUpdate();
+                robot.tryUpdate();
             }
 
             //On écoute les ports du HL pour transmettre un éventuel message

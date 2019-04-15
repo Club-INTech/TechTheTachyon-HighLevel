@@ -46,7 +46,7 @@ public class TestSICK extends TestBaseHL {
         } else {
             // test avec tous les SICK
             for (int i=0; i < 1000;i++) {
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
                 TimeUnit.MILLISECONDS.sleep(200);
                 try {
                     robot.turn(0);

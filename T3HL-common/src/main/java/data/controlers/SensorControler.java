@@ -255,17 +255,20 @@ public class SensorControler extends Thread implements Service {
                 }
             } else {
                 System.out.println(orien);
-                teta = Math.atan(-rapport);
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
+                        teta = Math.atan(-rapport);
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     } else {
+                        teta = Math.atan(rapport);
                         yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
+                        teta = Math.atan(-rapport);
                         yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     } else {
+                        teta = Math.atan(rapport);
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 }

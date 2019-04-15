@@ -59,6 +59,11 @@ public enum ConfigData implements ConfigInfo
     SIMULATION(false),
 
     /**
+     * Visualisation des actions active
+     */
+    VISUALISATION(true),
+
+    /**
      * Si on utilise le Lidar
      */
     USING_LIDAR(false),

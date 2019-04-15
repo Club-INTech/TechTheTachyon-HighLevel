@@ -14,6 +14,7 @@ import org.junit.Test;
 import robot.Master;
 import robot.Robot;
 import simulator.GraphicalInterface;
+import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
@@ -64,6 +65,7 @@ public abstract class TestBaseHL {
     }
 
     private void waitForLLConnection() {
+        System.out.println("Waiting for connections...");
         while(!connectionManager.areConnectionsInitiated()) {
             try {
                 Thread.sleep(100);
@@ -71,11 +73,12 @@ public abstract class TestBaseHL {
                 e.printStackTrace();
             }
         }
+        System.out.println("Everything connected!");
     }
 
     protected void setup(boolean simulationMode) {
         ConfigData.SIMULATION.setDefaultValue(simulationMode);
-        container = Container.getInstance("robot.Master");
+        container = Container.getInstance("Master");
         try {
 //            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
@@ -102,15 +105,24 @@ public abstract class TestBaseHL {
             e.printStackTrace();
         }
 
-        if(simulationMode) {
+        boolean visualise = container.getConfig().getBoolean(ConfigData.VISUALISATION);
+        if(simulationMode || visualise) {
             // init simulator
             SimulatorManagerLauncher simulatorLauncher = new SimulatorManagerLauncher();
-            simulatorLauncher.setLLMasterPort((int) ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
-            simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+            if(simulationMode) {
+                simulatorLauncher.setLLMasterPort((int) ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+                simulatorLauncher.setSpeedFactor(1);
+            } else {
+                simulatorLauncher.setVisualisationMode(Master.class);
+            }
             simulatorLauncher.setColorblindMode(false);
-            simulatorLauncher.setSpeedFactor(1);
             try {
-                simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                if(simulationMode) {
+                    simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                } else {
+                    simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+                }
             } catch (ContainerException e) {
                 e.printStackTrace();
             }
@@ -130,9 +142,13 @@ public abstract class TestBaseHL {
         waitForLLConnection();
 
         try {
-            if(simulationMode) {
+            if(simulationMode || visualise) {
                 SimulatorDebug debug = container.getService(SimulatorDebug.class);
-                debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                if(simulationMode) {
+                    debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                } else {
+                    debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
+                }
             }
             initState(container);
 

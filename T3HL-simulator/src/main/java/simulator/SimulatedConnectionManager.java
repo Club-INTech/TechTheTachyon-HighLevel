@@ -8,6 +8,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SimulatedConnectionManager extends Thread {
 
+    /**
+     * Port pour signifier qu'on veut voir ce que le HL fait (sur le robot)
+     */
+    public static final int VISUALISATION_PORT = -1;
     private ServerSocket receptionSocket;
     private Socket socket;
     private ConcurrentLinkedQueue<String> receivedMessage;
@@ -24,19 +28,25 @@ public class SimulatedConnectionManager extends Thread {
         this.port=port;
         //On initialise le dernier message reçu et le serveur Socket
         this.receivedMessage = new ConcurrentLinkedQueue<String>();
-        try {
-            this.receptionSocket = new ServerSocket(port);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(port != VISUALISATION_PORT) {
+            try {
+                System.out.println("Ouverture d'une socket sur le port "+port);
+                this.receptionSocket = new ServerSocket(port);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                this.socket=this.receptionSocket.accept();
+                System.out.println("Socket connectée sur le port "+port);
+                this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
+                this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            this.start();
+        } else {
+            ready = true;
         }
-        try {
-            this.socket=this.receptionSocket.accept();
-            this.incoming = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
-            this.outgoing = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.start();
     }
 
     @Override
@@ -73,11 +83,13 @@ public class SimulatedConnectionManager extends Thread {
 
     /** Envoi un message au robot connecté au simulateur */
     void sendMessage(String message){
-        try {
-            this.outgoing.write(message);
-            this.outgoing.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(port != VISUALISATION_PORT) {
+            try {
+                this.outgoing.write(message);
+                this.outgoing.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

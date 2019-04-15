@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class SimulatedRobot {
+public class SimulatedRobot implements IRobot {
 
     private static final float MONTLHERY_SPEED = 2f; // mm/<tick du simulateur>
     private static final float MONTLHERY_ROT_SPEED = (float) (Math.PI/2f); // rad/s
@@ -359,18 +359,18 @@ public class SimulatedRobot {
 
     /* ======================== Getters de la position et de l'orientation du robot ========================== */
     /** Renvoie la position en X du robot */
-    int getX(){ return this.position.getX(); }
+    public int getX(){ return this.position.getX(); }
 
     /** Renvoie la position en Y du robot */
-    int getY(){ return this.position.getY(); }
+    public int getY(){ return this.position.getY(); }
 
     /** Renvoie la position du robot */
-    Vec2 getPosition(){
+    public Vec2 getPosition(){
         return this.position;
     }
 
     /** Renvoie l'orientation du robot */
-    double getOrientation(){ return this.orientation; }
+    public double getOrientation(){ return this.orientation; }
 
     /* ======================== Tout ce qui touche au mode Montlhery pour le tester ======================== */
     public void setMontlheryMode() {
@@ -411,7 +411,7 @@ public class SimulatedRobot {
         forcedMovement = false;
     }
 
-    Vec2 getTargetPosition() {
+    public Vec2 getTargetPosition() {
         return positionTarget;
     }
 

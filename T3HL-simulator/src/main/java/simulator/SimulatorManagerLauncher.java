@@ -2,6 +2,7 @@ package simulator;
 
 import data.Table;
 import locomotion.PathFollower;
+import robot.Robot;
 import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
@@ -26,7 +27,7 @@ public class SimulatorManagerLauncher extends Thread{
     //Attributs internes
     private GraphicalInterface graphicalInterface;
     private SimulatorManager simulatorManager;
-    private HashMap<Integer, SimulatedRobot> simulatedRobots = new HashMap<>();
+    private HashMap<Integer, IRobot> simulatedRobots = new HashMap<>();
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManager = new HashMap<>();
     private HashMap<Integer, SimulatedConnectionManager> simulatedHLConnectionManager = new HashMap<>();
     private SimulatedConnectionManager lidarConnection;
@@ -43,7 +44,15 @@ public class SimulatorManagerLauncher extends Thread{
     //Permet de savoir si cette instance a fini de faire son travail
     private boolean finished = false;
 
+    /**
+     * Permet de savoir si on est en mode visualisation
+     */
+    private boolean visualisationMode;
 
+    /**
+     * La classe du service représentant le robot (permet de tester le master et le slave)
+     */
+    private Class<? extends Robot> robotClass;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -125,6 +134,16 @@ public class SimulatorManagerLauncher extends Thread{
     public void setSpeedFactor(float speedFactor){
         if (canParametersBePassed()) {
             this.speedFactor = speedFactor;
+        }
+    }
+
+    /**
+     * Active le mode visualisation
+     */
+    public void setVisualisationMode(Class<? extends Robot> robotClass) {
+        if(canParametersBePassed()) {
+            this.robotClass = robotClass;
+            visualisationMode = true;
         }
     }
 
@@ -254,36 +273,48 @@ public class SimulatorManagerLauncher extends Thread{
             }
         }
 
-        // On simule une présence de lidar si nécessaire
-        if (this.lidarPort != 0){
-            while (this.lidarConnection == null || !this.lidarConnection.isReady()){
-                try {
-                    Thread.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        //Récupération des obstacles
+        this.container = Container.getInstance("Master");
+
+        if(visualisationMode) {
+            System.out.println("Initialisation du robot visualisé");
+            try {
+                VisualisedRobot robot = new VisualisedRobot(container, robotClass);
+                this.simulatedRobots.put(SimulatedConnectionManager.VISUALISATION_PORT, robot);
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // On simule une présence de lidar si nécessaire
+            if (this.lidarPort != 0){
+                while (this.lidarConnection == null || !this.lidarConnection.isReady()){
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+            }
+
+
+            // On créer un robot par port
+            for (int port : this.simulatedLLConnectionManager.keySet()) {
+                System.out.println("test");
+                System.out.println(String.format("(%d) Listener connecté", port));
+
+                //On instancie un robot simulé pour chaque LL instancié
+                SimulatedRobot simulatedRobot = new SimulatedRobot(port);
+                simulatedRobot.setSimulatedLLConnectionManager(this.simulatedLLConnectionManager.get(port));
+                simulatedRobot.setSpeedFactor(this.speedFactor);
+                simulatedRobot.launch();
+
+                //On ajoute le robot simulé dans la liste de tous les robots simulés
+                this.simulatedRobots.put(port, simulatedRobot);
+                System.out.println(String.format("(%d) Robot simulé instancié", port));
             }
         }
 
-
-        // On créer un robot par port
-        for (int port : this.simulatedLLConnectionManager.keySet()) {
-            System.out.println("test");
-            System.out.println(String.format("(%d) Listener connecté", port));
-
-            //On instancie un robot simulé pour chaque LL instancié
-            SimulatedRobot simulatedRobot = new SimulatedRobot(port);
-            simulatedRobot.setSimulatedLLConnectionManager(this.simulatedLLConnectionManager.get(port));
-            simulatedRobot.setSpeedFactor(this.speedFactor);
-            simulatedRobot.launch();
-
-            //On ajoute le robot simulé dans la liste de tous les robots simulés
-            this.simulatedRobots.put(port, simulatedRobot);
-            System.out.println(String.format("(%d) Robot simulé instancié", port));
-        }
-
-        //Récupération des obstacles
-        this.container = Container.getInstance("Master");
+        System.out.println("Instanciation de l'interface graphique");
         try {
             this.table = this.container.getService(Table.class);
         } catch (ContainerException e) {

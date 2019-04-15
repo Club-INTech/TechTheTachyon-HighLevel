@@ -34,7 +34,7 @@ public class GraphicalInterface extends JFrame {
     private final Font font;
 
     //Attributs qui peuvent être modifiés avant le lancement
-    private HashMap<Integer, SimulatedRobot> simulatedRobots;
+    private HashMap<Integer, IRobot> simulatedRobots;
     private Table table;
     private boolean colorblindMode;
     private boolean isDrawingPoints;
@@ -119,7 +119,7 @@ public class GraphicalInterface extends JFrame {
      *  Les attributs définits à NULL sont des attributs qu'il faut SET obligatoirement
      */
     private void initDefaultPassedParameters(){
-        this.simulatedRobots=new HashMap<Integer, SimulatedRobot>();
+        this.simulatedRobots= new HashMap<>();
         this.isDrawingPoints=true;
         this.isDrawingGraph=true;
         this.isDrawingPaths=true;
@@ -132,7 +132,7 @@ public class GraphicalInterface extends JFrame {
     /** Set les robots qui sont instancié pour qu'ils soient affichés dans le simulateur
      * @param simulatedRobots HashMap<Integer, SimulatedRobot> des robots instanciés
      */
-    void setSimulatedRobots(HashMap<Integer, SimulatedRobot> simulatedRobots){
+    void setSimulatedRobots(HashMap<Integer, IRobot> simulatedRobots){
         if (canParametersBePassed()){
             this.simulatedRobots=simulatedRobots;
         }
@@ -211,7 +211,7 @@ public class GraphicalInterface extends JFrame {
 
     /* ========================================== Méthodes de dessin =========================================== */
     /** Affiche un robot */
-    private void drawRobot(SimulatedRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter, int index){
+    private void drawRobot(IRobot simulatedRobot, Graphics g, int x, int y, double orientation, int diameter, int index){
         g.setColor(ROBOT_COLOR);
         g.fillOval(x-diameter/2,y-diameter/2, diameter,diameter);
         g.setColor(ORIENTATION_COLOR);
@@ -236,12 +236,12 @@ public class GraphicalInterface extends JFrame {
         g.setColor(DEFAULT_COLOR);
     }
 
-    private void drawDebug(Graphics g, SimulatedRobot simulatedRobot, int index) {
+    private void drawDebug(Graphics g, IRobot simulatedRobot, int index) {
         drawElevators(g, simulatedRobot, index);
         drawArmPositions(g, simulatedRobot, index);
     }
 
-    private void drawArmPositions(Graphics g, SimulatedRobot simulatedRobot, int index) {
+    private void drawArmPositions(Graphics g, IRobot simulatedRobot, int index) {
         g.setColor(Color.BLACK);
 
         int totalElevatorPanelHeight = 100;
@@ -254,7 +254,7 @@ public class GraphicalInterface extends JFrame {
         g.drawString("Rpos: "+simulatedRobot.getRightArmPosition(), baseX, baseY+textHeight*2+margin);
     }
 
-    private void drawElevators(Graphics g, SimulatedRobot simulatedRobot, int index) {
+    private void drawElevators(Graphics g, IRobot simulatedRobot, int index) {
         g.setColor(Color.BLACK);
 
         int totalElevatorPanelHeight = 100;
@@ -406,7 +406,7 @@ public class GraphicalInterface extends JFrame {
             drawGraphe(g);
         }
 
-        for (SimulatedRobot simulatedRobot : simulatedRobots.values()) {
+        for (IRobot simulatedRobot : simulatedRobots.values()) {
             Vec2 coordsOnInterface = transformTableCoordsToInterfaceCoords(simulatedRobot.getX(), simulatedRobot.getY());
             int diameterOnInterface = transformTableDistanceToInterfaceDistance((Integer) ConfigData.ROBOT_RAY.getDefaultValue()*2);
             drawRobot(simulatedRobot, g, coordsOnInterface.getX(), coordsOnInterface.getY(), simulatedRobot.getOrientation(), diameterOnInterface, index);
