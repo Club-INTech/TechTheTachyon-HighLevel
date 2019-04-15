@@ -283,6 +283,7 @@ public class Main {
         } catch (ContainerException e) {
             e.printStackTrace();
         }
+        simulatorLauncher.setShowingRealRobot(false);
         simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setSpeedFactor(1);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
