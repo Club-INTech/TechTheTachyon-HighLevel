@@ -119,15 +119,6 @@ public class SensorControler extends Thread implements Service {
             if (!robotPosQueue.isEmpty()){
                 handleRobotPos();
             }
-            if (!sickData.isEmpty()){
-                handleSick();
-            }
-            if (!eventData.isEmpty()){
-                handleEvent();
-            }
-            if (!couleurPalet.isEmpty()){
-                handleEvent();
-            }
             if (!buddyPosQueue.isEmpty()){
                 handleBuddyPos();
             }
@@ -139,6 +130,15 @@ public class SensorControler extends Thread implements Service {
             }
             if (!buddyScriptOrderQueue.isEmpty()){
                 handleBuddyScriptOrder();
+            }
+            if (!sickData.isEmpty()){
+                handleSick();
+            }
+            if (!eventData.isEmpty()){
+                handleEvent();
+            }
+            if (!couleurPalet.isEmpty()){
+                handleEvent();
             }
         }
     }
@@ -311,7 +311,14 @@ public class SensorControler extends Thread implements Service {
      */
     private void handleBuddyPos(){
         String[] coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
-        XYO.getBuddyInstance().update(Integer.parseInt(coordonates[0]), Integer.parseInt(coordonates[1]), Double.parseDouble(coordonates[2]));
+        int x = Integer.parseInt(coordonates[0]);
+        int y = Integer.parseInt(coordonates[1]);
+        double o = Double.parseDouble(coordonates[2]);
+        if (symetrie) {
+            x = -x;
+            o = Calculs.modulo(Math.PI - o, Math.PI);
+        }
+        XYO.getBuddyInstance().update(x, y, o);
     }
 
     /**
