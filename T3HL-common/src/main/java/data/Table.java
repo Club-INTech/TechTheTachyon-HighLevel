@@ -300,7 +300,7 @@ public class Table implements Service {
             if (pt.distanceTo(XYO.getBuddyInstance().getPosition()) < compareThreshold) {
                 ray = buddyRobotRay;
             }
-            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray);
+            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray, robotRay);
             Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
             mobileObstacleBuffer.add(obst);
         }

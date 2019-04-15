@@ -151,11 +151,6 @@ public class Listener extends ServiceThread {
             if(useLidar) {
                 connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar connected");
-                try {
-                    TimeUnit.SECONDS.sleep(5);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         } catch (CommunicationException e) {
             e.printStackTrace();
