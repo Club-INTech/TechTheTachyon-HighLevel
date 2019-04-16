@@ -1,4 +1,8 @@
 #!/bin/bash
+if [ ! -d "bin" ]; then
+    mkdir "bin"
+fi
+
 echo "cd bin"
 cd bin
 echo $PWD
