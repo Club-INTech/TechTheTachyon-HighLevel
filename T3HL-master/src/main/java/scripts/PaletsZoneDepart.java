@@ -6,6 +6,7 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -14,7 +15,7 @@ import utils.math.VectCartesian;
 public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
-    private int xEntry = -1500+191+65;//1350;
+    private int xEntry = 1500-191-65;//1350;
     private int yEntry = 430;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
@@ -41,7 +42,7 @@ public class PaletsZoneDepart extends Script {
                 } else {
                     premierPaletPris = true;
                 }
-                robot.turn(-Math.PI/2.0); // FIXME: retirer
+                robot.turn(Math.PI / 2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -58,15 +59,11 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-/*
-FIXME REMETTRE:
+
+            // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
             table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
             table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
             table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-*/
-            table.removeFixedObstacleNoReInit(table.getPaletRougeGauche());
-            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
-            table.removeFixedObstacleNoReInit(table.getPaletBleuGauche());
 
             table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {
@@ -87,6 +84,5 @@ FIXME REMETTRE:
 
     @Override
     public void updateConfig(Config config) {
-
     }
 }

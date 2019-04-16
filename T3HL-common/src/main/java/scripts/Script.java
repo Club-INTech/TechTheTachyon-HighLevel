@@ -88,7 +88,6 @@ public abstract class Script implements Service {
 
         try {
             this.execute(version);
-            System.out.println("jhfdkjqhdksjqviksuysydtfgstgshgfgzffgrffgdgdfsdgdrrrytguyrufyuytdetdrrysrfstsryethesfrhrfgrgsjfyrgrdthd");
         } catch (Exception e) {
             this.finalize(e);
             e.printStackTrace();

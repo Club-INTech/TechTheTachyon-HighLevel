@@ -311,8 +311,8 @@ public class SimulatedRobot implements IRobot {
     }
 
     /** Fait tourner le robot de delta */
-    void turn(float aim){
-        if (this.orientationTarget-moduloSpec(aim)< this.ORIENTATION_TOLERANCE){
+    void turn(float aim) {
+        if (Math.abs(moduloSpec(this.orientationTarget)-moduloSpec(aim)) < this.ORIENTATION_TOLERANCE){
             this.forceRaiseStoppedMovingFlag();
         }
         else {

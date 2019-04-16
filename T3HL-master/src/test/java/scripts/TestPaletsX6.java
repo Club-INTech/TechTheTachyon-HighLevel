@@ -16,6 +16,10 @@ public class TestPaletsX6 extends TestScriptBase {
         table.removeFixedObstacle(table.getPaletBleuGauche());
         table.removeFixedObstacle(table.getPaletRougeGauche());
         table.removeFixedObstacle(table.getPaletVertGauche());
+
+        table.removeFixedObstacle(table.getPaletBleuDroite());
+        table.removeFixedObstacle(table.getPaletRougeDroite());
+        table.removeFixedObstacle(table.getPaletVertDroite());
     }
 
     @Override
@@ -31,7 +35,7 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-1309, 226);
+        return new VectCartesian(1309, 226);
     }
 
     @Override

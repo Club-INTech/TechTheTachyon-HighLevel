@@ -24,9 +24,13 @@ import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
 import connection.ConnectionManager;
-import data.*;
+import data.Graphe;
+import data.Sick;
+import data.Table;
+import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
+import data.controlers.PanneauService;
 import data.controlers.SensorControler;
 import data.graphe.Node;
 import locomotion.PathFollower;
@@ -34,7 +38,10 @@ import locomotion.Pathfinder;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
 import robot.Master;
-import scripts.*;
+import scripts.Script;
+import scripts.ScriptManager;
+import scripts.ScriptManagerMaster;
+import scripts.ScriptNamesMaster;
 import simulator.GraphicalInterface;
 import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
@@ -69,7 +76,7 @@ public class Main {
     private static GraphicalInterface interfaceGraphique;
     private static MontlheryController controller;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
@@ -94,14 +101,13 @@ public class Main {
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
-            XYO.getRobotInstance().update(-1500+191, 550, Math.PI);
+            XYO.getRobotInstance().update(1500-191, 550, Math.PI);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-
-            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             table.removeAllChaosObstacles();
 
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
             accelerateur.goToThenExecute(0);
@@ -240,7 +246,17 @@ public class Main {
 
     private static void initServices(){
         container = Container.getInstance("robot.Master");
+
         try {
+            // trouve la couleur
+            if(System.getProperty("user.name").equals("pi")) { // si on est bien sur la Rapsi
+                PanneauService panneauService = container.getService(PanneauService.class);
+                if(panneauService.isPurple()) {
+                    container.getConfig().override(ConfigData.COULEUR, "violet");
+                } else {
+                    container.getConfig().override(ConfigData.COULEUR, "jaune");
+                }
+            }
             scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
             orderWrapper = container.getService(OrderWrapper.class);
@@ -284,7 +300,7 @@ public class Main {
             e.printStackTrace();
         }
         simulatorLauncher.setColorblindMode(true);
-        simulatorLauncher.setSpeedFactor(1);
+        simulatorLauncher.setSpeedFactor(2);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
         try {

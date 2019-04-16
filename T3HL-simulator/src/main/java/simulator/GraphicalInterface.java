@@ -54,6 +54,7 @@ public class GraphicalInterface extends JFrame {
     private JPanel panel;
     private int TABLE_PIXEL_WIDTH = 980;      //in pixels
     private int STACKS_PIXEL_WIDTH = 300;
+    private int TOTAL_PIXEL_WIDTH = this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH;
     private int TABLE_PIXEL_HEIGHT = (int) ((TABLE_PIXEL_WIDTH+STACKS_PIXEL_WIDTH)/ASPECT_RATIO);      //in pixels
     private Color DEFAULT_COLOR = new Color(0,0,0,255);
     private Color ROBOT_COLOR = new Color(0,255,0,128);
@@ -79,6 +80,8 @@ public class GraphicalInterface extends JFrame {
     private PathFollower pathfollowerToShow;
 
     private int pathfollowerToShowPort;
+    private long startTime;
+    private float timeScale;
 
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
@@ -108,7 +111,7 @@ public class GraphicalInterface extends JFrame {
         };
         this.panel.setDoubleBuffered(true);
         this.panel.setVisible(true);
-        this.panel.setPreferredSize(new Dimension(this.TABLE_PIXEL_WIDTH+this.STACKS_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT));
+        this.panel.setPreferredSize(new Dimension(TOTAL_PIXEL_WIDTH, this.TABLE_PIXEL_HEIGHT));
         this.getContentPane().add(this.panel);
         this.setVisible(true);
         this.pack();
@@ -191,6 +194,7 @@ public class GraphicalInterface extends JFrame {
             this.addSimulatedObstacleWithMouse();
         }
         this.isLaunched=true;
+        startTime = System.currentTimeMillis();
         System.out.println("Interface graphique démarrée");
     }
 
@@ -416,6 +420,17 @@ public class GraphicalInterface extends JFrame {
             drawPoints(g);
         }
 
+        drawTime(g);
+    }
+
+    private void drawTime(Graphics g) {
+        g.setColor(Color.RED);
+        long elapsedTime = (long) ((System.currentTimeMillis() - startTime) * timeScale);
+        long millis = elapsedTime % 1000;
+        long seconds = elapsedTime/1000;
+        String message = String.format("%03d:%03d", seconds, millis);
+        int messageWidth = g.getFontMetrics().stringWidth(message);
+        g.drawString(message, TOTAL_PIXEL_WIDTH-messageWidth, TABLE_PIXEL_HEIGHT);
     }
 
     private void drawGraphe(Graphics g) {
@@ -577,5 +592,13 @@ public class GraphicalInterface extends JFrame {
 
     public PathFollower getPathfollowerToShow() {
         return pathfollowerToShow;
+    }
+
+    public void setTimeScale(float timeScale) {
+        this.timeScale = timeScale;
+    }
+
+    public float getTimeScale() {
+        return timeScale;
     }
 }

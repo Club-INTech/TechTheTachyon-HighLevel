@@ -331,6 +331,7 @@ public class SimulatorManagerLauncher extends Thread{
         this.graphicalInterface.setIsDrawingPoints(true);
         this.graphicalInterface.setDrawingPaths(true);
         this.graphicalInterface.setDrawingGraph(true);
+        this.graphicalInterface.setTimeScale(speedFactor);
         this.graphicalInterface.setIsCreatingObstacleWithMouse(this.isSimulatingObstacleWithMouse);
         this.graphicalInterface.launch();
         System.out.println("Interface graphique instanciée");

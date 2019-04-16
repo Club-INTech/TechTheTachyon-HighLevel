@@ -97,6 +97,13 @@
             <artifactId>jSerialComm</artifactId>
             <version>[2.0.0,3.0.0)</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.Club-INTech</groupId>
+            <artifactId>PanneauRaspi</artifactId>
+            <version>ca0aad2140</version>
+        </dependency>
+
     </dependencies>
 
     <!-- SubModules -->

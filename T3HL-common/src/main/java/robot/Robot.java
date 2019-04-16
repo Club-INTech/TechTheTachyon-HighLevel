@@ -22,6 +22,7 @@ import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
+import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -50,6 +51,11 @@ import java.util.Stack;
 public abstract class Robot implements Service {
 
     /**
+     * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
+     */
+    private final PanneauService panneauService;
+
+    /**
      * Permet d'envoyer des infos de debug
      */
     private SimulatorDebug simulatorDebug;
@@ -75,10 +81,18 @@ public abstract class Robot implements Service {
      * Position et Orientation du robot
      */
     protected XYO xyo;
-    private long LOOP_SLEEP_TIME;
+    private long loopSleepTime;
 
     private Stack<CouleurPalet> leftElevator;
     private Stack<CouleurPalet> rightElevator;
+
+    /**
+     * Est-ce qu'on est en mode simulation?
+     */
+    private boolean inSimulation;
+
+    private boolean isMaster;
+    private boolean symetry;
 
     /**
      * @param locomotion
@@ -86,16 +100,17 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug) {
+    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
+        this.panneauService = panneauService;
     }
 
-
-    public void increaseScore(int points){
+    public void increaseScore(int points) {
         this.score = this.score + points;
+        this.panneauService.updateScore(score);
     }
 
     public void waitForLeftElevator() {
@@ -121,7 +136,7 @@ public abstract class Robot implements Service {
         state.setData(true);
         while((boolean)state.getData()) { // tant que l'ascenseur bouge
             try {
-                Thread.sleep(LOOP_SLEEP_TIME);
+                Thread.sleep(loopSleepTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -227,6 +242,9 @@ public abstract class Robot implements Service {
      * Méthode qui permet le recalage avec les sicks
      */
     public void computeNewPositionAndOrientation(Sick[] significantSicks){
+        if(inSimulation) {
+            return;
+        }
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
@@ -250,12 +268,35 @@ public abstract class Robot implements Service {
     }
 
     // Gestion des ascenseurs
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsGauches() {
+        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+            return getNbPaletsDroitsNoSymetry();
+        } else {
+            return getNbPaletsGauchesNoSymetry();
+        }
+    }
 
     /**
      * Renvoie le nombre de palets dans l'ascenseur de droite
      * @return
      */
     public int getNbPaletsDroits() {
+        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+            return getNbPaletsGauchesNoSymetry();
+        } else {
+            return getNbPaletsDroitsNoSymetry();
+        }
+    }
+
+    /**
+     * Renvoie le nombre de palets dans l'ascenseur de droite
+     * @return
+     */
+    public int getNbPaletsDroitsNoSymetry() {
         Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         return rightElevator.size();
     }
@@ -264,7 +305,7 @@ public abstract class Robot implements Service {
      * Renvoie le nombre de palets dans l'ascenseur de droite
      * @return
      */
-    public int getNbPaletsGauches() {
+    public int getNbPaletsGauchesNoSymetry() {
         Objects.requireNonNull(rightElevator, "Tentative de compter le nombre de palets dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         return leftElevator.size();
     }
@@ -299,6 +340,30 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletDroit(CouleurPalet palet) {
+       if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+           pushPaletGaucheNoSymetry(palet);
+       } else {
+           pushPaletDroitNoSymetry(palet);
+       }
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletGauche(CouleurPalet palet) {
+        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+            pushPaletDroitNoSymetry(palet);
+        } else {
+            pushPaletGaucheNoSymetry(palet);
+        }
+    }
+
+    /**
+     * Ajoute un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public void pushPaletDroitNoSymetry(CouleurPalet palet) {
         //if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
         // ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
         //}
@@ -311,7 +376,7 @@ public abstract class Robot implements Service {
      * Ajoute un palet dans l'ascenseur de gauche
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
-    public void pushPaletGauche(CouleurPalet palet) {
+    public void pushPaletGaucheNoSymetry(CouleurPalet palet) {
         // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
         //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
         //}
@@ -325,6 +390,30 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletDroit() {
+        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+            return popPaletGaucheNoSymetry();
+        } else {
+            return popPaletDroitNoSymetry();
+        }
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de gauche
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletGauche() {
+        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+            return popPaletDroitNoSymetry();
+        } else {
+            return popPaletGaucheNoSymetry();
+        }
+    }
+
+    /**
+     * Retire un palet dans l'ascenseur de droite
+     * @throws NullPointerException si l'ascenseur n'existe pas
+     */
+    public CouleurPalet popPaletDroitNoSymetry() {
         Objects.requireNonNull(rightElevator, "Tentative de retirer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         CouleurPalet result = rightElevator.pop();
         sendElevatorUpdate();
@@ -335,7 +424,7 @@ public abstract class Robot implements Service {
      * Retire un palet dans l'ascenseur de gauche
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
-    public CouleurPalet popPaletGauche() {
+    public CouleurPalet popPaletGaucheNoSymetry() {
         Objects.requireNonNull(leftElevator, "Tentative de retirer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         CouleurPalet result = leftElevator.pop();
         sendElevatorUpdate();
@@ -360,6 +449,9 @@ public abstract class Robot implements Service {
 
     @Override
     public void updateConfig(Config config) {
-        LOOP_SLEEP_TIME = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
+        loopSleepTime = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
+        inSimulation = config.getBoolean(ConfigData.SIMULATION);
+        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        isMaster = config.getBoolean(ConfigData.MASTER);
     }
 }

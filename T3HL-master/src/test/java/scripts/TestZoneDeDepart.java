@@ -23,7 +23,7 @@ public class TestZoneDeDepart extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-730, 470);
+        return new VectCartesian(730, 470);
     }
 
 }

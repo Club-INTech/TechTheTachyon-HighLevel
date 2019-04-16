@@ -23,7 +23,7 @@ public class PaletsX6 extends Script {
          *  (selon si on s'est fait voler les palets ? (dans lequel pas on shift de côté))
          * */
         /*met en place les versions différentes*/
-        versions = new ArrayList<Integer>();
+        versions = new ArrayList<>();
         versions.add(0);
         versions.add(1);
         versions.add(2);
@@ -40,15 +40,15 @@ public class PaletsX6 extends Script {
      */
 
         if (version == 0) { //rouge droite
-            positions.add(new VectCartesian(-1000, 1206));
-            positions.add(new VectCartesian(-805 , 1206));
-            positions.add(new VectCartesian(-597, 1206));
+            positions.add(new VectCartesian(1000, 1206));
+            positions.add(new VectCartesian(805 , 1206));
+            positions.add(new VectCartesian(597, 1206));
         } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(-905, 1186));
-            positions.add(new VectCartesian(-505, 1186));
+            positions.add(new VectCartesian(905, 1186));
+            positions.add(new VectCartesian(505, 1186));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {  //bleu droite
-            positions.add(new VectCartesian(-834, 1225));
+            positions.add(new VectCartesian(834, 1225));
             //positions.add(new VectCartesian(0, 800));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 3) {  //rouge gauche On doit symetriser la partie droite pas la peine d'écrire des cordonnées
@@ -64,9 +64,8 @@ public class PaletsX6 extends Script {
             positions.add(new VectCartesian(0, 800));
             positions.add(new VectCartesian(0, 800));
         }
-        boolean premierdeplacement = false;
         try {
-            robot.turn(0.0);
+            robot.turn(Math.PI);
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
@@ -77,24 +76,23 @@ public class PaletsX6 extends Script {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //
                 robot.followPathTo(position);
-                if (premierdeplacement) {}
-                else {
-                    premierdeplacement = true;
-                }
-                robot.turn(0);
+                robot.turn(Math.PI);
 
                 // on suposse que l'ascenseur est monté au mx au début
 
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                if(version == 1) {
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                if(version == 0) {
                     // TODO
-                    robot.pushPaletGauche(CouleurPalet.VERT);
+                    robot.pushPaletDroit(CouleurPalet.ROUGE);
+                } else if(version == 1) {
+                    // TODO
+                    robot.pushPaletDroit(CouleurPalet.VERT);
                 }
             }
         } catch (UnableToMoveException e) {
@@ -104,13 +102,12 @@ public class PaletsX6 extends Script {
     }
     @Override
     public Shape entryPosition(Integer version) {
-
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(-1500+280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(-1500+280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
             return positionEntree;
         }
         else if (version == 2) {
