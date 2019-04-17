@@ -50,6 +50,8 @@ public enum Connection {
     DEBUG_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.DEBUG_SIMULATEUR_PORT, SocketClientInterface.class),
     DEBUG_SIMULATEUR_SERVER(ConfigData.LOCALHOST, ConfigData.DEBUG_SIMULATEUR_PORT, SocketServerInterface.class),
 
+    ELECTRON(ConfigData.ELECTRON_IP, ConfigData.ELECTRON_PORT, SocketServerInterface.class),
+
     BALISE(ConfigData.BALISE_IP,ConfigData.BALISE_PORT,SocketClientInterface.class)
     ;
 

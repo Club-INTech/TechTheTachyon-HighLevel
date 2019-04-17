@@ -5,13 +5,19 @@ import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListener;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 import com.pi4j.util.CommandArgumentParser;*/
+import connection.Connection;
+import data.SensorState;
 import data.Table;
 import pfg.config.Config;
 import robot.Master;
+import sun.management.Sensor;
 import utils.Log;
+import utils.communication.CommunicationException;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
+
+import java.util.concurrent.TimeUnit;
 
 public class Electron extends Script{
 
@@ -21,6 +27,33 @@ public class Electron extends Script{
 
     @Override
     public void execute(Integer version) {
+
+        Thread electronThread = new Thread(() -> {
+            Log.ELECTRON.debug("Thread sending activating order started");
+            while (!SensorState.ELECTRON_ACTIVATED.getData()) {
+                try {
+                    Connection.ELECTRON.send("Launch");
+                } catch (CommunicationException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.ELECTRON.debug("Electron activated");
+
+
+            while (!SensorState.ELECTRON_ARRIVED.getData()){
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            Log.ELECTRON.debug("Electron arrived");
+        });
+        electronThread.start();
+
+
+
+
 /* FIXME: A refaire
         final GpioController gpio = GpioFactory.getInstance();
         final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32_depart", PinState.LOW);
