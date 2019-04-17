@@ -27,6 +27,13 @@ public class PanneauService extends ServiceThread {
 
     public void updateScore(int newScore) {
         this.score = newScore;
+        try {
+            lazyGet().printScore(this.score);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TooManyDigitsException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isPurple() {
