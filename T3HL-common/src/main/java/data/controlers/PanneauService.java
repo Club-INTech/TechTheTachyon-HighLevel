@@ -60,7 +60,7 @@ public class PanneauService extends ServiceThread {
         if(onRaspi && panel == null) {
             try {
                 panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);// Le switch est forcément sur le pin 7,
-            } catch (I2CFactory.UnsupportedBusNumberException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

@@ -251,7 +251,7 @@ public class Main {
             // trouve la couleur
             try {
                 panneauService = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
-            }catch (IOException | I2CFactory.UnsupportedBusNumberException e){
+            }catch (IOException e){
                 e.printStackTrace();
             }
             if(panneauService.isViolet()) {
