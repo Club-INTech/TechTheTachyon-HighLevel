@@ -225,6 +225,7 @@ public class Listener extends ServiceThread {
         this.master = config.getBoolean(ConfigData.MASTER);
         this.simulation=config.getBoolean(ConfigData.SIMULATION);
         this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
+        this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
     }
 }

@@ -69,6 +69,11 @@ public enum ConfigData implements ConfigInfo
     USING_LIDAR(false),
 
     /**
+     * Si on utilise l'électron
+     */
+    USING_ELECTRON(true),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),

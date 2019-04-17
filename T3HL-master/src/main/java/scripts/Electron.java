@@ -10,6 +10,7 @@ import data.SensorState;
 import data.Table;
 import pfg.config.Config;
 import robot.Master;
+import robot.Robot;
 import sun.management.Sensor;
 import utils.Log;
 import utils.communication.CommunicationException;
@@ -29,6 +30,8 @@ public class Electron extends Script{
     public void execute(Integer version) {
 
         Thread electronThread = new Thread(() -> {
+
+
             Log.ELECTRON.debug("Thread sending activating order started");
             while (!SensorState.ELECTRON_ACTIVATED.getData()) {
                 try {
@@ -39,6 +42,7 @@ public class Electron extends Script{
             }
             Log.ELECTRON.debug("Electron activated");
 
+            ((Master)robot).score += 15;
 
             while (!SensorState.ELECTRON_ARRIVED.getData()){
                 try {
@@ -48,6 +52,8 @@ public class Electron extends Script{
                 }
             }
             Log.ELECTRON.debug("Electron arrived");
+
+            ((Master)robot).score += 20;
         });
         electronThread.start();
 
