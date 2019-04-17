@@ -202,6 +202,10 @@ public class SensorControler extends Thread implements Service {
                     Log.COMMUNICATION.critical("Erreur dans l'event 'confirmOrder', il manque l'ordre!");
                 }
                 break;
+
+            case "gogogofast":
+                SensorState.WAITING_JUMPER.setData(false);
+                break;
         }
     }
 

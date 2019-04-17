@@ -99,19 +99,19 @@ public class LidarControler extends ServiceThread {
 
     @Override
     public void run() {
-        Log.LIDAR.debug("Controller lancé : en attente du listener...");
-        Log.LIDAR.debug("Démarrage du processus LiDAR_UST_10LX...");
+        Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
+        Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
             Process lidarProcess = new ProcessBuilder(processPath).start();
 
             // force l'extinction du programme quand la VM s'arrête
             Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
-            new CopyIOThread(lidarProcess, Log.LIDAR).start();
+            new CopyIOThread(lidarProcess, Log.LIDAR_PROCESS).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
         waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
-        Log.LIDAR.debug("Processus OK");
+        Log.LIDAR_PROCESS.debug("Processus OK");
 
         while (!listener.isAlive()) {
             try {
@@ -131,7 +131,7 @@ public class LidarControler extends ServiceThread {
         }
 */
 
-        Log.LIDAR.debug("Controller opérationnel");
+        Log.LIDAR_PROCESS.debug("Controller opérationnel");
 
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();

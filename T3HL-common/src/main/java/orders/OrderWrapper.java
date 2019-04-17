@@ -341,4 +341,12 @@ public class OrderWrapper implements Service {
     public void setConnection(Connection connection) {
         this.llConnection = connection;
     }
+
+    public void waitJumper() {
+        Log.STRATEGY.debug("Waiting jumper...");
+        SensorState.WAITING_JUMPER.setData(true);
+        sendString("waitJumper");
+        waitWhileTrue(SensorState.WAITING_JUMPER::getData);
+        Log.STRATEGY.debug("GOGOGO!!!");
+    }
 }

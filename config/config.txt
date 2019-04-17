@@ -18,6 +18,7 @@ COULEUR                             =violet
 #CHEMIN D'EXECUTION DU PROCESSUS LIDAR
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
+USING_LIDAR                         =true
 
 #________________________________________________________________________________________________________________________
 

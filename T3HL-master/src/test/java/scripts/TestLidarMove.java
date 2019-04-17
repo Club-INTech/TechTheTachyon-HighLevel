@@ -10,7 +10,7 @@ import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
-public class TestLidar extends TestBaseHL {
+public class TestLidarMove extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
@@ -51,29 +51,8 @@ public class TestLidar extends TestBaseHL {
                 robot.followPathTo(new VectCartesian(750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (UnableToMoveException e) {
-               // System.err.println(e.getMessage());
-                //e.printStackTrace();
-            }
-        }
-        /*final int testCount = 60;
-        Table table = container.getService(Table.class);
-
-        for (int i = 0; i < testCount; i++) {
-            List<MobileCircularObstacle> mobileObstacles = table.getMobileObstacles();
-            synchronized (mobileObstacles) {
-                System.out.println("[=== Liste des obstacles ===]");
-                for(MobileCircularObstacle mobileObstacle : mobileObstacles) {
-                    System.out.println(mobileObstacle);
-                }
-                System.out.println("[=== === === === === === ===]");
-            }
-            try {
-                // Attente de 5s avant de redonner les positions
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
-        //Thread.sleep(1600000);
+        }
     }
 }

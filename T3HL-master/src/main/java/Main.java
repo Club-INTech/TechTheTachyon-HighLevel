@@ -36,7 +36,6 @@ import data.graphe.Node;
 import locomotion.PathFollower;
 import locomotion.Pathfinder;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
@@ -102,12 +101,12 @@ public class Main {
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+       // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             table.removeAllChaosObstacles();
-
+            orderWrapper.waitJumper();
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
             accelerateur.goToThenExecute(0);
@@ -118,23 +117,6 @@ public class Main {
                 System.out.println("Finished!");
                 Thread.sleep(1000);
             }
-          //  interfaceGraphique.clearPointsToDraw();
-
-            zone_chaos_palets.goToThenExecute(1);
-
-            /**
-             * Si tout les palets de la zone de chaos ont été récupérer
-             */
-            // FIXME table.removeFixedObstacle(table.zoneChaosDroite);
-
-
-            goldenium.goToThenExecute(1);
-            paletsx6.goToThenExecute(1);
-            paletsx3.goToThenExecute(1);
-            accelerateur.goToThenExecute(1);
-
-
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -245,7 +227,7 @@ public class Main {
     }
 
     private static void initServices(){
-        container = Container.getInstance("robot.Master");
+        container = Container.getInstance("Master");
 
         try {
             // trouve la couleur

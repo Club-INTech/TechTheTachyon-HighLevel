@@ -38,6 +38,7 @@ public enum Log
     STRATEGY(true),
     ORDERS(true),
     LIDAR(false),
+    LIDAR_PROCESS(true),
     PATHFINDING(true),
     GRAPHE(false),
     HOOK(true),

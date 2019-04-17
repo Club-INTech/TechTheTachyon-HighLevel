@@ -18,8 +18,6 @@
 
 package data;
 
-import java.util.concurrent.CompletableFuture;
-
 /**
  * Liste les données du robot et leurs état
  *
@@ -34,6 +32,7 @@ public class SensorState<DataType> {
     public static final SensorState<Boolean> RIGHT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
     public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>(false, Boolean.class);
     public static final SensorState<Long> LAST_PONG = new SensorState<>(-1L, Long.class);
+    public static final SensorState<Boolean> WAITING_JUMPER = new SensorState<>(false, Boolean.class);
     ;
 
     /**
