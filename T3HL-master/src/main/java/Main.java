@@ -101,6 +101,7 @@ public class Main {
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
+            Script homologation = ScriptNamesMaster.HOMOLOGATION.getScript();
 
             waitForLLConnection();
 
@@ -117,10 +118,13 @@ public class Main {
             robot.turn(Math.PI);
             table.removeAllChaosObstacles();
             orderWrapper.waitJumper();
+
+            homologation.goToThenExecute(0);
+/* FIXME
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
             accelerateur.goToThenExecute(0);
-
+*/
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             while(robot != null) {

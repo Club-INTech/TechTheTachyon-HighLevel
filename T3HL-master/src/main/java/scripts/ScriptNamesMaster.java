@@ -10,7 +10,8 @@ public enum ScriptNamesMaster implements ScriptNames {
     PALETS6(PaletsX6.class, "paletsx6"),
     PALETS_ZONE_DEPART(PaletsZoneDepart.class, "palets_zone_depart"),
     PALETS_ZONE_CHAOS(ScriptPaletsZoneChaos.class, "palet_zone_chaos"),
-    GOLDENIUM(Goldenium.class,"goldenium");
+    GOLDENIUM(Goldenium.class,"goldenium"),
+    HOMOLOGATION(ScriptHomologation.class, "homologation");
 
 
     private Class<? extends Service> aClass;
