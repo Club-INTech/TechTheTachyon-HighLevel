@@ -126,7 +126,7 @@ public class SensorControler extends Thread implements Service {
                 handleEvent();
             }
             if (!couleurPalet.isEmpty()){
-                handleEvent();
+                handleCouleurPalet();
             }
             if (!buddyPosQueue.isEmpty()){
                 handleBuddyPos();
@@ -202,6 +202,14 @@ public class SensorControler extends Thread implements Service {
                 } else {
                     Log.COMMUNICATION.critical("Erreur dans l'event 'confirmOrder', il manque l'ordre!");
                 }
+                break;
+
+            case "electron_activated":
+                SensorState.ELECTRON_ACTIVATED.setData(true);
+                break;
+
+            case "electron_arrived":
+                SensorState.ELECTRON_ARRIVED.setData(true);
                 break;
 
             case "gogogofast":

@@ -69,6 +69,11 @@ public enum ConfigData implements ConfigInfo
     USING_LIDAR(false),
 
     /**
+     * Si on utilise l'électron
+     */
+    USING_ELECTRON(true),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),
@@ -80,6 +85,8 @@ public enum ConfigData implements ConfigInfo
     LIDAR_DATA_PORT(17865),
     BALISE_IP("127.0.0.1"),
     BALISE_PORT(1111),
+    ELECTRON_IP("192.168.1.69"),
+    ELECTRON_PORT(18900),
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),

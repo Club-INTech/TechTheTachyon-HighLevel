@@ -44,6 +44,7 @@ public enum Log
     HOOK(true),
     TABLE(false),
     AI(true),
+    ELECTRON(true),
     ;
 
     /**
