@@ -72,6 +72,10 @@ public class Listener extends ServiceThread {
     private boolean useLidar;
 
     private boolean visualize;
+    /**
+     * Est-ce qu'on active l'éléctron ?
+     */
+    private boolean useElectron;
 
     /**
      * Construit un listener
@@ -151,6 +155,10 @@ public class Listener extends ServiceThread {
             if(useLidar) {
                 connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar connected");
+            }
+            if(useElectron) {
+                connectionManager.initConnections(Connection.ELECTRON);
+                Log.COMMUNICATION.debug("Electron connected");
             }
         } catch (CommunicationException e) {
             e.printStackTrace();
