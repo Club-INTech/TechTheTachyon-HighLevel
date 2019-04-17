@@ -118,6 +118,16 @@ public class Main {
             }
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
+            int i=0;
+            while (i<1000) {
+                try {
+                    panneauService.getPaneau().printScore(i);
+                }catch(IOException | TooManyDigitsException e){
+                    e.printStackTrace();
+                }
+                ++i;
+                Thread.sleep(500);
+            }
 
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
