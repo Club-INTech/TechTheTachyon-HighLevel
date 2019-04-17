@@ -19,7 +19,7 @@
 package robot;
 
 import data.CouleurPalet;
-import data.controlers.PanneauService;
+import com.panneau.Panneau;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -35,7 +35,7 @@ import java.util.Stack;
  */
 public class Master extends Robot {
 
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, Panneau panneauService) {
         super(locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
         createLeftElevator();
         createRightElevator();

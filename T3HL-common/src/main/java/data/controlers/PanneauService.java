@@ -24,10 +24,18 @@ public class PanneauService extends ServiceThread {
 
     public PanneauService() {
         onRaspi = System.getProperty("user.name").equals("pi");
+        if(onRaspi){
+            panel=lazyGet();
+        }
     }
 
     public void updateScore(int newScore) {
         this.score = newScore;
+        try {
+            panel.printScore(score);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public boolean isPurple() {
@@ -51,7 +59,7 @@ public class PanneauService extends ServiceThread {
     private Panneau lazyGet() {
         if(onRaspi && panel == null) {
             try {
-                panel = new Panneau(RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07, RaspiPin.GPIO_04);
+                panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);// Le switch est forcément sur le pin 7,
             } catch (I2CFactory.UnsupportedBusNumberException | IOException e) {
                 e.printStackTrace();
             }
@@ -64,6 +72,7 @@ public class PanneauService extends ServiceThread {
         if( ! onRaspi) {
             return;
         }
+        /*
         while(!isInterrupted()) {
             try {
                 lazyGet().printScore(score);
@@ -77,6 +86,7 @@ public class PanneauService extends ServiceThread {
                 e.printStackTrace();
             }
         }
+         */
     }
 
     @Override

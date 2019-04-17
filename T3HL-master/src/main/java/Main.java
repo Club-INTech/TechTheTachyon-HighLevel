@@ -23,6 +23,9 @@ import ai.goap.Action;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
+import com.panneau.TooManyDigitsException;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.i2c.I2CFactory;
 import connection.ConnectionManager;
 import data.Graphe;
 import data.Sick;
@@ -30,7 +33,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
-import data.controlers.PanneauService;
+import com.panneau.Panneau;
 import data.controlers.SensorControler;
 import data.graphe.Node;
 import locomotion.PathFollower;
@@ -52,6 +55,8 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +79,7 @@ public class Main {
     private static AIService ai;
     private static GraphicalInterface interfaceGraphique;
     private static MontlheryController controller;
-    private static PanneauService panneauService;
+    private static Panneau panneauService;
 
     public static void main(String[] args) {
         initServices();
@@ -82,7 +87,11 @@ public class Main {
             initSimulator();
         }
 
-        panneauService.updateScore(505);
+        try {
+            panneauService.printScore(505);
+        }catch (IOException | TooManyDigitsException e){
+            e.printStackTrace();
+        }
 
         try {
             initAI();
@@ -101,7 +110,11 @@ public class Main {
 
             waitForLLConnection();
 
-            panneauService.updateScore(42);
+            try {
+                panneauService.printScore(42);
+            }catch( IOException | TooManyDigitsException e){
+                e.printStackTrace();
+            }
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
@@ -236,8 +249,12 @@ public class Main {
 
         try {
             // trouve la couleur
-            panneauService = container.getService(PanneauService.class);
-            if(panneauService.isPurple()) {
+            try {
+                panneauService = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
+            }catch (IOException | I2CFactory.UnsupportedBusNumberException e){
+                e.printStackTrace();
+            }
+            if(panneauService.isViolet()) {
                 container.getConfig().override(ConfigData.COULEUR, "violet");
             } else {
                 container.getConfig().override(ConfigData.COULEUR, "jaune");
