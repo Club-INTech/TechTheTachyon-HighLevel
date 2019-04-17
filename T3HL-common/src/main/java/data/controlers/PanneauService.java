@@ -21,6 +21,14 @@ public class PanneauService implements Service {
     private long updatePeriod;
     private String couleur;
 
+    public PanneauService(){
+        try {
+            panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public Panneau getPaneau(){
         return panel;
     }
