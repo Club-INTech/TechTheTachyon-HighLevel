@@ -74,12 +74,15 @@ public class Main {
     private static AIService ai;
     private static GraphicalInterface interfaceGraphique;
     private static MontlheryController controller;
+    private static PanneauService panneauService;
 
     public static void main(String[] args) {
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
         }
+
+        panneauService.updateScore(505);
 
         try {
             initAI();
@@ -97,6 +100,8 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
             waitForLLConnection();
+
+            panneauService.updateScore(42);
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
@@ -231,13 +236,11 @@ public class Main {
 
         try {
             // trouve la couleur
-            if(System.getProperty("user.name").equals("pi")) { // si on est bien sur la Rapsi
-                PanneauService panneauService = container.getService(PanneauService.class);
-                if(panneauService.isPurple()) {
-                    container.getConfig().override(ConfigData.COULEUR, "violet");
-                } else {
-                    container.getConfig().override(ConfigData.COULEUR, "jaune");
-                }
+            panneauService = container.getService(PanneauService.class);
+            if(panneauService.isPurple()) {
+                container.getConfig().override(ConfigData.COULEUR, "violet");
+            } else {
+                container.getConfig().override(ConfigData.COULEUR, "jaune");
             }
             scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
