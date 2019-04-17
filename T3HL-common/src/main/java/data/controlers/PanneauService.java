@@ -2,6 +2,7 @@ package data.controlers;
 
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
+import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CFactory;
 import pfg.config.Config;
 import utils.ConfigData;
@@ -27,13 +28,6 @@ public class PanneauService extends ServiceThread {
 
     public void updateScore(int newScore) {
         this.score = newScore;
-        try {
-            lazyGet().printScore(this.score);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TooManyDigitsException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isPurple() {
@@ -57,7 +51,7 @@ public class PanneauService extends ServiceThread {
     private Panneau lazyGet() {
         if(onRaspi && panel == null) {
             try {
-                panel = new Panneau();
+                panel = new Panneau(RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07, RaspiPin.GPIO_04);
             } catch (I2CFactory.UnsupportedBusNumberException | IOException e) {
                 e.printStackTrace();
             }
