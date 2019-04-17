@@ -19,6 +19,7 @@
 package robot;
 
 import com.panneau.Panneau;
+import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -32,7 +33,7 @@ import utils.communication.SimulatorDebug;
  */
 public class Slave extends Robot {
 
-    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, Panneau panneauService) {
+    public Slave(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
         super(locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
         createRightElevator();
     }

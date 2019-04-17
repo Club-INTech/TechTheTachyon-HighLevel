@@ -34,6 +34,7 @@ import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
 import com.panneau.Panneau;
+import data.controlers.PanneauService;
 import data.controlers.SensorControler;
 import data.graphe.Node;
 import locomotion.PathFollower;
@@ -79,7 +80,7 @@ public class Main {
     private static AIService ai;
     private static GraphicalInterface interfaceGraphique;
     private static MontlheryController controller;
-    private static Panneau panneauService;
+    private static PanneauService panneauService;
 
     public static void main(String[] args) {
         initServices();
@@ -88,7 +89,7 @@ public class Main {
         }
 
         try {
-            panneauService.printScore(505);
+            panneauService.getPaneau().printScore(505);
         }catch (IOException | TooManyDigitsException e){
             e.printStackTrace();
         }
@@ -111,7 +112,7 @@ public class Main {
             waitForLLConnection();
 
             try {
-                panneauService.printScore(42);
+                panneauService.getPaneau().printScore(42);
             }catch( IOException | TooManyDigitsException e){
                 e.printStackTrace();
             }
@@ -249,12 +250,8 @@ public class Main {
 
         try {
             // trouve la couleur
-            try {
-                panneauService = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-            if(panneauService.isViolet()) {
+            panneauService = container.getService(PanneauService.class);
+            if(panneauService.getPaneau().isViolet()) {
                 container.getConfig().override(ConfigData.COULEUR, "violet");
             } else {
                 container.getConfig().override(ConfigData.COULEUR, "jaune");

@@ -24,6 +24,7 @@ import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
+import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
@@ -55,7 +56,7 @@ public abstract class Robot implements Service {
     /**
      * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
      */
-    private final Panneau panneauService;
+    private final PanneauService panneauService;
 
     /**
      * Permet d'envoyer des infos de debug
@@ -102,7 +103,7 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, Panneau panneauService) {
+    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
@@ -113,7 +114,7 @@ public abstract class Robot implements Service {
     public void increaseScore(int points) {
         this.score = this.score + points;
         try {
-            this.panneauService.printScore(score);
+            this.panneauService.getPaneau().printScore(score);
         }catch(TooManyDigitsException | IOException e){
             e.printStackTrace();
         }
