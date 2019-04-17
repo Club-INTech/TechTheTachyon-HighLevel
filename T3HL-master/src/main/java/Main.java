@@ -87,13 +87,13 @@ public class Main {
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
         }
-
+/*
         try {
             panneauService.getPaneau().printScore(505);
         }catch (IOException | TooManyDigitsException e){
             e.printStackTrace();
         }
-
+*/
         try {
             initAI();
         } catch (ContainerException e) {
@@ -110,7 +110,7 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
             waitForLLConnection();
-
+/*
             try {
                 panneauService.getPaneau().printScore(42);
             }catch( IOException | TooManyDigitsException e){
@@ -128,7 +128,7 @@ public class Main {
                 ++i;
                 Thread.sleep(500);
             }
-
+*/
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
