@@ -245,6 +245,35 @@ public abstract class Robot implements Service {
         if(inSimulation) {
             return;
         }
+
+        if(symetry) {
+            if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_0;
+            }
+
+            else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_0;
+            }
+        }
+
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();

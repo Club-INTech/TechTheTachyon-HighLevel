@@ -35,15 +35,15 @@ import data.controlers.SensorControler;
 import data.graphe.Node;
 import locomotion.PathFollower;
 import locomotion.Pathfinder;
+import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
+import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Script;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
-import simulator.GraphicalInterface;
-import simulator.SimulatorManager;
-import simulator.SimulatorManagerLauncher;
+import simulator.*;
 import utils.ConfigData;
 import utils.Container;
 import utils.communication.KeepAlive;
@@ -54,6 +54,7 @@ import utils.math.VectCartesian;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author nayth
@@ -80,6 +81,8 @@ public class Main {
         initServices();
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
+        } else if(container.getConfig().getBoolean(ConfigData.VISUALISATION)) {
+            initVisualisateur();
         }
 
         panneauService.updateScore(505);
@@ -106,10 +109,12 @@ public class Main {
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
 
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
-        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+            robot.turn(Math.PI);
             table.removeAllChaosObstacles();
             orderWrapper.waitJumper();
             zone_depart_palets.goToThenExecute(1);
@@ -122,7 +127,7 @@ public class Main {
                 System.out.println("Finished!");
                 Thread.sleep(1000);
             }
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | UnableToMoveException e) {
             e.printStackTrace();
         }
         Container.resetInstance();
@@ -254,9 +259,13 @@ public class Main {
             lidarControler = container.getService(LidarControler.class);
             lidarControler.start();
             robot = container.getService(Master.class);
-            if((boolean) ConfigData.SIMULATION.getDefaultValue()) {
+            if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 SimulatorDebug debug = container.getService(SimulatorDebug.class);
-                debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+                    debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
+                } else {
+                    debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                }
             }
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
@@ -286,6 +295,32 @@ public class Main {
         }
         simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setSpeedFactor(2);
+        simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
+        simulatorLauncher.launch();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        simulatorLauncher.waitForLaunchCompletion();
+        SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
+        interfaceGraphique = simulatorManager.getGraphicalInterface();
+    }
+
+    private static void initVisualisateur(){
+        simulatorLauncher = new SimulatorManagerLauncher();
+
+        simulatorLauncher.setVisualisationMode(Master.class);
+
+        try {
+            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+        //On set le lidar s'il ne tourne pas
+        //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
+
+        simulatorLauncher.setColorblindMode(true);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
         try {

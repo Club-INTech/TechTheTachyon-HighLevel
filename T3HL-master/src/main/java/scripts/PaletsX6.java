@@ -71,7 +71,7 @@ public class PaletsX6 extends Script {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+            robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //

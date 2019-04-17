@@ -153,8 +153,9 @@ public class SensorControler extends Thread implements Service {
         double o = Double.parseDouble(coordonates[2]);
         if (symetrie) {
             x = -x;
-            o = Calculs.modulo(Math.PI - o, Math.PI);
+            o = Math.PI - o;
         }
+        o = Calculs.modulo(o, Math.PI);
        // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
     }
@@ -276,7 +277,7 @@ public class SensorControler extends Thread implements Service {
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 }
-                xCalcule = (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta)) - 1500;
+                xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta));
             }
         }
         else {
