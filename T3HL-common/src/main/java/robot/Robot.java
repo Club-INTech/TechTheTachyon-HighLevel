@@ -18,6 +18,8 @@
 
 package robot;
 
+import com.panneau.Panneau;
+import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
@@ -39,6 +41,7 @@ import utils.communication.SimulatorDebug;
 import utils.container.Service;
 import utils.math.Vec2;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -110,7 +113,11 @@ public abstract class Robot implements Service {
 
     public void increaseScore(int points) {
         this.score = this.score + points;
-        this.panneauService.updateScore(score);
+        try {
+            this.panneauService.getPaneau().printScore(score);
+        }catch(TooManyDigitsException | IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void waitForLeftElevator() {

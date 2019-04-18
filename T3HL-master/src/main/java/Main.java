@@ -23,6 +23,9 @@ import ai.goap.Action;
 import ai.goap.ActionGraph;
 import ai.goap.Agent;
 import ai.goap.EnvironmentInfo;
+import com.panneau.TooManyDigitsException;
+import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.i2c.I2CFactory;
 import connection.ConnectionManager;
 import data.Graphe;
 import data.Sick;
@@ -30,6 +33,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
+import com.panneau.Panneau;
 import data.controlers.PanneauService;
 import data.controlers.SensorControler;
 import data.graphe.Node;
@@ -53,6 +57,8 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.io.IOException;
+import java.rmi.UnexpectedException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -85,9 +91,13 @@ public class Main {
         } else if(container.getConfig().getBoolean(ConfigData.VISUALISATION)) {
             initVisualisateur();
         }
-
-        panneauService.updateScore(505);
-
+/*
+        try {
+            panneauService.getPaneau().printScore(505);
+        }catch (IOException | TooManyDigitsException e){
+            e.printStackTrace();
+        }
+*/
         try {
             initAI();
         } catch (ContainerException e) {
@@ -105,11 +115,25 @@ public class Main {
             Script homologation = ScriptNamesMaster.HOMOLOGATION.getScript();
 
             waitForLLConnection();
-
-            panneauService.updateScore(42);
+/*
+            try {
+                panneauService.getPaneau().printScore(42);
+            }catch( IOException | TooManyDigitsException e){
+                e.printStackTrace();
+            }
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
-
+            int i=0;
+            while (i<1000) {
+                try {
+                    panneauService.getPaneau().printScore(i);
+                }catch(IOException | TooManyDigitsException e){
+                    e.printStackTrace();
+                }
+                ++i;
+                Thread.sleep(500);
+            }
+*/
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
@@ -247,7 +271,7 @@ public class Main {
         try {
             // trouve la couleur
             panneauService = container.getService(PanneauService.class);
-            if(panneauService.isPurple()) {
+            if(panneauService.getPaneau().isViolet()) {
                 container.getConfig().override(ConfigData.COULEUR, "violet");
             } else {
                 container.getConfig().override(ConfigData.COULEUR, "jaune");

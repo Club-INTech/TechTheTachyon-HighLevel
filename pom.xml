@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.github.Club-INTech</groupId>
             <artifactId>PanneauRaspi</artifactId>
-            <version>b6a728e707</version>
+            <version>f80b69be6e</version>
         </dependency>
 
     </dependencies>
