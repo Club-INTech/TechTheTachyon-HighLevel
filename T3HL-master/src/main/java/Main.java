@@ -113,6 +113,7 @@ public class Main {
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
             Script homologation = ScriptNamesMaster.HOMOLOGATION.getScript();
+            Script precoupe_acc = ScriptNamesMaster.PRECOUPE_ACC.getScript();
 
             waitForLLConnection();
 /*
@@ -145,6 +146,8 @@ public class Main {
             orderWrapper.waitJumper();
 
             homologation.goToThenExecute(0);
+            precoupe_acc.goToThenExecute(0);
+
 /* FIXME
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
