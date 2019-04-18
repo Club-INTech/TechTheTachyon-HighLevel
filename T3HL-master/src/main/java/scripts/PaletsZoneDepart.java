@@ -12,6 +12,8 @@ import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.concurrent.TimeUnit;
+
 public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
@@ -31,7 +33,7 @@ public class PaletsZoneDepart extends Script {
     public void execute(Integer version) {
         boolean premierPaletPris = false;
         try {
-            System.out.println("HELLO");
+        System.out.println("HELLO");
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -66,6 +68,7 @@ public class PaletsZoneDepart extends Script {
             table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
 
             table.updateTableAfterFixedObstaclesChanges();
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

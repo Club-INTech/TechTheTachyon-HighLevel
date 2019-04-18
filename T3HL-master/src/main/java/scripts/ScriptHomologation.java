@@ -47,11 +47,13 @@ public class ScriptHomologation extends Script {
             robot.moveLengthwise(DISTANCE_INTERPALET, false);
             robot.turn(0);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
-            robot.moveLengthwise(-DISTANCE_INTERPALET*2, false);
+            robot.turn(Math.PI);
+            robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
             robot.turn(-Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET, false);
             robot.turn(0);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
+
 
             table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {
