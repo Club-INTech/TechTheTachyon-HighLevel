@@ -438,4 +438,8 @@ public class SimulatedRobot implements IRobot {
                 break;
         }
     }
+
+    public void sendJumperOkay() {
+        simulatedLLConnectionManager.sendMessage(String.format("%sgogogofast\n", Channel.EVENT.getHeaders()));
+    }
 }

@@ -46,6 +46,7 @@ import scripts.ScriptNamesMaster;
 import simulator.*;
 import utils.ConfigData;
 import utils.Container;
+import utils.MatchTimer;
 import utils.communication.KeepAlive;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
@@ -275,6 +276,8 @@ public class Main {
             keepAliveService.start();
             controller = new MontlheryController(robot, orderWrapper);
             ai = container.getService(AIService.class);
+            MatchTimer timer = container.getService(MatchTimer.class);
+            timer.start();
         } catch (ContainerException e) {
             e.printStackTrace();
         }

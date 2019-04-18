@@ -28,6 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utils.ConfigData;
+import utils.MatchTimer;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -45,7 +46,7 @@ public class Test_SensorControler {
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
         listener=new Listener(connectionManager);
-        sensorControler=new SensorControler(listener);
+        sensorControler=new SensorControler(listener, null);
     }
 
     @Test

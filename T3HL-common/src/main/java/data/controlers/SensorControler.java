@@ -4,6 +4,7 @@ import data.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.MatchTimer;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
@@ -37,6 +38,7 @@ public class SensorControler extends Thread implements Service {
      * Listener
      */
     private Listener listener;
+    private MatchTimer timer;
 
     /**
      * Files de communication avec le Listener
@@ -77,8 +79,9 @@ public class SensorControler extends Thread implements Service {
      * @param listener
      *              le listener
      */
-    public SensorControler(Listener listener) throws FileNotFoundException, UnsupportedEncodingException {
+    public SensorControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
+        this.timer = timer;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPathQueue = new ConcurrentLinkedQueue<>();
@@ -212,9 +215,11 @@ public class SensorControler extends Thread implements Service {
                 SensorState.ELECTRON_ARRIVED.setData(true);
                 break;
 
-            case "gogogofast":
+            case "gogogofast": {
+                timer.resetTimer();
                 SensorState.WAITING_JUMPER.setData(false);
                 break;
+            }
         }
     }
 

@@ -349,4 +349,9 @@ public class OrderWrapper implements Service {
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
         Log.STRATEGY.debug("GOGOGO!!!");
     }
+
+    public void endMatch() {
+        Log.STRATEGY.debug("Fin du match!");
+        sendString("endMatch");
+    }
 }
