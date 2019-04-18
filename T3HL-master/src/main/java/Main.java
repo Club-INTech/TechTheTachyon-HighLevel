@@ -276,6 +276,7 @@ public class Main {
             } else {
                 container.getConfig().override(ConfigData.COULEUR, "jaune");
             }
+            System.out.println("Couleur: "+container.getConfig().getString(ConfigData.COULEUR));
             scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
             orderWrapper = container.getService(OrderWrapper.class);
