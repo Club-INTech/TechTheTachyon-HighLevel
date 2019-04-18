@@ -50,6 +50,7 @@ import scripts.ScriptNamesMaster;
 import simulator.*;
 import utils.ConfigData;
 import utils.Container;
+import utils.Log;
 import utils.MatchTimer;
 import utils.communication.KeepAlive;
 import utils.communication.SimulatorDebug;
@@ -112,6 +113,8 @@ public class Main {
             Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
+            //Script accelPreCoupe = ScriptNamesMaster.ACCELERATEUR_PRECOUPE.getScript();
+            //Script departPreCoupe = ScriptNamesMaster.DEPART_PRECOUPE.getScript();
             Script homologation = ScriptNamesMaster.HOMOLOGATION.getScript();
 
             waitForLLConnection();
@@ -145,6 +148,11 @@ public class Main {
             orderWrapper.waitJumper();
 
             homologation.goToThenExecute(0);
+
+            /*
+                departPrecoupe.goToThenExecute(0);
+                accelPrecoupe.goToThenExecute(0);
+            */
 /* FIXME
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
@@ -271,10 +279,14 @@ public class Main {
         try {
             // trouve la couleur
             panneauService = container.getService(PanneauService.class);
-            if(panneauService.getPaneau().isViolet()) {
-                container.getConfig().override(ConfigData.COULEUR, "violet");
+            if(panneauService.getPaneau() != null) {
+                if(panneauService.getPaneau().isViolet()) {
+                    container.getConfig().override(ConfigData.COULEUR, "violet");
+                } else {
+                    container.getConfig().override(ConfigData.COULEUR, "jaune");
+                }
             } else {
-                container.getConfig().override(ConfigData.COULEUR, "jaune");
+                Log.STRATEGY.critical("PAS DE PANNEAU");
             }
             System.out.println("Couleur: "+container.getConfig().getString(ConfigData.COULEUR));
             scriptManager = container.getService(ScriptManagerMaster.class);

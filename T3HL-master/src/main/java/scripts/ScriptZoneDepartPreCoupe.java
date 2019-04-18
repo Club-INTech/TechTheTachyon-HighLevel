@@ -13,6 +13,9 @@ import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ScriptZoneDepartPreCoupe extends Script{
 
 
@@ -32,15 +35,12 @@ public class ScriptZoneDepartPreCoupe extends Script{
 
         @Override
         public void execute(Integer version) {
-            boolean premierPaletPris = false;
             try {
 
                 // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-                table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-                table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-                table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+//                table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
 
-                robot.turn(Math.PI/2);
+                /*robot.turn(Math.PI/2);
                 robot.moveLengthwise(DISTANCE_INTERPALET*2 + 240, false);
                 robot.turn(Math.PI);
                 robot.moveLengthwise(DISTANCE_INTERPALET*3, false);
@@ -60,7 +60,38 @@ public class ScriptZoneDepartPreCoupe extends Script{
                 robot.moveLengthwise(DISTANCE_INTERPALET, false);
                 robot.turn(0);
                 robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
+*/
+                List<Vec2> devant = new ArrayList<>();
+                List<Vec2> pos = new ArrayList<>();
+                Vec2 devantDelta = new VectCartesian(-DISTANCE_INTERPALET*3, 0f);
+                devant.add(table.getPaletBleuDroite().getPosition().plusVector(devantDelta));
+                devant.add(table.getPaletVertDroite().getPosition().plusVector(devantDelta));
+                devant.add(table.getPaletRougeDroite().getPosition().plusVector(devantDelta));
 
+                pos.add(table.getPaletBleuDroite().getPosition());
+                pos.add(table.getPaletVertDroite().getPosition());
+                pos.add(table.getPaletRougeDroite().getPosition());
+                for(int i = 0;i<3;i++) {
+                    robot.followPathTo(pos.get(i));
+                    robot.followPathTo(devant.get(i));
+                    switch (i) {
+                        case 0:
+                            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                            break;
+
+                        case 1:
+                            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+                            break;
+
+                        case 2:
+                            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+                            break;
+                    }
+                    robot.followPathTo(pos.get(i));
+                }
+                table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+                table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
 
                 table.updateTableAfterFixedObstaclesChanges();
             } catch (UnableToMoveException e) {

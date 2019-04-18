@@ -154,13 +154,15 @@ public class SensorControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
+        Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
         if (symetrie) {
             x = -x;
             o = Math.PI - o;
         }
         o = Calculs.modulo(o, Math.PI);
-       // System.out.println("LL: "+XYO.getRobotInstance());
+        // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
+        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
     }
 
     /**
