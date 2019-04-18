@@ -35,4 +35,10 @@ public class MatchTimer extends ServiceThread {
     public void updateConfig(Config config) {
 
     }
+
+    public long getTimeElapsed() {
+        if(startTime <= 0)
+            return 0;
+        return System.currentTimeMillis()-startTime;
+    }
 }

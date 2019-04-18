@@ -145,20 +145,21 @@ public class Main {
             robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             robot.turn(Math.PI);
+
+            // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
+            table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+            table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
             table.removeAllChaosObstacles();
             orderWrapper.waitJumper();
 
             homologation.goToThenExecute(0);
-<<<<<<< HEAD
             precoupe_acc.goToThenExecute(0);
-
-=======
 
             /*
                 departPrecoupe.goToThenExecute(0);
                 accelPrecoupe.goToThenExecute(0);
             */
->>>>>>> 14c19139b154ab7592754b046dc3b575402029c5
 /* FIXME
             zone_depart_palets.goToThenExecute(1);
             paletsx6.goToThenExecute(1);
@@ -294,7 +295,8 @@ public class Main {
             } else {
                 Log.STRATEGY.critical("PAS DE PANNEAU");
             }
-            System.out.println("Couleur: "+container.getConfig().getString(ConfigData.COULEUR));
+            container.getConfig().override(ConfigData.COULEUR, "violet");
+            Log.STRATEGY.debug("Couleur: "+container.getConfig().getString(ConfigData.COULEUR));
             scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
             orderWrapper = container.getService(OrderWrapper.class);

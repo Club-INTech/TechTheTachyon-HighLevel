@@ -54,7 +54,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(Math.PI);
 
 
@@ -82,7 +82,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(-distanceToCorner, false);
 
 
-                robot.gotoPoint(position2palet6);
+                robot.followPathTo(position2palet6);
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -92,7 +92,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(Math.PI);
                 robot.moveLengthwise(palet + ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
@@ -116,7 +116,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner, false);
 
-                robot.gotoPoint(position3palet6);
+                robot.followPathTo(position3palet6);
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -126,7 +126,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(Math.PI);
                 robot.moveLengthwise(palet + ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
@@ -164,7 +164,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(0);
 
 
@@ -192,7 +192,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(-distanceToCorner, false);
 
 
-                robot.gotoPoint(position2palet6);
+                robot.followPathTo(position2palet6);
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
@@ -202,7 +202,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(0);
                 robot.moveLengthwise(palet + ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
@@ -226,7 +226,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner, false);
 
-                robot.gotoPoint(position3palet6);
+                robot.followPathTo(position3palet6);
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
@@ -236,7 +236,7 @@ public class precoupeAccelerateurx6 extends Script {
                 robot.moveLengthwise(100,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.gotoPoint(positionAccelerateur);
+                robot.followPathTo(positionAccelerateur);
                 robot.turn(0);
                 robot.moveLengthwise(palet + ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);

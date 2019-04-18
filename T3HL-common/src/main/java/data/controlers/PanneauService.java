@@ -18,7 +18,7 @@ public class PanneauService implements Service {
     private String couleur;
 
     public PanneauService(){
-        try {
+/*        try {
             panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
             panel.addListener(teamColor -> {
                 couleur=panel.getTeamColor().toString();
@@ -26,7 +26,7 @@ public class PanneauService implements Service {
             });
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }*/
     }
 
     public Panneau getPaneau(){

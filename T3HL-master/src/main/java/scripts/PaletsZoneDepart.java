@@ -33,7 +33,6 @@ public class PaletsZoneDepart extends Script {
     public void execute(Integer version) {
         boolean premierPaletPris = false;
         try {
-        System.out.println("HELLO");
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -72,8 +71,6 @@ public class PaletsZoneDepart extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override

@@ -24,14 +24,12 @@ import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
-import utils.communication.CommunicationException;
+import utils.MatchTimer;
 import utils.communication.CopyIOThread;
-import utils.container.Service;
 import utils.container.ServiceThread;
 import utils.math.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -57,6 +55,7 @@ public class LidarControler extends ServiceThread {
      * Separateur entre deux coordonnées d'un point
      */
     private static final String COORDONATE_SEPARATOR    = ":";
+    private final MatchTimer timer;
 
     /**
      * Table à mettre à jour
@@ -90,7 +89,8 @@ public class LidarControler extends ServiceThread {
      * @param table     la table
      * @param listener  le listener
      */
-    public LidarControler(Table table, Listener listener) {
+    public LidarControler(Table table, Listener listener, MatchTimer timer) {
+        this.timer = timer;
         this.table = table;
         this.listener = listener;
         this.messageQueue = new ConcurrentLinkedQueue<>();
@@ -135,7 +135,7 @@ public class LidarControler extends ServiceThread {
 
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
-        float margin = 50;
+        float margin = 100;
         Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
             while (messageQueue.peek() == null) {
@@ -159,7 +159,9 @@ public class LidarControler extends ServiceThread {
                 }
                 // on ajoute l'obstacle que s'il est dans la table
                 if(tableBB.isInShape(obstacleCenter)) {
-                    mobileObstacles.add(obstacleCenter);
+                    if(timer.getTimeElapsed() >= 30*1000) {
+                        mobileObstacles.add(obstacleCenter);
+                    }
                 }
             }
             //table.getGraphe().writeLock().lock();

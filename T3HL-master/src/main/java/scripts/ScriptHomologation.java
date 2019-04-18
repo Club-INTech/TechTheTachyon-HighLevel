@@ -8,10 +8,14 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
+import utils.Log;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScriptHomologation extends Script {
 
@@ -33,12 +37,6 @@ public class ScriptHomologation extends Script {
     public void execute(Integer version) {
         boolean premierPaletPris = false;
         try {
-
-            // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-            table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-            table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-
             robot.turn(Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
             robot.turn(Math.PI);
@@ -55,7 +53,6 @@ public class ScriptHomologation extends Script {
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
 
 
-            table.updateTableAfterFixedObstaclesChanges();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
