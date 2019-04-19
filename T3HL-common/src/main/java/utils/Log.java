@@ -18,17 +18,14 @@
 
 package utils;
 
-import pfg.config.Config;
-
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * Service de Log par canaux
  *
- * @author rem
+ * @author rem, jglrxavpok
  */
 public enum Log
 {
@@ -45,16 +42,11 @@ public enum Log
     TABLE(false),
     AI(true),
     ELECTRON(true),
-    ;
 
-    /**
-     * Préfixes de couleurs pour l'affichage (Debug, Warning & Critical)
-     */
-    private static final String DEBUG       = "\u001B[32m";
-    private static final String WARNING     = "\u001B[33m";
-    private static final String CRITICAL    = "\u001B[31m";
-    private static final String LOG_INFO    = "\u001B[34m";
-    private static final String RESET       = "\u001B[0m";
+    // sorties standard
+    STDOUT(true),
+    STDERR(true),
+    ;
 
     /**
      * Instance permettant d'avoir la date et l'heure
@@ -62,26 +54,39 @@ public enum Log
     private static Calendar calendar;
 
     /**
-     * Buffer d'écriture dans un fichier de log
+     * Préfixes de couleurs pour l'affichage (Debug, Warning & Critical)
      */
-    private static BufferedWriter writer;
+    private static final String DEBUG       = "\u001B[34m";
+    private static final String WARNING     = "\u001B[33m";
+    private static final String CRITICAL    = "\u001B[31m";
+    private static final String LOG_INFO    = "\u001B[32m";
+    private static final String RESET       = "\u001B[0m";
+
+    // Sorties standard. Initialisés lors du chargement de la classe Log, ils ne pointeront donc que vers ces sorties (non pas celles redéfinies avec System.setOut))
+    /**
+     * Sortie standard
+     */
+    private static PrintStream stdout = System.out;
 
     /**
-     * True pour sauvegarder les logs
-     * override par la config
+     * Sortie standard d'erreur
      */
-    private static boolean saveLogs     = true;
+    private static PrintStream stderr = System.err;
 
-    /**
-     * True pour afficher les logs
-     * override par la config
-     */
-    private static boolean printLogs    = true;
+    private enum Severity {
+        CRITICAL(Log.CRITICAL),
+        WARNING(Log.WARNING),
+        DEBUG(Log.DEBUG),
+        ;
 
-    /**
-     * Nom du fichier de sauvegarde des logs
-     */
-    private static String finalSaveFile;
+        private final String color;
+        private PrintStream activeOutput = System.out;
+        private PrintStream nonactiveOutput = System.out;
+
+        Severity(String color) {
+            this.color = color;
+        }
+    }
 
     /**
      * Spécifie si les logs du canal doivent être activés ou non
@@ -110,7 +115,7 @@ public enum Log
      */
     public void debug(Object message)
     {
-        writeToLog(DEBUG, message.toString(), this.active);
+        writeToLog(Severity.DEBUG, message.toString(), this.active);
     }
 
     /**
@@ -120,7 +125,7 @@ public enum Log
      */
     public void warning(Object message)
     {
-        writeToLog(WARNING, message.toString(), this.active);
+        writeToLog(Severity.WARNING, message.toString(), this.active);
     }
 
     /**
@@ -130,7 +135,7 @@ public enum Log
      */
     public void critical(Object message)
     {
-        writeToLog(CRITICAL, message.toString(), true);
+        writeToLog(Severity.CRITICAL, message.toString(), true);
     }
 
 
@@ -140,102 +145,166 @@ public enum Log
      * @param color     le préfixe pour la couleur en sortie standart
      * @param message   message à affiché
      */
-    private synchronized void writeToLog(String color, String message, boolean active)
+    private synchronized void writeToLog(Log.Severity severity, String message, boolean active)
     {
         this.toLog.setLength(0);
         calendar = Calendar.getInstance();
-        this.toLog.append("[")
-        .append(calendar.get(Calendar.HOUR_OF_DAY))
-        .append("h")
-        .append(calendar.get(Calendar.MINUTE))
-        .append(":")
-        .append(calendar.get(Calendar.SECOND))
-        .append(",")
-        .append(calendar.get(Calendar.MILLISECOND))
-        .append("]");
-        String hour = this.toLog.toString();
+        toLog
+                .append(String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY)))
+                .append(":")
+                .append(String.format("%02d", calendar.get(Calendar.MINUTE)))
+                .append(":")
+                .append(String.format("%02d", calendar.get(Calendar.SECOND)))
+                .append(".")
+                .append(String.format("%03d", calendar.get(Calendar.MILLISECOND)))
+        ;
+        String hour = toLog.toString();
+        String color = severity.color;
 
-        if(active & printLogs)
-        {
-            Thread currentThread = Thread.currentThread();
-            StackTraceElement elem = currentThread.getStackTrace()[3];
-            this.toLog.setLength(0);
-            this.toLog.append(color)
-            .append(hour)
-            .append(" ")
-            .append(this.name())
-            .append("/")
-            .append(currentThread.getName())
-            .append(" ")
-            .append(elem.getClassName())
-            .append(",")
-            .append(elem.getMethodName())
-            .append(":")
-            .append(elem.getLineNumber())
-            .append(" >>> ")
-            .append(message )
-            .append(RESET);
-            System.out.println(this.toLog.toString());
-        }
+        Thread currentThread = Thread.currentThread();
+        StackTraceElement elem = currentThread.getStackTrace()[3]; // appelant
+        this.toLog.setLength(0);
+        this.toLog
+                .append("[")
+                .append(color)
+                .append(hour)
+                .append(" ")
+                .append(this.name())
+                .append(" (")
+                .append(severity.name())
+                .append(") ")
+                .append("on ")
+                .append(currentThread.getName())
 
-        if(saveLogs)
-        {
-            this.toLog.setLength(0);
-            this.toLog.append(hour)
-            .append(" ")
-            .append(this.name())
-            .append(" > ")
-            .append(message);
-            writeToFile(this.toLog.toString());
-        }
-    }
+                // liens vers le code source cliquables (dans la console d'IDEA, et peut-être Eclipse)
 
-    /**
-     * Ecrit le message spécifié dans le fichier de log
-     *
-     * @param message le message a logguer
-     */
-    private synchronized void writeToFile(String message)
-    {
-        // chaque message sur sa propre ligne
-        message += "\n";
-        try
-        {
-            writer.write(message);
-            writer.flush();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+                // cf https://stackoverflow.com/questions/5232925/eclipse-console-what-are-the-rules-that-make-stack-traces-clickable
+                /*
+                "%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber()
+                 */
+                .append(" ")
+                .append(elem.getClassName())
+                .append(".")
+                .append(elem.getMethodName())
+                .append("(")
+                .append(elem.getFileName())
+                .append(":")
+                .append(elem.getLineNumber())
+                .append(")")
+                .append("] ")
+                .append(message )
+        ;
+        if(active) {
+            severity.activeOutput.println(this.toLog.toString());
+        } else {
+            severity.nonactiveOutput.println(this.toLog.toString());
         }
     }
 
     /**
      * Initialise les flux d'entrée/sortie
      */
-    public static void init(Config config)
+    public static void init()
     {
-        boolean ret = true;
-        try {
-            calendar = Calendar.getInstance();
-            String hour = calendar.get(Calendar.HOUR) + ":" +
-                    calendar.get(Calendar.MINUTE) + ":" +
-                    calendar.get(Calendar.SECOND);
-            File testFinalRepertoire = new File("../logs");
-            finalSaveFile = "../logs/LOG-" + hour + ".txt";
-            if (!testFinalRepertoire.exists())
-                ret = testFinalRepertoire.mkdir();
-            if (!ret) {
-                throw new IOException("Impossible de créer le répertoire logs");
-            }
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(finalSaveFile), StandardCharsets.UTF_8));
-            saveLogs = config.getBoolean(ConfigData.SAVE_LOG);
-            printLogs = config.getBoolean(ConfigData.PRINT_LOG);
-            System.out.println(LOG_INFO + "DEMARRAGE DU SERVICE DE LOG");
-            System.out.println(RESET);
-        } catch (IOException e) {
-            e.printStackTrace();
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+1:00"));
+        // sorties standard (console)
+        if(stdout == null) {
+            stdout = System.out;
         }
+        if(stderr == null) {
+            stderr = System.err;
+        }
+
+        // création du dossier de logs si besoin
+        File logFolder = new File("../logs/");
+        if(!logFolder.exists()) {
+            System.out.println("Le dossier de logs n'existe pas, tentative de création du dossier à "+logFolder.getAbsolutePath());
+            if(!logFolder.mkdirs()) {
+                String canonicalName;
+                try {
+                    canonicalName = logFolder.getCanonicalPath();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    canonicalName = "ERREUR LORS DE LA RECUPERATION DU NOM => "+e.getMessage();
+                }
+                System.err.println("Erreur critique: Impossible de créer un dossier de log à '"+logFolder.getAbsolutePath()+"' (nom canonique: "+canonicalName+")!");
+            } else {
+                System.out.println("Réussite de la création du dossier de logs");
+            }
+        }
+
+        // sorties vers des fichiers
+        OutputStream fullOutput = attemptInitLogOutput("everything");
+        OutputStream activeOutput = attemptInitLogOutput("");
+        OutputStream errorOnlyOutput = attemptInitLogOutput("errors");
+
+
+        // initialisation des différents types de sorties
+
+
+        // Sorties des Logs non actifs ("everything" seulement)
+        MultiOutputStream logNonactiveOutputs = new MultiOutputStream(fullOutput);
+
+        // Sorties des Logs actifs ("everything", la console et le log de base)
+        MultiOutputStream logActiveOutputs = new MultiOutputStream(stdout, activeOutput, logNonactiveOutputs);
+
+        //Sorties des Logs d'erreur ("everything", console, log de base et "errors")
+        MultiOutputStream errorOutputs = new MultiOutputStream(stderr, fullOutput, activeOutput, errorOnlyOutput);
+
+        PrintStream nonActiveStream = new PrintStream(logNonactiveOutputs);
+        PrintStream activeStream = new PrintStream(logActiveOutputs);
+        PrintStream errorStream = new PrintStream(errorOutputs);
+
+        // préparation des sorties à utiliser pour les différentes sévérités
+        Severity.DEBUG.nonactiveOutput = nonActiveStream;
+        Severity.DEBUG.activeOutput = activeStream;
+        Severity.WARNING.nonactiveOutput = nonActiveStream;
+        Severity.WARNING.activeOutput = activeStream;
+
+        // print et sauvegarde quoi qu'il arrive
+        Severity.CRITICAL.activeOutput = errorStream;
+        Severity.CRITICAL.nonactiveOutput = errorStream;
+
+        // Gestion des System.out.print* et System.err.print*
+        System.setOut(new LogPrintStream(Log.STDOUT, Log::debug));
+        System.setErr(new LogPrintStream(Log.STDERR, Log::critical));
+    }
+
+    /**
+     * Essaie de créer la sortie correspondante au suffixe donné. Renvoie 'null' et affiche des erreurs si la tentative échoue.
+     * <br/>
+     * Format du nom du fichier créé: "jour mois n°jour heure:minutes:secondes timezone année". Exemple: "Fri Apr 19 22:51:42 CEST 2019"
+     * @param suffix le suffixe du fichier à créer
+     * @return un {@link OutputStream} si la tentative réussi, 'null' sinon
+     */
+    private static OutputStream attemptInitLogOutput(String suffix) {
+        // dossier d'exécution usuel: 'bin/'
+        String date = calendar.getTime().toString();
+        String filename;
+        if(suffix == null || suffix.isEmpty()) {
+            filename = "./../logs/"+date+".log";
+        } else {
+            filename = "./../logs/"+date+" - "+suffix+".log";
+        }
+        try {
+            // tentative de création du fichier
+            File file = new File(filename);
+            if(!file.exists()) {
+                System.out.println("Création du fichier de log '"+filename+"' à '"+file.getCanonicalPath()+"'");
+                if(!file.createNewFile()) {
+                    throw new IOException("Impossible de créer le fichier "+file.getAbsolutePath());
+                } else {
+                    System.out.println("Réussite de la création du fichier de log '"+filename+"");
+                }
+            }
+            OutputStream out = new FileOutputStream(file);
+            System.out.println("Ouverture du fichier de log '"+filename+"'");
+            return out;
+        } catch (IOException e) {
+            System.err.println("Erreur Critique: Impossible de créer de fichier de log '"+filename+"' !!!");
+        }
+
+        return null;
     }
 
     /**
@@ -244,19 +313,17 @@ public enum Log
     public static void close()
     {
         System.out.println(LOG_INFO + "FERMETURE DU SERVICE DE LOG");
-        if(saveLogs)
-            try {
-                System.out.println(LOG_INFO + "SAUVEGARDE DES FICHIERS DE LOG");
-                System.out.println(RESET);
-                synchronized (values()) {
-                    if (writer != null)
-                        writer.close();
-                }
+        try {
+            System.out.println(LOG_INFO + "SAUVEGARDE DES FICHIERS DE LOG");
+            System.out.println(RESET);
+            synchronized (values()) {
+                // TODO?
             }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**

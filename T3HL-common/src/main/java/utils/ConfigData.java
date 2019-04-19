@@ -38,12 +38,6 @@ public enum ConfigData implements ConfigInfo
     ETHERNET_DEFAULT_TIME(1),
 
     /**
-     * Paramètres du log
-     */
-    PRINT_LOG(true),
-    SAVE_LOG(true),
-
-    /**
      * Couleur
      */
     COULEUR("violet"),
