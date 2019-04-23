@@ -45,7 +45,7 @@ public enum Log
 
     // sorties standard
     STDOUT(true),
-    STDERR(true),
+    STDERR(true, false),
     ;
 
     /**
@@ -72,6 +72,11 @@ public enum Log
      * Sortie standard d'erreur
      */
     private static PrintStream stderr = System.err;
+
+    /**
+     * Faut-il afficher le header complet dans les logs pour ce logger? ('false' uniquement pour STDERR)
+     */
+    private final boolean useLongHeader;
 
     private enum Severity {
         CRITICAL(Log.CRITICAL),
@@ -104,48 +109,80 @@ public enum Log
      */
     Log(boolean defaultActive)
     {
+        this(defaultActive, true);
+    }
+
+    /**
+     * Pour chaque canaux, on peut spécifier une couleur d'affichage
+     * @param defaultActive     true si par défault affiché
+     * @param useLongHeader     false si on utilise le header compact
+     */
+    Log(boolean defaultActive, boolean useLongHeader)
+    {
+        this.useLongHeader = useLongHeader;
         this.active = defaultActive;
         this.toLog = new StringBuilder();
+    }
+
+
+    public void debug(Object message)
+    {
+        writeToLog(Severity.DEBUG, message.toString(), this.active, 0);
     }
 
     /**
      * Méthode standard de log
      *
      * @param message   message à logger
+     * @param stackOffset un offset dans la stack de la JVM, utile pour prendre en compte la redirection par les LogPrintStream
      */
-    public void debug(Object message)
+    public void debug(Object message, int stackOffset)
     {
-        writeToLog(Severity.DEBUG, message.toString(), this.active);
+        writeToLog(Severity.DEBUG, message.toString(), this.active, stackOffset);
     }
 
-    /**
-     * Méthode warning de log
-     *
-     * @param message   message à logger
-     */
     public void warning(Object message)
     {
-        writeToLog(Severity.WARNING, message.toString(), this.active);
+        writeToLog(Severity.WARNING, message.toString(), this.active, 0);
     }
 
     /**
      * Méthode warning de log
      *
      * @param message   message à logger
+     * @param stackOffset un offset dans la stack de la JVM, utile pour prendre en compte la redirection par les LogPrintStream
      */
+    public void warning(Object message, int stackOffset)
+    {
+        writeToLog(Severity.WARNING, message.toString(), this.active, stackOffset);
+    }
+
     public void critical(Object message)
     {
-        writeToLog(Severity.CRITICAL, message.toString(), true);
+        writeToLog(Severity.CRITICAL, message.toString(), this.active, 0);
+    }
+
+    /**
+     * Méthode warning de log
+     *
+     * @param message   message à logger
+     * @param stackOffset un offset dans la stack de la JVM, utile pour prendre en compte la redirection par les LogPrintStream
+     */
+    public void critical(Object message, int stackOffset)
+    {
+        writeToLog(Severity.CRITICAL, message.toString(), true, stackOffset);
     }
 
 
     /**
      * Log du message
      *
-     * @param color     le préfixe pour la couleur en sortie standart
-     * @param message   message à affiché
+     * @param severity  la sévérité du message
+     * @param message   message à afficher
+     * @param active    doit-on mettre ce message dans les logs actifs?
+     * @param stackOffset   un offset dans la stack de la JVM pour savoir quelle méthode a demandé un log
      */
-    private synchronized void writeToLog(Log.Severity severity, String message, boolean active)
+    private synchronized void writeToLog(Log.Severity severity, String message, boolean active, int stackOffset)
     {
         this.toLog.setLength(0);
         calendar = Calendar.getInstance();
@@ -162,7 +199,7 @@ public enum Log
         String color = severity.color;
 
         Thread currentThread = Thread.currentThread();
-        StackTraceElement elem = currentThread.getStackTrace()[3]; // appelant
+        StackTraceElement elem = currentThread.getStackTrace()[3+stackOffset]; // appelant
         this.toLog.setLength(0);
         this.toLog
                 .append("[")
@@ -175,22 +212,28 @@ public enum Log
                 .append(") ")
                 .append("on ")
                 .append(currentThread.getName())
+        ;
 
-                // liens vers le code source cliquables (dans la console d'IDEA, et peut-être Eclipse)
+        if(useLongHeader) {
+            toLog
+                    // liens vers le code source cliquables (dans la console d'IDEA, et peut-être Eclipse)
 
-                // cf https://stackoverflow.com/questions/5232925/eclipse-console-what-are-the-rules-that-make-stack-traces-clickable
-                /*
-                "%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber()
-                 */
-                .append(" ")
-                .append(elem.getClassName())
-                .append(".")
-                .append(elem.getMethodName())
-                .append("(")
-                .append(elem.getFileName())
-                .append(":")
-                .append(elem.getLineNumber())
-                .append(")")
+                    // cf https://stackoverflow.com/questions/5232925/eclipse-console-what-are-the-rules-that-make-stack-traces-clickable
+                    /*
+                    "%s.%s(%s:%s)%n", s.getClassName(), s.getMethodName(), s.getFileName(), s.getLineNumber()
+                     */
+                    .append(" ")
+                    .append(elem.getClassName())
+                    .append(".")
+                    .append(elem.getMethodName())
+                    .append("(")
+                    .append(elem.getFileName())
+                    .append(":")
+                    .append(elem.getLineNumber())
+                    .append(")")
+            ;
+        }
+        toLog
                 .append("] ")
                 .append(message )
         ;
@@ -237,7 +280,6 @@ public enum Log
         OutputStream fullOutput = attemptInitLogOutput("everything");
         OutputStream activeOutput = attemptInitLogOutput("");
         OutputStream errorOnlyOutput = attemptInitLogOutput("errors");
-
 
         // initialisation des différents types de sorties
 

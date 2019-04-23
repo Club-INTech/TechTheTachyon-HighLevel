@@ -99,24 +99,27 @@ public class Main {
             e.printStackTrace();
         }
 */
+
+/*
         try {
             initAI();
         } catch (ContainerException e) {
             e.printStackTrace();
         }
+*/
 
         boolean isMaster = container.getConfig().getBoolean(ConfigData.MASTER);
         try {
-            Script paletsx3 = ScriptNamesMaster.PALETS3.getScript();
-            Script paletsx6 = ScriptNamesMaster.PALETS6.getScript();
-            Script accelerateur = ScriptNamesMaster.ACCELERATEUR.getScript();
-            Script zone_depart_palets = ScriptNamesMaster.PALETS_ZONE_DEPART.getScript();
-            Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
-            Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
-            //Script accelPreCoupe = ScriptNamesMaster.ACCELERATEUR_PRECOUPE.getScript();
-            //Script departPreCoupe = ScriptNamesMaster.DEPART_PRECOUPE.getScript();
-            Script homologation = ScriptNamesMaster.HOMOLOGATION.getScript();
-            Script precoupe_acc = ScriptNamesMaster.PRECOUPE_ACC.getScript();
+            Script paletsx6 = scriptManager.getScript(ScriptNamesMaster.PALETS6);
+            Script accelerateur = scriptManager.getScript(ScriptNamesMaster.ACCELERATEUR);
+            Script zone_depart_palets = scriptManager.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART);
+            Script zone_chaos_palets = scriptManager.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS);
+            //Script accelPreCoupe = scriptManager.getScript(ScriptNamesMaster.ACCELERATEUR_PRECOUPE);
+            //Script departPreCoupe = scriptManager.getScript(ScriptNamesMaster.DEPART_PRECOUPE);
+            Script homologation = scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION);
+            Script precoupe_acc = scriptManager.getScript(ScriptNamesMaster.PRECOUPE_ACC);
+
+            new RuntimeException("TEST LOG").printStackTrace();
 
             waitForLLConnection();
 /*
@@ -207,11 +210,12 @@ public class Main {
             }
         };
 
+        /*
         Action paletsX3Action = new ScriptAction(ScriptNamesMaster.PALETS3, 0) {
             {
                 effects.put("PaletsX3", true);
             }
-        };
+        };*/
 
         Action zoneDepart = new ScriptAction(ScriptNamesMaster.PALETS_ZONE_DEPART, 0) {
             {
@@ -238,7 +242,7 @@ public class Main {
         ActionGraph graph = ai.getGraph();
         Agent agent = ai.getAgent();
         graph.node(paletsX6Action);
-        graph.node(paletsX3Action);
+        //graph.node(paletsX3Action);
         graph.node(zoneDepart);
         graph.node(accelerateur);
 
@@ -270,7 +274,7 @@ public class Main {
 
         Map<String, Object> goalState = new HashMap<>();
         goalState.put("PaletsX6", true);
-        goalState.put("PaletsX3", true);
+        goalState.put("PaletsX3", false);
         goalState.put("ZoneDepart", true);
         goalState.put("Accelerateur", true);
 
@@ -280,7 +284,7 @@ public class Main {
         agent.setCurrentGoal(goal);
     }
 
-    private static void initServices(){
+    private static void initServices() {
         container = Container.getInstance("Master");
 
         try {

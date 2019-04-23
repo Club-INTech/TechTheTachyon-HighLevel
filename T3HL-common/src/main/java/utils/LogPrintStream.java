@@ -11,7 +11,13 @@ public class LogPrintStream extends PrintStream {
 
     @FunctionalInterface
     public interface LogWritingFunction {
-        void write(Log logger, String message);
+        /**
+         *
+         * @param logger le logger à utiliser
+         * @param message le message à logger
+         * @param stackOffset un offset dans la stack de la JVM, utile pour prendre en compte la redirection par ce LogPrintStream
+         */
+        void write(Log logger, String message, int stackOffset);
     }
 
     /**
@@ -36,7 +42,7 @@ public class LogPrintStream extends PrintStream {
         // on récupère ce qui a été écrit et on le transmet
         ByteArrayOutputStream baos = (ByteArrayOutputStream) this.out;
         String message = new String(baos.toByteArray());
-        writingFunction.write(logger, message.substring(0, message.length()-1 /* Retrait du \n de fin */));
+        writingFunction.write(logger, message.substring(0, message.length()-1 /* Retrait du \n de fin */), 2);
         baos.reset(); // reset pour libérer la place
     }
 

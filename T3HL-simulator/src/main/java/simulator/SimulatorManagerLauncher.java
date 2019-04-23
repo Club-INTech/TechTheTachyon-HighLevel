@@ -299,7 +299,6 @@ public class SimulatorManagerLauncher extends Thread{
 
             // On créer un robot par port
             for (int port : this.simulatedLLConnectionManager.keySet()) {
-                System.out.println("test");
                 System.out.println(String.format("(%d) Listener connecté", port));
 
                 //On instancie un robot simulé pour chaque LL instancié

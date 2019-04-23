@@ -1,8 +1,4 @@
 [Common]
-# PARAMETRES POUR LOG
-PRINT_LOG                           = true
-SAVE_LOG                            = true
-
 # DIMENSIONS DE L'ADVERSAIRE
 ENNEMY_RAY                          = 220
 

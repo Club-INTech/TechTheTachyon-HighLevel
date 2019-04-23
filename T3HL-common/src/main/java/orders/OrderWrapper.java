@@ -290,7 +290,6 @@ public class OrderWrapper implements Service {
         try {
             llConnection.send(message);
             Log.ORDERS.debug("Sent to LL: "+message);
-            // DEBUG System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {

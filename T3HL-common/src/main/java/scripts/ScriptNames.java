@@ -18,6 +18,9 @@
 
 package scripts;
 
+import utils.Container;
+import utils.container.ContainerException;
+
 /**
  * Interface permettant de définir les noms des scripts
  *
@@ -27,5 +30,5 @@ public interface ScriptNames {
     @Override
     String toString();
 
-    Script getScript();
+    Script createScript(Container container) throws ContainerException;
 }

@@ -1,10 +1,9 @@
 package scripts;
 
 import data.Table;
-import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
-import robot.Master; // TODO modifier en import robot master
+import robot.Slave;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
@@ -28,7 +27,7 @@ public class Goldenium extends Script {
     /**
      * constante
      */
-    protected Goldenium(Master robot, Table table) {
+    protected Goldenium(Slave robot, Table table) {
         super(robot, table);
     }
 

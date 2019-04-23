@@ -63,6 +63,8 @@ public class Container implements Service {
      * Instancie le gestionnaire de dépendances ainsi que la config
      */
     private Container(String profile) {
+        Log.init();
+
         /* Affichage du message de bienvenue */
         printMessage("../resources/intro.txt");
 
@@ -105,7 +107,6 @@ public class Container implements Service {
         instanciedServices = new HashMap<>();
         instanciedThreads = new HashMap<>();
         config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile);
-        Log.init();
 
         /* Le container est un service ! */
         instanciedServices.put(getClass().getSimpleName(), this);

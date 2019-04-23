@@ -20,6 +20,7 @@ package scripts;
 
 import pfg.config.Config;
 import utils.Container;
+import utils.container.ContainerException;
 
 /**
  * @see ScriptManager
@@ -36,7 +37,13 @@ public class ScriptManagerMaster extends ScriptManager {
     public ScriptManagerMaster(Container container) {
         super(container);
 
-        // TODO Instancier les scripts (AVEC LE CONTAINER)
+        for(ScriptNamesMaster script : ScriptNamesMaster.values()) {
+            try {
+                instanciedScripts.put(script, script.createScript(container));
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
