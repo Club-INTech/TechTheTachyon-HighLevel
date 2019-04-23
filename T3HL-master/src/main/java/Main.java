@@ -87,13 +87,13 @@ public class Main {
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
         }
-/*
+
         try {
             panneauService.getPaneau().printScore(505);
         }catch (IOException | TooManyDigitsException e){
             e.printStackTrace();
         }
-*/
+
         try {
             initAI();
         } catch (ContainerException e) {
@@ -110,14 +110,14 @@ public class Main {
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
             waitForLLConnection();
-/*
+
             try {
                 panneauService.getPaneau().printScore(42);
             }catch( IOException | TooManyDigitsException e){
                 e.printStackTrace();
             }
 
-            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
+       /*     /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             int i=0;
             while (i<1000) {
                 try {
