@@ -89,7 +89,7 @@ public class Main {
         }
 
         try {
-            panneauService.getPaneau().printScore(42);
+            panneauService.getPaneau().printScore(505);
         }catch (IOException | TooManyDigitsException e){
             e.printStackTrace();
         }
