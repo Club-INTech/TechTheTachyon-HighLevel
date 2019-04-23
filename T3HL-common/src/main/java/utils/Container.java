@@ -106,6 +106,7 @@ public class Container implements Service {
         /* Instanciation des attributs & de la config */
         instanciedServices = new HashMap<>();
         instanciedThreads = new HashMap<>();
+        System.out.println("Chargement de la config...");
         config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile);
 
         /* Le container est un service ! */
