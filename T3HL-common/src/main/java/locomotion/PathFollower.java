@@ -18,7 +18,6 @@
 
 package locomotion;
 
-import ai.AIService;
 import data.SensorState;
 import data.Table;
 import data.XYO;
@@ -27,6 +26,7 @@ import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.container.ServiceThread;
 import utils.math.*;
@@ -69,22 +69,27 @@ public class PathFollower extends ServiceThread {
     /**
      * Temps entre 2 vérifications de blocage
      */
-    private int LOOP_DELAY;
+    private int loopDelay;
 
     /**
      * Distance de vérification d'adversaire
      */
-    private int DISTANCE_CHECK;
+    private int distanceCheck;
 
     /**
      * Rayon du robot
      */
-    private int RADIUS_CHECK;
+    private int radiusCheck;
 
     /**
      * Actions exécutées en parallèle du mouvement
      */
     private Runnable[] parallelActions;
+
+    /**
+     * Timeout avant d'arrêter d'essayer de se déplacer avec un moveLengthwise
+     */
+    private int blockTimeout;
 
     /**
      * Construit le service de suivit de chemin
@@ -124,46 +129,53 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas d'évènents inattendus
      */
-    public void moveLenghtwise(int distance, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
-        // FIXME: Nombre/temps maximum de tentatives
-        int travelledDistance = 0;
-        Vec2 start = robotXYO.getPosition().clone();
-        do {
-            int toTravel = distance-travelledDistance;
-            Log.LOCOMOTION.debug("TRAVEL >> "+toTravel);
+    public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
+        withTimeout(blockTimeout, () -> {
+            Runnable[] parallelActionsLambda = parallelActions;
+            int travelledDistance = 0;
+            Vec2 start = robotXYO.getPosition().clone();
+            do {
+                int toTravel = distance - travelledDistance;
+                XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(toTravel, robotXYO.getOrientation())), robotXYO.getOrientation());
 
-            XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(toTravel, robotXYO.getOrientation())), robotXYO.getOrientation());
-
-            try {
-                Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
-                if (enemy.isPresent()) { // on ne peut pas avancer, il y a quelqu'un dans le chemin
-                    throw new UnableToMoveException("Enemy pos is "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
-                SensorState.MOVING.setData(true);
-                this.orderWrapper.moveLenghtwise(toTravel, parallelActions);
-                parallelActions = new Runnable[0]; // on ne refait pas les actions en parallèle
-
-                waitWhileTrue(SensorState.MOVING::getData, () -> {
-                    Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
-                    if (enemyForward.isPresent()) {
-                        orderWrapper.immobilise();
-                        throw new UnableToMoveException("Enemy pos is "+enemyForward.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                try {
+                    Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
+                    if (enemy.isPresent()) { // on ne peut pas avancer, il y a quelqu'un dans le chemin
+                        throw new UnableToMoveException("Enemy pos is " + enemy.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                     }
-                    if (SensorState.STUCKED.getData() && !expectedWallImpact) {
-                        orderWrapper.immobilise();
-                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                    }
-                });
-            } catch (UnableToMoveException e) {
-                if(e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
-                    Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! "+e.getMessage());
-                } else {
-                    e.printStackTrace();
-                }
-            }
+                    SensorState.MOVING.setData(true);
+                    this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
+                    parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
-            travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
-        } while(travelledDistance != distance);
+                    waitWhileTrue(SensorState.MOVING::getData, () -> {
+                        Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
+                        if (enemyForward.isPresent()) {
+                            orderWrapper.immobilise();
+                            throw new UnableToMoveException("Enemy pos is " + enemyForward.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                        }
+                        if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                            orderWrapper.immobilise();
+                            throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                        }
+                    });
+                } catch (UnableToMoveException e) {
+                    if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
+                        Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    break;
+                }
+
+                travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
+            } while (travelledDistance != distance);
+
+        });
     }
 
     /**
@@ -210,7 +222,7 @@ public class PathFollower extends ServiceThread {
                 throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
             Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
-            nearDirection.setR(this.DISTANCE_CHECK);
+            nearDirection.setR(this.distanceCheck);
             nearDirection.plus(XYO.getRobotInstance().getPosition());
             segment.setPointB(nearDirection);
 
@@ -237,7 +249,7 @@ public class PathFollower extends ServiceThread {
             orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
         }
         Segment seg = new Segment(robotXYO.getPosition().clone(),
-                robotXYO.getPosition().plusVector(new VectPolar(DISTANCE_CHECK, orientation)));
+                robotXYO.getPosition().plusVector(new VectPolar(distanceCheck, orientation)));
         return getEnemyInSegment(seg);
     }
 
@@ -325,9 +337,10 @@ public class PathFollower extends ServiceThread {
      */
     @Override
     public void updateConfig(Config config) {
-        this.LOOP_DELAY = config.getInt(ConfigData.LOCOMOTION_LOOP_DELAY);
-        this.DISTANCE_CHECK = config.getInt(ConfigData.LOCOMOTION_DISTANCE_CHECK);
-        this.RADIUS_CHECK = config.getInt(ConfigData.LOCOMOTION_RADIUS_CHECK);
+        this.loopDelay = config.getInt(ConfigData.LOCOMOTION_LOOP_DELAY);
+        this.distanceCheck = config.getInt(ConfigData.LOCOMOTION_DISTANCE_CHECK);
+        this.radiusCheck = config.getInt(ConfigData.LOCOMOTION_RADIUS_CHECK);
+        this.blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
     }
     /**
      * Getters & Setters

@@ -23,11 +23,6 @@ public class ScriptHomologation extends Script {
 
     private int xEntry = 1500-191-65+20;//1350;
     private int yEntry = 430;
-    private Vec2[] positions = new VectCartesian[]{
-            new VectCartesian(xEntry, yEntry),
-            new VectCartesian(xEntry,yEntry+300),
-            new VectCartesian(xEntry,yEntry+600)
-    };
 
     public ScriptHomologation(Master robot, Table table) {
         super(robot, table);
@@ -35,7 +30,6 @@ public class ScriptHomologation extends Script {
 
     @Override
     public void execute(Integer version) {
-        boolean premierPaletPris = false;
         try {
             robot.turn(Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
@@ -55,9 +49,8 @@ public class ScriptHomologation extends Script {
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
+            throw new RuntimeException("DIJZQDOIJZQD");
         }
-
-
     }
 
     @Override

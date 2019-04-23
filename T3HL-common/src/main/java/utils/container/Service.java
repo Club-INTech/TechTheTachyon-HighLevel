@@ -63,6 +63,7 @@ public interface Service
                 additionalAction.act();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                return;
             }
         }
     }

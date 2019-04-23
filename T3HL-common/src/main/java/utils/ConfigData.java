@@ -95,6 +95,8 @@ public enum ConfigData implements ConfigInfo
     PING_INTERVAL(100), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
     PING_TIMEOUT(500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
 
+    LOCOMOTION_OBSTRUCTED_TIMEOUT(5000),
+
     SCORE_UPDATE_PERIOD(100), // période entre deux mises à jour de l'affichage du score
 
     /**

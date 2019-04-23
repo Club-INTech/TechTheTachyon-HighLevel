@@ -28,12 +28,12 @@ import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -109,8 +109,8 @@ public class Locomotion implements Service {
      * Méthode permettant au robot d'avancer : bloquant
      * @param distance  distance de translation
      */
-    public void moveLenghtwise(int distance) throws UnableToMoveException {
-        pathFollower.moveLenghtwise(distance, false);
+    public void moveLengthwise(int distance) throws UnableToMoveException, TimeoutError {
+        pathFollower.moveLengthwise(distance, false);
     }
 
     /**
@@ -120,8 +120,8 @@ public class Locomotion implements Service {
      * @param expectedWallImpact
      *              true si l'on veut ignorer les blocages mécaniques
      */
-    public void moveLenghtwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        pathFollower.moveLenghtwise(distance, expectedWallImpact);
+    public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException, TimeoutError {
+        pathFollower.moveLengthwise(distance, expectedWallImpact);
     }
 
     /**
