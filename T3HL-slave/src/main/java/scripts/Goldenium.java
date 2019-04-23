@@ -35,12 +35,12 @@ public class Goldenium extends Script {
     @Override
     public void execute(Integer version) {
         //attention il n'y qu'une seule pompe sur le robot secondaire
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM);
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM);
 
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE); //Necessaire ?
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.increaseScore(20);
 
     }
@@ -54,9 +54,9 @@ public class Goldenium extends Script {
 
     @Override
     public void finalize(Exception e) {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);//Necessaire ?
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
     }
 
     @Override

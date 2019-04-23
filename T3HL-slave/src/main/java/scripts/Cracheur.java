@@ -29,7 +29,7 @@ public class Cracheur extends Script {
     public void execute(Integer version) {
         if (nbPalets < nbMaxPalets) {
             for (int j = 1; j<= nbPalets; j++) {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
                 robot.popPaletDroit();
             }
@@ -38,7 +38,7 @@ public class Cracheur extends Script {
             for (int i = 1; i < nbPalets; i++) {
                 robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
                 robot.popPaletDroit();
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             }
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
             robot.popPaletDroit();
