@@ -18,6 +18,8 @@
 
 package robot;
 
+import com.panneau.Panneau;
+import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
@@ -39,6 +41,7 @@ import utils.communication.SimulatorDebug;
 import utils.container.Service;
 import utils.math.Vec2;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Stack;
 
@@ -110,7 +113,13 @@ public abstract class Robot implements Service {
 
     public void increaseScore(int points) {
         this.score = this.score + points;
-        this.panneauService.updateScore(score);
+        try {
+            if(panneauService.getPaneau() != null) {
+                this.panneauService.getPaneau().printScore(score);
+            }
+        }catch(TooManyDigitsException | IOException e){
+            e.printStackTrace();
+        }
     }
 
     public void waitForLeftElevator() {
@@ -245,6 +254,35 @@ public abstract class Robot implements Service {
         if(inSimulation) {
             return;
         }
+
+        if(symetry) {
+            if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_0;
+            }
+
+            else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_0;
+            }
+        }
+
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();

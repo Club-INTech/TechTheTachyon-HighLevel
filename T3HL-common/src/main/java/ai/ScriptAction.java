@@ -28,10 +28,10 @@ import data.table.Obstacle;
 import locomotion.NoPathFound;
 import scripts.Script;
 import scripts.ScriptNames;
-import utils.Log;
+import utils.Container;
+import utils.container.ContainerException;
 import utils.math.Vec2;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class ScriptAction extends Action {
@@ -69,7 +69,15 @@ public class ScriptAction extends Action {
         this.baseCost = baseCost;
         this.version = version;
         this.scriptName = scriptName;
-        this.script = scriptName.getScript();
+        Script scriptInstance;
+        try {
+            // TODO FIXME
+            scriptInstance = scriptName.createScript(Container.getInstance("Master"));
+        } catch (ContainerException e) {
+            e.printStackTrace();
+            scriptInstance = null;
+        }
+        this.script = scriptInstance;
     }
 
     @Override

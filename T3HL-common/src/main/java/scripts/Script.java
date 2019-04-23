@@ -67,10 +67,7 @@ public abstract class Script implements Service {
      *              version du script à executer
      */
     public void goToThenExecute(Integer version) {
-        System.out.println("I'm alive");
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
-        System.out.println(entryPosition);
-        System.out.println("Still alive");
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
         } else if (table.isPositionInMobileObstacle(entryPosition)) {
@@ -78,9 +75,7 @@ public abstract class Script implements Service {
         }
 
         try {
-            System.out.println("coucou");
             this.robot.followPathTo(entryPosition, () -> this.executeWhileMovingToEntry(version));
-            System.out.println("dqiojzdoizqhdozqhdzoudh");
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             // TODO

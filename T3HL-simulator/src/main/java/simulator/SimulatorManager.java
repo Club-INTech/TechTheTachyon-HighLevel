@@ -256,6 +256,9 @@ public class SimulatorManager extends Thread {
                 else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
                     robot.sstop();
                 }
+                else if(testOrder(arguments, "waitJumper", 1)) {
+                    robot.sendJumperOkay();
+                }
                 else if(testOrder(arguments, "down", 2)
                         || testOrder(arguments, "up", 2)) {
                     // désolé

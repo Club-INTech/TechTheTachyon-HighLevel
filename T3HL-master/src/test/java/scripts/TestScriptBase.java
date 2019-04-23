@@ -1,13 +1,12 @@
 package scripts;
 
-import utils.math.Vec2;
+import utils.container.ContainerException;
 
 public abstract class TestScriptBase extends TestBaseHL {
 
     @Override
-    public void action() {
-        ScriptNamesMaster.reInit();
-        Script script = getScript().getScript();
+    public void action() throws ContainerException {
+        Script script = getScript().createScript(container);
 
         for(int version : versionsToTest()) {
             script.goToThenExecute(version);

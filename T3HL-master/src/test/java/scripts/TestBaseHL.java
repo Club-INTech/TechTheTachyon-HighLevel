@@ -61,7 +61,6 @@ public abstract class TestBaseHL {
     @After
     public void cleanup() {
         Container.resetInstance();
-        ScriptNamesMaster.cleanup();
     }
 
     private void waitForLLConnection() {
@@ -97,7 +96,6 @@ public abstract class TestBaseHL {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = getRobot();
-            ScriptNamesMaster.reInit();
 
             Vec2 start = startPosition();
             XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());

@@ -23,7 +23,7 @@ public class TestPaletsX6 extends TestScriptBase {
     }
 
     @Override
-    public void action() {
+    public void action() throws ContainerException {
         robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         super.action();
     }

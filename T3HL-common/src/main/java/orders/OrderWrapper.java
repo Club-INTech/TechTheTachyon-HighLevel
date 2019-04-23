@@ -290,7 +290,6 @@ public class OrderWrapper implements Service {
         try {
             llConnection.send(message);
             Log.ORDERS.debug("Sent to LL: "+message);
-            // DEBUG System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
@@ -348,5 +347,10 @@ public class OrderWrapper implements Service {
         sendString("waitJumper");
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
         Log.STRATEGY.debug("GOGOGO!!!");
+    }
+
+    public void endMatch() {
+        Log.STRATEGY.debug("Fin du match!");
+        sendString("endMatch");
     }
 }

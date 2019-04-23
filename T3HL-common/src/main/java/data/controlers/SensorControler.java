@@ -4,6 +4,7 @@ import data.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.MatchTimer;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
@@ -37,6 +38,7 @@ public class SensorControler extends Thread implements Service {
      * Listener
      */
     private Listener listener;
+    private MatchTimer timer;
 
     /**
      * Files de communication avec le Listener
@@ -66,7 +68,7 @@ public class SensorControler extends Thread implements Service {
 
     private int[] sickMeasurements = new int[Sick.values().length];
 
-    private PrintWriter sickWriter;
+   // private PrintWriter sickWriter;
 
     private int measureIndex = 0;
 
@@ -77,8 +79,9 @@ public class SensorControler extends Thread implements Service {
      * @param listener
      *              le listener
      */
-    public SensorControler(Listener listener) throws FileNotFoundException, UnsupportedEncodingException {
+    public SensorControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
+        this.timer = timer;
         this.robotPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPosQueue = new ConcurrentLinkedQueue<>();
         this.buddyPathQueue = new ConcurrentLinkedQueue<>();
@@ -87,12 +90,13 @@ public class SensorControler extends Thread implements Service {
         this.eventData=new ConcurrentLinkedQueue<>();
         this.sickData=new ConcurrentLinkedQueue<>();
         this.couleurPalet =new ConcurrentLinkedQueue<>();
+        /*
         this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
         sickWriter.print("Indice");
         for (Sick sick : Sick.values()) {
             sickWriter.print("\t"+sick.name());
         }
-        sickWriter.println();
+        sickWriter.println();*/
         listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
         listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
         listener.addQueue(Channel.BUDDY_PATH, buddyPathQueue);
@@ -151,12 +155,15 @@ public class SensorControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
+        Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
         if (symetrie) {
             x = -x;
-            o = Calculs.modulo(Math.PI - o, Math.PI);
+            o = Math.PI - o;
         }
-       // System.out.println("LL: "+XYO.getRobotInstance());
+        o = Calculs.modulo(o, Math.PI);
+        // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
+        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
     }
 
     /**
@@ -211,9 +218,11 @@ public class SensorControler extends Thread implements Service {
                 SensorState.ELECTRON_ARRIVED.setData(true);
                 break;
 
-            case "gogogofast":
+            case "gogogofast": {
+                timer.resetTimer();
                 SensorState.WAITING_JUMPER.setData(false);
                 break;
+            }
         }
     }
 
@@ -230,8 +239,8 @@ public class SensorControler extends Thread implements Service {
 
         }
         System.out.println();
-        sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
-        sickWriter.flush();
+     /*   sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
+        sickWriter.flush();*/
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         int dsick;
@@ -284,7 +293,7 @@ public class SensorControler extends Thread implements Service {
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 }
-                xCalcule = (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta)) - 1500;
+                xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta));
             }
         }
         else {
@@ -372,6 +381,6 @@ public class SensorControler extends Thread implements Service {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        sickWriter.close();
+    //    sickWriter.close();
     }
 }
