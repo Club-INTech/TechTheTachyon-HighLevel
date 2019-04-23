@@ -50,6 +50,14 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>TechTheHighLevel</groupId>
+            <artifactId>TTHL-simulator</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- Build Configuration -->
@@ -85,7 +93,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>Main</mainClass>
+                            <mainClass>MainSlave</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -16,15 +16,11 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import data.Sick;
-import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
-import orders.order.ActuatorsOrder;
-import robot.Master;
-import scripts.ScriptManagerMaster;
-import scripts.ScriptNamesMaster;
+import robot.Slave;
+import scripts.ScriptManagerSlave;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -37,19 +33,19 @@ import utils.container.ContainerException;
 /**
  * @author nayth, jglrxavpok
  */
-public class MainMaster extends RobotEntryPoint {
+public class MainSlave extends RobotEntryPoint {
 
     private SimulatorManagerLauncher simulatorLauncher;
     // Regardez, c'est GLaDOS!
     private GraphicalInterface interfaceGraphique;
 
     public static void main(String[] args) throws ContainerException {
-        new MainMaster().start();
+        new MainSlave().start();
     }
 
     private void start() throws ContainerException {
-        Container container = Container.getInstance("Master");
-        entryPoint(container, Master.class, ScriptManagerMaster.class);
+        Container container = Container.getInstance("Slave");
+        entryPoint(container, Slave.class, ScriptManagerSlave.class);
     }
 
     @Override
@@ -59,6 +55,7 @@ public class MainMaster extends RobotEntryPoint {
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
             } else {
+                // TODO: LL Slave Simulateur?
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
             }
         }
@@ -72,23 +69,7 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 550, Math.PI);
-
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-        robot.turn(Math.PI);
-
-        // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-        table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-        table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-        table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
-        orderWrapper.waitJumper();
-
-        scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION).goToThenExecute(0);
-        scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION).goToThenExecute(0);
+        // TODO
     }
 
     private void initSimulator(){
@@ -125,7 +106,7 @@ public class MainMaster extends RobotEntryPoint {
     private void initVisualisateur(){
         simulatorLauncher = new SimulatorManagerLauncher();
 
-        simulatorLauncher.setVisualisationMode(Master.class);
+        simulatorLauncher.setVisualisationMode(Slave.class);
 
         try {
             simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
