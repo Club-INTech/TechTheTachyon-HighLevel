@@ -87,13 +87,13 @@ public class Main {
         if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
         }
-
+/*
         try {
             panneauService.getPaneau().printScore(505);
         }catch (IOException | TooManyDigitsException e){
             e.printStackTrace();
         }
-
+*/
         try {
             initAI();
         } catch (ContainerException e) {
