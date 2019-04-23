@@ -23,6 +23,7 @@ import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.order.ActuatorsOrder;
 import robot.Master;
+import scripts.Match;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptNamesMaster;
 import simulator.GraphicalInterface;
@@ -87,8 +88,11 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
-        scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION).goToThenExecute(0);
-        scriptManager.getScript(ScriptNamesMaster.PRECOUPE_ACC).goToThenExecute(0);
+        try {
+            container.getService(Match.class).goToThenExecute(0);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initSimulator(){
