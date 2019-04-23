@@ -174,7 +174,7 @@ public class LidarControler extends ServiceThread {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
         this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
         this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
         this.processPath = config.getString(ConfigData.LIDAR_PROCESS_PATH);

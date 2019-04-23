@@ -155,7 +155,7 @@ public class SensorControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
-        Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
+     //   Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
         if (symetrie) {
             x = -x;
             o = Math.PI - o;
@@ -163,7 +163,7 @@ public class SensorControler extends Thread implements Service {
         o = Calculs.modulo(o, Math.PI);
         // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
-        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
+//        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
     }
 
     /**
@@ -375,7 +375,7 @@ public class SensorControler extends Thread implements Service {
     @Override
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
     }
 
     @Override

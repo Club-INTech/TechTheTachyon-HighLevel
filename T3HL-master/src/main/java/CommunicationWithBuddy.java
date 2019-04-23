@@ -80,7 +80,7 @@ public class CommunicationWithBuddy implements Service {
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        this.symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
             this.buddyConnection = Connection.SLAVE_SIMULATEUR;

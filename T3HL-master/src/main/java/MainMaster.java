@@ -88,7 +88,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
         scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION).goToThenExecute(0);
-        scriptManager.getScript(ScriptNamesMaster.HOMOLOGATION).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesMaster.PRECOUPE_ACC).goToThenExecute(0);
     }
 
     private void initSimulator(){

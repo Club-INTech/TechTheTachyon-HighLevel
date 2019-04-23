@@ -60,8 +60,6 @@ public class UnableToMoveException extends Exception {
         super(s+"["+reason.name()+"] Aim is "+aim.getPosition());
         this.aim = aim;
         this.reason = reason;
-
-        Log.COMMUNICATION.critical("EXCEPTION: "+getMessage());
     }
 
     /**

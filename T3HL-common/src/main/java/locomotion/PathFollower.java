@@ -125,21 +125,45 @@ public class PathFollower extends ServiceThread {
      *              en cas d'évènents inattendus
      */
     public void moveLenghtwise(int distance, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
-        XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
-        SensorState.MOVING.setData(true);
-        this.orderWrapper.moveLenghtwise(distance, parallelActions);
+        // FIXME: Nombre/temps maximum de tentatives
+        int travelledDistance = 0;
+        Vec2 start = robotXYO.getPosition().clone();
+        do {
+            int toTravel = distance-travelledDistance;
+            Log.LOCOMOTION.debug("TRAVEL >> "+toTravel);
 
-        waitWhileTrue(SensorState.MOVING::getData, () -> {
-            Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
-            if (enemy.isPresent()) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException("Enemy pos is "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+            XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(toTravel, robotXYO.getOrientation())), robotXYO.getOrientation());
+
+            try {
+                Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
+                if (enemy.isPresent()) { // on ne peut pas avancer, il y a quelqu'un dans le chemin
+                    throw new UnableToMoveException("Enemy pos is "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+                SensorState.MOVING.setData(true);
+                this.orderWrapper.moveLenghtwise(toTravel, parallelActions);
+                parallelActions = new Runnable[0]; // on ne refait pas les actions en parallèle
+
+                waitWhileTrue(SensorState.MOVING::getData, () -> {
+                    Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
+                    if (enemyForward.isPresent()) {
+                        orderWrapper.immobilise();
+                        throw new UnableToMoveException("Enemy pos is "+enemyForward.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                    }
+                    if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                        orderWrapper.immobilise();
+                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                    }
+                });
+            } catch (UnableToMoveException e) {
+                if(e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
+                    Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! "+e.getMessage());
+                } else {
+                    e.printStackTrace();
+                }
             }
-            if (SensorState.STUCKED.getData() && !expectedWallImpact) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-            }
-        });
+
+            travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
+        } while(travelledDistance != distance);
     }
 
     /**

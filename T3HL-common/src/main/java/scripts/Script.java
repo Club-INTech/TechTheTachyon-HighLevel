@@ -22,6 +22,7 @@ import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import robot.Robot;
+import utils.Log;
 import utils.container.Service;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -67,6 +68,7 @@ public abstract class Script implements Service {
      *              version du script à executer
      */
     public void goToThenExecute(Integer version) {
+        Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName());
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
