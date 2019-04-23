@@ -140,7 +140,9 @@ public class Accelerateur extends Script {
     }
 
     @Override
-    public void updateConfig(Config config) { }
+    public void updateConfig(Config config) {
+        super.updateConfig(config);
+    }
 
 }
 

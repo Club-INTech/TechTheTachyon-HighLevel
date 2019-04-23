@@ -111,6 +111,7 @@ public class ScriptPaletsZoneChaos extends Script{
 
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
         rayonRobot=config.getInt(ConfigData.ROBOT_RAY)+1;
     }
 }

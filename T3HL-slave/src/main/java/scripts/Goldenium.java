@@ -60,6 +60,6 @@ public class Goldenium extends Script {
 
     @Override
     public void updateConfig(Config config) {
-
+        super.updateConfig(config);
     }
 }

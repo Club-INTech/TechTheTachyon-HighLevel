@@ -64,5 +64,6 @@ public class ScriptHomologation extends Script {
 
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
     }
 }

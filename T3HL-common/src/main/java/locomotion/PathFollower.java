@@ -130,13 +130,14 @@ public class PathFollower extends ServiceThread {
      *              en cas d'évènents inattendus
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
-        withTimeout(blockTimeout, () -> {
+        Service.withTimeout(blockTimeout, () -> {
             Runnable[] parallelActionsLambda = parallelActions;
             int travelledDistance = 0;
             Vec2 start = robotXYO.getPosition().clone();
+
+            XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
             do {
                 int toTravel = distance - travelledDistance;
-                XYO aim = new XYO(robotXYO.getPosition().plusVector(new VectPolar(toTravel, robotXYO.getOrientation())), robotXYO.getOrientation());
 
                 try {
                     Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);

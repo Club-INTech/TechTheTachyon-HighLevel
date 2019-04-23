@@ -139,5 +139,6 @@ public class PaletsX6 extends Script {
     }
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
     }
 }

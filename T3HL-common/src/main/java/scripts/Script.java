@@ -21,8 +21,11 @@ package scripts;
 import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
+import pfg.config.Config;
 import robot.Robot;
+import utils.ConfigData;
 import utils.Log;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -53,6 +56,11 @@ public abstract class Script implements Service {
     protected ArrayList<Integer> versions;
 
     /**
+     * Timeout avant d'arrêter d'essayer de se déplacer (quand un ennemi est dans un obstacle par exemple)
+     */
+    private int blockTimeout;
+
+    /**
      * Construit un script
      * @param robot
      *              le robot
@@ -67,13 +75,24 @@ public abstract class Script implements Service {
      * @param version
      *              version du script à executer
      */
-    public void goToThenExecute(Integer version) {
+    public void goToThenExecute(Integer version) throws TimeoutError {
         Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName());
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
-        } else if (table.isPositionInMobileObstacle(entryPosition)) {
-            // TODO Si le point trouvé est dans un obstacle mobile
+        } else {
+            // attente de qq secondes si
+            Service.withTimeout(blockTimeout, () -> {
+                while(table.isPositionInMobileObstacle(entryPosition)) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            });
+
+
         }
 
         try {
@@ -120,4 +139,9 @@ public abstract class Script implements Service {
      *              l'exception qui a été levée
      */
     public abstract void finalize(Exception e);
+
+    @Override
+    public void updateConfig(Config config) {
+        blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
+    }
 }
