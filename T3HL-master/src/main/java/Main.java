@@ -109,7 +109,7 @@ public class Main {
             Script zone_chaos_palets = ScriptNamesMaster.PALETS_ZONE_CHAOS.getScript();
             Script goldenium = ScriptNamesMaster.GOLDENIUM.getScript();
 
-            waitForLLConnection();
+            //waitForLLConnection();
 
             try {
                 panneauService.getPaneau().printScore(42);
@@ -117,7 +117,7 @@ public class Main {
                 e.printStackTrace();
             }
 
-       /*     /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
+            /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             int i=0;
             while (i<1000) {
                 try {
@@ -128,7 +128,7 @@ public class Main {
                 ++i;
                 Thread.sleep(500);
             }
-*/
+//*/
             XYO.getRobotInstance().update(1500-191, 550, Math.PI);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
        // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
