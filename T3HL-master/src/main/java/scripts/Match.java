@@ -37,6 +37,6 @@ public class Match extends Script {
 
     @Override
     public void updateConfig(Config config) {
-
+        super.updateConfig(config);
     }
 }

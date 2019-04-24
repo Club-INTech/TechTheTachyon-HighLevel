@@ -83,6 +83,8 @@ public class Locomotion implements Service {
      */
     private int compareThreshold;
 
+    private int blockTimeout;
+
     /**
      * Construit le service de locmotion
      * @param table
@@ -203,7 +205,22 @@ public class Locomotion implements Service {
         }
 
         Optional<MobileCircularObstacle> mobileObstacleBelowPoint = table.findMobileObstacleInPosition(point);
-        mobileObstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle));
+        mobileObstacleBelowPoint.ifPresent(obstacle -> {
+            Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle);
+            Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+
+            // FIXME: gérer le TimeoutError
+            // attente de qq secondes s'il y a un ennemi là où on veut aller
+            Service.withTimeout(blockTimeout, () -> {
+                while(table.isPositionInMobileObstacle(point)) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            });
+        });
 
         pointsQueue.clear();
         exceptionsQueue.clear();
@@ -287,6 +304,7 @@ public class Locomotion implements Service {
     @Override
     public void updateConfig(Config config) {
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
+        this.blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
     }
 
     public Table getTable() {

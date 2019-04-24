@@ -34,9 +34,9 @@ public class ScriptPaletsZoneChaos extends Script{
     @Override
     public void execute(Integer version) {
         float[] signes= new float[3];
-        signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
-        signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
-        signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
+        signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
+        signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
+        signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
 
         positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
         positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
@@ -107,7 +107,9 @@ public class ScriptPaletsZoneChaos extends Script{
     public Shape entryPosition(Integer version) {return new Circle(new VectCartesian(xEntry, yEntry), 5); }
 
     @Override
-    public void finalize(Exception e) { }
+    public void finalize(Exception e) {
+        table.removeAllChaosObstacles();
+    }
 
     @Override
     public void updateConfig(Config config) {

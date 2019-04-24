@@ -20,6 +20,7 @@ package scripts;
 
 import data.Table;
 import data.XYO;
+import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
 import robot.Robot;
@@ -31,6 +32,7 @@ import utils.math.Shape;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 /**
@@ -81,18 +83,22 @@ public abstract class Script implements Service {
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
         } else {
-            // attente de qq secondes si
-            Service.withTimeout(blockTimeout, () -> {
-                while(table.isPositionInMobileObstacle(entryPosition)) {
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        break;
+            Optional<MobileCircularObstacle> obstacle = table.findMobileObstacleInPosition(entryPosition);
+            obstacle.ifPresent(mobileObstacle -> {
+                Log.LOCOMOTION.warning("Point d'arrivée " + entryPosition + " dans l'obstacle mobile " + mobileObstacle);
+                Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+
+                // attente de qq secondes s'il y a un ennemi là où on veut aller
+                Service.withTimeout(blockTimeout, () -> {
+                    while(table.isPositionInMobileObstacle(entryPosition)) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
                     }
-                }
+                });
             });
-
-
         }
 
         try {

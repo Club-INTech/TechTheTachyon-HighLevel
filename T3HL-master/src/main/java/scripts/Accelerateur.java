@@ -7,6 +7,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.Log;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
@@ -20,7 +21,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = 170;
+    private int xEntry = -170;
     private int yEntry = 340;
 
     /**
@@ -105,7 +106,9 @@ public class Accelerateur extends Script {
              * Dire que le goldenium est libéré
              */
             GameState.GOLDENIUM_LIBERE.setData(true);
-            robot.followPathTo(positionDepart);
+            Log.LOCOMOTION.warning("PRE POS DEPART");
+            robot.followPathTo(positionDepart, () -> robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR));
+            Log.LOCOMOTION.warning("POST POS DEPART");
             robot.turn(Math.PI);
             robot.increaseScore(10);
             boolean first = false;

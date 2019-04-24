@@ -58,9 +58,9 @@ public class MainMaster extends RobotEntryPoint {
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = container.getService(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-                debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
-            } else {
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            } else {
+                debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
             }
         }
 
@@ -85,7 +85,8 @@ public class MainMaster extends RobotEntryPoint {
         table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
         table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
         table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
+        table.updateTableAfterFixedObstaclesChanges();
+     //   table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
         try {
