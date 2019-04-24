@@ -14,8 +14,8 @@ public class Cracheur extends Script {
      */
 
     //Valeurs à ajuster pour le robot secondaire
-    private int xEntry = 2000;
-    private int yEntry = 2000;
+    private int xEntry = 130;
+    private int yEntry = 1580;
 
     private int nbPalets = robot.getNbPaletsDroits();
     private int nbMaxPalets = 5; //Nb de palets si l'ascenseur est rempli pour distinction de cas
