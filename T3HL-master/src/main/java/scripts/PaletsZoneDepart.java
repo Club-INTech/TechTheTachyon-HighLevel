@@ -56,12 +56,14 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);  // on attend que le vide se casse
 
             // FIXME A faire en roulant
+            /*
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+*/
 
             // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
             table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
