@@ -19,7 +19,7 @@ public class PanneauService implements Service {
     private long updatePeriod;
     private String couleur;
 
-    public PanneauService(Container container, Panneau.teamColorChangeListener listener){
+    public PanneauService(Container container) {
               try {
             panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
             /*
