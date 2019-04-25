@@ -54,6 +54,8 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);  // on attend que le vide se casse
+
+            // FIXME A faire en roulant
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
             robot.waitForLeftElevator();
@@ -67,7 +69,7 @@ public class PaletsZoneDepart extends Script {
             table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
 
             table.updateTableAfterFixedObstaclesChanges();
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
