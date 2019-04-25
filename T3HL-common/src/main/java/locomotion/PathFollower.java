@@ -130,53 +130,87 @@ public class PathFollower extends ServiceThread {
      *              en cas d'évènents inattendus
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
-        Service.withTimeout(blockTimeout, () -> {
-            Runnable[] parallelActionsLambda = parallelActions;
-            int travelledDistance = 0;
-            Vec2 start = robotXYO.getPosition().clone();
+        Runnable[] parallelActionsLambda = parallelActions;
+        int travelledDistance = 0;
+        Vec2 start = robotXYO.getPosition().clone();
 
-            XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
-            do {
-                int toTravel = distance - travelledDistance;
+        XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
+        do {
+            int toTravel = distance - travelledDistance;
 
-                try {
-                    Optional<MobileCircularObstacle> enemy = getEnemyForward(distance > 0);
-                    if (enemy.isPresent()) { // on ne peut pas avancer, il y a quelqu'un dans le chemin
-                        throw new UnableToMoveException("Enemy pos is " + enemy.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                    }
-                    SensorState.MOVING.setData(true);
-                    this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
-                    parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
+            try {
+                Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
+                if(enemyForward.isPresent()) {
+                    MobileCircularObstacle obstacle = enemyForward.get();
+                    Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
+                    Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
 
-                    waitWhileTrue(SensorState.MOVING::getData, () -> {
-                        Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
-                        if (enemyForward.isPresent()) {
-                            orderWrapper.immobilise();
-                            throw new UnableToMoveException("Enemy pos is " + enemyForward.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                        }
-                        if (SensorState.STUCKED.getData() && !expectedWallImpact) {
-                            orderWrapper.immobilise();
-                            throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                        }
-                    });
-                } catch (UnableToMoveException e) {
-                    if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
-                        Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
-                    } else {
-                        e.printStackTrace();
+                    // attente de qq secondes s'il y a un ennemi là où on veut aller
+                    try {
+                        Service.withTimeout(blockTimeout, () -> {
+                            while(getEnemyForward(distance > 0).isPresent()) {
+                                try {
+                                    Thread.sleep(50);
+                                } catch (InterruptedException e) {
+                                    break;
+                                }
+                            }
+                        });
+                    } catch (TimeoutError timeout) {
+                        throw new UnableToMoveException("Enemy pos is " + obstacle.toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                     }
                 }
 
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    break;
+                SensorState.MOVING.setData(true);
+                this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
+                parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
+
+                waitWhileTrue(SensorState.MOVING::getData, () -> {
+                    Optional<MobileCircularObstacle> enemyForwardWhileMoving = getEnemyForward(distance > 0);
+                    if(enemyForwardWhileMoving.isPresent()) {
+                        MobileCircularObstacle obstacle = enemyForwardWhileMoving.get();
+                        Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
+                        Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+
+                        orderWrapper.immobilise();
+
+                        // FIXME: gérer le TimeoutError
+                        // attente de qq secondes s'il y a un ennemi là où on veut aller
+                        try {
+                            Service.withTimeout(blockTimeout, () -> {
+                                while(getEnemyForward(distance > 0).isPresent()) {
+                                    try {
+                                        Thread.sleep(50);
+                                    } catch (InterruptedException e) {
+                                        break;
+                                    }
+                                }
+                            });
+                        } catch (TimeoutError timeout) {
+                            throw new UnableToMoveException("Enemy pos is " + enemyForwardWhileMoving.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                        }
+                    }
+                    if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                        orderWrapper.immobilise();
+                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                    }
+                });
+            } catch (UnableToMoveException e) {
+                if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
+                    Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
+                } else {
+                    e.printStackTrace();
                 }
+            }
 
-                travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
-            } while (travelledDistance != distance);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                break;
+            }
 
-        });
+            travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
+        } while (travelledDistance != distance);
     }
 
     /**

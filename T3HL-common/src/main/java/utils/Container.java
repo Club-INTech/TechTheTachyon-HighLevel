@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -276,7 +277,11 @@ public class Container implements Service {
      * @see Service
      */
     @Override
-    public void updateConfig(Config config) {}
+    public void updateConfig(Config config) {
+        for(Service service:instanciedServices.values()){
+            service.updateConfig(config);
+        }
+    }
 
     /**
      * Getters (utilisé)
