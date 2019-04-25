@@ -19,6 +19,7 @@
 package robot;
 
 import data.CouleurPalet;
+import com.panneau.Panneau;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
