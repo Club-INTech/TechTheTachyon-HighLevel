@@ -1,6 +1,7 @@
 package scripts;
 
 import data.Table;
+import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -37,25 +38,27 @@ public class Goldenium extends Script {
     @Override
     public void execute(Integer version) {
         //attention il n'y qu'une seule pompe sur le robot secondaire
-        robot.followPathTo(positionDepart);
-        robot.turn(-Math.PI/2);
+        try {
+            robot.followPathTo(positionDepart);
+            robot.turn(-Math.PI/2);
 
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-        // FIXME: insérer position stockage goldenium
-        robot.increaseScore(20);
-
-
-        robot.followPathTo(positionBalance);
-        robot.turn(Math.PI/2);
-
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
-        robot.increaseScore(24);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+            // FIXME: insérer position stockage goldenium
+            robot.increaseScore(20);
 
 
+            robot.followPathTo(positionBalance);
+            robot.turn(Math.PI/2);
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+            robot.increaseScore(24);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
