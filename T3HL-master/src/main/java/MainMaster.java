@@ -34,6 +34,8 @@ import utils.ConfigData;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 /**
  * @author nayth, jglrxavpok
@@ -90,12 +92,25 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
 
-        try {
+        Vec2 center = new VectCartesian(0, 500);
+        Vec2 edge = new VectCartesian(1000, 500);
+        while(true) {
+            robot.followPathTo(center);
+            robot.followPathTo(edge);
+
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
+  /*      try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-
+*/
     }
 
     private void initSimulator(){
