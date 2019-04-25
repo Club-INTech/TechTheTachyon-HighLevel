@@ -4,19 +4,15 @@ import utils.Container;
 import utils.container.ContainerException;
 import utils.container.Service;
 
-public enum ScriptNamesMaster implements ScriptNames {
-    ACCELERATEUR(Accelerateur.class, "accelerateur"),
-    PALETS6(PaletsX6.class, "paletsx6"),
-    PALETS_ZONE_DEPART(PaletsZoneDepart.class, "palets_zone_depart"),
-    PALETS_ZONE_CHAOS(ScriptPaletsZoneChaos.class, "palet_zone_chaos"),
-    HOMOLOGATION(ScriptHomologation.class, "homologation"),
-    PRECOUPE_ACC(precoupeAccelerateurx6.class, "precoupeAccelerateurx6"),
+public enum ScriptNamesSlave implements ScriptNames {
+    GOLDENIUM(Goldenium.class,"goldenium"),
+    PALETS3(Paletsx3.class, "paletsx3"),
     ;
 
     private Class<? extends Service> scriptClass;
     private String scriptName;
 
-    ScriptNamesMaster(Class<? extends Service> scriptClass, String scriptName){
+    ScriptNamesSlave(Class<? extends Service> scriptClass, String scriptName){
         this.scriptClass = scriptClass;
         this.scriptName = scriptName;
     }

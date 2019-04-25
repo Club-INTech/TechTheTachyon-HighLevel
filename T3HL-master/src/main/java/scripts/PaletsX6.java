@@ -44,8 +44,8 @@ public class PaletsX6 extends Script {
             positions.add(new VectCartesian(805 , 1206));
             positions.add(new VectCartesian(597, 1206));
         } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(905, 1186));
             positions.add(new VectCartesian(505, 1186));
+            positions.add(new VectCartesian(905, 1186));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {  //bleu droite
             positions.add(new VectCartesian(834, 1225));
@@ -71,7 +71,7 @@ public class PaletsX6 extends Script {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+            robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //
@@ -84,7 +84,7 @@ public class PaletsX6 extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 if(version == 0) {
@@ -139,5 +139,6 @@ public class PaletsX6 extends Script {
     }
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
     }
 }

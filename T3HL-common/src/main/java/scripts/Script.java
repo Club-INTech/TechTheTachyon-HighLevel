@@ -20,13 +20,19 @@ package scripts;
 
 import data.Table;
 import data.XYO;
+import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
+import pfg.config.Config;
 import robot.Robot;
+import utils.ConfigData;
+import utils.Log;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Shape;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 
 /**
@@ -52,6 +58,11 @@ public abstract class Script implements Service {
     protected ArrayList<Integer> versions;
 
     /**
+     * Timeout avant d'arrêter d'essayer de se déplacer (quand un ennemi est dans un obstacle par exemple)
+     */
+    private int blockTimeout;
+
+    /**
      * Construit un script
      * @param robot
      *              le robot
@@ -66,21 +77,32 @@ public abstract class Script implements Service {
      * @param version
      *              version du script à executer
      */
-    public void goToThenExecute(Integer version) {
-        System.out.println("I'm alive");
+    public void goToThenExecute(Integer version) throws TimeoutError {
+        Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName());
         Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
-        System.out.println(entryPosition);
-        System.out.println("Still alive");
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
-        } else if (table.isPositionInMobileObstacle(entryPosition)) {
-            // TODO Si le point trouvé est dans un obstacle mobile
+        } else {
+            Optional<MobileCircularObstacle> obstacle = table.findMobileObstacleInPosition(entryPosition);
+            obstacle.ifPresent(mobileObstacle -> {
+                Log.LOCOMOTION.warning("Point d'arrivée " + entryPosition + " dans l'obstacle mobile " + mobileObstacle);
+                Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+
+                // attente de qq secondes s'il y a un ennemi là où on veut aller
+                Service.withTimeout(blockTimeout, () -> {
+                    while(table.isPositionInMobileObstacle(entryPosition)) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            break;
+                        }
+                    }
+                });
+            });
         }
 
         try {
-            System.out.println("coucou");
             this.robot.followPathTo(entryPosition, () -> this.executeWhileMovingToEntry(version));
-            System.out.println("dqiojzdoizqhdozqhdzoudh");
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             // TODO
@@ -123,4 +145,9 @@ public abstract class Script implements Service {
      *              l'exception qui a été levée
      */
     public abstract void finalize(Exception e);
+
+    @Override
+    public void updateConfig(Config config) {
+        blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
+    }
 }

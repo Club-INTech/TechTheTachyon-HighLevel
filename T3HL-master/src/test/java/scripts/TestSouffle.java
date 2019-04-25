@@ -21,24 +21,11 @@ public class TestSouffle extends TestBaseHL {
 
     @Override
     public void action() throws Exception {
-        orderWrapper.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-        orderWrapper.sendString("suck right");
-        orderWrapper.sendString("stock right");
-        TimeUnit.SECONDS.sleep(1);
-        orderWrapper.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
-        TimeUnit.SECONDS.sleep(1);
-        orderWrapper.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
-        TimeUnit.SECONDS.sleep(1);
-        robot.moveLengthwise(-30, false);
-
-        orderWrapper.sendString("suck left");
-        orderWrapper.sendString("unsuck right");
-        orderWrapper.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-
-        TimeUnit.SECONDS.sleep(1);
-        orderWrapper.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
-        TimeUnit.SECONDS.sleep(1);
-        robot.moveLengthwise(30, false);
-        TimeUnit.SECONDS.sleep(1);
+        for (int i = 0; i < 4; i++) {
+            robot.turn(Math.PI);
+            TimeUnit.MILLISECONDS.sleep(5000);
+            robot.turn(-Math.PI);
+            TimeUnit.MILLISECONDS.sleep(5000);
+        }
     }
 }

@@ -40,7 +40,7 @@ public class Test_Communication {
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        Log.init(container.getConfig());
+        Log.init();
         interface1 = new SocketServerInterface("localhost", 10200);
         interface1.init();
     }

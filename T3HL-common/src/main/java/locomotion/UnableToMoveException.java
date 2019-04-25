@@ -19,6 +19,7 @@
 package locomotion;
 
 import data.XYO;
+import utils.Log;
 
 /**
  * Exceptions de locomotion

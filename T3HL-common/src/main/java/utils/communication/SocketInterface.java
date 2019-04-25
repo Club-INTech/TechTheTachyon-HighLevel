@@ -55,12 +55,12 @@ public abstract class SocketInterface implements CommunicationInterface {
     /**
      * Buffer de lecture
      */
-    private BufferedReader input;
+    protected BufferedReader input;
 
     /**
      * Buffer d'écriture
      */
-    private BufferedWriter output;
+    protected BufferedWriter output;
 
     /**
      * True si la connexion a été initialisée

@@ -33,6 +33,8 @@ public class SensorState<DataType> {
     public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>(false, Boolean.class);
     public static final SensorState<Long> LAST_PONG = new SensorState<>(-1L, Long.class);
     public static final SensorState<Boolean> WAITING_JUMPER = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ACTIVATED = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ARRIVED = new SensorState<>(false, Boolean.class);
     ;
 
     /**

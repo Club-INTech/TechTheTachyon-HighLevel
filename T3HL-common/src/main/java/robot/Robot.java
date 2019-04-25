@@ -18,7 +18,6 @@
 
 package robot;
 
-import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
@@ -114,7 +113,9 @@ public abstract class Robot implements Service {
     public void increaseScore(int points) {
         this.score = this.score + points;
         try {
-            this.panneauService.getPaneau().printScore(score);
+            if(panneauService.getPaneau() != null) {
+                this.panneauService.getPaneau().printScore(score);
+            }
         }catch(TooManyDigitsException | IOException e){
             e.printStackTrace();
         }
@@ -181,7 +182,7 @@ public abstract class Robot implements Service {
      *              en cas de problèmes de blocage/adversaire
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        this.locomotion.moveLenghtwise(distance, expectedWallImpact);
+        this.locomotion.moveLengthwise(distance, expectedWallImpact);
     }
 
     /**
@@ -252,6 +253,35 @@ public abstract class Robot implements Service {
         if(inSimulation) {
             return;
         }
+
+        if(symetry) {
+            if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_0;
+            }
+
+            else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_0;
+            }
+
+
+            else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_0) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_PI;
+            } else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_PI) {
+                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_0;
+            }
+        }
+
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
@@ -458,7 +488,7 @@ public abstract class Robot implements Service {
     public void updateConfig(Config config) {
         loopSleepTime = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
         inSimulation = config.getBoolean(ConfigData.SIMULATION);
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
         isMaster = config.getBoolean(ConfigData.MASTER);
     }
 }

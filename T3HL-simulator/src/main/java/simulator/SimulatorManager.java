@@ -256,6 +256,10 @@ public class SimulatorManager extends Thread {
                 else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
                     robot.sstop();
                 }
+                else if(testOrder(arguments, "waitJumper", 1)) {
+                    robot.sendJumperOkay();
+                    graphicalInterface.resetTimer();
+                }
                 else if(testOrder(arguments, "down", 2)
                         || testOrder(arguments, "up", 2)) {
                     // désolé
@@ -291,7 +295,7 @@ public class SimulatorManager extends Thread {
                             RobotSide side = RobotSide.valueOf(arguments[1].toUpperCase());
                             robot.setArmPosition(side, position);
                             try {
-                                TimeUnit.MILLISECONDS.sleep(750); // simulation du mouvement
+                                TimeUnit.MILLISECONDS.sleep((long) (500/this.graphicalInterface.getTimeScale())); // simulation du mouvement
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }

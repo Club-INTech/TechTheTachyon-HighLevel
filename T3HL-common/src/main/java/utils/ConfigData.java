@@ -38,15 +38,9 @@ public enum ConfigData implements ConfigInfo
     ETHERNET_DEFAULT_TIME(1),
 
     /**
-     * Paramètres du log
-     */
-    PRINT_LOG(true),
-    SAVE_LOG(true),
-
-    /**
      * Couleur
      */
-    COULEUR("violet"),
+    COULEUR("jaune"),
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)
@@ -69,6 +63,11 @@ public enum ConfigData implements ConfigInfo
     USING_LIDAR(false),
 
     /**
+     * Si on utilise l'électron
+     */
+    USING_ELECTRON(false),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),
@@ -80,6 +79,8 @@ public enum ConfigData implements ConfigInfo
     LIDAR_DATA_PORT(17865),
     BALISE_IP("127.0.0.1"),
     BALISE_PORT(1111),
+    ELECTRON_IP("192.168.1.69"),
+    ELECTRON_PORT(18900),
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
@@ -93,6 +94,8 @@ public enum ConfigData implements ConfigInfo
      */
     PING_INTERVAL(100), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
     PING_TIMEOUT(500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
+
+    LOCOMOTION_OBSTRUCTED_TIMEOUT(2000),
 
     SCORE_UPDATE_PERIOD(100), // période entre deux mises à jour de l'affichage du score
 

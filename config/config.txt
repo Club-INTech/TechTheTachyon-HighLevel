@@ -1,8 +1,4 @@
 [Common]
-# PARAMETRES POUR LOG
-PRINT_LOG                           = true
-SAVE_LOG                            = true
-
 # DIMENSIONS DE L'ADVERSAIRE
 ENNEMY_RAY                          = 220
 
@@ -13,12 +9,14 @@ NBR_NOEUDS_CIRCLE                   = 14
 ESPACEMENT_CIRCLE                   = 1.2
 
 #Couleur
-COULEUR                             =violet
+COULEUR                             =jaune
 
 #CHEMIN D'EXECUTION DU PROCESSUS LIDAR
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
+SIMULATION                          =false
 USING_LIDAR                         =true
+USING_ELECTRON                      =false
 
 #________________________________________________________________________________________________________________________
 

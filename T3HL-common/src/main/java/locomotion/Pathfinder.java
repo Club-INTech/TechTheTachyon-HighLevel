@@ -109,7 +109,8 @@ public class Pathfinder implements Service {
 
             lastAim = aim;
 
-/*
+            gScore.put(start, 0.0);
+
             // Tant qu'il y a des noeuds à visiter
             while (!openList.isEmpty()) {
                 currentNode = openList.poll();
@@ -148,18 +149,24 @@ public class Pathfinder implements Service {
                                 closedList.remove(neighbour);
                                 openList.add(neighbour);
                             }
+
+                            double heuristicNeighbour = neighbour.costTo(aim);
+                            heuristiques.put(neighbour, gScore.get(neighbour) + heuristicNeighbour);
                         } else if (!visited) {
                             // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
                             gScore.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             openList.add(neighbour);
+
+                            double heuristicNeighbour = neighbour.costTo(aim);
+                            heuristiques.put(neighbour, gScore.get(neighbour) + heuristicNeighbour);
                         }
                     }
 
                 }
                 closedList.add(currentNode);
-            }*/
-
+            }
+/*
             // Theta*
             // https://en.wikipedia.org/wiki/Theta*
             closedList.clear();
@@ -193,7 +200,7 @@ public class Pathfinder implements Service {
                         updateVertex(aim, s, neighbour);
                     }
                 }
-            }
+            }*/
             throw new NoPathFound(start.getPosition(), aim.getPosition());
         } finally {
             graphe.readLock().unlock();
@@ -208,9 +215,6 @@ public class Pathfinder implements Service {
             canUseParent =  ! parent.equals(s) && lineOfSight != null && lineOfSight.isReachable(graphe);
             if(canUseParent) { // différence avec A* => on regarde s'il est possible d'y aller en ligne droite
                 s = parent;
-                if(s.getPosition().getX() > 0) {
-              //      System.err.println("s: "+s+"; parent: "+parent);
-                }
             }
             updateOpenListIfNecessary(aim, s, neighbour);
         } while(canUseParent);

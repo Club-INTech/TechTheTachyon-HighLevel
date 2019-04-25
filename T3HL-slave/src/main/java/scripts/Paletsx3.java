@@ -5,7 +5,7 @@ import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
-import robot.Master;
+import robot.Slave;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -28,7 +28,7 @@ public class Paletsx3 extends Script{
     };
 
 
-    public Paletsx3(Master robot, Table table) {
+    public Paletsx3(Slave robot, Table table) {
         super(robot, table);
     }
 
@@ -48,7 +48,7 @@ public class Paletsx3 extends Script{
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
 
-                ((Master) robot).pushPaletDroit(couleur); // TODO
+                robot.pushPaletDroit(couleur); // TODO
                 robot.followPathTo(positions[j]);
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
@@ -59,7 +59,7 @@ public class Paletsx3 extends Script{
             CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-            ((Master) robot).pushPaletDroit(couleur); // TODO
+            robot.pushPaletDroit(couleur); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }
@@ -77,6 +77,8 @@ public class Paletsx3 extends Script{
     public void finalize(Exception e) { }
 
     @Override
-    public void updateConfig(Config config) { }
+    public void updateConfig(Config config) {
+        super.updateConfig(config);
+    }
 
 }

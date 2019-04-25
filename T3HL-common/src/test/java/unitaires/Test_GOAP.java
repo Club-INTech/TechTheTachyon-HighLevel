@@ -5,7 +5,6 @@ import data.XYO;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pfg.config.Config;
 import utils.Container;
 import utils.Log;
 import utils.math.Vec2;
@@ -36,7 +35,7 @@ public class Test_GOAP {
     public void init() {
         Container container = Container.getInstance("Master");
         Assert.assertNotNull(container.getConfig());
-        Log.init(container.getConfig());
+        Log.init();
         getAxe = new Action() {
             {
                 preconditions.put("axe in inventory", false);

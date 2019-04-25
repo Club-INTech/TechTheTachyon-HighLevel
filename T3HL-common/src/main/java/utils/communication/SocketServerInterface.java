@@ -71,12 +71,14 @@ public class SocketServerInterface extends SocketInterface {
                                 Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
                                 initBuffers();
                                 Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
+                                send("ping");
                             } catch (SocketTimeoutException e) {
                                 e.printStackTrace();
                             }
                         }
                     } catch (IOException | CommunicationException e) {
                         e.printStackTrace();
+                        Log.COMMUNICATION.critical("Socket error: "+e.getMessage());
                         if(e instanceof SocketException) {
                             if(((SocketException) e).getMessage().contains("Socket is closed")) {
                                 break;
