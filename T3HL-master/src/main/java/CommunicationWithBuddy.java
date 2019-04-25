@@ -11,6 +11,7 @@ import utils.communication.CommunicationException;
 import utils.container.Service;
 import utils.math.Vec2;
 
+import java.util.List;
 import java.util.Locale;
 
 public class CommunicationWithBuddy implements Service {
@@ -40,10 +41,10 @@ public class CommunicationWithBuddy implements Service {
     }
 
     /**
-     * Envoie un message à buddy. NE REESSAYE PAS EN CAS D'ERREUR POUR EVITER UN BLOCAGE
+     * Envoie un message au robot coéquipier. NE REESSAYE PAS EN CAS D'ERREUR POUR EVITER UN BLOCAGE
      * @param message message à envoyer tel quel
      */
-    public void sendString(String message) {
+    private void sendString(String message) {
         try {
             buddyConnection.send(message);
             Log.ORDERS.debug("Sent to BUDDY: "+message);
@@ -70,11 +71,26 @@ public class CommunicationWithBuddy implements Service {
     }
 
     /**
-     * Envoie une confirmation de palet pris au robot secondaire
+     * Envoie une confirmation de palet pris au robot coéquipier
      * @param palet quel palet a été pris
      */
     public void sendPaletPris(Palet palet){
         this.sendString(String.format(Locale.US, "%s %d", Channel.BUDDY_PALETS, palet.getId()));
+    }
+
+    /**
+     * Envoie la liste des positions composant le chemin actuel du robot coéquipier
+     * @param path liste de Vec2 à envoyer
+     */
+    public void sendPath(List<Vec2> path){
+        StringBuilder serializePath = new StringBuilder();
+        for (Vec2 vec2 : path){
+            serializePath.append(vec2.getX());
+            serializePath.append(" ");
+            serializePath.append(vec2.getY());
+            serializePath.append(" ");
+        }
+        this.sendString(serializePath.toString());
     }
 
     @Override
