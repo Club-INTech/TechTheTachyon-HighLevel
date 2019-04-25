@@ -92,8 +92,8 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
 
-        Vec2 center = new VectCartesian(0, 500);
-        Vec2 edge = new VectCartesian(1000, 500);
+        Vec2 center = new VectCartesian(-300, 500);
+        Vec2 edge = new VectCartesian(1200, 500);
         while(true) {
             try {
                 robot.followPathTo(center);
