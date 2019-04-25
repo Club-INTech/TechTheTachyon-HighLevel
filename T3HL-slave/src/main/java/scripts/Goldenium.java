@@ -1,7 +1,7 @@
 package scripts;
 
 import data.Table;
-import locomotion.UnableToMoveException;
+import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
@@ -9,54 +9,63 @@ import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
 
+// TODO Mettre ce script dans le code du slave
 public class Goldenium extends Script {
 
-    /**
-     * Construit un script
-     *
-     * @param robot le robot
-     * @param table
-     */
-    /**
-     * Position d'entrée du script
-     */
+    //position d'entrée
 
-    //Valeurs à ajuster pour le robot secondaire
-    private int xEntry = -700; //a vérifier
-    private int yEntry = 300 ; // distance à verifier
+    private int xEntry = -725; //a tester
+    private int yEntry = 250 ; //a tester
 
-    /**
-     * constante
-     */
-    protected Goldenium(Slave robot, Table table) {
+    //position de fin
+
+    private int xBalance = 137; //a tester
+    private int yBalance = 1385; //a tester (vraie valeur: 1388)
+
+    //paramètres
+
+    private final VectCartesian positionDepart;
+    private final VectCartesian positionBalance;
+
+
+    public Goldenium(Slave robot, Table table) {
         super(robot, table);
+        positionDepart = new VectCartesian(xEntry, yEntry);
+        positionBalance = new VectCartesian(xBalance, yBalance);
     }
 
     @Override
     public void execute(Integer version) {
         //attention il n'y qu'une seule pompe sur le robot secondaire
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM);
+        robot.followPathTo(positionDepart);
+        robot.turn(-Math.PI/2);
 
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+        // FIXME: insérer position stockage goldenium
         robot.increaseScore(20);
+
+
+        robot.followPathTo(positionBalance);
+        robot.turn(Math.PI/2);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+        robot.increaseScore(24);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+
 
     }
 
     @Override
     public Shape entryPosition(Integer version) {
-        {
-            return new Circle(new VectCartesian(xEntry, yEntry), 42);
-        }
+        return new Circle(new VectCartesian(xEntry, yEntry), 5);
     }
 
     @Override
     public void finalize(Exception e) {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.setSpeed(Speed.DEFAULT_SPEED);
     }
 
     @Override
