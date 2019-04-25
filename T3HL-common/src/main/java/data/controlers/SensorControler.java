@@ -326,7 +326,7 @@ public class SensorControler extends Thread implements Service {
         for(int i=0; i < pathString.length; i+=2){
             path.add(new VectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
         }
-        //TODO : metter à jour une variable permettant de savoir quel chemin utilise buddy
+        BuddyState.CHEMIN_BUDDY.setData(path);
     }
 
     /**
@@ -347,7 +347,8 @@ public class SensorControler extends Thread implements Service {
         String[] scriptString = message.split(ARGUMENTS_SEPARATOR);
         String script = scriptString[0];
         int version = Integer.parseInt(scriptString[1]);
-        //TODO : metter à jour une variable permettant de savoir quel script nous est ordonné (de préférence une liste)
+        BuddyState.CURRENT_SCRIPT_NAME.setData(script);
+        BuddyState.CURRENT_SCRIPT_VERSION.setData(version);
     }
 
 
