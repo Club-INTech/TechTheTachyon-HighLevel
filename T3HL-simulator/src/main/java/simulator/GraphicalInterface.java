@@ -601,4 +601,8 @@ public class GraphicalInterface extends JFrame {
     public float getTimeScale() {
         return timeScale;
     }
+
+    public void resetTimer() {
+        this.startTime = System.currentTimeMillis();
+    }
 }

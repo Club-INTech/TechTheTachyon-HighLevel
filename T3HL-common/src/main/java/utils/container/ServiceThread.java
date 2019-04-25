@@ -19,5 +19,4 @@ public abstract class ServiceThread extends Thread implements Service {
         return getClass().getSimpleName();
     }
 
-
 }

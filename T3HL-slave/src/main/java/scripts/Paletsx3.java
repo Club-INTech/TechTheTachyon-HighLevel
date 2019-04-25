@@ -77,6 +77,8 @@ public class Paletsx3 extends Script{
     public void finalize(Exception e) { }
 
     @Override
-    public void updateConfig(Config config) { }
+    public void updateConfig(Config config) {
+        super.updateConfig(config);
+    }
 
 }

@@ -42,7 +42,11 @@ public class LogPrintStream extends PrintStream {
         // on récupère ce qui a été écrit et on le transmet
         ByteArrayOutputStream baos = (ByteArrayOutputStream) this.out;
         String message = new String(baos.toByteArray());
-        writingFunction.write(logger, message.substring(0, message.length()-1 /* Retrait du \n de fin */), 2);
+        if(message.length() == 0) {
+            writingFunction.write(logger, "", 2);
+        } else {
+            writingFunction.write(logger, message.substring(0, message.length()-1 /* Retrait du \n de fin */), 2);
+        }
         baos.reset(); // reset pour libérer la place
     }
 

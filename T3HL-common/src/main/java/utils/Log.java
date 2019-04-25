@@ -72,6 +72,7 @@ public enum Log
      * Sortie standard d'erreur
      */
     private static PrintStream stderr = System.err;
+    private static int counter;
 
     /**
      * Faut-il afficher le header complet dans les logs pour ce logger? ('false' uniquement pour STDERR)
@@ -239,8 +240,10 @@ public enum Log
         ;
         if(active) {
             severity.activeOutput.println(this.toLog.toString());
+            severity.activeOutput.flush();
         } else {
             severity.nonactiveOutput.println(this.toLog.toString());
+            severity.nonactiveOutput.flush();
         }
     }
 
@@ -256,6 +259,41 @@ public enum Log
         }
         if(stderr == null) {
             stderr = System.err;
+        }
+
+        stdout.println("Initialisation du compteur...");
+        File counterFile = new File("../logs/counter");
+
+        counter = 0;
+        if(counterFile.exists()) {
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(counterFile));
+                try {
+                    counter = Integer.parseInt(reader.readLine());
+                } catch (NumberFormatException e) {
+                    stderr.println("Erreur lors de la lecture du compteur");
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                stderr.println("Erreur lors de l'initialisation du compteur");
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                counterFile.createNewFile();
+            } catch (IOException e) {
+                stderr.println("Erreur lors de la création du fichier du compteur");
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            PrintStream printer = new PrintStream(counterFile);
+            printer.println(counter+1);
+            printer.close();
+        } catch (FileNotFoundException e) {
+            stderr.println("Erreur lors de l'incrémentation du compteur");
+            e.printStackTrace();
         }
 
         // création du dossier de logs si besoin
@@ -321,7 +359,7 @@ public enum Log
      */
     private static OutputStream attemptInitLogOutput(String suffix) {
         // dossier d'exécution usuel: 'bin/'
-        String date = calendar.getTime().toString();
+        String date = calendar.getTime().toString()+" #"+counter;
         String filename;
         if(suffix == null || suffix.isEmpty()) {
             filename = "./../logs/"+date+".log";
