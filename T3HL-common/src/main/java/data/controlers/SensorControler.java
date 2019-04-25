@@ -297,6 +297,7 @@ public class SensorControler extends Thread implements Service {
         if (-Math.PI/2 < orien && orien < Math.PI/2) {
             newOrientation -= Math.PI;
         }
+        newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
         Sick.setNewXYO(newXYO);
     }
