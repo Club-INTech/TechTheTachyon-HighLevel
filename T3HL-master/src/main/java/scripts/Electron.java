@@ -33,9 +33,9 @@ public class Electron extends Script{
 
 
             Log.ELECTRON.debug("Thread sending activating order started");
-            while (!SensorState.ELECTRON_ACTIVATED.getData()) {
+            while ((!SensorState.ELECTRON_ACTIVATED.getData()) && (!SensorState.ELECTRON_ARRIVED.getData()) ) {
                 try {
-                    Connection.ELECTRON.send("Launch");
+                    Connection.ELECTRON.send("electron_launch");
                 } catch (CommunicationException e) {
                     e.printStackTrace();
                 }
