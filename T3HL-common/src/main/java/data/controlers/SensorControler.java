@@ -257,22 +257,27 @@ public class SensorControler extends Thread implements Service {
 
             if (symetrie) {
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
-                teta = Math.atan(rapport);
-                xCalcule = (int) Math.round((1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
+                        teta = Math.atan(rapport);
                         yCalcule = (int) Math.round((2000 - (sickMeasurements[significantSicks[2].getIndex()]+ vectsick.getY()+offsetSick) * Math.cos(teta)));
                     } else {
+                        teta = Math.atan(-rapport);
                         yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta)));
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
+                        teta = Math.atan(rapport);
                         yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     } else {
+                        teta = Math.atan(-rapport);
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
 
+
                 }
+                xCalcule = (int) Math.round(-(1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
+                teta = Math.PI-teta;
             } else {
                 System.out.println(orien);
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
