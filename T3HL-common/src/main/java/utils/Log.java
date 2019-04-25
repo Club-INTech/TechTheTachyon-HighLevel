@@ -42,6 +42,7 @@ public enum Log
     TABLE(false),
     AI(true),
     ELECTRON(true),
+    POSITION(false),
 
     // sorties standard
     STDOUT(true),
