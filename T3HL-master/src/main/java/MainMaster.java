@@ -95,8 +95,12 @@ public class MainMaster extends RobotEntryPoint {
         Vec2 center = new VectCartesian(0, 500);
         Vec2 edge = new VectCartesian(1000, 500);
         while(true) {
-            robot.followPathTo(center);
-            robot.followPathTo(edge);
+            try {
+                robot.followPathTo(center);
+                robot.followPathTo(edge);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
 
             try {
                 Thread.sleep(50);

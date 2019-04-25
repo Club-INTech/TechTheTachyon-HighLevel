@@ -231,7 +231,7 @@ public class Locomotion implements Service {
             try {
                 try {
                     graphe.readLock().lock();
-                    path = pathfinder.findPath(start, aim);
+                    path = pathfinder.findPath(start, aim); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
                 }
                 finally {
                     graphe.readLock().unlock();
