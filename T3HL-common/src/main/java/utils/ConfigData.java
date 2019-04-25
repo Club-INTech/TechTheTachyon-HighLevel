@@ -40,7 +40,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Couleur
      */
-    COULEUR("violet"),
+    COULEUR("jaune"),
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)
@@ -94,6 +94,8 @@ public enum ConfigData implements ConfigInfo
      */
     PING_INTERVAL(100), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
     PING_TIMEOUT(500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
+
+    LOCOMOTION_OBSTRUCTED_TIMEOUT(2000),
 
     SCORE_UPDATE_PERIOD(100), // période entre deux mises à jour de l'affichage du score
 

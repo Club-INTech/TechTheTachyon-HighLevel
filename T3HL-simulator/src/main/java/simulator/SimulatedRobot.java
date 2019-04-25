@@ -333,8 +333,11 @@ public class SimulatedRobot implements IRobot {
 
     /** Fait arrêter le robot */
     void stop(){
+        this.positionTarget.set(position);
         this.positionTarget=this.position;
         this.orientationTarget=this.orientation;
+        turning = false;
+        forwardOrBackward = false;
         this.forceRaiseStoppedMovingFlag();
     }
 

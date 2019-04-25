@@ -112,6 +112,7 @@ public class ScriptZoneDepartPreCoupe extends Script{
 
         @Override
         public void updateConfig(Config config) {
+            super.updateConfig(config);
         }
 
 

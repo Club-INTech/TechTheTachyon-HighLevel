@@ -18,7 +18,6 @@
 
 package robot;
 
-import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
@@ -183,7 +182,7 @@ public abstract class Robot implements Service {
      *              en cas de problèmes de blocage/adversaire
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        this.locomotion.moveLenghtwise(distance, expectedWallImpact);
+        this.locomotion.moveLengthwise(distance, expectedWallImpact);
     }
 
     /**
@@ -489,7 +488,7 @@ public abstract class Robot implements Service {
     public void updateConfig(Config config) {
         loopSleepTime = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
         inSimulation = config.getBoolean(ConfigData.SIMULATION);
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
         isMaster = config.getBoolean(ConfigData.MASTER);
     }
 }

@@ -324,7 +324,7 @@ public class OrderWrapper implements Service {
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;

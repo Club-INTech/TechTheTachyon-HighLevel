@@ -287,6 +287,7 @@ public class precoupeAccelerateurx6 extends Script {
 
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
     }
 
 }

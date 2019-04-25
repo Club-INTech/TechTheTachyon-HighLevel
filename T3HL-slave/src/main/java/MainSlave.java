@@ -53,10 +53,10 @@ public class MainSlave extends RobotEntryPoint {
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = container.getService(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-                debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
-            } else {
                 // TODO: LL Slave Simulateur?
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            } else {
+                debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
             }
         }
 

@@ -76,17 +76,17 @@ public class PaletsX6 extends Script {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //
                 robot.followPathTo(position);
-                robot.turn(0);
+                robot.turn(Math.PI);
 
                 // on suposse que l'ascenseur est monté au mx au début
 
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
                 //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 if(version == 0) {
                     // TODO
                     robot.pushPaletDroit(CouleurPalet.ROUGE);
@@ -139,5 +139,6 @@ public class PaletsX6 extends Script {
     }
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
     }
 }

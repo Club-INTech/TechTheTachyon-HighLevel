@@ -10,7 +10,8 @@ public enum ScriptNamesMaster implements ScriptNames {
     PALETS_ZONE_DEPART(PaletsZoneDepart.class, "palets_zone_depart"),
     PALETS_ZONE_CHAOS(ScriptPaletsZoneChaos.class, "palet_zone_chaos"),
     HOMOLOGATION(ScriptHomologation.class, "homologation"),
-    PRECOUPE_ACC(precoupeAccelerateurx6.class, "precoupeAccelerateurx6");
+    PRECOUPE_ACC(precoupeAccelerateurx6.class, "precoupeAccelerateurx6"),
+    ;
 
     private Class<? extends Service> scriptClass;
     private String scriptName;

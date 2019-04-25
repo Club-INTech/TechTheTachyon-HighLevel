@@ -104,7 +104,7 @@ public abstract class RobotEntryPoint {
             } else {
                 Log.STRATEGY.critical("PAS DE PANNEAU");
             }
-            container.getConfig().override(ConfigData.COULEUR, "violet");
+//            container.getConfig().override(ConfigData.COULEUR, "jaune");
             Log.STRATEGY.debug("Couleur: "+container.getConfig().getString(ConfigData.COULEUR));
             scriptManager = container.getService(scriptManagerClass);
             connectionManager = container.getService(ConnectionManager.class);
