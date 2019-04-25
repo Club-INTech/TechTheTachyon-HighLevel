@@ -159,9 +159,7 @@ public class LidarControler extends ServiceThread {
                 }
                 // on ajoute l'obstacle que s'il est dans la table
                 if(tableBB.isInShape(obstacleCenter)) {
-                    if(timer.getTimeElapsed() >= 30*1000) {
-                        mobileObstacles.add(obstacleCenter);
-                    }
+                    mobileObstacles.add(obstacleCenter);
                 }
             }
             //table.getGraphe().writeLock().lock();
