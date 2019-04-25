@@ -237,7 +237,6 @@ public class Locomotion implements Service {
                     graphe.readLock().unlock();
                 }
 
-
                 // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
                 // ce thread pourrait être interrompu entre le addAll et le clear ;(
                 // ça a pas beaucoup de conséquences dans notre cas mais si on peut sauver 20ms au HL, c'est pas mal (cf Thread.sleep(20) de PathFollower)

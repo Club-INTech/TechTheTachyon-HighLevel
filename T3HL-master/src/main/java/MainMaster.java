@@ -88,7 +88,7 @@ public class MainMaster extends RobotEntryPoint {
         table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
         table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
         table.updateTableAfterFixedObstaclesChanges();
-     //   table.removeAllChaosObstacles();
+        table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
 
