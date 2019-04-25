@@ -31,6 +31,7 @@ public enum ActuatorsOrder implements Order {
     FERME_PORTE_ARRIERE("flpAr"),
     FERME_PORTE_DROITE("flpd"),
     FERME_PORTE_GAUCHE("flpg"),
+    ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR("pos musclor"),
     ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_INTERMEDIAIRE("posinter right"),
     ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE("posinter left"),
     ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_INTERMEDIAIRE("posinter right"),

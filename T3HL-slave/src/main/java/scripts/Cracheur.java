@@ -45,7 +45,7 @@ public class Cracheur extends Script {
         }
     }
     @Override //à adapter
-    public Shape entryPosition(Integer version) { return new Circle(new VectCartesian(xEntry, yEntry), 1000); }
+    public Shape entryPosition(Integer version) { return new Circle(new VectCartesian(xEntry, yEntry), 5); }
 
     @Override
     public void finalize(Exception e) { }
