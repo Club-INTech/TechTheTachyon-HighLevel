@@ -13,9 +13,13 @@ import utils.math.VectCartesian;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Gère les données de positions et de capteur ne nécessitant pas de traitement
@@ -41,16 +45,9 @@ public class SensorControler extends Thread implements Service {
     private MatchTimer timer;
 
     /**
-     * Files de communication avec le Listener
+     * Liste des ChannelHandlers
      */
-    private ConcurrentLinkedQueue<String> robotPosQueue;
-    private ConcurrentLinkedQueue<String> buddyPosQueue;
-    private ConcurrentLinkedQueue<String> buddyPathQueue;
-    private ConcurrentLinkedQueue<String> buddyScriptOrderQueue;
-    private ConcurrentLinkedQueue<String> buddyPaletsQueue;
-    private ConcurrentLinkedQueue<String> eventData;
-    private ConcurrentLinkedQueue<String> sickData;
-    private ConcurrentLinkedQueue<String> couleurPalet;
+    private ArrayList<ChannelHandler> channelHandlers = new ArrayList<ChannelHandler>();
 
     /**
      * True si autre couleur
@@ -82,14 +79,6 @@ public class SensorControler extends Thread implements Service {
     public SensorControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
         this.timer = timer;
-        this.robotPosQueue = new ConcurrentLinkedQueue<>();
-        this.buddyPosQueue = new ConcurrentLinkedQueue<>();
-        this.buddyPathQueue = new ConcurrentLinkedQueue<>();
-        this.buddyScriptOrderQueue = new ConcurrentLinkedQueue<>();
-        this.buddyPaletsQueue = new ConcurrentLinkedQueue<>();
-        this.eventData=new ConcurrentLinkedQueue<>();
-        this.sickData=new ConcurrentLinkedQueue<>();
-        this.couleurPalet =new ConcurrentLinkedQueue<>();
         /*
         this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
         sickWriter.print("Indice");
@@ -97,14 +86,23 @@ public class SensorControler extends Thread implements Service {
             sickWriter.print("\t"+sick.name());
         }
         sickWriter.println();*/
-        listener.addQueue(Channel.ROBOT_POSITION, robotPosQueue);
-        listener.addQueue(Channel.BUDDY_POSITION, buddyPosQueue);
-        listener.addQueue(Channel.BUDDY_PATH, buddyPathQueue);
-        listener.addQueue(Channel.BUDDY_SCRIPT_ORDER, buddyScriptOrderQueue);
-        listener.addQueue(Channel.BUDDY_PALETS, buddyPaletsQueue);
-        listener.addQueue(Channel.EVENT, eventData);
-        listener.addQueue(Channel.SICK, sickData);
-        listener.addQueue(Channel.COULEUR_PALET_PRIS, couleurPalet);
+        registerChannelHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
+        registerChannelHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
+        registerChannelHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
+        registerChannelHandler(Channel.BUDDY_PALETS, this::handleBuddyPalet);
+        registerChannelHandler(Channel.BUDDY_SCRIPT_ORDER, this::handleBuddyScriptOrder);
+        registerChannelHandler(Channel.EVENT, this::handleEvent);
+        registerChannelHandler(Channel.SICK, this::handleSick);
+        registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
+    }
+
+    /**
+     * Fonction de liaison entre un channel et une fonction traitant les messages reçus
+     * @param channel channel à lier
+     * @param function fonction à lier
+     */
+    private void registerChannelHandler(Channel channel, Consumer<String> function){
+        this.channelHandlers.add(new ChannelHandler(this.listener, channel, function));
     }
 
     @Override
@@ -120,29 +118,8 @@ public class SensorControler extends Thread implements Service {
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
         while (!Thread.currentThread().isInterrupted()) {
-            if (!robotPosQueue.isEmpty()){
-                handleRobotPos();
-            }
-            if (!sickData.isEmpty()){
-                handleSick();
-            }
-            if (!eventData.isEmpty()){
-                handleEvent();
-            }
-            if (!couleurPalet.isEmpty()){
-                handleCouleurPalet();
-            }
-            if (!buddyPosQueue.isEmpty()){
-                handleBuddyPos();
-            }
-            if (!buddyPathQueue.isEmpty()){
-                handleBuddyPath();
-            }
-            if (!buddyPaletsQueue.isEmpty()){
-                handleBuddyPalets();
-            }
-            if (!buddyScriptOrderQueue.isEmpty()){
-                handleBuddyScriptOrder();
+            for (ChannelHandler channelHandler : this.channelHandlers){
+                channelHandler.checkAndHandle();
             }
         }
     }
@@ -150,8 +127,8 @@ public class SensorControler extends Thread implements Service {
     /**
      * POSITION
      */
-    private void handleRobotPos() {
-        String[] coordonates = robotPosQueue.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleRobotPos(String message) {
+        String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
@@ -169,13 +146,11 @@ public class SensorControler extends Thread implements Service {
     /**
      * EVENT
      */
-    private void handleEvent() {
-        String[] event;
-        String data = eventData.poll();
-        if (!data.equals("pong")) { // ne log pas les pongs
-            Log.COMMUNICATION.debug("Got event from LL: " + data);
+    private void handleEvent(String message) {
+        if (!message.equals("pong")) { // ne log pas les pongs
+            Log.COMMUNICATION.debug("Got event from LL: " + message);
         }
-        event = data.split(ARGUMENTS_SEPARATOR);
+        String[] event = message.split(ARGUMENTS_SEPARATOR);
         switch (event[0]) {
             case "pong":
                 SensorState.LAST_PONG.setData(System.currentTimeMillis());
@@ -229,8 +204,8 @@ public class SensorControler extends Thread implements Service {
     /**
      * SICK
      */
-    private void handleSick(){
-        String[] sickMeasurementsStr = sickData.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleSick(String message){
+        String[] sickMeasurementsStr = message.split(ARGUMENTS_SEPARATOR);
         System.out.println("=== SICK ===");
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
@@ -325,24 +300,23 @@ public class SensorControler extends Thread implements Service {
     /**
      * COULEUR_PALETS
      */
-    private void handleCouleurPalet(){
-        String couleur = couleurPalet.poll();
-        CouleurPalet.setCouleurPalRecu(couleur);
+    private void handleCouleurPalet(String message){
+        CouleurPalet.setCouleurPalRecu(message);
     }
 
     /**
      * BUDDY : position
      */
-    private void handleBuddyPos(){
-        String[] coordonates = buddyPosQueue.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleBuddyPos(String message){
+        String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
         XYO.getBuddyInstance().update(Integer.parseInt(coordonates[0]), Integer.parseInt(coordonates[1]), Double.parseDouble(coordonates[2]));
     }
 
     /**
      * BUDDY : chemin du buddy
      */
-    private void handleBuddyPath(){
-        String[] pathString = buddyPathQueue.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleBuddyPath(String message){
+        String[] pathString = message.split(ARGUMENTS_SEPARATOR);
         ArrayList<Vec2> path = new ArrayList<Vec2>();
         for(int i=0; i < pathString.length; i+=2){
             path.add(new VectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
@@ -353,8 +327,8 @@ public class SensorControler extends Thread implements Service {
     /**
      * BUDDY : palets pris par le buddy
      */
-    private void handleBuddyPalets(){
-        String[] paletsString = buddyPaletsQueue.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleBuddyPalet(String message){
+        String[] paletsString = message.split(ARGUMENTS_SEPARATOR);
         Palet palet = Palet.getPaletById(Integer.parseInt(paletsString[0]));
         if (palet != null) {
             palet.setPaletPris(true);
@@ -364,8 +338,8 @@ public class SensorControler extends Thread implements Service {
     /**
      * BUDDY : ordres donnés par le principal
      */
-    private void handleBuddyScriptOrder(){
-        String[] scriptString = buddyScriptOrderQueue.poll().split(ARGUMENTS_SEPARATOR);
+    private void handleBuddyScriptOrder(String message){
+        String[] scriptString = message.split(ARGUMENTS_SEPARATOR);
         String script = scriptString[0];
         int version = Integer.parseInt(scriptString[1]);
         //TODO : metter à jour une variable permettant de savoir quel script nous est ordonné (de préférence une liste)
