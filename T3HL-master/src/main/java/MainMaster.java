@@ -89,11 +89,13 @@ public class MainMaster extends RobotEntryPoint {
      //   table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
+
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
+
     }
 
     private void initSimulator(){
