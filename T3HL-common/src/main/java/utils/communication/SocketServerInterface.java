@@ -72,6 +72,7 @@ public class SocketServerInterface extends SocketInterface {
                                 initBuffers();
                                 Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
                                 send("ping");
+                                Log.COMMUNICATION.debug("Initialized connection with a 'ping'");
                             } catch (SocketTimeoutException e) {
                                 e.printStackTrace();
                             }
