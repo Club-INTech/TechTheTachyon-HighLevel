@@ -210,7 +210,7 @@ public class PathFollower extends ServiceThread {
             }
 
             travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
-        } while (travelledDistance != distance);
+        } while (Math.abs(travelledDistance-distance) <= 5);
     }
 
     /**
