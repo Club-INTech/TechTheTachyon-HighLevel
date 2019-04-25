@@ -24,7 +24,7 @@ public class PanneauService implements Service {
                 couleur=panel.getTeamColor().toString();
                 System.out.println(panel.getTeamColor());
             });
-        }catch (IOException e){
+        }catch (IOException | I2CFactory.UnsupportedBusNumberException e){
             e.printStackTrace();
         }*/
     }
