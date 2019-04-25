@@ -255,12 +255,11 @@ public class SensorControler extends Thread implements Service {
             VectCartesian vectsick = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
             double orien= XYO.getRobotInstance().getOrientation();
 
-            // TODO: TESTME
             if (symetrie) {
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 teta = Math.atan(rapport);
                 xCalcule = (int) Math.round((1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
-                if (-Math.PI/2 < orien && orien < Math.PI/2) { //modifier car arctan est toujours inférieur à PI
+                if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
                         yCalcule = (int) Math.round((2000 - (sickMeasurements[significantSicks[2].getIndex()]+ vectsick.getY()+offsetSick) * Math.cos(teta)));
                     } else {
