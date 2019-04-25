@@ -21,7 +21,7 @@ public class Match extends Script {
     public void execute(Integer version) {
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
+//        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
         scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
     }
 
