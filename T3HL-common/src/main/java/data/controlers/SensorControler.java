@@ -11,15 +11,9 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Gère les données de positions et de capteur ne nécessitant pas de traitement
@@ -87,10 +81,10 @@ public class SensorControler extends Thread implements Service {
         }
         sickWriter.println();*/
         registerChannelHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
-        registerChannelHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
+        registerChannelHandler(Channel.OTHER_POSITION, this::handleBuddyPos);
         registerChannelHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
-        registerChannelHandler(Channel.BUDDY_PALETS, this::handleBuddyPalet);
-        registerChannelHandler(Channel.BUDDY_SCRIPT_ORDER, this::handleBuddyScriptOrder);
+        registerChannelHandler(Channel.UPDATE_PALETS, this::handleBuddyPalet);
+        registerChannelHandler(Channel.SCRIPTS, this::handleBuddyScriptOrder);
         registerChannelHandler(Channel.EVENT, this::handleEvent);
         registerChannelHandler(Channel.SICK, this::handleSick);
         registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);

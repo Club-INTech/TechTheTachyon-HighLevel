@@ -24,7 +24,6 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
-import utils.container.Service;
 import utils.container.ServiceThread;
 
 import java.util.HashMap;
@@ -32,7 +31,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Ecoute toutes les connections instanciées
@@ -191,7 +189,7 @@ public class Listener extends ServiceThread {
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
                                 if(buddy.isInitiated()) {
-                                    buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                                    buddy.send(String.format("%s%s", Channel.OTHER_POSITION.getHeaders(), message));
                                 }
                             }
                         }

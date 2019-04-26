@@ -27,11 +27,11 @@ public enum Channel {
     LIDAR('!', '!'),
     COULEUR_PALET_PRIS('!', '&'),
     PALETS_POSITION('!', '-'),
-    BUDDY_PATH('!', 'C'),
-    BUDDY_SCRIPT_ORDER('!', 'O'),
-    BUDDY_PALETS('!', 'H'),
-    BUDDY_POSITION('!', '#'),
+    SCRIPTS('!', 'O'),
+    UPDATE_PALETS('!', 'H'),
+    OTHER_POSITION('!', '#'),
     ROBOT_POSITION('@', 'P'),
+    BUDDY_PATH('!', 'C'),
     EVENT('@', 'B'),
     SICK('@', 'A'),
     ;
@@ -42,7 +42,7 @@ public enum Channel {
     private String headers;
 
     /**
-     * Consruit un cannal de com
+     * Consruit un canal de com
      * @param h1    char 1
      * @param h2    char 2
      */
