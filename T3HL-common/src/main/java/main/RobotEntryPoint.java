@@ -23,7 +23,7 @@ import data.Table;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
 import data.controlers.PanneauService;
-import data.controlers.SensorControler;
+import data.controlers.DataControler;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Robot;
@@ -45,7 +45,7 @@ public abstract class RobotEntryPoint {
     protected ConnectionManager connectionManager;
     protected OrderWrapper orderWrapper;
     protected Listener listener;
-    protected SensorControler sensorControler;
+    protected DataControler dataControler;
     protected LidarControler lidarControler;
     protected Table table;
     protected Robot robot;
@@ -111,8 +111,8 @@ public abstract class RobotEntryPoint {
             orderWrapper = container.getService(OrderWrapper.class);
             listener = container.getService(Listener.class);
             listener.start();
-            sensorControler = container.getService(SensorControler.class);
-            sensorControler.start();
+            dataControler = container.getService(DataControler.class);
+            dataControler.start();
             table = container.getService(Table.class);
             table.initObstacles();
             lidarControler = container.getService(LidarControler.class);

@@ -65,7 +65,7 @@ public abstract class CommunicationDefault implements Service {
      */
     protected void sendPosition(){
         Vec2 currentPos = XYO.getRobotInstance().getPosition();
-        this.sendString(String.format(Locale.US, "%s %d %d", Channel.OTHER_POSITION, currentPos.getX(), currentPos.getY()));
+        this.sendString(String.format(Locale.US, "%s %d %d", Channel.BUDDY_POSITION, currentPos.getX(), currentPos.getY()));
     }
 
     /**

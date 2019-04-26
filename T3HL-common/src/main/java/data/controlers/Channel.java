@@ -29,7 +29,7 @@ public enum Channel {
     PALETS_POSITION('!', '-'),
     SCRIPTS('!', 'O'),
     UPDATE_PALETS('!', 'H'),
-    OTHER_POSITION('!', '#'),
+    BUDDY_POSITION('!', '#'),
     ROBOT_POSITION('@', 'P'),
     BUDDY_PATH('!', 'C'),
     EVENT('@', 'B'),

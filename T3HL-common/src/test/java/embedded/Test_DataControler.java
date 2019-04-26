@@ -20,21 +20,17 @@
 package embedded;
 
 import connection.ConnectionManager;
-import data.Sick;
 import data.XYO;
 import data.controlers.Listener;
-import data.controlers.SensorControler;
+import data.controlers.DataControler;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.ConfigData;
-import utils.MatchTimer;
-import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-public class Test_SensorControler {
+public class Test_DataControler {
 
-    private SensorControler sensorControler;
+    private DataControler dataControler;
 
     private Listener listener;
 
@@ -46,7 +42,7 @@ public class Test_SensorControler {
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
         listener=new Listener(connectionManager);
-        sensorControler=new SensorControler(listener, null);
+        dataControler =new DataControler(listener, null);
     }
 
     @Test

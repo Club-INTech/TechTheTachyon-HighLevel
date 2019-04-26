@@ -28,6 +28,8 @@ public enum RobotState {
     //Exemples
     BRAS_AVANT_DEPLOYE(true),
     BRAS_ARRIERE_DEPLOYE(true),
+    CURRENT_SCRIPT_NAME(""),
+    CURRENT_SCRIPT_VERSION(0),
     ;
     private Object valueObject;
     RobotState(Object valueObject){

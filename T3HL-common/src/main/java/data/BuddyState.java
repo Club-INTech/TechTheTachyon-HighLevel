@@ -30,9 +30,7 @@ import java.util.ArrayList;
 public enum BuddyState {
 
     //Exemples
-    CHEMIN_BUDDY(new ArrayList<Vec2>()),
-    CURRENT_SCRIPT_NAME(""),
-    CURRENT_SCRIPT_VERSION(0),
+    BUDDY_PATH(new ArrayList<Vec2>()),
     ;
     private Object valueObject;
     BuddyState(Object valueObject){

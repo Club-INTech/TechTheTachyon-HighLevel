@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  *
  * @author rem
  */
-public class SensorControler extends Thread implements Service {
+public class DataControler extends Thread implements Service {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -70,7 +70,7 @@ public class SensorControler extends Thread implements Service {
      * @param listener
      *              le listener
      */
-    public SensorControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
+    public DataControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
         this.timer = timer;
         /*
@@ -81,10 +81,10 @@ public class SensorControler extends Thread implements Service {
         }
         sickWriter.println();*/
         registerChannelHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
-        registerChannelHandler(Channel.OTHER_POSITION, this::handleBuddyPos);
+        registerChannelHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
         registerChannelHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
-        registerChannelHandler(Channel.UPDATE_PALETS, this::handleBuddyPalet);
-        registerChannelHandler(Channel.SCRIPTS, this::handleBuddyScriptOrder);
+        registerChannelHandler(Channel.UPDATE_PALETS, this::handlePaletUpdate);
+        registerChannelHandler(Channel.SCRIPTS, this::handleScriptOrder);
         registerChannelHandler(Channel.EVENT, this::handleEvent);
         registerChannelHandler(Channel.SICK, this::handleSick);
         registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
@@ -321,13 +321,13 @@ public class SensorControler extends Thread implements Service {
         for(int i=0; i < pathString.length; i+=2){
             path.add(new VectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
         }
-        BuddyState.CHEMIN_BUDDY.setData(path);
+        BuddyState.BUDDY_PATH.setData(path);
     }
 
     /**
-     * BUDDY : palets pris par le buddy
+     * Update palets
      */
-    private void handleBuddyPalet(String message){
+    private void handlePaletUpdate(String message){
         String[] paletsString = message.split(ARGUMENTS_SEPARATOR);
         Palet palet = Palet.getPaletById(Integer.parseInt(paletsString[0]));
         if (palet != null) {
@@ -338,14 +338,13 @@ public class SensorControler extends Thread implements Service {
     /**
      * BUDDY : ordres donnés par le principal
      */
-    private void handleBuddyScriptOrder(String message){
+    private void handleScriptOrder(String message){
         String[] scriptString = message.split(ARGUMENTS_SEPARATOR);
         String script = scriptString[0];
         int version = Integer.parseInt(scriptString[1]);
-        BuddyState.CURRENT_SCRIPT_NAME.setData(script);
-        BuddyState.CURRENT_SCRIPT_VERSION.setData(version);
+        RobotState.CURRENT_SCRIPT_NAME.setData(script);
+        RobotState.CURRENT_SCRIPT_VERSION.setData(version);
     }
-
 
     @Override
     public void updateConfig(Config config) {

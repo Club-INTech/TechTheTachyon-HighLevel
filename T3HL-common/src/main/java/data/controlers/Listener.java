@@ -189,7 +189,7 @@ public class Listener extends ServiceThread {
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
                                 if(buddy.isInitiated()) {
-                                    buddy.send(String.format("%s%s", Channel.OTHER_POSITION.getHeaders(), message));
+                                    buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
                                 }
                             }
                         }
