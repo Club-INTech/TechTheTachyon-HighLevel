@@ -23,6 +23,7 @@ import data.Table;
 import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.LastElementCollection;
 import utils.Log;
 import utils.MatchTimer;
 import utils.communication.CopyIOThread;
@@ -71,7 +72,7 @@ public class LidarControler extends ServiceThread {
     /**
      * File de communication avec le Listener
      */
-    private Stack<String> messageStack;
+    private LastElementCollection<String> messageStack;
 
     /**
      * True si autre couleur
@@ -94,7 +95,7 @@ public class LidarControler extends ServiceThread {
         this.timer = timer;
         this.table = table;
         this.listener = listener;
-        this.messageStack = new Stack<>();
+        this.messageStack = new LastElementCollection<>();
         listener.addCollection(Channel.LIDAR, this.messageStack);
     }
 
@@ -139,33 +140,32 @@ public class LidarControler extends ServiceThread {
         float margin = 100;
         Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
-            while (messageStack.peek() == null) {
+            while (messageStack.isEmpty()) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            while(!messageStack.isEmpty()) {
-                points = messageStack.pop().split(POINT_SEPARATOR);
-                messageStack.clear();
-                mobileObstacles.clear();
-                for (String point : points) {
-                    Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
-                            Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
-                    if(obstacleCenter.getR() <= robotRadius)
-                        continue;
-                    obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
-                    obstacleCenter.plus(XYO.getRobotInstance().getPosition());
-                    if (symetrie) {
-                        obstacleCenter.symetrize();
-                    }
-                    // on ajoute l'obstacle que s'il est dans la table
-                    if(tableBB.isInShape(obstacleCenter)) {
-                        mobileObstacles.add(obstacleCenter);
-                    }
+            points = messageStack.pop().split(POINT_SEPARATOR);
+            Log.LIDAR_PROCESS.debug(">> Points: ");
+            mobileObstacles.clear();
+            for (String point : points) {
+                Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
+                        Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
+                if(obstacleCenter.getR() <= robotRadius)
+                    continue;
+                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
+                obstacleCenter.plus(XYO.getRobotInstance().getPosition());
+                if (symetrie) {
+                    obstacleCenter.symetrize();
+                }
+                // on ajoute l'obstacle que s'il est dans la table
+                if(tableBB.isInShape(obstacleCenter)) {
+                    mobileObstacles.add(obstacleCenter);
                 }
             }
+            messageStack.clear();
             //table.getGraphe().writeLock().lock();
 
          //   long start = System.currentTimeMillis();
