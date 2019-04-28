@@ -218,6 +218,7 @@ public class DataControler extends Thread implements Service {
         int xCalcule;
         int yCalcule;
         double teta;
+        double newOrientation;
 
         if (isMaster) {
             dsick = 173;
@@ -267,31 +268,50 @@ public class DataControler extends Thread implements Service {
                         yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
                     }
                 }
-                xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()) * Math.cos(teta));
+                xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()+offsetSick) * Math.cos(teta));
+            }
+            newOrientation = teta + Math.PI;
+            if (-Math.PI/2 < orien && orien < Math.PI/2) {
+                newOrientation -= Math.PI;
             }
         }
         else {
+            //TODO mettre la bonne valeure
             dsick = 50;
+            VectCartesian vectSickSecondaire = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
             double rapport = ((double)esick) / dsick;
+            double orien = 0; //TODO récuperer orientation du secondaire
+            //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
             if (symetrie) {
-                // On différencie les cas où le robot est orienté vers la gauche et la droite
+                if(0< orien && orien <Math.PI/2){
+                    teta=Math.atan(rapport);
+                    xCalcule= -1500 + (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
+                    yCalcule=(int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
+                }
+                else{
+                    teta=Math.atan(rapport);//Il faut enlever pi/2
+                    xCalcule=-1500 + (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
+                    yCalcule = 2000 - (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
+                    teta+= -Math.PI/2;
+                }
 
-                teta = Math.atan(rapport);
-                xCalcule = (int) Math.round(1500 - sickMeasurements[1] * Math.cos(teta));
-                yCalcule = (int) Math.round(sickMeasurements[0] * Math.cos(teta));
             } else {
-                teta = Math.PI-Math.atan(rapport);
-                xCalcule = (int) Math.round(sickMeasurements[0] * Math.cos(teta)) - 1500;
-                yCalcule = (int) Math.round(2000 - sickMeasurements[2] * Math.cos(teta));
+                if (-Math.PI/2 < orien && orien <Math.PI){
+                    teta=Math.atan(rapport); //Il faut ajouter pi/2
+                    xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
+                    yCalcule=(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
+                    teta+=Math.PI/2;
+                }
+                else{
+                    teta=Math.atan(rapport);//Il faut ajouter pi
+                    xCalcule= 1500 - (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
+                    yCalcule= 2000 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
+                    teta += Math.PI;
+                }
             }
-
+            newOrientation = teta;
         }
         VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
-        double newOrientation = teta + Math.PI;
-        double orien = XYO.getRobotInstance().getOrientation();
-        if (-Math.PI/2 < orien && orien < Math.PI/2) {
-            newOrientation -= Math.PI;
-        }
         newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
         Sick.setNewXYO(newXYO);
