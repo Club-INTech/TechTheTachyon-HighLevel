@@ -147,16 +147,16 @@ public class LidarControler extends ServiceThread {
                     e.printStackTrace();
                 }
             }
+            XYO currentXYO = XYO.getRobotInstance().clone();
             points = messageStack.pop().split(POINT_SEPARATOR);
-            Log.LIDAR_PROCESS.debug(">> Points: ");
             mobileObstacles.clear();
             for (String point : points) {
                 Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
                 if(obstacleCenter.getR() <= robotRadius)
                     continue;
-                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
-                obstacleCenter.plus(XYO.getRobotInstance().getPosition());
+                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
+                obstacleCenter.plus(currentXYO.getPosition());
                 if (symetrie) {
                     obstacleCenter.symetrize();
                 }

@@ -91,4 +91,9 @@ public class XYO {
     public String toString() {
         return "XYO(xy="+position+", o="+orientation+")";
     }
+
+    @Override
+    public XYO clone() {
+        return new XYO(this.getPosition().clone(), this.orientation);
+    }
 }
