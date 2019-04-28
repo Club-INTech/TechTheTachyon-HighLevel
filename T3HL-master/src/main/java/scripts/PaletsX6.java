@@ -103,11 +103,11 @@ public class PaletsX6 extends Script {
     @Override
     public Shape entryPosition(Integer version) {
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
             return positionEntree;
         }
         else if (version == 2) {
