@@ -26,11 +26,7 @@ import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ServiceThread;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
 
 /**
  * Ecoute toutes les connections instanciées
@@ -57,7 +53,7 @@ public class Listener extends ServiceThread {
     /**
      * Map des cannaux & queues des services
      */
-    private Map<Channel, ConcurrentLinkedQueue<String>> queueMap;
+    private Map<Channel, Collection<String>> collectionMap;
 
     /**
      * Si on est en simulation
@@ -81,7 +77,7 @@ public class Listener extends ServiceThread {
      */
     public Listener(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
-        this.queueMap = new HashMap<>();
+        this.collectionMap = new HashMap<>();
     }
 
     /**
@@ -91,9 +87,9 @@ public class Listener extends ServiceThread {
      */
     private void handleMessage(String header, String message) {
       //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
-        for (Channel registeredChannel : queueMap.keySet()) {
+        for (Channel registeredChannel : collectionMap.keySet()) {
             if (registeredChannel.getHeaders().equals(header)) {
-                queueMap.get(registeredChannel).add(message);
+                collectionMap.get(registeredChannel).add(message);
             }
         }
     }
@@ -103,8 +99,8 @@ public class Listener extends ServiceThread {
      * @param channel   le channel à mapper
      * @param queue     la queue sur laquelle le mapper
      */
-    public void addQueue(Channel channel, ConcurrentLinkedQueue<String> queue){
-        queueMap.put(channel, queue);
+    public void addCollection(Channel channel, Collection<String> queue){
+        collectionMap.put(channel, queue);
     }
 
     @Override

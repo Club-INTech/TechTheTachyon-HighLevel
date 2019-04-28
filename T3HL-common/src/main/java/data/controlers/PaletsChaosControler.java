@@ -35,7 +35,7 @@ public class PaletsChaosControler extends Thread implements Service {
         this.listener = listener;
         this.table = table;
         this.paletsPosAndColorQueue = new ConcurrentLinkedQueue<>();
-        listener.addQueue(Channel.PALETS_POSITION, paletsPosAndColorQueue);
+        listener.addCollection(Channel.PALETS_POSITION, paletsPosAndColorQueue);
     }
 
     @Override

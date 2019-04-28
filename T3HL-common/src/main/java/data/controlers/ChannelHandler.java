@@ -20,7 +20,7 @@ public class ChannelHandler{
     public ChannelHandler(Listener listener, Channel channel, Consumer<String> function){
         this.function = function;
         this.queue = new ConcurrentLinkedQueue<>();
-        listener.addQueue(channel, this.queue);
+        listener.addCollection(channel, this.queue);
     }
 
     /**

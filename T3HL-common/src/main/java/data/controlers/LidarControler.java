@@ -32,6 +32,7 @@ import utils.math.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -70,7 +71,7 @@ public class LidarControler extends ServiceThread {
     /**
      * File de communication avec le Listener
      */
-    private ConcurrentLinkedQueue<String> messageQueue;
+    private Stack<String> messageStack;
 
     /**
      * True si autre couleur
@@ -93,8 +94,8 @@ public class LidarControler extends ServiceThread {
         this.timer = timer;
         this.table = table;
         this.listener = listener;
-        this.messageQueue = new ConcurrentLinkedQueue<>();
-        listener.addQueue(Channel.LIDAR, this.messageQueue);
+        this.messageStack = new Stack<>();
+        listener.addCollection(Channel.LIDAR, this.messageStack);
     }
 
     @Override
@@ -138,15 +139,16 @@ public class LidarControler extends ServiceThread {
         float margin = 100;
         Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
-            while (messageQueue.peek() == null) {
+            while (messageStack.peek() == null) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            while(!messageQueue.isEmpty()) {
-                points = messageQueue.poll().split(POINT_SEPARATOR);
+            while(!messageStack.isEmpty()) {
+                points = messageStack.pop().split(POINT_SEPARATOR);
+                messageStack.clear();
                 mobileObstacles.clear();
                 for (String point : points) {
                     Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
