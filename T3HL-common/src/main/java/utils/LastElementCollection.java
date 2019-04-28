@@ -20,7 +20,7 @@ public class LastElementCollection<T> implements Collection<T> {
 
     @Override
     public boolean isEmpty() {
-        return hasValue;
+        return ! hasValue;
     }
 
     @Override
