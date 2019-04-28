@@ -38,17 +38,17 @@ public class PaletsX6 extends Script {
             /*donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
      Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
      */
-
+        //difference de ~100  entre chaque palet
         if (version == 0) { //rouge droite
             positions.add(new VectCartesian(1000, 1206));
             positions.add(new VectCartesian(805 , 1206));
             positions.add(new VectCartesian(597, 1206));
         } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(505, 1186));
-            positions.add(new VectCartesian(905, 1186));
+            positions.add(new VectCartesian(505, 1206));
+            positions.add(new VectCartesian(905, 1206));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 2) {  //bleu droite
-            positions.add(new VectCartesian(834, 1225));
+            positions.add(new VectCartesian(834, 1206));
             //positions.add(new VectCartesian(0, 800));
             //positions.add(new VectCartesian(0, 800));
         } else if (version == 3) {  //rouge gauche On doit symetriser la partie droite pas la peine d'écrire des cordonnées
@@ -82,8 +82,8 @@ public class PaletsX6 extends Script {
 
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
                 //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
@@ -103,11 +103,11 @@ public class PaletsX6 extends Script {
     @Override
     public Shape entryPosition(Integer version) {
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
             return positionEntree;
         }
         else if (version == 2) {

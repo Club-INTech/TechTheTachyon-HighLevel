@@ -90,8 +90,9 @@ public class MainMaster extends RobotEntryPoint {
         table.updateTableAfterFixedObstaclesChanges();
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
-
-
+        //robot.
+        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
+/*
         Vec2 center = new VectCartesian(-300, 500);
         Vec2 edge = new VectCartesian(1200, 500);
         while(true) {
@@ -109,6 +110,7 @@ public class MainMaster extends RobotEntryPoint {
                 break;
             }
         }
+        */
   /*      try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
