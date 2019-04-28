@@ -327,9 +327,10 @@ public class DataControler extends Thread implements Service {
     /**
      * BUDDY : position
      */
-    private void handleBuddyPos(String message){
+    private void handleBuddyPos(String message) {
         String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
         XYO.getBuddyInstance().update(Integer.parseInt(coordonates[0]), Integer.parseInt(coordonates[1]), Double.parseDouble(coordonates[2]));
+        Log.COMMUNICATION.debug("Received buddy pos: "+XYO.getBuddyInstance()+" isMaster= "+isMaster);
     }
 
     /**

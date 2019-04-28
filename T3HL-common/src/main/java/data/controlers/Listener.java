@@ -123,8 +123,8 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Simulation initializing connections...");
                 connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
                 Log.COMMUNICATION.debug("Simulated Teensy Master connected");
-                connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulated Buddy connected");
+                // FIXME/TODO connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
+                // FIXME/TODO Log.COMMUNICATION.debug("Simulated Buddy connected");
                 Log.COMMUNICATION.debug("Debug connection init...");
                 connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
                 Log.COMMUNICATION.debug("Debug connection ready!");
@@ -189,6 +189,7 @@ public class Listener extends ServiceThread {
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
                                 if(buddy.isInitiated()) {
+                                    Log.COMMUNICATION.debug("Sending buddy pos to "+buddy+" because of message '"+message+"' from "+current);
                                     buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
                                 }
                             }

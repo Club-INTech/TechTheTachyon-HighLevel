@@ -145,21 +145,23 @@ public class LidarControler extends ServiceThread {
                     e.printStackTrace();
                 }
             }
-            points = messageQueue.poll().split(POINT_SEPARATOR);
-            mobileObstacles.clear();
-            for (String point : points) {
-                Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
-                        Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
-                if(obstacleCenter.getR() <= robotRadius)
-                    continue;
-                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
-                obstacleCenter.plus(XYO.getRobotInstance().getPosition());
-                if (symetrie) {
-                    obstacleCenter.symetrize();
-                }
-                // on ajoute l'obstacle que s'il est dans la table
-                if(tableBB.isInShape(obstacleCenter)) {
-                    mobileObstacles.add(obstacleCenter);
+            while(!messageQueue.isEmpty()) {
+                points = messageQueue.poll().split(POINT_SEPARATOR);
+                mobileObstacles.clear();
+                for (String point : points) {
+                    Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
+                            Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
+                    if(obstacleCenter.getR() <= robotRadius)
+                        continue;
+                    obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
+                    obstacleCenter.plus(XYO.getRobotInstance().getPosition());
+                    if (symetrie) {
+                        obstacleCenter.symetrize();
+                    }
+                    // on ajoute l'obstacle que s'il est dans la table
+                    if(tableBB.isInShape(obstacleCenter)) {
+                        mobileObstacles.add(obstacleCenter);
+                    }
                 }
             }
             //table.getGraphe().writeLock().lock();

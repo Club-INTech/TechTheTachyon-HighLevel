@@ -27,7 +27,7 @@ public class ChannelHandler{
      * On regarde si la file contient des messages, et si c'est le cas, on les traite
      */
     public void checkAndHandle(){
-        if (!this.queue.isEmpty()){
+        while(!this.queue.isEmpty()) {
             this.function.accept(this.queue.poll());
         }
     }

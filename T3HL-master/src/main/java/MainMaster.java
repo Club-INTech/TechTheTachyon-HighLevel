@@ -91,8 +91,8 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
         //robot.
-        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
-/*
+//        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
+
         Vec2 center = new VectCartesian(-300, 500);
         Vec2 edge = new VectCartesian(1200, 500);
         while(true) {
@@ -110,7 +110,7 @@ public class MainMaster extends RobotEntryPoint {
                 break;
             }
         }
-        */
+
   /*      try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
@@ -126,7 +126,7 @@ public class MainMaster extends RobotEntryPoint {
         simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
 
         //On set tous les HL qui recevront des messages
-        simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
+        // FIXME/TODO simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
 
         //On set le lidar s'il ne tourne pas
         //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());

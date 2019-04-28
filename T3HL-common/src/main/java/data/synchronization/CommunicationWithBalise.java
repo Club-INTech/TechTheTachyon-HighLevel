@@ -29,7 +29,7 @@ public class CommunicationWithBalise extends CommunicationDefault {
 
     @Override
     public void updateConfig(Config config) {
-        // On est du côté violet par défaut , le HL pense en violet
+        // On est du côté jaune par défaut , le HL pense en jaune
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.simulationActive = config.getBoolean(ConfigData.SIMULATION);
