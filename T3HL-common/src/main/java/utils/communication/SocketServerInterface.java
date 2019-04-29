@@ -21,10 +21,7 @@ package utils.communication;
 import utils.Log;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.util.Optional;
 
 /**
@@ -56,11 +53,12 @@ public class SocketServerInterface extends SocketInterface {
                 Socket privSocket = null;
                 try {
                     Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
-                    serverSocket = new ServerSocket(port);
+                    serverSocket = new ServerSocket();
                     int receiveBufferSize = serverSocket.getReceiveBufferSize();
                     Log.COMMUNICATION.debug("Receive buffer size on "+serverSocket.getLocalSocketAddress()+" is "+receiveBufferSize);
                     serverSocket.setReceiveBufferSize(receiveBufferSize*100);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
+                    serverSocket.bind(new InetSocketAddress(port));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
