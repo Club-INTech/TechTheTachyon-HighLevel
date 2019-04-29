@@ -197,11 +197,6 @@ public class Listener extends ServiceThread {
                     iterator.remove();
                 }
             }
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
