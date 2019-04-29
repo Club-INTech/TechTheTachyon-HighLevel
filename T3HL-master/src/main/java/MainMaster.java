@@ -115,7 +115,7 @@ public class MainMaster extends RobotEntryPoint {
 */
         while(true) {
             try {
-                robot.turn(0);
+                robot.turn(Math.PI-1.0);
                 TimeUnit.MILLISECONDS.sleep(1000);
                 robot.turn(Math.PI);
                 TimeUnit.MILLISECONDS.sleep(1000);

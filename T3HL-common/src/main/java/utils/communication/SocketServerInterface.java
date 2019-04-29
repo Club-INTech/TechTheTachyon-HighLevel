@@ -25,6 +25,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Optional;
 
 /**
  * Définit l'interface de connexion utilisant une socket serveur
@@ -35,6 +36,7 @@ import java.net.SocketTimeoutException;
 public class SocketServerInterface extends SocketInterface {
 
     private ServerSocket serverSocket = null;
+    private int receivedCount;
 
     /**
      * Construit une interface de connexion point-à-point attendant la connexion
@@ -65,7 +67,8 @@ public class SocketServerInterface extends SocketInterface {
                             try {
                                 Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
                                 privSocket = serverSocket.accept();
-                                if (privSocket != null){
+                                if (privSocket != null) {
+                                    System.err.println(">> Received before new socket: "+receivedCount);
                                     socket = privSocket;
                                 }
                                 Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
@@ -91,6 +94,15 @@ public class SocketServerInterface extends SocketInterface {
         };
         thread.setDaemon(true);
         thread.start();
+    }
+
+    @Override
+    public synchronized Optional<String> read() throws CommunicationException {
+        Optional<String> result = super.read();
+        if(result.isPresent()) {
+            receivedCount++;
+        }
+        return result;
     }
 
     @Override
