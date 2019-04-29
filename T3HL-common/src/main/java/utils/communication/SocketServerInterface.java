@@ -56,7 +56,7 @@ public class SocketServerInterface extends SocketInterface {
                     serverSocket = new ServerSocket();
                     int receiveBufferSize = serverSocket.getReceiveBufferSize();
                     Log.COMMUNICATION.debug("Receive buffer size on "+serverSocket.getLocalSocketAddress()+" is "+receiveBufferSize);
-                    serverSocket.setReceiveBufferSize(receiveBufferSize*100);
+                    serverSocket.setReceiveBufferSize(receiveBufferSize*200);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
                     serverSocket.bind(new InetSocketAddress(port));
                 } catch (IOException e) {

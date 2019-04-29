@@ -142,8 +142,8 @@ public abstract class SocketInterface implements CommunicationInterface {
      */
     protected void initBuffers() throws CommunicationException {
         try {
-            this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()));
-            this.output = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()));
+            this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream(), StandardCharsets.UTF_8.name()), 64*1024);
+            this.output = new BufferedWriter(new OutputStreamWriter(this.socket.getOutputStream(), StandardCharsets.UTF_8.name()), 64*1024);
             this.initiated = true;
         } catch (IOException e) {
             throw new CommunicationException("Impossible de créer les buffers IO");

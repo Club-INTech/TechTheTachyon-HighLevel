@@ -78,6 +78,7 @@ public class Listener extends ServiceThread {
     public Listener(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
         this.collectionMap = new HashMap<>();
+        this.setPriority(Thread.MAX_PRIORITY);
     }
 
     /**
@@ -172,7 +173,7 @@ public class Listener extends ServiceThread {
         Optional<String> buffer;
         Iterator<Connection> iterator;
         Connection current;
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!isInterrupted()) {
             iterator = connectionManager.getInitiatedConnections().iterator();
             while (iterator.hasNext()){
                 current = iterator.next();
