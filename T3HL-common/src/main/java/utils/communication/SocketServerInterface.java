@@ -103,6 +103,7 @@ public class SocketServerInterface extends SocketInterface {
         Optional<String> result = super.read();
         if(result.isPresent()) {
             receivedCount++;
+            Log.COMMUNICATION.debug(">> READ: "+result.get());
         }
         return result;
     }
