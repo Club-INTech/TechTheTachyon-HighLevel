@@ -37,6 +37,8 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author nayth, jglrxavpok
  */
@@ -92,7 +94,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
         //robot.
 //        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
-
+/*
         Vec2 center = new VectCartesian(-1200, 500);
         Vec2 edge = new VectCartesian(1200, 500);
         while(true) {
@@ -110,7 +112,17 @@ public class MainMaster extends RobotEntryPoint {
                 break;
             }
         }
-
+*/
+        while(true) {
+            try {
+                robot.turn(0);
+                TimeUnit.MILLISECONDS.sleep(1000);
+                robot.turn(Math.PI);
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
   /*      try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
