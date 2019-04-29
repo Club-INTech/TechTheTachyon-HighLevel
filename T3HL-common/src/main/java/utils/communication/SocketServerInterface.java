@@ -57,6 +57,9 @@ public class SocketServerInterface extends SocketInterface {
                 try {
                     Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
                     serverSocket = new ServerSocket(port);
+                    int receiveBufferSize = serverSocket.getReceiveBufferSize();
+                    Log.COMMUNICATION.debug("Receive buffer size on "+serverSocket.getLocalSocketAddress()+" is "+receiveBufferSize);
+                    serverSocket.setReceiveBufferSize(receiveBufferSize*100);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
                 } catch (IOException e) {
                     e.printStackTrace();
