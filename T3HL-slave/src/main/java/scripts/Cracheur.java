@@ -18,7 +18,6 @@ public class Cracheur extends Script {
     private int yEntry = 1580;
 
     private int nbPalets = robot.getNbPaletsDroits();
-    private int nbMaxPalets = 5; //Nb de palets si l'ascenseur est rempli pour distinction de cas
 
 
     public Cracheur(Slave robot, Table table) {
@@ -27,20 +26,11 @@ public class Cracheur extends Script {
 
     @Override
     public void execute(Integer version) {
-        if (nbPalets < nbMaxPalets) {
-            for (int j = 1; j<= nbPalets; j++) {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-                robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
-                robot.popPaletDroit();
-            }
-        }
-        else {
-            for (int i = 1; i < nbPalets; i++) {
-                robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
-                robot.popPaletDroit();
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-            }
+
+        for (int i = 1; i < nbPalets; i++) {
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             robot.popPaletDroit();
         }
     }

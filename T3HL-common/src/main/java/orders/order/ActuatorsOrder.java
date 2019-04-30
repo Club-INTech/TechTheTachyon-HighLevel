@@ -88,7 +88,8 @@ public enum ActuatorsOrder implements Order {
     TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_GAUCHE("torqueBras left"),
     TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DU_SECONDAIRE("torqueBras right"),
 
-    CRACHE_UN_PALET("crache"),
+    CRACHE_UN_PALET("oust"),
+    RANGE_CRACHE_PALET("range"),
     TEST_COUPLE_XL("torqueXL"),
 
     ;
