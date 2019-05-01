@@ -137,7 +137,7 @@ public class LidarControler extends ServiceThread {
 
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
-        float margin = 100;
+        float margin = 10;
         Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
             while (messageStack.isEmpty()) {
