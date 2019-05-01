@@ -80,7 +80,7 @@ public class MainMaster extends RobotEntryPoint {
         container.getConfig().override(ConfigData.COULEUR, "violet");
         container.updateConfig(container.getConfig());
 
-        XYO.getRobotInstance().update(1500-191, 550, Math.PI);
+        XYO.getRobotInstance().update(1500-191, 550, 0);
 
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
