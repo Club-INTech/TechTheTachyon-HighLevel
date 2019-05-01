@@ -151,6 +151,9 @@ public class LidarControler extends ServiceThread {
             for (String point : points) {
                 Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
+                if(symetrie) {
+                    obstacleCenter.setA(-obstacleCenter.getA());
+                }
                 if(obstacleCenter.getR() <= robotRadius)
                     continue;
                 obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
