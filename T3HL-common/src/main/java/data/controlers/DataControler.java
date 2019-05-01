@@ -227,6 +227,7 @@ public class DataControler extends Thread implements Service {
             double orien= XYO.getRobotInstance().getOrientation();
 
             if (symetrie) {
+                orien= Math.PI-orien;
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
