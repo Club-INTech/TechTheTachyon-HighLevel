@@ -80,13 +80,13 @@ public class MainMaster extends RobotEntryPoint {
         container.getConfig().override(ConfigData.COULEUR, "violet");
         container.updateConfig(container.getConfig());
 
-        XYO.getRobotInstance().update(1500-191, 550, 0);
+        XYO.getRobotInstance().update(1500-191, 550, Math.PI);
 
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
+        robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         robot.turn(Math.PI);
 
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
