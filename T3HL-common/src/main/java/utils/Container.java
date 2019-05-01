@@ -279,6 +279,8 @@ public class Container implements Service {
     @Override
     public void updateConfig(Config config) {
         for(Service service:instanciedServices.values()){
+            if(service instanceof Container)
+                continue;
             service.updateConfig(config);
         }
     }
