@@ -73,13 +73,15 @@ public class MainMaster extends RobotEntryPoint {
         } else if(container.getConfig().getBoolean(ConfigData.VISUALISATION)) {
             initVisualisateur();
         }
-
-        container.getConfig().override(ConfigData.COULEUR,"violet");
     }
 
     @Override
     protected void act() throws UnableToMoveException {
+        container.getConfig().override(ConfigData.COULEUR, "violet");
+        container.updateConfig(container.getConfig());
+
         XYO.getRobotInstance().update(1500-191, 550, Math.PI);
+
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
