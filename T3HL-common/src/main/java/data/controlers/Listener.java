@@ -65,6 +65,11 @@ public class Listener extends ServiceThread {
      */
     private boolean useLidar;
 
+    /**
+     * Si on utilise la balise pour le traitement d'images
+     */
+    private boolean useBaliseImage;
+
     private boolean visualize;
     /**
      * Est-ce qu'on active l'éléctron ?
@@ -127,7 +132,6 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Debug connection ready!");
             }
             else {
-                // FIXME :) connectionManager.initConnections(Connection.BALISE_IA);
                 Log.COMMUNICATION.debug("Lidar");
                 Log.COMMUNICATION.debug("Balise");
                 if (master) {
@@ -146,6 +150,9 @@ public class Listener extends ServiceThread {
                     connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
                     Log.COMMUNICATION.debug("Debug connection ready!");
                 }
+            }
+            if(useBaliseImage){
+                connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
             if(useLidar) {
                 connectionManager.initConnections(Connection.LIDAR_DATA);
@@ -217,6 +224,7 @@ public class Listener extends ServiceThread {
         this.simulation=config.getBoolean(ConfigData.SIMULATION);
         this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
         this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
+        this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
     }
 }
