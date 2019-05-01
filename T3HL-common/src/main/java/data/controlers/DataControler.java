@@ -282,7 +282,7 @@ public class DataControler extends Thread implements Service {
             double orien = XYO.getRobotInstance().getOrientation();
             //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
             if (symetrie) {
-                if(0< orien && orien <Math.PI/2){
+                if(-Math.PI/2< orien && orien <Math.PI/2){
                     teta=Math.atan(rapport);
                     xCalcule= -1500 + (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
@@ -295,7 +295,7 @@ public class DataControler extends Thread implements Service {
                 }
 
             } else {
-                if (-Math.PI/2 < orien && orien <Math.PI){
+                if (0 < orien && orien <Math.PI){
                     teta=Math.atan(rapport); //Il faut ajouter pi/2
                     xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
