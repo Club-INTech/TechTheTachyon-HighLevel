@@ -293,6 +293,8 @@ public class DataControler extends Thread implements Service {
                     yCalcule = 2000 - (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
                     teta+= -Math.PI/2;
                 }
+                xCalcule= -xCalcule;
+                teta=Math.PI-teta;
 
             } else {
                 if (0 < orien && orien <Math.PI){

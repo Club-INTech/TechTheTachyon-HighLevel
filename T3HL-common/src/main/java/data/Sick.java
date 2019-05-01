@@ -8,9 +8,9 @@ import java.util.concurrent.ExecutionException;
  */
 public enum Sick {
 
-    SICK_AVANT(0),
-    SICK_AVANT_GAUCHE(1),
-    SICK_ARRIERE_GAUCHE(2),
+    SICK_AVANT(0), //SICK DROIT POUR LE SECONDAIRE
+    SICK_AVANT_GAUCHE(1), // SICK ARRIERE DROIT POUR LE SECONDAIRE
+    SICK_ARRIERE_GAUCHE(2), //SICK ARRIERE GAUCHE POUR LE SECONDAIRE
     SICK_ARRIERE(3),
     SICK_ARRIERE_DROIT(4),
     SICK_AVANT_DROIT(5),
@@ -34,6 +34,10 @@ public enum Sick {
     // Symétries côté droit
     public static final Sick[] LOWER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
     public static final Sick[] UPPER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
+
+    //Secondaire
+
+    public static final Sick[] SECONDAIRE= {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
 
     /**
      * Indice du capteur sick
