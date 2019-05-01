@@ -55,6 +55,10 @@ public class OrderWrapper implements Service {
     private Connection llConnection;
 
     /**
+     * Si on utlise la balise
+     */
+    private Boolean useBalise_Image;
+    /**
      * Le service de symétrie des ordres
      */
     private SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap;
@@ -326,6 +330,7 @@ public class OrderWrapper implements Service {
         // On est du côté violet par défaut , le HL pense en violet
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
+        useBalise_Image = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
@@ -346,6 +351,13 @@ public class OrderWrapper implements Service {
         SensorState.WAITING_JUMPER.setData(true);
         sendString("waitJumper");
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
+        if(useBalise_Image) {
+            try {
+                Connection.BALISE_IMAGE.send("GO");
+            } catch (CommunicationException e) {
+                e.printStackTrace();
+            }
+        }
         Log.STRATEGY.debug("GOGOGO!!!");
     }
 

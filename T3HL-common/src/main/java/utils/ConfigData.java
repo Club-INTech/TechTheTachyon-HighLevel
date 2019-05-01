@@ -68,6 +68,11 @@ public enum ConfigData implements ConfigInfo
     USING_ELECTRON(false),
 
     /**
+     * Si on utilise la balise pour le traitement d'images
+     */
+    USING_BALISE_IMAGE(false),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),
