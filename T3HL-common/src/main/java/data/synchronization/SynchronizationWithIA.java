@@ -11,12 +11,12 @@ import utils.math.Vec2;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class SynchronizationWithBalise extends SynchronizationCommon {
+public class SynchronizationWithIA extends SynchronizationCommon {
 
     /**
      * Constructeur
      */
-    public SynchronizationWithBalise(Container container) {
+    public SynchronizationWithIA(Container container) {
         super(container);
         this.container = container;
     }
