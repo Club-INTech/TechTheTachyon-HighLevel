@@ -248,7 +248,7 @@ public class DataControler extends Thread implements Service {
 
 
                 }
-                xCalcule = (int) Math.round(-(1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
+                xCalcule = (int) Math.round((1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
                 teta = Math.PI-teta;
             } else {
                 System.out.println(orien);
