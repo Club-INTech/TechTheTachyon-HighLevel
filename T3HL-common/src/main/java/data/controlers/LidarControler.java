@@ -33,8 +33,6 @@ import utils.math.*;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Gère les données du lidar pour modifier la table
@@ -96,7 +94,7 @@ public class LidarControler extends ServiceThread {
         this.table = table;
         this.listener = listener;
         this.messageStack = new LastElementCollection<>();
-        listener.addCollection(Channel.LIDAR, this.messageStack);
+        listener.addCollection(Channel.OBSTACLES, this.messageStack);
     }
 
     @Override

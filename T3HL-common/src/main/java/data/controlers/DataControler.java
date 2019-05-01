@@ -332,7 +332,7 @@ public class DataControler extends Thread implements Service {
     private void handleBuddyPos(String message) {
         String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
         XYO.getBuddyInstance().update(Integer.parseInt(coordonates[0]), Integer.parseInt(coordonates[1]), Double.parseDouble(coordonates[2]));
-        Log.COMMUNICATION.debug("Received buddy pos: "+XYO.getBuddyInstance()+" isMaster= "+isMaster);
+        Log.COMMUNICATION.debug("Received buddy pos: " + XYO.getBuddyInstance() + " isMaster=" + isMaster);
     }
 
     /**
@@ -352,9 +352,15 @@ public class DataControler extends Thread implements Service {
      */
     private void handlePaletUpdate(String message){
         String[] paletsString = message.split(ARGUMENTS_SEPARATOR);
-        Palet palet = Palet.getPaletById(Integer.parseInt(paletsString[0]));
-        if (palet != null) {
-            palet.setPaletPris(true);
+        int id = Integer.parseInt(paletsString[0]);
+        if (id == Palet.GOLDENIUM.getId()) {
+            GameState.GOLDENIUM_LIBERE.setData(Boolean.parseBoolean(paletsString[1]));
+        }
+        else {
+            Palet palet = Palet.getPaletById(id);
+            if (palet != null) {
+                palet.setPaletPris(Boolean.parseBoolean(paletsString[1]));
+            }
         }
     }
 

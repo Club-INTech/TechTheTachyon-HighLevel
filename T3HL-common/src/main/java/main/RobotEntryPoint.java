@@ -57,7 +57,7 @@ public abstract class RobotEntryPoint {
         this.container = container;
         initServices(container, robotClass, scriptManagerClass);
         preLLConnection();
-        waitForLLConnection();
+        waitForAllConnectionsReady();
         Log.COMMUNICATION.debug("Connection established, starting match");
 
         try {
@@ -81,7 +81,7 @@ public abstract class RobotEntryPoint {
 
     protected abstract void act() throws UnableToMoveException;
 
-    private void waitForLLConnection() {
+    private void waitForAllConnectionsReady() {
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 Thread.sleep(100);

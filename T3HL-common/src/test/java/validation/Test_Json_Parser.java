@@ -37,7 +37,7 @@ public class Test_Json_Parser {
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
         connectionManager = container.getService(ConnectionManager.class);
-        connectionManager.initConnections(Connection.BALISE);
+        connectionManager.initConnections(Connection.BALISE_IA);
         listener = container.getService(Listener.class);
         table = container.getService(Table.class);
         graphe = container.getService(Graphe.class);

@@ -11,9 +11,10 @@ import utils.communication.CommunicationException;
 import utils.container.Service;
 import utils.math.Vec2;
 
+import java.util.List;
 import java.util.Locale;
 
-public abstract class CommunicationDefault implements Service {
+public abstract class SynchronizationCommon implements Service {
 
     /**
      * Boolean de symétrie
@@ -43,7 +44,7 @@ public abstract class CommunicationDefault implements Service {
     /**
      * Constructeur
      */
-    protected CommunicationDefault(Container container){
+    protected SynchronizationCommon(Container container){
         this.container=container;
     }
 
@@ -69,12 +70,38 @@ public abstract class CommunicationDefault implements Service {
     }
 
     /**
+     * Envoie la liste des positions composant le chemin actuel du robot coéquipier
+     * @param path liste de Vec2 à envoyer
+     */
+    protected void sendPath(List<Vec2> path){
+        StringBuilder serializePath = new StringBuilder();
+        for (Vec2 vec2 : path){
+            serializePath.append(vec2.getX());
+            serializePath.append(" ");
+            serializePath.append(vec2.getY());
+            serializePath.append(" ");
+        }
+        this.sendString(serializePath.toString());
+        this.sendString(String.format(Locale.US, "%s %s", Channel.BUDDY_PATH, serializePath.toString()));
+    }
+
+    /**
      * Envoie une confirmation de palet pris
      * @param palet quel palet a été pris
+     * @param pris True si le palet a été pris, False sinon
      */
-    protected void sendPaletPris(Palet palet){
-        this.sendString(String.format(Locale.US, "%s %d", Channel.UPDATE_PALETS, palet.getId()));
+    protected void sendPaletPris(Palet palet, boolean pris){
+        this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS, palet.getId(), pris));
     }
+
+    /**
+     * Envoie l'état du goldenium
+     * @param accessible True si le goldenium est accessible, False sinon
+     */
+    protected void sendGoldeniumState(boolean accessible){
+        this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS, Palet.GOLDENIUM.getId(), accessible));
+    }
+
 
     @Override
     public abstract void updateConfig(Config config);
