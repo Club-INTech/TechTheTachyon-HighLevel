@@ -24,16 +24,27 @@ package data.controlers;
  * @author rem
  */
 public enum Channel {
-    LIDAR('!', '!'),
-    COULEUR_PALET_PRIS('!', '&'),
-    PALETS_POSITION('!', '-'),
-    SCRIPTS('!', 'O'),
-    UPDATE_PALETS('!', 'H'),
-    BUDDY_POSITION('!', '#'),
+    //DataControler
+
+    //Du LL
     ROBOT_POSITION('@', 'P'),
+    COULEUR_PALET_PRIS('!', '&'),
+
+    //De buddy
+    BUDDY_POSITION('!', '#'),
     BUDDY_PATH('!', 'C'),
+    UPDATE_PALETS('!', 'H'),
+
+    //De l'BALISE_IA
+    SCRIPTS('!', 'O'),
     EVENT('@', 'B'),
     SICK('@', 'A'),
+
+    //LidarControler
+    OBSTACLES('!', '!'),
+
+    //PaletChaosControler,
+    PALETS_POSITION('!', '-'),
     ;
 
     /**
