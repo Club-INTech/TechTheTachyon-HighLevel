@@ -95,8 +95,8 @@ public abstract class RobotEntryPoint {
         try {
             // trouve la couleur
             panneauService = container.getService(PanneauService.class);
-            if(panneauService.getPaneau() != null) {
-                if(panneauService.getPaneau().isViolet()) {
+            if(panneauService.getPanneau() != null) {
+                if(panneauService.getPanneau().isViolet()) {
                     container.getConfig().override(ConfigData.COULEUR, "violet");
                 } else {
                     container.getConfig().override(ConfigData.COULEUR, "jaune");

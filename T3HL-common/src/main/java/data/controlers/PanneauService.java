@@ -33,17 +33,13 @@ public class PanneauService implements Service {
                 container.getConfig().override(ConfigData.COULEUR, couleur);
                 container.updateConfig(container.getConfig());
             });
-        }catch (IOException | I2CFactory.UnsupportedBusNumberException e){
+        } catch (IOException | I2CFactory.UnsupportedBusNumberException e){
             e.printStackTrace();
         }
     }
 
-    public Panneau getPaneau(){
+    public Panneau getPanneau(){
         return panel;
-    }
-
-    public void setPaneau(Panneau p){
-        panel=p;
     }
 
     public String getCouleur(){

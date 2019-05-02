@@ -23,9 +23,7 @@ import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.order.ActuatorsOrder;
 import robot.Master;
-import scripts.Match;
 import scripts.ScriptManagerMaster;
-import scripts.ScriptNamesMaster;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -36,8 +34,6 @@ import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author nayth, jglrxavpok
@@ -77,16 +73,18 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        container.getConfig().override(ConfigData.COULEUR, "violet");
-        container.updateConfig(container.getConfig());
-
         XYO.getRobotInstance().update(1500-191, 550, Math.PI);
 
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+        } else {
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+        }
         robot.turn(Math.PI);
 
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
