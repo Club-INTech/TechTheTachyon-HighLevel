@@ -16,6 +16,8 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import com.panneau.Panneau;
+import com.panneau.TooManyDigitsException;
 import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
@@ -33,6 +35,7 @@ import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,6 +58,8 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void preLLConnection() throws ContainerException {
+        waitForColorSwitch();
+
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = container.getService(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
@@ -71,10 +76,36 @@ public class MainMaster extends RobotEntryPoint {
         }
     }
 
+    private void waitForColorSwitch() {
+        Panneau panneau = panneauService.getPanneau();
+        if(panneau != null) {
+            try {
+                panneau.printScore(5005);
+                Panneau.teamColor color = panneau.getTeamColor();
+                // on attend une première activation du switch
+                while(color == panneau.getTeamColor()) {
+                    panneau.printScore(5005);
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    panneau.printScore(550);
+                    TimeUnit.MILLISECONDS.sleep(100);
+                }
+
+                // on attend une deuxième activation du switch ou 5s
+                long delay = 5000;
+                long start = System.currentTimeMillis();
+                while(color == panneau.getTeamColor() && (System.currentTimeMillis() - start) > delay) {
+                    panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
+                    TimeUnit.MILLISECONDS.sleep(100);
+                }
+            } catch (IOException | InterruptedException | TooManyDigitsException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     protected void act() throws UnableToMoveException {
         XYO.getRobotInstance().update(1500-191, 550, Math.PI);
-
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         // FIXME    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
@@ -93,10 +124,6 @@ public class MainMaster extends RobotEntryPoint {
         table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
         table.updateTableAfterFixedObstaclesChanges();
         table.removeAllChaosObstacles();
-        panneauService.getPanneau().addListener(teamColor -> {
-            // reset symétrie côté LL
-            this.orderWrapper.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation(), true);
-        });
         orderWrapper.waitJumper();
         //robot.
 //        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
