@@ -95,6 +95,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
                 robot.popPaletDroit();
+                robot.increaseScore(10);
             }
             while (robot.getNbPaletsDroits() > 0) {
                 actionBras(true, true);
