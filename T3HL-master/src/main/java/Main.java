@@ -119,7 +119,7 @@ public class Main {
 
             /// ========== INSERER LE CODE ICI POUR TESTER LES SCRIPTS ========== ///
             int i=0;
-            while (i<1000) {
+            while (i<10000) {
                 try {
                     panneauService.getPaneau().printScore(i);
                 }catch(IOException | TooManyDigitsException e){
