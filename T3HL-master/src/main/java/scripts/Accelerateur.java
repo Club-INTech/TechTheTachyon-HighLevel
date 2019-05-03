@@ -85,7 +85,6 @@ public class Accelerateur extends Script {
 
             robot.turn(0);
 
-            robot.moveLengthwise(palet+ecartement, false);
             if(robot.getNbPaletsDroits() > 0) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
