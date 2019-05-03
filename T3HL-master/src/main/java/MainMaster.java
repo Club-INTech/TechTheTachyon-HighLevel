@@ -96,7 +96,7 @@ public class MainMaster extends RobotEntryPoint {
                 long start = System.currentTimeMillis();
                 while(initialColor == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
                     panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    TimeUnit.MILLISECONDS.sleep(1);
                 }
             } catch (IOException | InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
