@@ -22,7 +22,7 @@ public class Accelerateur extends Script {
      */
 
     private int xEntry = -170;
-    private int yEntry = 340;
+    private int yEntry = 340+30;
 
     /**
      * constante
@@ -104,7 +104,9 @@ public class Accelerateur extends Script {
              */
             GameState.GOLDENIUM_LIBERE.setData(true);
             Log.LOCOMOTION.warning("PRE POS DEPART");
-            robot.followPathTo(positionDepart, () -> robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR));
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+            robot.followPathTo(positionDepart);
             Log.LOCOMOTION.warning("POST POS DEPART");
             robot.turn(Math.PI);
             robot.increaseScore(10);
