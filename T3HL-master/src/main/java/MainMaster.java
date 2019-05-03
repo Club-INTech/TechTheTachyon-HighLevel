@@ -25,6 +25,7 @@ import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.order.ActuatorsOrder;
 import robot.Master;
+import scripts.Match;
 import scripts.ScriptManagerMaster;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
@@ -159,7 +160,7 @@ public class MainMaster extends RobotEntryPoint {
                 break;
             }
         }*/
-
+/*
         while(true) {
             try {
                 robot.turn(Math.PI-1.0);
@@ -169,13 +170,13 @@ public class MainMaster extends RobotEntryPoint {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-  /*      try {
+        }*/
+        try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-*/
+
     }
 
     private void initSimulator(){
