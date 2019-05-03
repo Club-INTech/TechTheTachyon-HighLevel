@@ -29,16 +29,19 @@ public enum Channel {
     //Du LL
     ROBOT_POSITION('@', 'P'),
     COULEUR_PALET_PRIS('!', '&'),
+    SICK('@', 'A'),
 
     //De buddy
     BUDDY_POSITION('!', '#'),
     BUDDY_PATH('!', 'C'),
     UPDATE_PALETS('!', 'H'),
 
-    //De l'BALISE_IA
+    //De l'IA
     SCRIPTS('!', 'O'),
+
+    //Pour l'IA
     EVENT('@', 'B'),
-    SICK('@', 'A'),
+    PALETS_ASCENSEUR('@', 'C'),
 
     //LidarControler
     OBSTACLES('!', '!'),

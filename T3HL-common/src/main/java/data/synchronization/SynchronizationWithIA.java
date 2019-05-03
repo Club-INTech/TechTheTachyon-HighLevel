@@ -1,15 +1,19 @@
 package data.synchronization;
 
 import connection.Connection;
+import data.CouleurPalet;
 import data.controlers.Channel;
 import data.table.MobileCircularObstacle;
 import pfg.config.Config;
+import robot.Robot;
 import utils.ConfigData;
 import utils.Container;
+import utils.container.ContainerException;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Stack;
 
 public class SynchronizationWithIA extends SynchronizationCommon {
 
@@ -53,6 +57,55 @@ public class SynchronizationWithIA extends SynchronizationCommon {
      */
     public void sendJumperOut(){
         this.sendString(String.format(Locale.US, "%s KRAKATOA", Channel.EVENT));
+    }
+
+    /**
+     * Envoie le contenu de l'ascenseur droit à l'IA
+     */
+    public void sendPaletsAscenseurDroit(){
+        Robot robot = null;
+        try {
+            robot = this.container.getService(Robot.class);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+        Stack<CouleurPalet> ascenseurDroit = robot.getRightElevatorOrNull();
+        if (ascenseurDroit != null) {
+            StringBuilder toSend = new StringBuilder();
+            for (CouleurPalet couleur : ascenseurDroit) {
+                toSend.append(couleur.getNom());
+                toSend.append(" ");
+            }
+            this.sendString(String.format(Locale.US, "%s droit %s", Channel.PALETS_ASCENSEUR, toSend.toString()));
+        }
+    }
+
+    /**
+     * Envoie le contenu de l'ascenseur gauche à l'IA
+     */
+    public void sendPaletsAscenseurGauche(){
+        Robot robot = null;
+        try {
+            robot = this.container.getService(Robot.class);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+        Stack<CouleurPalet> ascenseurGauche = robot.getLeftElevatorOrNull();
+        if (ascenseurGauche != null) {
+            StringBuilder toSend = new StringBuilder();
+            for (CouleurPalet couleur : ascenseurGauche) {
+                toSend.append(couleur.getNom());
+                toSend.append(" ");
+            }
+            this.sendString(String.format(Locale.US, "%s gauche %s", Channel.PALETS_ASCENSEUR, toSend.toString()));
+        }
+    }
+
+    /**
+     * Envoie le contenu de l'ascenseur du secondaire (droit) à l'IA
+     */
+    public void sendPaletsAscenseurSecondaire(){
+        this.sendPaletsAscenseurDroit();
     }
 
     @Override

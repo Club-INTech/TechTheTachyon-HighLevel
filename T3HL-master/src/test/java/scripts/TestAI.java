@@ -6,7 +6,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class TestAI extends TestBaseHL {
-    // TODO: Initialiser l'BALISE_IA
+    // TODO: Initialiser l'IA
 
     @Override
     public void initState(Container container) throws ContainerException {

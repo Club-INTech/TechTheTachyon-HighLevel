@@ -56,7 +56,7 @@ public class GoapPathfinder {
             //     Log.AI.debug("Can be executed: "+actionNode.getAction());
             EnvironmentInfo newState = info.copyWithEffects(actionNode.getAction());
             if(actionNode.requiresMovement(newState)) {
-                actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'BALISE_IA
+                actionNode.updateTargetPosition(newState, newState.getXYO().getPosition()); // mise à jour de la position de l'IA
                 // TODO: angle
             }
             double runningCost = parent.runningCost + actionNode.getCost(info, depth);

@@ -39,7 +39,7 @@ public class SpectreRobot {
 
     /**
      * A défaut d'avoir quelque chose de propre, on vérifie si ce spectre est en fait le vrai robot, comme ça on peut tricher sur la table à renvoyer
-     * dans getSimulatedTable(). Comme ça l'BALISE_IA va modifier pour de vrai l'état de la table lors de l'exécution
+     * dans getSimulatedTable(). Comme ça l'IA va modifier pour de vrai l'état de la table lors de l'exécution
      */
     private final boolean isRoot;
 

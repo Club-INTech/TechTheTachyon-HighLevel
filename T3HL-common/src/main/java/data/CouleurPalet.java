@@ -4,15 +4,22 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public enum CouleurPalet {
-    VERT,
-    ROUGE,
-    BLEU,
-    GOLDENIUM,
+    VERT("v"),
+    ROUGE("r"),
+    BLEU("b"),
+    GOLDENIUM("g"),
     /**
      * Le bas niveau renvoit un message d'erreur: pas de couleur
      */
-    PAS_DE_PALET,
+    PAS_DE_PALET(""),
     ;
+
+    //Nom du palet
+    private String nom;
+
+    CouleurPalet(String nom){
+        this.nom = nom;
+    }
 
     static CompletableFuture<CouleurPalet> couleurPalRecue;
     //static CouleurPalet couleurPalRecue;
@@ -51,5 +58,9 @@ public enum CouleurPalet {
             e.printStackTrace();
         }
         return couleurPalet ;
+    }
+
+    public String getNom(){
+        return this.nom;
     }
 }
