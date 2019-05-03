@@ -80,14 +80,22 @@ public class MainMaster extends RobotEntryPoint {
         Panneau panneau = panneauService.getPanneau();
         if(panneau != null) {
             try {
-                panneau.printScore(5005);
+                try {
+                    panneau.printScore(5005);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Panneau.teamColor initialColor = panneau.getTeamColor();
                 // on attend une première activation du switch
                 while(initialColor == panneau.getTeamColor()) {
-                    panneau.printScore(5005);
-                    TimeUnit.MILLISECONDS.sleep(100);
-                    panneau.printScore(550);
-                    TimeUnit.MILLISECONDS.sleep(100);
+                    try {
+                        panneau.printScore(5005);
+                        TimeUnit.MILLISECONDS.sleep(100);
+                        panneau.printScore(550);
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 initialColor = panneau.getTeamColor();
@@ -95,10 +103,14 @@ public class MainMaster extends RobotEntryPoint {
                 long delay = 5000;
                 long start = System.currentTimeMillis();
                 while(initialColor == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
-                    panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
+                    try {
+                        panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     TimeUnit.MILLISECONDS.sleep(1);
                 }
-            } catch (IOException | InterruptedException | TooManyDigitsException e) {
+            } catch (InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
             }
         }
