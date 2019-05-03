@@ -81,19 +81,20 @@ public class MainMaster extends RobotEntryPoint {
         if(panneau != null) {
             try {
                 panneau.printScore(5005);
-                Panneau.teamColor color = panneau.getTeamColor();
+                Panneau.teamColor initialColor = panneau.getTeamColor();
                 // on attend une première activation du switch
-                while(color == panneau.getTeamColor()) {
+                while(initialColor == panneau.getTeamColor()) {
                     panneau.printScore(5005);
                     TimeUnit.MILLISECONDS.sleep(100);
                     panneau.printScore(550);
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
 
+                initialColor = panneau.getTeamColor();
                 // on attend une deuxième activation du switch ou 5s
                 long delay = 5000;
                 long start = System.currentTimeMillis();
-                while(color == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
+                while(initialColor == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
                     panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
