@@ -51,10 +51,10 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
                 robot.moveLengthwise(-palet-ecartement,false);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
-                robot.moveLengthwise(-distanceToCorner, false);
+                robot.moveLengthwise(distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
-                robot.moveLengthwise(distanceToCorner, false);
+                robot.moveLengthwise(-distanceToCorner, false);
                 robot.popPaletDroit();
             } else {
                 if(monteAsc) {
@@ -66,10 +66,10 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
                 robot.moveLengthwise(palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
-                robot.moveLengthwise(distanceToCorner, false);
+                robot.moveLengthwise(-distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
-                robot.moveLengthwise(-distanceToCorner, false);
+                robot.moveLengthwise(distanceToCorner, false);
                 robot.popPaletGauche();
             }
         } catch (UnableToMoveException a){
@@ -81,13 +81,9 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.turn(0);
+            // TODO: inverser le sens: faire gauche avant droite->moins de rotations
 
-            // FIXME: juste pour la précoupe: on pousse le palet bleu de l'accélérateur
-            robot.moveLengthwise(palet+ecartement, false);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-            robot.moveLengthwise(-palet-ecartement,false);
-            robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
+            robot.turn(0);
 
             if(robot.getNbPaletsDroits() > 0) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
