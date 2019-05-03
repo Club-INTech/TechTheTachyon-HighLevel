@@ -23,7 +23,7 @@ public class PanneauService implements Service {
 
     public PanneauService(){
         try {
-            panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
+            panel = new Panneau(RaspiPin.GPIO_04, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
             panel.addListener(teamColor -> {
                 couleur=panel.getTeamColor().toString();
                 System.out.println(panel.getTeamColor());
