@@ -5,6 +5,7 @@ import data.Table;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -15,6 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
+    private boolean symetry;
+
     public PaletsX6(Master robot, Table table) {
         super(robot, table);
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
@@ -71,7 +74,11 @@ public class PaletsX6 extends Script {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
+            if(symetry) {
+                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+            } else {
+                robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
+            }
             for (Vec2 position : positions) {
                 /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
                 //
@@ -103,11 +110,11 @@ public class PaletsX6 extends Script {
     @Override
     public Shape entryPosition(Integer version) {
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,450), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
             return positionEntree;
         }
         else if (version == 2) {
@@ -140,5 +147,6 @@ public class PaletsX6 extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 }
