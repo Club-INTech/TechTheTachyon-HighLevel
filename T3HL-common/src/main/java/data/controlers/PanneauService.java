@@ -20,14 +20,8 @@ public class PanneauService implements Service {
     private String couleur;
 
     public PanneauService(Container container) {
-              try {
-            panel = new Panneau(RaspiPin.GPIO_01, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
-            /*
-            panel.addListener(teamColor -> {
-                couleur=panel.getTeamColor().toString();
-                System.out.println(panel.getTeamColor());
-            });
-             */
+        try {
+            panel = new Panneau(RaspiPin.GPIO_00, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
             panel.addListener(teamColor -> {
                 couleur=panel.getTeamColor().toString().toLowerCase();
                 container.getConfig().override(ConfigData.COULEUR, couleur);
