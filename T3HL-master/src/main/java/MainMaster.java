@@ -33,6 +33,7 @@ import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.Container;
+import utils.Log;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 
@@ -111,6 +112,7 @@ public class MainMaster extends RobotEntryPoint {
                     }
                     TimeUnit.MILLISECONDS.sleep(1);
                 }
+                Log.STRATEGY.warning("Couleur: "+panneau.getTeamColor());
             } catch (InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
             }
