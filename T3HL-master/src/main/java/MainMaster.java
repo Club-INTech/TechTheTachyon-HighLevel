@@ -93,7 +93,7 @@ public class MainMaster extends RobotEntryPoint {
                 // on attend une deuxième activation du switch ou 5s
                 long delay = 5000;
                 long start = System.currentTimeMillis();
-                while(color == panneau.getTeamColor() && (System.currentTimeMillis() - start) > delay) {
+                while(color == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
                     panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
