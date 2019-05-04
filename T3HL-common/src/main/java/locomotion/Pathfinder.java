@@ -21,6 +21,7 @@ package locomotion;
 import data.Graphe;
 import data.graphe.Node;
 import data.graphe.Ridge;
+import data.table.MobileCircularObstacle;
 import pfg.config.Config;
 import utils.container.Service;
 import utils.math.Vec2;
@@ -78,7 +79,7 @@ public class Pathfinder implements Service {
      * @throws NoPathFound
      *              s'il n'existe pas de chemin entre les deux noeuds
      */
-    public LinkedList<Vec2> findPath(Node start, Node aim) throws NoPathFound {
+    public LinkedList<Vec2> findPath(Node start, Node aim, Set<MobileCircularObstacle> encounteredEnemies) throws NoPathFound {
         graphe.cacheLocks.readLock().lock();
         try {
             Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.get(start);
@@ -130,7 +131,7 @@ public class Pathfinder implements Service {
                         continue; // TODO: trouver pourquoi ça arrive avec l'IA
 
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
-                    if (ridge.isReachable(graphe)) {
+                    if (ridge.isReachable(graphe, encounteredEnemies)) {
                         double ridgeCost = ridge.getCost();
 
                         double currentCost = gScore.getOrDefault(currentNode, Node.DEFAULT_COST) + ridgeCost;

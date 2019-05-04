@@ -106,6 +106,11 @@ public class MobileCircularObstacle extends Obstacle {
         return "Obstacle mobile circulaire " + this.shape.toString();
     }
 
+    @Override
+    public int hashCode() {
+        return shape.getCenter().hashCode();
+    }
+
     /**
      * Getters & Setters
      */

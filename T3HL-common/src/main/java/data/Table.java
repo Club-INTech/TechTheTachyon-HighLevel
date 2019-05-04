@@ -300,7 +300,7 @@ public class Table implements Service {
             if (pt.distanceTo(XYO.getBuddyInstance().getPosition()) < compareThreshold) {
                 ray = buddyRobotRay;
             }
-            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray, robotRay);
+            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray+robotRay);
             Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
             mobileObstacleBuffer.add(obst);
         }
@@ -514,7 +514,7 @@ public class Table implements Service {
      * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
      */
     public void SIMULATEDaddMobileObstacle() {
-        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay);
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay+robotRay);
         this.simulatedObstacle.setLifeTime(100000);
         this.mobileObstacles.add(this.simulatedObstacle);
     }

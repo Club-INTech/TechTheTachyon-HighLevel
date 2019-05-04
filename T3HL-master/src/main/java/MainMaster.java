@@ -173,6 +173,15 @@ public class MainMaster extends RobotEntryPoint {
                 e.printStackTrace();
             }
         }*/
+
+/*        while(robot != null) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+*/
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {

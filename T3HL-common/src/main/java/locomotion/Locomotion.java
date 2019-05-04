@@ -34,9 +34,9 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  * Service permettant au robot de se déplacer
@@ -227,11 +227,15 @@ public class Locomotion implements Service {
 
         pathFollower.setParallelActions(parallelActions);
 
+        // a-t-on rencontré un ennemi lors du parcours du chemin?
+        Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
+
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
             try {
                 try {
                     graphe.readLock().lock();
-                    path = pathfinder.findPath(start, aim); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                    encounteredEnemies.clear();
+                    path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
                 }
                 finally {
                     graphe.readLock().unlock();
@@ -286,7 +290,12 @@ public class Locomotion implements Service {
             } catch (NoPathFound e) {
                 // TODO : Compléter
                 //e.printStackTrace();
-                throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
+                if( ! encounteredEnemies.isEmpty()) {
+//                    throw new UnableToMoveException(e.getMessage()+", enemy is at "+encounteredEnemy.get(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH);
+                    new UnableToMoveException(e.getMessage()+", encountered enemies are at "+encounteredEnemies.stream().map(it -> it.getPosition().toString()).collect(Collectors.joining(", ")), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH).printStackTrace();
+                } else {
+                    throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
+                }
             }
         }
         pointsQueue.clear();

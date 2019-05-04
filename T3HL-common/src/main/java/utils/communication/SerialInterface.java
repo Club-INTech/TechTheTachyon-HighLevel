@@ -36,7 +36,7 @@ public class SerialInterface implements CommunicationInterface {
         if (port != null) {
             if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                System.out.println("=> Received: " + line);
+             //   System.out.println("=> Received: " + line);
                 return Optional.of(line);
             }
         }

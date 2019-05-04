@@ -32,6 +32,7 @@ import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 public class ScriptAction extends Action {
@@ -106,7 +107,7 @@ public class ScriptAction extends Action {
             }
 
             try {
-                info.getSpectre().getSimulationPathfinder().findPath(start, aim);
+                info.getSpectre().getSimulationPathfinder().findPath(start, aim, new HashSet<>());
                 result = true;
             } catch (NoPathFound f) {
             }
