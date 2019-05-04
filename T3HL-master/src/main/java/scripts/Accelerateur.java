@@ -14,8 +14,6 @@ import utils.math.VectCartesian;
 
 
 public class Accelerateur extends Script {
-    private final VectCartesian positionEcartementPalet;
-    private final VectCartesian positionCoin;
     private final VectCartesian positionDepart;
     /**
      * Position d'entrée du script
@@ -34,8 +32,6 @@ public class Accelerateur extends Script {
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
-        positionEcartementPalet = new VectCartesian(xEntry+palet+ecartement, yEntry);
-        positionCoin = new VectCartesian(xEntry-distanceToCorner, yEntry);
         positionDepart = new VectCartesian(xEntry, yEntry);
     }
 
