@@ -41,11 +41,11 @@ public class Accelerateur extends Script {
                 if(monteAsc) {
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
-                robot.moveLengthwise(palet+ecartement, false);
+                robot.moveLengthwise(-palet-ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-palet-ecartement,false);
+                robot.moveLengthwise(palet+ecartement,false);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
                 robot.moveLengthwise(distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
@@ -56,11 +56,11 @@ public class Accelerateur extends Script {
                 if(monteAsc) {
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
-                robot.moveLengthwise(-palet-ecartement, false);
+                robot.moveLengthwise(palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(+palet+ecartement, false);
+                robot.moveLengthwise(-palet-ecartement, false);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
                 robot.moveLengthwise(-distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);

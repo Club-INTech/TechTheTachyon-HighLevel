@@ -286,6 +286,7 @@ public class Table implements Service {
                     point = pointIterator.next();
                     if (obstacle.isInObstacle(point)) {
                         obstacle.update(point);
+                        Log.LIDAR.debug("MàJ de l'obstacle mobile : " + obstacle);
                         pointIterator.remove();
                     }
                 }
