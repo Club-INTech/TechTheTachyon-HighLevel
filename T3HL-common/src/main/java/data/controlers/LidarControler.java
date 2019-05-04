@@ -158,9 +158,6 @@ public class LidarControler extends ServiceThread {
                     continue;
                 obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
                 obstacleCenter.plus(currentXYO.getPosition());
-                if (symetrie) {
-                    obstacleCenter.symetrize();
-                }
                 // on ajoute l'obstacle que s'il est dans la table
                 if(tableBB.isInShape(obstacleCenter)) {
                     mobileObstacles.add(obstacleCenter);
