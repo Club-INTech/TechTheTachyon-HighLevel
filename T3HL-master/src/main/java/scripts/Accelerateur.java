@@ -26,7 +26,7 @@ public class Accelerateur extends Script {
      * constante
      */
     private int distavance = 0;
-    private int palet = -90;
+    private int palet = 90;
     private final int ecartement = -20;
     private final int distanceToCorner = -30;
 
