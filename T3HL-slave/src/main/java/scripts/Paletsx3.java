@@ -21,7 +21,7 @@ public class Paletsx3 extends Script{
     /**
      * constante
      */
-    Vec2[] positions = new Vec2[]{
+    private Vec2[] positions = new Vec2[]{
             new VectCartesian(xEntry,yEntry),
             //new VectCartesian(xEntry-100,yEntry),
             //new VectCartesian(xEntry-200,yEntry)
@@ -41,7 +41,7 @@ public class Paletsx3 extends Script{
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT);
+                robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
 
                 CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
 
@@ -54,7 +54,7 @@ public class Paletsx3 extends Script{
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT);
+            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
 
             CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
