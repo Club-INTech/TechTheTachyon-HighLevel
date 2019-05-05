@@ -95,13 +95,26 @@ public abstract class RobotEntryPoint {
         try {
             // trouve la couleur
             panneauService = container.getService(PanneauService.class);
-            if(panneauService.getPanneau() != null) {
-                if(panneauService.getPanneau().isViolet()) {
-                    container.getConfig().override(ConfigData.COULEUR, "violet");
+            if(container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
+                if(panneauService.getPanneau() != null) {
+                    if(panneauService.getPanneau().isViolet()) {
+                        container.getConfig().override(ConfigData.COULEUR, "violet");
+                    } else {
+                        container.getConfig().override(ConfigData.COULEUR, "jaune");
+                    }
                 } else {
-                    container.getConfig().override(ConfigData.COULEUR, "jaune");
+                    Log.STRATEGY.critical("PAS DE PANNEAU");
                 }
             } else {
+                // FIXME
+                // FIXME
+                // FIXME
+                // FIXME    PREVOIR QUELQUE CHOSE POUR NE PAS LANCER LE ROBOT DANS CE MODE POUR UN MATCH
+                // FIXME
+                // FIXME
+                // FIXME
+                // FIXME
+                panneauService.setPanel(null);
                 Log.STRATEGY.critical("PAS DE PANNEAU");
             }
 //            container.getConfig().override(ConfigData.COULEUR, "jaune");
