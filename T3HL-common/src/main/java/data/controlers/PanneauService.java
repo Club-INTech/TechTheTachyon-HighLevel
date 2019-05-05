@@ -34,6 +34,10 @@ public class PanneauService implements Service {
         }
     }
 
+    public void setPanel(Panneau panel) {
+        this.panel = panel;
+    }
+
     public Panneau getPanneau(){
         return panel;
     }

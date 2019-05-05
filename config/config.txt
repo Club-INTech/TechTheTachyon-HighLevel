@@ -18,6 +18,7 @@ SIMULATION                          =false
 USING_LIDAR                         =true
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
+USING_PANEL                         =true
 
 #________________________________________________________________________________________________________________________
 

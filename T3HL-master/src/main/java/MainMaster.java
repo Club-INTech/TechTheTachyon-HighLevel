@@ -79,6 +79,10 @@ public class MainMaster extends RobotEntryPoint {
     }
 
     private void waitForColorSwitch() {
+        if( ! container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
+            panneauService.setPanel(null);
+            return;
+        }
         Panneau panneau = panneauService.getPanneau();
         if(panneau != null) {
             try {

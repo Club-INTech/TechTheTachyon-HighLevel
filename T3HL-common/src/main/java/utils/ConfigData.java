@@ -73,6 +73,11 @@ public enum ConfigData implements ConfigInfo
     USING_BALISE_IMAGE(false),
 
     /**
+     * Si on utilise le panneau
+     */
+    USING_PANEL(true),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
     MASTER_IP("192.168.0.3"),
