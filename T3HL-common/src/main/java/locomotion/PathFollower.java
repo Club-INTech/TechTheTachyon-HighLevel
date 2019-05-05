@@ -23,6 +23,7 @@ import data.Table;
 import data.XYO;
 import data.table.MobileCircularObstacle;
 import orders.OrderWrapper;
+import orders.Speed;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -249,28 +250,56 @@ public class PathFollower extends ServiceThread {
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
+        orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         this.orderWrapper.moveToPoint(point, parallelActions);
 
-        waitWhileTrue(SensorState.MOVING::getData, () -> {
-            if (isCircleObstructed()) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-            }
-            Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
-            nearDirection.setR(this.distanceCheck);
-            nearDirection.plus(XYO.getRobotInstance().getPosition());
-            segment.setPointB(nearDirection);
+        try {
+            waitWhileTrue(SensorState.MOVING::getData, () -> {
+                if (isCircleObstructed()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+                Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
+                nearDirection.setR(this.distanceCheck);
+                nearDirection.plus(XYO.getRobotInstance().getPosition());
+                segment.setPointB(nearDirection);
 
-            Optional<MobileCircularObstacle> enemy = getEnemyInSegment(segment);
-            if (enemy.isPresent()) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-            }
-            if (SensorState.STUCKED.getData()) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-            }
-        });
+                Optional<MobileCircularObstacle> enemy = getEnemyInSegment(segment);
+                if (enemy.isPresent()) {
+
+
+                    // on vérifie si l'endroit où on veut aller est plus proche:
+                    double distanceToAim = aim.getPosition().distanceTo(XYO.getRobotInstance().getPosition());
+
+                    boolean needsToStop = true;
+                    if(distanceToAim < distanceCheck) {
+                        nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
+                        nearDirection.setR(distanceToAim);
+                        nearDirection.plus(XYO.getRobotInstance().getPosition());
+                        segment.setPointB(nearDirection);
+                        if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
+                            orderWrapper.immobilise();
+                            orderWrapper.setBothSpeed(Speed.SLOW_ALL);
+                            // on redemande le déplacement
+                            this.orderWrapper.moveToPoint(point);
+                            needsToStop = false;
+                        }
+                    }
+
+                    if(needsToStop) {
+                        orderWrapper.immobilise();
+                        throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                    }
+                }
+                if (SensorState.STUCKED.getData()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                }
+            });
+        } finally {
+            // on reset la vitesse quoi qu'il arrive
+            orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
+        }
     }
 
     /**
