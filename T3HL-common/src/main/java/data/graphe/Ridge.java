@@ -71,7 +71,7 @@ public class Ridge {
     public boolean isReachable(Graphe graphe, Set<MobileCircularObstacle> encounteredEnemies) {
         synchronized (graphe.getMobileObstacles()) {
             for(MobileCircularObstacle obstacle : graphe.getMobileObstacles()) {
-                if(obstacle.getPathfindingShape().intersect(seg)) {
+                if(obstacle.isValidated() && obstacle.getPathfindingShape().intersect(seg)) {
                     if(encounteredEnemies != null) {
                         encounteredEnemies.add(obstacle);
                     }

@@ -29,6 +29,12 @@ import utils.math.Vec2;
  * @author rem
  */
 public class MobileCircularObstacle extends Obstacle {
+
+    /**
+     * Nombre de fois que l'obstacle doit être vu pour être validé
+     */
+    private static final int MIN_VIEW_COUNT = 3;
+
     /**
      * Temps de vie de l'obstacle (en millisecondes) : sert à retirer l'obstacle lorsqu'il n'est plus détecté
      */
@@ -46,6 +52,11 @@ public class MobileCircularObstacle extends Obstacle {
     private static final int DEFAULT_MARGIN = 60;
 
     private Circle pathShape;
+
+    /**
+     * Combien de fois on a vu cet obstacle à la suite?
+     */
+    private int viewCount;
 
     /**
      * Constructeur à partir d'une position et d'un rayon
@@ -66,6 +77,7 @@ public class MobileCircularObstacle extends Obstacle {
      */
     private MobileCircularObstacle(Circle circle, Circle pathShape) {
         super(circle);
+        viewCount = 0;
         this.pathShape = pathShape;
         this.outDatedTime = DEFAULT_LIFE_TIME + System.currentTimeMillis();
     }
@@ -76,11 +88,20 @@ public class MobileCircularObstacle extends Obstacle {
         pathShape.setCenter(position);
     }
 
+    @Override
+    public boolean intersect(Segment segment) {
+        if( ! isValidated()) { // validation que si on a vu l'obstacle un certain nombre de fois
+            return false;
+        }
+        return super.intersect(segment);
+    }
+
     /**
      * Met à jour la position et le temps de vie de l'obstacle
      * @param newPosition   nouvelle position
      */
     public void update(Vec2 newPosition) {
+        viewCount++;
         this.shape.setCenter(newPosition);
         this.pathShape.setCenter(newPosition);
         this.outDatedTime = DEFAULT_LIFE_TIME + System.currentTimeMillis();
@@ -92,6 +113,10 @@ public class MobileCircularObstacle extends Obstacle {
      */
     public Circle getPathfindingShape() {
         return pathShape;
+    }
+
+    public boolean isValidated() {
+        return viewCount >= MIN_VIEW_COUNT;
     }
 
     @Override
