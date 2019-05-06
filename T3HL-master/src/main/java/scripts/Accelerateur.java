@@ -19,15 +19,15 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = -170;
+    private int xEntry = -170-35;
     private int yEntry = 340+50;
 
     /**
      * constante
      */
     private int distavance = 0;
-    private int palet = 90;
-    private final int ecartement = -20;
+    private int palet = -90;
+    private final int ecartement = 20;
     private final int distanceToCorner = -30;
 
     public Accelerateur(Master robot, Table table) {
