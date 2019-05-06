@@ -36,10 +36,12 @@ public class Accelerateur extends Script {
         positionDepart = new VectCartesian(xEntry, yEntry);
     }
 
-    private void actionBras(boolean coteDroit, boolean monteAsc /*TODO: tmp*/, boolean firstDone) {
+    private void actionBras(boolean coteDroit, boolean firstOfThisSide /*TODO: tmp*/, boolean firstDone) {
         try {
             if (coteDroit) {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                if (!firstOfThisSide) {
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                }
                 if (firstDone) {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
                 }
@@ -57,8 +59,10 @@ public class Accelerateur extends Script {
                 robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
                 robot.popPaletDroit();
             } else {
-                //On monte l'ascenseur gauche
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                if (!firstOfThisSide) {
+                    //On monte l'ascenseur gauche quand nécessaire
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                }
 
                 if (firstDone) {
                     //On envoie le bras à la position ascenseur
@@ -112,11 +116,13 @@ public class Accelerateur extends Script {
 
             //On dépose tous les palets gauche en priorité
             boolean firstDone = false;
+            boolean firstOfThisSide = true;
             while (robot.getNbPaletsGauches() > 0) {
-                actionBras(false, true, firstDone);
+                actionBras(false, firstOfThisSide, firstDone);
                 GameState.GOLDENIUM_LIBERE.setData(true);
                 robot.increaseScore(10);
                 firstDone = true;
+                firstOfThisSide = true;
             }
 
             //On reset les bras aux positions ascenseur
@@ -127,10 +133,12 @@ public class Accelerateur extends Script {
             robot.turn(0);
 
             //On dépose tous les palets droits
+            firstOfThisSide = false;
             while(robot.getNbPaletsDroits() > 0) {
-                actionBras(true, true, firstDone);
+                actionBras(true, firstOfThisSide, firstDone);
                 robot.increaseScore(10);
                 firstDone = true;
+                firstOfThisSide = true;
             }
 
         } catch (UnableToMoveException e) {
