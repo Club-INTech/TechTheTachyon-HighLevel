@@ -7,6 +7,9 @@ import utils.container.Service;
 public enum ScriptNamesSlave implements ScriptNames {
     GOLDENIUM(Goldenium.class,"goldenium"),
     PALETS3(Paletsx3.class, "paletsx3"),
+    PALETSX6(Paletsx6.class, "paletsx6"),
+    CRACHEUR(Cracheur.class, "cracheur"),
+    GETBLUEACC(GetBlueAcc.class, "getBlueAcc"),
     ;
 
     private Class<? extends Service> scriptClass;

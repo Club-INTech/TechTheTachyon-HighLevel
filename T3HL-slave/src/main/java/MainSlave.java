@@ -16,11 +16,13 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import robot.Slave;
 import scripts.ScriptManagerSlave;
+import scripts.ScriptNamesSlave;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -70,6 +72,10 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
         // TODO
+        XYO.getRobotInstance().update(900, 500, Math.PI);
+
+        scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+
     }
 
     private void initSimulator(){
