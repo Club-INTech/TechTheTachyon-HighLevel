@@ -20,7 +20,7 @@ public class Accelerateur extends Script {
      */
 
     private int xEntry = -210-30;
-    private int yEntry = 340+25;
+    private int yEntry = 340+15;
 
     /**
      * constante
