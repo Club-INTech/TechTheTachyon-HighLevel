@@ -19,7 +19,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = -210;
+    private int xEntry = -210-30;
     private int yEntry = 340;
 
     /**
