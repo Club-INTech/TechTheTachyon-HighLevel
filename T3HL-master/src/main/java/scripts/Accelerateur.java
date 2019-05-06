@@ -111,6 +111,9 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+
             //On se cale dans la bonne orientation : vers le camp ennemi
             robot.turn(Math.PI);
 
