@@ -36,7 +36,7 @@ public class Accelerateur extends Script {
         positionDepart = new VectCartesian(xEntry, yEntry);
     }
 
-    private void actionBras(boolean coteDroit, boolean firstOfThisSide /*TODO: tmp*/, boolean firstDone) {
+    private void actionBras(boolean coteDroit, boolean firstOfThisSide, boolean firstDone) {
         try {
             if (coteDroit) {
                 if (!firstOfThisSide) {
@@ -111,8 +111,8 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE, false);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, false);
 
             //On se cale dans la bonne orientation : vers le camp ennemi
             robot.turn(Math.PI);
@@ -143,6 +143,9 @@ public class Accelerateur extends Script {
                 firstDone = true;
                 firstOfThisSide = true;
             }
+
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE, false);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, false);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
