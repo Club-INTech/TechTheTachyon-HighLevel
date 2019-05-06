@@ -20,7 +20,7 @@ public class Accelerateur extends Script {
      */
 
     private int xEntry = -210-30;
-    private int yEntry = 340;
+    private int yEntry = 340+20;
 
     /**
      * constante
@@ -51,9 +51,8 @@ public class Accelerateur extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
-                robot.moveLengthwise(palet+ecartement,false);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
-                robot.moveLengthwise(distanceToCorner, false);
+                robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, false);
                 robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
@@ -81,14 +80,11 @@ public class Accelerateur extends Script {
                 //On place le palet sur la rampe
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR, true);
 
-                //On se déplace en ayant le palet sur la rampe
-                robot.moveLengthwise(-palet-ecartement, false);
-
                 //On pousse le palet contre la rampe
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
 
-                //On coince le palet entre les 2 murs de la rampe
-                robot.moveLengthwise(-distanceToCorner, false);
+                //On se déplace en ayant le palet sur la rampe
+                robot.moveLengthwise(-palet-ecartement-distanceToCorner, false);
 
                 //On casse le vide
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
