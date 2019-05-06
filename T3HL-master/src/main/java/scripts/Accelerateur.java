@@ -77,38 +77,29 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            // TODO: inverser le sens: faire gauche avant droite->moins de rotations
+            robot.turn(Math.PI);
 
-            robot.turn(0);
-
-/*            if(robot.getNbPaletsDroits() > 0) {
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR);
-                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE);
-                robot.popPaletDroit();
+            boolean first = false;
+            while (robot.getNbPaletsGauches() > 0) {
+                actionBras(false, first);
+                GameState.GOLDENIUM_LIBERE.setData(true);
                 robot.increaseScore(10);
-            }*/
-            while (robot.getNbPaletsDroits() > 0) {
-                actionBras(true, true);
-                robot.increaseScore(10);
+                first = true;
             }
 
-
-            /**
-             * Dire que le goldenium est libéré
-             */
-            GameState.GOLDENIUM_LIBERE.setData(true);
             Log.LOCOMOTION.warning("PRE POS DEPART");
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, false);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+
             robot.followPathTo(positionDepart);
+
             Log.LOCOMOTION.warning("POST POS DEPART");
-            robot.turn(Math.PI);
-        //    robot.increaseScore(10);
-            boolean first = false;
-            while(robot.getNbPaletsGauches() > 0) {
-                actionBras(false, first);
+            robot.turn(0);
+
+            first = false;
+            while(robot.getNbPaletsDroits() > 0) {
+                actionBras(true, first);
                 robot.increaseScore(10);
                 first = true;
             }
