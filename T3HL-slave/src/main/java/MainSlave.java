@@ -74,7 +74,15 @@ public class MainSlave extends RobotEntryPoint {
         // TODO
         XYO.getRobotInstance().update(900, 500, Math.PI);
 
-        scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+        table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+        table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+        table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+        table.updateTableAfterFixedObstaclesChanges();
+        table.removeAllChaosObstacles();
+
+        //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+        robot.moveLengthwise(500,false);
+        robot.turn(Math.PI/2);
 
     }
 
