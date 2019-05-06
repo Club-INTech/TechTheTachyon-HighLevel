@@ -54,7 +54,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
                 robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
                 robot.popPaletDroit();
             } else {
@@ -90,7 +90,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
 
                 //On recule le bras
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
 
                 //On recule
                 robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
