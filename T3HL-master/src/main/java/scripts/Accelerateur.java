@@ -56,7 +56,7 @@ public class Accelerateur extends Script {
                 robot.moveLengthwise(distanceToCorner, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, false);
-                robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
+                robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
                 robot.popPaletDroit();
             } else {
                 if (!firstOfThisSide) {
@@ -152,7 +152,7 @@ public class Accelerateur extends Script {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
     }
 
