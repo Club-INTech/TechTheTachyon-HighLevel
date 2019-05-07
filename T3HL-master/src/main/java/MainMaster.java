@@ -23,6 +23,7 @@ import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
+import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Match;
@@ -144,53 +145,25 @@ public class MainMaster extends RobotEntryPoint {
         table.updateTableAfterFixedObstaclesChanges();
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
-        //robot.
-//        scriptManager.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(0);
 
-        /*
-        Vec2 center = new VectCartesian(-100, 500);
-        Vec2 edge = new VectCartesian(1200, 500);
-        while(true) {
-            try {
-                robot.followPathTo(center);
-                robot.followPathTo(edge);
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
+        try {
+            SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
+            for (int i = 0; i < 1000; i++) {
+                ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
+                robot.useActuator(order);
+                robot.useActuator((ActuatorsOrder) symetry.getSymmetrizedActuatorOrder(order), true);
             }
-
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                break;
-            }
-        }*/
-/*
-        while(true) {
-            try {
-                robot.turn(Math.PI-1.0);
-                TimeUnit.MILLISECONDS.sleep(1000);
-                robot.turn(Math.PI);
-                TimeUnit.MILLISECONDS.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
-/*        while(robot != null) {
-            try {
-                TimeUnit.MILLISECONDS.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        } catch (ContainerException e) {
+            e.printStackTrace();
         }
-*/
+
+/*
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-
+*/
     }
 
     private void initSimulator(){
