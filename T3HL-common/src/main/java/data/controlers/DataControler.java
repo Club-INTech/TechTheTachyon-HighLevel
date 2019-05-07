@@ -211,17 +211,21 @@ public class DataControler extends Thread implements Service {
     private void handleSick(String message){
         String[] sickMeasurementsStr = message.split(ARGUMENTS_SEPARATOR);
         System.out.println("=== SICK ===");
+        Sick[] sicks = Sick.values();
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
             sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
+            sicks[i].setLastMeasure(sickMeasurements[i]);
             System.out.print(sickMeasurementsStr[i]+" ");
-
         }
         System.out.println();
      /*   sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
         sickWriter.flush();*/
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
+        if (significantSicks == Sick.NOTHING){
+            return;
+        }
         int dsick;
         int esick = sickMeasurements[significantSicks[1].getIndex()] - sickMeasurements[significantSicks[2].getIndex()];
         int xCalcule;

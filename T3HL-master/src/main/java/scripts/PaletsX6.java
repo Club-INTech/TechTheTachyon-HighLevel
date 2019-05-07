@@ -34,6 +34,7 @@ public class PaletsX6 extends Script {
         /*position des 6 palets ( position dans le tableau positionS ) */
         this.positions = new ArrayList<>();
     }
+
     @Override
     public void execute(Integer version) {
             /*donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.

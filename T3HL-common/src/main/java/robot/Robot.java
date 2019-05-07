@@ -285,6 +285,9 @@ public abstract class Robot implements Service {
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
+        if (significantSicks == Sick.NOTHING){
+            return;
+        }
         XYO newXYO = Sick.getNewXYO();
 
         // remplacement de la position dans le HL
