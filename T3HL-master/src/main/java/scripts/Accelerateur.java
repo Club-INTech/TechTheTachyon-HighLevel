@@ -1,15 +1,19 @@
 package scripts;
 
 import data.GameState;
+import data.Sick;
 import data.Table;
+import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
 import utils.Log;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 
@@ -29,6 +33,10 @@ public class Accelerateur extends Script {
     private int palet = -90;
     private final int ecartement = 50;
     private final int distanceToCorner = -30;
+
+
+    private final int offsetRecalage = 31;
+    private boolean symetry = false;
 
 
     public Accelerateur(Master robot, Table table) {
@@ -113,6 +121,22 @@ public class Accelerateur extends Script {
             //On se cale dans la bonne orientation : vers le camp ennemi
             robot.turn(Math.PI);
 
+            //On regarde notre distance par rapport au mur
+            robot.computeNewPositionAndOrientation(Sick.NOTHING);
+            int[] sicksMeasures = Sick.getLastMeasures();
+
+            int averageDistance;
+            if (this.symetry) {
+                averageDistance = (sicksMeasures[4] + sicksMeasures[5]) / 2 + offsetRecalage;
+            }
+            else{
+                averageDistance = (sicksMeasures[1] + sicksMeasures[2]) / 2 + offsetRecalage;
+            }
+
+            Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+            robot.followPathTo(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
+
+
             //On dépose tous les palets gauche en priorité
             boolean firstDone = false;
             boolean firstOfThisSide = true;
@@ -171,6 +195,7 @@ public class Accelerateur extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 
 }
