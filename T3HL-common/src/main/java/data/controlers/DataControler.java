@@ -227,6 +227,7 @@ public class DataControler extends Thread implements Service {
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         if (significantSicks == Sick.NOTHING){
+            Sick.setNewXYO(XYO.getRobotInstance());
             return;
         }
         int dsick;
