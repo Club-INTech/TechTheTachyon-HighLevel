@@ -32,6 +32,7 @@ public class PaletsZoneDepart extends Script {
     @Override
     public void execute(Integer version) {
         boolean premierPaletPris = false;
+        int i =0;
         try {
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
@@ -50,6 +51,22 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 robot.pushPaletGauche(CouleurPalet.ROUGE); // FIXME: corriger couleur
+                //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
+                switch (i) {
+                    case 0:
+                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+                    i++;
+                    break;
+                    case 1:
+                    table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+                    i++;
+                    break;
+                    case 2:
+                    table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                    i++;
+                    break;
+                }
+                table.updateTableAfterFixedObstaclesChanges();
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
@@ -66,11 +83,10 @@ public class PaletsZoneDepart extends Script {
 */
 
             // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-            table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-            table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
 
-            table.updateTableAfterFixedObstaclesChanges();
+
+
+
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();

@@ -157,15 +157,6 @@ public class PaletsX6 extends Script {
 
     @Override
     public void finalize(Exception e) {
-            //vaut mieux faire en fonction de la version
-            //cas de la version 3
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-            //cas des autres versions
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
 
         // TODO: push palet
     }
