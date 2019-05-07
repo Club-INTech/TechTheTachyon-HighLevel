@@ -143,9 +143,11 @@ public class Accelerateur extends Script {
 
             int averageDistance;
             if (this.symetry) {
+                System.out.println("symetry " + sicksMeasures[4] + sicksMeasures[5]);
                 averageDistance = (sicksMeasures[4] + sicksMeasures[5]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
             else{
+                System.out.println("no symetry " + sicksMeasures[1] + sicksMeasures[2]);
                 averageDistance = (sicksMeasures[1] + sicksMeasures[2]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
 
