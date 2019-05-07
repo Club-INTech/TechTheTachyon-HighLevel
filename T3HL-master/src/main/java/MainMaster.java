@@ -131,7 +131,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+            robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
         } else {
             robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_0);
         }
