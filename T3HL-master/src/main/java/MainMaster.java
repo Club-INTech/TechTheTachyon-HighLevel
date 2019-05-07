@@ -126,15 +126,15 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 1750, Math.PI ); // /!\Je l'ai mis en haut à gauche
+        XYO.getRobotInstance().update(1500-191, 550, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-            robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         } else {
-            robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_0);
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
         robot.turn(Math.PI);
 
