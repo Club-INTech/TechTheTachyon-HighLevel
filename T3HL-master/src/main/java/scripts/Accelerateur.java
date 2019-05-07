@@ -27,6 +27,11 @@ public class Accelerateur extends Script {
     private int yEntry = 340+18;
 
     /**
+     * Boolean de symétrie
+     */
+    private boolean symetry = false;
+
+    /**
      * constante
      */
     private int distavance = 0;
@@ -35,9 +40,20 @@ public class Accelerateur extends Script {
     private final int distanceToCorner = -30;
 
 
+    /**
+     * Offset avec la planche
+     */
     private final int offsetRecalage = 31;
-    private boolean symetry = false;
 
+    /**
+     * Offset pour corriger la mesure des sicks (différence réel - mesuré)
+     */
+    private int offsetSick= 6;
+
+    /**
+     * Différence en Y entre le sick et le centre du robot
+     */
+    private int ySickToRobotCenter=113;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
@@ -127,15 +143,16 @@ public class Accelerateur extends Script {
 
             int averageDistance;
             if (this.symetry) {
-                averageDistance = (sicksMeasures[4] + sicksMeasures[5]) / 2 + offsetRecalage;
+                averageDistance = (sicksMeasures[4] + sicksMeasures[5]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
             else{
-                averageDistance = (sicksMeasures[1] + sicksMeasures[2]) / 2 + offsetRecalage;
+                averageDistance = (sicksMeasures[1] + sicksMeasures[2]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
             robot.followPathTo(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
 
+            robot.turn(Math.PI);
 
             //On dépose tous les palets gauche en priorité
             boolean firstDone = false;
