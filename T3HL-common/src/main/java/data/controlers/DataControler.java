@@ -193,6 +193,15 @@ public class DataControler extends Thread implements Service {
                 SensorState.WAITING_JUMPER.setData(false);
                 break;
             }
+
+            // que le bras soit à la bonne position ou pas, il faut dire que le mouvement est fini
+            case "armPositionFail": // TODO: gérer quand le bras y arrive pas ?
+            case "armFinishedMovement": {
+                String side = event[1];
+                // Bras PHYSIQUE (ie ne prend pas en compte la symétrie)
+                SensorState.getArmMovingState(side).setData(false);
+                Log.COMMUNICATION.debug("Fin de mouvement du bras "+side);
+            }
         }
     }
 

@@ -97,9 +97,25 @@ public class OrderWrapper implements Service {
         if(waitForConfirmation) {
             Log.COMMUNICATION.debug("Asking for confirmation for "+order.getOrderStr());
             this.sendString("!"+order.getOrderStr());
-            SensorState.ACTUATOR_ACTUATING.setData(true);
-            waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-            Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+
+            // il y a une procédure de traitement des mouvements de bras qui n'est pas bloquante pour le LL,
+            // il faut donc un système comme les ascenseurs pour attendre qu'ils aient fini bougent
+            if(order instanceof ActuatorsOrder && ((ActuatorsOrder) order).isArmOrder()) {
+                // quel côté bouge?
+                String side = order.getOrderStr().split(" ")[1];
+
+                // l'ordre est déjà symétrisé quand on récupère la position, c'est donc le bras (droit par exemple) physique, pas logique
+                SensorState<Boolean> armMoving = SensorState.getArmMovingState(side);
+                armMoving.setData(true);
+                Log.COMMUNICATION.debug("Attente du bras du à l'ordre "+order.getOrderStr());
+
+                // on attend que le bras ait fini
+                waitWhileTrue(armMoving::getData);
+            } else {
+                SensorState.ACTUATOR_ACTUATING.setData(true);
+                waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+                Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+            }
             if(order instanceof ActuatorsOrder) {
                 long duration = ((ActuatorsOrder) order).getActionDuration();
                 if(duration > 0) {
