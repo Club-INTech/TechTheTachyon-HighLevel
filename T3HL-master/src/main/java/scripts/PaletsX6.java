@@ -31,8 +31,6 @@ public class PaletsX6 extends Script {
         versions.add(1);
         versions.add(2);
         versions.add(3);
-        versions.add(4);
-        versions.add(5);
         /*position des 6 palets ( position dans le tableau positionS ) */
         this.positions = new ArrayList<>();
     }
@@ -41,32 +39,25 @@ public class PaletsX6 extends Script {
             /*donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
      Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
      */
-        //difference de ~100  entre chaque palet
-        if (version == 0) { //rouge droite
-            positions.add(new VectCartesian(1000, 1206));
-            positions.add(new VectCartesian(805 , 1206));
-            positions.add(new VectCartesian(597, 1206));
-        } else if (version == 1) {  //vert droite
-            positions.add(new VectCartesian(505, 1206));
-            positions.add(new VectCartesian(905, 1206));
-            //positions.add(new VectCartesian(0, 800));
-        } else if (version == 2) {  //bleu droite
-            positions.add(new VectCartesian(834, 1206));
-            //positions.add(new VectCartesian(0, 800));
-            //positions.add(new VectCartesian(0, 800));
-        } else if (version == 3) {  //rouge gauche On doit symetriser la partie droite pas la peine d'écrire des cordonnées
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-        } else if (version == 4) {  //vert gauche
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-        } else if (version == 5) {  //bleu gauche
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-            positions.add(new VectCartesian(0, 800));
-        }
+            int i=0;
+            //Position pour le côté droit
+            //difference de ~100  entre chaque palet
+            if (version == 0) { //rouge droite
+            // version pour juste les rouges
+                positions.add(new VectCartesian(805 , 1206));
+                positions.add(new VectCartesian(597, 1206));
+            } else if (version == 1) {  // version pour juste les verts
+            // positions.add(new VectCartesian(905, 1206));
+                positions.add(new VectCartesian(505, 1206));
+            } else if (version == 2) {  //// version pour juste le bleu
+                positions.add(new VectCartesian(834, 1206));
+            }//version pour prendre les palets à la suite sauf le bleu
+            else if (version ==3){
+                positions.add(new VectCartesian(905, 1206));
+                positions.add(new VectCartesian(805 , 1206));
+                positions.add(new VectCartesian(597, 1206));
+                positions.add(new VectCartesian(505, 1206));
+            }
         try {
             robot.turn(Math.PI);
             try {
@@ -79,27 +70,61 @@ public class PaletsX6 extends Script {
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
+            //Verifier les ascenseurs ?
+            if(robot.getNbPaletsDroits()==0){
+                //robot.useActuator(ActuatorsOrder.);
+            }
             for (Vec2 position : positions) {
-                /*petit booléen qui permet de ne pas bouger au début de la première action comme on est dans l'entry position*/
-                //
-                robot.followPathTo(position);
-                robot.turn(Math.PI);
-
-                // on suposse que l'ascenseur est monté au mx au début
-
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                if(robot.getNbPaletsDroits()==5){
+                    robot.turn(0);
+                    // on suppose que l'ascenseur est monté au mx au début
+                    robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR);
+                    robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                }
+                else {
+                    robot.turn(Math.PI);
+                    // on suppose que l'ascenseur est monté au mx au début
+                    robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+                    robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    robot.followPathTo(position);
+                }
                 if(version == 0) {
                     // TODO
                     robot.pushPaletDroit(CouleurPalet.ROUGE);
-                } else if(version == 1) {
+                    }
+                else if(version == 1) {
                     // TODO
                     robot.pushPaletDroit(CouleurPalet.VERT);
+                }
+                else if(version ==2){
+                    robot.pushPaletDroit(CouleurPalet.BLEU);
+                }
+                else if(version == 3){//Pour chaque palet
+                    switch (i) {
+                        case 0:robot.pushPaletDroit(CouleurPalet.ROUGE);
+                                i++;
+                            break;
+                        case 1:robot.pushPaletDroit(CouleurPalet.VERT);
+                            i++;
+                            break;
+                        case 2:robot.pushPaletDroit(CouleurPalet.ROUGE);
+                            i++;
+                            break;
+                        case 3:robot.pushPaletDroit(CouleurPalet.ROUGE);
+                            i++;
+                            break;
+                        case 4:robot.pushPaletDroit(CouleurPalet.VERT);
+                            i++;
+                            break;
+                    }
                 }
             }
         } catch (UnableToMoveException e) {
@@ -109,38 +134,38 @@ public class PaletsX6 extends Script {
     }
     @Override
     public Shape entryPosition(Integer version) {
+        //position de départ directement au niveau du palet
         if (version == 0) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            //Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1000,1206), 5);
             return positionEntree;
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(905,1206), 5);
             return positionEntree;
         }
         else if (version == 2) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            Shape positionEntree = new Circle(new VectCartesian(834,1206), 5);
             return positionEntree;
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1000,1206), 5);
             return positionEntree;
         }
-        else if (version == 4) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
-            return positionEntree;
-        }
-        else if (version == 5) {
-            Shape positionEntree = new Circle(new VectCartesian(0,800), 5);
-            return positionEntree;
-        }
-
         return null;
     }
+
     @Override
     public void finalize(Exception e) {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+            //vaut mieux faire en fonction de la version
+            //cas de la version 3
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+            //cas des autres versions
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
 
         // TODO: push palet
     }
