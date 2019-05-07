@@ -139,16 +139,13 @@ public class Accelerateur extends Script {
 
             //On regarde notre distance par rapport au mur
             robot.computeNewPositionAndOrientation(Sick.NOTHING);
-            int[] sicksMeasures = Sick.getLastMeasures();
 
             int averageDistance;
             if (this.symetry) {
-                System.out.println("symetry " + sicksMeasures[4] + sicksMeasures[5]);
-                averageDistance = (sicksMeasures[4] + sicksMeasures[5]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
+                averageDistance = (Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
             else{
-                System.out.println("no symetry " + sicksMeasures[1] + sicksMeasures[2]);
-                averageDistance = (sicksMeasures[1] + sicksMeasures[2]) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
+                averageDistance = (Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
             }
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
