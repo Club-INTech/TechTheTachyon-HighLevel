@@ -146,28 +146,13 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
-        try {
-            SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
-            for (int i = 0; i < 1000; i++) {
-                ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
-                if(order.getOrderStr().contains("Secondaire") || order.getOrderStr().contains("gold ")
-                        || order.getOrderStr().contains("bal ")
-                ) // faut pas faire un mouvement connu que du secondaire...
-                    continue;
-                robot.useActuator(order);
-                robot.useActuator((ActuatorsOrder) symetry.getSymmetrizedActuatorOrder(order), true);
-            }
-        } catch (ContainerException e) {
-            e.printStackTrace();
-        }
 
-/*
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-*/
+
     }
 
     private void initSimulator(){
