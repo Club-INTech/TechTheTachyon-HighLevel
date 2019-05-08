@@ -145,10 +145,9 @@ public class MainMaster extends RobotEntryPoint {
             }
         }
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-        table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-        table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-        table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-        table.updateTableAfterFixedObstaclesChanges();
+/*        table.removeTemporaryObstacle(table.getPaletRougeDroite());
+        table.removeTemporaryObstacle(table.getPaletVertDroite());
+        table.removeTemporaryObstacle(table.getPaletBleuDroite());*/
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 

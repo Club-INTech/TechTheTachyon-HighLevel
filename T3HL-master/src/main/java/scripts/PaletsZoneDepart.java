@@ -57,17 +57,17 @@ public class PaletsZoneDepart extends Script {
                 switch (i) {
                     case 0:
                         robot.pushPaletGauche(CouleurPalet.BLEU);
-                    table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                        table.removeTemporaryObstacle(table.getPaletRougeDroite());
                     i++;
                     break;
                     case 1:
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
-                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+                    table.removeTemporaryObstacle(table.getPaletVertDroite());
                     i++;
                     break;
                     case 2:
-                        robot.pushPaletGauche(CouleurPalet.ROUGE);
-                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+                    robot.pushPaletGauche(CouleurPalet.ROUGE);
+                        table.removeTemporaryObstacle(table.getPaletBleuDroite());
                     i++;
                     break;
                 }

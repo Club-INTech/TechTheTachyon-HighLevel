@@ -20,6 +20,7 @@ package data.graphe;
 
 import data.Graphe;
 import data.table.MobileCircularObstacle;
+import data.table.Obstacle;
 import utils.math.Segment;
 
 import java.util.List;
@@ -75,6 +76,15 @@ public class Ridge {
                     if(encounteredEnemies != null) {
                         encounteredEnemies.add(obstacle);
                     }
+                    return false;
+                }
+            }
+        }
+
+        // On vérifie s'il y a un obstacle temporaire
+        synchronized (graphe.getTemporaryObstacles()) {
+            for(Obstacle obstacle : graphe.getTemporaryObstacles()) {
+                if(obstacle.intersect(seg)) {
                     return false;
                 }
             }

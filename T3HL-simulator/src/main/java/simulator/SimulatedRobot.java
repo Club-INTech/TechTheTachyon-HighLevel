@@ -154,6 +154,10 @@ public class SimulatedRobot implements IRobot {
         simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENT.getHeaders(), side));
     }
 
+    public void sendArmConfirmation(RobotSide side) {
+        simulatedLLConnectionManager.sendMessage(String.format("%sarmFinishedMovement %s\n", Channel.EVENT.getHeaders(), side.name().toLowerCase()));
+    }
+
     public void sendPong() {
         simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(), "pong"));
     }
@@ -445,4 +449,5 @@ public class SimulatedRobot implements IRobot {
     public void sendJumperOkay() {
         simulatedLLConnectionManager.sendMessage(String.format("%sgogogofast\n", Channel.EVENT.getHeaders()));
     }
+
 }

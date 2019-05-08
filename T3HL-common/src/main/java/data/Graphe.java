@@ -52,6 +52,11 @@ public class Graphe implements Service {
 
     public final ReentrantReadWriteLock cacheLocks = new ReentrantReadWriteLock(true);
 
+    /**
+     * Liste des obstacles temporaires (eg les palets de la zone de chaos)
+     */
+    private final ArrayList<Obstacle> temporaryObstacles;
+
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
 
@@ -118,6 +123,7 @@ public class Graphe implements Service {
         table.setGraphe(this);
         this.fixedObstacles = table.getFixedObstacles();
         this.mobileCircularObstacles = table.getMobileObstacles();
+        this.temporaryObstacles = table.getTemporaryObstacles();
         this.nodes = new ArrayList<>();
         this.ridges = new ArrayList<>();
     }
@@ -176,7 +182,7 @@ public class Graphe implements Service {
                 pos.setA(i * 2 * Math.PI / nodeCricleNbr);
                 pos.plus(obstacle.getPosition());
 
-                if (!table.isPositionInFixedObstacle(pos)) {
+                if (!table.isPositionInFixedObstacle(pos, false)) {
                     addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos+" à cause d'un obstacle en "+obstacle);
                 }
@@ -227,7 +233,7 @@ public class Graphe implements Service {
             for (int j=0; j<nodeYNbr; j++) {
                 pos.setY(j * yStep);
 
-                if (!table.isPositionInFixedObstacle(pos)) {
+                if (!table.isPositionInFixedObstacle(pos, false)) {
                     addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos);
                 }
@@ -426,6 +432,10 @@ public class Graphe implements Service {
     }
     public ArrayList<Ridge> getRidges() {
         return ridges;
+    }
+
+    public ArrayList<Obstacle> getTemporaryObstacles() {
+        return temporaryObstacles;
     }
 
     public ConcurrentLinkedQueue<MobileCircularObstacle> getMobileObstacles() {

@@ -299,6 +299,7 @@ public class SimulatorManager extends Thread {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            robot.sendArmConfirmation(side);
                             return;
                         }
                     }

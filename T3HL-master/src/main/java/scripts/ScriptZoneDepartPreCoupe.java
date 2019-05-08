@@ -76,24 +76,22 @@ public class ScriptZoneDepartPreCoupe extends Script{
                     robot.followPathTo(devant.get(i));
                     switch (i) {
                         case 0:
-                            table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                            table.removeTemporaryObstacle(table.getPaletBleuDroite());
                             break;
 
                         case 1:
-                            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+                            table.removeTemporaryObstacle(table.getPaletVertGauche());
                             break;
 
                         case 2:
-                            table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
+                            table.removeTemporaryObstacle(table.getPaletVertGauche());
                             break;
                     }
                     robot.followPathTo(pos.get(i));
                 }
-                table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
-                table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
-                table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
-
-                table.updateTableAfterFixedObstaclesChanges();
+                table.removeTemporaryObstacle(table.getPaletVertDroite());
+                table.removeTemporaryObstacle(table.getPaletBleuDroite());
+                table.removeTemporaryObstacle(table.getPaletRougeDroite());
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }

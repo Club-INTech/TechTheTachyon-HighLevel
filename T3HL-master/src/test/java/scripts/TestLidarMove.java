@@ -20,10 +20,9 @@ public class TestLidarMove extends TestBaseHL {
 
     @Override
     public void initState(Container container) throws ContainerException {
-        table.removeFixedObstacleNoReInit(table.getPaletRougeGauche());
-        table.removeFixedObstacleNoReInit(table.getPaletVertGauche());
-        table.removeFixedObstacleNoReInit(table.getPaletBleuGauche());
-        table.updateTableAfterFixedObstaclesChanges();
+        table.removeTemporaryObstacle(table.getPaletRougeGauche());
+        table.removeTemporaryObstacle(table.getPaletVertGauche());
+        table.removeTemporaryObstacle(table.getPaletBleuGauche());
         table.removeAllChaosObstacles();
     }
 
