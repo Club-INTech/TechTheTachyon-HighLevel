@@ -126,7 +126,7 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 350, 0 );
+        XYO.getRobotInstance().update(1500-191, 350, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
