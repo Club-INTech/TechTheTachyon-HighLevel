@@ -126,24 +126,24 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 1550, Math.PI );
+        XYO.getRobotInstance().update(1500-191, 350, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
         for (int i=0; i<2; i++) {
             if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             }
-            robot.turn(Math.PI);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        robot.turn(Math.PI);
 
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
