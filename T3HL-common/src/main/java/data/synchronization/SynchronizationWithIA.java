@@ -31,7 +31,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
      * @param version version du script
      */
     public void sendScriptDone(String scriptStr, int version){
-        this.sendString(String.format(Locale.US, "%s %s %d done", Channel.SCRIPTS, scriptStr, version));
+        this.sendString(String.format(Locale.US, "%s %s %d done", Channel.SCRIPTS.getHeaders(), scriptStr, version));
     }
 
     /**
@@ -39,7 +39,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
      * @param obstacle vec2 de la position à envoyer
      */
     public void sendMobileObstacle(Vec2 obstacle){
-        this.sendString(String.format(Locale.US, "%s %s %s", Channel.OBSTACLES, obstacle.getX(), obstacle.getY()));
+        this.sendString(String.format(Locale.US, "%s %s %s", Channel.OBSTACLES.getHeaders(), obstacle.getX(), obstacle.getY()));
     }
 
     /**
@@ -56,7 +56,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
      * Envoie un message quand le jumper est sorti
      */
     public void sendJumperOut(){
-        this.sendString(String.format(Locale.US, "%s KRAKATOA", Channel.EVENT));
+        this.sendString(String.format(Locale.US, "%s KRAKATOA", Channel.EVENT.getHeaders()));
     }
 
     /**
@@ -76,7 +76,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
                 toSend.append(couleur.getNom());
                 toSend.append(" ");
             }
-            this.sendString(String.format(Locale.US, "%s droit %s", Channel.PALETS_ASCENSEUR, toSend.toString()));
+            this.sendString(String.format(Locale.US, "%s droit %s", Channel.PALETS_ASCENSEUR.getHeaders(), toSend.toString()));
         }
     }
 
@@ -97,7 +97,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
                 toSend.append(couleur.getNom());
                 toSend.append(" ");
             }
-            this.sendString(String.format(Locale.US, "%s gauche %s", Channel.PALETS_ASCENSEUR, toSend.toString()));
+            this.sendString(String.format(Locale.US, "%s gauche %s", Channel.PALETS_ASCENSEUR.getHeaders(), toSend.toString()));
         }
     }
 
