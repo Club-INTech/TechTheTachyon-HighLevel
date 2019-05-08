@@ -36,6 +36,10 @@ public class Electron extends Script{
             while ((!SensorState.ELECTRON_ACTIVATED.getData()) && (!SensorState.ELECTRON_ARRIVED.getData()) ) {
                 try {
                     Connection.ELECTRON.send("electron_launch");
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
                 } catch (CommunicationException e) {
                     e.printStackTrace();
                 }
@@ -49,12 +53,14 @@ public class Electron extends Script{
                     TimeUnit.SECONDS.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    return;
                 }
             }
             Log.ELECTRON.debug("Electron arrived");
 
             ((Master)robot).score += 20;
         });
+        electronThread.setDaemon(true);
         electronThread.start();
 
 
