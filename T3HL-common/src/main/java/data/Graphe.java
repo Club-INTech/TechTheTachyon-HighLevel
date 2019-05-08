@@ -43,8 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author rem
  */
-public class
-Graphe implements Service {
+public class Graphe implements Service {
 
     /**
      * Mémoire qui contient les chemins déjà calculés pour le pathfinding (vidée dès que le graphe change)
@@ -459,7 +458,11 @@ Graphe implements Service {
     public void updateConfig(Config config) {
         updateConfigNoInit(config);
         // L'initialisation du Graphe a besoin des données de la config :'(
-        this.init();
+        synchronized (fixedObstacles) {
+            synchronized (mobileCircularObstacles) {
+                this.init();
+            }
+        }
     }
 
     public void updateConfigNoInit(Config config) {
