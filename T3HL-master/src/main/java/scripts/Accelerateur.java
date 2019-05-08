@@ -23,7 +23,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = -210-30;
+    private int xEntry = -210-27;
     private int yEntry = 340+18;
 
     /**
@@ -159,6 +159,7 @@ public class Accelerateur extends Script {
             boolean firstDone = false;
             boolean firstOfThisSide = true;
             while (robot.getNbPaletsGauches() > 0) {
+                robot.turn(Math.PI);
                 actionBras(false, firstOfThisSide, firstDone);
                 GameState.GOLDENIUM_LIBERE.setData(true);
                 robot.increaseScore(10);
@@ -176,6 +177,7 @@ public class Accelerateur extends Script {
             //On dépose tous les palets droits
             firstOfThisSide = true;
             while(robot.getNbPaletsDroits() > 0) {
+                robot.turn(0);
                 actionBras(true, firstOfThisSide, firstDone);
                 robot.increaseScore(10);
                 firstDone = true;
