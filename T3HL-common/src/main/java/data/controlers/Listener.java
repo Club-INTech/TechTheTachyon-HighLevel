@@ -139,7 +139,7 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.debug("Slave");
                     Log.COMMUNICATION.debug("Teensy Master");
                 } else {
-                    connectionManager.initConnections(Connection.MASTER, Connection.TEENSY_SLAVE);
+                    connectionManager.initConnections(/* FIXME/TODO Connection.MASTER,*/ Connection.TEENSY_SLAVE);
                     buddy = Connection.MASTER;
                     Log.COMMUNICATION.debug("Master");
                     Log.COMMUNICATION.debug("Teensy Slave");
