@@ -16,6 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
@@ -72,8 +73,11 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
         // TODO
-        XYO.getRobotInstance().update(900, 500, Math.PI);
+        XYO.getRobotInstance().update(1500-200, 300, Math.PI);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        robot.turn(Math.PI/2);
+
 
         table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
         table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
