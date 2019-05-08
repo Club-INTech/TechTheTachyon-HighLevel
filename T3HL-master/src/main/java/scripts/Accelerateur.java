@@ -64,6 +64,7 @@ public class Accelerateur extends Script {
         try {
             if (coteDroit) {
                 if (!firstOfThisSide) {
+                    System.out.println("ascenseur droit monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
                 if (firstDone) {
@@ -78,12 +79,13 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
                 robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
                 robot.popPaletDroit();
             } else {
                 if (!firstOfThisSide) {
                     //On monte l'ascenseur gauche quand nécessaire
+                    System.out.println("ascenseur gauche monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
 
