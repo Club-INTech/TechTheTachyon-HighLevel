@@ -14,7 +14,7 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     /**
      * Constructeur
      */
-    public SynchronizationWithBuddy(Container container){
+    public SynchronizationWithBuddy(Container container) {
         super(container);
         this.container=container;
     }

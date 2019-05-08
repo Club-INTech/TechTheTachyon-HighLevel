@@ -63,8 +63,8 @@ public abstract class Robot implements Service {
      * Permet d'envoyer des infos de debug
      */
     private SimulatorDebug simulatorDebug;
-    public int score ;
 
+    public int score ;
 
     /**
      * Service qui permet au robot de bouger
@@ -132,7 +132,7 @@ public abstract class Robot implements Service {
     }
 
     public void waitForElevator(String side) {
-        SensorState state;
+        SensorState<Boolean> state;
         switch (side.toLowerCase()) {
             case "left":
                 state = SensorState.LEFT_ELEVATOR_MOVING;
@@ -144,7 +144,7 @@ public abstract class Robot implements Service {
                 throw new IllegalArgumentException("Côté non reconnu: "+side);
         }
         state.setData(true);
-        while((boolean)state.getData()) { // tant que l'ascenseur bouge
+        while(state.getData()) { // tant que l'ascenseur bouge
             try {
                 Thread.sleep(loopSleepTime);
             } catch (InterruptedException e) {
@@ -273,34 +273,6 @@ public abstract class Robot implements Service {
             return;
         }
 
-        /*if(symetry) {
-            if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_0) {
-                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_PI;
-            } else if(significantSicks == Sick.LOWER_LEFT_CORNER_TOWARDS_PI) {
-                significantSicks = Sick.LOWER_RIGHT_CORNER_TOWARDS_0;
-            }
-
-
-            else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_0) {
-                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_PI;
-            } else if(significantSicks == Sick.LOWER_RIGHT_CORNER_TOWARDS_PI) {
-                significantSicks = Sick.LOWER_LEFT_CORNER_TOWARDS_0;
-            }
-
-            else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_0) {
-                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_PI;
-            } else if(significantSicks == Sick.UPPER_LEFT_CORNER_TOWARDS_PI) {
-                significantSicks = Sick.UPPER_RIGHT_CORNER_TOWARDS_0;
-            }
-
-
-            else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_0) {
-                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_PI;
-            } else if(significantSicks == Sick.UPPER_RIGHT_CORNER_TOWARDS_PI) {
-                significantSicks = Sick.UPPER_LEFT_CORNER_TOWARDS_0;
-            }
-        }*/
-
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
@@ -369,7 +341,6 @@ public abstract class Robot implements Service {
         return leftElevator.size();
     }
 
-    // TODO: FIXME
     /**
      * Initialises l'ascenseur de droite
      */

@@ -77,6 +77,12 @@ public enum ConfigData implements ConfigInfo
      */
     USING_PANEL(true),
 
+
+    /**
+     * Si on se connecte au copain
+     */
+    CONNECT_TO_BUDDY(true),
+
     /**
      * Ips et ports des raspis, lidar & teensy
      */
