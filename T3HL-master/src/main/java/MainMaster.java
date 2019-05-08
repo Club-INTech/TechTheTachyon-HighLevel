@@ -138,6 +138,11 @@ public class MainMaster extends RobotEntryPoint {
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             }
             robot.turn(Math.PI);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)

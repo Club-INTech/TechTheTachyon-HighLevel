@@ -36,7 +36,7 @@ public class Accelerateur extends Script {
      */
     private int distavance = 0;
     private int palet = -90;
-    private final int ecartement = 50;
+    private final int ecartement = 20;
     private final int distanceToCorner = -30;
 
 
@@ -63,9 +63,6 @@ public class Accelerateur extends Script {
     private void actionBras(boolean coteDroit, boolean firstOfThisSide, boolean firstDone) {
         try {
             if (coteDroit) {
-                if (!firstOfThisSide) {
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                }
                 if (firstDone) {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
                 }
@@ -76,17 +73,15 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
+                if (!firstOfThisSide) {
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, false);
+                }
                 robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
                 robot.popPaletDroit();
             } else {
-                if (!firstOfThisSide) {
-                    //On monte l'ascenseur gauche quand nécessaire
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-                }
-
                 if (firstDone) {
                     //On envoie le bras à la position ascenseur
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
@@ -106,6 +101,11 @@ public class Accelerateur extends Script {
 
                 //On pousse le palet contre la rampe
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
+
+                if (!firstOfThisSide) {
+                    //On monte l'ascenseur gauche quand nécessaire
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
+                }
 
                 //On se déplace en ayant le palet sur la rampe
                 robot.moveLengthwise(-palet-ecartement-distanceToCorner, false);
