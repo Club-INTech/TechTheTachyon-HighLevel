@@ -26,7 +26,11 @@ public class Match extends Script {
         robot.pushPaletGauche(CouleurPalet.ROUGE);
         robot.pushPaletGauche(CouleurPalet.ROUGE);
         robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
 
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         robot.pushPaletDroit(CouleurPalet.ROUGE);

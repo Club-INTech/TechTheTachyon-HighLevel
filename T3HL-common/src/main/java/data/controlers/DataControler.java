@@ -63,6 +63,9 @@ public class DataControler extends Thread implements Service {
 
     private int measureIndex = 0;
 
+    /**
+     * Offset pour corriger la mesure des sicks (différence réel - mesuré)
+     */
     private int offsetSick= 6;
 
     /**
@@ -211,17 +214,22 @@ public class DataControler extends Thread implements Service {
     private void handleSick(String message){
         String[] sickMeasurementsStr = message.split(ARGUMENTS_SEPARATOR);
         System.out.println("=== SICK ===");
+        Sick[] sicks = Sick.values();
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
             sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
+            sicks[i].setLastMeasure(sickMeasurements[i]);
             System.out.print(sickMeasurementsStr[i]+" ");
-
         }
         System.out.println();
      /*   sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
         sickWriter.flush();*/
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
+        if (significantSicks == Sick.NOTHING){
+            Sick.setNewXYO(XYO.getRobotInstance());
+            return;
+        }
         int dsick;
         int esick = sickMeasurements[significantSicks[1].getIndex()] - sickMeasurements[significantSicks[2].getIndex()];
         int xCalcule;
@@ -236,7 +244,7 @@ public class DataControler extends Thread implements Service {
             double orien= XYO.getRobotInstance().getOrientation();
 
             if (symetrie) {
-                orien= Math.PI-orien;
+                orien= Calculs.modulo(Math.PI-orien, Math.PI);
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
@@ -258,7 +266,7 @@ public class DataControler extends Thread implements Service {
 
                 }
                 xCalcule = (int) Math.round((1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
-                teta = Math.PI-teta;
+                teta = Calculs.modulo(Math.PI-teta, Math.PI);
             } else {
                 System.out.println(orien);
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
@@ -280,7 +288,7 @@ public class DataControler extends Thread implements Service {
                 }
                 xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()+offsetSick) * Math.cos(teta));
             }
-            newOrientation = teta + Math.PI;
+            newOrientation = Calculs.modulo(teta + Math.PI, Math.PI);
             if (-Math.PI/2 < orien && orien < Math.PI/2) {
                 newOrientation -= Math.PI;
             }
@@ -304,7 +312,7 @@ public class DataControler extends Thread implements Service {
                     teta+= -Math.PI/2;
                 }
                 xCalcule= -xCalcule;
-                teta=Math.PI-teta;
+                teta=Calculs.modulo(Math.PI-teta, Math.PI);
 
             } else {
                 if (0 < orien && orien <Math.PI){
