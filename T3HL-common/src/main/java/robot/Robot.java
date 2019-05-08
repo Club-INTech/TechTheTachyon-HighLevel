@@ -26,6 +26,7 @@ import data.XYO;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
+import locomotion.UnableToMoveReason;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
@@ -43,6 +44,7 @@ import utils.math.Vec2;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -169,7 +171,24 @@ public abstract class Robot implements Service {
      *              en cas de problème de blocage/adversaire
      */
     public void followPathTo(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
-        this.locomotion.followPathTo(point, parallelActions);
+        int attemptCount = 2;
+        for (int i = 0; i < attemptCount; i++) {
+            try {
+                this.locomotion.followPathTo(point, parallelActions);
+                parallelActions = null;
+            } catch (UnableToMoveException e) {
+                if(e.getReason() == UnableToMoveReason.ENEMY_IN_PATH) {
+                    e.printStackTrace(); // on affiche l'erreur mais on réessaie dans 1/2s
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    } catch (InterruptedException e1) {
+                        continue;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**

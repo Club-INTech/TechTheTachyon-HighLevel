@@ -292,7 +292,7 @@ public class Locomotion implements Service {
                 //e.printStackTrace();
                 if( ! encounteredEnemies.isEmpty()) {
 //                    throw new UnableToMoveException(e.getMessage()+", enemy is at "+encounteredEnemy.get(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH);
-                    new UnableToMoveException(e.getMessage()+", encountered enemies are at "+encounteredEnemies.stream().map(it -> it.getPosition().toString()).collect(Collectors.joining(", ")), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH).printStackTrace();
+                    throw new UnableToMoveException(e.getMessage()+", encountered enemies are at "+encounteredEnemies.stream().map(it -> it.getPosition().toString()).collect(Collectors.joining(", ")), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH);
                 } else {
                     throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
                 }
