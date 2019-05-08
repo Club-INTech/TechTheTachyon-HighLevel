@@ -278,6 +278,9 @@ public class OrderWrapper implements Service {
      * @param point point auquel le LL doit se rendre
      */
     public void gotoPoint(Vec2 point) {
+        if(symetry) {
+            point.symetrize();
+        }
         this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
     }
 
