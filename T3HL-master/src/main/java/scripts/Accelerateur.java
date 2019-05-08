@@ -64,7 +64,7 @@ public class Accelerateur extends Script {
         try {
             if (coteDroit) {
                 if (!firstOfThisSide) {
-                    System.out.println("ascenseur droit monté");
+                    Log.ORDERS.critical("ascenseur droit monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
                 if (firstDone) {
@@ -85,7 +85,7 @@ public class Accelerateur extends Script {
             } else {
                 if (!firstOfThisSide) {
                     //On monte l'ascenseur gauche quand nécessaire
-                    System.out.println("ascenseur gauche monté");
+                    Log.ORDERS.critical("ascenseur gauche monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
 
@@ -163,7 +163,7 @@ public class Accelerateur extends Script {
                 GameState.GOLDENIUM_LIBERE.setData(true);
                 robot.increaseScore(10);
                 firstDone = true;
-                firstOfThisSide = true;
+                firstOfThisSide = false;
             }
 
             //On reset les bras aux positions ascenseur
@@ -174,12 +174,12 @@ public class Accelerateur extends Script {
             robot.turn(0);
 
             //On dépose tous les palets droits
-            firstOfThisSide = false;
+            firstOfThisSide = true;
             while(robot.getNbPaletsDroits() > 0) {
                 actionBras(true, firstOfThisSide, firstDone);
                 robot.increaseScore(10);
                 firstDone = true;
-                firstOfThisSide = true;
+                firstOfThisSide = false;
             }
 
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE, false);
