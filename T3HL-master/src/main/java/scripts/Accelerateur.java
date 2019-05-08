@@ -64,7 +64,6 @@ public class Accelerateur extends Script {
         try {
             if (coteDroit) {
                 if (!firstOfThisSide) {
-                    Log.ORDERS.critical("ascenseur droit monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
                 if (firstDone) {
@@ -85,7 +84,6 @@ public class Accelerateur extends Script {
             } else {
                 if (!firstOfThisSide) {
                     //On monte l'ascenseur gauche quand nécessaire
-                    Log.ORDERS.critical("ascenseur gauche monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
 
@@ -145,9 +143,11 @@ public class Accelerateur extends Script {
             int averageDistance;
             if (this.symetry) {
                 averageDistance = (Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
+                Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
             }
             else{
                 averageDistance = (Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
+                Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
             }
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
