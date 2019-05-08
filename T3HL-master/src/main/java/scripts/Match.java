@@ -22,13 +22,9 @@ public class Match extends Script {
     @Override
     public void execute(Integer version) {
         //scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
-        //scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
-        //scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
 
-        for (int i=0; i<5; i++){
-            robot.pushPaletDroit(CouleurPalet.ROUGE);
-            robot.pushPaletGauche(CouleurPalet.ROUGE);
-        }
         scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
     }
 
