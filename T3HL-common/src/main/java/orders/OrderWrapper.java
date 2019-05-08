@@ -20,6 +20,7 @@ package orders;
 
 import connection.Connection;
 import data.SensorState;
+import data.XYO;
 import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
@@ -205,6 +206,7 @@ public class OrderWrapper implements Service {
      */
     public void setPositionAndOrientation(Vec2 pos, double orientation) {
         setPositionAndOrientation(pos, orientation, true);
+        XYO.getRobotInstance().update(pos.getX(), pos.getY(), orientation);
     }
 
     public void setPositionAndOrientation(Vec2 pos, double orientation, boolean synchronize) {
@@ -220,15 +222,11 @@ public class OrderWrapper implements Service {
             this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         } else {
             this.sendString(String.format(Locale.US, "%s %d %d %.3f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
         }
+        XYO.getRobotInstance().update(pos.getX(), pos.getY(), orientation);
     }
 
     /**

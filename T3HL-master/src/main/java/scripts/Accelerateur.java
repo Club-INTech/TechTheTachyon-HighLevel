@@ -64,6 +64,7 @@ public class Accelerateur extends Script {
         try {
             if (coteDroit) {
                 if (!firstOfThisSide) {
+                    System.out.println("ascenseur droit monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
                 if (firstDone) {
@@ -84,6 +85,7 @@ public class Accelerateur extends Script {
             } else {
                 if (!firstOfThisSide) {
                     //On monte l'ascenseur gauche quand nécessaire
+                    System.out.println("ascenseur gauche monté");
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
 
