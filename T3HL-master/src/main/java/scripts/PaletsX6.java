@@ -45,16 +45,18 @@ public class PaletsX6 extends Script {
             //difference de ~100  entre chaque palet
             if (version == 0) { //rouge droite
             // version pour juste les rouges
+                positions.add(new VectCartesian(905, 1206));
                 positions.add(new VectCartesian(805 , 1206));
                 positions.add(new VectCartesian(597, 1206));
             } else if (version == 1) {  // version pour juste les verts
-            // positions.add(new VectCartesian(905, 1206));
+             positions.add(new VectCartesian(905, 1206));
                 positions.add(new VectCartesian(505, 1206));
             } else if (version == 2) {  //// version pour juste le bleu
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version ==3){
                 positions.add(new VectCartesian(905, 1206));
+                positions.add(new VectCartesian(834, 1206));
                 positions.add(new VectCartesian(805 , 1206));
                 positions.add(new VectCartesian(597, 1206));
                 positions.add(new VectCartesian(505, 1206));

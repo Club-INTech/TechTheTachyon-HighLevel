@@ -21,21 +21,21 @@ public class Match extends Script {
     @Override
     public void execute(Integer version) {
     //scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+ //       scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
 
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
+   //     scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
 
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-     //scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+     scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
     }
 
     @Override
