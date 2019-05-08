@@ -147,6 +147,8 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
 
+        robot.computeNewPositionAndOrientation(Sick.NOTHING);
+
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
