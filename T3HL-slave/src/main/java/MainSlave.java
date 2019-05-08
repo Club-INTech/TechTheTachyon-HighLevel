@@ -73,6 +73,7 @@ public class MainSlave extends RobotEntryPoint {
     protected void act() throws UnableToMoveException {
         // TODO
         XYO.getRobotInstance().update(900, 500, Math.PI);
+        robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
         table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
         table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
