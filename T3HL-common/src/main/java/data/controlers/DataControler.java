@@ -244,7 +244,7 @@ public class DataControler extends Thread implements Service {
             double orien= XYO.getRobotInstance().getOrientation();
 
             if (symetrie) {
-                orien= Math.PI-orien;
+                orien= Calculs.modulo(Math.PI-orien, Math.PI);
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
@@ -266,7 +266,7 @@ public class DataControler extends Thread implements Service {
 
                 }
                 xCalcule = (int) Math.round((1500 - (sickMeasurements[significantSicks[0].getIndex()]+ vectsick.getX()+offsetSick) * Math.cos(teta)));
-                teta = Math.PI-teta;
+                teta = Calculs.modulo(Math.PI-teta, Math.PI);
             } else {
                 System.out.println(orien);
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
@@ -288,7 +288,7 @@ public class DataControler extends Thread implements Service {
                 }
                 xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()+offsetSick) * Math.cos(teta));
             }
-            newOrientation = teta + Math.PI;
+            newOrientation = Calculs.modulo(teta + Math.PI, Math.PI);
             if (-Math.PI/2 < orien && orien < Math.PI/2) {
                 newOrientation -= Math.PI;
             }
@@ -312,7 +312,7 @@ public class DataControler extends Thread implements Service {
                     teta+= -Math.PI/2;
                 }
                 xCalcule= -xCalcule;
-                teta=Math.PI-teta;
+                teta=Calculs.modulo(Math.PI-teta, Math.PI);
 
             } else {
                 if (0 < orien && orien <Math.PI){
