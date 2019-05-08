@@ -99,8 +99,8 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public Shape entryPosition(Integer version) {
-        return new Circle(robot.getXyo().getPosition(),5);
-        //return new Circle(new VectCartesian(xEntry, yEntry), 5);
+        //return new Circle(robot.getXyo().getPosition(),5);
+        return new Circle(new VectCartesian(xEntry, yEntry), 5);
     }
 
     @Override
