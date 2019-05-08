@@ -18,7 +18,7 @@ public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
     private int xEntry = 1500-191-65+20;//1350;
-    private int yEntry = 450;
+    private int yEntry = 455;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
             new VectCartesian(xEntry,yEntry+300),
@@ -47,7 +47,7 @@ public class PaletsZoneDepart extends Script {
                 }
                 //robot.turn(Math.PI / 2);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                for(int f =0;f<100;f++) { }
+
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
