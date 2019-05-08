@@ -50,19 +50,22 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                robot.pushPaletGauche(CouleurPalet.ROUGE); // FIXME: corriger couleur
+                // FIXME: corriger couleur
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
                     case 0:
-                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
+                        robot.pushPaletGauche(CouleurPalet.BLEU);
+                    table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
                     i++;
                     break;
                     case 1:
-                    table.removeFixedObstacleNoReInit(table.getPaletVertDroite());
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
+                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
                     i++;
                     break;
                     case 2:
-                    table.removeFixedObstacleNoReInit(table.getPaletBleuDroite());
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
+                    table.removeFixedObstacleNoReInit(table.getPaletRougeDroite());
                     i++;
                     break;
                 }
@@ -87,7 +90,7 @@ public class PaletsZoneDepart extends Script {
 
 
 
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+           // robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
