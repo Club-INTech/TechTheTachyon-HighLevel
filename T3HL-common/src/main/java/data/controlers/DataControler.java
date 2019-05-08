@@ -63,6 +63,9 @@ public class DataControler extends Thread implements Service {
 
     private int measureIndex = 0;
 
+    /**
+     * Offset pour corriger la mesure des sicks (différence réel - mesuré)
+     */
     private int offsetSick= 6;
 
     /**
@@ -224,6 +227,7 @@ public class DataControler extends Thread implements Service {
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         if (significantSicks == Sick.NOTHING){
+            Sick.setNewXYO(XYO.getRobotInstance());
             return;
         }
         int dsick;

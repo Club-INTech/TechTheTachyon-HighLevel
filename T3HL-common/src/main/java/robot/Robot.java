@@ -304,10 +304,10 @@ public abstract class Robot implements Service {
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
+        XYO newXYO = Sick.getNewXYO();
         if (significantSicks == Sick.NOTHING){
             return;
         }
-        XYO newXYO = Sick.getNewXYO();
 
         // remplacement de la position dans le HL
         XYO.getRobotInstance().update(newXYO.getPosition().getX(), newXYO.getPosition().getY(), newXYO.getOrientation());
