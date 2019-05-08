@@ -215,6 +215,7 @@ public class DataControler extends Thread implements Service {
         String[] sickMeasurementsStr = message.split(ARGUMENTS_SEPARATOR);
         System.out.println("=== SICK ===");
         Sick[] sicks = Sick.values();
+        long timestampStart = System.currentTimeMillis();
         for(int i = 0; i < sickMeasurementsStr.length; i++) {
             // permet d'éviter de réextraire les valeurs du String qu'on reçoie
             sickMeasurements[i] = Integer.parseInt(sickMeasurementsStr[i]);
@@ -333,6 +334,8 @@ public class DataControler extends Thread implements Service {
         VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
         newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
+        long timestampStop = System.currentTimeMillis();
+        System.out.println("SICK : Temps exécution : " + (timestampStop-timestampStart) + " ms");
         Sick.setNewXYO(newXYO);
     }
 
