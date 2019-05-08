@@ -83,6 +83,7 @@ public class LidarControler extends ServiceThread {
      * Chemin du processus gèrant le Lidar (absolu ou relatif au dossier d'exécution)
      */
     private String processPath;
+    private boolean shouldRun;
 
     /**
      * Construit un gestionnaire des données du Lidar
@@ -99,6 +100,9 @@ public class LidarControler extends ServiceThread {
 
     @Override
     public void run() {
+        if(!shouldRun) {
+            return;
+        }
         Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
         Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
@@ -178,5 +182,6 @@ public class LidarControler extends ServiceThread {
         this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
         this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
         this.processPath = config.getString(ConfigData.LIDAR_PROCESS_PATH);
+        this.shouldRun = config.getBoolean(ConfigData.USING_LIDAR);
     }
 }

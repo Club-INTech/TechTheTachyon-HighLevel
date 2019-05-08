@@ -6,6 +6,7 @@ import utils.Log;
 import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import static com.fazecast.jSerialComm.SerialPort.TIMEOUT_SCANNER;
 
@@ -52,13 +53,19 @@ public class SerialInterface implements CommunicationInterface {
         port.setParity(0);
         port.setNumDataBits(8);
         port.setComPortTimeouts(TIMEOUT_SCANNER, 0, 0);
-        boolean result = port.openPort();
-        if (!result) {
-            Log.COMMUNICATION.critical("Echec de l'ouverture du port!");
-        }
-        this.printer = new PrintStream(port.getOutputStream());
-        this.scanner = new Scanner(port.getInputStream());
-        open = true;
+        new Thread(() -> {
+            while(!port.openPort()) {
+                Log.COMMUNICATION.critical("Echec de l'ouverture du port! Réessai dans 0.5s");
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+            this.printer = new PrintStream(port.getOutputStream());
+            this.scanner = new Scanner(port.getInputStream());
+            open = true;
+        }).start();
     }
 
     @Override

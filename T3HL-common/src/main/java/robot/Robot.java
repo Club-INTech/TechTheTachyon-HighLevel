@@ -182,7 +182,7 @@ public abstract class Robot implements Service {
                     try {
                         TimeUnit.MILLISECONDS.sleep(500);
                     } catch (InterruptedException e1) {
-                        continue;
+                        break;
                     }
                 } else {
                     throw e;

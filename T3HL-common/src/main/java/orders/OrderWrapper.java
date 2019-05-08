@@ -343,10 +343,16 @@ public class OrderWrapper implements Service {
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
         useBalise_Image = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
+
+        boolean isMaster = config.getBoolean(ConfigData.MASTER);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            this.llConnection = Connection.TEENSY_MASTER;
+            if(isMaster) {
+                this.llConnection = Connection.TEENSY_MASTER;
+            } else {
+                this.llConnection = Connection.TEENSY_SLAVE;
+            }
         }
     }
 
