@@ -69,7 +69,6 @@ public class PaletsZoneDepart extends Script {
                     i++;
                     break;
                 }
-                table.updateTableAfterFixedObstaclesChanges();
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
@@ -103,6 +102,7 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public void finalize(Exception e) {
+        table.updateTableAfterFixedObstaclesChanges();
     }
 
     @Override
