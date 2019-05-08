@@ -55,11 +55,11 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version ==3){
-                positions.add(new VectCartesian(905, 1206));
-                positions.add(new VectCartesian(834, 1206));
-                positions.add(new VectCartesian(805 , 1206));
-                positions.add(new VectCartesian(597, 1206));
-                positions.add(new VectCartesian(505, 1206));
+                positions.add(new VectCartesian(1000, 1206));
+                positions.add(new VectCartesian(900, 1206));
+                positions.add(new VectCartesian(800 , 1206));
+                positions.add(new VectCartesian(700, 1206));
+                positions.add(new VectCartesian(600, 1206));
             }
         try {
             robot.turn(Math.PI);
@@ -94,7 +94,7 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
-                    robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
+                    robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                     robot.followPathTo(position);
