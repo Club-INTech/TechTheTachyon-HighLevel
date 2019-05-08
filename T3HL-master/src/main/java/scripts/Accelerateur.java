@@ -151,7 +151,7 @@ public class Accelerateur extends Script {
             }
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            robot.followPathTo(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
+            robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
 
             robot.turn(Math.PI);
 
