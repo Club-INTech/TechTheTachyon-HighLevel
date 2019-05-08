@@ -80,17 +80,17 @@ public enum ConfigData implements ConfigInfo
     /**
      * Ips et ports des raspis, lidar & teensy
      */
-    MASTER_IP("192.168.0.3"),
+    MASTER_IP("192.168.12.2"),
     MASTER_PORT(14500),
     TEENSY_MASTER_IP("192.168.1.1"),
     TEENSY_MASTER_PORT(13500),
-    TEENSY_SLAVE_IP("192.168.0.2"),
+    TEENSY_SLAVE_IP("192.168.12.3"),
     TEENSY_SLAVE_PORT(13500),
     LIDAR_DATA_PORT(17865),
     BALISE_IP("127.0.0.1"),
     BALISE_PORT(1111),
     IA_PORT(16000),
-    ELECTRON_IP("192.168.1.69"),
+    ELECTRON_IP("192.168.12.69"),
     ELECTRON_PORT(18900),
 
     LOCALHOST("localhost"),
@@ -98,7 +98,7 @@ public enum ConfigData implements ConfigInfo
     LL_MASTER_SIMULATEUR(10001),
     HL_SLAVE_SIMULATEUR(20001),
     HL_MASTER_SIMULATEUR(20002),
-    DEBUG_SIMULATEUR_PORT(19999), //
+    DEBUG_SIMULATEUR_PORT(19999),
 
     /**
      * Timings
