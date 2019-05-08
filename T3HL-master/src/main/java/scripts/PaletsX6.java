@@ -62,7 +62,7 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(600, 1206));
             }
         try {
-            robot.turn(Math.PI);
+            //robot.turn(Math.PI);
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
