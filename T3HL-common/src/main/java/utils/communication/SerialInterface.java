@@ -65,7 +65,7 @@ public class SerialInterface implements CommunicationInterface {
             this.printer = new PrintStream(port.getOutputStream());
             this.scanner = new Scanner(port.getInputStream());
             open = true;
-        });
+        }).start();
     }
 
     @Override
