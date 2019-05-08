@@ -60,6 +60,7 @@ public class Accelerateur extends Script {
     private void actionBras(boolean coteDroit, boolean firstOfThisSide) {
         try {
             if (coteDroit) {
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
                 if (!firstOfThisSide) {
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, false);
                 }
@@ -73,6 +74,9 @@ public class Accelerateur extends Script {
                 robot.moveLengthwise(-distanceAllerRetour, false);
                 robot.popPaletDroit();
             } else {
+                //On prépare la pompe pour aspirer mieux
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
+
                 if (!firstOfThisSide) {
                     //On monte l'ascenseur gauche quand nécessaire
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
@@ -80,7 +84,7 @@ public class Accelerateur extends Script {
                 //On envoie le bras à la position ascenseur
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
 
-                //On aspire
+                //On attend un peu pour bien aspirer
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
 
                 //On place le palet sur la rampe
