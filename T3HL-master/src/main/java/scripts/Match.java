@@ -24,18 +24,18 @@ public class Match extends Script {
         //robot.pushPaletGauche(CouleurPalet.ROUGE);
         //robot.pushPaletGauche(CouleurPalet.ROUGE);
         //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
-        //robot.pushPaletGauche(CouleurPalet.ROUGE);
+       // robot.pushPaletGauche(CouleurPalet.ROUGE);
+       // robot.pushPaletGauche(CouleurPalet.ROUGE);
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0);
 
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
 
+      //  robot.pushPaletDroit(CouleurPalet.ROUGE);
         //robot.pushPaletDroit(CouleurPalet.ROUGE);
         //robot.pushPaletDroit(CouleurPalet.ROUGE);
         //robot.pushPaletDroit(CouleurPalet.ROUGE);
         //robot.pushPaletDroit(CouleurPalet.ROUGE);
-        //robot.pushPaletDroit(CouleurPalet.ROUGE);
-     //scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
+    // scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
     }
 
     @Override

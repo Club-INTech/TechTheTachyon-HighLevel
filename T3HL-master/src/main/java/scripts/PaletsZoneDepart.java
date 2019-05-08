@@ -18,7 +18,7 @@ public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
     private int xEntry = 1500-191-65+20;//1350;
-    private int yEntry = 430;
+    private int yEntry = 450;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
             new VectCartesian(xEntry,yEntry+300),
@@ -69,7 +69,6 @@ public class PaletsZoneDepart extends Script {
                     i++;
                     break;
                 }
-                table.updateTableAfterFixedObstaclesChanges();
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
@@ -103,6 +102,7 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public void finalize(Exception e) {
+        table.updateTableAfterFixedObstaclesChanges();
     }
 
     @Override

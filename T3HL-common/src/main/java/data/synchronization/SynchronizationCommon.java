@@ -54,8 +54,12 @@ public abstract class SynchronizationCommon implements Service {
      */
     protected void sendString(String message) {
         try {
-            this.connection.send(message);
-            Log.ORDERS.debug("Sent to BUDDY: "+message);
+            if(connection.isInitiated()) {
+                this.connection.send(message);
+                Log.ORDERS.debug("Sent to BUDDY: "+message);
+            } else {
+                Log.ORDERS.debug("Wanted to send to BUDDY: '"+message+"' but no connection!");
+            }
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
@@ -64,7 +68,7 @@ public abstract class SynchronizationCommon implements Service {
     /**
      * Envoie notre position
      */
-    protected void sendPosition(){
+    public void sendPosition(){
         Vec2 currentPos = XYO.getRobotInstance().getPosition();
         this.sendString(String.format(Locale.US, "%s %d %d", Channel.BUDDY_POSITION, currentPos.getX(), currentPos.getY()));
     }
@@ -73,7 +77,7 @@ public abstract class SynchronizationCommon implements Service {
      * Envoie la liste des positions composant le chemin actuel du robot coéquipier
      * @param path liste de Vec2 à envoyer
      */
-    protected void sendPath(List<Vec2> path){
+    public void sendPath(List<Vec2> path){
         StringBuilder serializePath = new StringBuilder();
         for (Vec2 vec2 : path){
             serializePath.append(vec2.getX());
@@ -90,7 +94,7 @@ public abstract class SynchronizationCommon implements Service {
      * @param palet quel palet a été pris
      * @param pris True si le palet a été pris, False sinon
      */
-    protected void sendPaletPris(Palet palet, boolean pris){
+    public void sendPaletPris(Palet palet, boolean pris){
         this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS, palet.getId(), pris));
     }
 
@@ -98,10 +102,13 @@ public abstract class SynchronizationCommon implements Service {
      * Envoie l'état du goldenium
      * @param accessible True si le goldenium est accessible, False sinon
      */
-    protected void sendGoldeniumState(boolean accessible){
+    public void sendGoldeniumState(boolean accessible){
         this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS, Palet.GOLDENIUM.getId(), accessible));
     }
 
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public abstract void updateConfig(Config config);

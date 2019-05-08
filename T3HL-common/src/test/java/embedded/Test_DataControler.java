@@ -23,9 +23,11 @@ import connection.ConnectionManager;
 import data.XYO;
 import data.controlers.Listener;
 import data.controlers.DataControler;
+import data.synchronization.SynchronizationWithBuddy;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import utils.Container;
 import utils.math.VectCartesian;
 
 public class Test_DataControler {
@@ -41,7 +43,7 @@ public class Test_DataControler {
     public void setUp() throws Exception{
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
-        listener=new Listener(connectionManager);
+        listener=new Listener(connectionManager, new SynchronizationWithBuddy(Container.getInstance("Master")));
         dataControler =new DataControler(listener, null);
     }
 

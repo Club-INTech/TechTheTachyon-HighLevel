@@ -20,6 +20,7 @@ package data.controlers;
 
 import connection.Connection;
 import connection.ConnectionManager;
+import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -44,6 +45,7 @@ public class Listener extends ServiceThread {
      * Gestionnaire des connexions
      */
     private ConnectionManager connectionManager;
+    private SynchronizationWithBuddy buddySync;
 
     /**
      * Pour connaître les redirections à effectuer
@@ -77,11 +79,17 @@ public class Listener extends ServiceThread {
     private boolean useElectron;
 
     /**
+     * Est-ce qu'on se connecte au copain?
+     */
+    private boolean connectToBuddy;
+
+    /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
-    public Listener(ConnectionManager connectionManager) {
+    public Listener(ConnectionManager connectionManager, SynchronizationWithBuddy buddySync) {
         this.connectionManager = connectionManager;
+        this.buddySync = buddySync;
         this.collectionMap = new HashMap<>();
         this.setPriority(Thread.MAX_PRIORITY);
     }
@@ -111,13 +119,7 @@ public class Listener extends ServiceThread {
 
     @Override
     public void run() {
-        Connection buddy;
-        if (simulation){
-            buddy = Connection.SLAVE_SIMULATEUR;
-        }
-        else {
-            buddy = Connection.SLAVE;
-        }
+        Connection buddy = Connection.SLAVE;
         // Initialisation des connexions
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
@@ -135,15 +137,24 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Lidar");
                 Log.COMMUNICATION.debug("Balise");
                 if (master) {
-                    connectionManager.initConnections(/*Connection.SLAVE, */Connection.TEENSY_MASTER);
-                    Log.COMMUNICATION.debug("Slave");
+                    connectionManager.initConnections(Connection.TEENSY_MASTER);
                     Log.COMMUNICATION.debug("Teensy Master");
+                    buddy = Connection.SLAVE;
+                    if(connectToBuddy) {
+                        connectionManager.initConnections(buddy);
+                        Log.COMMUNICATION.debug("Slave");
+                    }
                 } else {
-                    connectionManager.initConnections(/* FIXME/TODO Connection.MASTER,*/ Connection.TEENSY_SLAVE);
-                    buddy = Connection.MASTER;
-                    Log.COMMUNICATION.debug("Master");
+                    connectionManager.initConnections(Connection.TEENSY_SLAVE);
                     Log.COMMUNICATION.debug("Teensy Slave");
+                    buddy = Connection.MASTER;
+                    if(connectToBuddy) {
+                        connectionManager.initConnections(buddy);
+                        Log.COMMUNICATION.debug("Master");
+                    }
                 }
+
+                buddySync.setConnection(buddy);
 
                 if(visualize) {
                     Log.COMMUNICATION.debug("Debug connection init...");
@@ -193,8 +204,7 @@ public class Listener extends ServiceThread {
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
                                 if(buddy.isInitiated()) {
-                                    Log.COMMUNICATION.debug("Sending buddy pos to "+buddy+" because of message '"+message+"' from "+current);
-                                    buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                                    buddySync.sendPosition();
                                 }
                             }
                         }
@@ -226,5 +236,6 @@ public class Listener extends ServiceThread {
         this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
         this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
+        this.connectToBuddy = config.getBoolean(ConfigData.CONNECT_TO_BUDDY);
     }
 }

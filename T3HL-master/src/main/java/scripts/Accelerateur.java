@@ -23,8 +23,8 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private int xEntry = -210-27;
-    private int yEntry = 340+18;
+    private final int xEntry = -210-27-30;
+    private final int yEntry = 340+18;
 
     /**
      * Boolean de symétrie
@@ -32,12 +32,9 @@ public class Accelerateur extends Script {
     private boolean symetry = false;
 
     /**
-     * constante
+     * Distance d'aller retour entre le moment où l'on dépose un palet et le moment où l'en le libère
      */
-    private int distavance = 0;
-    private int palet = -90;
-    private final int ecartement = 20;
-    private final int distanceToCorner = -30;
+    private final int distanceAllerRetour = 140;
 
 
     /**
@@ -48,50 +45,40 @@ public class Accelerateur extends Script {
     /**
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
      */
-    private int offsetSick= 6;
+    private final int offsetSick= 6;
 
     /**
      * Différence en Y entre le sick et le centre du robot
      */
-    private int ySickToRobotCenter=113;
+    private final int ySickToRobotCenter=113;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
         positionDepart = new VectCartesian(xEntry, yEntry);
     }
 
-    private void actionBras(boolean coteDroit, boolean firstOfThisSide, boolean firstDone) {
+    private void actionBras(boolean coteDroit, boolean firstOfThisSide) {
         try {
             if (coteDroit) {
-                if (firstDone) {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-                }
-                else{
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
-                    robot.moveLengthwise(-palet - ecartement, false);
-                }
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
-                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
                 if (!firstOfThisSide) {
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, false);
                 }
-                robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
+                robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
+                robot.moveLengthwise(distanceAllerRetour, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
-                robot.moveLengthwise(-distanceToCorner-palet-ecartement, false);
+                robot.moveLengthwise(-distanceAllerRetour, false);
                 robot.popPaletDroit();
             } else {
-                if (firstDone) {
-                    //On envoie le bras à la position ascenseur
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+                if (!firstOfThisSide) {
+                    //On monte l'ascenseur gauche quand nécessaire
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
                 }
-                else{
-                    //On envoie le bras à la position ascenseur
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, false);
-                    //On se déplace pour mettre un autre palet sur la rampe
-                    robot.moveLengthwise(palet + ecartement, false);
-                }
+                //On envoie le bras à la position ascenseur
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
 
                 //On aspire
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -102,13 +89,8 @@ public class Accelerateur extends Script {
                 //On pousse le palet contre la rampe
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_GAUCHE, true);
 
-                if (!firstOfThisSide) {
-                    //On monte l'ascenseur gauche quand nécessaire
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
-                }
-
                 //On se déplace en ayant le palet sur la rampe
-                robot.moveLengthwise(-palet-ecartement-distanceToCorner, false);
+                robot.moveLengthwise(distanceAllerRetour, false);
 
                 //On casse le vide
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
@@ -117,7 +99,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
 
                 //On recule
-                robot.moveLengthwise(distanceToCorner+palet+ecartement, false);
+                robot.moveLengthwise(-distanceAllerRetour, false);
 
                 //On met à jour la tour gauche
                 robot.popPaletGauche();
@@ -156,14 +138,12 @@ public class Accelerateur extends Script {
             robot.turn(Math.PI);
 
             //On dépose tous les palets gauche en priorité
-            boolean firstDone = false;
             boolean firstOfThisSide = true;
             while (robot.getNbPaletsGauches() > 0) {
                 robot.turn(Math.PI);
-                actionBras(false, firstOfThisSide, firstDone);
+                actionBras(false, firstOfThisSide);
                 GameState.GOLDENIUM_LIBERE.setData(true);
                 robot.increaseScore(10);
-                firstDone = true;
                 firstOfThisSide = false;
             }
 
@@ -178,9 +158,8 @@ public class Accelerateur extends Script {
             firstOfThisSide = true;
             while(robot.getNbPaletsDroits() > 0) {
                 robot.turn(0);
-                actionBras(true, firstOfThisSide, firstDone);
+                actionBras(true, firstOfThisSide);
                 robot.increaseScore(10);
-                firstDone = true;
                 firstOfThisSide = false;
             }
 
