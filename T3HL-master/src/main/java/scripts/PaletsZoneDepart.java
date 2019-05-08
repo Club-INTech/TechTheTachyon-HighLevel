@@ -43,6 +43,7 @@ public class PaletsZoneDepart extends Script {
 //                    robot.followPathTo(position);
                 } else {
                     premierPaletPris = true;
+                    robot.followPathTo(position);
                 }
                 robot.turn(Math.PI / 2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
