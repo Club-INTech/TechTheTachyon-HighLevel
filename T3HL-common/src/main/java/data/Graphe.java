@@ -57,6 +57,11 @@ public class Graphe implements Service {
      */
     private final ArrayList<Obstacle> temporaryObstacles;
 
+    /**
+     * Est-ce que le graphe est déjà initialisé? On évite de recharger le graphe quand le panneau change la config
+     */
+    private boolean initialized;
+
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
 
@@ -67,13 +72,13 @@ public class Graphe implements Service {
 
     /**
      * Liste des obstacles fixes
-     * @see Table#fixedObstacles
+     * @see Table#getFixedObstacles()
      */
     private final ArrayList<Obstacle> fixedObstacles;
 
     /**
      * Liste des obstacles mobiles
-     * @see Table#mobileObstacles
+     * @see Table#getMobileObstacles()
      */
     private final ConcurrentLinkedQueue<MobileCircularObstacle> mobileCircularObstacles;
 
@@ -258,7 +263,7 @@ public class Graphe implements Service {
                 constructRidge(node1, node2, segment);
             }
         }
-        Log.GRAPHE.debug("Fin d'initialisation des arrêtes");
+        Log.GRAPHE.debug("Fin d'initialisation des arrêtes, "+ridges.size()+" arrêtes créées");
     }
 
     /**
@@ -468,9 +473,12 @@ public class Graphe implements Service {
     public void updateConfig(Config config) {
         updateConfigNoInit(config);
         // L'initialisation du Graphe a besoin des données de la config :'(
-        synchronized (fixedObstacles) {
-            synchronized (mobileCircularObstacles) {
-                this.init();
+        if( ! initialized) {
+            synchronized (fixedObstacles) {
+                synchronized (mobileCircularObstacles) {
+                    this.init();
+                    initialized = true;
+                }
             }
         }
     }
