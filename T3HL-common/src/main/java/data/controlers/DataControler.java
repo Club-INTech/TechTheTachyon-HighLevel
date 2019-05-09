@@ -198,7 +198,11 @@ public class DataControler extends Thread implements Service {
             }
 
             // que le bras soit à la bonne position ou pas, il faut dire que le mouvement est fini
-            case "armPositionFail": // TODO: gérer quand le bras y arrive pas ?
+            case "armPositionFail":
+                // TODO: gérer quand le bras y arrive pas ?
+                Log.ORDERS.critical("Le bras n'est pas arrivé à destination");
+                break;
+
             case "armFinishedMovement": {
                 String side = event[1];
                 // Bras PHYSIQUE (ie ne prend pas en compte la symétrie)
