@@ -133,12 +133,14 @@ public class MainMaster extends RobotEntryPoint {
         robot.setRotationSpeed(Speed.MEDIUM_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-        if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
-        } else {
-            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+        for (int i=0; i<2; i++) {
+            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+            } else {
+                robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+            }
+            robot.turn(Math.PI);
         }
-        //robot.turn(Math.PI);
         robot.turn(-Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
