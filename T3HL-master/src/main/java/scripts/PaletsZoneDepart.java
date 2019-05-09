@@ -46,6 +46,7 @@ public class PaletsZoneDepart extends Script {
                     //robot.followPathTo(position);
                 }
                 //robot.turn(Math.PI / 2);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
                 try {
@@ -55,7 +56,9 @@ public class PaletsZoneDepart extends Script {
                 }
 
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
+
                 /*try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
