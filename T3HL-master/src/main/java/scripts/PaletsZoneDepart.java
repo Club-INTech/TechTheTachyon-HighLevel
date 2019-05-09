@@ -62,7 +62,7 @@ public class PaletsZoneDepart extends Script {
                     e.printStackTrace();
                 }
 
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,false);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                 // FIXME: corriger couleur
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
