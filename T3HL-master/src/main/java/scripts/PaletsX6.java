@@ -59,7 +59,7 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(900, 1206));
                 positions.add(new VectCartesian(800 , 1206));
                 positions.add(new VectCartesian(700, 1206));
-                positions.add(new VectCartesian(600, 1206));
+                positions.add(new VectCartesian(500, 1206));
             }
         try {
             //
