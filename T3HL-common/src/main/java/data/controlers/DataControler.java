@@ -302,8 +302,8 @@ public class DataControler extends Thread implements Service {
             }
         }
         else {
-            dsick = 68;
-            VectCartesian vectSickSecondaire = new VectCartesian(110,100); //Vecteur qui place les sick par rapport à l'origine du robot
+            dsick = 64;
+            VectCartesian vectSickSecondaire = new VectCartesian(108,100); //Vecteur qui place les sick par rapport à l'origine du robot
             double rapport = ((double)esick) / dsick;
             double orien = XYO.getRobotInstance().getOrientation();
             //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
