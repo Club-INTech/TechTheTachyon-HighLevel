@@ -62,15 +62,17 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(600, 1206));
             }
         try {
-            //robot.turn(Math.PI);
+            //
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if(symetry) {
+                robot.turn(0);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
+                robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
             //Verifier les ascenseurs ?
