@@ -131,19 +131,12 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-        for (int i=0; i<2; i++) {
-            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
-            } else {
-                robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-            }
-            robot.turn(Math.PI);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+        } else {
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
+        robot.turn(Math.PI);
         robot.turn(Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
@@ -151,51 +144,6 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
-
-        /*
-        //TEST ROTATION
-        for (int i=0; i<100; i++) {
-            robot.turn(Math.PI);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            robot.turn(0);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }*/
-
-
-      /* //TEST TRANSLATION
-        for (int i=0; i<100; i++) {
-            robot.moveLengthwise(100, false);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            robot.moveLengthwise(-100, false);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        int i=0;
-        while(i<1000000000){
-            try {
-                Thread.sleep(1);
-                i+=1;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Sleep 1 WOLOLO");
-        }*/
 
 
         try {
