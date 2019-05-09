@@ -144,6 +144,7 @@ public class MainMaster extends RobotEntryPoint {
                 e.printStackTrace();
             }
         }
+        robot.turn(Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
