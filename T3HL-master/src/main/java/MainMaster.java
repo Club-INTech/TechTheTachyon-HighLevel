@@ -140,7 +140,7 @@ public class MainMaster extends RobotEntryPoint {
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             }
             try {
-                TimeUnit.SECONDS.wait(1);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
