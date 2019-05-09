@@ -21,8 +21,8 @@ public class PaletsZoneDepart extends Script {
     private final int yEntry = 450;
     private final Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),
-            new VectCartesian(xEntry,yEntry+300),
-            new VectCartesian(xEntry,yEntry+600)
+            new VectCartesian(xEntry,yEntry+302),
+            new VectCartesian(xEntry,yEntry+605)
     };
 
     public PaletsZoneDepart(Master robot, Table table) {
