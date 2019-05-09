@@ -154,7 +154,17 @@ public class MainMaster extends RobotEntryPoint {
 
         for (int i=0; i<100; i++) {
             robot.turn(Math.PI);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             robot.turn(0);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         while(true){
