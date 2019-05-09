@@ -62,23 +62,28 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(600, 1206));
             }
         try {
-            //robot.turn(Math.PI);
+            //
             try {
                 TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             if(symetry) {
+                robot.turn(0);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
+                robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
             //Verifier les ascenseurs ?
             if(robot.getNbPaletsDroits()==0){
                 //robot.useActuator(ActuatorsOrder.);
             }
+
             for (Vec2 position : positions) {
-                if(robot.getNbPaletsDroits()==5){
+                robot.followPathTo(position);
+                if(robot.getNbPaletsDroits()==5)
+                {
                     robot.turn(0);
                     // on suppose que l'ascenseur est monté au mx au début
                     robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
@@ -97,7 +102,6 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    robot.followPathTo(position);
                 }
                 if(version == 0) {
                     // TODO
@@ -152,7 +156,7 @@ public class PaletsX6 extends Script {
             return positionEntree;
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(1000,1206), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+600), 5);
             return positionEntree;
         }
         return null;
