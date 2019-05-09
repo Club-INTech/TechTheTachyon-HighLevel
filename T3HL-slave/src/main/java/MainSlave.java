@@ -85,8 +85,8 @@ public class MainSlave extends RobotEntryPoint {
         table.removeAllChaosObstacles();
 
         //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
-        robot.moveLengthwise(500,false);
-        robot.turn(Math.PI/2);
+        //robot.moveLengthwise(500,false);
+        //robot.turn(Math.PI/2);
 
     }
 
