@@ -34,7 +34,7 @@ public class Accelerateur extends Script {
     /**
      * Distance d'aller retour entre le moment où l'on dépose un palet et le moment où l'en le libère
      */
-    private final int distanceAllerRetour = 120;
+    private final int distanceAllerRetour = 110;
 
 
     /**
