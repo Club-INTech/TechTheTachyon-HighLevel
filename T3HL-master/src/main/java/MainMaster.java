@@ -151,6 +151,21 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
+
+        for (int i=0; i<100; i++) {
+            robot.turn(Math.PI);
+            robot.turn(0);
+        }
+
+        while(true){
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Sleep 1 WOLOLO");
+        }
+
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
