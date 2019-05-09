@@ -23,7 +23,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private final int xEntry = -210-27+30+40;
+    private final int xEntry = -210-27+30+60;
     private final int yEntry = 340+10;
 
     /**
@@ -34,7 +34,7 @@ public class Accelerateur extends Script {
     /**
      * Distance d'aller retour entre le moment où l'on dépose un palet et le moment où l'en le libère
      */
-    private final int distanceAllerRetour = 110;
+    private final int distanceAllerRetour = 125;
 
 
     /**
