@@ -335,7 +335,7 @@ public class DataControler extends Thread implements Service {
         newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
         long timestampStop = System.currentTimeMillis();
-        System.out.println("SICK : Temps exécution : " + (timestampStop-timestampStart) + " ms");
+        Log.DATA_HANDLER.debug("SICK : Temps exécution : " + (timestampStop-timestampStart) + " ms");
         Sick.setNewXYO(newXYO);
     }
 
