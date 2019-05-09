@@ -30,7 +30,6 @@ import java.util.*;
 
 /**
  * Service déstiner à calculer un chemin entre deux points de la table
- * TODO : 1As ?
  *
  * @author rem
  */

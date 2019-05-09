@@ -11,7 +11,6 @@ import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
 
-// TODO Mettre ce script dans le code du slave
 public class Goldenium extends Script {
 
     //position d'entrée

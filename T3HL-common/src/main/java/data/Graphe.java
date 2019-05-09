@@ -315,12 +315,6 @@ public class Graphe implements Service {
                     // on n'utilise pas un foreach pour éviter de créer des itérateurs pour rien!
                     for (int i = 0; i < list.size(); i++) {
                         Node nodeI = list.get(i);
-                     /*   FIXME: plus proche ou égalité ??
-                        double distSq = nodeI.getPosition().squaredDistanceTo(position);
-                        if(closestDist > distSq) {
-                            n = nodeI;
-                            closestDist = distSq;
-                        }*/
                         if(nodeI.getPosition().equals(position)) {
                             n = nodeI;
                         }
