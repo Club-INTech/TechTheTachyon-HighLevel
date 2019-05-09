@@ -139,6 +139,11 @@ public class MainMaster extends RobotEntryPoint {
             } else {
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             }
+            try {
+                TimeUnit.SECONDS.wait(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             robot.turn(Math.PI);
         }
         robot.turn(-Math.PI/2);
