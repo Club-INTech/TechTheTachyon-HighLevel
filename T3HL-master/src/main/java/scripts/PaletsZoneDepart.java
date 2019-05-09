@@ -36,7 +36,7 @@ public class PaletsZoneDepart extends Script {
         try {
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
-           // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+            // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
                     robot.moveLengthwise(DISTANCE_INTERPALET, false);
@@ -48,14 +48,19 @@ public class PaletsZoneDepart extends Script {
                 //robot.turn(Math.PI / 2);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
-              //  try {
-                //    Thread.sleep(1000);
-               // } catch (InterruptedException e) {
-                 //   e.printStackTrace();
-                //}
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
+                /*try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }*/
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                 // FIXME: corriger couleur
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
@@ -63,18 +68,18 @@ public class PaletsZoneDepart extends Script {
                     case 0:
                         robot.pushPaletGauche(CouleurPalet.BLEU);
                         table.removeTemporaryObstacle(table.getPaletRougeDroite());
-                    i++;
-                    break;
+                        i++;
+                        break;
                     case 1:
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
-                    table.removeTemporaryObstacle(table.getPaletVertDroite());
-                    i++;
-                    break;
+                        table.removeTemporaryObstacle(table.getPaletVertDroite());
+                        i++;
+                        break;
                     case 2:
-                    robot.pushPaletGauche(CouleurPalet.ROUGE);
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
                         table.removeTemporaryObstacle(table.getPaletBleuDroite());
-                    i++;
-                    break;
+                        i++;
+                        break;
                 }
             }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
@@ -96,7 +101,7 @@ public class PaletsZoneDepart extends Script {
 
 
 
-           // robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+            // robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
