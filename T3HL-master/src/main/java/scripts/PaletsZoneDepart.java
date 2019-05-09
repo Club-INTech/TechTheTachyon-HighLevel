@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
-    private int xEntry = 1500-191-65+20;//1350;
+    private int xEntry = 1500-191-65;//1350;
     private int yEntry = 450;
     private Vec2[] positions = new VectCartesian[]{
             new VectCartesian(xEntry, yEntry),

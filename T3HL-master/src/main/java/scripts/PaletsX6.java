@@ -156,7 +156,7 @@ public class PaletsX6 extends Script {
             return positionEntree;
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+600-100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+600), 5);
             return positionEntree;
         }
         return null;
