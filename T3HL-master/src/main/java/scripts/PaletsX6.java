@@ -77,8 +77,9 @@ public class PaletsX6 extends Script {
             if(robot.getNbPaletsDroits()==0){
                 //robot.useActuator(ActuatorsOrder.);
             }
+
             for (Vec2 position : positions) {
-                if(robot.getNbPaletsDroits()==5){
+                if((robot.getNbPaletsDroits()==5&&!symetry)||(symetry&&robot.getNbPaletsDroits()<5)){
                     robot.turn(0);
                     // on suppose que l'ascenseur est monté au mx au début
                     robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
@@ -88,7 +89,7 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 }
-                else {
+                else if((robot.getNbPaletsDroits()==5&&symetry)||(!symetry&&robot.getNbPaletsDroits()<5)) {
                     robot.turn(Math.PI);
                     // on suppose que l'ascenseur est monté au mx au début
                     robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
