@@ -133,21 +133,14 @@ public class MainMaster extends RobotEntryPoint {
         robot.setRotationSpeed(Speed.MEDIUM_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
-        for (int i=0; i<2; i++) {
-            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-                Log.TABLE.critical("Couleur pour le recalage : violet");
-                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
-            } else {
-                Log.TABLE.critical("Couleur pour le recalage : jaune");
-                robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            robot.turn(Math.PI);
+        if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            Log.TABLE.critical("Couleur pour le recalage : violet");
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+        } else {
+            Log.TABLE.critical("Couleur pour le recalage : jaune");
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
+
         robot.turn(-Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
