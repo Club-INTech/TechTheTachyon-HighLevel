@@ -135,8 +135,10 @@ public class MainMaster extends RobotEntryPoint {
 
         for (int i=0; i<2; i++) {
             if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+                Log.TABLE.critical("Couleur pour le recalage : violet");
                 robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
             } else {
+                Log.TABLE.critical("Couleur pour le recalage : jaune");
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
             }
             try {
