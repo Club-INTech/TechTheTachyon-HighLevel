@@ -227,6 +227,12 @@ public class DataControler extends Thread implements Service {
                 Log.COMMUNICATION.warning("Le bras '"+side+"' est muet: on ne peut pas vérifier qu'il va au bon endroit mais il devrait bouger.");
                 break;
             }
+
+            case "armIsSpeaking": {
+                String side = event[1];
+                Log.COMMUNICATION.warning("Le bras '"+side+"' n'est plus muet!");
+                break;
+            }
         }
     }
 
