@@ -28,6 +28,7 @@ import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.Service;
+import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.Locale;
@@ -213,7 +214,7 @@ public class OrderWrapper implements Service {
         int y=pos.getY();
         if(symetry){
             x=-x;
-            orientation=(Math.PI - orientation)%(2*Math.PI);
+            orientation= Calculs.modulo(Math.PI - orientation, Math.PI);
         }
         // cette demande nécessite une synchro
         if(synchronize) {
