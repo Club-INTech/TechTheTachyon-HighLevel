@@ -204,6 +204,13 @@ public class DataControler extends Thread implements Service {
                 // Bras PHYSIQUE (ie ne prend pas en compte la symétrie)
                 SensorState.getArmMovingState(side).setData(false);
                 Log.COMMUNICATION.debug("Fin de mouvement du bras "+side);
+                break;
+            }
+
+            case "armIsMute": {
+                String side = event[1];
+                Log.COMMUNICATION.warning("Le bras '"+side+"' est muet: on ne peut pas vérifier qu'il va au bon endroit mais il devrait bouger.");
+                break;
             }
         }
     }
@@ -335,7 +342,7 @@ public class DataControler extends Thread implements Service {
         newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
         long timestampStop = System.currentTimeMillis();
-        System.out.println("SICK : Temps exécution : " + (timestampStop-timestampStart) + " ms");
+        Log.DATA_HANDLER.debug("SICK : Temps exécution : " + (timestampStop-timestampStart) + " ms");
         Sick.setNewXYO(newXYO);
     }
 

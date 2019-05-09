@@ -225,6 +225,7 @@ public class Container implements Service {
 
             /* On instancie l'objet ou on le stocke dans le dico */
             constructor.setAccessible(true);    // Petit hack, ne faite pas ca chez vous !
+            Log.DATA_HANDLER.debug("Initialisation du service "+service.getSimpleName());
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
             instanciedServices.put(service.getSimpleName(), (Service) s);
@@ -235,8 +236,10 @@ public class Container implements Service {
                 instanciedThreads.put(service.getSimpleName(), (Thread) s);
             }
 
+            Log.DATA_HANDLER.debug("Mise à jour de la config du service "+service.getSimpleName()+" après son initialisation.");
             /* Mise à jour de la config */
             s.updateConfig(this.config);
+            Log.DATA_HANDLER.debug("Service "+service.getSimpleName()+" prêt");
 
             /* Mise à jour de la pile */
             stack.pop();
