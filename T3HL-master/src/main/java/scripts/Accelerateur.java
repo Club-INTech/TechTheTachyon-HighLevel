@@ -23,7 +23,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private final int xEntry = -210-27+30+60;
+    private final int xEntry = -210-27+30+90;
     private final int yEntry = 340+10;
 
     /**
@@ -34,7 +34,7 @@ public class Accelerateur extends Script {
     /**
      * Distance d'aller retour entre le moment où l'on dépose un palet et le moment où l'en le libère
      */
-    private final int distanceAllerRetour = 125;
+    private final int distanceAllerRetour = 150;
 
 
     /**
@@ -68,10 +68,10 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
                 robot.useActuator(ActuatorsOrder.POUSSE_LE_PALET_BRAS_DROIT, true);
-                robot.moveLengthwise(distanceAllerRetour, false);
+                robot.moveLengthwise(-distanceAllerRetour, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, true);
-                robot.moveLengthwise(-distanceAllerRetour, false);
+                robot.moveLengthwise(distanceAllerRetour, false);
                 robot.popPaletDroit();
             } else {
                 //On prépare la pompe pour aspirer mieux
