@@ -39,11 +39,9 @@ public class PaletsZoneDepart extends Script {
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
-                    robot.moveLengthwise(DISTANCE_INTERPALET, false);
-//                    robot.followPathTo(position);
+                    robot.gotoPoint(position);
                 } else {
                     premierPaletPris = true;
-                    //robot.followPathTo(position);
                 }
                 //robot.turn(Math.PI / 2);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
@@ -88,23 +86,6 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
             // ""recalage""
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);  // on attend que le vide se casse
-
-            // FIXME A faire en roulant
-            /*
-            robot.waitForLeftElevator();
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-            robot.waitForLeftElevator();
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            robot.waitForLeftElevator();
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-*/
-
-            // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-
-
-
-
-            // robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
