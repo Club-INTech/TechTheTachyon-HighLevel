@@ -23,7 +23,7 @@ public class Accelerateur extends Script {
      * Position d'entrée du script
      */
 
-    private final int xEntry = -210-27+30;
+    private final int xEntry = -210-27+30+40;
     private final int yEntry = 340+10;
 
     /**
@@ -34,7 +34,7 @@ public class Accelerateur extends Script {
     /**
      * Distance d'aller retour entre le moment où l'on dépose un palet et le moment où l'en le libère
      */
-    private final int distanceAllerRetour = 90;
+    private final int distanceAllerRetour = 120;
 
 
     /**
@@ -42,7 +42,7 @@ public class Accelerateur extends Script {
      */
     private final int offsetRecalage = 31;
 
-    /**
+    /*
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
      */
     private final int offsetSick= 6;
