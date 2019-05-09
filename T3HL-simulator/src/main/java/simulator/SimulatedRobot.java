@@ -233,7 +233,7 @@ public class SimulatedRobot implements IRobot {
     /* =============================== Méthodes d'envoide la position du robot ============================== */
     /** Envoie la position à l'instance de HL qui est en relation avec ce robot simulé */
     private void sendRealtimePosition(){
-        this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.3f\n", Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",", "."));
+        this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.5f\n", Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",", "."));
     }
 
     /* ======================== Méthodes de mise à jour de la position et de l'orientation ================== */

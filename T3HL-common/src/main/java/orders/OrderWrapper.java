@@ -150,7 +150,7 @@ public class OrderWrapper implements Service {
         if(symetry) {
             angle=(Math.PI - angle)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), angle));
+        this.sendString(String.format(Locale.US, "%s %.5f", MotionOrder.TURN.getOrderStr(), angle));
         runAll(parallelActions);
     }
 
@@ -179,7 +179,7 @@ public class OrderWrapper implements Service {
      * @param speed la vitesse qu'on veut
      */
     public void setTranslationnalSpeed(float speed) {
-        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
     }
 
     /**
@@ -187,7 +187,7 @@ public class OrderWrapper implements Service {
      * @param rotationSpeed la vitesse de rotation qu'on veut
      */
     public void setRotationnalSpeed(double rotationSpeed) {
-        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
     }
 
     /**
@@ -218,11 +218,11 @@ public class OrderWrapper implements Service {
         // cette demande nécessite une synchro
         if(synchronize) {
             SensorState.ACTUATOR_ACTUATING.setData(true);
-            this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
+            this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
         } else {
-            this.sendString(String.format(Locale.US, "%s %d %d %.3f",
+            this.sendString(String.format(Locale.US, "%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
         }
     }
@@ -235,7 +235,7 @@ public class OrderWrapper implements Service {
         if(symetry) {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.3f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
+        this.sendString(String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
     }
 
     /**
@@ -269,7 +269,7 @@ public class OrderWrapper implements Service {
             }
 
         }
-        this.sendString(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
+        this.sendString(String.format(Locale.US, "%s %d %s %d %.5f %.5f %s",
                 HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
     }
 
