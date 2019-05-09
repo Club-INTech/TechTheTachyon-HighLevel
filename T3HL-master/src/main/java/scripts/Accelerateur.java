@@ -24,7 +24,7 @@ public class Accelerateur extends Script {
      */
 
     private final int xEntry = -210-27+30;
-    private final int yEntry = 340+18;
+    private final int yEntry = 340+10;
 
     /**
      * Boolean de symétrie
