@@ -81,6 +81,7 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
+                robot.followPathTo(position);
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
@@ -101,7 +102,6 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    robot.followPathTo(position);
                 }
                 if(version == 0) {
                     // TODO
