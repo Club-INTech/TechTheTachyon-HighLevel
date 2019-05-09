@@ -246,6 +246,24 @@ public abstract class Robot implements Service {
     }
 
     /**
+     * Change la vitesse de translation du LL
+     * @param speed
+     *              la vitesse souhaitée
+     */
+    public void setTranslationSpeed(Speed speed) {
+        this.orderWrapper.setTranslationnalSpeed(speed.getTranslationSpeed());
+    }
+
+    /**
+     * Change la vitesse de rotation du LL
+     * @param speed
+     *              la vitesse souhaitée
+     */
+    public void setRotationSpeed(Speed speed) {
+        this.orderWrapper.setRotationnalSpeed(speed.getRotationSpeed());
+    }
+
+    /**
      * Change la position du LL
      * @param pos
      *              position souhaitée

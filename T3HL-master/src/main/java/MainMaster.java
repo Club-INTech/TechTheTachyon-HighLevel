@@ -23,6 +23,7 @@ import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
+import orders.Speed;
 import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
@@ -129,6 +130,7 @@ public class MainMaster extends RobotEntryPoint {
         XYO.getRobotInstance().update(1500-191, 350, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+        robot.setRotationSpeed(Speed.MEDIUM_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
