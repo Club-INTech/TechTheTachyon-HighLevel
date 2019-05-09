@@ -171,13 +171,13 @@ public class MainMaster extends RobotEntryPoint {
 
         //TEST TRANSLATION
         for (int i=0; i<100; i++) {
-            robot.moveLengthwise(1000, false);
+            robot.moveLengthwise(100, false);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            robot.moveLengthwise(-1000, false);
+            robot.moveLengthwise(-100, false);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
