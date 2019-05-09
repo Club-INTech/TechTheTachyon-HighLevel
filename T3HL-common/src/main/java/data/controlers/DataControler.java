@@ -146,7 +146,7 @@ public class DataControler extends Thread implements Service {
      */
     private void handleEvent(String message) {
         if (!message.equals("pong")) { // ne log pas les pongs
-            Log.COMMUNICATION.debug("Got event from LL: " + message);
+            Log.COMMUNICATION.debug("Got event: " + message);
         }
         String[] event = message.split(ARGUMENTS_SEPARATOR);
         switch (event[0]) {
