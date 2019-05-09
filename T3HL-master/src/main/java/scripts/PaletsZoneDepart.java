@@ -108,9 +108,7 @@ public class PaletsZoneDepart extends Script {
     }
 
     @Override
-    public void finalize(Exception e) {
-        table.updateTableAfterFixedObstaclesChanges();
-    }
+    public void finalize(Exception e) { }
 
     @Override
     public void updateConfig(Config config) {

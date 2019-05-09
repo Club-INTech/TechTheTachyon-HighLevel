@@ -74,7 +74,8 @@ public class XYO {
         return robotXYO;
     }
     public static XYO getBuddyInstance() {
-        // TODO : Décider comment ca fonctionne ! et virer l'instanciation qui sert pour les tests
+        // c'est instancié la première fois qu'on veut y accéder.
+        // la position est mise à jour lors des communications avec le buddy
         if (buddyXYO == null) {
             buddyXYO = new XYO(new VectCartesian(100000, 100000), 0);
         }

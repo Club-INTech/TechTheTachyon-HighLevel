@@ -43,8 +43,6 @@ public class ScriptManagerSlave extends ScriptManager {
                 e.printStackTrace();
             }
         }
-
-        // TODO Instancier les scripts (AVEC LE CONTAINER)
     }
 
     @Override
