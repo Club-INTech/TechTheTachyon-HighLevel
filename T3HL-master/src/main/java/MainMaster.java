@@ -167,9 +167,11 @@ public class MainMaster extends RobotEntryPoint {
             }
         }
 
-        while(true){
+        int i=0;
+        while(i<1000000000){
             try {
                 Thread.sleep(1);
+                i+=1;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
