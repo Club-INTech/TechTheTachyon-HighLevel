@@ -91,6 +91,7 @@ public class DataControler extends Thread implements Service {
         registerChannelHandler(Channel.EVENT, this::handleEvent);
         registerChannelHandler(Channel.SICK, this::handleSick);
         registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
+        registerChannelHandler(Channel.LL_DEBUG, this::handleLLDebug);
     }
 
     /**
@@ -119,6 +120,13 @@ public class DataControler extends Thread implements Service {
                 channelHandler.checkAndHandle();
             }
         }
+    }
+
+    /**
+     * DEBUG DU LL
+     */
+    private void handleLLDebug(String message) {
+        Log.LL_DEBUG.debug(message);
     }
 
     /**

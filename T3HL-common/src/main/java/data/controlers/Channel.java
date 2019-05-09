@@ -27,6 +27,7 @@ public enum Channel {
     //DataControler
 
     //Du LL
+    LL_DEBUG('@', 'C'),
     ROBOT_POSITION('@', 'P'),
     COULEUR_PALET_PRIS('!', '&'),
     SICK('@', 'A'),

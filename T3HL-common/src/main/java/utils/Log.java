@@ -43,6 +43,7 @@ public enum Log
     AI(true),
     ELECTRON(true),
     POSITION(false),
+    LL_DEBUG(false),
 
     // sorties standard
     STDOUT(true),
