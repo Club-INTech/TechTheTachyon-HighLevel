@@ -93,6 +93,7 @@ public abstract class Script implements Service {
                     while(table.isPositionInMobileObstacle(entryPosition)) {
                         try {
                             Thread.sleep(50);
+                            Log.TABLE.critical("Robot in mobile obstacle");
                         } catch (InterruptedException e) {
                             break;
                         }
