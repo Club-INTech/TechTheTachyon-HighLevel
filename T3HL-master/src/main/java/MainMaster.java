@@ -170,7 +170,7 @@ public class MainMaster extends RobotEntryPoint {
         }*/
 
 
-        //TEST TRANSLATION
+      /* //TEST TRANSLATION
         for (int i=0; i<100; i++) {
             robot.moveLengthwise(100, false);
             try {
@@ -195,7 +195,7 @@ public class MainMaster extends RobotEntryPoint {
                 e.printStackTrace();
             }
             System.out.println("Sleep 1 WOLOLO");
-        }
+        }*/
 
 
         try {
