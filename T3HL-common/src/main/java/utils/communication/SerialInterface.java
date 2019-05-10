@@ -38,7 +38,7 @@ public class SerialInterface implements CommunicationInterface {
             if (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 if(line.startsWith("[Dynamixel-Com]")) {
-                    System.out.println(line);
+                    Log.DYNAMIXEL_COM.debug(line);
                 }
              //   System.out.println("=> Received: " + line);
                 return Optional.of(line);
