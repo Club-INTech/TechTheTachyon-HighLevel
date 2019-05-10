@@ -93,6 +93,7 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
 
+
                 }
                 else {
                     robot.turn(Math.PI);
@@ -103,6 +104,11 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
 
+                }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 if(version == 0) {
                     // TODO
