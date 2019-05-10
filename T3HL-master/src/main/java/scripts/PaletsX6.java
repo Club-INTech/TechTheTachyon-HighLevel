@@ -55,11 +55,11 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version ==3){
-                positions.add(new VectCartesian(1000, 1201));
-                positions.add(new VectCartesian(900, 1201));
-                positions.add(new VectCartesian(800 , 1201));
-                positions.add(new VectCartesian(700, 1201));
-                positions.add(new VectCartesian(500, 1201));
+                positions.add(new VectCartesian(1000, 1203));
+                positions.add(new VectCartesian(900, 1203));
+                positions.add(new VectCartesian(800 , 1203));
+                positions.add(new VectCartesian(700, 1203));
+                positions.add(new VectCartesian(500, 1203));
             }
         try {
             //
@@ -106,7 +106,7 @@ public class PaletsX6 extends Script {
 
                 }
                 try {
-                    Thread.sleep(300);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
