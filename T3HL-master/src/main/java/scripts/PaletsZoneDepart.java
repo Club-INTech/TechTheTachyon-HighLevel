@@ -1,6 +1,7 @@
 package scripts;
 
 import data.CouleurPalet;
+import data.SensorState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -39,8 +40,10 @@ public class PaletsZoneDepart extends Script {
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
+                    SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                     robot.gotoPoint(position);
+                    waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
                     premierPaletPris = true;
