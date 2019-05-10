@@ -127,11 +127,13 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 350, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setRotationSpeed(Speed.MEDIUM_ALL);
-        robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        synchronized (XYO.getRobotInstance()) {
+            XYO.getRobotInstance().update(1500-191, 350, Math.PI);
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        }
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             Log.TABLE.critical("Couleur pour le recalage : violet");
