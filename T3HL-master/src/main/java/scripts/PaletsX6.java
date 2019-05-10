@@ -81,6 +81,7 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
+
                 robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
                 if(robot.getNbPaletsDroits()==5)
                 {
@@ -164,7 +165,9 @@ public class PaletsX6 extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
+        if(robot.getNbPaletsDroits()>=1){
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+        }
     }
 
     @Override
