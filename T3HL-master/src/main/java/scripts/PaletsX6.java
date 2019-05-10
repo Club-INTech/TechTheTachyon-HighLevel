@@ -70,10 +70,10 @@ public class PaletsX6 extends Script {
             }
             if(symetry) {
                 robot.turn(0);
-              //  robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
                 robot.turn(Math.PI);
-                //robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
+                robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
             //Verifier les ascenseurs ?
             if(robot.getNbPaletsDroits()==0){
@@ -81,7 +81,7 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
-                robot.followPathTo(position);
+                robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
@@ -91,7 +91,7 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+
                 }
                 else {
                     robot.turn(Math.PI);
@@ -101,7 +101,7 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+
                 }
                 if(version == 0) {
                     // TODO
@@ -160,6 +160,11 @@ public class PaletsX6 extends Script {
             return positionEntree;
         }
         return null;
+    }
+
+    @Override
+    public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
     }
 
     @Override

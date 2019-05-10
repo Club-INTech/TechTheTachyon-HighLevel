@@ -40,11 +40,11 @@ public class PaletsZoneDepart extends Script {
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
-                    SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    robot.gotoPoint(position);
+                   // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
+                    //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
+                    robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
                     waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+                    //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
                     premierPaletPris = true;
                 }
@@ -103,7 +103,10 @@ public class PaletsZoneDepart extends Script {
         //return new Circle(robot.getXyo().getPosition(),5);
         return new Circle(new VectCartesian(xEntry, yEntry), 5);
     }
-
+    @Override
+    public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+    }
     @Override
     public void finalize(Exception e) {
         // range le bras quand on a fini
