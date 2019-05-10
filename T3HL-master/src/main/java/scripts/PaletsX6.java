@@ -55,11 +55,11 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version ==3){
-                positions.add(new VectCartesian(1000, 1206));
-                positions.add(new VectCartesian(900, 1206));
-                positions.add(new VectCartesian(800 , 1206));
-                positions.add(new VectCartesian(700, 1206));
-                positions.add(new VectCartesian(500, 1206));
+                positions.add(new VectCartesian(1000, 1196));
+                positions.add(new VectCartesian(900, 1196));
+                positions.add(new VectCartesian(800 , 1196));
+                positions.add(new VectCartesian(700, 1196));
+                positions.add(new VectCartesian(500, 1196));
             }
         try {
             //
