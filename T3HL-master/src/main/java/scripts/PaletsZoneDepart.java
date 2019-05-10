@@ -102,7 +102,10 @@ public class PaletsZoneDepart extends Script {
     }
 
     @Override
-    public void finalize(Exception e) { }
+    public void finalize(Exception e) {
+        // range le bras quand on a fini
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,false);
+    }
 
     @Override
     public void updateConfig(Config config) {
