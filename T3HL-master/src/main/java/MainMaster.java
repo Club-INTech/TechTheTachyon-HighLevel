@@ -23,6 +23,7 @@ import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
+import orders.Speed;
 import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
@@ -126,18 +127,23 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1500-191, 350, Math.PI );
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        robot.setRotationSpeed(Speed.MEDIUM_ALL);
+        synchronized (XYO.getRobotInstance()) {
+            XYO.getRobotInstance().update(1500-191, 350, Math.PI);
+            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        }
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            Log.TABLE.critical("Couleur pour le recalage : violet");
             robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         } else {
+            Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
-        //robot.turn(Math.PI);
-        robot.turn(-Math.PI/2);
+
+        robot.turn(Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());

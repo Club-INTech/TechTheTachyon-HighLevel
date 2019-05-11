@@ -44,6 +44,7 @@ public enum Log
     ELECTRON(true),
     POSITION(false),
     LL_DEBUG(false),
+    DYNAMIXEL_COM(false),
 
     // sorties standard
     STDOUT(true),

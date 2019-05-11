@@ -144,7 +144,9 @@ public class DataControler extends Thread implements Service {
         }
         o = Calculs.modulo(o, Math.PI);
         // System.out.println("LL: "+XYO.getRobotInstance());
-        XYO.getRobotInstance().update(x, y, o);
+        synchronized (XYO.getRobotInstance()) {
+            XYO.getRobotInstance().update(x, y, o);
+        }
         Log.POSITION.debug("Pos from LL: "+XYO.getRobotInstance());
 //        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
     }

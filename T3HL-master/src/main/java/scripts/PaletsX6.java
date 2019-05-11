@@ -55,11 +55,11 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version ==3){
-                positions.add(new VectCartesian(1000, 1206));
-                positions.add(new VectCartesian(900, 1206));
-                positions.add(new VectCartesian(800 , 1206));
-                positions.add(new VectCartesian(700, 1206));
-                positions.add(new VectCartesian(500, 1206));
+                positions.add(new VectCartesian(1000, 1204));
+                positions.add(new VectCartesian(900, 1204));
+                positions.add(new VectCartesian(800 , 1204));
+                positions.add(new VectCartesian(700, 1204));
+                positions.add(new VectCartesian(500, 1204));
             }
         try {
             //
@@ -81,7 +81,8 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
-                robot.followPathTo(position);
+
+                robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
@@ -91,7 +92,8 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+
+
                 }
                 else {
                     robot.turn(Math.PI);
@@ -101,7 +103,12 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 if(version == 0) {
                     // TODO
@@ -156,10 +163,17 @@ public class PaletsX6 extends Script {
             return positionEntree;
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+600-100), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+600), 5);
             return positionEntree;
         }
         return null;
+    }
+
+    @Override
+    public void executeWhileMovingToEntry(int version) {
+        if(robot.getNbPaletsDroits()>=1){
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+        }
     }
 
     @Override

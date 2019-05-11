@@ -109,13 +109,16 @@ public abstract class Script implements Service {
             // TODO
         }
 
+        Exception exception = null;
         try {
             this.execute(version);
         } catch (Exception e) {
-            this.finalize(e);
             e.printStackTrace();
+            exception = e;
             throw e;
             // TODO
+        } finally {
+            this.finalize(exception);
         }
     }
 
