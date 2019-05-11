@@ -93,7 +93,7 @@ public class MainMaster extends RobotEntryPoint {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Panneau.teamColor initialColor = panneau.getTeamColor();
+                Panneau.TeamColor initialColor = panneau.getTeamColor();
                 // on attend une première activation du switch
                 while(initialColor == panneau.getTeamColor()) {
                     try {
