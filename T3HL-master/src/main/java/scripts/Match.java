@@ -2,6 +2,7 @@ package scripts;
 
 import data.CouleurPalet;
 import data.Table;
+import data.XYO;
 import pfg.config.Config;
 import robot.Master;
 import scripts.*;
@@ -35,7 +36,7 @@ public class Match extends Script {
 
     @Override
     public Shape entryPosition(Integer version) {
-        return scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).entryPosition(version);
+        return new Circle(XYO.getRobotInstance().getPosition(), 100);
     }
 
     @Override
