@@ -37,9 +37,10 @@ public enum Connection {
     MASTER(ConfigData.MASTER_IP, ConfigData.MASTER_PORT, SocketClientInterface.class),
     SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class),
     LIDAR_DATA(ConfigData.LOCALHOST, ConfigData.LIDAR_DATA_PORT, SocketClientInterface.class),
-    TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SocketServerInterface.class),
+    TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, /*SocketServerInterface.class*/SerialInterface.class),
     TEENSY_MASTER_MONTHLERY(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SerialInterface.class),
-    TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SocketServerInterface.class),
+    TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SerialInterface.class),
+    ELECTRON(ConfigData.ELECTRON_IP, ConfigData.ELECTRON_PORT, SocketClientInterface.class),
 
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
     LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class),
@@ -50,7 +51,8 @@ public enum Connection {
     DEBUG_SIMULATEUR(ConfigData.LOCALHOST, ConfigData.DEBUG_SIMULATEUR_PORT, SocketClientInterface.class),
     DEBUG_SIMULATEUR_SERVER(ConfigData.LOCALHOST, ConfigData.DEBUG_SIMULATEUR_PORT, SocketServerInterface.class),
 
-    BALISE(ConfigData.BALISE_IP,ConfigData.BALISE_PORT,SocketClientInterface.class)
+    BALISE_IMAGE(ConfigData.BALISE_IP,ConfigData.BALISE_PORT,SocketClientInterface.class),
+    BALISE_IA(ConfigData.BALISE_IP,ConfigData.IA_PORT,SocketClientInterface.class),
     ;
 
     /**

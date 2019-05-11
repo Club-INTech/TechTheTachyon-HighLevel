@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -63,6 +64,8 @@ public class Container implements Service {
      * Instancie le gestionnaire de dépendances ainsi que la config
      */
     private Container(String profile) {
+        Log.init();
+
         /* Affichage du message de bienvenue */
         printMessage("../resources/intro.txt");
 
@@ -104,8 +107,8 @@ public class Container implements Service {
         /* Instanciation des attributs & de la config */
         instanciedServices = new HashMap<>();
         instanciedThreads = new HashMap<>();
+        System.out.println("Chargement de la config...");
         config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile);
-        Log.init(config);
 
         /* Le container est un service ! */
         instanciedServices.put(getClass().getSimpleName(), this);
@@ -222,6 +225,7 @@ public class Container implements Service {
 
             /* On instancie l'objet ou on le stocke dans le dico */
             constructor.setAccessible(true);    // Petit hack, ne faite pas ca chez vous !
+            Log.DATA_HANDLER.debug("Initialisation du service "+service.getSimpleName());
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
             instanciedServices.put(service.getSimpleName(), (Service) s);
@@ -232,8 +236,10 @@ public class Container implements Service {
                 instanciedThreads.put(service.getSimpleName(), (Thread) s);
             }
 
+            Log.DATA_HANDLER.debug("Mise à jour de la config du service "+service.getSimpleName()+" après son initialisation.");
             /* Mise à jour de la config */
             s.updateConfig(this.config);
+            Log.DATA_HANDLER.debug("Service "+service.getSimpleName()+" prêt");
 
             /* Mise à jour de la pile */
             stack.pop();
@@ -274,7 +280,13 @@ public class Container implements Service {
      * @see Service
      */
     @Override
-    public void updateConfig(Config config) {}
+    public void updateConfig(Config config) {
+        for(Service service:instanciedServices.values()){
+            if(service instanceof Container)
+                continue;
+            service.updateConfig(config);
+        }
+    }
 
     /**
      * Getters (utilisé)

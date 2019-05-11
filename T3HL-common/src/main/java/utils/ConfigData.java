@@ -38,15 +38,9 @@ public enum ConfigData implements ConfigInfo
     ETHERNET_DEFAULT_TIME(1),
 
     /**
-     * Paramètres du log
-     */
-    PRINT_LOG(true),
-    SAVE_LOG(true),
-
-    /**
      * Couleur
      */
-    COULEUR("violet"),
+    COULEUR("jaune"),
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)
@@ -69,30 +63,56 @@ public enum ConfigData implements ConfigInfo
     USING_LIDAR(false),
 
     /**
+     * Si on utilise l'électron
+     */
+    USING_ELECTRON(false),
+
+    /**
+     * Si on utilise la balise pour le traitement d'images
+     */
+    USING_BALISE_IMAGE(false),
+
+    /**
+     * Si on utilise le panneau
+     */
+    USING_PANEL(true),
+
+
+    /**
+     * Si on se connecte au copain
+     */
+    CONNECT_TO_BUDDY(true),
+
+    /**
      * Ips et ports des raspis, lidar & teensy
      */
-    MASTER_IP("192.168.0.3"),
+    MASTER_IP("192.168.12.2"),
     MASTER_PORT(14500),
     TEENSY_MASTER_IP("192.168.1.1"),
     TEENSY_MASTER_PORT(13500),
-    TEENSY_SLAVE_IP("192.168.0.2"),
+    TEENSY_SLAVE_IP("192.168.12.3"),
     TEENSY_SLAVE_PORT(13500),
     LIDAR_DATA_PORT(17865),
     BALISE_IP("127.0.0.1"),
     BALISE_PORT(1111),
+    IA_PORT(16000),
+    ELECTRON_IP("192.168.12.69"),
+    ELECTRON_PORT(18900),
 
     LOCALHOST("localhost"),
     LOCALSERVER_PORT(13550),
     LL_MASTER_SIMULATEUR(10001),
     HL_SLAVE_SIMULATEUR(20001),
     HL_MASTER_SIMULATEUR(20002),
-    DEBUG_SIMULATEUR_PORT(19999), //
+    DEBUG_SIMULATEUR_PORT(19999),
 
     /**
      * Timings
      */
     PING_INTERVAL(100), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
     PING_TIMEOUT(500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
+
+    LOCOMOTION_OBSTRUCTED_TIMEOUT(2000),
 
     SCORE_UPDATE_PERIOD(100), // période entre deux mises à jour de l'affichage du score
 
@@ -106,7 +126,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Threshold de comparaison de deux positions
      */
-    VECTOR_COMPARISON_THRESHOLD(60),
+    VECTOR_COMPARISON_THRESHOLD(5),
 
     /**
      * Paramètres du Graphe
@@ -122,7 +142,7 @@ public enum ConfigData implements ConfigInfo
      * Paramètre Locomotion
      */
     LOCOMOTION_LOOP_DELAY(20),
-    LOCOMOTION_DISTANCE_CHECK(250),
+    LOCOMOTION_DISTANCE_CHECK(200),
     LOCOMOTION_RADIUS_CHECK(200),
 
     /**

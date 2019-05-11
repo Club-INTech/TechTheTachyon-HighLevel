@@ -18,7 +18,6 @@
 
 package robot;
 
-import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
@@ -27,6 +26,7 @@ import data.XYO;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
+import locomotion.UnableToMoveReason;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
@@ -44,6 +44,7 @@ import utils.math.Vec2;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -62,8 +63,8 @@ public abstract class Robot implements Service {
      * Permet d'envoyer des infos de debug
      */
     private SimulatorDebug simulatorDebug;
-    public int score ;
 
+    public int score ;
 
     /**
      * Service qui permet au robot de bouger
@@ -114,7 +115,9 @@ public abstract class Robot implements Service {
     public void increaseScore(int points) {
         this.score = this.score + points;
         try {
-            this.panneauService.getPaneau().printScore(score);
+            if(panneauService.getPanneau() != null) {
+                this.panneauService.getPanneau().printScore(score);
+            }
         }catch(TooManyDigitsException | IOException e){
             e.printStackTrace();
         }
@@ -129,7 +132,7 @@ public abstract class Robot implements Service {
     }
 
     public void waitForElevator(String side) {
-        SensorState state;
+        SensorState<Boolean> state;
         switch (side.toLowerCase()) {
             case "left":
                 state = SensorState.LEFT_ELEVATOR_MOVING;
@@ -141,7 +144,7 @@ public abstract class Robot implements Service {
                 throw new IllegalArgumentException("Côté non reconnu: "+side);
         }
         state.setData(true);
-        while((boolean)state.getData()) { // tant que l'ascenseur bouge
+        while(state.getData()) { // tant que l'ascenseur bouge
             try {
                 Thread.sleep(loopSleepTime);
             } catch (InterruptedException e) {
@@ -168,7 +171,24 @@ public abstract class Robot implements Service {
      *              en cas de problème de blocage/adversaire
      */
     public void followPathTo(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
-        this.locomotion.followPathTo(point, parallelActions);
+        int attemptCount = 2;
+        for (int i = 0; i < attemptCount; i++) {
+            try {
+                this.locomotion.followPathTo(point, parallelActions);
+                parallelActions = null;
+            } catch (UnableToMoveException e) {
+                if(e.getReason() == UnableToMoveReason.ENEMY_IN_PATH) {
+                    e.printStackTrace(); // on affiche l'erreur mais on réessaie dans 1/2s
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    } catch (InterruptedException e1) {
+                        break;
+                    }
+                } else {
+                    throw e;
+                }
+            }
+        }
     }
 
     /**
@@ -181,7 +201,7 @@ public abstract class Robot implements Service {
      *              en cas de problèmes de blocage/adversaire
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        this.locomotion.moveLenghtwise(distance, expectedWallImpact);
+        this.locomotion.moveLengthwise(distance, expectedWallImpact);
     }
 
     /**
@@ -226,6 +246,24 @@ public abstract class Robot implements Service {
     }
 
     /**
+     * Change la vitesse de translation du LL
+     * @param speed
+     *              la vitesse souhaitée
+     */
+    public void setTranslationSpeed(Speed speed) {
+        this.orderWrapper.setTranslationnalSpeed(speed.getTranslationSpeed());
+    }
+
+    /**
+     * Change la vitesse de rotation du LL
+     * @param speed
+     *              la vitesse souhaitée
+     */
+    public void setRotationSpeed(Speed speed) {
+        this.orderWrapper.setRotationnalSpeed(speed.getRotationSpeed());
+    }
+
+    /**
      * Change la position du LL
      * @param pos
      *              position souhaitée
@@ -252,10 +290,14 @@ public abstract class Robot implements Service {
         if(inSimulation) {
             return;
         }
+
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);
         this.orderWrapper.getSickData();
         XYO newXYO = Sick.getNewXYO();
+        if (significantSicks == Sick.NOTHING){
+            return;
+        }
 
         // remplacement de la position dans le HL
         XYO.getRobotInstance().update(newXYO.getPosition().getX(), newXYO.getPosition().getY(), newXYO.getOrientation());
@@ -317,7 +359,6 @@ public abstract class Robot implements Service {
         return leftElevator.size();
     }
 
-    // TODO: FIXME
     /**
      * Initialises l'ascenseur de droite
      */
@@ -458,7 +499,7 @@ public abstract class Robot implements Service {
     public void updateConfig(Config config) {
         loopSleepTime = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
         inSimulation = config.getBoolean(ConfigData.SIMULATION);
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
         isMaster = config.getBoolean(ConfigData.MASTER);
     }
 }

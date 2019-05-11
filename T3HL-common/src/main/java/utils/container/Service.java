@@ -19,7 +19,9 @@
 package utils.container;
 
 import pfg.config.Config;
+import utils.TimeoutError;
 
+import java.util.concurrent.*;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -63,6 +65,7 @@ public interface Service
                 additionalAction.act();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                return;
             }
         }
     }
@@ -70,4 +73,26 @@ public interface Service
     interface AdditionalAction<ExceptionType extends Throwable> {
         void act() throws ExceptionType;
     }
+
+    static void withTimeout(long timeoutMillis, Runnable runnable) throws TimeoutError {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        final Future<Void> handler = executor.submit((Callable) () -> {
+            runnable.run();
+            return null;
+        });
+
+        try {
+            handler.get(timeoutMillis, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            handler.cancel(true);
+            throw new TimeoutError("Timeout of "+timeoutMillis+" expired!");
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            throw new TimeoutError("Timeout of "+timeoutMillis+" expired due to an error: ", e);
+        }
+
+        executor.shutdownNow();
+    }
+
 }

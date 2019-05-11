@@ -37,15 +37,17 @@ public enum Speed implements Order {
     VERY_SLOW_ALL(150,0.75D),
 
     /** Vitesse lente en translation, lente en rotation */
-    SLOW_ALL(300, 1D),
+    SLOW_ALL(250, 1*Math.PI),
 
     /** Vitesse standard de déplacement et rotation */
     MEDIUM_ALL(400,2D),
 
     /** Vitesse rapide en translation et rotation */
-    FAST_ALL(700,2.5D),
+    FAST_ALL(500,2*Math.PI),
 
-    /** Vitesse ultra rapide en translation et rotation */
+    /** Vitesse ultra rapide en translation et rotation
+     *  TODO: NON TESTEE
+     */
     ULTRA_FAST_ALL(1000,4D),
 
     /** Vitesse par défaut (utliser une des vitesses au dessus dans les parenthèses)

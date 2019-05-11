@@ -193,7 +193,7 @@ public class Circle extends Shape {
      */
     @Override
     public String toString() {
-        return String.format(Locale.US, "Circle [center: %s, ray : %.1f, angleStart : %.3f, angleEnd : %.3f",
+        return String.format(Locale.US, "Circle [center: %s, ray : %.1f, angleStart : %.5f, angleEnd : %.5f",
                 this.center.toString(), this.radius, this.angleStart, this.angleEnd);
     }
 

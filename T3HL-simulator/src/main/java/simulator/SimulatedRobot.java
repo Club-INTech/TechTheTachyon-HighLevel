@@ -154,6 +154,10 @@ public class SimulatedRobot implements IRobot {
         simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENT.getHeaders(), side));
     }
 
+    public void sendArmConfirmation(RobotSide side) {
+        simulatedLLConnectionManager.sendMessage(String.format("%sarmFinishedMovement %s\n", Channel.EVENT.getHeaders(), side.name().toLowerCase()));
+    }
+
     public void sendPong() {
         simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(), "pong"));
     }
@@ -229,7 +233,7 @@ public class SimulatedRobot implements IRobot {
     /* =============================== Méthodes d'envoide la position du robot ============================== */
     /** Envoie la position à l'instance de HL qui est en relation avec ce robot simulé */
     private void sendRealtimePosition(){
-        this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.3f\n", Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",", "."));
+        this.simulatedLLConnectionManager.sendMessage(String.format("%s%d %d %.5f\n", Channel.ROBOT_POSITION.getHeaders(), this.getX(), this.getY(), this.getOrientation()).replace(",", "."));
     }
 
     /* ======================== Méthodes de mise à jour de la position et de l'orientation ================== */
@@ -333,8 +337,11 @@ public class SimulatedRobot implements IRobot {
 
     /** Fait arrêter le robot */
     void stop(){
+        this.positionTarget.set(position);
         this.positionTarget=this.position;
         this.orientationTarget=this.orientation;
+        turning = false;
+        forwardOrBackward = false;
         this.forceRaiseStoppedMovingFlag();
     }
 
@@ -438,4 +445,9 @@ public class SimulatedRobot implements IRobot {
                 break;
         }
     }
+
+    public void sendJumperOkay() {
+        simulatedLLConnectionManager.sendMessage(String.format("%sgogogofast\n", Channel.EVENT.getHeaders()));
+    }
+
 }

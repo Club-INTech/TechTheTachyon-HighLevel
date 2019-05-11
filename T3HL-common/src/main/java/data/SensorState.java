@@ -24,8 +24,6 @@ package data;
  * @author william
  */
 public class SensorState<DataType> {
-    public static final SensorState<Double> EXEMPLE = new SensorState<>(1.5, Double.class);
-    public static final SensorState<Integer> CUBE_PRIS = new SensorState<>(0, Integer.class);
     public static final SensorState<Boolean> MOVING = new SensorState<>(false, Boolean.class);
     public static final SensorState<Boolean> STUCKED = new SensorState<>(false, Boolean.class);
     public static final SensorState<Boolean> LEFT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
@@ -33,6 +31,10 @@ public class SensorState<DataType> {
     public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>(false, Boolean.class);
     public static final SensorState<Long> LAST_PONG = new SensorState<>(-1L, Long.class);
     public static final SensorState<Boolean> WAITING_JUMPER = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ACTIVATED = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ARRIVED = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> LEFT_ARM_MOVING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> RIGHT_ARM_MOVING = new SensorState<>(false, Boolean.class);
     ;
 
     /**
@@ -70,5 +72,25 @@ public class SensorState<DataType> {
             throw new ClassCastException("Cette donnée est de type " + this.c + ", trouvé : " + object.getClass());
         }
         this.data = object;
+    }
+
+    /**
+     * Donnes l'objet {@link SensorState} correspondant au bras donné, ou throw {@link IllegalArgumentException} si le bras donné n'est pas "left" ou "right"
+     * <hr/>
+     * <b><i>ATTENTION</i></b>: Cette méthode demande le bras <b>physique</b>, ie ne prend pas en compte la symétrie
+     * @param side le côté
+     * @return le {@link SensorState} correspondant
+     */
+    public static SensorState<Boolean> getArmMovingState(String side) {
+        switch (side) {
+            case "left":
+                return LEFT_ARM_MOVING;
+
+            case "right":
+                return RIGHT_ARM_MOVING;
+
+            default:
+                throw new IllegalArgumentException(side);
+        }
     }
 }

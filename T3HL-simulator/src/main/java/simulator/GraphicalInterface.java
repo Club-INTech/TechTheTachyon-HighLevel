@@ -60,6 +60,7 @@ public class GraphicalInterface extends JFrame {
     private Color ROBOT_COLOR = new Color(0,255,0,128);
     private Color ORIENTATION_COLOR = new Color(0,0,255,255);
     private Color FIXED_OBSTACLE_COLOR = new Color(255,0,0,64);
+    private Color TEMPORARY_OBSTACLE_COLOR = new Color(0,0,255,128);
     private Color MOBILE_OBSTACLE_COLOR = new Color(255,255,0,64);
     private Color POINTS_TO_DRAW_COLOR = new Color(255,0,255,255);
     private Color RIDGE_COLOR = new Color(0,0,0,255);
@@ -67,6 +68,7 @@ public class GraphicalInterface extends JFrame {
 
     //Attributs pas graphiques
     private ArrayList<Obstacle> fixedObstacles;
+    private ArrayList<Obstacle> temporaryObstacles;
     private ConcurrentLinkedQueue<MobileCircularObstacle> mobileObstacles;
     private long lastTimeUpdate;
     private ArrayList<Vec2> pointsToDraw;
@@ -89,6 +91,7 @@ public class GraphicalInterface extends JFrame {
         this.initDefaultPassedParameters();
 
         this.fixedObstacles = new ArrayList<>();
+        this.temporaryObstacles = new ArrayList<>();
         this.mobileObstacles = new ConcurrentLinkedQueue<>();
 
         this.pointsToDraw=new ArrayList<>();
@@ -205,6 +208,7 @@ public class GraphicalInterface extends JFrame {
             if (System.currentTimeMillis() - this.lastTimeUpdate > this.MILLIS_BETWEEN_UPDATES) {
                 this.lastTimeUpdate = System.currentTimeMillis();
                 this.fixedObstacles = table.getFixedObstacles();
+                this.temporaryObstacles = table.getTemporaryObstacles();
                 this.mobileObstacles = table.getMobileObstacles();
                 this.mousePosition = this.panel.getMousePosition();
                 tryMoveSimulatedObstacleWithMouse();
@@ -331,6 +335,12 @@ public class GraphicalInterface extends JFrame {
                 drawSingleObstacle(g, obstacle);
             }
         }
+        g.setColor(TEMPORARY_OBSTACLE_COLOR);
+        synchronized (this.temporaryObstacles) {
+            for (Obstacle obstacle : this.temporaryObstacles) {
+                drawSingleObstacle(g, obstacle);
+            }
+        }
         g.setColor(MOBILE_OBSTACLE_COLOR);
         synchronized (this.mobileObstacles) {
             for (Obstacle obstacle : this.mobileObstacles) {
@@ -453,6 +463,9 @@ public class GraphicalInterface extends JFrame {
             g.setColor(POINTS_TO_DRAW_COLOR);
             for(Node node : table.getGraphe().getNodes()) {
                 Vec2 vecteur = node.getPosition();
+                if(table.isPositionInFixedObstacle(node.getPosition())) {
+                    continue;
+                }
                 vecteur = transformTableCoordsToInterfaceCoords(vecteur);
                 g.fillOval(vecteur.getX()-pointDiameter/2, vecteur.getY()-pointDiameter/2, pointDiameter, pointDiameter);
             }
@@ -600,5 +613,9 @@ public class GraphicalInterface extends JFrame {
 
     public float getTimeScale() {
         return timeScale;
+    }
+
+    public void resetTimer() {
+        this.startTime = System.currentTimeMillis();
     }
 }

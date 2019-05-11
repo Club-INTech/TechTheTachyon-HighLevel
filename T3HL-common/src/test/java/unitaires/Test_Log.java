@@ -46,7 +46,7 @@ public class Test_Log {
         systemOut = System.out;
         System.setOut(output);
         Log.activeAllChannels();
-        Log.init(new Config(ConfigData.values(), true));
+        Log.init();
     }
 
     @After

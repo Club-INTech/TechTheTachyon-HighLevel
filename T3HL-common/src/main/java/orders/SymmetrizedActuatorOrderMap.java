@@ -67,8 +67,8 @@ public class SymmetrizedActuatorOrderMap implements Service {
         correspondenceMap.put(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
         correspondenceMap.put(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE, ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
         correspondenceMap.put(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        correspondenceMap.put(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT, ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_GAUCHE);
-        correspondenceMap.put(ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_GAUCHE, ActuatorsOrder.TEST_PALET_ATTRAPÉ_EN_FONCTION_DU_COUPLE_DROIT);
+        correspondenceMap.put(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT, ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_GAUCHE);
+        correspondenceMap.put(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_GAUCHE, ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_INTERMEDIAIRE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_INTERMEDIAIRE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_RECULE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE);
@@ -85,7 +85,7 @@ public class SymmetrizedActuatorOrderMap implements Service {
      */
     public Order getSymmetrizedActuatorOrder(ActuatorsOrder order)
     {
-        return correspondenceMap.get(order);
+        return correspondenceMap.getOrDefault(order,order);
     }
 
     @Override

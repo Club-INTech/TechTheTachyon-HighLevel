@@ -19,7 +19,12 @@
 package data.graphe;
 
 import data.Graphe;
+import data.table.MobileCircularObstacle;
+import data.table.Obstacle;
 import utils.math.Segment;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Classe implémentant les arrêtes pour le graphe
@@ -61,10 +66,30 @@ public class Ridge {
     }
 
     public boolean isReachable(Graphe graphe) {
+        return isReachable(graphe, null);
+    }
+
+    public boolean isReachable(Graphe graphe, Set<MobileCircularObstacle> encounteredEnemies) {
         synchronized (graphe.getMobileObstacles()) {
-            return graphe.getMobileObstacles().stream()
-                    .noneMatch(o -> o.getPathfindingShape().intersect(seg));
+            for(MobileCircularObstacle obstacle : graphe.getMobileObstacles()) {
+                if(obstacle.isValidated() && obstacle.getPathfindingShape().intersect(seg)) {
+                    if(encounteredEnemies != null) {
+                        encounteredEnemies.add(obstacle);
+                    }
+                    return false;
+                }
+            }
         }
+
+        // On vérifie s'il y a un obstacle temporaire
+        synchronized (graphe.getTemporaryObstacles()) {
+            for(Obstacle obstacle : graphe.getTemporaryObstacles()) {
+                if(obstacle.intersect(seg)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void setStaticCost(int staticCost) {

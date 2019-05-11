@@ -28,15 +28,15 @@ import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  * Service permettant au robot de se déplacer
@@ -83,6 +83,8 @@ public class Locomotion implements Service {
      */
     private int compareThreshold;
 
+    private int blockTimeout;
+
     /**
      * Construit le service de locmotion
      * @param table
@@ -109,8 +111,8 @@ public class Locomotion implements Service {
      * Méthode permettant au robot d'avancer : bloquant
      * @param distance  distance de translation
      */
-    public void moveLenghtwise(int distance) throws UnableToMoveException {
-        pathFollower.moveLenghtwise(distance, false);
+    public void moveLengthwise(int distance) throws UnableToMoveException, TimeoutError {
+        pathFollower.moveLengthwise(distance, false);
     }
 
     /**
@@ -120,8 +122,8 @@ public class Locomotion implements Service {
      * @param expectedWallImpact
      *              true si l'on veut ignorer les blocages mécaniques
      */
-    public void moveLenghtwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        pathFollower.moveLenghtwise(distance, expectedWallImpact);
+    public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException, TimeoutError {
+        pathFollower.moveLengthwise(distance, expectedWallImpact);
     }
 
     /**
@@ -203,23 +205,41 @@ public class Locomotion implements Service {
         }
 
         Optional<MobileCircularObstacle> mobileObstacleBelowPoint = table.findMobileObstacleInPosition(point);
-        mobileObstacleBelowPoint.ifPresent(obstacle -> Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle));
+        mobileObstacleBelowPoint.ifPresent(obstacle -> {
+            Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle);
+            Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+
+            // FIXME: gérer le TimeoutError
+            // attente de qq secondes s'il y a un ennemi là où on veut aller
+            Service.withTimeout(blockTimeout, () -> {
+                while(table.isPositionInMobileObstacle(point)) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            });
+        });
 
         pointsQueue.clear();
         exceptionsQueue.clear();
 
         pathFollower.setParallelActions(parallelActions);
 
+        // a-t-on rencontré un ennemi lors du parcours du chemin?
+        Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
+
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
             try {
                 try {
                     graphe.readLock().lock();
-                    path = pathfinder.findPath(start, aim);
+                    encounteredEnemies.clear();
+                    path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
                 }
                 finally {
                     graphe.readLock().unlock();
                 }
-
 
                 // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
                 // ce thread pourrait être interrompu entre le addAll et le clear ;(
@@ -270,7 +290,12 @@ public class Locomotion implements Service {
             } catch (NoPathFound e) {
                 // TODO : Compléter
                 //e.printStackTrace();
-                throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
+                if( ! encounteredEnemies.isEmpty()) {
+//                    throw new UnableToMoveException(e.getMessage()+", enemy is at "+encounteredEnemy.get(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH);
+                    throw new UnableToMoveException(e.getMessage()+", encountered enemies are at "+encounteredEnemies.stream().map(it -> it.getPosition().toString()).collect(Collectors.joining(", ")), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.ENEMY_IN_PATH);
+                } else {
+                    throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
+                }
             }
         }
         pointsQueue.clear();
@@ -287,6 +312,7 @@ public class Locomotion implements Service {
     @Override
     public void updateConfig(Config config) {
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
+        this.blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
     }
 
     public Table getTable() {

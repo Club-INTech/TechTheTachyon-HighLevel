@@ -1,0 +1,14 @@
+#!/bin/bash -v
+
+#Build du slave
+cd T3HL-slave/
+mvn clean
+mvn package -DskipTests
+cd ..
+
+mkdir ./bin/lib/
+
+# Copie des fichiers compilés et des libs du slave
+cp -r T3HL-slave/target/lib ./bin/
+
+cp T3HL-slave/target/TTHL-slave-1.0.jar ./bin/

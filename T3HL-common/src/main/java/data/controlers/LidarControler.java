@@ -23,18 +23,16 @@ import data.Table;
 import data.XYO;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.LastElementCollection;
 import utils.Log;
-import utils.communication.CommunicationException;
+import utils.MatchTimer;
 import utils.communication.CopyIOThread;
-import utils.container.Service;
 import utils.container.ServiceThread;
 import utils.math.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Gère les données du lidar pour modifier la table
@@ -57,6 +55,7 @@ public class LidarControler extends ServiceThread {
      * Separateur entre deux coordonnées d'un point
      */
     private static final String COORDONATE_SEPARATOR    = ":";
+    private final MatchTimer timer;
 
     /**
      * Table à mettre à jour
@@ -71,7 +70,7 @@ public class LidarControler extends ServiceThread {
     /**
      * File de communication avec le Listener
      */
-    private ConcurrentLinkedQueue<String> messageQueue;
+    private LastElementCollection<String> messageStack;
 
     /**
      * True si autre couleur
@@ -84,21 +83,26 @@ public class LidarControler extends ServiceThread {
      * Chemin du processus gèrant le Lidar (absolu ou relatif au dossier d'exécution)
      */
     private String processPath;
+    private boolean shouldRun;
 
     /**
      * Construit un gestionnaire des données du Lidar
      * @param table     la table
      * @param listener  le listener
      */
-    public LidarControler(Table table, Listener listener) {
+    public LidarControler(Table table, Listener listener, MatchTimer timer) {
+        this.timer = timer;
         this.table = table;
         this.listener = listener;
-        this.messageQueue = new ConcurrentLinkedQueue<>();
-        listener.addQueue(Channel.LIDAR, this.messageQueue);
+        this.messageStack = new LastElementCollection<>();
+        listener.addCollection(Channel.OBSTACLES, this.messageStack);
     }
 
     @Override
     public void run() {
+        if(!shouldRun) {
+            return;
+        }
         Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
         Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
@@ -135,32 +139,35 @@ public class LidarControler extends ServiceThread {
 
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
-        Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius, table.getWidth()-2*enemyRadius);
+        float margin = 10;
+        Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
-            while (messageQueue.peek() == null) {
+            while (messageStack.isEmpty()) {
                 try {
                     Thread.sleep(TIME_LOOP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            points = messageQueue.poll().split(POINT_SEPARATOR);
+            XYO currentXYO = XYO.getRobotInstance().clone();
+            points = messageStack.pop().split(POINT_SEPARATOR);
             mobileObstacles.clear();
             for (String point : points) {
                 Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                         Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
+                if(symetrie) {
+                    obstacleCenter.setA(-obstacleCenter.getA());
+                }
                 if(obstacleCenter.getR() <= robotRadius)
                     continue;
-                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + XYO.getRobotInstance().getOrientation(), Math.PI));
-                obstacleCenter.plus(XYO.getRobotInstance().getPosition());
-                if (symetrie) {
-                    obstacleCenter.symetrize();
-                }
+                obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
+                obstacleCenter.plus(currentXYO.getPosition());
                 // on ajoute l'obstacle que s'il est dans la table
                 if(tableBB.isInShape(obstacleCenter)) {
                     mobileObstacles.add(obstacleCenter);
                 }
             }
+            messageStack.clear();
             //table.getGraphe().writeLock().lock();
 
          //   long start = System.currentTimeMillis();
@@ -171,9 +178,10 @@ public class LidarControler extends ServiceThread {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("jaune");
+        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
         this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
         this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
         this.processPath = config.getString(ConfigData.LIDAR_PROCESS_PATH);
+        this.shouldRun = config.getBoolean(ConfigData.USING_LIDAR);
     }
 }

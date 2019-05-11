@@ -43,6 +43,8 @@ public class Table implements Service {
      */
     private final ArrayList<Obstacle> fixedObstacles;
 
+    private final ArrayList<Obstacle> temporaryObstacles;
+
     private Obstacle paletRougeDroite;
     private Obstacle paletBleuDroite;
     private Obstacle paletVertDroite;
@@ -116,6 +118,7 @@ public class Table implements Service {
         this.fixedObstacles = new ArrayList<>();
         this.mobileObstacles = new ConcurrentLinkedQueue<>();
         this.mobileObstacleBuffer = new ArrayList<>();
+        this.temporaryObstacles = new ArrayList<>();
     }
 
     /**
@@ -124,42 +127,42 @@ public class Table implements Service {
     public void initObstaclesNoInit() {
         Vec2 vecteurPaletRougeUnZoneChaosDroite = PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletRougeUnZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosDroite, 219);
-        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosDroite);
+        this.addTemporaryObstacle(paletRougeUnZoneChaosDroite);
         this.paletRedUnZoneChaosPurple = paletRougeUnZoneChaosDroite;
 
         Vec2 vecteurPaletRougeDeuxZoneChaosDroite = PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletRougeDeuxZoneChaosDroite = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosDroite, 219);
-        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosDroite);
+        this.addTemporaryObstacle(paletRougeDeuxZoneChaosDroite);
         this.paletRedDeuxZoneChaosPurple = paletRougeDeuxZoneChaosDroite;
 
         Vec2 vecteurPaletRougeUnZoneChaosGauche = PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletRougeUnZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeUnZoneChaosGauche, 219);
-        this.addFixedObstacleNoGraphChange(paletRougeUnZoneChaosGauche);
+        this.addTemporaryObstacle(paletRougeUnZoneChaosGauche);
         this.paletRedUnZoneChaosYellow = paletRougeUnZoneChaosGauche;
 
         Vec2 vecteurPaletRougeDeuxZoneChaosGauche = PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletRougeDeuxZoneChaosGauche = new StillCircularObstacle(vecteurPaletRougeDeuxZoneChaosGauche, 219);
-        this.addFixedObstacleNoGraphChange(paletRougeDeuxZoneChaosGauche);
+        this.addTemporaryObstacle(paletRougeDeuxZoneChaosGauche);
         this.paletRedDeuxZoneChaosYellow = paletRougeDeuxZoneChaosGauche;
 
         Vec2 vecteurPaletVertZoneChaosDroite = PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletVertZoneChaosDroite = new StillCircularObstacle(vecteurPaletVertZoneChaosDroite, 219);
-        this.addFixedObstacleNoGraphChange(paletVertZoneChaosDroite);
+        this.addTemporaryObstacle(paletVertZoneChaosDroite);
         this.paletGreenZoneChaosPurple = paletVertZoneChaosDroite;
 
         Vec2 vecteurPaletVertZoneChaosGauche = PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletVertZoneChaosGauche = new StillCircularObstacle(vecteurPaletVertZoneChaosGauche, 219);
-        this.addFixedObstacleNoGraphChange(paletVertZoneChaosGauche);
+        this.addTemporaryObstacle(paletVertZoneChaosGauche);
         this.paletGreenZoneChaosYellow = paletVertZoneChaosGauche;
 
         Vec2 vecteurPaletBleuZoneChaosDroite = PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition();
         Obstacle paletBleuZoneChaosDroite = new StillCircularObstacle(vecteurPaletBleuZoneChaosDroite, 219);
-        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosDroite);
+        this.addTemporaryObstacle(paletBleuZoneChaosDroite);
         this.paletBlueZoneChaosPurple = paletBleuZoneChaosDroite;
 
         Vec2 vecteurPaletBleuZoneChaosGauche = PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition();
         Obstacle paletBleuZoneChaosGauche = new StillCircularObstacle(vecteurPaletBleuZoneChaosGauche, 219);
-        this.addFixedObstacleNoGraphChange(paletBleuZoneChaosGauche);
+        this.addTemporaryObstacle(paletBleuZoneChaosGauche);
         this.paletBlueZoneChaosYellow = paletBleuZoneChaosGauche;
 
         Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
@@ -229,32 +232,32 @@ public class Table implements Service {
 
         Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000, 450);
         Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletRougeDroite);
+        this.addTemporaryObstacle(paletRougeDroite);
         this.paletRougeDroite = paletRougeDroite;
 
         Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000, 750);
         Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletVertDroite);
+        this.addTemporaryObstacle(paletVertDroite);
         this.paletVertDroite = paletVertDroite;
 
         Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000, 1050);
         Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletBleuDroite);
+        this.addTemporaryObstacle(paletBleuDroite);
         this.paletBleuDroite = paletBleuDroite;
 
         Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000, 450);
         Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletRougeGauche);
+        this.addTemporaryObstacle(paletRougeGauche);
         this.paletRougeGauche = paletRougeGauche;
 
         Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000, 750);
         Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletVertGauche);
+        this.addTemporaryObstacle(paletVertGauche);
         this.paletVertGauche = paletVertGauche;
 
         Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000, 1050);
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre, 199);
-        this.addFixedObstacleNoGraphChange(paletBleuGauche);
+        this.addTemporaryObstacle(paletBleuGauche);
         this.paletBleuGauche = paletBleuGauche;
     }
 
@@ -286,6 +289,7 @@ public class Table implements Service {
                     point = pointIterator.next();
                     if (obstacle.isInObstacle(point)) {
                         obstacle.update(point);
+                        Log.LIDAR.debug("MàJ de l'obstacle mobile : " + obstacle);
                         pointIterator.remove();
                     }
                 }
@@ -300,7 +304,7 @@ public class Table implements Service {
             if (pt.distanceTo(XYO.getBuddyInstance().getPosition()) < compareThreshold) {
                 ray = buddyRobotRay;
             }
-            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray, robotRay);
+            MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray+robotRay);
             Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
             mobileObstacleBuffer.add(obst);
         }
@@ -330,12 +334,31 @@ public class Table implements Service {
      * @return true si le point est dans un obstacle fixe
      */
     public boolean isPositionInFixedObstacle(Vec2 point) {
+        return isPositionInFixedObstacle(point, true);
+    }
+
+    /**
+     * @param point  position à tester
+     * @param checkTemporary on vérifie aussi les obstacles temporaires?
+     * @return true si le point est dans un obstacle fixe
+     */
+    public boolean isPositionInFixedObstacle(Vec2 point, boolean checkTemporary) {
         Iterator<Obstacle> iterator = fixedObstacles.iterator();
         Obstacle obstacle;
         while (iterator.hasNext()) {
             obstacle = iterator.next();
             if (obstacle.isInObstacle(point)) {
                 return true;
+            }
+        }
+
+        if(checkTemporary) {
+            iterator = temporaryObstacles.iterator();
+            while (iterator.hasNext()) {
+                obstacle = iterator.next();
+                if (obstacle.isInObstacle(point)) {
+                    return true;
+                }
             }
         }
         return false;
@@ -366,6 +389,14 @@ public class Table implements Service {
     public Optional<Obstacle> findFixedObstacleInPosition(Vec2 point) {
         Iterator<Obstacle> iterator = fixedObstacles.iterator();
         Obstacle obstacle;
+        while (iterator.hasNext()) {
+            obstacle = iterator.next();
+            if (obstacle.isInObstacle(point)) {
+                return Optional.of(obstacle);
+            }
+        }
+
+        iterator = temporaryObstacles.iterator();
         while (iterator.hasNext()) {
             obstacle = iterator.next();
             if (obstacle.isInObstacle(point)) {
@@ -502,7 +533,7 @@ public class Table implements Service {
      * @param obstacle  obstacle à retirer
      */
     public void removeFixedObstacle(Obstacle obstacle) {
-        removeFixedObstacleNoReInit(obstacle);
+        removeTemporaryObstacle(obstacle);
         if (graphe != null) {
             this.graphe.reInit();
         } else {
@@ -511,10 +542,30 @@ public class Table implements Service {
     }
 
     /**
+     * Ajoutes un obstacle temporaire sur la table (ex: palets de la zone de départ qui peuvent être retirés)
+     * @param obstacle L'obstacle à retirer
+     */
+    public void addTemporaryObstacle(Obstacle obstacle) {
+        synchronized (temporaryObstacles) {
+            temporaryObstacles.add(obstacle);
+        }
+    }
+
+    /**
+     * Retires un obstacle temporaire de la table
+     * @param obstacle
+     */
+    public void removeTemporaryObstacle(Obstacle obstacle) {
+        synchronized (temporaryObstacles) {
+            temporaryObstacles.remove(obstacle);
+        }
+    }
+
+    /**
      * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
      */
     public void SIMULATEDaddMobileObstacle() {
-        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay);
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay+robotRay);
         this.simulatedObstacle.setLifeTime(100000);
         this.mobileObstacles.add(this.simulatedObstacle);
     }
@@ -554,6 +605,10 @@ public class Table implements Service {
 
     public ArrayList<Obstacle> getFixedObstacles() {
         return fixedObstacles;
+    }
+
+    public ArrayList<Obstacle> getTemporaryObstacles() {
+        return temporaryObstacles;
     }
 
     public ConcurrentLinkedQueue<MobileCircularObstacle> getMobileObstacles() {
@@ -642,15 +697,14 @@ public class Table implements Service {
     }
 
     public void removeAllChaosObstacles() {
-        removeFixedObstacleNoReInit(paletRedUnZoneChaosPurple);
-        removeFixedObstacleNoReInit(paletRedDeuxZoneChaosPurple);
-        removeFixedObstacleNoReInit(paletGreenZoneChaosPurple);
-        removeFixedObstacleNoReInit(paletBlueZoneChaosPurple);
+        removeTemporaryObstacle(paletRedUnZoneChaosPurple);
+        removeTemporaryObstacle(paletRedDeuxZoneChaosPurple);
+        removeTemporaryObstacle(paletGreenZoneChaosPurple);
+        removeTemporaryObstacle(paletBlueZoneChaosPurple);
 
-        removeFixedObstacleNoReInit(paletRedUnZoneChaosYellow);
-        removeFixedObstacleNoReInit(paletRedDeuxZoneChaosYellow);
-        removeFixedObstacleNoReInit(paletGreenZoneChaosYellow);
-        removeFixedObstacleNoReInit(paletBlueZoneChaosYellow);
-        updateTableAfterFixedObstaclesChanges();
+        removeTemporaryObstacle(paletRedUnZoneChaosYellow);
+        removeTemporaryObstacle(paletRedDeuxZoneChaosYellow);
+        removeTemporaryObstacle(paletGreenZoneChaosYellow);
+        removeTemporaryObstacle(paletBlueZoneChaosYellow);
     }
 }

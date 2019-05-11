@@ -8,18 +8,21 @@ import java.util.concurrent.ExecutionException;
  */
 public enum Sick {
 
-    SICK_AVANT(0),
-    SICK_AVANT_GAUCHE(1),
-    SICK_ARRIERE_GAUCHE(2),
-    SICK_ARRIERE(3),
-    SICK_ARRIERE_DROIT(4),
-    SICK_AVANT_DROIT(5),
+    SICK_AVANT(0, -1), //SICK DROIT POUR LE SECONDAIRE
+    SICK_AVANT_GAUCHE(1, -1), // SICK ARRIERE DROIT POUR LE SECONDAIRE
+    SICK_ARRIERE_GAUCHE(2, -1), //SICK ARRIERE GAUCHE POUR LE SECONDAIRE
+    SICK_ARRIERE(3, -1),
+    SICK_ARRIERE_DROIT(4, -1),
+    SICK_AVANT_DROIT(5, -1),
 
     ;
 
     // =====================================================================
     // ==== Capteurs SICK à utiliser selon l'orientation et la position ====
     // =====================================================================
+    //RIEN DU TOUT
+    public static final Sick[] NOTHING = {};
+
     public static final Sick[] LOWER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
     public static final Sick[] UPPER_LEFT_CORNER_TOWARDS_PI = {SICK_AVANT, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
 
@@ -35,10 +38,20 @@ public enum Sick {
     public static final Sick[] LOWER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
     public static final Sick[] UPPER_RIGHT_CORNER_TOWARDS_PI = {SICK_ARRIERE, SICK_AVANT_DROIT, SICK_ARRIERE_DROIT};
 
+
+    //Secondaire
+
+    public static final Sick[] SECONDAIRE= {SICK_AVANT, SICK_AVANT_GAUCHE, SICK_ARRIERE_GAUCHE};
+
     /**
      * Indice du capteur sick
      */
     private final int indiceSick;
+
+    /**
+     * Dernière mesure
+     */
+    private int lastMeasure;
 
     private static Sick[] significantSicks = LOWER_LEFT_CORNER_TOWARDS_PI;
 
@@ -57,8 +70,9 @@ public enum Sick {
      * Constructeur de l'enum
      * @param indiceSick
      */
-    Sick(int indiceSick){
+    Sick(int indiceSick, int lastMeasure){
         this.indiceSick=indiceSick;
+        this.lastMeasure = lastMeasure;
     }
 
     /**
@@ -91,6 +105,34 @@ public enum Sick {
      */
     public static Sick[] getSignificantSicks() {
         return significantSicks;
+    }
+
+    /**
+     * Renvoie la dernière mesure réalisée par le sick
+     * @return int
+     */
+    public int getLastMeasure(){
+        return this.lastMeasure;
+    }
+
+    /**
+     * Set la dernière mesure réalisée par le sick
+     */
+    public void setLastMeasure(int lastMeasure){
+        this.lastMeasure = lastMeasure;
+    }
+
+    /**
+     * Renvoie toutes les dernières mesures des sicks
+     * @return int[]
+     */
+    public static int[] getLastMeasures(){
+        int[] lastMeasures = new int[6];
+        Sick[] sicks = Sick.values();
+        for (int i = 0; i < sicks.length; i++){
+            lastMeasures[i] = sicks[i].getLastMeasure();
+        }
+        return lastMeasures;
     }
 
 

@@ -20,6 +20,7 @@ package orders;
 
 import connection.Connection;
 import data.SensorState;
+import data.XYO;
 import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
@@ -27,6 +28,7 @@ import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.Service;
+import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.Locale;
@@ -54,6 +56,10 @@ public class OrderWrapper implements Service {
      */
     private Connection llConnection;
 
+    /**
+     * Si on utlise la balise
+     */
+    private Boolean useBalise_Image;
     /**
      * Le service de symétrie des ordres
      */
@@ -93,9 +99,25 @@ public class OrderWrapper implements Service {
         if(waitForConfirmation) {
             Log.COMMUNICATION.debug("Asking for confirmation for "+order.getOrderStr());
             this.sendString("!"+order.getOrderStr());
-            SensorState.ACTUATOR_ACTUATING.setData(true);
-            waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-            Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+
+            // il y a une procédure de traitement des mouvements de bras qui n'est pas bloquante pour le LL,
+            // il faut donc un système comme les ascenseurs pour attendre qu'ils aient fini bougent
+            if(order instanceof ActuatorsOrder && ((ActuatorsOrder) order).isArmOrder()) {
+                // quel côté bouge?
+                String side = order.getOrderStr().split(" ")[1];
+
+                // l'ordre est déjà symétrisé quand on récupère la position, c'est donc le bras (droit par exemple) physique, pas logique
+                SensorState<Boolean> armMoving = SensorState.getArmMovingState(side);
+                armMoving.setData(true);
+                Log.COMMUNICATION.debug("Attente du bras du à l'ordre "+order.getOrderStr());
+
+                // on attend que le bras ait fini
+                waitWhileTrue(armMoving::getData);
+            } else {
+                SensorState.ACTUATOR_ACTUATING.setData(true);
+                waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+                Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
+            }
             if(order instanceof ActuatorsOrder) {
                 long duration = ((ActuatorsOrder) order).getActionDuration();
                 if(duration > 0) {
@@ -129,7 +151,7 @@ public class OrderWrapper implements Service {
         if(symetry) {
             angle=(Math.PI - angle)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.3f", MotionOrder.TURN.getOrderStr(), angle));
+        this.sendString(String.format(Locale.US, "%s %.5f", MotionOrder.TURN.getOrderStr(), angle));
         runAll(parallelActions);
     }
 
@@ -158,7 +180,7 @@ public class OrderWrapper implements Service {
      * @param speed la vitesse qu'on veut
      */
     public void setTranslationnalSpeed(float speed) {
-        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
     }
 
     /**
@@ -166,7 +188,7 @@ public class OrderWrapper implements Service {
      * @param rotationSpeed la vitesse de rotation qu'on veut
      */
     public void setRotationnalSpeed(double rotationSpeed) {
-        this.sendString(String.format(Locale.US, "%s %.3f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
     }
 
     /**
@@ -192,21 +214,16 @@ public class OrderWrapper implements Service {
         int y=pos.getY();
         if(symetry){
             x=-x;
-            orientation=(Math.PI - orientation)%(2*Math.PI);
+            orientation= Calculs.modulo(Math.PI - orientation, Math.PI);
         }
         // cette demande nécessite une synchro
         if(synchronize) {
             SensorState.ACTUATOR_ACTUATING.setData(true);
-            this.sendString(String.format(Locale.US, "!%s %d %d %.3f",
+            this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-            try {
-                TimeUnit.MILLISECONDS.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         } else {
-            this.sendString(String.format(Locale.US, "%s %d %d %.3f",
+            this.sendString(String.format(Locale.US, "%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
         }
     }
@@ -219,7 +236,7 @@ public class OrderWrapper implements Service {
         if(symetry) {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.3f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
+        this.sendString(String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
     }
 
     /**
@@ -253,7 +270,7 @@ public class OrderWrapper implements Service {
             }
 
         }
-        this.sendString(String.format(Locale.US, "%s %d %s %d %.3f %.3f %s",
+        this.sendString(String.format(Locale.US, "%s %d %s %d %.5f %.5f %s",
                 HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
     }
 
@@ -262,6 +279,9 @@ public class OrderWrapper implements Service {
      * @param point point auquel le LL doit se rendre
      */
     public void gotoPoint(Vec2 point) {
+        if(symetry) {
+            point.symetrize();
+        }
         this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
     }
 
@@ -290,7 +310,6 @@ public class OrderWrapper implements Service {
         try {
             llConnection.send(message);
             Log.ORDERS.debug("Sent to LL: "+message);
-            // DEBUG System.out.println("=> Sending "+message);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
@@ -325,12 +344,19 @@ public class OrderWrapper implements Service {
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        symetry = config.getString(ConfigData.COULEUR).equals("jaune");
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.simulation = config.getBoolean(ConfigData.SIMULATION);
+        useBalise_Image = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
+
+        boolean isMaster = config.getBoolean(ConfigData.MASTER);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            this.llConnection = Connection.TEENSY_MASTER;
+            if(isMaster) {
+                this.llConnection = Connection.TEENSY_MASTER;
+            } else {
+                this.llConnection = Connection.TEENSY_SLAVE;
+            }
         }
     }
 
@@ -347,6 +373,18 @@ public class OrderWrapper implements Service {
         SensorState.WAITING_JUMPER.setData(true);
         sendString("waitJumper");
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
+        if(useBalise_Image) {
+            try {
+                Connection.BALISE_IMAGE.send("GO");
+            } catch (CommunicationException e) {
+                e.printStackTrace();
+            }
+        }
         Log.STRATEGY.debug("GOGOGO!!!");
+    }
+
+    public void endMatch() {
+        Log.STRATEGY.debug("Fin du match!");
+        sendString("endMatch");
     }
 }

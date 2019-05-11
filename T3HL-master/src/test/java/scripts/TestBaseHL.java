@@ -5,7 +5,7 @@ import data.Table;
 import data.XYO;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
-import data.controlers.SensorControler;
+import data.controlers.DataControler;
 import locomotion.PathFollower;
 import orders.OrderWrapper;
 import org.junit.After;
@@ -61,7 +61,6 @@ public abstract class TestBaseHL {
     @After
     public void cleanup() {
         Container.resetInstance();
-        ScriptNamesMaster.cleanup();
     }
 
     private void waitForLLConnection() {
@@ -83,7 +82,7 @@ public abstract class TestBaseHL {
 //            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);
             orderWrapper = container.getService(OrderWrapper.class);
-            SensorControler sensorControler = container.getService(SensorControler.class);
+            DataControler sensorControler = container.getService(DataControler.class);
             sensorControler.start();
 
             if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
@@ -97,7 +96,6 @@ public abstract class TestBaseHL {
             table = container.getService(Table.class);
             table.initObstacles();
             robot = getRobot();
-            ScriptNamesMaster.reInit();
 
             Vec2 start = startPosition();
             XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());

@@ -20,19 +20,14 @@ package data.controlers;
 
 import connection.Connection;
 import connection.ConnectionManager;
+import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
-import utils.container.Service;
 import utils.container.ServiceThread;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 /**
  * Ecoute toutes les connections instanciées
@@ -50,6 +45,7 @@ public class Listener extends ServiceThread {
      * Gestionnaire des connexions
      */
     private ConnectionManager connectionManager;
+    private SynchronizationWithBuddy buddySync;
 
     /**
      * Pour connaître les redirections à effectuer
@@ -59,7 +55,7 @@ public class Listener extends ServiceThread {
     /**
      * Map des cannaux & queues des services
      */
-    private Map<Channel, ConcurrentLinkedQueue<String>> queueMap;
+    private Map<Channel, Collection<String>> collectionMap;
 
     /**
      * Si on est en simulation
@@ -71,15 +67,31 @@ public class Listener extends ServiceThread {
      */
     private boolean useLidar;
 
+    /**
+     * Si on utilise la balise pour le traitement d'images
+     */
+    private boolean useBaliseImage;
+
     private boolean visualize;
+    /**
+     * Est-ce qu'on active l'éléctron ?
+     */
+    private boolean useElectron;
+
+    /**
+     * Est-ce qu'on se connecte au copain?
+     */
+    private boolean connectToBuddy;
 
     /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
-    public Listener(ConnectionManager connectionManager) {
+    public Listener(ConnectionManager connectionManager, SynchronizationWithBuddy buddySync) {
         this.connectionManager = connectionManager;
-        this.queueMap = new HashMap<>();
+        this.buddySync = buddySync;
+        this.collectionMap = new HashMap<>();
+        this.setPriority(Thread.MAX_PRIORITY);
     }
 
     /**
@@ -89,9 +101,9 @@ public class Listener extends ServiceThread {
      */
     private void handleMessage(String header, String message) {
       //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
-        for (Channel registeredChannel : queueMap.keySet()) {
+        for (Channel registeredChannel : collectionMap.keySet()) {
             if (registeredChannel.getHeaders().equals(header)) {
-                queueMap.get(registeredChannel).add(message);
+                collectionMap.get(registeredChannel).add(message);
             }
         }
     }
@@ -101,19 +113,13 @@ public class Listener extends ServiceThread {
      * @param channel   le channel à mapper
      * @param queue     la queue sur laquelle le mapper
      */
-    public void addQueue(Channel channel, ConcurrentLinkedQueue<String> queue){
-        queueMap.put(channel, queue);
+    public void addCollection(Channel channel, Collection<String> queue){
+        collectionMap.put(channel, queue);
     }
 
     @Override
     public void run() {
-        Connection buddy;
-        if (simulation){
-            buddy = Connection.SLAVE_SIMULATEUR;
-        }
-        else {
-            buddy = Connection.SLAVE;
-        }
+        Connection buddy = Connection.SLAVE;
         // Initialisation des connexions
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
         try {
@@ -121,26 +127,34 @@ public class Listener extends ServiceThread {
                 Log.COMMUNICATION.debug("Simulation initializing connections...");
                 connectionManager.initConnections(Connection.MASTER_LL_SIMULATEUR);
                 Log.COMMUNICATION.debug("Simulated Teensy Master connected");
-                connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
-                Log.COMMUNICATION.debug("Simulated Buddy connected");
+                // FIXME/TODO connectionManager.initConnections(Connection.SLAVE_SIMULATEUR);
+                // FIXME/TODO Log.COMMUNICATION.debug("Simulated Buddy connected");
                 Log.COMMUNICATION.debug("Debug connection init...");
                 connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
                 Log.COMMUNICATION.debug("Debug connection ready!");
             }
             else {
-                // FIXME :) connectionManager.initConnections(Connection.BALISE);
                 Log.COMMUNICATION.debug("Lidar");
                 Log.COMMUNICATION.debug("Balise");
                 if (master) {
-                    connectionManager.initConnections(/*Connection.SLAVE, */Connection.TEENSY_MASTER);
-                    Log.COMMUNICATION.debug("Slave");
+                    connectionManager.initConnections(Connection.TEENSY_MASTER);
                     Log.COMMUNICATION.debug("Teensy Master");
+                    buddy = Connection.SLAVE;
+                    if(connectToBuddy) {
+                        connectionManager.initConnections(buddy);
+                        Log.COMMUNICATION.debug("Slave");
+                    }
                 } else {
-                    connectionManager.initConnections(Connection.MASTER, Connection.TEENSY_SLAVE);
-                    buddy = Connection.MASTER;
-                    Log.COMMUNICATION.debug("Master");
+                    connectionManager.initConnections(Connection.TEENSY_SLAVE);
                     Log.COMMUNICATION.debug("Teensy Slave");
+                    buddy = Connection.MASTER;
+                    if(connectToBuddy) {
+                        connectionManager.initConnections(buddy);
+                        Log.COMMUNICATION.debug("Master");
+                    }
                 }
+
+                buddySync.setConnection(buddy);
 
                 if(visualize) {
                     Log.COMMUNICATION.debug("Debug connection init...");
@@ -148,9 +162,16 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.debug("Debug connection ready!");
                 }
             }
+            if(useBaliseImage){
+                connectionManager.initConnections(Connection.BALISE_IMAGE);
+            }
             if(useLidar) {
                 connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar connected");
+            }
+            if(useElectron) {
+                connectionManager.initConnections(Connection.ELECTRON);
+                Log.COMMUNICATION.debug("Electron connected");
             }
         } catch (CommunicationException e) {
             e.printStackTrace();
@@ -170,7 +191,7 @@ public class Listener extends ServiceThread {
         Optional<String> buffer;
         Iterator<Connection> iterator;
         Connection current;
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!isInterrupted()) {
             iterator = connectionManager.getInitiatedConnections().iterator();
             while (iterator.hasNext()){
                 current = iterator.next();
@@ -183,7 +204,7 @@ public class Listener extends ServiceThread {
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
                                 if(buddy.isInitiated()) {
-                                    buddy.send(String.format("%s%s", Channel.BUDDY_POSITION.getHeaders(), message));
+                                    buddySync.sendPosition();
                                 }
                             }
                         }
@@ -193,11 +214,6 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.critical("Impossible de lire sur la connexion " + current.name() + " : fermeture de la connexion");
                     iterator.remove();
                 }
-            }
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         }
     }
@@ -217,6 +233,9 @@ public class Listener extends ServiceThread {
         this.master = config.getBoolean(ConfigData.MASTER);
         this.simulation=config.getBoolean(ConfigData.SIMULATION);
         this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
+        this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
+        this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
+        this.connectToBuddy = config.getBoolean(ConfigData.CONNECT_TO_BUDDY);
     }
 }

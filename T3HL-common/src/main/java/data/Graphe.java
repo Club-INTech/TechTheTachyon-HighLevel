@@ -43,8 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author rem
  */
-public class
-Graphe implements Service {
+public class Graphe implements Service {
 
     /**
      * Mémoire qui contient les chemins déjà calculés pour le pathfinding (vidée dès que le graphe change)
@@ -52,6 +51,16 @@ Graphe implements Service {
     public final Map<Node, Map<Node, LinkedList<Vec2>>> cache = new HashMap<>();
 
     public final ReentrantReadWriteLock cacheLocks = new ReentrantReadWriteLock(true);
+
+    /**
+     * Liste des obstacles temporaires (eg les palets de la zone de chaos)
+     */
+    private final ArrayList<Obstacle> temporaryObstacles;
+
+    /**
+     * Est-ce que le graphe est déjà initialisé? On évite de recharger le graphe quand le panneau change la config
+     */
+    private boolean initialized;
 
     // pour pouvoir créer des tableaux d'arraylist
     private static class NodeList extends ArrayList<Node> {}
@@ -63,13 +72,13 @@ Graphe implements Service {
 
     /**
      * Liste des obstacles fixes
-     * @see Table#fixedObstacles
+     * @see Table#getFixedObstacles()
      */
     private final ArrayList<Obstacle> fixedObstacles;
 
     /**
      * Liste des obstacles mobiles
-     * @see Table#mobileObstacles
+     * @see Table#getMobileObstacles()
      */
     private final ConcurrentLinkedQueue<MobileCircularObstacle> mobileCircularObstacles;
 
@@ -119,6 +128,7 @@ Graphe implements Service {
         table.setGraphe(this);
         this.fixedObstacles = table.getFixedObstacles();
         this.mobileCircularObstacles = table.getMobileObstacles();
+        this.temporaryObstacles = table.getTemporaryObstacles();
         this.nodes = new ArrayList<>();
         this.ridges = new ArrayList<>();
     }
@@ -177,7 +187,7 @@ Graphe implements Service {
                 pos.setA(i * 2 * Math.PI / nodeCricleNbr);
                 pos.plus(obstacle.getPosition());
 
-                if (!table.isPositionInFixedObstacle(pos)) {
+                if (!table.isPositionInFixedObstacle(pos, false)) {
                     addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos+" à cause d'un obstacle en "+obstacle);
                 }
@@ -228,7 +238,7 @@ Graphe implements Service {
             for (int j=0; j<nodeYNbr; j++) {
                 pos.setY(j * yStep);
 
-                if (!table.isPositionInFixedObstacle(pos)) {
+                if (!table.isPositionInFixedObstacle(pos, false)) {
                     addNode(new Node(pos.clone()));
                     Log.GRAPHE.debug("Ajout d'un noeud en "+pos);
                 }
@@ -253,7 +263,7 @@ Graphe implements Service {
                 constructRidge(node1, node2, segment);
             }
         }
-        Log.GRAPHE.debug("Fin d'initialisation des arrêtes");
+        Log.GRAPHE.debug("Fin d'initialisation des arrêtes, "+ridges.size()+" arrêtes créées");
     }
 
     /**
@@ -305,12 +315,6 @@ Graphe implements Service {
                     // on n'utilise pas un foreach pour éviter de créer des itérateurs pour rien!
                     for (int i = 0; i < list.size(); i++) {
                         Node nodeI = list.get(i);
-                     /*   FIXME: plus proche ou égalité ??
-                        double distSq = nodeI.getPosition().squaredDistanceTo(position);
-                        if(closestDist > distSq) {
-                            n = nodeI;
-                            closestDist = distSq;
-                        }*/
                         if(nodeI.getPosition().equals(position)) {
                             n = nodeI;
                         }
@@ -429,6 +433,10 @@ Graphe implements Service {
         return ridges;
     }
 
+    public ArrayList<Obstacle> getTemporaryObstacles() {
+        return temporaryObstacles;
+    }
+
     public ConcurrentLinkedQueue<MobileCircularObstacle> getMobileObstacles() {
         return mobileCircularObstacles;
     }
@@ -459,7 +467,14 @@ Graphe implements Service {
     public void updateConfig(Config config) {
         updateConfigNoInit(config);
         // L'initialisation du Graphe a besoin des données de la config :'(
-        this.init();
+        if( ! initialized) {
+            synchronized (fixedObstacles) {
+                synchronized (mobileCircularObstacles) {
+                    this.init();
+                    initialized = true;
+                }
+            }
+        }
     }
 
     public void updateConfigNoInit(Config config) {

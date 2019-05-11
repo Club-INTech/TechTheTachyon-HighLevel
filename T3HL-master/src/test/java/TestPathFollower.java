@@ -1,19 +1,16 @@
 import connection.ConnectionManager;
 import data.Graphe;
-import data.Table;
 import data.XYO;
 import data.controlers.Listener;
-import data.controlers.SensorControler;
+import data.controlers.DataControler;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
-import orders.order.Order;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Master;
-import scripts.ScriptManagerMaster;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Segment;
@@ -29,7 +26,7 @@ public class TestPathFollower {
     private static OrderWrapper orderWrapper;
     private static Graphe graphe;
     private static PathFollower pathFollower;
-    private static SensorControler sensorController;
+    private static DataControler sensorController;
 
     @Before
     public void init() {
@@ -41,7 +38,7 @@ public class TestPathFollower {
             listener.start();
             graphe = container.getService(Graphe.class);
             pathFollower = container.getService(PathFollower.class);
-            sensorController = container.getService(SensorControler.class);
+            sensorController = container.getService(DataControler.class);
             sensorController.start();
             robot = container.getService(Master.class);
         } catch (ContainerException e) {

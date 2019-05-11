@@ -21,10 +21,8 @@ package utils.communication;
 import utils.Log;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.net.*;
+import java.util.Optional;
 
 /**
  * Définit l'interface de connexion utilisant une socket serveur
@@ -35,6 +33,7 @@ import java.net.SocketTimeoutException;
 public class SocketServerInterface extends SocketInterface {
 
     private ServerSocket serverSocket = null;
+    private int receivedCount;
 
     /**
      * Construit une interface de connexion point-à-point attendant la connexion
@@ -54,8 +53,12 @@ public class SocketServerInterface extends SocketInterface {
                 Socket privSocket = null;
                 try {
                     Log.COMMUNICATION.debug(String.format("Creating socket waiting connection on port %d", port));
-                    serverSocket = new ServerSocket(port);
+                    serverSocket = new ServerSocket();
+                    int receiveBufferSize = serverSocket.getReceiveBufferSize();
+                    Log.COMMUNICATION.debug("Receive buffer size on "+serverSocket.getLocalSocketAddress()+" is "+receiveBufferSize);
+                    serverSocket.setReceiveBufferSize(receiveBufferSize*200);
                     serverSocket.setSoTimeout(CONNECTION_TIMEOUT);
+                    serverSocket.bind(new InetSocketAddress(port));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -65,18 +68,23 @@ public class SocketServerInterface extends SocketInterface {
                             try {
                                 Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
                                 privSocket = serverSocket.accept();
-                                if (privSocket != null){
+                                if (privSocket != null) {
+                                    System.err.println(">> Received before new socket: "+receivedCount);
                                     socket = privSocket;
+                                    socket.setTcpNoDelay(true);
                                 }
                                 Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
                                 initBuffers();
                                 Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
+                                send("ping");
+                                Log.COMMUNICATION.debug("Initialized connection with a 'ping'");
                             } catch (SocketTimeoutException e) {
                                 e.printStackTrace();
                             }
                         }
                     } catch (IOException | CommunicationException e) {
                         e.printStackTrace();
+                        Log.COMMUNICATION.critical("Socket error: "+e.getMessage());
                         if(e instanceof SocketException) {
                             if(((SocketException) e).getMessage().contains("Socket is closed")) {
                                 break;
@@ -88,6 +96,16 @@ public class SocketServerInterface extends SocketInterface {
         };
         thread.setDaemon(true);
         thread.start();
+    }
+
+    @Override
+    public synchronized Optional<String> read() throws CommunicationException {
+        Optional<String> result = super.read();
+        if(result.isPresent()) {
+            receivedCount++;
+            Log.COMMUNICATION.debug(">> READ: "+result.get());
+        }
+        return result;
     }
 
     @Override

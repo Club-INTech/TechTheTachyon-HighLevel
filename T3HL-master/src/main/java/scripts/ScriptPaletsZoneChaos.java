@@ -34,9 +34,9 @@ public class ScriptPaletsZoneChaos extends Script{
     @Override
     public void execute(Integer version) {
         float[] signes= new float[3];
-        signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
-        signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
-        signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+500);
+        signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
+        signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
+        signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
 
         positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
         positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
@@ -58,16 +58,16 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
                     if (position == positions[0]){
-                        table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
                         robot.pushPaletDroit(CouleurPalet.ROUGE);
                     }
                     if (position == positions[1]){
-                        table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletRedDeuxZoneChaosYellow());
                         robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                     }
                     if (position == positions[2]){
-                        table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletGreenZoneChaosYellow());
                         robot.pushPaletDroit(CouleurPalet.VERT);
                     }
                 }
@@ -78,15 +78,15 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                     if (position == positions[0]) {
-                        table.removeFixedObstacle(table.getPaletRedUnZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
                     if (position == positions[1]) {
-                        table.removeFixedObstacle(table.getPaletRedDeuxZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletRedDeuxZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
                     if (position == positions[2]){
-                        table.removeFixedObstacle(table.getPaletGreenZoneChaosYellow());
+                        table.removeTemporaryObstacle(table.getPaletGreenZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.VERT);
                     }
                 }
@@ -107,10 +107,13 @@ public class ScriptPaletsZoneChaos extends Script{
     public Shape entryPosition(Integer version) {return new Circle(new VectCartesian(xEntry, yEntry), 5); }
 
     @Override
-    public void finalize(Exception e) { }
+    public void finalize(Exception e) {
+        table.removeAllChaosObstacles();
+    }
 
     @Override
     public void updateConfig(Config config) {
+        super.updateConfig(config);
         rayonRobot=config.getInt(ConfigData.ROBOT_RAY)+1;
     }
 }

@@ -21,6 +21,7 @@ package locomotion;
 import data.Graphe;
 import data.graphe.Node;
 import data.graphe.Ridge;
+import data.table.MobileCircularObstacle;
 import pfg.config.Config;
 import utils.container.Service;
 import utils.math.Vec2;
@@ -29,7 +30,6 @@ import java.util.*;
 
 /**
  * Service déstiner à calculer un chemin entre deux points de la table
- * TODO : 1As ?
  *
  * @author rem
  */
@@ -78,7 +78,7 @@ public class Pathfinder implements Service {
      * @throws NoPathFound
      *              s'il n'existe pas de chemin entre les deux noeuds
      */
-    public LinkedList<Vec2> findPath(Node start, Node aim) throws NoPathFound {
+    public LinkedList<Vec2> findPath(Node start, Node aim, Set<MobileCircularObstacle> encounteredEnemies) throws NoPathFound {
         graphe.cacheLocks.readLock().lock();
         try {
             Map<Node, LinkedList<Vec2>> alreadyComputedPaths = graphe.cache.get(start);
@@ -109,7 +109,8 @@ public class Pathfinder implements Service {
 
             lastAim = aim;
 
-/*
+            gScore.put(start, 0.0);
+
             // Tant qu'il y a des noeuds à visiter
             while (!openList.isEmpty()) {
                 currentNode = openList.poll();
@@ -129,7 +130,7 @@ public class Pathfinder implements Service {
                         continue; // TODO: trouver pourquoi ça arrive avec l'IA
 
                     // Si le voisin est accessible (s'il n'y a pas d'obstacle mobile entre les deux noeuds)
-                    if (ridge.isReachable(graphe)) {
+                    if (ridge.isReachable(graphe, encounteredEnemies)) {
                         double ridgeCost = ridge.getCost();
 
                         double currentCost = gScore.getOrDefault(currentNode, Node.DEFAULT_COST) + ridgeCost;
@@ -148,18 +149,24 @@ public class Pathfinder implements Service {
                                 closedList.remove(neighbour);
                                 openList.add(neighbour);
                             }
+
+                            double heuristicNeighbour = neighbour.costTo(aim);
+                            heuristiques.put(neighbour, gScore.get(neighbour) + heuristicNeighbour);
                         } else if (!visited) {
                             // Sinon, si le noeud n'as jamais été visité, lui assigne le coût courant et le noeud courant comme prédecesseur
                             gScore.put(neighbour, currentCost);
                             parents.put(neighbour, currentNode);
                             openList.add(neighbour);
+
+                            double heuristicNeighbour = neighbour.costTo(aim);
+                            heuristiques.put(neighbour, gScore.get(neighbour) + heuristicNeighbour);
                         }
                     }
 
                 }
                 closedList.add(currentNode);
-            }*/
-
+            }
+/*
             // Theta*
             // https://en.wikipedia.org/wiki/Theta*
             closedList.clear();
@@ -193,7 +200,7 @@ public class Pathfinder implements Service {
                         updateVertex(aim, s, neighbour);
                     }
                 }
-            }
+            }*/
             throw new NoPathFound(start.getPosition(), aim.getPosition());
         } finally {
             graphe.readLock().unlock();
@@ -208,9 +215,6 @@ public class Pathfinder implements Service {
             canUseParent =  ! parent.equals(s) && lineOfSight != null && lineOfSight.isReachable(graphe);
             if(canUseParent) { // différence avec A* => on regarde s'il est possible d'y aller en ligne droite
                 s = parent;
-                if(s.getPosition().getX() > 0) {
-              //      System.err.println("s: "+s+"; parent: "+parent);
-                }
             }
             updateOpenListIfNecessary(aim, s, neighbour);
         } while(canUseParent);
