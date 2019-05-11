@@ -280,18 +280,18 @@ public class DataControler extends Thread implements Service {
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+ vectsick.getY()+offsetSick) * Math.cos(teta)));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     } else {
                         teta = Math.atan(-rapport);
-                        yCalcule = 2000 - (int)Math.round(((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta)));
+                        yCalcule = 2000 - (int)Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
                         teta = Math.atan(rapport);
-                        yCalcule = 2000-(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000-(int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     } else {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     }
 
 
@@ -303,18 +303,18 @@ public class DataControler extends Thread implements Service {
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000- (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     } else {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     } else {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000-(int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     }
                 }
                 xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()+offsetSick) * Math.cos(teta));
