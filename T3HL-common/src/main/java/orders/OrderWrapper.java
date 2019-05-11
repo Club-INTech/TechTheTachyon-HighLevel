@@ -20,7 +20,7 @@ package orders;
 
 import connection.Connection;
 import data.SensorState;
-import data.XYO;
+import data.controlers.DataControler;
 import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
@@ -32,7 +32,6 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Classe qui permet d'envoyer tous les ordres
@@ -64,14 +63,16 @@ public class OrderWrapper implements Service {
      * Le service de symétrie des ordres
      */
     private SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap;
+    private DataControler dataController;
 
     /**
      * Construit l'order wrapper
      * @param symmetrizedActuatorOrderMap
      *              service permettant de gérer la symétrie des ordres
      */
-    private OrderWrapper(SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
+    private OrderWrapper(SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap, DataControler dataController) {
         this.symmetrizedActuatorOrderMap = symmetrizedActuatorOrderMap;
+        this.dataController = dataController;
     }
 
     /**
@@ -222,6 +223,7 @@ public class OrderWrapper implements Service {
             this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+            dataController.waitForTwoPositionUpdates();
         } else {
             this.sendString(String.format(Locale.US, "%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
