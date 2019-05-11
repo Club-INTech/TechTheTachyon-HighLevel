@@ -155,6 +155,9 @@ public class MainMaster extends RobotEntryPoint {
             SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
             for (int i = 0; i < 1000; i++) {
                 ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
+                // on évite les positions du secondaire
+                if(order.getOrderStr().contains("Secondaire") || order.getOrderStr().contains("musclor") || order.getOrderStr().contains("bal"))
+                    continue;
                 robot.useActuator(order);
                 robot.useActuator((ActuatorsOrder) symetry.getSymmetrizedActuatorOrder(order), true);
                 try {
