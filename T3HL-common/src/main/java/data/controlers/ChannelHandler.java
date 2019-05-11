@@ -8,6 +8,7 @@ import java.util.function.Consumer;
  */
 public class ChannelHandler{
 
+    private Channel channel;
     private Consumer<String> function;
     private ConcurrentLinkedQueue<String> queue;
 
@@ -18,6 +19,7 @@ public class ChannelHandler{
      * @param function fonction qu'on apelle en cas de réception de message
      */
     public ChannelHandler(Listener listener, Channel channel, Consumer<String> function){
+        this.channel = channel;
         this.function = function;
         this.queue = new ConcurrentLinkedQueue<>();
         listener.addCollection(channel, this.queue);
@@ -34,5 +36,13 @@ public class ChannelHandler{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void clearAllMessages() {
+        queue.clear();
+    }
+
+    public Channel getChannel() {
+        return channel;
     }
 }

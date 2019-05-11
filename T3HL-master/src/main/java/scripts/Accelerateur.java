@@ -48,9 +48,21 @@ public class Accelerateur extends Script {
     private final int offsetSick= 6;
 
     /**
-     * Différence en Y entre le sick et le centre du robot
+     * Différence en Y et X entre le sick et le centre du robot
      */
     private final int ySickToRobotCenter=113;
+
+    private final int xSickToRobotCenter=101;
+
+    /**
+     * Distance entre les sicks et rapport entre dsick et écart de valeures mesurées pour faire un recalage en rotation
+     */
+
+    private final int dsick = 173;
+
+    double rapport ;
+    double ecart_mesures_sicks;
+    double teta;
 
     public Accelerateur(Master robot, Table table) {
         super(robot, table);
@@ -126,18 +138,31 @@ public class Accelerateur extends Script {
             //On regarde notre distance par rapport au mur
             robot.computeNewPositionAndOrientation(Sick.NOTHING);
 
-            int averageDistance;
-            if (this.symetry) {
-                averageDistance = (Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
-                Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
-            }
-            else{
-                averageDistance = (Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
-                Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
-            }
+            int averageDistanceY;
+            int averageDistanceX;
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
+
+            if (this.symetry) {
+                averageDistanceY = (Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
+                Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistanceY);
+
+            }
+            else{
+                ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
+                rapport = ecart_mesures_sicks / dsick;
+                teta = Math.atan(rapport);
+                averageDistanceY = (int) (Math.cos(teta)*(Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter);
+                averageDistanceX= (int) (Math.cos(teta)*Sick.SICK_AVANT.getLastMeasure()+ this.offsetSick + this.xSickToRobotCenter);
+                if (averageDistanceX < (currentPosition.getX()-72)){
+                    averageDistanceX= (int) (currentPosition.getX()*Math.cos(teta));
+                }
+                Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistanceY);
+                robot.setPositionAndOrientation(new VectCartesian(averageDistanceX, averageDistanceY),teta+Math.PI);
+
+            }
+
+            robot.gotoPoint(new VectCartesian(this.xEntry,this.yEntry));
 
             robot.turn(Math.PI);
 

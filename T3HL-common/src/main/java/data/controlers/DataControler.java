@@ -13,6 +13,7 @@ import utils.math.VectCartesian;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -67,6 +68,7 @@ public class DataControler extends Thread implements Service {
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
      */
     private int offsetSick= 6;
+    private int posUpdates = 0;
 
     /**
      * Construit un gestionnaire de capteur
@@ -144,11 +146,15 @@ public class DataControler extends Thread implements Service {
         }
         o = Calculs.modulo(o, Math.PI);
         // System.out.println("LL: "+XYO.getRobotInstance());
-        synchronized (XYO.getRobotInstance()) {
-            XYO.getRobotInstance().update(x, y, o);
-        }
+        XYO.getRobotInstance().update(x, y, o);
         Log.POSITION.debug("Pos from LL: "+XYO.getRobotInstance());
-//        Log.COMMUNICATION.debug("Updated pos from LL after computation: "+XYO.getRobotInstance());
+
+        // Si le compteur est à 1, on le met à 0
+        // Si le compteur est à 2, on le met à 1
+        // (dans cet ordre pour pas faire deux décrémentations en même temps)
+        if(posUpdates > 0) {
+            posUpdates--;
+        }
     }
 
     /**
@@ -280,18 +286,18 @@ public class DataControler extends Thread implements Service {
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+ vectsick.getY()+offsetSick) * Math.cos(teta)));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     } else {
                         teta = Math.atan(-rapport);
-                        yCalcule = 2000 - (int)Math.round(((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta)));
+                        yCalcule = 2000 - (int)Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_ARRIERE_DROIT || significantSicks[1] == Sick.SICK_AVANT_DROIT) {
                         teta = Math.atan(rapport);
-                        yCalcule = 2000-(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000-(int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     } else {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta)/2));
                     }
 
 
@@ -303,18 +309,18 @@ public class DataControler extends Thread implements Service {
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000- (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     } else {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     }
                 } else {
                     if (significantSicks[1] == Sick.SICK_AVANT_GAUCHE || significantSicks[1] == Sick.SICK_ARRIERE_GAUCHE) {
                         teta = Math.atan(-rapport);
-                        yCalcule = (int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = (int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     } else {
                         teta = Math.atan(rapport);
-                        yCalcule = (int) Math.round(2000 - (sickMeasurements[significantSicks[2].getIndex()]+vectsick.getY()+offsetSick) * Math.cos(teta));
+                        yCalcule = 2000-(int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()]+2*vectsick.getY()+2*offsetSick) * Math.cos(teta))/2);
                     }
                 }
                 xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectsick.getX()+offsetSick) * Math.cos(teta));
@@ -435,5 +441,35 @@ public class DataControler extends Thread implements Service {
     protected void finalize() throws Throwable {
         super.finalize();
     //    sickWriter.close();
+    }
+
+    /**
+     * Vides la liste des messages reçus de position du LL, attends qu'on en reçoit deux avant de retourner.
+     * On suppose avoir déjà reçu la confirmation du LL quand on commence cette méthode
+     * Le principe est de s'assurer que le HL et LL s'accordent sur la position:
+     *
+     * (Pire) Ordre des opérations:
+     * - Le HL envoie la nouvelle position
+     * - Le LL n'a pas encore reçu la position et a envoyé (0,0,0) (ou n'importe quelle position erronée)
+     * - Le DataControler met alors à jour la position du robot à (0,0,0)
+     * - Le LL reçoit la nouvelle position et confirme
+     * - Le HL reçoit la confirmation, ignore les 2 prochains messages de position (pour être sûr que le LL envoie la bonne position)
+     * - Le HL attent le prochain message de mise à jour, le LL lui envoie alors la (bonne) position et le HL la met à jour en interne.
+     *
+     * Et tout le monde est d'accord :)
+     * Et le HL reforce sa position pour être sûr à la fin
+     */
+    public void waitForTwoPositionUpdates() {
+        // on ignore les prochains messages
+        for (ChannelHandler handle : channelHandlers) {
+            if(handle.getChannel() == Channel.ROBOT_POSITION) {
+                handle.clearAllMessages();
+                break;
+            }
+        }
+        // on reset le compteur à 2
+        posUpdates = 2;
+        // on attend d'en avoir reçu deux
+        waitWhileTrue(() -> posUpdates > 0);
     }
 }

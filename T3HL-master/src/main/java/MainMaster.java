@@ -38,6 +38,8 @@ import utils.Container;
 import utils.Log;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -130,10 +132,9 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.setRotationSpeed(Speed.MEDIUM_ALL);
-        synchronized (XYO.getRobotInstance()) {
-            XYO.getRobotInstance().update(1500-191, 350, Math.PI);
-            robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        }
+
+        Vec2 newPos = new VectCartesian(1500-191, 350);
+        robot.setPositionAndOrientation(newPos, Math.PI);
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             Log.TABLE.critical("Couleur pour le recalage : violet");
@@ -151,13 +152,35 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
+        try {
+            SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
+            for (int i = 0; i < 1000; i++) {
+                ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
+                // on évite les positions du secondaire
+                if(order.getOrderStr().contains("Secondaire") || order.getOrderStr().contains("musclor") || order.getOrderStr().contains("bal")
+                || order.name().contains("SECONDAIRE"))
+                    continue;
+                robot.useActuator(order);
+                robot.useActuator((ActuatorsOrder) symetry.getSymmetrizedActuatorOrder(order), true);
+                try {
+                    robot.turn((i % 2) * Math.PI);
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+
+/*
 
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-
+*/
     }
 
     private void initSimulator(){
