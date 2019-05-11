@@ -111,11 +111,9 @@ public class PaletsX6 extends Script {
                     e.printStackTrace();
                 }
                 if(version == 0) {
-                    // TODO
                     robot.pushPaletDroit(CouleurPalet.ROUGE);
                     }
                 else if(version == 1) {
-                    // TODO
                     robot.pushPaletDroit(CouleurPalet.VERT);
                 }
                 else if(version ==2){
@@ -178,8 +176,8 @@ public class PaletsX6 extends Script {
 
     @Override
     public void finalize(Exception e) {
-
-        // TODO: push palet
+        // range le bras quand on a fini
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,false);
     }
     @Override
     public void updateConfig(Config config) {
