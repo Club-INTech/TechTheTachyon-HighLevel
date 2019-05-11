@@ -25,8 +25,10 @@ import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
 import utils.ConfigData;
+import utils.Container;
 import utils.Log;
 import utils.communication.CommunicationException;
+import utils.container.ContainerException;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
@@ -59,20 +61,20 @@ public class OrderWrapper implements Service {
      * Si on utlise la balise
      */
     private Boolean useBalise_Image;
+    private Container container;
     /**
      * Le service de symétrie des ordres
      */
     private SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap;
-    private DataControler dataController;
 
     /**
      * Construit l'order wrapper
      * @param symmetrizedActuatorOrderMap
      *              service permettant de gérer la symétrie des ordres
      */
-    private OrderWrapper(SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap, DataControler dataController) {
+    private OrderWrapper(Container container, SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
+        this.container = container;
         this.symmetrizedActuatorOrderMap = symmetrizedActuatorOrderMap;
-        this.dataController = dataController;
     }
 
     /**
@@ -223,7 +225,11 @@ public class OrderWrapper implements Service {
             this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-            dataController.waitForTwoPositionUpdates();
+            try {
+                container.getService(DataControler.class).waitForTwoPositionUpdates();
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
         } else {
             this.sendString(String.format(Locale.US, "%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
