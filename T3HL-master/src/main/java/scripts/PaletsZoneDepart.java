@@ -40,37 +40,35 @@ public class PaletsZoneDepart extends Script {
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
                 if (premierPaletPris) {
-                   // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
+                    // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                     robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
-                    waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
+                    //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                     //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
                     premierPaletPris = true;
-                }
+                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
+                //Attend avant de prendre un palet
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
-
+                //Attend avant de prendre un palet
                 try {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,false);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                robot.waitForLeftElevator();
-                // FIXME: corriger couleur
+                //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+                //robot.waitForLeftElevator();
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
                     case 0:
@@ -90,9 +88,9 @@ public class PaletsZoneDepart extends Script {
                         break;
                 }
             }
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-            robot.waitForLeftElevator();
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+            //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+            //robot.waitForLeftElevator();
+            //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -105,7 +103,9 @@ public class PaletsZoneDepart extends Script {
     }
     @Override
     public void executeWhileMovingToEntry(int version) {
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+        if(robot.getNbPaletsGauches()>=1) {
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
+        }
     }
     @Override
     public void finalize(Exception e) {
