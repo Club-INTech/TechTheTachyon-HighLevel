@@ -151,13 +151,31 @@ public class MainMaster extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         orderWrapper.waitJumper();
 
+        try {
+            SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
+            for (int i = 0; i < 1000; i++) {
+                ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+                robot.useActuator((ActuatorsOrder) symetry.getSymmetrizedActuatorOrder(order), true);
+                try {
+                    robot.turn((i % 2) * Math.PI);
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
+
+/*
 
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-
+*/
     }
 
     private void initSimulator(){
