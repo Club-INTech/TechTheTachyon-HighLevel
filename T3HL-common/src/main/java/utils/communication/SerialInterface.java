@@ -3,7 +3,6 @@ package utils.communication;
 import com.fazecast.jSerialComm.SerialPort;
 import utils.Log;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Optional;
@@ -73,7 +72,7 @@ public class SerialInterface implements CommunicationInterface {
                 }
             }
             this.printer = new PrintStream(port.getOutputStream());
-            this.scanner = new Scanner(new BufferedInputStream(port.getInputStream()));
+            this.scanner = new Scanner(port.getInputStream());
             open = true;
         }).start();
     }
