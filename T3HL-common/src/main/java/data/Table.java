@@ -294,6 +294,7 @@ public class Table implements Service {
                     }
                 }
                 if (obstacle.getOutDatedTime() < System.currentTimeMillis()) {
+                    Log.LIDAR.debug("Mort de l'obstacle mobile : " + obstacle);
                     mobileObstacleIterator.remove();
                 }
             }
