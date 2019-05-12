@@ -29,6 +29,7 @@ import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Match;
 import scripts.ScriptManagerMaster;
+import scripts.ScriptTestPositions;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -153,7 +154,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
         try {
-            container.getService(Match.class).goToThenExecute(0);
+            container.getService(ScriptTestPositions.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
