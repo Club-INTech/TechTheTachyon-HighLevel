@@ -128,7 +128,7 @@ public class MobileCircularObstacle extends Obstacle {
 
     @Override
     public String toString() {
-        return "Obstacle mobile circulaire (outdated in "+(outDatedTime-System.currentTimeMillis())+"ms)" + this.shape.toString();
+        return "Obstacle mobile circulaire " + this.shape.toString();
     }
 
     @Override
