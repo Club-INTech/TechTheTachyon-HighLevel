@@ -3,6 +3,7 @@ package utils.communication;
 import com.fazecast.jSerialComm.SerialPort;
 import utils.Log;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Optional;
 import java.util.Scanner;
@@ -35,13 +36,18 @@ public class SerialInterface implements CommunicationInterface {
     @Override
     public Optional<String> read() throws CommunicationException {
         if (port != null) {
-            if (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                if(line.startsWith("[Dynamixel-Com]")) {
-                    Log.DYNAMIXEL_COM.debug(line);
+            try {
+                if (port.getInputStream().available() > 0 && scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    if(line.startsWith("[Dynamixel-Com]")) {
+                        Log.DYNAMIXEL_COM.debug(line);
+                    }
+                    System.out.println("[Serial] Received: " + line);
+                    return Optional.of(line);
                 }
-                System.out.println("[Serial] Received: " + line);
-                return Optional.of(line);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new CommunicationException(e);
             }
         }
         return Optional.empty();
