@@ -112,7 +112,7 @@ public class Locomotion implements Service {
      * @param distance  distance de translation
      */
     public void moveLengthwise(int distance) throws UnableToMoveException, TimeoutError {
-        pathFollower.moveLengthwise(distance, false);
+        moveLengthwise(distance, false);
     }
 
     /**

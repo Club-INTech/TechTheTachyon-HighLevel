@@ -131,87 +131,105 @@ public class PathFollower extends ServiceThread {
      *              en cas d'évènents inattendus
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
-        Runnable[] parallelActionsLambda = parallelActions;
-        int travelledDistance = 0;
-        Vec2 start = robotXYO.getPosition().clone();
+        try {
+            Runnable[] parallelActionsLambda = parallelActions;
+            int travelledDistance = 0;
+            Vec2 start = robotXYO.getPosition().clone();
 
-        XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
-        do {
-            int toTravel = distance - travelledDistance;
+            XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
+            do {
+                int toTravel = distance - travelledDistance;
 
-            try {
-                Optional<MobileCircularObstacle> enemyForward = getEnemyForward(distance > 0);
-                if(enemyForward.isPresent()) {
-                    MobileCircularObstacle obstacle = enemyForward.get();
-                    Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
-                    Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+                try {
+                    handleEnemyForward(distance, aim);
 
-                    // attente de qq secondes s'il y a un ennemi là où on veut aller
-                    try {
-                        Service.withTimeout(blockTimeout, () -> {
-                            while(getEnemyForward(distance > 0).isPresent()) {
-                                try {
-                                    Thread.sleep(50);
-                                } catch (InterruptedException e) {
-                                    break;
-                                }
-                            }
-                        });
-                    } catch (TimeoutError timeout) {
-                        throw new UnableToMoveException("Enemy pos is " + obstacle.toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                    }
-                }
+                    SensorState.MOVING.setData(true);
+                    this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
+                    parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
-                SensorState.MOVING.setData(true);
-                this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
-                parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
-
-                waitWhileTrue(SensorState.MOVING::getData, () -> {
-                    Optional<MobileCircularObstacle> enemyForwardWhileMoving = getEnemyForward(distance > 0);
-                    if(enemyForwardWhileMoving.isPresent()) {
-                        MobileCircularObstacle obstacle = enemyForwardWhileMoving.get();
-                        Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
-                        Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
-
-                        orderWrapper.immobilise();
-
-                        // FIXME: gérer le TimeoutError
-                        // attente de qq secondes s'il y a un ennemi là où on veut aller
-                        try {
-                            Service.withTimeout(blockTimeout, () -> {
-                                while(getEnemyForward(distance > 0).isPresent()) {
-                                    try {
-                                        Thread.sleep(50);
-                                    } catch (InterruptedException e) {
-                                        break;
-                                    }
-                                }
-                            });
-                        } catch (TimeoutError timeout) {
-                            throw new UnableToMoveException("Enemy pos is " + enemyForwardWhileMoving.get().toString() + " ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                    waitWhileTrue(SensorState.MOVING::getData, () -> {
+                        handleEnemyForward(distance, aim);
+                        if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                            orderWrapper.immobilise();
+                            throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
                         }
+                    });
+                } catch (UnableToMoveException e) {
+                    if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
+                        Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
+                    } else {
+                        e.printStackTrace();
                     }
-                    if (SensorState.STUCKED.getData() && !expectedWallImpact) {
-                        orderWrapper.immobilise();
-                        throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-                    }
-                });
-            } catch (UnableToMoveException e) {
-                if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
-                    Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
-                } else {
-                    e.printStackTrace();
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    break;
+                }
+
+                travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
+            } while (Math.abs(travelledDistance-distance) >= 5);
+        } finally {
+            orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
+        }
+    }
+
+    private void handleEnemyForward(int distance, XYO aim) throws UnableToMoveException {
+        Optional<MobileCircularObstacle> enemy = getEnemyForward(distance);
+
+        boolean direction = distance > 0;
+        double orientation = robotXYO.getOrientation();
+        if (!direction) {
+            orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
+        }
+
+        Segment segment = new Segment(robotXYO.getPosition().clone(),
+                robotXYO.getPosition().plusVector(new VectPolar(distanceCheck, orientation)));
+
+        if (enemy.isPresent()) {
+            // on vérifie si l'endroit où on veut aller est plus proche:
+            double distanceToAim = aim.getPosition().distanceTo(XYO.getRobotInstance().getPosition());
+
+            boolean needsToStop = true;
+            if(distanceToAim < distanceCheck) { // si c'est plus proche que la distance de vérification
+                Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
+                nearDirection.setR(distanceToAim);
+                nearDirection.plus(XYO.getRobotInstance().getPosition());
+                segment.setPointB(nearDirection);
+                if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
+                    // on ralentit
+                    orderWrapper.immobilise();
+                    orderWrapper.setBothSpeed(Speed.SLOW_ALL);
+                    // on redemande le déplacement
+                    this.orderWrapper.moveLenghtwise(distanceToAim*Math.signum(distance));
+                    needsToStop = false;
                 }
             }
 
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-                break;
-            }
+            if(needsToStop) { // l'ennemi est vraiment devant nous
+                MobileCircularObstacle obstacle = enemy.get();
+                Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
+                Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
 
-            travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
-        } while (Math.abs(travelledDistance-distance) >= 5);
+                orderWrapper.immobilise();
+
+                // attente de qq secondes s'il y a un ennemi là où on veut aller
+                try {
+                    Service.withTimeout(blockTimeout, () -> {
+                        while(getEnemyForward(distanceToAim).isPresent()) {
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                break;
+                            }
+                        }
+                    });
+                } catch (TimeoutError timeout) {
+                    throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+            }
+        }
     }
 
     /**
@@ -304,17 +322,19 @@ public class PathFollower extends ServiceThread {
 
     /**
      * Vérifie en fonction de la vitesse s'il y a un adversaire en face du robot
-     * @param direction true si l'on va vers l'avant du robot
+     * @param distance la distance à parcourir
      * @return <pre>Optional.none()</pre> s'il n'y a pas d'ennemi, <pre>Optional.of(&lt;some&gt;)</pre> s'il y en a un
      */
-    private Optional<MobileCircularObstacle> getEnemyForward(boolean direction) {
+    private Optional<MobileCircularObstacle> getEnemyForward(double distance) {
+        // true si l'on va vers l'avant du robot
+        boolean direction = distance > 0;
         double orientation = robotXYO.getOrientation();
         if (!direction) {
             orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
         }
-        Segment seg = new Segment(robotXYO.getPosition().clone(),
+        Segment segment = new Segment(robotXYO.getPosition().clone(),
                 robotXYO.getPosition().plusVector(new VectPolar(distanceCheck, orientation)));
-        return getEnemyInSegment(seg);
+        return getEnemyInSegment(segment);
     }
 
     /**

@@ -337,6 +337,8 @@ public class OrderWrapper implements Service {
      * @param actions les actions à exécuter
      */
     private void runAll(Runnable[] actions) {
+        if(actions == null)
+            return;
         for (Runnable action : actions) {
             action.run();
         }
