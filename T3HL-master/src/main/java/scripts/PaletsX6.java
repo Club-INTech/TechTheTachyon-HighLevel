@@ -68,13 +68,13 @@ public class PaletsX6 extends Script {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if(symetry) {
+            /*if(symetry) {
                 robot.turn(0);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
                 robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-            }
+            }*/
             //Verifier les ascenseurs ?
             if(robot.getNbPaletsDroits()==0){
                 //robot.useActuator(ActuatorsOrder.);
@@ -161,7 +161,7 @@ public class PaletsX6 extends Script {
             return positionEntree;
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,450+900), 5);
+            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,400+900), 5);
             return positionEntree;
         }
         return null;
