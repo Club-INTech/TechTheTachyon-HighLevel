@@ -3,10 +3,11 @@ package utils.communication;
 import com.fazecast.jSerialComm.SerialPort;
 import utils.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Optional;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import static com.fazecast.jSerialComm.SerialPort.TIMEOUT_SCANNER;
@@ -19,7 +20,7 @@ public class SerialInterface implements CommunicationInterface {
     private SerialPort port;
     private PrintStream printer;
     private boolean open;
-    private Scanner scanner;
+    private BufferedReader reader;
 
     public SerialInterface(String ip, int port) {
         // on n'utilise pas l'IP ni le port
@@ -37,8 +38,8 @@ public class SerialInterface implements CommunicationInterface {
     public Optional<String> read() throws CommunicationException {
         if (port != null) {
             try {
-                if (port.getInputStream().available() > 0 && scanner.hasNextLine()) {
-                    String line = scanner.nextLine();
+                if (reader.ready()) {
+                    String line = reader.readLine();
                     if(line.startsWith("[Dynamixel-Com]")) {
                         Log.DYNAMIXEL_COM.debug(line);
                     }
@@ -72,7 +73,7 @@ public class SerialInterface implements CommunicationInterface {
                 }
             }
             this.printer = new PrintStream(port.getOutputStream());
-            this.scanner = new Scanner(port.getInputStream());
+            this.reader = new BufferedReader(new InputStreamReader(port.getInputStream()));
             open = true;
         }).start();
     }
