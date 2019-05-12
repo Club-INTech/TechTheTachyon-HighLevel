@@ -2,6 +2,7 @@ package scripts;
 
 import data.Table;
 import data.XYO;
+import robot.Master;
 import robot.Robot;
 import utils.math.Circle;
 import utils.math.Shape;
@@ -13,7 +14,7 @@ public class ScriptTestPositions extends Script {
      * @param robot le robot
      * @param table
      */
-    protected ScriptTestPositions(Robot robot, Table table) {
+    protected ScriptTestPositions(Master robot, Table table) {
         super(robot, table);
     }
 

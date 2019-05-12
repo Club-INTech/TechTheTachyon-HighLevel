@@ -136,19 +136,22 @@ public class PathFollower extends ServiceThread {
             int travelledDistance = 0;
             Vec2 start = robotXYO.getPosition().clone();
 
+            // permet de vérifier qu'on essaie pour la première fois: on évite de s'arrêter et de diminuer la vitesse à chaque itération si on rencontre un ennemi plus loin que là où on veut aller
+            boolean firstPass = true;
             XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
             do {
                 int toTravel = distance - travelledDistance;
 
                 try {
-                    handleEnemyForward(distance, aim);
+                    handleEnemyForward(distance, aim, firstPass);
 
                     SensorState.MOVING.setData(true);
                     this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
+                    boolean finalFirstPass = firstPass;
                     waitWhileTrue(SensorState.MOVING::getData, () -> {
-                        handleEnemyForward(distance, aim);
+                        handleEnemyForward(distance, aim, finalFirstPass);
                         if (SensorState.STUCKED.getData() && !expectedWallImpact) {
                             orderWrapper.immobilise();
                             throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
@@ -169,13 +172,21 @@ public class PathFollower extends ServiceThread {
                 }
 
                 travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
+                firstPass = false;
             } while (Math.abs(travelledDistance-distance) >= 5);
         } finally {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         }
     }
 
-    private void handleEnemyForward(int distance, XYO aim) throws UnableToMoveException {
+    /**
+     * Vérifies si un ennemi est devant là où on veut aller. S'il est plus loin que la position qu'on veut atteindre, on continue. Le robot ralentit alors si 'shouldSlowDown' est à 'true'
+     * @param distance la distance qu'on veut parcourir
+     * @param aim le point final où veut être
+     * @param shouldSlowDown doit-on ralentir s'il y a un ennemi proche?
+     * @throws UnableToMoveException si un ennemi bloque complétement le chemin
+     */
+    private void handleEnemyForward(int distance, XYO aim, boolean shouldSlowDown) throws UnableToMoveException {
         Optional<MobileCircularObstacle> enemy = getEnemyForward(distance);
 
         boolean direction = distance > 0;
@@ -191,43 +202,41 @@ public class PathFollower extends ServiceThread {
             // on vérifie si l'endroit où on veut aller est plus proche:
             double distanceToAim = aim.getPosition().distanceTo(XYO.getRobotInstance().getPosition());
 
-            boolean needsToStop = true;
             if(distanceToAim < distanceCheck) { // si c'est plus proche que la distance de vérification
                 Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
                 nearDirection.setR(distanceToAim);
                 nearDirection.plus(XYO.getRobotInstance().getPosition());
                 segment.setPointB(nearDirection);
                 if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
-                    // on ralentit
-                    orderWrapper.immobilise();
-                    orderWrapper.setBothSpeed(Speed.SLOW_ALL);
-                    // on redemande le déplacement
-                    this.orderWrapper.moveLenghtwise(distanceToAim*Math.signum(distance));
-                    needsToStop = false;
+                    // on ralentit si on l'a pas déjà fait
+                    if(shouldSlowDown) {
+                        orderWrapper.immobilise();
+                        orderWrapper.setBothSpeed(Speed.SLOW_ALL);
+                    }
+                    return;
                 }
             }
 
-            if(needsToStop) { // l'ennemi est vraiment devant nous
-                MobileCircularObstacle obstacle = enemy.get();
-                Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
-                Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+            // l'ennemi est vraiment devant nous
+            MobileCircularObstacle obstacle = enemy.get();
+            Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
+            Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
 
-                orderWrapper.immobilise();
+            orderWrapper.immobilise();
 
-                // attente de qq secondes s'il y a un ennemi là où on veut aller
-                try {
-                    Service.withTimeout(blockTimeout, () -> {
-                        while(getEnemyForward(distanceToAim).isPresent()) {
-                            try {
-                                Thread.sleep(50);
-                            } catch (InterruptedException e) {
-                                break;
-                            }
+            // attente de qq secondes s'il y a un ennemi là où on veut aller
+            try {
+                Service.withTimeout(blockTimeout, () -> {
+                    while(getEnemyForward(distanceToAim).isPresent()) {
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            break;
                         }
-                    });
-                } catch (TimeoutError timeout) {
-                    throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-                }
+                    }
+                });
+            } catch (TimeoutError timeout) {
+                throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
             }
         }
     }

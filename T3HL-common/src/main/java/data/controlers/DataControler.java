@@ -460,6 +460,7 @@ public class DataControler extends Thread implements Service {
      * Et le HL reforce sa position pour être sûr à la fin
      */
     public void waitForTwoPositionUpdates() {
+        Log.COMMUNICATION.debug("Waiting for two position updates");
         // on ignore les prochains messages
         for (ChannelHandler handle : channelHandlers) {
             if(handle.getChannel() == Channel.ROBOT_POSITION) {

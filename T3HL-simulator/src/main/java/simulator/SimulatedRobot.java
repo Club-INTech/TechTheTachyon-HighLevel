@@ -137,9 +137,7 @@ public class SimulatedRobot implements IRobot {
                 updatePosition();
                 tryRaiseStoppedMovingFlag();
                 trySendStoppedMovingMessage();
-                if (this.isMoving()) {
-                    sendRealtimePosition();
-                }
+                sendRealtimePosition();
                 this.lastUpdateTime = System.currentTimeMillis();
             }
         }
