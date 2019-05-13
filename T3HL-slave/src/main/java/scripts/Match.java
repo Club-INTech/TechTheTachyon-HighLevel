@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import data.XYO;
 import pfg.config.Config;
@@ -19,6 +20,9 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
+        for (int i = 0; i<5; i++){
+            robot.pushPaletDroit(CouleurPalet.VERT);
+        }
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
     }
 

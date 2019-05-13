@@ -5,6 +5,7 @@ import utils.container.ContainerException;
 import utils.container.Service;
 
 public enum ScriptNamesSlave implements ScriptNames {
+    MATCH(Match.class,"match"),
     GOLDENIUM(Goldenium.class,"goldenium"),
     PALETS3(Paletsx3.class, "paletsx3"),
     PALETSX6(Paletsx6.class, "paletsx6"),
