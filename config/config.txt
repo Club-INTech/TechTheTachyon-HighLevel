@@ -14,7 +14,7 @@ COULEUR                             =jaune
 #CHEMIN D'EXECUTION DU PROCESSUS LIDAR
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
-SIMULATION                          =false
+SIMULATION                          =true
 USING_LIDAR                         =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
