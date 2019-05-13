@@ -92,6 +92,12 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+                    if (robot.getNbPaletsGauches()<4) {
+                        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+                    } else if (robot.getNbPaletsGauches()==4) {
+                        robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+                    }
+
 
 
                 }
@@ -103,7 +109,11 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
                     robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true  );
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-
+                    if (robot.getNbPaletsDroits()<4) {
+                        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET, true);
+                    } else if (robot.getNbPaletsDroits()==4) {
+                        robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
+                    }
                 }
                 try {
                     Thread.sleep(500);
@@ -165,10 +175,11 @@ public class PaletsX6 extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        if(robot.getNbPaletsDroits()>=1){
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+        if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits()<5){ // si l'asc coontient 4 palets, on peut plus descendre
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, false);
         }
     }
+
 
     @Override
     public void finalize(Exception e) {
