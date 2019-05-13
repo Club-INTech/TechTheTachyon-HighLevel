@@ -3,6 +3,7 @@ package scripts;
 import data.CouleurPalet;
 import data.Table;
 import data.XYO;
+import locomotion.UnableToMoveException;
 import pfg.config.Config;
 import robot.Slave;
 import utils.math.Circle;
@@ -19,6 +20,15 @@ public class MatchSlave extends Script {
 
     @Override
     public void execute(Integer version) {
+        for (int i=0; i< 10000; i++){
+            try {
+                robot.moveLengthwise(1000, false);
+                robot.moveLengthwise(-1000, false);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+        }
+
         for (int i = 0; i<5; i++){
             robot.pushPaletDroit(CouleurPalet.VERT);
         }
