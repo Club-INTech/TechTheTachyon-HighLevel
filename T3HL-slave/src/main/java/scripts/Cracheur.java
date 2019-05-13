@@ -17,8 +17,8 @@ public class Cracheur extends Script {
      */
 
     //Valeurs à ajuster pour le robot secondaire
-    private int xEntry = 130;
-    private int yEntry = 1580;
+    private int xEntry = 1500-1280;
+    private int yEntry = 1380;
     private boolean symetrie;
 
     private int nbPalets = robot.getNbPaletsDroits();
@@ -30,7 +30,12 @@ public class Cracheur extends Script {
 
     @Override
     public void execute(Integer version) {
-
+        try {
+            robot.gotoPoint(new VectCartesian(1500-1330, 1380));
+            robot.turn(Math.PI / 2);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
         try {
             if (!symetrie){
                 robot.turn(Math.PI);

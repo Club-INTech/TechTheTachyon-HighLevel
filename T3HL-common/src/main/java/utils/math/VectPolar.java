@@ -31,6 +31,10 @@ public class VectPolar extends Vec2 {
      * @param r
      * @param a
      */
+    public VectPolar(float r, float a){
+        super(r,a);
+    }
+
     public VectPolar(double r, double a){
         super(r,a);
     }
