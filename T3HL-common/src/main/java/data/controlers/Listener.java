@@ -197,7 +197,7 @@ public class Listener extends ServiceThread {
                 current = iterator.next();
                 try {
                     buffer = current.read();
-                    if (buffer.isPresent()) {
+                    while(buffer.isPresent()) {
                         if(buffer.get().length() >= 2) {
                             header = buffer.get().substring(0, 2);
                             message = buffer.get().substring(2);
@@ -208,6 +208,8 @@ public class Listener extends ServiceThread {
                                 }
                             }
                         }
+
+                        buffer = current.read();
                     }
                 } catch (CommunicationException e) {
                     e.printStackTrace();
