@@ -81,7 +81,8 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
-                robot.moveLengthwise(-100, false, () -> this.executeWhileMovingToEntry(version));
+                robot.turn(Math.PI);
+                robot.moveLengthwise(100, false, () -> this.executeWhileMovingToEntry(version));
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
