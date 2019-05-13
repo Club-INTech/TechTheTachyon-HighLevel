@@ -81,8 +81,7 @@ public class PaletsX6 extends Script {
             }
 
             for (Vec2 position : positions) {
-
-                robot.followPathTo(position,() -> this.executeWhileMovingToEntry(version));
+                robot.moveLengthwise(-100, false, () -> this.executeWhileMovingToEntry(version));
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
@@ -122,7 +121,7 @@ public class PaletsX6 extends Script {
                 }
                 if(version == 0) {
                     robot.pushPaletDroit(CouleurPalet.ROUGE);
-                    }
+                }
                 else if(version == 1) {
                     robot.pushPaletDroit(CouleurPalet.VERT);
                 }

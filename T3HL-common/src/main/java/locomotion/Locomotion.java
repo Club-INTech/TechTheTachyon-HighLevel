@@ -122,8 +122,8 @@ public class Locomotion implements Service {
      * @param expectedWallImpact
      *              true si l'on veut ignorer les blocages mécaniques
      */
-    public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException, TimeoutError {
-        pathFollower.moveLengthwise(distance, expectedWallImpact);
+    public void moveLengthwise(int distance, boolean expectedWallImpact, Runnable... runnables) throws UnableToMoveException, TimeoutError {
+        pathFollower.moveLengthwise(distance, expectedWallImpact, runnables);
     }
 
     /**

@@ -200,8 +200,8 @@ public abstract class Robot implements Service {
      * @throws UnableToMoveException
      *              en cas de problèmes de blocage/adversaire
      */
-    public void moveLengthwise(int distance, boolean expectedWallImpact) throws UnableToMoveException {
-        this.locomotion.moveLengthwise(distance, expectedWallImpact);
+    public void moveLengthwise(int distance, boolean expectedWallImpact, Runnable... runnables) throws UnableToMoveException {
+        this.locomotion.moveLengthwise(distance, expectedWallImpact, runnables);
     }
 
     /**
