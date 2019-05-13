@@ -115,6 +115,11 @@ public class Table implements Service {
      */
     private final List<MobileCircularObstacle> mobileObstacleBuffer;
 
+    /**
+     * Rampes et balance (dans une variable pour que le lidar détecte pas le mat de la balance)
+     */
+    private StillCircularRectangularObstacle balanceAndRamps;
+
 
     /**
      * Constructeur de la table
@@ -172,8 +177,8 @@ public class Table implements Service {
 
         Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, robotRay+obstacleMargin);
-        Obstacle rampe = new StillCircularRectangularObstacle(formeRampe);
-        this.addFixedObstacleNoGraphChange(rampe);
+        balanceAndRamps = new StillCircularRectangularObstacle(formeRampe);
+        this.addFixedObstacleNoGraphChange(balanceAndRamps);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750, 1561);           //arrondi
         CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, robotRay+obstacleMargin);
@@ -712,5 +717,9 @@ public class Table implements Service {
         removeTemporaryObstacle(paletRedDeuxZoneChaosYellow);
         removeTemporaryObstacle(paletGreenZoneChaosYellow);
         removeTemporaryObstacle(paletBlueZoneChaosYellow);
+    }
+
+    public boolean isPositionInBalance(Vec2 center) {
+        return balanceAndRamps.isInObstacle(center);
     }
 }
