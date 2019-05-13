@@ -19,8 +19,8 @@ public class ScriptTestPositions extends Script {
 
     @Override
     public void execute(Integer version) {
-        Vec2 pointA = new VectCartesian(-500, 500);
-        Vec2 pointB = new VectCartesian(500, 500);
+        Vec2 pointA = new VectCartesian(-700, 500);
+        Vec2 pointB = new VectCartesian(+700, 500);
         while(true) {
             try {
                 robot.followPathTo(pointA);
