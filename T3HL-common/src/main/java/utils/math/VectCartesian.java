@@ -31,6 +31,15 @@ public class VectCartesian extends Vec2 {
      * @param x
      * @param y
      */
+    public VectCartesian(int x, int y){
+        super(x, y);
+    }
+
+    /**
+     * Constructeur d'un vecteur cartésien pour qu'il n'y ait pas de confusion avec les vecteurs polaires quand on débug
+     * @param x
+     * @param y
+     */
     public VectCartesian(float x, float y){
         super(Math.round(x), Math.round(y));
     }
