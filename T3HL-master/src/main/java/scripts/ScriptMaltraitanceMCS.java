@@ -33,8 +33,8 @@ public class ScriptMaltraitanceMCS extends Script {
     public void execute(Integer version) {
         Vec2 target = XYO.getRobotInstance().getPosition();
         while (true) {
-            float randX = (float) (Math.random()*0.1);
-            float randY = (float) (Math.random()*0.1);
+            float randX = (float) (Math.random()*2-1)*0.1f;
+            float randY = (float) (Math.random()*2-1)*0.1f;
             orderWrapper.sendString(String.format(Locale.US, "%s %f %f", MotionOrder.MOVE_TO_POINT.getOrderStr(), target.getX()+randX, target.getY()+randY));
         }
     }
