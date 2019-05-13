@@ -57,10 +57,14 @@ public class SymmetrizedActuatorOrderMap implements Service {
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE);
         correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
         correspondenceMap.put(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
         correspondenceMap.put(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+        correspondenceMap.put(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE, ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         correspondenceMap.put(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
         correspondenceMap.put(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
