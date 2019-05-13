@@ -80,6 +80,7 @@ public class PaletsX6 extends Script {
                 //robot.useActuator(ActuatorsOrder.);
             }
 
+            robot.followPathTo(positions.get(0));
             for (Vec2 position : positions) {
                 robot.turn(Math.PI);
                 robot.moveLengthwise(100, false, () -> this.executeWhileMovingToEntry(version));
