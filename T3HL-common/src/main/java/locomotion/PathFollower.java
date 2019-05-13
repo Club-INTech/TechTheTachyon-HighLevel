@@ -210,7 +210,7 @@ public class PathFollower extends ServiceThread {
                 if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
                     // on ralentit si on l'a pas déjà fait
                     if(shouldSlowDown) {
-                        orderWrapper.immobilise();
+                 //       orderWrapper.immobilise();
                         orderWrapper.setBothSpeed(Speed.SLOW_ALL);
                     }
                     return;
