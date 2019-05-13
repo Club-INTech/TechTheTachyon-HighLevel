@@ -23,6 +23,7 @@ import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import robot.Slave;
 import scripts.MatchSlave;
+import scripts.PaletsX6Slave;
 import scripts.ScriptManagerSlave;
 import scripts.ScriptNamesSlave;
 import simulator.GraphicalInterface;
@@ -74,9 +75,10 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
         // TODO
-        XYO.getRobotInstance().update(1500-200, 300, Math.PI);
+        XYO.getRobotInstance().update(900, 500, Math.PI);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
 
 
 
