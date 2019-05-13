@@ -154,7 +154,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
         try {
-            container.getService(ScriptTestPositions.class).goToThenExecute(0);
+            container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
