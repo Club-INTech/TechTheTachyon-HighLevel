@@ -305,7 +305,8 @@ public class PathFollower extends ServiceThread {
                         nearDirection.plus(XYO.getRobotInstance().getPosition());
                         segment.setPointB(nearDirection);
                         if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
-                            orderWrapper.immobilise();
+                            //orderWrapper.immobilise();
+                            Log.PATHFINDING.debug("Enemy in front, slowing down... (enemy is "+enemy.get()+")");
                             orderWrapper.setBothSpeed(Speed.SLOW_ALL);
                             // on redemande le déplacement
                             this.orderWrapper.moveToPoint(point);
