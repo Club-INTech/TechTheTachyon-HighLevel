@@ -275,7 +275,6 @@ public class Table implements Service {
      */
     public void updateMobileObstacles(List<Vec2> points) {
         MobileCircularObstacle obstacle;
-        Iterator<Vec2> pointIterator = points.iterator();
         Vec2 point;
         Log.LIDAR.debug("Mise à jour des Obstacle...");
 
@@ -285,6 +284,7 @@ public class Table implements Service {
 
             while (mobileObstacleIterator.hasNext()) {
                 obstacle = mobileObstacleIterator.next();
+                Iterator<Vec2> pointIterator = points.iterator();
                 while (pointIterator.hasNext()) {
                     point = pointIterator.next();
                     if (obstacle.isInObstacle(point)) {
