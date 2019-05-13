@@ -43,7 +43,7 @@ public class SerialInterface implements CommunicationInterface {
                     if(line.startsWith("[Dynamixel-Com]")) {
                         Log.DYNAMIXEL_COM.debug(line);
                     }
-                    System.out.println("[Serial] Received: " + line);
+                    //System.out.println("[Serial] Received: " + line);
                     return Optional.of(line);
                 }
             } catch (IOException e) {
