@@ -18,7 +18,7 @@ public class Cracheur extends Script {
 
     //Valeurs à ajuster pour le robot secondaire
     private int xEntry = 1500-1280;
-    private int yEntry = 1380;
+    private int yEntry = 1280;
     private boolean symetrie;
 
     private int nbPalets = robot.getNbPaletsDroits();
