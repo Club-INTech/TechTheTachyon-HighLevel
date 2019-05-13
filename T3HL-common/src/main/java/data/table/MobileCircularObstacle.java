@@ -49,7 +49,7 @@ public class MobileCircularObstacle extends Obstacle {
     /**
      * Marge par défaut (en mm) pour éviter que les robots se cognent
      */
-    private static final int DEFAULT_MARGIN = 60;
+    private static final int DEFAULT_MARGIN = 5;
 
     private Circle pathShape;
 
