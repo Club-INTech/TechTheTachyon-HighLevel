@@ -3,10 +3,8 @@ package scripts;
 import data.Table;
 import data.XYO;
 import robot.Master;
-import robot.Robot;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class ScriptTestPositions extends Script {
     /**
@@ -21,12 +19,12 @@ public class ScriptTestPositions extends Script {
 
     @Override
     public void execute(Integer version) {
+        Vec2 pointA = new VectCartesian(0, 500);
+        Vec2 pointB = new VectCartesian(1000, 500);
         while(true) {
             try {
-                robot.turn(Math.PI);
-                robot.moveLengthwise(1000, false);
-                robot.turn(0);
-                robot.moveLengthwise(1000, false);
+                robot.followPathTo(pointA);
+                robot.followPathTo(pointB);
             } catch (Exception e) {
                 e.printStackTrace();
             }
