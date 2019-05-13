@@ -13,7 +13,6 @@ public class MatchSlave extends Script {
 
     public MatchSlave(Slave robot, Table table, ScriptManagerSlave scriptManagerSlave) {
         super(robot,table);
-
         this.scriptManagerSlave = scriptManagerSlave;
     }
 
