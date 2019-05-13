@@ -30,20 +30,20 @@ public class Cracheur extends Script {
     @Override
     public void execute(Integer version) {
 
-        for (int i = 1; i < nbPalets; i++) {
-            try {
-                if (!symetrie){
-                    robot.turn(Math.PI);
-                }
-                else {
-                    robot.turn(0);
-                }
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
+        try {
+            if (!symetrie){
+                robot.turn(Math.PI);
             }
-            robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
-            robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET);
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+            else {
+                robot.turn(0);
+            }
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
+            robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
+            robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET, true);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
             robot.popPaletDroit();
         }
     }
