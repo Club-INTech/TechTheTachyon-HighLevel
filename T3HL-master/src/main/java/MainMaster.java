@@ -28,7 +28,6 @@ import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Match;
-import scripts.ScriptMaltraitanceMCS;
 import scripts.ScriptManagerMaster;
 import scripts.ScriptTestPositions;
 import simulator.GraphicalInterface;
@@ -155,7 +154,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
         try {
-            container.getService(ScriptMaltraitanceMCS.class).goToThenExecute(0);
+            container.getService(ScriptTestPositions.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
