@@ -9,6 +9,7 @@ import pfg.config.Config;
 import robot.Master;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class precoupeAccelerateurx6 extends Script {
@@ -276,8 +277,8 @@ public class precoupeAccelerateurx6 extends Script {
 
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(new VectCartesian(xEntry, yEntry), 5);
+    public Vec2 entryPosition(Integer version) {
+        return new VectCartesian(xEntry, yEntry);
     }
 
     @Override

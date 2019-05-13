@@ -145,24 +145,20 @@ public class PaletsX6 extends Script {
         }
     }
     @Override
-    public Shape entryPosition(Integer version) {
+    public Vec2 entryPosition(Integer version) {
         //position de départ directement au niveau du palet
         if (version == 0) {
             //Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
-            Shape positionEntree = new Circle(new VectCartesian(1000,1206), 5);
-            return positionEntree;
+            return new VectCartesian(1000,1206);
         }
         else if (version == 1) {
-            Shape positionEntree = new Circle(new VectCartesian(905,1206), 5);
-            return positionEntree;
+            return new VectCartesian(905,1206);
         }
         else if (version == 2) {
-            Shape positionEntree = new Circle(new VectCartesian(834,1206), 5);
-            return positionEntree;
+            return new VectCartesian(834,1206);
         }
         else if (version == 3) {
-            Shape positionEntree = new Circle(new VectCartesian(1500-191-65+20,350+900), 5);
-            return positionEntree;
+            return new VectCartesian(1500-191-65+20,350+900);
         }
         return null;
     }

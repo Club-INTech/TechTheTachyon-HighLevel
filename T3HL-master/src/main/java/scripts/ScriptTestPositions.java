@@ -6,6 +6,7 @@ import robot.Master;
 import robot.Robot;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 
 public class ScriptTestPositions extends Script {
     /**
@@ -33,8 +34,8 @@ public class ScriptTestPositions extends Script {
     }
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(XYO.getRobotInstance().getPosition(), 100);
+    public Vec2 entryPosition(Integer version) {
+        return XYO.getRobotInstance().getPosition();
     }
 
     @Override

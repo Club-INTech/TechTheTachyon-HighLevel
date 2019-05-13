@@ -79,7 +79,7 @@ public abstract class Script implements Service {
      */
     public void goToThenExecute(Integer version) throws TimeoutError {
         Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName());
-        Vec2 entryPosition = this.entryPosition(version).closestPointToShape(XYO.getRobotInstance().getPosition());
+        Vec2 entryPosition = this.entryPosition(version);
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
         } else {
@@ -141,7 +141,7 @@ public abstract class Script implements Service {
      *              la version à executer
      * @return  le perimètre d'entré
      */
-    public abstract Shape entryPosition(Integer version);
+    public abstract Vec2 entryPosition(Integer version);
 
     /**
      * A executer à la fin du script, terminé ou non !

@@ -7,6 +7,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 
 public class MatchSlave extends Script {
     private final ScriptManagerSlave scriptManagerSlave;
@@ -25,8 +26,8 @@ public class MatchSlave extends Script {
     }
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(XYO.getRobotInstance().getPosition(), 100);
+    public Vec2 entryPosition(Integer version) {
+        return XYO.getRobotInstance().getPosition();
     }
 
     @Override

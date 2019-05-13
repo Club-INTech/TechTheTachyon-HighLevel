@@ -8,6 +8,7 @@ import robot.Slave;
 import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class GetBlueAcc extends Script {
@@ -39,7 +40,7 @@ public class GetBlueAcc extends Script {
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
     }
     @Override //à adapter
-    public Shape entryPosition(Integer version) { return new Circle(new VectCartesian(xEntry, yEntry), 5); }
+    public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
 
     @Override
     public void finalize(Exception e) { }

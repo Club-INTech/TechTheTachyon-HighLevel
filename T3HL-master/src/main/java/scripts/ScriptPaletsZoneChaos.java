@@ -104,7 +104,7 @@ public class ScriptPaletsZoneChaos extends Script{
     }
 
     @Override
-    public Shape entryPosition(Integer version) {return new Circle(new VectCartesian(xEntry, yEntry), 5); }
+    public Vec2 entryPosition(Integer version) {return new VectCartesian(xEntry, yEntry); }
 
     @Override
     public void finalize(Exception e) {

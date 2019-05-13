@@ -16,6 +16,7 @@ import utils.Log;
 import utils.communication.CommunicationException;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
@@ -93,7 +94,7 @@ public class Electron extends Script{
     }
 
     @Override
-    public Shape entryPosition(Integer version) { return new Circle(new VectCartesian(0, 0), 100000); }
+    public Vec2 entryPosition(Integer version) { return new VectCartesian(0, 0); }
 
     @Override
     public void finalize(Exception e) { }

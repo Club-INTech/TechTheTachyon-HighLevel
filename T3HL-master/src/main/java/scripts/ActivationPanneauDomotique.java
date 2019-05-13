@@ -7,6 +7,7 @@ import pfg.config.Config;
 import robot.Robot;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 import locomotion.UnableToMoveException;
 
@@ -60,8 +61,8 @@ public class ActivationPanneauDomotique extends Script{
      */
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(new VectCartesian(xEntry, yEntry), 42);
+    public Vec2 entryPosition(Integer version) {
+        return new VectCartesian(xEntry, yEntry);
     }
 
     /** Methode à executer en cas d'erreur pendant le script */

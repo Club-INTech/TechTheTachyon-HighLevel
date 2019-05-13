@@ -91,7 +91,7 @@ public class ScriptAction extends Action {
             long startTime = System.nanoTime();
             boolean result = false;
             Graphe graph = info.getSpectre().getSimulatedGraph();
-            Vec2 entryPos = script.entryPosition(version).getCenter();
+            Vec2 entryPos = script.entryPosition(version);
             Vec2 currentPos = info.getCurrentPosition();
             Node start = graph.addProvisoryNode(currentPos);
             Node aim = graph.addProvisoryNode(entryPos);
@@ -119,7 +119,7 @@ public class ScriptAction extends Action {
 
     @Override
     public double getCost(EnvironmentInfo info) {
-        Vec2 entryPos = script.entryPosition(version).getCenter();
+        Vec2 entryPos = script.entryPosition(version);
         return baseCost + info.getXYO().getPosition().squaredDistanceTo(entryPos) + Math.abs(info.getXYO().getPosition().angleTo(entryPos));
     }
 
@@ -141,7 +141,7 @@ public class ScriptAction extends Action {
 
     @Override
     public void updateTargetPosition(EnvironmentInfo info, Vec2 targetPos) {
-        Vec2 entryPos = script.entryPosition(version).getCenter();
+        Vec2 entryPos = script.entryPosition(version);
         targetPos.set(entryPos);
     }
 

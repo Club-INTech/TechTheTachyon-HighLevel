@@ -8,6 +8,7 @@ import robot.Master;
 import scripts.*;
 import utils.math.Circle;
 import utils.math.Shape;
+import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class Match extends Script {
@@ -35,8 +36,8 @@ public class Match extends Script {
     }
 
     @Override
-    public Shape entryPosition(Integer version) {
-        return new Circle(XYO.getRobotInstance().getPosition(), 100);
+    public Vec2 entryPosition(Integer version) {
+        return XYO.getRobotInstance().getPosition();
     }
 
     @Override
