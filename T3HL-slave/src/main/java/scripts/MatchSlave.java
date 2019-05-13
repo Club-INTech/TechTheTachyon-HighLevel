@@ -8,15 +8,14 @@ import robot.Slave;
 import utils.math.Circle;
 import utils.math.Shape;
 
-public class Match extends Script {
+public class MatchSlave extends Script {
     private final ScriptManagerSlave scriptManagerSlave;
 
-    public Match(Slave robot, Table table, ScriptManagerSlave scriptManagerSlave) {
+    public MatchSlave(Slave robot, Table table, ScriptManagerSlave scriptManagerSlave) {
         super(robot,table);
 
         this.scriptManagerSlave = scriptManagerSlave;
     }
-
 
     @Override
     public void execute(Integer version) {

@@ -11,7 +11,7 @@ import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-public class Paletsx3 extends Script{
+public class PaletsX3Slave extends Script{
     /**
      * Position d'entrée du script
      */
@@ -28,7 +28,7 @@ public class Paletsx3 extends Script{
     };
 
 
-    public Paletsx3(Slave robot, Table table) {
+    public PaletsX3Slave(Slave robot, Table table) {
         super(robot, table);
     }
 

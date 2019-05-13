@@ -10,7 +10,7 @@ import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.VectCartesian;
 
-public class Paletsx6 extends Script {
+public class PaletsX6Slave extends Script {
 
     private int xEntry = 700;
     private int yEntry = 1200;
@@ -21,7 +21,7 @@ public class Paletsx6 extends Script {
     private boolean symetrie;
 
 
-    public Paletsx6(Slave robot, Table table) {
+    public PaletsX6Slave(Slave robot, Table table) {
         super(robot, table);
     }
 

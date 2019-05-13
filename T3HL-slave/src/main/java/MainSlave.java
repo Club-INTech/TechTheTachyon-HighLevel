@@ -22,6 +22,7 @@ import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import robot.Slave;
+import scripts.MatchSlave;
 import scripts.ScriptManagerSlave;
 import scripts.ScriptNamesSlave;
 import simulator.GraphicalInterface;
@@ -84,7 +85,11 @@ public class MainSlave extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 
-        scriptManager.getScript(ScriptNamesSlave.MATCH).goToThenExecute(0);
+        try {
+            container.getService(MatchSlave.class).goToThenExecute(0);
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
 
     }
 
