@@ -43,6 +43,7 @@ public class PaletsZoneDepart extends Script {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                     robot.followPathTo(position,() -> {robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);});
+                    robot.turn(Math.PI / 2);
                     //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                     //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
