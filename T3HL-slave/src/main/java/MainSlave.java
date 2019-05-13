@@ -77,6 +77,15 @@ public class MainSlave extends RobotEntryPoint {
         XYO.getRobotInstance().update(1500-200, 300, Math.PI);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+
+
+
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         robot.turn(Math.PI/2);
 
 
