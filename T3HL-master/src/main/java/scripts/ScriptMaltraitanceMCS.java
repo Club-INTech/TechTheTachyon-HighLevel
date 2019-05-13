@@ -1,5 +1,6 @@
 package scripts;
 
+import data.SensorState;
 import data.Table;
 import data.XYO;
 import orders.OrderWrapper;
@@ -35,7 +36,9 @@ public class ScriptMaltraitanceMCS extends Script {
         while (true) {
             float randX = (float) (Math.random()*2-1)*0.1f;
             float randY = (float) (Math.random()*2-1)*0.1f;
+            SensorState.MOVING.setData(true);
             orderWrapper.sendString(String.format(Locale.US, "%s %f %f", MotionOrder.MOVE_TO_POINT.getOrderStr(), target.getX()+randX, target.getY()+randY));
+            waitWhileTrue(SensorState.MOVING::getData);
         }
     }
 
