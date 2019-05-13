@@ -82,8 +82,8 @@ public class MainSlave extends RobotEntryPoint {
 
         for (int i=0; i< 10000; i++){
             try {
-                robot.moveLengthwise(1000, false);
-                robot.moveLengthwise(-1000, false);
+                robot.turn(Math.PI/2);
+                robot.turn(-Math.PI/2);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
