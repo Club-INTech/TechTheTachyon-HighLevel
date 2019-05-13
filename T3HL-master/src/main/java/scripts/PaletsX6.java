@@ -184,7 +184,7 @@ public class PaletsX6 extends Script {
     @Override
     public void finalize(Exception e) {
         // range le bras quand on a fini
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,false);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,false);
     }
     @Override
     public void updateConfig(Config config) {
