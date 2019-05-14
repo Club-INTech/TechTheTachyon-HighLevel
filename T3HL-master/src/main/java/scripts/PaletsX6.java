@@ -105,9 +105,6 @@ public class PaletsX6 extends Script {
                     } else {
                         robot.turn(Math.PI);
                     }
-
-                    waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 }
                 first = false;
 
@@ -165,16 +162,24 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
 
         try {
+            Thread elevatorWaitingThread = new Thread("Thread to wait for right elevator") { // ♪ Musique d'ascenseur ♪
+                @Override
+                public void run() {
+                    if (robot.getNbPaletsDroits() < 5) {
+                        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                    } else if (robot.getNbPaletsDroits() == 5) {
+                        robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
+                    }
+                    robot.waitForRightElevator();
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                }
+            };
+            elevatorWaitingThread.setDaemon(true);
+            elevatorWaitingThread.start();
+
             robot.moveLengthwise(distance, false, () -> {
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                if (robot.getNbPaletsDroits() < 5) {
-                    robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                    //robot.waitForRightElevator();
-                } else if (robot.getNbPaletsDroits() == 5) {
-                    robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
-                }
             });
         } catch (UnableToMoveException e) {
             e.printStackTrace();
