@@ -61,8 +61,8 @@ public class ScriptPaletsZoneChaos extends Script{
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
                 robot.turn(Math.PI/2);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                 robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
@@ -94,9 +94,6 @@ public class ScriptPaletsZoneChaos extends Script{
         }catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
-        Log.TABLE.debug("execution zoneChaos");
-
     }
 
     @Override
