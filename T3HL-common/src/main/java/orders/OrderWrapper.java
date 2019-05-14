@@ -66,6 +66,7 @@ public class OrderWrapper implements Service {
      * Le service de symétrie des ordres
      */
     private SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap;
+    private boolean forceInversion;
 
     /**
      * Construit l'order wrapper
@@ -92,7 +93,7 @@ public class OrderWrapper implements Service {
      */
     public void useActuator(Order order, boolean waitForConfirmation) {
         Order symetrisedOrder;
-        if(symetry && order instanceof ActuatorsOrder) {
+        if(shouldSymetrize() && order instanceof ActuatorsOrder) {
             symetrisedOrder=this.symmetrizedActuatorOrderMap.getSymmetrizedActuatorOrder((ActuatorsOrder) order);
             if(symetrisedOrder != null){
                 order=symetrisedOrder;
@@ -151,7 +152,7 @@ public class OrderWrapper implements Service {
      * @param angle  angle avec lequel on veut tourner
      */
     public void turn(double angle, Runnable... parallelActions) {
-        if(symetry) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             angle=(Math.PI - angle)%(2*Math.PI);
         }
         this.sendString(String.format(Locale.US, "%s %.5f", MotionOrder.TURN.getOrderStr(), angle));
@@ -164,7 +165,7 @@ public class OrderWrapper implements Service {
      */
     public void moveToPoint(Vec2 point, Runnable... parallelActions) {
         Vec2 p = point;
-        if(symetry) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             p = p.symetrizeVector();
         }
         this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), p.getX(), p.getY()));
@@ -215,7 +216,7 @@ public class OrderWrapper implements Service {
     public void setPositionAndOrientation(Vec2 pos, double orientation, boolean synchronize) {
         int x=pos.getX();
         int y=pos.getY();
-        if(symetry){
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             x=-x;
             orientation= Calculs.modulo(Math.PI - orientation, Math.PI);
         }
@@ -241,7 +242,7 @@ public class OrderWrapper implements Service {
      * @param orientation orientation du robot
      */
     public void setOrientation(double orientation) {
-        if(symetry) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
         this.sendString(String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
@@ -265,7 +266,7 @@ public class OrderWrapper implements Service {
      */
     public void configureHook(int id, Vec2 posTrigger, int tolerency, double orientation, double tolerencyAngle, Order order) {
         Order symetrisedOrder;
-        if(symetry){
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             posTrigger = posTrigger.symetrizeVector();
             Log.HOOK.debug("la position envoyée au bas niveau pour le hook"+posTrigger.toString());
             orientation=(Math.PI - orientation)%(2*Math.PI);
@@ -287,7 +288,7 @@ public class OrderWrapper implements Service {
      * @param point point auquel le LL doit se rendre
      */
     public void gotoPoint(Vec2 point) {
-        if(symetry) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             point.symetrize();
         }
         this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
@@ -317,7 +318,7 @@ public class OrderWrapper implements Service {
     public void sendString(String message) {
         try {
             llConnection.send(message);
-            Log.ORDERS.debug("Sent to LL: "+message);
+            Log.ORDERS.debug("Sent to LL: "+message, 3);
         } catch (CommunicationException e) {
             e.printStackTrace();
             try {
@@ -325,7 +326,7 @@ public class OrderWrapper implements Service {
                     Thread.sleep(5);
                 }
                 llConnection.send(message);
-                Log.ORDERS.debug("Sent to LL: "+message);
+                Log.ORDERS.debug("Sent to LL: "+message, 3);
             } catch (CommunicationException | InterruptedException e1) {
                 e1.printStackTrace();
             }
@@ -396,5 +397,17 @@ public class OrderWrapper implements Service {
     public void endMatch() {
         Log.STRATEGY.debug("Fin du match!");
         sendString("endMatch");
+    }
+
+    public boolean shouldSymetrize() {
+        return symetry ^ forceInversion;
+    }
+
+    /**
+     * <b>A NE PAS APPELER SANS SAVOIR CE QU'ON FAIT</b><hr/>
+     * Permet de (re-)forcer une symétrie des ordres qu'on envoie quand on veut pas coder les mêmes pour deux côtés du robot
+     */
+    public void setInverted(boolean inverted) {
+        this.forceInversion = inverted;
     }
 }

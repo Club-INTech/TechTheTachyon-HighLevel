@@ -2,20 +2,17 @@ package scripts;
 
 import data.CouleurPalet;
 import data.PaletsZoneChaos;
+import data.SensorState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import utils.ConfigData;
-import utils.Log;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
 
 // TODO
 
@@ -59,13 +56,19 @@ public class ScriptPaletsZoneChaos extends Script{
             table.removeAllChaosObstacles();
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             for (Vec2 position : positions) {
-                robot.followPathTo(position, () -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET));
+                robot.followPathTo(position);
                 robot.turn(Math.PI/2);
+                // tant que l'ascenseur gauche bouge on continue pas, sinon on risque de pas avoir un ascenseur à une bonne position (en théorie ici c'est bon mais on sait jamais)
+                waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET); // on baisse l'ascenseur pendant le mouvement du bras
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,false);
+
+                SensorState.LEFT_ELEVATOR_MOVING.setData(true); // on dit que l'ascenseur gauche bouge pour pas le refaire bouger son mouvement dans la prochaine itération
                 robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+
 
                 // à défaut de savoir la couleur, au moins on cassera pas les ascenseurs
                 robot.pushPaletGauche(CouleurPalet.ROUGE);

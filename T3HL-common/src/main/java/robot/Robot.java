@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Stack;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
@@ -97,6 +98,7 @@ public abstract class Robot implements Service {
 
     private boolean isMaster;
     private boolean symetry;
+    private boolean forceInversion;
 
     /**
      * @param locomotion
@@ -144,13 +146,7 @@ public abstract class Robot implements Service {
                 throw new IllegalArgumentException("Côté non reconnu: "+side);
         }
         state.setData(true);
-        while(state.getData()) { // tant que l'ascenseur bouge
-            try {
-                Thread.sleep(loopSleepTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        waitWhileTrue(state::getData);
     }
 
     /**
@@ -322,7 +318,7 @@ public abstract class Robot implements Service {
      * @return
      */
     public int getNbPaletsGauches() {
-        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
             return getNbPaletsDroitsNoSymetry();
         } else {
             return getNbPaletsGauchesNoSymetry();
@@ -334,7 +330,7 @@ public abstract class Robot implements Service {
      * @return
      */
     public int getNbPaletsDroits() {
-        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
             return getNbPaletsGauchesNoSymetry();
         } else {
             return getNbPaletsDroitsNoSymetry();
@@ -388,7 +384,7 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletDroit(CouleurPalet palet) {
-       if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+       if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
            pushPaletGaucheNoSymetry(palet);
        } else {
            pushPaletDroitNoSymetry(palet);
@@ -400,7 +396,7 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletGauche(CouleurPalet palet) {
-        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
             pushPaletDroitNoSymetry(palet);
         } else {
             pushPaletGaucheNoSymetry(palet);
@@ -438,7 +434,7 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletDroit() {
-        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
             return popPaletGaucheNoSymetry();
         } else {
             return popPaletDroitNoSymetry();
@@ -450,7 +446,7 @@ public abstract class Robot implements Service {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletGauche() {
-        if(isMaster && symetry) { // le secondaire ne fait pas de symétrie ici
+        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
             return popPaletDroitNoSymetry();
         } else {
             return popPaletGaucheNoSymetry();
@@ -477,6 +473,25 @@ public abstract class Robot implements Service {
         CouleurPalet result = leftElevator.pop();
         sendElevatorUpdate();
         return result;
+    }
+
+    /**
+     * (Re-)Symétrise les actions qu'on passe en argument, c'est utile quand on veut faire les mêmes actions des deux côtés du robot
+     * @param actions
+     */
+    public void invertOrders(Consumer<Robot> actions) {
+        try {
+            forceInversion = true;
+            orderWrapper.setInverted(true);
+            actions.accept(this);
+        } finally { // on s'assure de pas laisser le robot dans un état indésirable
+            forceInversion = false;
+            orderWrapper.setInverted(false);
+        }
+    }
+
+    public boolean symetry() {
+        return isMaster && (symetry ^ forceInversion);
     }
 
     /**

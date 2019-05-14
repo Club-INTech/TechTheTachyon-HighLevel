@@ -1,6 +1,7 @@
 package data.controlers;
 
 import data.*;
+import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -38,16 +39,12 @@ public class DataControler extends Thread implements Service {
      */
     private Listener listener;
     private MatchTimer timer;
+    private OrderWrapper orderWrapper;
 
     /**
      * Liste des ChannelHandlers
      */
     private ArrayList<ChannelHandler> channelHandlers = new ArrayList<ChannelHandler>();
-
-    /**
-     * True si autre couleur
-     */
-    private boolean symetrie;
 
     /**
      * True si master
@@ -69,15 +66,17 @@ public class DataControler extends Thread implements Service {
      */
     private int offsetSick= 6;
     private int posUpdates = 0;
+    private boolean symetry;
 
     /**
      * Construit un gestionnaire de capteur
      * @param listener
      *              le listener
      */
-    public DataControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
+    public DataControler(Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
         this.timer = timer;
+        this.orderWrapper = orderWrapper;
         /*
         this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
         sickWriter.print("Indice");
@@ -152,7 +151,7 @@ public class DataControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
-        if (symetrie) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             x = -x;
             o = Math.PI - o;
         }
@@ -184,7 +183,7 @@ public class DataControler extends Thread implements Service {
                 break;
 
             case "leftElevatorStopped":
-                if (symetrie) {
+                if (symetry()) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
                 } else {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(false);
@@ -192,7 +191,7 @@ public class DataControler extends Thread implements Service {
                 break;
 
             case "rightElevatorStopped":
-                if (symetrie) {
+                if (symetry()) {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(false);
                 } else {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
@@ -289,7 +288,7 @@ public class DataControler extends Thread implements Service {
             VectCartesian vectsick = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
             double orien= XYO.getRobotInstance().getOrientation();
 
-            if (symetrie) {
+            if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
                 orien= Calculs.modulo(Math.PI-orien, Math.PI);
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
@@ -345,7 +344,7 @@ public class DataControler extends Thread implements Service {
             double rapport = ((double)esick) / dsick;
             double orien = XYO.getRobotInstance().getOrientation();
             //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
-            if (symetrie) {
+            if (symetry()) {
                 if(orien>Math.PI/2 || orien < -Math.PI/2){
                     teta=Math.atan(rapport);
                     xCalcule= -1500 + (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
@@ -440,10 +439,14 @@ public class DataControler extends Thread implements Service {
         RobotState.CURRENT_SCRIPT_VERSION.setData(version);
     }
 
+    private boolean symetry() {
+        return orderWrapper.shouldSymetrize();
+    }
+
     @Override
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 
     @Override
