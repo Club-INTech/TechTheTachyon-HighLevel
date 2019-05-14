@@ -26,8 +26,7 @@ public class ScriptPaletsZoneChaos extends Script{
     private int xEntry = 900;
     private int yEntry = 1055;
     private Vec2[] positions = new VectCartesian[4];
-    VectCartesian positionentre = new VectCartesian(xEntry,yEntry);
-    int rayonRobot = 0;
+    int rayonRobot = 190;
     int rayonPalet= 38;
 
     public ScriptPaletsZoneChaos(Master robot, Table table) {super(robot, table); }
@@ -45,10 +44,10 @@ public class ScriptPaletsZoneChaos extends Script{
  */
         Arrays.sort(positions,(v1, v2) -> {
             if (v1.getX() < v2.getX()){
-                return -1;
+                return 1;
             }
             else if (v1.getX() > v2.getX()){
-                return 1;
+                return -1;
             }
             else{
                 return Integer.compare(v1.getY(), v2.getY());
