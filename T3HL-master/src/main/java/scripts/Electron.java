@@ -1,17 +1,14 @@
 package scripts;
-/*
-import com.pi4j.io.gpio.*;
-import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
-import com.pi4j.io.gpio.event.GpioPinListener;
-import com.pi4j.io.gpio.event.GpioPinListenerDigital;
-import com.pi4j.util.CommandArgumentParser;*/
+
 import connection.Connection;
 import data.SensorState;
 import data.Table;
+import data.XYO;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
 import sun.management.Sensor;
+import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.math.Circle;
@@ -23,13 +20,18 @@ import java.util.concurrent.TimeUnit;
 
 public class Electron extends Script{
 
+    private boolean usingElectron;
+
     public Electron(Master robot, Table table) {
         super(robot, table);
     }
 
     @Override
     public void execute(Integer version) {
-
+        if(!usingElectron) {
+            Log.STRATEGY.critical("L'électron est désactivé! On skippe le script de lancement de l'électron!");
+            return;
+        }
         Thread electronThread = new Thread(() -> {
 
 
@@ -47,7 +49,7 @@ public class Electron extends Script{
             }
             Log.ELECTRON.debug("Electron activated");
 
-            ((Master)robot).score += 15;
+            robot.score += 15;
 
             while (!SensorState.ELECTRON_ARRIVED.getData()){
                 try {
@@ -59,42 +61,16 @@ public class Electron extends Script{
             }
             Log.ELECTRON.debug("Electron arrived");
 
-            ((Master)robot).score += 20;
+            robot.score += 20;
         });
         electronThread.setDaemon(true);
         electronThread.start();
-
-
-
-
-/* FIXME: A refaire
-        final GpioController gpio = GpioFactory.getInstance();
-        final GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01, "ESP32_depart", PinState.LOW);
-
-        pin.high();
-        robot.increaseScore(20);
-
-        PinPullResistance pull = PinPullResistance.PULL_UP;
-        final GpioPinDigitalInput testArrivee = gpio.provisionDigitalInputPin(RaspiPin.GPIO_02, pull);
-        testArrivee.addListener(new GpioPinListenerDigital() {
-            @Override
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-
-                if (event.getState().isHigh()){
-
-                    //TODO ajouter au calcul des points
-                    robot.increaseScore(20);
-
-                    Log.STRATEGY.debug("Electron arrivee");
-                }
-            }
-        });*/
-
-
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(0, 0); }
+    public Vec2 entryPosition(Integer version) {
+        return XYO.getRobotInstance().getPosition();
+    }
 
     @Override
     public void finalize(Exception e) { }
@@ -102,5 +78,6 @@ public class Electron extends Script{
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        usingElectron = config.getBoolean(ConfigData.USING_ELECTRON);
     }
 }

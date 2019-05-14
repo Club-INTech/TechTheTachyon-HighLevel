@@ -261,7 +261,9 @@ public class SimulatorManager extends Thread {
                     graphicalInterface.resetTimer();
                 }
                 else if(testOrder(arguments, "down", 2)
-                        || testOrder(arguments, "up", 2)) {
+                        || testOrder(arguments, "up", 2)
+                        || testOrder(arguments, "downup", 2)
+                        || testOrder(arguments, "updown", 2)) {
                     // désolé
                     // TODO: tmp
                     new Thread(() -> {

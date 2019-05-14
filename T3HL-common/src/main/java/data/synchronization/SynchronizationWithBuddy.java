@@ -2,6 +2,9 @@ package data.synchronization;
 
 import connection.Connection;
 
+import data.GameState;
+import data.SensorState;
+import data.controlers.Channel;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Container;
@@ -31,5 +34,16 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
         } else {
             this.connection = Connection.SLAVE;
         }
+    }
+
+    /**
+     * Permet de prévenir le secondaire que le distributeur x6 est libre
+     */
+    public void sendPaletX6Free() {
+        sendString(String.format("%spaletsx6free", Channel.BUDDY_EVENT.getHeaders()));
+    }
+
+    public void waitForFreePaletX6() {
+        waitWhileTrue(() -> !((boolean)GameState.PALETS_X6_FREE.getData()));
     }
 }

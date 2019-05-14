@@ -78,7 +78,7 @@ public abstract class Script implements Service {
      *              version du script à executer
      */
     public void goToThenExecute(Integer version) throws TimeoutError {
-        Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName());
+        Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName()+" v"+version);
         Vec2 entryPosition = this.entryPosition(version);
         if (table.isPositionInFixedObstacle(entryPosition)) {
             // TODO Si le point trouvé est dans un obstacle fixe
