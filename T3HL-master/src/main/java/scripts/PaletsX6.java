@@ -86,8 +86,8 @@ public class PaletsX6 extends Script {
                 robot.turn(Math.PI);
                 if( ! first) {
                     robot.moveLengthwise(100, false, () -> this.executeWhileMovingToEntry(version));
-                    first = false;
                 }
+                first = false;
                 if(robot.getNbPaletsDroits()==5)
                 {
                     robot.turn(0);
