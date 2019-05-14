@@ -132,7 +132,7 @@ public class MainMaster extends RobotEntryPoint {
     protected void act() throws UnableToMoveException {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.setRotationSpeed(Speed.MEDIUM_ALL);
+        robot.setRotationSpeed(Speed.SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
         robot.setPositionAndOrientation(newPos, Math.PI);
