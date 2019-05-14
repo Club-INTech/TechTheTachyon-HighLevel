@@ -68,7 +68,6 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
-                //Attend avant de prendre un palet
 
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                 readjustElevator();
