@@ -2,6 +2,7 @@ package scripts;
 
 import data.CouleurPalet;
 import data.SensorState;
+import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -36,7 +37,7 @@ public class PaletsZoneDepart extends Script {
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(xEntry, yEntry),
-                    //new VectCartesian(xEntry, yEntry),
+                    new VectCartesian(xEntry-190, yEntry),
                     //new VectCartesian(xEntry,yEntry+302),
                     //new VectCartesian(xEntry,yEntry+605)
             };
@@ -55,7 +56,12 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             for (Vec2 position : positions) {
-                if (premierPaletPris) {
+                if(premierPaletPris&&version==JUST_BLUE){
+                    robot.turn(Math.PI);
+                    robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
+                    robot.followPathTo(position,() -> {robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);});
+                }
+                else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
                     robot.followPathTo(position,() -> {robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);});
@@ -118,12 +124,12 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        if(version ==1)//position du premier palet
+        if(version ==JUST_BLUE)//position du premier palet
         {
-            return new VectCartesian(xEntry, yEntry+605);
+            return new VectCartesian(xEntry, yEntry);
         }
         else{
-            return new VectCartesian(xEntry, yEntry);
+            return new VectCartesian(xEntry, yEntry-605);
         }
     }
 
