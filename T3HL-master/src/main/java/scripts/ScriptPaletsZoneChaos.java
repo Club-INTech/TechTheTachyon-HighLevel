@@ -62,12 +62,16 @@ public class ScriptPaletsZoneChaos extends Script{
                 waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET); // on baisse l'ascenseur pendant le mouvement du bras
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,false);
 
                 SensorState.LEFT_ELEVATOR_MOVING.setData(true); // on dit que l'ascenseur gauche bouge pour pas le refaire bouger son mouvement dans la prochaine itération
-                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                if(robot.getNbPaletsGauches() < 4) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                } else {
+                    robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                }
 
 
                 // à défaut de savoir la couleur, au moins on cassera pas les ascenseurs
