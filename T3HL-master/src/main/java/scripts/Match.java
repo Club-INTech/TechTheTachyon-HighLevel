@@ -25,10 +25,11 @@ public class Match extends Script {
         scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).goToThenExecute(0);
 
         // 1. Zone de départ, juste la case bleue
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(PaletsZoneDepart.JUST_BLUE);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
+        /*
         // 2. Zone de chaos (tout)
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);*/
 
         // 3. Palets x6
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
