@@ -37,10 +37,10 @@ public class PaletsZoneDepart extends Script {
             };
         } else {
             positions = new VectCartesian[]{
-                    new VectCartesian(xEntry, yEntry),
                     //new VectCartesian(xEntry, yEntry),
-                    //new VectCartesian(xEntry,yEntry+302),
-                    //new VectCartesian(xEntry,yEntry+605)
+                    new VectCartesian(xEntry, yEntry),
+                    new VectCartesian(xEntry,yEntry+302),
+                    new VectCartesian(xEntry,yEntry+605)
             };
         }
         boolean premierPaletPris = false;
