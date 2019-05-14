@@ -1,25 +1,19 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import utils.ConfigData;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.util.concurrent.TimeUnit;
 
 public class PaletsZoneDepart extends Script {
 
     /**
-     * Version qui ne prend que le palet devant la case bleue TODO
+     * Version qui ne prend que le palet devant la case bleue
      */
     public static int JUST_BLUE = 1;
 
@@ -59,7 +53,7 @@ public class PaletsZoneDepart extends Script {
                 if(premierPaletPris&&version==JUST_BLUE){
                     robot.turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-                    robot.followPathTo(position,() -> {robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);});
+                    robot.followPathTo(position,() -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
                 }
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
@@ -75,25 +69,10 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
                 //Attend avant de prendre un palet
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
-                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
-                robot.waitForLeftElevator();
-                //Attend avant de prendre un palet
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,false);
-                //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                //robot.waitForLeftElevator();
+                readjustElevator();
+
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
                     case 0:
@@ -120,6 +99,18 @@ public class PaletsZoneDepart extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Recalage du palet dans l'ascenseur et fin de dépôt
+     */
+    private void readjustElevator() {
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
+
+        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
     }
 
     @Override

@@ -63,7 +63,9 @@ public enum ActuatorsOrder implements Order {
     POUSSE_LE_PALET_BRAS_DU_SECONDAIRE("pushPalet right"),
     REMONTE_LE_BRAS_GAUCHE_DU_DISTRIBUTEUR_VERS_ASCENSEUR("dist2stock left"),
     REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR("dist2stock right"),
-    REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR("dist2stock right"),  //FIXME: pourquoi le secondaire utilise une position pour XLs?
+    REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR("dist2stock right"),  //FIXME: pourquoi le secondaire utilise une position pour XLs?,
+    ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_PALET("overPuck right"),
+    ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET("overPuck left"),
     MONTE_ASCENCEUR_DROIT_DE_UN_PALET("up right"),
     MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET("up left"),
     MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET("updown right"),
@@ -139,6 +141,8 @@ public enum ActuatorsOrder implements Order {
             REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,
             ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,
             ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,
+            ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_PALET,
+            ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,
     };
 
     static {
