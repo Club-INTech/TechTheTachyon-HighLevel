@@ -1,5 +1,6 @@
 package scripts;
 import data.CouleurPalet;
+import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
@@ -104,6 +105,9 @@ public class PaletsX6 extends Script {
                     } else {
                         robot.turn(Math.PI);
                     }
+
+                    waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 }
                 first = false;
 
@@ -164,15 +168,12 @@ public class PaletsX6 extends Script {
             robot.moveLengthwise(distance, false, () -> {
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                if (robot.getNbPaletsDroits() < 4) {
+                SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+                if (robot.getNbPaletsDroits() < 5) {
                     robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                     //robot.waitForRightElevator();
-                } else if (robot.getNbPaletsDroits() == 4) {
+                } else if (robot.getNbPaletsDroits() == 5) {
                     robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
-                }
-                robot.waitForRightElevator();
-                if(robot.getNbPaletsDroits() >= 1 && robot.getNbPaletsDroits() < 4){ // si l'asc contient 4 palets, on peut plus descendre
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
                 }
             });
         } catch (UnableToMoveException e) {
@@ -201,7 +202,7 @@ public class PaletsX6 extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits()<4  ){ // si l'asc contient 4 palets, on peut plus descendre
+        if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits() < 4){ // si l'asc contient 4 palets, on peut plus descendre
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
         }
     }
