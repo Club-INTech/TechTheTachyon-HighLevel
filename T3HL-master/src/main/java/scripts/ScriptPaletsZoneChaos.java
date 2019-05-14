@@ -56,15 +56,14 @@ public class ScriptPaletsZoneChaos extends Script{
 
 
         try{
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
             table.removeAllChaosObstacles();
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             for (Vec2 position : positions) {
-                robot.followPathTo(position, () -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET));
+                robot.followPathTo(position);
                 robot.turn(Math.PI/2);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                 robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
 
@@ -91,7 +90,7 @@ public class ScriptPaletsZoneChaos extends Script{
                     }*/
 
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         }catch (UnableToMoveException e) {
             e.printStackTrace();
         }
