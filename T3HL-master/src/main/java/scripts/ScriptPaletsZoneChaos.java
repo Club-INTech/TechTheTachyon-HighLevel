@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 public class ScriptPaletsZoneChaos extends Script{
 
 
-    private int xEntry = 0;
-    private int yEntry = 450;
+    private int xEntry = 600;
+    private int yEntry = 1055;
     private Vec2[] positions = new VectCartesian[3];
     VectCartesian positionentre = new VectCartesian(xEntry,yEntry);
     int rayonRobot = 0;
