@@ -17,14 +17,14 @@ import java.util.concurrent.TimeUnit;
 
 public class PaletsZoneDepart extends Script {
 
+    /**
+     * Version qui ne prend que le palet devant la case bleue TODO
+     */
+    public static int JUST_BLUE = 1;
+
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65;//1350;
-    private final int yEntry = 450;
-    private final Vec2[] positions = new VectCartesian[]{
-            new VectCartesian(xEntry, yEntry),
-            new VectCartesian(xEntry,yEntry+302),
-            new VectCartesian(xEntry,yEntry+605)
-    };
+    private final int yEntry = 450+605;//450;
 
     public PaletsZoneDepart(Master robot, Table table) {
         super(robot, table);
@@ -32,6 +32,22 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public void execute(Integer version) {
+        Vec2[] positions;
+        if(version == JUST_BLUE) {
+            positions = new VectCartesian[]{
+                    new VectCartesian(xEntry, yEntry),
+                    //new VectCartesian(xEntry, yEntry),
+                    //new VectCartesian(xEntry,yEntry+302),
+                    //new VectCartesian(xEntry,yEntry+605)
+            };
+        } else {
+            positions = new VectCartesian[]{
+                    new VectCartesian(xEntry, yEntry),
+                    //new VectCartesian(xEntry, yEntry),
+                    //new VectCartesian(xEntry,yEntry+302),
+                    //new VectCartesian(xEntry,yEntry+605)
+            };
+        }
         boolean premierPaletPris = false;
         int i =0;
         try {
@@ -48,7 +64,7 @@ public class PaletsZoneDepart extends Script {
                     //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
                     premierPaletPris = true;
-                 }
+                }
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
@@ -75,18 +91,18 @@ public class PaletsZoneDepart extends Script {
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
                     case 0:
-                        robot.pushPaletGauche(CouleurPalet.BLEU);
+                        robot.pushPaletGauche(CouleurPalet.ROUGE);
                         table.removeTemporaryObstacle(table.getPaletRougeDroite());
                         i++;
                         break;
                     case 1:
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
-                        table.removeTemporaryObstacle(table.getPaletVertDroite());
+                        table.removeTemporaryObstacle(table.getPaletRougeDroite());
                         i++;
                         break;
                     case 2:
-                        robot.pushPaletGauche(CouleurPalet.ROUGE);
-                        table.removeTemporaryObstacle(table.getPaletBleuDroite());
+                        robot.pushPaletGauche(CouleurPalet.VERT);
+                        table.removeTemporaryObstacle(table.getPaletVertDroite());
                         i++;
                         break;
                 }
@@ -102,7 +118,13 @@ public class PaletsZoneDepart extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        if(version ==1)//position du premier palet
+        {
+            return new VectCartesian(xEntry, yEntry+605);
+        }
+        else{
+            return new VectCartesian(xEntry, yEntry);
+        }
     }
 
 

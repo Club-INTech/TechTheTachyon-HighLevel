@@ -94,6 +94,7 @@ public class DataControler extends Thread implements Service {
         registerChannelHandler(Channel.SICK, this::handleSick);
         registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
         registerChannelHandler(Channel.LL_DEBUG, this::handleLLDebug);
+        registerChannelHandler(Channel.BUDDY_EVENT, this::handleBuddyEvent);
     }
 
     /**
@@ -124,6 +125,18 @@ public class DataControler extends Thread implements Service {
         }
     }
 
+    private void handleBuddyEvent(String message) {
+        String[] parts = message.split(" ");
+        String type = parts[0];
+        switch (type) {
+            case "paletsx6free":
+                GameState.PALETS_X6_FREE.setData(true);
+                break;
+        }
+
+        Log.COMMUNICATION.debug("Got event from buddy: "+message);
+    }
+
     /**
      * DEBUG DU LL
      */
@@ -139,19 +152,15 @@ public class DataControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
-     //   Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
         if (symetrie) {
             x = -x;
             o = Math.PI - o;
         }
         o = Calculs.modulo(o, Math.PI);
-        // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
         Log.POSITION.debug("Pos from LL: "+XYO.getRobotInstance());
 
-        // Si le compteur est à 1, on le met à 0
-        // Si le compteur est à 2, on le met à 1
-        // (dans cet ordre pour pas faire deux décrémentations en même temps)
+        // Décrémentation du compteur, permet d'attendre quelques màj lorsqu'on fait un recalage (pour être sûr que le HL et le LL sont d'accords sur la position)
         if(posUpdates > 0) {
             posUpdates--;
         }
