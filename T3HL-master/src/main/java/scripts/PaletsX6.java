@@ -158,7 +158,7 @@ public class PaletsX6 extends Script {
 
         // on suppose que l'ascenseur est monté au mx au début
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE); // pas besoin d'attendre, le vide se fait pendant la descente du bras
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
 
         try {
