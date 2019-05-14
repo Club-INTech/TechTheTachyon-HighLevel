@@ -144,9 +144,6 @@ public class MainMaster extends RobotEntryPoint {
             Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
-        for(int i =0;i<500;i++){
-            orderWrapper.sendString("cod");
-        }
         robot.turn(-Math.PI/2);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
