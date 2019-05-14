@@ -132,7 +132,7 @@ public class MainMaster extends RobotEntryPoint {
     protected void act() throws UnableToMoveException {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.setRotationSpeed(Speed.SLOW_ALL);
+        robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
         robot.setPositionAndOrientation(newPos, Math.PI);
@@ -145,6 +145,8 @@ public class MainMaster extends RobotEntryPoint {
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
         robot.turn(-Math.PI/2);
+
+        robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
