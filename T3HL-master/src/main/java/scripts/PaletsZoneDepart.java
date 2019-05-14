@@ -37,7 +37,7 @@ public class PaletsZoneDepart extends Script {
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(xEntry-190-41, yEntry-10),
+                    new VectCartesian(xEntry-190-46, yEntry-15),
                     //new VectCartesian(xEntry,yEntry+302),
                     //new VectCartesian(xEntry,yEntry+605)
             };
@@ -83,7 +83,7 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
-                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
                 robot.waitForLeftElevator();
                 //Attend avant de prendre un palet
                 try {
@@ -113,7 +113,7 @@ public class PaletsZoneDepart extends Script {
                         break;
                 }
             }
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false); //on descend l'ascenceur à la fin du script
+           // robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false); //on descend l'ascenceur à la fin du script
             //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
             //robot.waitForLeftElevator();
             //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
