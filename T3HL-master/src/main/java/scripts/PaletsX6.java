@@ -120,11 +120,11 @@ public class PaletsX6 extends Script {
                         robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
                     }
                 }
-                try {
+                /*try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
+                }*/
                 if(version == 0) {
                     robot.pushPaletDroit(CouleurPalet.ROUGE);
                 }
