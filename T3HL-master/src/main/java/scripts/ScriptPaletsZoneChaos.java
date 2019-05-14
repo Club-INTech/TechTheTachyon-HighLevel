@@ -59,7 +59,7 @@ public class ScriptPaletsZoneChaos extends Script{
             table.removeAllChaosObstacles();
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             for (Vec2 position : positions) {
-                robot.followPathTo(position);
+                robot.followPathTo(position, () -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET));
                 robot.turn(Math.PI/2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,false);
