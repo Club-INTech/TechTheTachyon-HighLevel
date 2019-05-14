@@ -28,9 +28,10 @@ public class PaletsZoneDepart extends Script {
     @Override
     public void execute(Integer version) {
         Vec2[] positions;
+        Vec2 entry = entryPosition(version);
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
-                    new VectCartesian(xEntry, yEntry),
+                    new VectCartesian(entry.getX(), entry.getY()),
                    // new VectCartesian(xEntry-190-46, yEntry-15),
                     //new VectCartesian(xEntry,yEntry+302),
                     //new VectCartesian(xEntry,yEntry+605)
@@ -38,9 +39,9 @@ public class PaletsZoneDepart extends Script {
         } else {
             positions = new VectCartesian[]{
                     //new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(xEntry,yEntry+302),
-                    new VectCartesian(xEntry,yEntry+605)
+                    new VectCartesian(entry.getX(), entry.getY()),
+                    new VectCartesian(entry.getX(),entry.getY()+302),
+                    new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
         boolean premierPaletPris = false;
