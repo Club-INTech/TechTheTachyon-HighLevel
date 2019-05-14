@@ -171,7 +171,6 @@ public class Accelerateur extends Script {
             }
 
             robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yEntry - averageDistance));
-            robot.gotoPoint(new VectCartesian(this.xEntry,this.yEntry));
 
             robot.turn(Math.PI);
 

@@ -112,9 +112,9 @@ public class PaletsX6 extends Script {
                 if(hasSwitched) {
                     int finalI = i;
                     // permet de ne pas avoir à recoder les actions du robot si on change de côté
-                    robot.invertOrders(robot -> actions(robot, version, finalI));
+                    robot.invertOrders(robot -> actions(robot, version, finalI, 100));
                 } else {
-                    actions(robot, version, i);
+                    actions(robot, version, i, 100);
                 }
                 i++;
             }
@@ -124,21 +124,14 @@ public class PaletsX6 extends Script {
         }
     }
 
-    private void actions(Robot robot, int version, int i) {
-        // on suppose que l'ascenseur est monté au mx au début
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE); // pas besoin d'attendre, le vide se fait pendant la descente du bras
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-        if (robot.getNbPaletsDroits() < 4) {
-            robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-            //robot.waitForRightElevator();
-        } else if (robot.getNbPaletsDroits() == 4) {
-            robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
-            //robot.waitForRightElevator();
-        }
-
+    /**
+     * Actions à faire pour une itération du script
+     * @param robot le robot
+     * @param version la version du script
+     * @param i l'indice du palet pris
+     * @param distance la distance au prochain palet
+     */
+    private void actions(Robot robot, int version, int i, int distance) {
         if(version == 0) {
             robot.pushPaletDroit(CouleurPalet.ROUGE);
         }
@@ -161,6 +154,27 @@ public class PaletsX6 extends Script {
                 case 4:robot.pushPaletDroit(CouleurPalet.VERT);
                     break;
             }
+        }
+
+        // on suppose que l'ascenseur est monté au mx au début
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE); // pas besoin d'attendre, le vide se fait pendant la descente du bras
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
+
+        try {
+            robot.moveLengthwise(distance, false, () -> {
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                if (robot.getNbPaletsDroits() < 4) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                    //robot.waitForRightElevator();
+                } else if (robot.getNbPaletsDroits() == 4) {
+                    robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
+                    //robot.waitForRightElevator();
+                }
+            });
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
         }
     }
 
