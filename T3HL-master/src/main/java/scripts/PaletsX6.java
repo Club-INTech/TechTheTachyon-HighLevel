@@ -180,7 +180,7 @@ public class PaletsX6 extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits()<4){ // si l'asc coontient 4 palets, on peut plus descendre
+        if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits()<5){ // si l'asc coontient 4 palets, on peut plus descendre
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
         }
     }
