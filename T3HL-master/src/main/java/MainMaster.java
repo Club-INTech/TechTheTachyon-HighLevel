@@ -151,6 +151,9 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletVertDroite());
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
+        for(int i =0;i<500;i++){
+            orderWrapper.sendString("cod");
+        }
         orderWrapper.waitJumper();
 
         try {
