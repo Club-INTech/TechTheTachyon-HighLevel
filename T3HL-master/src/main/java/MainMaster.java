@@ -18,6 +18,7 @@
 
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
+import data.PaletsZoneChaos;
 import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
@@ -43,6 +44,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**

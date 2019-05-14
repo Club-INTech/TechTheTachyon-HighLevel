@@ -14,6 +14,7 @@ import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 // TODO
@@ -33,67 +34,59 @@ public class ScriptPaletsZoneChaos extends Script{
 
     @Override
     public void execute(Integer version) {
-        float[] signes= new float[3];
-        signes[0]= Math.signum(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
-        signes[1]=Math.signum(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
-        signes[2]=Math.signum(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()-500);
 
-        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[0]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[1]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+signes[2]*(rayonRobot+rayonPalet+10),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[0]=new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX()+(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[1]=new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX()+(rayonRobot+rayonPalet+10),PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[2]=new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX()+(rayonRobot+rayonPalet+10),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+        positions[3]=new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition().getX()+(rayonRobot+rayonPalet+10),PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+
+/**
+ * On trie les palets selon l'axe X pour les prendre de droite à gauche
+ */
+        Arrays.sort(positions,(v1, v2) -> {
+            if (v1.getX() < v2.getX()){
+                return -1;
+            }
+            else if (v1.getX() > v2.getX()){
+                return 1;
+            }
+            else{
+                return Integer.compare(v1.getY(), v2.getY());
+            }
+        });
 
 
         try{
-            robot.followPathTo(positionentre);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE,true);
-            int numero = 0;
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
                 robot.turn(Math.PI/2);
-                if(signes[numero]==-1){
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
-                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE,true);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT);
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
-                    if (position == positions[0]){
-                        table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
-                        robot.pushPaletDroit(CouleurPalet.ROUGE);
-                    }
-                    if (position == positions[1]){
-                        table.removeTemporaryObstacle(table.getPaletRedDeuxZoneChaosYellow());
-                        robot.pushPaletDroit(CouleurPalet.ROUGE);
-
-                    }
-                    if (position == positions[2]){
-                        table.removeTemporaryObstacle(table.getPaletGreenZoneChaosYellow());
-                        robot.pushPaletDroit(CouleurPalet.VERT);
-                    }
-                }
-                else{
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-                    if (position == positions[0]) {
+                    //Ce qui suit c'est du piff j'ai la flemme de vérifier la couleur parcequ'on s'en fou
+                    if (position == positions[0]){
                         table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
                     }
-                    if (position == positions[1]) {
+                    if (position == positions[1]){
                         table.removeTemporaryObstacle(table.getPaletRedDeuxZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.ROUGE);
+
                     }
                     if (position == positions[2]){
                         table.removeTemporaryObstacle(table.getPaletGreenZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.VERT);
                     }
-                }
-                numero=numero+1;
+                    if (position== positions[3]){
+                        table.removeTemporaryObstacle(table.getPaletBlueZoneChaosYellow());
+                        robot.pushPaletGauche(CouleurPalet.BLEU);
+                    }
 
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
         }catch (UnableToMoveException e) {
             e.printStackTrace();
