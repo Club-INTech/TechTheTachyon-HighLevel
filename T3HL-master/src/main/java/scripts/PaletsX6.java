@@ -169,7 +169,10 @@ public class PaletsX6 extends Script {
                     //robot.waitForRightElevator();
                 } else if (robot.getNbPaletsDroits() == 4) {
                     robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET);
-                    //robot.waitForRightElevator();
+                }
+                robot.waitForRightElevator();
+                if(robot.getNbPaletsDroits() >= 1 && robot.getNbPaletsDroits() < 4){ // si l'asc contient 4 palets, on peut plus descendre
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
                 }
             });
         } catch (UnableToMoveException e) {
