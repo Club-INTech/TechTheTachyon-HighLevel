@@ -99,8 +99,10 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
                     if (robot.getNbPaletsGauches()<4) {
                         robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+                        robot.waitForElevator("left");
                     } else if (robot.getNbPaletsGauches()==4) {
                         robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+                        robot.waitForElevator("left");
                     }
 
 
@@ -116,8 +118,10 @@ public class PaletsX6 extends Script {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     if (robot.getNbPaletsDroits()<4) {
                         robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET, true);
+                        robot.waitForElevator("right");
                     } else if (robot.getNbPaletsDroits()==4) {
                         robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
+                        robot.waitForElevator("right");
                     }
                 }
                 /*try {
