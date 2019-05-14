@@ -104,7 +104,6 @@ public class PaletsX6 extends Script {
                     } else {
                         robot.turn(Math.PI);
                     }
-                    robot.moveLengthwise(100, false, () -> this.executeWhileMovingToEntry(version));
                 }
                 first = false;
 
