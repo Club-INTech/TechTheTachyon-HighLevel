@@ -58,6 +58,7 @@ public class ScriptPaletsZoneChaos extends Script{
         try{
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
+            table.removeAllChaosObstacles();
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
                 robot.turn(Math.PI/2);
@@ -66,6 +67,7 @@ public class ScriptPaletsZoneChaos extends Script{
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE,true);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+                    /*
                     //Ce qui suit c'est du piff j'ai la flemme de vérifier la couleur parcequ'on s'en fou
                     if (position == positions[0]){
                         table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
@@ -83,7 +85,7 @@ public class ScriptPaletsZoneChaos extends Script{
                     if (position== positions[3]){
                         table.removeTemporaryObstacle(table.getPaletBlueZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.BLEU);
-                    }
+                    }*/
 
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
