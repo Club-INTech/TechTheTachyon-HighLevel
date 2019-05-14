@@ -143,7 +143,7 @@ public class Accelerateur extends Script {
 
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
 
-            if (this.symetry) {
+           /* if (this.symetry) {
                 averageDistanceY = (Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetRecalage + this.offsetSick + this.ySickToRobotCenter;
                 Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistanceY);
 
@@ -160,7 +160,7 @@ public class Accelerateur extends Script {
                 Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistanceY);
                 robot.setPositionAndOrientation(new VectCartesian(averageDistanceX, averageDistanceY),teta+Math.PI);
 
-            }
+            }*/
 
             robot.gotoPoint(new VectCartesian(this.xEntry,this.yEntry));
 
