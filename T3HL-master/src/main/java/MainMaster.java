@@ -83,21 +83,29 @@ public class MainMaster extends RobotEntryPoint {
 
     protected void waitForAllConnectionsReady() {
         int ledCount = container.getConfig().getInt(ConfigData.LED_COUNT);
-        LEDs leds = panneauService.getPanneau().getLeds();
-        leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
-        LEDs.RGBColor color = new LEDs.RGBColor(0.5f, 0.5f, 0.5f);
+        int trainLength = 5;
+        LEDs.RGBColor[] colors = new LEDs.RGBColor[trainLength+1];
+        for (int i = 0; i < trainLength+1; i++) {
+            float intensity = (trainLength-i) * 1.0f / (trainLength+1);
+            colors[i] = new LEDs.RGBColor(intensity, intensity, intensity);
+        }
+        LEDs leds = null;
+        if(panneauService.getPanneau() != null) {
+            leds = panneauService.getPanneau().getLeds();
+            leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
+        }
         int index = 0;
         while (!connectionManager.areConnectionsInitiated()) {
             try {
-                leds.set(index % ledCount, LEDs.RGBColor.NOIR);
-                leds.set((index+1) % ledCount, color);
-
-                leds.set((ledCount-index-1) % ledCount, LEDs.RGBColor.NOIR);
-                leds.set((ledCount-(index+1)-1) % ledCount, color);
+                if(leds != null) {
+                    for(int i = 0;i<trainLength;i++) {
+                        leds.set((index+i) % ledCount, LEDs.RGBColor.NOIR);
+                    }
+                }
 
                 index++;
                 index %= ledCount;
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
