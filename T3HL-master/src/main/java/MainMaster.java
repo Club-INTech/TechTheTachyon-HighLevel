@@ -100,7 +100,7 @@ public class MainMaster extends RobotEntryPoint {
                 if(leds != null) {
                     leds.fillColor(LEDs.RGBColor.NOIR);
                     for(int i = 0;i <= trainLength;i++) {
-                        leds.set((ledCount-(index+i)-1) % ledCount, colors[i]);
+                        leds.set((index+i) % ledCount, colors[i]);
                     }
 //                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                 }
@@ -108,7 +108,7 @@ public class MainMaster extends RobotEntryPoint {
 
                 index++;
                 index %= ledCount;
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
