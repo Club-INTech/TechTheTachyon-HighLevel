@@ -90,8 +90,9 @@ public class MainMaster extends RobotEntryPoint {
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 if(leds != null) {
-                    float f = (float)Math.sin(System.nanoTime()/1_000_000.0 * Math.PI)*0.5f+1f;
-                    leds.fillColor(new LEDs.RGBColor(f, f, f));
+                    float f = (float)Math.sin(System.currentTimeMillis()/1000.0 * Math.PI)*0.5f+1f;
+                    leds.fillColor(new LEDs.RGBColor(f, 0f, 1f-f));
+                    System.out.println(">> "+f);
                 }
 
                 Thread.sleep(50);
