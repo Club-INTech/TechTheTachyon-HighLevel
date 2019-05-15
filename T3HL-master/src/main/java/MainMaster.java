@@ -86,7 +86,7 @@ public class MainMaster extends RobotEntryPoint {
         int trainLength = 5;
         LEDs.RGBColor[] colors = new LEDs.RGBColor[trainLength+1];
         for (int i = 0; i < trainLength+1; i++) {
-            float intensity = (float)(trainLength-i)/trainLength+1;
+            float intensity = (float)(trainLength-i)/(trainLength+1);
             colors[i] = new LEDs.RGBColor(intensity, 0.0f, 0.0f);
         }
         LEDs leds = null;
