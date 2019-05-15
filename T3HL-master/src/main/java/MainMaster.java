@@ -82,23 +82,19 @@ public class MainMaster extends RobotEntryPoint {
     }
 
     protected void waitForAllConnectionsReady() {
-        int ledCount = container.getConfig().getInt(ConfigData.LED_COUNT);
         LEDs leds = null;
         if(panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
             leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
         }
-        int index = 0;
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 if(leds != null) {
-                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
-                    leds.set((index+1) % ledCount, LEDs.RGBColor.ROUGE);
-                    leds.set((index+2) % ledCount, LEDs.RGBColor.BLEU);
+                    float f = (float) Math.min(1, Math.sin(System.currentTimeMillis()/1000.0 * Math.PI)*0.5f+0.5f);
+                    leds.fillColor(new LEDs.RGBColor(f, 0f, 1f-f));
+                    System.out.println(">> "+f);
                 }
 
-                index++;
-                index %= ledCount;
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
