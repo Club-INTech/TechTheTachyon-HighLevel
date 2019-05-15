@@ -94,6 +94,7 @@ public class MainMaster extends RobotEntryPoint {
                 if(leds != null) {
                     leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                     leds.set((index+1) % ledCount, LEDs.RGBColor.ROUGE);
+                    leds.set((index+2) % ledCount, LEDs.RGBColor.BLEU);
                 }
 
                 index++;
