@@ -109,7 +109,7 @@ public class PaletsX6 extends Script {
                 first = false;
 
                 // Skip le palet bleu
-                int distance = i == 3 ? 200 : 100;
+                int distance = i == 2 ? 200 : 100;
 
                 if(hasSwitched) {
                     int finalI = i;
