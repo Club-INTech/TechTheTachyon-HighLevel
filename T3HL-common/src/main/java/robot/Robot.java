@@ -172,6 +172,7 @@ public abstract class Robot implements Service {
             try {
                 this.locomotion.followPathTo(point, parallelActions);
                 parallelActions = null;
+                break;
             } catch (UnableToMoveException e) {
                 if(e.getReason() == UnableToMoveReason.ENEMY_IN_PATH) {
                     e.printStackTrace(); // on affiche l'erreur mais on réessaie dans 1/2s
