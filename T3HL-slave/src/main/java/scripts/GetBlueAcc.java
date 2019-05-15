@@ -1,19 +1,17 @@
 package scripts;
 
+import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import data.Table;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class GetBlueAcc extends Script {
-    private int xEntry = -170;
-    private int yEntry = 340;
+    private int xEntry = 1200;
+    private int yEntry = 250;
     private int xBlue = -210; //FIXME: positions à faire
     private int yBlue = 270;
     private boolean symetrie;
@@ -75,6 +73,8 @@ public class GetBlueAcc extends Script {
     public void finalize(Exception e) { }
 
     @Override
-    public void updateConfig(Config config) { this.symetrie = config.getString(ConfigData.COULEUR).equals("violet"); }
+    public void updateConfig(Config config) {
+        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+    }
 
 }
