@@ -25,6 +25,9 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
+        if(true)
+            return;
+
         // 3. Gold à prendre
         // 4. Rush vers balance
         // (5 Attente du principal?) <- à tester si on passe

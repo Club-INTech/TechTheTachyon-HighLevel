@@ -74,28 +74,12 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        // TODO
-        XYO.getRobotInstance().update(1200, 1200, Math.PI);
+        XYO.getRobotInstance().update(1200, 500, Math.PI);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        robot.turn(Math.PI);
-        //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+        robot.turn(-Math.PI/2);
 
-
-
-        try {
-            Thread.sleep(100000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        robot.turn(Math.PI/2);
-
-
-        table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletVertDroite());
-        table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
+        // TODO: Jumper
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);

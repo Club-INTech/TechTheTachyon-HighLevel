@@ -44,30 +44,21 @@ public class GetBlueAcc extends Script {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
 
         try {
+            robot.turn(Math.PI);
+            robot.followPathTo(new VectCartesian(xBlue, yBlue));
             if (!symetrie) {
-                robot.turn(Math.PI);
-                robot.moveLengthwise(1000, false);
-                robot.followPathTo(new VectCartesian(xBlue, yBlue));
                 robot.turn(Math.PI/2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
                 robot.turn(0);
                 robot.turn(-0.78);
+                // voir si c'est nécessaire robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
-                robot.turn(Math.PI);
-
-
             }
             else {
-                robot.turn(0);
-                robot.moveLengthwise(1000, false);
-                robot.followPathTo(new VectCartesian(-(xBlue), yBlue));
                 robot.turn(-(Math.PI/2));
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
                 robot.turn(0.78);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
-                robot.turn(0);
-
-
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
