@@ -98,10 +98,10 @@ public class MainMaster extends RobotEntryPoint {
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 if(leds != null) {
-                    leds.fillColor(LEDs.RGBColor.NOIR);
                     for(int i = 0;i <= trainLength;i++) {
-                        leds.set((index+i) % ledCount, colors[i]);
+                        leds.set((index+i+1) % ledCount, colors[i]);
                     }
+                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
 //                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                 }
                 System.out.println("index: "+index);
