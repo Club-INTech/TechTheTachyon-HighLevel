@@ -93,6 +93,7 @@ public class MainMaster extends RobotEntryPoint {
         if(panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
             leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
+            leds.update();
         }
         int index = 0;
         while (!connectionManager.areConnectionsInitiated()) {
@@ -101,6 +102,7 @@ public class MainMaster extends RobotEntryPoint {
                     for(int i = 0;i <= trainLength;i++) {
                         leds.set((ledCount-(index+i)-1) % ledCount, colors[i]);
                     }
+                    leds.update();
 //                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                 }
                 System.out.println("index: "+index);
