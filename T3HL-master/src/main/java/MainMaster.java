@@ -99,7 +99,7 @@ public class MainMaster extends RobotEntryPoint {
             try {
                 if(leds != null) {
                     for(int i = 0;i<trainLength;i++) {
-                        leds.set((index+i) % ledCount, LEDs.RGBColor.NOIR);
+                        leds.set((index+i) % ledCount, colors[i]);
                     }
                 }
 
