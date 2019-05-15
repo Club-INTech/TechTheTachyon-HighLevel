@@ -59,7 +59,7 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    robot.followPathTo(position,() -> {robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);});
+                    robot.followPathTo(position);
                     robot.turn(Math.PI / 2);
                     //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                     //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
@@ -108,8 +108,19 @@ public class PaletsZoneDepart extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
 
-        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
 
+        new Thread("Waiting for elevator") {
+            {
+                setDaemon(true);
+            }
+
+            @Override
+            public void run() {
+                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+                robot.waitForLeftElevator();
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
+            }
+        }.start();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
     }
 
