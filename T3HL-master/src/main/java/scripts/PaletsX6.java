@@ -108,13 +108,15 @@ public class PaletsX6 extends Script {
                 }
                 first = false;
 
+                // Skip le palet bleu
+                int distance = i == 3 ? 200 : 100;
 
                 if(hasSwitched) {
                     int finalI = i;
                     // permet de ne pas avoir à recoder les actions du robot si on change de côté
-                    robot.invertOrders(robot -> actions(robot, version, finalI, 100));
+                    robot.invertOrders(robot -> actions(robot, version, finalI, distance));
                 } else {
-                    actions(robot, version, i, 100);
+                    actions(robot, version, i, distance);
                 }
                 i++;
             }
