@@ -360,7 +360,7 @@ public class DataControler extends Thread implements Service {
                 teta=Calculs.modulo(Math.PI-teta, Math.PI);
 
             } else {
-                if (0 < orien && orien <Math.PI){
+                if (Math.PI/4 < orien && orien <3*Math.PI/4){
                     teta=Math.atan(rapport); //Il faut ajouter pi/2
                     xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
