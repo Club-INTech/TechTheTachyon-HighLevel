@@ -21,6 +21,7 @@ import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
+import orders.Speed;
 import robot.Slave;
 import scripts.MatchSlave;
 import scripts.PaletsX6Slave;
@@ -75,6 +76,7 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
         XYO.getRobotInstance().update(1200, 500, Math.PI/2);
+        robot.setRotationSpeed(Speed.SLOW_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(-Math.PI/2);
