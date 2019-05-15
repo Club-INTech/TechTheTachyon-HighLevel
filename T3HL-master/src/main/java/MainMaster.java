@@ -102,7 +102,7 @@ public class MainMaster extends RobotEntryPoint {
                         leds.set((index+i) % ledCount, colors[i]);
                     }
                     leds.set((index+trainLength) % ledCount, LEDs.RGBColor.NOIR);*/
-                    leds.set((index+1 % ledCount), colors[2]);
+                    leds.set((index+1 % ledCount), LEDs.RGBColor.ROUGE);
                     leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                 }
                 System.out.println("index: "+index);
