@@ -106,6 +106,9 @@ public enum ConfigData implements ConfigInfo
     HL_MASTER_SIMULATEUR(20002),
     DEBUG_SIMULATEUR_PORT(19999),
 
+    LED_COUNT(16),
+    LED_PROGRAM_PORT(19500),
+
     /**
      * Timings
      */

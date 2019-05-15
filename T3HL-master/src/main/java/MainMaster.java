@@ -16,21 +16,18 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
-import data.PaletsZoneChaos;
 import data.Sick;
-import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.Speed;
-import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Match;
 import scripts.ScriptManagerMaster;
-import scripts.ScriptTestPositions;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -44,7 +41,6 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -99,17 +95,25 @@ public class MainMaster extends RobotEntryPoint {
                     e.printStackTrace();
                 }
                 Panneau.TeamColor initialColor = panneau.getTeamColor();
+                LEDs leds = panneau.getLeds();
+                LEDs.RGBColor waitingColor1 = new LEDs.RGBColor(0.5f, 0.5f, 0.0f);
+                LEDs.RGBColor waitingColor2 = new LEDs.RGBColor(0.5f, 0.0f, 0.5f);
+
                 // on attend une première activation du switch
                 while(initialColor == panneau.getTeamColor()) {
                     try {
                         panneau.printScore(5005);
+                        leds.fillColor(waitingColor1);
                         TimeUnit.MILLISECONDS.sleep(100);
                         panneau.printScore(550);
+                        leds.fillColor(waitingColor2);
                         TimeUnit.MILLISECONDS.sleep(100);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+
+                resetColorToTeamColor(panneau);
 
                 initialColor = panneau.getTeamColor();
                 // on attend une deuxième activation du switch ou 5s
@@ -123,10 +127,25 @@ public class MainMaster extends RobotEntryPoint {
                     }
                     TimeUnit.MILLISECONDS.sleep(1);
                 }
+
+                resetColorToTeamColor(panneau);
                 Log.STRATEGY.warning("Couleur: "+panneau.getTeamColor());
             } catch (InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void resetColorToTeamColor(Panneau panneau) {
+        LEDs leds = panneau.getLeds();
+        switch (panneau.getTeamColor()) {
+            case JAUNE:
+                leds.fillColor(LEDs.RGBColor.JAUNE);
+                break;
+
+            case VIOLET:
+                leds.fillColor(LEDs.RGBColor.MAGENTA);
+                break;
         }
     }
 
