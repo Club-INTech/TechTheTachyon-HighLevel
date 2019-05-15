@@ -61,6 +61,7 @@ public class GetBlueAcc extends Script {
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
 
+            robot.turn(Math.PI/2);
             // === Début recalage ===
             double dsick = 64;
             int ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
