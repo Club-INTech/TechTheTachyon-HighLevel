@@ -75,10 +75,10 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
         // TODO
-        XYO.getRobotInstance().update(900, 500, Math.PI);
+        XYO.getRobotInstance().update(900, 1200, Math.PI);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        robot.turn(Math.PI/2);
+        robot.turn(Math.PI);
         //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
 
 
