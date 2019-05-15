@@ -86,8 +86,8 @@ public class MainMaster extends RobotEntryPoint {
         int trainLength = 5;
         LEDs.RGBColor[] colors = new LEDs.RGBColor[trainLength+1];
         for (int i = 0; i < trainLength+1; i++) {
-            float intensity = (trainLength-i) * 1.0f / (trainLength+1);
-            colors[i] = new LEDs.RGBColor(intensity, intensity, intensity);
+            float intensity = (float)(trainLength-i)/(trainLength+1);
+            colors[i] = new LEDs.RGBColor(intensity, 0.0f, 0.0f);
         }
         LEDs leds = null;
         if(panneauService.getPanneau() != null) {
@@ -98,10 +98,12 @@ public class MainMaster extends RobotEntryPoint {
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 if(leds != null) {
-                    for(int i = 0;i<trainLength;i++) {
-                        leds.set((index+i) % ledCount, LEDs.RGBColor.NOIR);
+                    for(int i = 0;i <= trainLength;i++) {
+                        leds.set((ledCount-(index+i)-1) % ledCount, colors[i]);
                     }
+//                    leds.set(index % ledCount, LEDs.RGBColor.NOIR);
                 }
+                System.out.println("index: "+index);
 
                 index++;
                 index %= ledCount;
