@@ -1,13 +1,12 @@
 package data.synchronization;
 
 import connection.Connection;
-
 import data.GameState;
-import data.SensorState;
 import data.controlers.Channel;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Container;
+import utils.Log;
 
 /**
  * Classe de communication avec l'autre robot
@@ -44,6 +43,10 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     }
 
     public void waitForFreePaletX6() {
-        waitWhileTrue(() -> !((boolean)GameState.PALETS_X6_FREE.getData()));
+        if(connection.isInitiated()) {
+            waitWhileTrue(() -> !((boolean)GameState.PALETS_X6_FREE.getData()));
+        } else {
+            Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que palets x6 est libre");
+        }
     }
 }
