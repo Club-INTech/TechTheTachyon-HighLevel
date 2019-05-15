@@ -13,7 +13,7 @@ public class GetBlueAcc extends Script {
     private int xEntry = 1200;
     private int yEntry = 250;
     private int xBlue = -210; //FIXME: positions à faire
-    private int yBlue = 270+70;
+    private int yBlue = 270+60;
     private boolean symetrie;
 
     public GetBlueAcc(Slave robot, Table table) {
