@@ -81,7 +81,7 @@ public abstract class RobotEntryPoint {
 
     protected abstract void act() throws UnableToMoveException;
 
-    private void waitForAllConnectionsReady() {
+    protected void waitForAllConnectionsReady() {
         while (!connectionManager.areConnectionsInitiated()) {
             try {
                 Thread.sleep(100);

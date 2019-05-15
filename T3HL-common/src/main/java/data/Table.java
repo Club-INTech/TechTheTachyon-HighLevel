@@ -18,6 +18,7 @@
 
 package data;
 
+import data.controlers.PaletsChaosControler;
 import data.table.*;
 import pfg.config.Config;
 import utils.ConfigData;
@@ -44,6 +45,8 @@ public class Table implements Service {
     private final ArrayList<Obstacle> fixedObstacles;
 
     private final ArrayList<Obstacle> temporaryObstacles;
+
+    private ConcurrentLinkedQueue<Obstacle> chaosObstacles;
 
     private Obstacle paletRougeDroite;
     private Obstacle paletBleuDroite;
@@ -129,6 +132,7 @@ public class Table implements Service {
         this.mobileObstacles = new ConcurrentLinkedQueue<>();
         this.mobileObstacleBuffer = new ArrayList<>();
         this.temporaryObstacles = new ArrayList<>();
+        this.chaosObstacles = new ConcurrentLinkedQueue<>();
     }
 
     /**
@@ -717,6 +721,16 @@ public class Table implements Service {
         removeTemporaryObstacle(paletRedDeuxZoneChaosYellow);
         removeTemporaryObstacle(paletGreenZoneChaosYellow);
         removeTemporaryObstacle(paletBlueZoneChaosYellow);
+    }
+
+    public void removeObstacleZoneChaos(Vec2 position){
+
+        for(Obstacle obstacle : this.temporaryObstacles) {
+            if(obstacle.getPosition().equals(position)){
+                removeTemporaryObstacle(obstacle);
+            }
+
+        }
     }
 
     public boolean isPositionInBalance(Vec2 center) {

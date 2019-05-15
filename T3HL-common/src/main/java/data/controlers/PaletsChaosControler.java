@@ -151,13 +151,6 @@ public class PaletsChaosControler extends Thread implements Service {
 
                 }*/
 
-                try {
-                    table.getGraphe().writeLock().lock();
-                    table.getGraphe().reInit();
-                }
-                finally {
-                    table.getGraphe().writeLock().unlock();
-                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }

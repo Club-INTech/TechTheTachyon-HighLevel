@@ -14,8 +14,8 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     private int xEntry = -170;
     private int yEntry = 340;
-    private int xBlue = 0; //FIXME: positions à faire
-    private int yBlue = 0;
+    private int xBlue = -210; //FIXME: positions à faire
+    private int yBlue = 270;
     private boolean symetrie;
 
     public GetBlueAcc(Slave robot, Table table) {
@@ -49,7 +49,7 @@ public class GetBlueAcc extends Script {
                 robot.moveLengthwise(1000, false);
                 robot.followPathTo(new VectCartesian(xBlue, yBlue));
                 robot.turn(Math.PI/2);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
                 robot.turn(0);
                 robot.turn(-0.78);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
@@ -62,7 +62,7 @@ public class GetBlueAcc extends Script {
                 robot.moveLengthwise(1000, false);
                 robot.followPathTo(new VectCartesian(-(xBlue), yBlue));
                 robot.turn(-(Math.PI/2));
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
                 robot.turn(0.78);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
                 robot.turn(0);
