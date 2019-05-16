@@ -21,11 +21,6 @@ public class PaletsX3Slave extends Script{
     /**
      * constante
      */
-    private Vec2[] positions = new Vec2[]{
-            new VectCartesian(xEntry,yEntry),
-            //new VectCartesian(xEntry-100,yEntry),
-            //new VectCartesian(xEntry-200,yEntry)
-    };
 
 
     public PaletsX3Slave(Slave robot, Table table) {
@@ -37,29 +32,28 @@ public class PaletsX3Slave extends Script{
         try {
             robot.turn(Math.PI);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            for (int j = 1; j < positions.length; j++) {
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-                robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
-
-                CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
-
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-
-                robot.pushPaletDroit(couleur); // TODO
-                robot.followPathTo(positions[j]);
-            }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
 
-            CouleurPalet couleur = CouleurPalet.getCouleurPalRecu();
+            CouleurPalet couleur = CouleurPalet.BLEU;
+
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+
             robot.pushPaletDroit(couleur); // TODO
+            robot.moveLengthwise(100,false);
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+            robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
+
+            CouleurPalet couleur2 = CouleurPalet.VERT;
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            robot.pushPaletDroit(couleur2); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }
