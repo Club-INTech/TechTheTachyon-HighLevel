@@ -106,6 +106,9 @@ public abstract class Script implements Service {
             this.robot.followPathTo(entryPosition, () -> this.executeWhileMovingToEntry(version));
         } catch (UnableToMoveException e) {
             e.printStackTrace();
+            if( ! shouldContinueScript(e)) {
+                return;
+            }
             // TODO
         }
 
@@ -120,6 +123,17 @@ public abstract class Script implements Service {
         } finally {
             this.finalize(exception);
         }
+    }
+
+    /**
+     * Doit-on continuer l'exécution du script alors qu'on a pas réussi à y aller?
+     * <br/>
+     * ATTENTION: finalize() ne sera PAS appelé si vous renvoyez false!
+     * @param e l'erreur de déplacement
+     * @return 'true' si on continue, 'false' sinon
+     */
+    protected boolean shouldContinueScript(UnableToMoveException e) {
+        return true;
     }
 
     /**
