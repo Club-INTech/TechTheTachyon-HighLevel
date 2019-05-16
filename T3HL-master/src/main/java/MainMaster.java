@@ -46,6 +46,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author nayth, jglrxavpok
  */
+
 public class MainMaster extends RobotEntryPoint {
 
     private SimulatorManagerLauncher simulatorLauncher;
@@ -194,13 +195,36 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 
-        orderWrapper.waitJumper();
+        int dsick = 173;
+        int offsetSick= 6;
+        int ySickToRobotCenter=113;
+        int xSickToRobotCenter=101;
+        int offsetRecalage = 31;
 
+        orderWrapper.waitJumper();
+//test
+        robot.followPathTo(new VectCartesian(-490, 410-78));
+
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
+            double rapport = ecart_mesures_sicks / dsick;
+            double teta = Math.atan(rapport);
+            float averageDistance = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+            Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
+        }
+        else {
+           double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
+           double rapport = ecart_mesures_sicks / dsick;
+            double teta = Math.atan(rapport);
+           float averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+            Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
+        }
+/*
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void initSimulator(){
