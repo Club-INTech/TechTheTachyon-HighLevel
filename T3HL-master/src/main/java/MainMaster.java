@@ -207,7 +207,7 @@ public class MainMaster extends RobotEntryPoint {
         orderWrapper.waitJumper();
         robot.turn(-Math.PI/2);
 //test
-        robot.followPathTo(new VectCartesian(-490, 410-78));
+        robot.followPathTo(new VectCartesian(-490, 410-78+50));
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
