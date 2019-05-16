@@ -82,6 +82,10 @@ public class MainSlave extends RobotEntryPoint {
         for (int i =0; i < 100000; i++){
             robot.moveLengthwise(1000, false);
             robot.moveLengthwise(-1000, false);
+            robot.moveLengthwise(500, false);
+            robot.moveLengthwise(-500, false);
+            robot.moveLengthwise(100, false);
+            robot.moveLengthwise(-100, false);
         }
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
