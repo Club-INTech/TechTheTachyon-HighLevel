@@ -226,7 +226,7 @@ public class MainMaster extends RobotEntryPoint {
             Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), currentPosition.getY() - averageDistance), Calculs.modulo(teta - Math.PI / 2, Math.PI));
+        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), currentPosition.getY() - averageDistance), Calculs.modulo(teta+Math.PI, Math.PI));
         robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + yEntry));
 
         robot.turn(0);
