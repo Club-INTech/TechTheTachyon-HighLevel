@@ -18,6 +18,7 @@
 
 package data;
 
+import utils.Log;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -60,6 +61,7 @@ public class XYO {
      * package-private
      */
     public void update(int x, int y, double o) {
+        Log.POSITION.debug(String.format("XYO updated : %d, %d, %5f", x, y, o));
         this.position.setXY(x, y);
         this.orientation = o;
     }
