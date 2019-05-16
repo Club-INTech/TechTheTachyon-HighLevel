@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 /**
  * Service de gestion des scripts
- * // TODO : Tester avec des exemples
  *
  * @author rem
  */
