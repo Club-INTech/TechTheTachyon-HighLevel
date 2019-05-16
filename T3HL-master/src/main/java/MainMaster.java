@@ -202,7 +202,7 @@ public class MainMaster extends RobotEntryPoint {
         int ySickToRobotCenter=113;
         int xSickToRobotCenter=101;
         int offsetRecalage = 36;
-        int yEntry = 410-78+30;
+        int yEntry = 410-78+15;
         float distanceToWall;
         double teta;
 
@@ -214,7 +214,7 @@ public class MainMaster extends RobotEntryPoint {
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
             double rapport = ecart_mesures_sicks / dsick;
-            teta = Math.atan(rapport);
+            teta = Math.atan(-rapport);
              distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
             Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + distanceToWall);
         }
