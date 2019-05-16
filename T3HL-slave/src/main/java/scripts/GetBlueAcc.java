@@ -91,11 +91,8 @@ public class GetBlueAcc extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
-
-
-
     }
+
     @Override //à adapter
     public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
 

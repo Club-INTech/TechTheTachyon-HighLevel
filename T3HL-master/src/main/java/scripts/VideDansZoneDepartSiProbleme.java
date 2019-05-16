@@ -13,7 +13,7 @@ import utils.math.VectCartesian;
  */
 public class VideDansZoneDepartSiProbleme extends Script {
 
-    protected VideDansZoneDepartSiProbleme(Master robot, Table table) {
+    public VideDansZoneDepartSiProbleme(Master robot, Table table) {
         super(robot, table);
     }
 
