@@ -200,7 +200,7 @@ public class MainMaster extends RobotEntryPoint {
         int offsetSick= 6;
         int ySickToRobotCenter=113;
         int xSickToRobotCenter=101;
-        int offsetRecalage = 31;
+        int offsetRecalage = 36;
         int yEntry = 410-78;
         float averageDistance;
 
