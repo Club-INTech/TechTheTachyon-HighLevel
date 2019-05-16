@@ -1,6 +1,7 @@
 package data.controlers;
 
 import data.*;
+import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -38,16 +39,12 @@ public class DataControler extends Thread implements Service {
      */
     private Listener listener;
     private MatchTimer timer;
+    private OrderWrapper orderWrapper;
 
     /**
      * Liste des ChannelHandlers
      */
     private ArrayList<ChannelHandler> channelHandlers = new ArrayList<ChannelHandler>();
-
-    /**
-     * True si autre couleur
-     */
-    private boolean symetrie;
 
     /**
      * True si master
@@ -69,15 +66,17 @@ public class DataControler extends Thread implements Service {
      */
     private int offsetSick= 6;
     private int posUpdates = 0;
+    private boolean symetry;
 
     /**
      * Construit un gestionnaire de capteur
      * @param listener
      *              le listener
      */
-    public DataControler(Listener listener, MatchTimer timer) throws FileNotFoundException, UnsupportedEncodingException {
+    public DataControler(Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
         this.listener = listener;
         this.timer = timer;
+        this.orderWrapper = orderWrapper;
         /*
         this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
         sickWriter.print("Indice");
@@ -94,6 +93,7 @@ public class DataControler extends Thread implements Service {
         registerChannelHandler(Channel.SICK, this::handleSick);
         registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
         registerChannelHandler(Channel.LL_DEBUG, this::handleLLDebug);
+        registerChannelHandler(Channel.BUDDY_EVENT, this::handleBuddyEvent);
     }
 
     /**
@@ -124,6 +124,18 @@ public class DataControler extends Thread implements Service {
         }
     }
 
+    private void handleBuddyEvent(String message) {
+        String[] parts = message.split(" ");
+        String type = parts[0];
+        switch (type) {
+            case "paletsx6free":
+                GameState.PALETS_X6_FREE.setData(true);
+                break;
+        }
+
+        Log.COMMUNICATION.debug("Got event from buddy: "+message);
+    }
+
     /**
      * DEBUG DU LL
      */
@@ -139,19 +151,15 @@ public class DataControler extends Thread implements Service {
         int x = Math.round(Float.parseFloat(coordonates[0]));
         int y = Math.round(Float.parseFloat(coordonates[1]));
         double o = Double.parseDouble(coordonates[2]);
-     //   Log.COMMUNICATION.debug("Received pos from LL: "+x+" "+y+" "+o);
-        if (symetrie) {
+        if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             x = -x;
             o = Math.PI - o;
         }
         o = Calculs.modulo(o, Math.PI);
-        // System.out.println("LL: "+XYO.getRobotInstance());
         XYO.getRobotInstance().update(x, y, o);
         Log.POSITION.debug("Pos from LL: "+XYO.getRobotInstance());
 
-        // Si le compteur est à 1, on le met à 0
-        // Si le compteur est à 2, on le met à 1
-        // (dans cet ordre pour pas faire deux décrémentations en même temps)
+        // Décrémentation du compteur, permet d'attendre quelques màj lorsqu'on fait un recalage (pour être sûr que le HL et le LL sont d'accords sur la position)
         if(posUpdates > 0) {
             posUpdates--;
         }
@@ -175,7 +183,7 @@ public class DataControler extends Thread implements Service {
                 break;
 
             case "leftElevatorStopped":
-                if (symetrie) {
+                if (symetry()) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
                 } else {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(false);
@@ -183,7 +191,7 @@ public class DataControler extends Thread implements Service {
                 break;
 
             case "rightElevatorStopped":
-                if (symetrie) {
+                if (symetry()) {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(false);
                 } else {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(false);
@@ -280,7 +288,7 @@ public class DataControler extends Thread implements Service {
             VectCartesian vectsick = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
             double orien= XYO.getRobotInstance().getOrientation();
 
-            if (symetrie) {
+            if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
                 orien= Calculs.modulo(Math.PI-orien, Math.PI);
                 // On différencie les cas où le robot est orienté vers la gauche et la droite
                 if (-Math.PI/2 < orien && orien < Math.PI/2) {
@@ -336,8 +344,11 @@ public class DataControler extends Thread implements Service {
             double rapport = ((double)esick) / dsick;
             double orien = XYO.getRobotInstance().getOrientation();
             //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
-            if (symetrie) {
-                if(orien>Math.PI/2 || orien < -Math.PI/2){
+
+            if (symetry) {
+                orien= Calculs.modulo(Math.PI-orien, Math.PI);
+                System.out.println(orien);
+                if(orien<Math.PI/2 && orien > -Math.PI/2){
                     teta=Math.atan(rapport);
                     xCalcule= -1500 + (int) ((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
@@ -352,7 +363,7 @@ public class DataControler extends Thread implements Service {
                 teta=Calculs.modulo(Math.PI-teta, Math.PI);
 
             } else {
-                if (0 < orien && orien <Math.PI){
+                if (Math.PI/4 < orien && orien <3*Math.PI/4){
                     teta=Math.atan(rapport); //Il faut ajouter pi/2
                     xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) Math.round((sickMeasurements[significantSicks[2].getIndex()]+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
@@ -431,10 +442,14 @@ public class DataControler extends Thread implements Service {
         RobotState.CURRENT_SCRIPT_VERSION.setData(version);
     }
 
+    private boolean symetry() {
+        return orderWrapper.shouldSymetrize();
+    }
+
     @Override
     public void updateConfig(Config config) {
         this.isMaster = config.getBoolean(ConfigData.MASTER);
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 
     @Override

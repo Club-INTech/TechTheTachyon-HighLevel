@@ -36,6 +36,7 @@ public enum Channel {
     BUDDY_POSITION('!', '#'),
     BUDDY_PATH('!', 'C'),
     UPDATE_PALETS('!', 'H'),
+    BUDDY_EVENT('!', 'E'),
 
     //De l'IA
     SCRIPTS('!', 'O'),
@@ -70,6 +71,12 @@ public enum Channel {
      * Getter
      */
     public String getHeaders() {
+        return headers;
+    }
+
+
+    @Override
+    public String toString() {
         return headers;
     }
 }

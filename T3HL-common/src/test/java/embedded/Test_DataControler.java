@@ -44,7 +44,7 @@ public class Test_DataControler {
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
         listener=new Listener(connectionManager, new SynchronizationWithBuddy(Container.getInstance("Master")));
-        dataControler =new DataControler(listener, null);
+        dataControler =new DataControler(listener, null, null);
     }
 
     @Test

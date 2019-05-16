@@ -203,6 +203,9 @@ public enum Log
         String color = severity.color;
 
         Thread currentThread = Thread.currentThread();
+        if(3+stackOffset >= currentThread.getStackTrace().length) {
+            stackOffset = currentThread.getStackTrace().length-3-1;
+        }
         StackTraceElement elem = currentThread.getStackTrace()[3+stackOffset]; // appelant
         this.toLog.setLength(0);
         this.toLog

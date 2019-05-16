@@ -19,26 +19,32 @@ public class PanneauService implements Service {
     private Panneau panel;
     private long updatePeriod;
     private String couleur;
+    private Container container;
+    private int programPort;
+    private int ledCount;
 
     public PanneauService(Container container) {
-        try {
-            panel = new Panneau(RaspiPin.GPIO_00, RaspiPin.GPIO_02, RaspiPin.GPIO_03, RaspiPin.GPIO_07);
-            panel.addListener(teamColor -> {
-                couleur=panel.getTeamColor().toString().toLowerCase();
-                Log.STRATEGY.warning("Couleur: "+couleur);
-                container.getConfig().override(ConfigData.COULEUR, couleur);
-                container.updateConfig(container.getConfig());
-            });
-        } catch (IOException | I2CFactory.UnsupportedBusNumberException e){
-            e.printStackTrace();
-        }
+        this.container = container;
     }
 
     public void setPanel(Panneau panel) {
         this.panel = panel;
     }
 
-    public Panneau getPanneau(){
+    public Panneau getPanneau() {
+        if(panel == null) {
+            try {
+                panel = new Panneau(ledCount, programPort, RaspiPin.GPIO_07);
+                panel.addListener(teamColor -> {
+                    couleur=panel.getTeamColor().toString().toLowerCase();
+                    Log.STRATEGY.warning("Couleur: "+couleur);
+                    container.getConfig().override(ConfigData.COULEUR, couleur);
+                    container.updateConfig(container.getConfig());
+                });
+            } catch (IOException | I2CFactory.UnsupportedBusNumberException e){
+                e.printStackTrace();
+            }
+        }
         return panel;
     }
 
@@ -50,5 +56,7 @@ public class PanneauService implements Service {
     public void updateConfig(Config config) {
         updatePeriod = config.getLong(ConfigData.SCORE_UPDATE_PERIOD);
         couleur = config.getString(ConfigData.COULEUR);
+        ledCount = config.getInt(ConfigData.LED_COUNT);
+        programPort = config.getInt(ConfigData.LED_PROGRAM_PORT);
     }
 }

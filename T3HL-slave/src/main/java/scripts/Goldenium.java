@@ -26,14 +26,12 @@ public class Goldenium extends Script {
 
     //paramètres
 
-    private final VectCartesian positionDepart;
     private final VectCartesian positionBalance;
     private boolean symetrie;
 
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
-        positionDepart = new VectCartesian(xEntry, yEntry);
         positionBalance = new VectCartesian(xBalance, yBalance);
     }
 

@@ -16,6 +16,7 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
+import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import data.Sick;
@@ -24,12 +25,10 @@ import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.Speed;
-import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
 import robot.Master;
 import scripts.Match;
 import scripts.ScriptManagerMaster;
-import scripts.ScriptTestPositions;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -48,6 +47,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author nayth, jglrxavpok
  */
+
 public class MainMaster extends RobotEntryPoint {
 
     private SimulatorManagerLauncher simulatorLauncher;
@@ -83,6 +83,26 @@ public class MainMaster extends RobotEntryPoint {
         }
     }
 
+    protected void waitForAllConnectionsReady() {
+        LEDs leds = null;
+        if(panneauService.getPanneau() != null) {
+            leds = panneauService.getPanneau().getLeds();
+            leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
+        }
+        while (!connectionManager.areConnectionsInitiated()) {
+            try {
+                if(leds != null) {
+                    float f = (float) Math.min(1, Math.sin(System.currentTimeMillis()/1000.0 * Math.PI)*0.5f+0.5f);
+                    leds.fillColor(new LEDs.RGBColor(f, 0f, 1f-f));
+                }
+
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void waitForColorSwitch() {
         if( ! container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
             panneauService.setPanel(null);
@@ -97,17 +117,25 @@ public class MainMaster extends RobotEntryPoint {
                     e.printStackTrace();
                 }
                 Panneau.TeamColor initialColor = panneau.getTeamColor();
+                LEDs leds = panneau.getLeds();
+                LEDs.RGBColor waitingColor1 = new LEDs.RGBColor(0.5f, 0.5f, 0.0f);
+                LEDs.RGBColor waitingColor2 = new LEDs.RGBColor(0.5f, 0.0f, 0.5f);
+
                 // on attend une première activation du switch
                 while(initialColor == panneau.getTeamColor()) {
                     try {
                         panneau.printScore(5005);
+                        leds.fillColor(waitingColor1);
                         TimeUnit.MILLISECONDS.sleep(100);
                         panneau.printScore(550);
+                        leds.fillColor(waitingColor2);
                         TimeUnit.MILLISECONDS.sleep(100);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+
+                resetColorToTeamColor(panneau);
 
                 initialColor = panneau.getTeamColor();
                 // on attend une deuxième activation du switch ou 5s
@@ -121,6 +149,8 @@ public class MainMaster extends RobotEntryPoint {
                     }
                     TimeUnit.MILLISECONDS.sleep(1);
                 }
+
+                resetColorToTeamColor(panneau);
                 Log.STRATEGY.warning("Couleur: "+panneau.getTeamColor());
             } catch (InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
@@ -128,11 +158,24 @@ public class MainMaster extends RobotEntryPoint {
         }
     }
 
+    private void resetColorToTeamColor(Panneau panneau) {
+        LEDs leds = panneau.getLeds();
+        switch (panneau.getTeamColor()) {
+            case JAUNE:
+                leds.fillColor(LEDs.RGBColor.JAUNE);
+                break;
+
+            case VIOLET:
+                leds.fillColor(LEDs.RGBColor.MAGENTA);
+                break;
+        }
+    }
+
     @Override
     protected void act() throws UnableToMoveException {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.setRotationSpeed(Speed.MEDIUM_ALL);
+        robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
         robot.setPositionAndOrientation(newPos, Math.PI);
@@ -144,20 +187,52 @@ public class MainMaster extends RobotEntryPoint {
             Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
-
         robot.turn(Math.PI/2);
+
+        robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
-        orderWrapper.waitJumper();
 
+        int dsick = 173;
+        int offsetSick= 6;
+        int ySickToRobotCenter=113;
+        int xSickToRobotCenter=101;
+        int offsetRecalage = 36;
+        int yEntry = 410-78;
+        float averageDistance;
+
+        orderWrapper.waitJumper();
+        robot.turn(-Math.PI/2);
+//test
+        robot.followPathTo(new VectCartesian(-490, 410-78));
+
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
+            double rapport = ecart_mesures_sicks / dsick;
+            double teta = Math.atan(rapport);
+             averageDistance = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+            Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
+        }
+        else {
+           double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
+           double rapport = ecart_mesures_sicks / dsick;
+            double teta = Math.atan(rapport);
+            averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+            Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
+        }
+        Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + yEntry - averageDistance));
+
+        robot.turn(0);
+/*
         try {
-            container.getService(ScriptTestPositions.class).goToThenExecute(0);
+            container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void initSimulator(){

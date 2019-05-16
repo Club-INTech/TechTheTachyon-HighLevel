@@ -21,6 +21,7 @@ import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
+import orders.Speed;
 import robot.Slave;
 import scripts.MatchSlave;
 import scripts.PaletsX6Slave;
@@ -74,27 +75,25 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        // TODO
-        XYO.getRobotInstance().update(900, 500, Math.PI);
+        XYO.getRobotInstance().update(1200, 300, Math.PI);
+
+
+
+        /*for (int i =0; i < 100000; i++){
+            robot.moveLengthwise(1000, false);
+            robot.moveLengthwise(-1000, false);
+            robot.moveLengthwise(500, false);
+            robot.moveLengthwise(-500, false);
+            robot.moveLengthwise(100, false);
+            robot.moveLengthwise(-100, false);
+        }*/
+
+        robot.setRotationSpeed(Speed.SLOW_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+        robot.turn(Math.PI);
 
-
-
-        try {
-            Thread.sleep(100000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        robot.turn(Math.PI/2);
-
-
-        table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletVertDroite());
-        table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
+        orderWrapper.waitJumper();
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);
