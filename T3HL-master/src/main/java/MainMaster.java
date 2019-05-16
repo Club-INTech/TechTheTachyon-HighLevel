@@ -175,8 +175,8 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
@@ -245,7 +245,7 @@ public class MainMaster extends RobotEntryPoint {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
             robot.popPaletDroit();
-            if (robot.getNbPaletsDroits() > 1) {
+            if (robot.getNbPaletsDroits() > 0) {
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
             }
         }
@@ -260,7 +260,7 @@ public class MainMaster extends RobotEntryPoint {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
             robot.popPaletGauche();
-            if (robot.getNbPaletsGauches() >1) {
+            if (robot.getNbPaletsGauches() > 0) {
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             }
         }
