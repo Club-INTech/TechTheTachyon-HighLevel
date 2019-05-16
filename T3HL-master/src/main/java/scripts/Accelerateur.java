@@ -220,7 +220,7 @@ public class Accelerateur extends Script {
     }
 
     @Override
-    protected boolean shouldContinueScript(UnableToMoveException e) {
+    protected boolean shouldContinueScript(Exception e) {
         Log.STRATEGY.critical("Impossible d'atteindre l'accélérateur, on va vider les ascenseurs dans la zone de départ!");
         try {
             container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);

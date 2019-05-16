@@ -129,10 +129,10 @@ public abstract class Script implements Service {
      * Doit-on continuer l'exécution du script alors qu'on a pas réussi à y aller?
      * <br/>
      * ATTENTION: finalize() ne sera PAS appelé si vous renvoyez false!
-     * @param e l'erreur de déplacement
+     * @param e l'erreur
      * @return 'true' si on continue, 'false' sinon
      */
-    protected boolean shouldContinueScript(UnableToMoveException e) {
+    protected boolean shouldContinueScript(Exception e) {
         return true;
     }
 

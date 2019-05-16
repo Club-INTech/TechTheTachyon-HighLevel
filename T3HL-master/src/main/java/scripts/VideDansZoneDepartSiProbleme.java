@@ -45,14 +45,16 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             SensorState.RIGHT_ARM_MOVING.setData(true); // pour s'assurer que le bras est au bon endroit
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
             robot.popPaletDroit();
         }
 
         if(robot.getNbPaletsGauches() > 0) {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-            SensorState.RIGHT_ARM_MOVING.setData(true); // pour s'assurer que le bras est au bon endroit
+            SensorState.LEFT_ARM_MOVING.setData(true); // pour s'assurer que le bras est au bon endroit
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             robot.popPaletGauche();
         }
     }

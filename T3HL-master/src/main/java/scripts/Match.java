@@ -6,6 +6,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
 import robot.Master;
+import utils.TimeoutError;
 import utils.math.Vec2;
 
 public class Match extends Script {
@@ -41,15 +42,16 @@ public class Match extends Script {
         Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
         try {
-            robot.followPathTo(accelerateurScript.entryPosition(0), () -> {
-                // 5. Prévenir le secondaire que le distributeur de palets x6 est libre
-                syncBuddy.sendPaletX6Free();
-            });
+            // 5. Prévenir le secondaire que le distributeur de palets x6 est libre
+            syncBuddy.sendPaletX6Free();
+
+            robot.followPathTo(accelerateurScript.entryPosition(0));
 
             // 6. Faire l'accélérateur
             scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
-        } catch (UnableToMoveException e) {
+        } catch (UnableToMoveException | TimeoutError e) {
             e.printStackTrace();
+            accelerateurScript.shouldContinueScript(e);
         }
 
     }
