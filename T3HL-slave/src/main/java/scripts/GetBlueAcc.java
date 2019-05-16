@@ -21,7 +21,7 @@ public class GetBlueAcc extends Script {
     /**
      * Offset avec la planche
      */
-    private final int offsetRecalage = 31+3;
+    private final int offsetRecalage = 31+5;
 
     /*
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)

@@ -20,6 +20,7 @@ import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import data.Sick;
+import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
@@ -199,7 +200,9 @@ public class MainMaster extends RobotEntryPoint {
         int offsetSick= 6;
         int ySickToRobotCenter=113;
         int xSickToRobotCenter=101;
-        int offsetRecalage = 31;
+        int offsetRecalage = 36;
+        int yEntry = 410-78;
+        float averageDistance;
 
         orderWrapper.waitJumper();
 //test
@@ -209,16 +212,20 @@ public class MainMaster extends RobotEntryPoint {
             double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
             double rapport = ecart_mesures_sicks / dsick;
             double teta = Math.atan(rapport);
-            float averageDistance = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+             averageDistance = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
             Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
         }
         else {
            double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
            double rapport = ecart_mesures_sicks / dsick;
             double teta = Math.atan(rapport);
-           float averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
+            averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
             Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
         }
+        Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + yEntry - averageDistance));
+
+        robot.turn(0);
 /*
         try {
             container.getService(Match.class).goToThenExecute(0);
