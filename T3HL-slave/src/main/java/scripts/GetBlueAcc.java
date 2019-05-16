@@ -21,7 +21,7 @@ public class GetBlueAcc extends Script {
     /**
      * Offset avec la planche
      */
-    private final int offsetRecalage = 31;
+    private final int offsetRecalage = 31+3;
 
     /*
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
@@ -45,10 +45,14 @@ public class GetBlueAcc extends Script {
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
 
             robot.turn(Math.PI/2);
+            robot.computeNewPositionAndOrientation(Sick.NOTHING);
             // === Début recalage ===
             double dsick = 64;
             int ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
             double rapport = ecart_mesures_sicks / dsick;
+            if(symetrie) {
+                rapport = -rapport;
+            }
             double teta = Math.atan(rapport);
 
             float averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + this.offsetSick + this.ySickToRobotCenter) + offsetRecalage);
