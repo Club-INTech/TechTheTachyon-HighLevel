@@ -129,7 +129,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Threshold de comparaison de deux positions
      */
-    VECTOR_COMPARISON_THRESHOLD(5),
+    VECTOR_COMPARISON_THRESHOLD(50),
 
     /**
      * Paramètres du Graphe
