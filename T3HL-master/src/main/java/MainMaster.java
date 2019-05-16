@@ -202,7 +202,7 @@ public class MainMaster extends RobotEntryPoint {
         int ySickToRobotCenter=113;
         int xSickToRobotCenter=101;
         int offsetRecalage = 36;
-        int yEntry = 410-78+15;
+        int yEntry = 410-78+15-4;
         float distanceToWall;
         double teta;
 
@@ -233,7 +233,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
