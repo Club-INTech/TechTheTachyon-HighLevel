@@ -81,7 +81,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(-Math.PI/2);
 
-        orderWrapper.waitJumper();
+        //orderWrapper.waitJumper();
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);
