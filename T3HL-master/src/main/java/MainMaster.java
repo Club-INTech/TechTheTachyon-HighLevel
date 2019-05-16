@@ -205,6 +205,7 @@ public class MainMaster extends RobotEntryPoint {
         float averageDistance;
 
         orderWrapper.waitJumper();
+        robot.turn(-Math.PI/2);
 //test
         robot.followPathTo(new VectCartesian(-490, 410-78));
 
