@@ -208,6 +208,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.turn(-Math.PI/2);
 //test
         robot.followPathTo(new VectCartesian(-490, 410-78));
+        robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
