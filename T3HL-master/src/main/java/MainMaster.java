@@ -238,6 +238,17 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+
+        robot.turn(Math.PI);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT,true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+
         /*
         try {
             container.getService(Match.class).goToThenExecute(0);
