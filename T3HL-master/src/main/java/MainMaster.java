@@ -199,83 +199,13 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 
-        int dsick = 173;
-        int offsetSick= 6;
-        int ySickToRobotCenter=113;
-        int xSickToRobotCenter=101;
-        int offsetRecalage = 36;
-        int yEntry = 410-78+15-4-5-3;
-        float distanceToWall;
-        double teta;
-
         orderWrapper.waitJumper();
-//test
-        robot.followPathTo(new VectCartesian(-490+10, 410-78+50));
-        robot.turn(Math.PI);
-        robot.computeNewPositionAndOrientation(Sick.NOTHING);
-        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-            double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
-            double rapport = ecart_mesures_sicks / dsick;
-            teta = Math.atan(-rapport);
-             distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
-            Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + distanceToWall);
-        }
-        else {
-           double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
-           double rapport = ecart_mesures_sicks / dsick;
-            teta = Math.atan(-rapport);
-            distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
-            Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
-        }
-        Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
-        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
 
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.turn(0);
-        for (int i = 0; i < 5; i++) {
-            robot.pushPaletDroit(CouleurPalet.ROUGE);
-            robot.pushPaletGauche(CouleurPalet.ROUGE);
-        }
-        while (robot.getNbPaletsDroits() > 0) {
-            robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-            if (robot.getNbPaletsDroits() > 1) {
-                SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-            }
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-            robot.popPaletDroit();
-        }
-
-        robot.turn(Math.PI);
-        while (robot.getNbPaletsGauches() > 0) {
-            robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-            if (robot.getNbPaletsGauches() > 1) {
-                SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            }
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-            robot.popPaletGauche();
-        }
-/*
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void initSimulator(){
