@@ -230,6 +230,8 @@ public class MainMaster extends RobotEntryPoint {
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
         robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
 
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.turn(0);
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         robot.pushPaletDroit(CouleurPalet.ROUGE);
@@ -237,8 +239,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.pushPaletGauche(CouleurPalet.ROUGE);
         while (robot.getNbPaletsDroits() > 0) {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
@@ -253,7 +254,7 @@ public class MainMaster extends RobotEntryPoint {
         while (robot.getNbPaletsGauches() > 0) {
             robot.turn(Math.PI);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
