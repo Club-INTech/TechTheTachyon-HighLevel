@@ -38,6 +38,7 @@ import utils.Container;
 import utils.Log;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
+import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -203,29 +204,30 @@ public class MainMaster extends RobotEntryPoint {
         int offsetRecalage = 36;
         int yEntry = 410-78;
         float averageDistance;
+        double teta;
 
         orderWrapper.waitJumper();
-        robot.turn(-Math.PI/2);
 //test
-        robot.followPathTo(new VectCartesian(-490, 410-78+50));
+        robot.followPathTo(new VectCartesian(-490+10, 410-78+50));
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
             double rapport = ecart_mesures_sicks / dsick;
-            double teta = Math.atan(rapport);
+            teta = Math.atan(rapport);
              averageDistance = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
             Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + averageDistance);
         }
         else {
            double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
            double rapport = ecart_mesures_sicks / dsick;
-            double teta = Math.atan(rapport);
+            teta = Math.atan(rapport);
             averageDistance = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter) + offsetRecalage);
             Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + averageDistance);
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-        robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + yEntry - averageDistance));
+        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), currentPosition.getY() - averageDistance), Calculs.modulo(teta - Math.PI / 2, Math.PI));
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + yEntry));
 
         robot.turn(0);
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
