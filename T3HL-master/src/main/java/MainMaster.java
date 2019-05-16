@@ -19,6 +19,7 @@
 import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
+import data.CouleurPalet;
 import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
@@ -230,24 +231,39 @@ public class MainMaster extends RobotEntryPoint {
         robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
 
         robot.turn(0);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT,true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        while (robot.getNbPaletsDroits() > 0) {
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+            robot.popPaletDroit();
+            if (robot.getNbPaletsDroits() > 1) {
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            }
+        }
 
-        robot.turn(Math.PI);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT,true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-
+        while (robot.getNbPaletsGauches() > 0) {
+            robot.turn(Math.PI);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            robot.popPaletGauche();
+            if (robot.getNbPaletsGauches() >1) {
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+            }
+        }
         /*
         try {
             container.getService(Match.class).goToThenExecute(0);
