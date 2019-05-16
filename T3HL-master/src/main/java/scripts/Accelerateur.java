@@ -21,7 +21,6 @@ public class Accelerateur extends Script {
 
     private final int xEntry = -490+10;
     private final int yEntry = 410-78+50;
-    int yEntryc = 410-78+15-4-5;
     private final Container container;
 
     /**
@@ -58,10 +57,12 @@ public class Accelerateur extends Script {
      */
 
     private final int dsick = 173;
-
     double rapport ;
     double ecart_mesures_sicks;
     double teta;
+    //variable pour le calcul du recalage
+    int yEntryc = 410-78+15-4-5;
+
 
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
@@ -163,28 +164,11 @@ public class Accelerateur extends Script {
             }*/
             ////////////
            // robot.followPathTo(new VectCartesian(-490+10, 410-78+50));
-            robot.turn(Math.PI);
-            robot.computeNewPositionAndOrientation(Sick.NOTHING);
-            if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-                double ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
-                double rapport = ecart_mesures_sicks / dsick;
-                teta = Math.atan(-rapport);
-                distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
-                Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + distanceToWall);
-            }
-            else {
-                double ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
-                double rapport = ecart_mesures_sicks / dsick;
-                teta = Math.atan(-rapport);
-                distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
-                Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
-            }
-            Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
-            robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntryc));
 
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+            recalageAccelerateur();
+
+           // robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+            //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.turn(0);
             for (int i = 0; i < 5; i++) {
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
@@ -256,6 +240,30 @@ public class Accelerateur extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void recalageAccelerateur() throws UnableToMoveException {
+        robot.turn(Math.PI);
+        robot.computeNewPositionAndOrientation(Sick.NOTHING);
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
+            rapport = ecart_mesures_sicks / dsick;
+            teta = Math.atan(-rapport);
+            distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
+            Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + distanceToWall);
+        }
+        else {
+            ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
+            rapport = ecart_mesures_sicks / dsick;
+            teta = Math.atan(-rapport);
+            distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
+            Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
+        }
+        Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntryc));
+
     }
 
     @Override
