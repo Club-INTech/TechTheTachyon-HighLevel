@@ -29,6 +29,7 @@ MASTER                              = true
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
+VECTOR_COMPARISON_THRESHOLD         = 10
 
 #________________________________________________________________________________________________________________________
 
