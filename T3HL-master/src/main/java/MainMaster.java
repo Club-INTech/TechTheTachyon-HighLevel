@@ -234,10 +234,10 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         robot.turn(0);
-        robot.pushPaletDroit(CouleurPalet.ROUGE);
-        robot.pushPaletDroit(CouleurPalet.ROUGE);
-        robot.pushPaletGauche(CouleurPalet.ROUGE);
-        robot.pushPaletGauche(CouleurPalet.ROUGE);
+        for (int i = 0; i < 5; i++) {
+            robot.pushPaletDroit(CouleurPalet.ROUGE);
+            robot.pushPaletGauche(CouleurPalet.ROUGE);
+        }
         while (robot.getNbPaletsDroits() > 0) {
             robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
