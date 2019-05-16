@@ -186,11 +186,12 @@ public class Accelerateur extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.turn(0);
-            robot.pushPaletDroit(CouleurPalet.ROUGE);
-            robot.pushPaletDroit(CouleurPalet.ROUGE);
-            robot.pushPaletGauche(CouleurPalet.ROUGE);
-            robot.pushPaletGauche(CouleurPalet.ROUGE);
+            for (int i = 0; i < 5; i++) {
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
+                robot.pushPaletGauche(CouleurPalet.ROUGE);
+            }
             while (robot.getNbPaletsDroits() > 0) {
+                robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
@@ -200,12 +201,14 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
                 robot.popPaletDroit();
                 if (robot.getNbPaletsDroits() > 0) {
+                    SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
             }
 
+            robot.turn(Math.PI);
             while (robot.getNbPaletsGauches() > 0) {
-                robot.turn(Math.PI);
+                robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
@@ -215,6 +218,7 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.popPaletGauche();
                 if (robot.getNbPaletsGauches() > 0) {
+                    SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
                 }
             }
