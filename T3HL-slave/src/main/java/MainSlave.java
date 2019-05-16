@@ -88,12 +88,20 @@ public class MainSlave extends RobotEntryPoint {
             robot.moveLengthwise(-100, false);
         }*/
 
+
         robot.setRotationSpeed(Speed.SLOW_ALL);
         robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(-Math.PI/2);
 
+        table.removeTemporaryObstacle(table.getPaletRougeDroite());
+        table.removeTemporaryObstacle(table.getPaletVertDroite());
+        table.removeTemporaryObstacle(table.getPaletBleuDroite());
+        table.removeAllChaosObstacles();
+
         orderWrapper.waitJumper();
+
+        scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);
