@@ -199,18 +199,18 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 
-        int dsick = 173;
+       /* int dsick = 173;
         int offsetSick= 6;
         int ySickToRobotCenter=113;
         int xSickToRobotCenter=101;
         int offsetRecalage = 36;
         int yEntry = 410-78+15-4-5-3;
         float distanceToWall;
-        double teta;
+        double teta;*/
 
         orderWrapper.waitJumper();
 //test
-        robot.followPathTo(new VectCartesian(-490+10, 410-78+50));
+     /*   robot.followPathTo(new VectCartesian(-490+10, 410-78+50));
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
@@ -269,13 +269,13 @@ public class MainMaster extends RobotEntryPoint {
                 SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             }
-        }
-        /*
+        }*/
+
         try {
             container.getService(Match.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     private void initSimulator(){
