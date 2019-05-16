@@ -244,14 +244,14 @@ public class MainMaster extends RobotEntryPoint {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+            if (robot.getNbPaletsDroits() > 1) {
+                SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            }
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
             robot.popPaletDroit();
-            if (robot.getNbPaletsDroits() > 0) {
-                SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-            }
         }
 
         robot.turn(Math.PI);
@@ -261,14 +261,14 @@ public class MainMaster extends RobotEntryPoint {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+            if (robot.getNbPaletsGauches() > 1) {
+                SensorState.LEFT_ELEVATOR_MOVING.setData(true);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+            }
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
             robot.popPaletGauche();
-            if (robot.getNbPaletsGauches() > 0) {
-                SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            }
         }
 /*
         try {
