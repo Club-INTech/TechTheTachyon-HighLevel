@@ -128,6 +128,7 @@ public class PaletsX6 extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 // fin du script
             } else {
                 boolean first = true;
@@ -197,16 +198,15 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
 
         try {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             if(moveDistance == 0) {
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
                 if(ungrab) {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 }
             } else {
                 robot.moveLengthwise(moveDistance, false, () -> {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                     if(ungrab) {
                         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     }
