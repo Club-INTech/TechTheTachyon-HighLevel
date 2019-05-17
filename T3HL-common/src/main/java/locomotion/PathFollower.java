@@ -250,20 +250,26 @@ public class PathFollower extends ServiceThread {
      *              en cas de blocage mécanique ou d'adversaire
      */
     public void turn(double angle, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
-        XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
-        SensorState.MOVING.setData(true);
-        this.orderWrapper.turn(angle, parallelActions);
+        try {
+            // on désactive le lidar pendant qu'on tourne pour éviter d'avoir des "traces" des obstacles lors de la rotation
+            SensorState.DISABLE_LIDAR.setData(true);
+            XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
+            SensorState.MOVING.setData(true);
+            this.orderWrapper.turn(angle, parallelActions);
 
-        waitWhileTrue(SensorState.MOVING::getData, () -> {
-            if (isCircleObstructed()) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
-            }
-            if (SensorState.STUCKED.getData() && !expectedWallImpact) {
-                orderWrapper.immobilise();
-                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
-            }
-        });
+            waitWhileTrue(SensorState.MOVING::getData, () -> {
+                if (isCircleObstructed()) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
+                }
+                if (SensorState.STUCKED.getData() && !expectedWallImpact) {
+                    orderWrapper.immobilise();
+                    throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                }
+            });
+        } finally {
+            SensorState.DISABLE_LIDAR.setData(false);
+        }
     }
 
     /**
