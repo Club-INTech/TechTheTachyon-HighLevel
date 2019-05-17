@@ -59,6 +59,7 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
                     robot.followPathTo(position);
                     robot.turn(Math.PI / 2);
                     //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
