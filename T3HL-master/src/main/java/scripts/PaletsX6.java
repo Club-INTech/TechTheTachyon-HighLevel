@@ -198,7 +198,9 @@ public class PaletsX6 extends Script {
             if(moveDistance == 0) {
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                if(ungrab) {
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                }
             } else {
                 robot.moveLengthwise(moveDistance, false, () -> {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
