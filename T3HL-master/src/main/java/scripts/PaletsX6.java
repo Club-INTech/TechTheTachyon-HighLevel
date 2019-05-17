@@ -103,11 +103,13 @@ public class PaletsX6 extends Script {
                 // on prend le palet bleu
                 grabPuck(robot, 0, false);
                 // on se retourne
+                robot.moveLengthwise(DISTANCE_INTER_PUCK+10, false); // +10 pour dépasser un peu la position
+                robot.followPathTo(positions.get(4)); // pour se remettre à la bonne position devant le palet suivant
                 robot.turn(0);
-                robot.moveLengthwise(-DISTANCE_INTER_PUCK, false);
 
                 // on prend les 2 autres palets
                 for (int j = 0; j < 2; j++) {
+                    // invert order pour utiliser la partie gauche du robot
                     robot.invertOrders(robot -> grabPuck(robot, -DISTANCE_INTER_PUCK, true));
                     switch (j) {
                         case 0:
@@ -122,7 +124,7 @@ public class PaletsX6 extends Script {
                 // on va à la balance
                 robot.followPathTo(positionBalance);
                 // on dépose le bleu
-                robot.turn(Calculs.modulo(Math.PI+Math.PI/8, Math.PI));
+                robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
@@ -307,6 +309,8 @@ public class PaletsX6 extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,false);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,false);
         if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits() < 4){ // si l'asc contient 4 palets, on peut plus descendre
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
         }
