@@ -19,6 +19,7 @@
 package data.controlers;
 
 import connection.Connection;
+import data.SensorState;
 import data.Table;
 import data.XYO;
 import pfg.config.Config;
@@ -151,6 +152,9 @@ public class LidarControler extends ServiceThread {
             }
             XYO currentXYO = XYO.getRobotInstance().clone();
             points = messageStack.pop().split(POINT_SEPARATOR);
+            if(SensorState.DISABLE_LIDAR.getData()) {
+                continue; // on ignore les valeurs renvoyées par le lidar pendant qu'il est désactivé
+            }
             mobileObstacles.clear();
             for (String point : points) {
                 Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),

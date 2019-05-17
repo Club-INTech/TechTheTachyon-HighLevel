@@ -103,6 +103,9 @@ public class MainMaster extends RobotEntryPoint {
                 e.printStackTrace();
             }
         }
+        if(leds != null) {
+            resetColorToTeamColor(panneauService.getPanneau());
+        }
     }
 
     private void waitForColorSwitch() {
@@ -175,6 +178,7 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
+        robot.increaseScore(5); // présence de l'expérience
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
