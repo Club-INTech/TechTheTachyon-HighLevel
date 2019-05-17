@@ -355,6 +355,7 @@ public class DataControler extends Thread implements Service {
                     teta=Math.atan(rapport);
                     xCalcule= -1500 + (int) (((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()])/2+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSick) * Math.cos(teta));
+                    teta += Math.PI;
                 }
                 else{
                     teta=Math.atan(rapport);//Il faut enlever pi/2
