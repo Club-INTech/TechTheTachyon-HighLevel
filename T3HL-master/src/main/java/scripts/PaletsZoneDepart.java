@@ -106,7 +106,7 @@ public class PaletsZoneDepart extends Script {
      * @param puckIndex indice du palet (premier est 0)
      */
     private void readjustElevator(int puckIndex) {
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
+      //  robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
 
 
