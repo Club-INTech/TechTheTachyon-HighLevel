@@ -35,25 +35,28 @@ public class PaletsX3Slave extends Script{
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
-
-            CouleurPalet couleur = CouleurPalet.BLEU;
-
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
 
-            robot.pushPaletDroit(couleur); // TODO
             robot.moveLengthwise(100,false);
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.TEST_PALET_ATTRAPE_EN_FONCTION_DU_COUPLE_DROIT);
-
-            CouleurPalet couleur2 = CouleurPalet.VERT;
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-            robot.pushPaletDroit(couleur2); // TODO
+            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
+
+            robot.moveLengthwise(100,false);
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+            robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
+
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
         }
