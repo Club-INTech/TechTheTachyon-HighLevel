@@ -58,7 +58,7 @@ public class Match extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return XYO.getRobotInstance().getPosition();
+        return scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).entryPosition(0);
     }
 
     @Override
