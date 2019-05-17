@@ -203,7 +203,7 @@ public class PaletsX6 extends Script {
             return new VectCartesian(834,1206);
         }
         else if (version == 3) {
-            return new VectCartesian(1500-191-65+20,1204+10+5);
+            return new VectCartesian(1500-191-65,1204+10+5);
         }
         return null;
     }
