@@ -36,6 +36,7 @@ VECTOR_COMPARISON_THRESHOLD         = 10
 [Slave]
 MASTER                              = false
 MASTER_ROBOT_IP                     = localhost
+COULEUR                             =violet       //TODO à retirer c'est juste un test
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
