@@ -169,7 +169,7 @@ public class DataControler extends Thread implements Service {
      * EVENT
      */
     private void handleEvent(String message) {
-        if (!message.equals("pong")) { // ne log pas les pongs
+        if (!message.equals("pong") && !message.equals("electron_arrived")) { // ne log pas les pongs
             Log.COMMUNICATION.debug("Got event: " + message);
         }
         String[] event = message.split(ARGUMENTS_SEPARATOR);
@@ -212,6 +212,9 @@ public class DataControler extends Thread implements Service {
                 break;
 
             case "electron_arrived":
+                if( ! SensorState.ELECTRON_ARRIVED.getData()) {
+                    Log.STRATEGY.debug("Electron arrivé!");
+                }
                 SensorState.ELECTRON_ARRIVED.setData(true);
                 break;
 

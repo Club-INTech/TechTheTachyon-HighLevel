@@ -164,7 +164,7 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
 
         try {
-            Thread elevatorWaitingThread = new Thread("Thread to wait for right elevator") { // ♪ Musique d'ascenseur ♪
+            /*Thread elevatorWaitingThread = new Thread("Thread to wait for right elevator") { // ♪ Musique d'ascenseur ♪
                 @Override
                 public void run() {
                     if (robot.getNbPaletsDroits() < 5) {
@@ -177,9 +177,10 @@ public class PaletsX6 extends Script {
                 }
             };
             elevatorWaitingThread.setDaemon(true);
-            elevatorWaitingThread.start();
+            elevatorWaitingThread.start();*/
 
             robot.moveLengthwise(distance, false, () -> {
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             });
