@@ -1,6 +1,6 @@
 [Common]
 # DIMENSIONS DE L'ADVERSAIRE
-ENNEMY_RAY                          = 220
+ENNEMY_RAY                          = 150
 
 # PARAMETRES DU GRAPHE
 NBR_NOEUDS_X                        = 30
