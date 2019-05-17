@@ -49,7 +49,7 @@ public class Electron extends Script{
             }
             Log.ELECTRON.debug("Electron activated");
 
-            robot.score += 15;
+            robot.increaseScore(15);
 
             while (!SensorState.ELECTRON_ARRIVED.getData()){
                 try {
@@ -61,7 +61,7 @@ public class Electron extends Script{
             }
             Log.ELECTRON.debug("Electron arrived");
 
-            robot.score += 20;
+            robot.increaseScore(20);
         });
         electronThread.setDaemon(true);
         electronThread.start();

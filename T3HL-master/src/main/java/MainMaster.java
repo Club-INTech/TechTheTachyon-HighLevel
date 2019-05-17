@@ -90,7 +90,6 @@ public class MainMaster extends RobotEntryPoint {
         LEDs leds = null;
         if(panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
-            leds.fillColor(LEDs.RGBColor.NOIR); // on éteint la bande
         }
         while (!connectionManager.areConnectionsInitiated()) {
             try {
