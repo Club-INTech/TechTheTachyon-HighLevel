@@ -19,7 +19,7 @@ public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65;//1350;
-    private final int yEntry = 450+605+302;//450;
+    private final int yEntry = 450+605+300;//450;
 
     public PaletsZoneDepart(Master robot, Table table) {
         super(robot, table);
