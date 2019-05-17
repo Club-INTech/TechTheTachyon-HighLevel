@@ -199,10 +199,15 @@ public class MainMaster extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 
-        orderWrapper.waitJumper();
 
         try {
-            container.getService(Match.class).goToThenExecute(0);
+            Match match = container.getService(Match.class);
+            Vec2 entryPos = match.entryPosition(0);
+            Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+            double angleToStart = Math.atan2(entryPos.getY() - currentPosition.getY(), entryPos.getX() - currentPosition.getX());
+            robot.turn(angleToStart);
+            orderWrapper.waitJumper();
+            match.goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
