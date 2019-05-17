@@ -19,7 +19,7 @@ public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65;//1350;
-    private final int yEntry = 450+605+300;//450;
+    private final int yEntry = 450+605;//450;
 
     public PaletsZoneDepart(Master robot, Table table) {
         super(robot, table);
@@ -41,7 +41,7 @@ public class PaletsZoneDepart extends Script {
                     //new VectCartesian(xEntry, yEntry),
                     new VectCartesian(entry.getX(), entry.getY()),
                     new VectCartesian(entry.getX(),entry.getY()+302),
-                    //new VectCartesian(entry.getX(),entry.getY()+605),
+                    new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
         boolean premierPaletPris = false;
@@ -69,7 +69,7 @@ public class PaletsZoneDepart extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
+                //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                 readjustElevator(i);
@@ -106,7 +106,7 @@ public class PaletsZoneDepart extends Script {
      * @param puckIndex indice du palet (premier est 0)
      */
     private void readjustElevator(int puckIndex) {
-      //  robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
 
 
