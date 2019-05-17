@@ -119,7 +119,7 @@ public class PaletsZoneDepart extends Script {
             public void run() {
                 robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 robot.waitForLeftElevator();
-                if(puckIndex < 2) {
+                if(puckIndex < 1) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
                 }
             }
