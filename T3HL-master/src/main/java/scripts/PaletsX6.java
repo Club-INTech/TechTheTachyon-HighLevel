@@ -20,6 +20,7 @@ import java.util.Iterator;
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
     private boolean symetry;
+    boolean onvaprendrelebleu= false;
 
     public PaletsX6(Master robot, Table table) {
         super(robot, table);
@@ -61,6 +62,7 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(1000, 1204+10+5));
                 positions.add(new VectCartesian(900, 1204+10+5));
                 positions.add(new VectCartesian(800 , 1204+10+5));
+                positions.add(new VectCartesian(700 , 1204+10+5));
                 positions.add(new VectCartesian(600, 1204+10+5));
                 positions.add(new VectCartesian(500, 1204+10+5));
             }
@@ -88,7 +90,10 @@ public class PaletsX6 extends Script {
             Iterator<VectCartesian> positionIterator = positions.iterator();
             while(positionIterator.hasNext()) {
                 Log.STRATEGY.debug("#Palets droits= "+robot.getNbPaletsDroits());
-                if(robot.getNbPaletsDroits() == 5 && !hasSwitched) { // si on a plus de place, on retourne le robot
+                if(robot.getNbPaletsDroits() == 3 && !hasSwitched) { // si on a plus de place, on retourne le robot
+                    if (!hasSwitched){
+                        onvaprendrelebleu = true;
+                    }
                     hasSwitched = true;
                     Collections.reverse(positions); // inversion de l'ordre des positions pour parcourir le distributeur dans l'autre sens
                     robot.followPathTo(positions.get(0));
@@ -101,15 +106,17 @@ public class PaletsX6 extends Script {
                 positionIterator.remove();
                 if(!first) {
                     if(hasSwitched) {
-                        robot.turn(0);
+                        if (!onvaprendrelebleu) {
+                            robot.turn(0);
+                        }
                     } else {
                         robot.turn(Math.PI);
                     }
                 }
-                first = false;
 
                 // Skip le palet bleu
-                int distance = i == 2 ? 200 : 100;
+                //int distance = i == 2 ? 200 : 100;
+                int distance=100;
 
                 if(hasSwitched) {
                     int finalI = i;
@@ -118,6 +125,7 @@ public class PaletsX6 extends Script {
                 } else {
                     actions(robot, version, i, distance);
                 }
+                first = false;
                 i++;
             }
         } catch (UnableToMoveException e) {
@@ -182,7 +190,15 @@ public class PaletsX6 extends Script {
             robot.moveLengthwise(distance, false, () -> {
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                if (!onvaprendrelebleu) {
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                    try {
+                        robot.turn(0);
+                    } catch (UnableToMoveException e) {
+                        e.printStackTrace();
+                    }
+                }
+                onvaprendrelebleu=false;
             });
         } catch (UnableToMoveException e) {
             e.printStackTrace();
