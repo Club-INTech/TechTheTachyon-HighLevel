@@ -16,7 +16,7 @@ LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
 SIMULATION                          =false
 USING_LIDAR                         =true
-USING_ELECTRON                      =true
+USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 USING_PANEL                         =true
 CONNECT_TO_BUDDY                    =false
@@ -25,7 +25,7 @@ CONNECT_TO_BUDDY                    =false
 
 [Master]
 MASTER                              = true
-
+USING_ELECTRON                      =true
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
