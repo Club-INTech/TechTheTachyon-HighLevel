@@ -90,9 +90,9 @@ public class MainSlave extends RobotEntryPoint {
 
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
-        robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        robot.turn(Math.PI);
+        //robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
+        //robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        //robot.turn(Math.PI);
 
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
