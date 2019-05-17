@@ -65,13 +65,13 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(500, 1204+10+5));
             }
         try {
-            /*if(symetry) {
+            if(symetry) {
                 robot.turn(0);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
                 robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-            }*/
+            }
             //Verifier les ascenseurs ?
             if(robot.getNbPaletsDroits()==0){
                 //robot.useActuator(ActuatorsOrder.);
