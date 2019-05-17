@@ -52,5 +52,5 @@ public class GetRedDep extends Script {
     public void updateConfig(Config config) {
         super.updateConfig(config);
     }
-}
+
 }
