@@ -1,6 +1,5 @@
 package scripts;
 import data.CouleurPalet;
-import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
@@ -10,6 +9,7 @@ import robot.Master;
 import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
+import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -21,6 +21,10 @@ public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
     private boolean symetry;
     boolean onvaprendrelebleu= false;
+
+    private static final int DISTANCE_INTER_PUCK = 100;
+
+    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5);
 
     public PaletsX6(Master robot, Table table) {
         super(robot, table);
@@ -41,9 +45,9 @@ public class PaletsX6 extends Script {
 
     @Override
     public void execute(Integer version) {
-            /*donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
-     Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
-     */
+            /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
+                Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
+             */
             int i=0;
             //Position pour le côté droit
             //difference de ~100  entre chaque palet
@@ -58,7 +62,7 @@ public class PaletsX6 extends Script {
             } else if (version == 2) {  //// version pour juste le bleu
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
-            else if (version ==3){
+            else if (version == 3 || version == 4) {
                 positions.add(new VectCartesian(1000, 1204+10+5));
                 positions.add(new VectCartesian(900, 1204+10+5));
                 positions.add(new VectCartesian(800 , 1204+10+5));
@@ -74,63 +78,138 @@ public class PaletsX6 extends Script {
                 robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
-            //Verifier les ascenseurs ?
-            if(robot.getNbPaletsDroits()==0){
-                //robot.useActuator(ActuatorsOrder.);
-            }
-
-            boolean first = true;
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            /**
-             * Booléen qui traque si on a changé de bras
-             */
-            boolean hasSwitched = false;
-            Iterator<VectCartesian> positionIterator = positions.iterator();
-            while(positionIterator.hasNext()) {
-                Log.STRATEGY.debug("#Palets droits= "+robot.getNbPaletsDroits());
-                if(robot.getNbPaletsDroits() == 3 && !hasSwitched) { // si on a plus de place, on retourne le robot
-                    if (!hasSwitched){
-                        onvaprendrelebleu = true;
+
+            if(version == 4) {
+                // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
+                for (int j = 0; j < 3; j++) {
+                    grabPuck(robot, DISTANCE_INTER_PUCK, true);
+
+                    // on ajoute le palet dans l'ascenseur
+                    switch (j) {
+                        case 0:
+                            robot.pushPaletDroit(CouleurPalet.ROUGE);
+                            break;
+                        case 1:
+                            robot.pushPaletDroit(CouleurPalet.VERT);
+                            break;
+                        case 2:
+                            robot.pushPaletDroit(CouleurPalet.ROUGE);
+                            break;
                     }
-                    hasSwitched = true;
-                    Collections.reverse(positions); // inversion de l'ordre des positions pour parcourir le distributeur dans l'autre sens
-                    robot.followPathTo(positions.get(0));
-                    robot.turn(0);
-                    Log.STRATEGY.debug("Switching side in Palets x6");
-                    first = true; // vu qu'on est déjà à la position du palet, on ne se redéplace pas
                 }
-                // on retire la position qu'on est en train de faire
-                positionIterator.next();
-                positionIterator.remove();
-                if(!first) {
-                    if(hasSwitched) {
-                        if (!onvaprendrelebleu) {
-                            robot.turn(0);
+                // on prend le palet bleu
+                grabPuck(robot, 0, false);
+                // on se retourne
+                robot.turn(0);
+                robot.moveLengthwise(-DISTANCE_INTER_PUCK, false);
+
+                // on prend les 2 autres palets
+                for (int j = 0; j < 2; j++) {
+                    robot.invertOrders(robot -> grabPuck(robot, -DISTANCE_INTER_PUCK, true));
+                    switch (j) {
+                        case 0:
+                            robot.pushPaletGauche(CouleurPalet.ROUGE);
+                            break;
+                        case 1:
+                            robot.pushPaletGauche(CouleurPalet.VERT);
+                            break;
+                    }
+                }
+
+                // on va à la balance
+                robot.followPathTo(positionBalance);
+                // on dépose le bleu
+                robot.turn(Calculs.modulo(Math.PI+Math.PI/8, Math.PI));
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                // fin du script
+            } else {
+                boolean first = true;
+
+                /**
+                 * Booléen qui traque si on a changé de bras
+                 */
+                boolean hasSwitched = false;
+                Iterator<VectCartesian> positionIterator = positions.iterator();
+                while(positionIterator.hasNext()) {
+                    Log.STRATEGY.debug("#Palets droits= "+robot.getNbPaletsDroits());
+                    if(robot.getNbPaletsDroits() == 3 && !hasSwitched) { // si on a plus de place, on retourne le robot
+                        if (!hasSwitched){
+                            onvaprendrelebleu = true;
                         }
-                    } else {
-                        robot.turn(Math.PI);
+                        hasSwitched = true;
+                        Collections.reverse(positions); // inversion de l'ordre des positions pour parcourir le distributeur dans l'autre sens
+                        robot.followPathTo(positions.get(0));
+                        robot.turn(0);
+                        Log.STRATEGY.debug("Switching side in Palets x6");
+                        first = true; // vu qu'on est déjà à la position du palet, on ne se redéplace pas
                     }
-                }
+                    // on retire la position qu'on est en train de faire
+                    positionIterator.next();
+                    positionIterator.remove();
+                    if(!first) {
+                        if(hasSwitched) {
+                            if (!onvaprendrelebleu) {
+                                robot.turn(0);
+                            }
+                        } else {
+                            robot.turn(Math.PI);
+                        }
+                    }
 
-                // Skip le palet bleu
-                //int distance = i == 2 ? 200 : 100;
-                int distance=100;
+                    // Skip le palet bleu
+                    //int distance = i == 2 ? 200 : 100;
+                    int distance=100;
 
-                if(hasSwitched) {
-                    int finalI = i;
-                    // permet de ne pas avoir à recoder les actions du robot si on change de côté
-                    robot.invertOrders(robot -> actions(robot, version, finalI, distance));
-                } else {
-                    actions(robot, version, i, distance);
+                    if(hasSwitched) {
+                        int finalI = i;
+                        // permet de ne pas avoir à recoder les actions du robot si on change de côté
+                        robot.invertOrders(robot -> actions(robot, version, finalI, distance));
+                    } else {
+                        actions(robot, version, i, distance);
+                    }
+                    first = false;
+                    i++;
                 }
-                first = false;
-                i++;
             }
+
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             // TODO
+        }
+    }
+
+    /**
+     * Actions à faire pour une itération de prise de palet
+     * @param robot le robot
+     * @param moveDistance la distance au prochain palet
+     * @param ungrab 'true' si on lâche le palet dans l'ascenseur
+     */
+    private void grabPuck(Robot robot, int moveDistance, boolean ungrab) {
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
+
+        try {
+            if(moveDistance == 0) {
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+            } else {
+                robot.moveLengthwise(moveDistance, false, () -> {
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+                    if(ungrab) {
+                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                    }
+                });
+            }
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
         }
     }
 
@@ -218,7 +297,7 @@ public class PaletsX6 extends Script {
         else if (version == 2) {
             return new VectCartesian(834,1206);
         }
-        else if (version == 3) {
+        else if (version == 3 || version == 4) {
             return new VectCartesian(1500-191-65,1204+10+5);
         }
         return null;
@@ -230,7 +309,6 @@ public class PaletsX6 extends Script {
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET, true);
         }
     }
-
 
     @Override
     public void finalize(Exception e) {

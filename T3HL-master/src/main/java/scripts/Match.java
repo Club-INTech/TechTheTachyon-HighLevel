@@ -33,7 +33,7 @@ public class Match extends Script {
         scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);*/
 
         // 3. Palets x6
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(3);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6).goToThenExecute(4);
 
         // (3,5. Prendre les palets restants de la zone de départ?)
 
