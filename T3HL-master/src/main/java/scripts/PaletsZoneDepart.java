@@ -72,6 +72,9 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
+
                 readjustElevator(i);
 
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
@@ -106,10 +109,6 @@ public class PaletsZoneDepart extends Script {
      * @param puckIndex indice du palet (premier est 0)
      */
     private void readjustElevator(int puckIndex) {
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on attend que le vide se casse
-
-
         new Thread("Waiting for elevator") {
             {
                 setDaemon(true);
