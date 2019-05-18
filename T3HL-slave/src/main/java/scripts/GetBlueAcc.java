@@ -62,11 +62,11 @@ public class GetBlueAcc extends Script {
             // === Fin recalage ===
 
             if(symetrie) {
-                robot.turn(Math.PI-0.78/2);
+                robot.turn(Math.PI+0.78/2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
                 robot.turn(Math.PI);
             } else {
-                robot.turn(-0.78/2);
+                robot.turn(0.78/2);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
                 robot.turn(0);
             }
