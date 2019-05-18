@@ -26,7 +26,7 @@ public class PaletsX6 extends Script {
 
     private static int offsetY = -4;
 
-    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY);
+    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+10);
 
     public PaletsX6(Master robot, Table table) {
         super(robot, table);
