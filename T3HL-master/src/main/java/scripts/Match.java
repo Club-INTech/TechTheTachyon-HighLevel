@@ -48,7 +48,7 @@ public class Match extends Script {
             robot.followPathTo(accelerateurScript.entryPosition(0));
 
             // 6. Faire l'accélérateur
-            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).goToThenExecute(0);
+            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).execute(0);
         } catch (UnableToMoveException | TimeoutError e) {
             e.printStackTrace();
             accelerateurScript.shouldContinueScript(e);
