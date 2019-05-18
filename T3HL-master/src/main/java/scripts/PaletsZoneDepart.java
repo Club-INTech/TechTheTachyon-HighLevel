@@ -95,7 +95,7 @@ public class PaletsZoneDepart extends Script {
 
             }
 
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
+            //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
