@@ -17,6 +17,7 @@ import static com.fazecast.jSerialComm.SerialPort.TIMEOUT_SCANNER;
  */
 public class SerialInterface implements CommunicationInterface {
 
+    private static int BAUD_RATE = 4_000_000;
     private SerialPort port;
     private PrintStream printer;
     private boolean open;
@@ -58,7 +59,7 @@ public class SerialInterface implements CommunicationInterface {
     public void init() throws CommunicationException {
         this.port = SerialPort.getCommPort("/dev/ttyACM0");
         Log.COMMUNICATION.debug("Ouverture de " + port.getSystemPortName());
-        port.setBaudRate(115200);
+        port.setBaudRate(BAUD_RATE);
         port.setNumStopBits(1);
         port.setParity(0);
         port.setNumDataBits(8);
