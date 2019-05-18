@@ -22,6 +22,7 @@ import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.Speed;
+import orders.order.ActuatorsOrder;
 import robot.Slave;
 import scripts.MatchSlave;
 import scripts.PaletsX6Slave;
@@ -96,6 +97,8 @@ public class MainSlave extends RobotEntryPoint {
         robot.setPositionAndOrientation(newPos, Math.PI);
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(Math.PI);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
 
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
