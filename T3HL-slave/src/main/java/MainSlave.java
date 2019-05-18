@@ -107,7 +107,8 @@ public class MainSlave extends RobotEntryPoint {
 
         orderWrapper.waitJumper();
 
-        scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
+        //scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
 
         //robot.moveLengthwise(1000,false);
         //robot.moveLengthwise(-1000,false);
