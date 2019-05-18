@@ -109,7 +109,6 @@ public class PaletsX6 extends Script {
 
                 // on prend les 2 autres palets
                 for (int j = 0; j < 2; j++) {
-                    // invert order pour utiliser la partie gauche du robot
                     if(j == 1) {
                         grabPuck(robot, -DISTANCE_INTER_PUCK*2, true, true); // retourne devant le bleu
                     } else {
@@ -200,7 +199,7 @@ public class PaletsX6 extends Script {
      */
     private void grabPuck(Robot robot, int moveDistance, boolean ungrab, boolean lowerElevator) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
@@ -238,7 +237,7 @@ public class PaletsX6 extends Script {
      */
     private void grabPuckGoto(Robot robot, Vec2 pos, boolean ungrab, boolean lowerElevator) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
