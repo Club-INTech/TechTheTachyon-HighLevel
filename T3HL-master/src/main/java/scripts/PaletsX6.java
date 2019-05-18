@@ -90,7 +90,7 @@ public class PaletsX6 extends Script {
                     if(j == 2) {
                         grabPuck(robot, DISTANCE_INTER_PUCK*2, true, true); // skip le palet bleu
                     } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
+                        grabPuckGoto(robot, positions.get(j), true, true);
                     }
 
                     // on ajoute le palet dans l'ascenseur
@@ -226,6 +226,36 @@ public class PaletsX6 extends Script {
                     }
                 });
             }
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Actions à faire pour une itération de prise de palet
+     * @param robot le robot
+     * @param ungrab 'true' si on lâche le palet dans l'ascenseur
+     */
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean ungrab, boolean lowerElevator) {
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+
+        // on s'assure que l'électrovanne est vraiment bien ouverte
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+
+        try {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            async("Dépôt", () -> {
+                if(lowerElevator) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                }
+                if(ungrab) {
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                }
+            });
+            robot.gotoPoint(pos);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
