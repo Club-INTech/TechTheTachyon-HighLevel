@@ -113,7 +113,7 @@ public class PaletsX6 extends Script {
                 for (int j = 0; j < 2; j++) {
                     // invert order pour utiliser la partie gauche du robot
                     if(j == 1) {
-                        grabPuck(robot, -DISTANCE_INTER_PUCK*3, true); // retourne devant le bleu
+                        grabPuck(robot, -DISTANCE_INTER_PUCK*2, true); // retourne devant le bleu
                     } else {
                         grabPuck(robot, DISTANCE_INTER_PUCK, true);
                     }
