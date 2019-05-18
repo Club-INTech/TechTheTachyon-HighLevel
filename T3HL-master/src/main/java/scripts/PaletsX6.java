@@ -25,7 +25,7 @@ public class PaletsX6 extends Script {
 
     private static final int DISTANCE_INTER_PUCK = 100;
 
-    private static int offsetY = 0;
+    private static int offsetY = -2;
 
     private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
 
