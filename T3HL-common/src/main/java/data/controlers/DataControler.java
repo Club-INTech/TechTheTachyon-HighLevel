@@ -180,7 +180,7 @@ public class DataControler extends Thread implements Service {
 
             case "stoppedMoving":
                 SensorState.MOVING.setData(false);
-                Log.POSITION.debug("Position at StoppedMoving: (x,y)=" + XYO.getRobotInstance().getPosition() + ", o=" + XYO.getRobotInstance().getOrientation());
+                Log.STDOUT.debug("Position at StoppedMoving: (x,y)=" + XYO.getRobotInstance().getPosition() + ", o=" + XYO.getRobotInstance().getOrientation());
                 break;
 
             case "leftElevatorStopped":
