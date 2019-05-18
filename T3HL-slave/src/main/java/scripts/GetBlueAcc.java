@@ -23,7 +23,7 @@ public class GetBlueAcc extends Script {
      */
     private final int offsetRecalage = 31+5;
 
-    /*
+    /**
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
      */
     private final int offsetSick= 6;
@@ -41,6 +41,7 @@ public class GetBlueAcc extends Script {
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
+            /*
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
 
@@ -72,13 +73,35 @@ public class GetBlueAcc extends Script {
             }
             // voir si c'est nécessaire: robot.turn(0);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+            */
+
+
+            // test sans rotation
+
+            robot.turn(Math.PI);
+            robot.followPathTo(new VectCartesian(xBlue, yBlue));
+
+
+            if (!symetrie) {
+                robot.turn(0);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
+                robot.moveLengthwise(-15, false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+            } else {
+                robot.turn(Math.PI);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE);
+                robot.moveLengthwise(15, false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+            }
+            robot.increaseScore(10);
+
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
     }
 
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue, yBlue); }
+    public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue+10, yBlue); }
 
     @Override
     public void finalize(Exception e) { }
