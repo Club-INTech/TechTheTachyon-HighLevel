@@ -91,6 +91,7 @@ public class MainSlave extends RobotEntryPoint {
             robot.moveLengthwise(-100, false);
         }*/
 
+        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
         Vec2 newPos = new VectCartesian(1500-191, 350);
@@ -98,7 +99,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(Math.PI);
 
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
+
 
         //table.removeTemporaryObstacle(table.getPaletRougeDroite());
         //table.removeTemporaryObstacle(table.getPaletVertDroite());
@@ -107,11 +108,11 @@ public class MainSlave extends RobotEntryPoint {
 
         orderWrapper.waitJumper();
 
+        /*robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-
+*/
         //scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
 
