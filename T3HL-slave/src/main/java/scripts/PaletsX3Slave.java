@@ -17,7 +17,7 @@ public class PaletsX3Slave extends Script{
      * Position d'entrée du script
      */
 
-    private int xEntry = 1270;
+    private int xEntry = 1338;
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     /**
      * constante
@@ -40,14 +40,14 @@ public class PaletsX3Slave extends Script{
                 robot.turn(0);
             }
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);//TODO refaire position bras
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
             robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
 
-            robot.moveLengthwise(100,false);
+            robot.moveLengthwise(-100,false);
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
@@ -56,7 +56,7 @@ public class PaletsX3Slave extends Script{
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            robot.moveLengthwise(100,false);
+            robot.moveLengthwise(-100,false);
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
