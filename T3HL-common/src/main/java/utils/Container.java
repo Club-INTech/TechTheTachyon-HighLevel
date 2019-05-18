@@ -67,7 +67,7 @@ public class Container implements Service {
         Log.init();
 
         /* Affichage du message de bienvenue */
-        printMessage("../resources/intro.txt");
+        printMessage("../resources/intro_colored.txt");
 
         /* Affiche la version du programme (dernier commit et sa branche) */
         try {
@@ -268,7 +268,11 @@ public class Container implements Service {
             String line;
 
             while((line = reader.readLine()) != null)
-                System.out.println(line);
+                System.out.println(
+                        line
+                                .replace("<CJ>", "\u001B[33m") // jaune
+                                .replace("<CB>",  "\u001B[34m") // bleu
+                );
 
             reader.close();
         } catch (IOException e) {
