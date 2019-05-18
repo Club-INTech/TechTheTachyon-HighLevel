@@ -14,7 +14,7 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
-    private int xBlue = -90; //FIXME: positions à faire
+    private int xBlue = -100; //FIXME: positions à faire
     private int yBlue = 285;
     private boolean symetrie;
 
