@@ -27,7 +27,7 @@ public class PaletsX6 extends Script {
 
     private static int offsetY = -4;
 
-    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+10);
+    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
 
     public PaletsX6(Master robot, Table table) {
         super(robot, table);
@@ -109,6 +109,7 @@ public class PaletsX6 extends Script {
                 // on se retourne
                 robot.moveLengthwise(DISTANCE_INTER_PUCK+10, false); // +10 pour dépasser un peu la position
                 robot.followPathTo(positions.get(4)); // pour se remettre à la bonne position devant le palet suivant
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
                 robot.turn(0);
 
                 // on prend les 2 autres palets
