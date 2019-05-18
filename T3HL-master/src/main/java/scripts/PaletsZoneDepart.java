@@ -65,11 +65,11 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    CompletableFuture<Void> finalElevatorAtRightPlace = elevatorAtRightPlace;
+                    CompletableFuture<Void> finalPuckStored = puckStored;
                     armInPlace = async("Mets le bras au dessus du palet", () -> {
-                        if(finalElevatorAtRightPlace != null) {
+                        if(finalPuckStored != null) {
                             try {
-                                finalElevatorAtRightPlace.get();
+                                finalPuckStored.get();
                             } catch (InterruptedException | ExecutionException e) {
                                 e.printStackTrace();
                             }
