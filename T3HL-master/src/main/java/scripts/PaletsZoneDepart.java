@@ -151,9 +151,9 @@ public class PaletsZoneDepart extends Script {
      * @param puckIndex indice du palet (premier est 0)
      */
     private void readjustElevator(int puckIndex) {
-        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
-        robot.waitForLeftElevator();
+//        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
         if(puckIndex < 1) {
+  //          robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
         }
     }
