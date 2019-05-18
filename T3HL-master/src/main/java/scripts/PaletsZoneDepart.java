@@ -60,9 +60,10 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    async(() -> {
-                        waitWhileTrue(SensorState.LEFT_ARM_MOVING::getData);
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
+                    async("Mets le bras au dessus du palet", () -> {
+                        waitWhileTrue(SensorState.LEFT_ARM_MOVING);
+                        waitWhileTrue(SensorState.ACTUATOR_ACTUATING);
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
                     });
                     robot.followPathTo(position);
                     robot.turn(Math.PI / 2);
@@ -80,7 +81,7 @@ public class PaletsZoneDepart extends Script {
                 async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
                     readjustElevator(puckIndex);
                 });
 

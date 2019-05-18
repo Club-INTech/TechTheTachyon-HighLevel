@@ -18,6 +18,7 @@
 
 package utils.container;
 
+import data.SensorState;
 import pfg.config.Config;
 import utils.TimeoutError;
 
@@ -45,12 +46,20 @@ public interface Service
      */
     void updateConfig(Config config);
 
+    default void waitWhileTrue(SensorState<Boolean> condition) {
+        waitWhileTrue(condition::getData, () -> {});
+    }
+
     /**
      * Boucle qui dure tant que la condition donnée est à 'true'
      * @param condition une fonction renvoyant un booléen
      */
     default void waitWhileTrue(Supplier<Boolean> condition) {
         waitWhileTrue(condition, () -> {});
+    }
+
+    default <ExceptionType extends Throwable> void waitWhileTrue(SensorState<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
+        waitWhileTrue(condition::getData, additionalAction);
     }
 
     /**
