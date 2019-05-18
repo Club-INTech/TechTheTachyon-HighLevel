@@ -76,11 +76,13 @@ public enum Log
      */
     private static PrintStream stderr = System.err;
     private static int counter;
+    private static long startTime = -1;
 
     /**
      * Faut-il afficher le header complet dans les logs pour ce logger? ('false' uniquement pour STDERR)
      */
     private final boolean useLongHeader;
+    private static final long MATCH_LENGTH = 100*1000;
 
     private enum Severity {
         CRITICAL(Log.CRITICAL),
@@ -199,6 +201,29 @@ public enum Log
                 .append(".")
                 .append(String.format("%03d", calendar.get(Calendar.MILLISECOND)))
         ;
+        if(startTime > 0) {
+            long elapsedTime = System.currentTimeMillis()-startTime;
+            long remaining = MATCH_LENGTH-elapsedTime;
+            toLog
+                    .append(" (Time: ")
+                    .append(String.format("%03d", elapsedTime / 1000))
+                    .append(".")
+                    .append(String.format("%03d", elapsedTime % 1000))
+
+                    .append(" / ")
+
+                    .append(String.format("%03d", MATCH_LENGTH / 1000))
+                    .append(".")
+                    .append(String.format("%03d", MATCH_LENGTH % 1000))
+
+                    .append(" -> ")
+
+                    .append(String.format("%03d", remaining / 1000))
+                    .append(".")
+                    .append(String.format("%03d", remaining % 1000))
+                    .append(" left)")
+            ;
+        }
         String hour = toLog.toString();
         String color = severity.color;
 
@@ -432,6 +457,14 @@ public enum Log
         {
             log.setActive(false);
         }
+    }
+
+    /**
+     * Active l'affichage du temps de match et du temps restant dans les logs
+     */
+    public static void setStartTime() {
+        Log.STRATEGY.debug("Set match start time");
+        startTime = System.currentTimeMillis();
     }
 
     /**

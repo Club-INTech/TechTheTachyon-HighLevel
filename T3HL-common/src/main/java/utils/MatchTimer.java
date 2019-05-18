@@ -15,6 +15,7 @@ public class MatchTimer extends ServiceThread {
 
     public void resetTimer() {
         startTime = System.currentTimeMillis();
+        Log.setStartTime();
     }
 
     @Override
