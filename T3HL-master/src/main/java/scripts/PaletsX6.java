@@ -203,7 +203,8 @@ public class PaletsX6 extends Script {
     private void grabPuck(Robot robot, int moveDistance, boolean ungrab) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
         // on s'assure que l'électrovanne est vraiment bien ouverte
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
