@@ -279,6 +279,9 @@ public class Locomotion implements Service {
                             }
                         }
                     }
+                    if(!SensorState.MOVING.getData()){
+                        break;
+                    }
 
                     try {
                         Thread.sleep(20);
