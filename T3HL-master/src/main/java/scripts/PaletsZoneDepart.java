@@ -1,6 +1,7 @@
 package scripts;
 
 import data.CouleurPalet;
+import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
@@ -59,7 +60,10 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
+                    async(() -> {
+                        waitWhileTrue(SensorState.LEFT_ARM_MOVING::getData);
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,false);
+                    });
                     robot.followPathTo(position);
                     robot.turn(Math.PI / 2);
                     //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
@@ -71,11 +75,15 @@ public class PaletsZoneDepart extends Script {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
 
-                readjustElevator(i);
+                int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
+                async("Remonte vers ascenseur et recale", () -> {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
+                    readjustElevator(puckIndex);
+                });
+
 
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
@@ -109,20 +117,11 @@ public class PaletsZoneDepart extends Script {
      * @param puckIndex indice du palet (premier est 0)
      */
     private void readjustElevator(int puckIndex) {
-        new Thread("Waiting for elevator") {
-            {
-                setDaemon(true);
-            }
-
-            @Override
-            public void run() {
-                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
-                robot.waitForLeftElevator();
-                if(puckIndex < 1) {
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
-                }
-            }
-        }.start();
+        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+        robot.waitForLeftElevator();
+        if(puckIndex < 1) {
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
+        }
     }
 
     @Override
