@@ -84,8 +84,6 @@ public class PaletsX6 extends Script {
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR, true);
-
             if(version == 4) {
                 // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
                 for (int j = 0; j < 3; j++) {
@@ -137,9 +135,7 @@ public class PaletsX6 extends Script {
                 SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
                 robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-                waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
             } else {
                 boolean first = true;
