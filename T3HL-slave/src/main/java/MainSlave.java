@@ -35,6 +35,8 @@ import utils.ConfigData;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 /**
  * @author nayth, jglrxavpok
@@ -90,9 +92,10 @@ public class MainSlave extends RobotEntryPoint {
 
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
-        //robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation());
-        //robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        //robot.turn(Math.PI);
+        Vec2 newPos = new VectCartesian(1500-191, 350);
+        robot.setPositionAndOrientation(newPos, Math.PI);
+        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        robot.turn(Math.PI);
 
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
