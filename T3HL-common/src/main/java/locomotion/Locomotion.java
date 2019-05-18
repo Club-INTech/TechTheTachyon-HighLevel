@@ -280,14 +280,14 @@ public class Locomotion implements Service {
                             }
                         }
                     }
-                    if(!SensorState.MOVING.getData()){
-                        break;
-                    }
-
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+
+                    if(!SensorState.MOVING.getData()){
+                        break;
                     }
                 }
 
