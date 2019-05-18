@@ -100,10 +100,10 @@ public class MainSlave extends RobotEntryPoint {
 
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
 
-        table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletVertDroite());
-        table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
+        //table.removeTemporaryObstacle(table.getPaletRougeDroite());
+        //table.removeTemporaryObstacle(table.getPaletVertDroite());
+        //table.removeTemporaryObstacle(table.getPaletBleuDroite());
+        //table.removeAllChaosObstacles();
 
         orderWrapper.waitJumper();
 
