@@ -104,14 +104,14 @@ public class MainSlave extends RobotEntryPoint {
 
         orderWrapper.waitJumper();
 
-        //scriptManager.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
 
-        robot.moveLengthwise(1000,false);
-        robot.moveLengthwise(-1000,false);
-        robot.moveLengthwise(1000,false);
-        robot.turn(0);
-        robot.moveLengthwise(1000,false);
-        robot.turn(Math.PI);
+        //robot.moveLengthwise(1000,false);
+        //robot.moveLengthwise(-1000,false);
+        //robot.moveLengthwise(1000,false);
+        //robot.turn(0);
+        //robot.moveLengthwise(1000,false);
+        //robot.turn(Math.PI);
 
 
 /*        try {
