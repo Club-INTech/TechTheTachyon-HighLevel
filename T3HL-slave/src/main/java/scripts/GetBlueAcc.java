@@ -61,7 +61,6 @@ public class GetBlueAcc extends Script {
             robot.gotoPoint(new VectCartesian(currentPosition.getX(), currentPosition.getY() + this.yBlue - averageDistance));
             // === Fin recalage ===
 
-            robot.turn(Math.PI/2);
             if(symetrie) {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
