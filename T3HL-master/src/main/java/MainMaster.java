@@ -234,7 +234,6 @@ public class MainMaster extends RobotEntryPoint {
             e.printStackTrace();
         }
         simulatorLauncher.setColorblindMode(true);
-        simulatorLauncher.setSpeedFactor(2);
         simulatorLauncher.setIsSimulatingObstacleWithMouse(true);
         simulatorLauncher.launch();
         try {
