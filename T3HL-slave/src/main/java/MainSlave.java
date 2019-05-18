@@ -106,7 +106,7 @@ public class MainSlave extends RobotEntryPoint {
         //table.removeAllChaosObstacles();
 
         orderWrapper.waitJumper();
-
+        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
         //scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
 
