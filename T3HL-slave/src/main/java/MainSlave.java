@@ -91,7 +91,7 @@ public class MainSlave extends RobotEntryPoint {
             robot.moveLengthwise(-100, false);
         }*/
 
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
         Vec2 newPos = new VectCartesian(1500-191, 350);
