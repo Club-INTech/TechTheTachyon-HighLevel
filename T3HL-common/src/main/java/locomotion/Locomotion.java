@@ -20,6 +20,7 @@ package locomotion;
 
 import ai.AIService;
 import data.Graphe;
+import data.SensorState;
 import data.Table;
 import data.XYO;
 import data.graphe.Node;
@@ -230,7 +231,7 @@ public class Locomotion implements Service {
         // a-t-on rencontré un ennemi lors du parcours du chemin?
         Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
 
-        while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
+        while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
                 try {
                     graphe.readLock().lock();
@@ -280,7 +281,7 @@ public class Locomotion implements Service {
                     }
 
                     try {
-                        Thread.sleep(5);
+                        Thread.sleep(20);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
