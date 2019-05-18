@@ -16,7 +16,7 @@ public class PaletsX3Slave extends Script{
      * Position d'entrée du script
      */
 
-    private int xEntry = 1375;
+    private int xEntry = 1290;
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     /**
      * constante
