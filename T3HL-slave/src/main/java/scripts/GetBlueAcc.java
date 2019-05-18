@@ -14,7 +14,7 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
-    private int xBlue = -100; //FIXME: positions à faire
+    private int xBlue = -120; //FIXME: positions à faire
     private int yBlue = 285;
     private boolean symetrie;
 
@@ -62,13 +62,13 @@ public class GetBlueAcc extends Script {
             // === Fin recalage ===
 
             if(symetrie) {
-                robot.turn(Math.PI);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
                 robot.turn(Math.PI-0.78/2);
-            } else {
-                robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
+                robot.turn(Math.PI);
+            } else {
                 robot.turn(-0.78/2);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE, true);
+                robot.turn(0);
             }
             // voir si c'est nécessaire: robot.turn(0);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
