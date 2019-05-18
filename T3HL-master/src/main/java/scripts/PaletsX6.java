@@ -86,27 +86,27 @@ public class PaletsX6 extends Script {
 
             if(version == 4) {
                 //On prend le 1er palet
-                grabPuckGoto(robot, positions.get(0), true, true);
+                grabPuckGoto(robot, positions.get(1), false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 2è palet
-                grabPuckGoto(robot, positions.get(1), true, true);
+                grabPuckGoto(robot, positions.get(2), false);
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 3è palet
-                grabPuck(robot, DISTANCE_INTER_PUCK * 2, true, true); // skip le palet bleu
+                grabPuck(robot, DISTANCE_INTER_PUCK * 2, false); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-                grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
+                grabPuck(robot, DISTANCE_INTER_PUCK, false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 6ème palet
-                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, true, true); // retourne devant le bleu
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false); // retourne devant le bleu
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
-                grabPuck(robot, 0, false, false);
+                grabPuck(robot, 0, true);
 
 
 
@@ -180,9 +180,8 @@ public class PaletsX6 extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
-     * @param ungrab 'true' si on lâche le palet dans l'ascenseur
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean ungrab, boolean lowerElevator) {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
@@ -192,20 +191,20 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
         try {
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            if(blue) {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
+            } else {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            }
             if(moveDistance == 0) {
-                if(lowerElevator) {
+                if(! blue) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                }
-                if(ungrab) {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 }
             } else {
                 robot.moveLengthwise(moveDistance, false, () -> {
-                    if(lowerElevator) {
+                    if( ! blue) {
                         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    }
-                    if(ungrab) {
                         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     }
                 });
@@ -218,9 +217,8 @@ public class PaletsX6 extends Script {
     /**
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
-     * @param ungrab 'true' si on lâche le palet dans l'ascenseur
      */
-    private void grabPuckGoto(Robot robot, Vec2 pos, boolean ungrab, boolean lowerElevator) {
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
@@ -230,12 +228,14 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
         try {
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            if(blue) {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
+            } else {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            }
             async("Dépôt", () -> {
-                if(lowerElevator) {
+                if( ! blue) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                }
-                if(ungrab) {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 }
             });
