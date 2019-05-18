@@ -88,9 +88,9 @@ public class PaletsX6 extends Script {
                 // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
                 for (int j = 0; j < 3; j++) {
                     if(j == 2) {
-                        grabPuck(robot, DISTANCE_INTER_PUCK*2, true); // skip le palet bleu
+                        grabPuck(robot, DISTANCE_INTER_PUCK*2, true, true); // skip le palet bleu
                     } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true);
+                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
                     }
 
                     // on ajoute le palet dans l'ascenseur
@@ -111,9 +111,9 @@ public class PaletsX6 extends Script {
                 for (int j = 0; j < 2; j++) {
                     // invert order pour utiliser la partie gauche du robot
                     if(j == 1) {
-                        grabPuck(robot, -DISTANCE_INTER_PUCK*2, true); // retourne devant le bleu
+                        grabPuck(robot, -DISTANCE_INTER_PUCK*2, true, true); // retourne devant le bleu
                     } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true);
+                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
                     }
                     switch (j) {
                         case 0:
@@ -125,13 +125,14 @@ public class PaletsX6 extends Script {
                     }
                 }
                 // on prend le palet bleu
-                grabPuck(robot, 0, false);
+                grabPuck(robot, 0, false, false);
 
                 // on va à la balance
                 robot.followPathTo(positionBalance);
                 // on dépose le bleu
                 robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
+                robot.increaseScore(12);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
@@ -197,7 +198,7 @@ public class PaletsX6 extends Script {
      * @param moveDistance la distance au prochain palet
      * @param ungrab 'true' si on lâche le palet dans l'ascenseur
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean ungrab) {
+    private void grabPuck(Robot robot, int moveDistance, boolean ungrab, boolean lowerElevator) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
@@ -209,13 +210,17 @@ public class PaletsX6 extends Script {
         try {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             if(moveDistance == 0) {
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                if(lowerElevator) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                }
                 if(ungrab) {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 }
             } else {
                 robot.moveLengthwise(moveDistance, false, () -> {
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    if(lowerElevator) {
+                        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    }
                     if(ungrab) {
                         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     }
