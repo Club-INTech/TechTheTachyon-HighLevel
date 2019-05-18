@@ -17,7 +17,7 @@ import static com.fazecast.jSerialComm.SerialPort.TIMEOUT_SCANNER;
  */
 public class SerialInterface implements CommunicationInterface {
 
-    private static int BAUD_RATE = 4_000_000;
+    private static int BAUD_RATE = 2_000_000;
     private SerialPort port;
     private PrintStream printer;
     private boolean open;
