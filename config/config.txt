@@ -41,3 +41,4 @@ COULEUR                             =violet       //TODO à retirer c'est juste 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
 BUDDY_RAY                           = 190
+VECTOR_COMPARISON_THRESHOLD         = 15
