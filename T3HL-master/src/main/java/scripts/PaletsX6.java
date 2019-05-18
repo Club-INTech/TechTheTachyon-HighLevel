@@ -85,50 +85,35 @@ public class PaletsX6 extends Script {
             robot.turn(Math.PI);
 
             if(version == 4) {
-                // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
-                for (int j = 0; j < 3; j++) {
-                    if(j == 2) {
-                        grabPuck(robot, DISTANCE_INTER_PUCK*2, true, true); // skip le palet bleu
-                    } else {
-                        grabPuckGoto(robot, positions.get(j), true, true);
-                    }
+                //On prend le 1er palet
+                grabPuckGoto(robot, positions.get(0), true, true);
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
 
-                    // on ajoute le palet dans l'ascenseur
-                    switch (j) {
-                        case 0:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                        case 1:
-                            robot.pushPaletDroit(CouleurPalet.VERT);
-                            break;
-                        case 2:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                    }
-                }
+                //On prend le 2è palet
+                grabPuckGoto(robot, positions.get(1), true, true);
+                robot.pushPaletDroit(CouleurPalet.VERT);
 
-                // on prend les 2 autres palets
-                for (int j = 0; j < 2; j++) {
-                    if(j == 1) {
-                        grabPuck(robot, -DISTANCE_INTER_PUCK*2, true, true); // retourne devant le bleu
-                    } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
-                    }
-                    switch (j) {
-                        case 0:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                        case 1:
-                            robot.pushPaletDroit(CouleurPalet.VERT);
-                            break;
-                    }
-                }
-                // on prend le palet bleu
+                //On prend le 3è palet
+                grabPuck(robot, DISTANCE_INTER_PUCK * 2, true, true); // skip le palet bleu
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
+
+                //On prend le 5è palet
+                grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
+
+                //On prend le 6ème palet
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, true, true); // retourne devant le bleu
+                robot.pushPaletDroit(CouleurPalet.VERT);
+
+                //On prend le 4ème palet (bleu)
                 grabPuck(robot, 0, false, false);
 
-                // on va à la balance
+
+
+                // On va à la balance
                 robot.followPathTo(positionBalance);
-                // on dépose le bleu
+
+                // On dépose le bleu
                 robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                 robot.increaseScore(12);
