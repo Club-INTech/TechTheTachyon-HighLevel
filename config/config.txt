@@ -25,7 +25,7 @@ CONNECT_TO_BUDDY                    =false
 
 [Master]
 MASTER                              = true
-USING_ELECTRON                      =false
+USING_ELECTRON                      =true
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
@@ -36,7 +36,8 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 [Slave]
 MASTER                              = false
 MASTER_ROBOT_IP                     = localhost
-COULEUR                             =violet       //TODO à retirer c'est juste un test
+COULEUR                             =violet
+# ^ TODO à retirer c'est juste un test
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
