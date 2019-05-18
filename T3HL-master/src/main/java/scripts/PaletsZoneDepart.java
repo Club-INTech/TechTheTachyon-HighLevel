@@ -1,7 +1,6 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
@@ -55,6 +54,7 @@ public class PaletsZoneDepart extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             CompletableFuture<Void> puckStored = null;
+            CompletableFuture<Void> elevatorAtRightPlace = null;
             for (Vec2 position : positions) {
                 CompletableFuture<Void> armInPlace = null;
                 if(premierPaletPris&&version==JUST_BLUE){
@@ -65,11 +65,11 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    CompletableFuture<Void> finalPuckStored = puckStored;
+                    CompletableFuture<Void> finalElevatorAtRightPlace = elevatorAtRightPlace;
                     armInPlace = async("Mets le bras au dessus du palet", () -> {
-                        if(finalPuckStored != null) {
+                        if(finalElevatorAtRightPlace != null) {
                             try {
-                                finalPuckStored.get();
+                                finalElevatorAtRightPlace.get();
                             } catch (InterruptedException | ExecutionException e) {
                                 e.printStackTrace();
                             }
@@ -93,6 +93,7 @@ public class PaletsZoneDepart extends Script {
                 // reset
                 armInPlace = null;
                 puckStored = null;
+                elevatorAtRightPlace = null;
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
@@ -103,6 +104,17 @@ public class PaletsZoneDepart extends Script {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
+                });
+
+                CompletableFuture<Void> finalPuckStored1 = puckStored;
+                elevatorAtRightPlace = async("Recalage ascenseur", () -> {
+                    if(finalPuckStored1 != null) {
+                        try {
+                            finalPuckStored1.get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     readjustElevator(puckIndex);
                 });
 
