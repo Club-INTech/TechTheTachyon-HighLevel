@@ -98,7 +98,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.turn(Math.PI);
 
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
 
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         table.removeTemporaryObstacle(table.getPaletVertDroite());
