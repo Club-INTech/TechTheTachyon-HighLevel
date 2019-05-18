@@ -109,9 +109,9 @@ public class MainSlave extends RobotEntryPoint {
         robot.moveLengthwise(1000,false);
         robot.moveLengthwise(-1000,false);
         robot.moveLengthwise(1000,false);
-        robot.turn(Math.PI);
-        robot.moveLengthwise(1000,false);
         robot.turn(0);
+        robot.moveLengthwise(1000,false);
+        robot.turn(Math.PI);
 
 
 /*        try {
