@@ -164,6 +164,17 @@ public abstract class Script implements Service {
      */
     public abstract void finalize(Exception e);
 
+    protected void async(Runnable action) {
+        async("Async Thread - "+action, action);
+    }
+
+    protected void async(String name, Runnable action) {
+        Thread thread = new Thread(action);
+        thread.setName(name);
+        thread.setDaemon(true);
+        thread.start();
+    }
+
     @Override
     public void updateConfig(Config config) {
         blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
