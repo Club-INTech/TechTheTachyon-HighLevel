@@ -17,7 +17,7 @@ public class Goldenium extends Script {
     //position d'entrée
 
     private int xEntry = -715 +40; //a tester
-    private int yEntry = 250  ; //a tester
+    private int yEntry = 250+ 60  ; //a tester
 
     //position de fin
 
