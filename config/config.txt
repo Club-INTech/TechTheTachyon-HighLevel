@@ -26,6 +26,8 @@ CONNECT_TO_BUDDY                    =false
 [Master]
 MASTER                              = true
 USING_ELECTRON                      =true
+USING_PANEL                         =true
+
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
