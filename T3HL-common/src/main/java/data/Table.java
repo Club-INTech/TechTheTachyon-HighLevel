@@ -180,17 +180,17 @@ public class Table implements Service {
         this.paletBlueZoneChaosYellow = paletBleuZoneChaosGauche;
 
         Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
-        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100, 422, robotRay+obstacleMargin);
+        CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100-robotRay-obstacleMargin, 422, robotRay+obstacleMargin);
         balanceAndRamps = new StillCircularRectangularObstacle(formeRampe);
         this.addFixedObstacleNoGraphChange(balanceAndRamps);
 
         Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600, 18, robotRay+obstacleMargin);
+        CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600-robotRay-obstacleMargin, 18, robotRay+obstacleMargin);
         Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
         this.addFixedObstacleNoGraphChange(paletSupportRampeDroite);
 
         Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750, 1561);           //arrondi
-        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600, 18, robotRay+obstacleMargin);
+        CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600-robotRay-obstacleMargin, 18, robotRay+obstacleMargin);
         Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
         this.addFixedObstacleNoGraphChange(paletSupportRampeGauche);
 
@@ -200,7 +200,7 @@ public class Table implements Service {
         this.addFixedObstacleNoGraphChange(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0, 18);                                 //arrondi
-        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000, 36, robotRay+obstacleMargin);
+        CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000-robotRay-obstacleMargin, 36, robotRay+obstacleMargin);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
         this.addFixedObstacleNoGraphChange(accelerateur);
 
