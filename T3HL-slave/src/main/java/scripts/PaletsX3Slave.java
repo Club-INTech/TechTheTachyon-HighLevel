@@ -6,6 +6,7 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
+import utils.ConfigData;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -21,6 +22,7 @@ public class PaletsX3Slave extends Script{
     /**
      * constante
      */
+    private boolean symetrie;
 
 
     public PaletsX3Slave(Slave robot, Table table) {
@@ -29,8 +31,14 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public void execute(Integer version) {
+
         try {
-            robot.turn(Math.PI);
+            if(!symetrie) {
+                robot.turn(Math.PI);
+            }
+            else {
+                robot.turn(0);
+            }
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
@@ -75,6 +83,7 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public void updateConfig(Config config) {
+        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
         super.updateConfig(config);
     }
 
