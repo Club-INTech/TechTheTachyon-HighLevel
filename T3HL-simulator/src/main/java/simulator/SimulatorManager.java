@@ -286,7 +286,7 @@ public class SimulatorManager extends Thread {
                 }
                 else {
                     ActuatorsOrder correspondingOrder = null;
-                    if(arguments.length == 2) {
+                    if(arguments.length >= 2) {
                         for(ActuatorsOrder actuatorOrder : ActuatorsOrder.values()) {
                             if(actuatorOrder.getOrderStr().equals(m)) {
                                 correspondingOrder = actuatorOrder;

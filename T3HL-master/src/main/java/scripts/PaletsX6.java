@@ -89,7 +89,11 @@ public class PaletsX6 extends Script {
             if(version == 4) {
                 // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
                 for (int j = 0; j < 3; j++) {
-                    grabPuck(robot, DISTANCE_INTER_PUCK, true);
+                    if(j == 2) {
+                        grabPuck(robot, DISTANCE_INTER_PUCK*2, true); // skip le palet bleu
+                    } else {
+                        grabPuck(robot, DISTANCE_INTER_PUCK, true);
+                    }
 
                     // on ajoute le palet dans l'ascenseur
                     switch (j) {
@@ -104,27 +108,26 @@ public class PaletsX6 extends Script {
                             break;
                     }
                 }
-                // on prend le palet bleu
-                grabPuck(robot, 0, false);
-                // on se retourne
-                robot.moveLengthwise(DISTANCE_INTER_PUCK+10, false); // +10 pour dépasser un peu la position
-                robot.followPathTo(positions.get(4)); // pour se remettre à la bonne position devant le palet suivant
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET);
-                robot.turn(0);
 
                 // on prend les 2 autres palets
                 for (int j = 0; j < 2; j++) {
                     // invert order pour utiliser la partie gauche du robot
-                    robot.invertOrders(robot -> grabPuck(robot, -DISTANCE_INTER_PUCK, true));
+                    if(j == 1) {
+                        grabPuck(robot, -DISTANCE_INTER_PUCK*3, true); // retourne devant le bleu
+                    } else {
+                        grabPuck(robot, DISTANCE_INTER_PUCK, true);
+                    }
                     switch (j) {
                         case 0:
-                            robot.pushPaletGauche(CouleurPalet.ROUGE);
+                            robot.pushPaletDroit(CouleurPalet.ROUGE);
                             break;
                         case 1:
-                            robot.pushPaletGauche(CouleurPalet.VERT);
+                            robot.pushPaletDroit(CouleurPalet.VERT);
                             break;
                     }
                 }
+                // on prend le palet bleu
+                grabPuck(robot, 0, false);
 
                 // on va à la balance
                 robot.followPathTo(positionBalance);
