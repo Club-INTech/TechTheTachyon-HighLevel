@@ -231,6 +231,7 @@ public class Locomotion implements Service {
         // a-t-on rencontré un ennemi lors du parcours du chemin?
         Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
 
+        SensorState.MOVING.setData(true);
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
                 try {
