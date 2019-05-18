@@ -19,7 +19,6 @@
 package scripts;
 
 import data.Table;
-import data.XYO;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
@@ -28,11 +27,11 @@ import utils.ConfigData;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Service;
-import utils.math.Shape;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -164,15 +163,20 @@ public abstract class Script implements Service {
      */
     public abstract void finalize(Exception e);
 
-    protected void async(Runnable action) {
-        async("Async Thread - "+action, action);
+    protected CompletableFuture<Void> async(Runnable action) {
+        return async("Async Thread - "+action, action);
     }
 
-    protected void async(String name, Runnable action) {
-        Thread thread = new Thread(action);
+    protected CompletableFuture<Void> async(String name, Runnable action) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        Thread thread = new Thread(() -> {
+            action.run();
+            future.complete(null);
+        });
         thread.setName(name);
         thread.setDaemon(true);
         thread.start();
+        return future;
     }
 
     @Override

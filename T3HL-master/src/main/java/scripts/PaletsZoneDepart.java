@@ -11,6 +11,9 @@ import robot.Master;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 public class PaletsZoneDepart extends Script {
 
     /**
@@ -51,7 +54,9 @@ public class PaletsZoneDepart extends Script {
             robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+            CompletableFuture<Void> puckStored = null;
             for (Vec2 position : positions) {
+                CompletableFuture<Void> armInPlace = null;
                 if(premierPaletPris&&version==JUST_BLUE){
                     robot.turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
@@ -60,9 +65,15 @@ public class PaletsZoneDepart extends Script {
                 else if (premierPaletPris) {
                     // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                     //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    async("Mets le bras au dessus du palet", () -> {
-                        waitWhileTrue(SensorState.LEFT_ARM_MOVING);
-                        waitWhileTrue(SensorState.ACTUATOR_ACTUATING);
+                    CompletableFuture<Void> finalPuckStored = puckStored;
+                    armInPlace = async("Mets le bras au dessus du palet", () -> {
+                        if(finalPuckStored != null) {
+                            try {
+                                finalPuckStored.get();
+                            } catch (InterruptedException | ExecutionException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
                     });
                     robot.followPathTo(position);
@@ -72,13 +83,23 @@ public class PaletsZoneDepart extends Script {
                 } else {
                     premierPaletPris = true;
                 }
+                if(armInPlace != null) {
+                    try {
+                        armInPlace.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // reset
+                armInPlace = null;
+                puckStored = null;
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, false);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
 
                 int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
-                async("Remonte vers ascenseur et recale", () -> {
+                puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
