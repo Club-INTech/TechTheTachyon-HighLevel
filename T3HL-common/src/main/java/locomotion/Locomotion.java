@@ -233,13 +233,6 @@ public class Locomotion implements Service {
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
             try {
                 try {
-                    if(!encounteredEnemies.isEmpty()) { // on a déjà eu un ennemi sur le chemin précédent, on attend un peu pour faire respirer le reste du HL
-                        try {
-                            Thread.sleep(15);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     graphe.readLock().lock();
                     encounteredEnemies.clear();
                     path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi

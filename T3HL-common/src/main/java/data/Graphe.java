@@ -328,7 +328,7 @@ public class Graphe implements Service {
         }
         else {
             try {
-                writeLock().lock();
+                //writeLock().lock();
                 n = new Node(position, true);
                 Log.GRAPHE.debug("Ajout d'un noeud provisoire à "+position);
                 Segment seg = new Segment(position, new VectCartesian(0, 0));
@@ -344,7 +344,7 @@ public class Graphe implements Service {
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             } finally {
-                writeLock().unlock();
+                //writeLock().unlock();
             }
             return null;
         }
@@ -357,7 +357,7 @@ public class Graphe implements Service {
     public void removeProvisoryNode(Node node) {
         if (!node.isPermanent()) {
             try {
-                writeLock().lock();
+                //writeLock().lock();
                 Log.GRAPHE.debug("Retrait du noeud provisoire "+node);
                 for (Node neighbour : node.getNeighbours().keySet()) {
                     ridges.remove(neighbour.getNeighbours().get(node));
@@ -368,7 +368,7 @@ public class Graphe implements Service {
                 // reset cache
                 resetCache();
             } finally {
-                writeLock().unlock();
+                //writeLock().unlock();
             }
         }
     }

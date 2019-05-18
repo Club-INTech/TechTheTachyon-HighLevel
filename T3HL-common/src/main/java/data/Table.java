@@ -330,13 +330,13 @@ public class Table implements Service {
 
         if (this.graphe != null) {
             try {
-                this.graphe.writeLock().lock();
+                //this.graphe.writeLock().lock();
                 this.graphe.update();
                 this.graphe.setUpdated(true);
             } catch (ConcurrentModificationException e) {
                 e.printStackTrace(); // eh
             } finally {
-                this.graphe.writeLock().unlock();
+                //this.graphe.writeLock().unlock();
             }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
@@ -518,10 +518,10 @@ public class Table implements Service {
     public void updateTableAfterFixedObstaclesChanges() {
         if (this.graphe != null) {
             try {
-                this.graphe.writeLock().lock();
+                //this.graphe.writeLock().lock();
                 this.graphe.reInit();
             } finally {
-                this.graphe.writeLock().unlock();
+                //this.graphe.writeLock().unlock();
             }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
@@ -592,14 +592,14 @@ public class Table implements Service {
     public void SIMULATEDmoveMobileObstacle(Vec2 newPosition) {
         if (this.graphe != null) {
             try {
-                this.graphe.writeLock().lock();
+                //this.graphe.writeLock().lock();
                 this.simulatedObstacle.update(newPosition);
                 this.graphe.update();
                 this.graphe.setUpdated(true);
             } catch (ConcurrentModificationException e) {
                 e.printStackTrace(); // eh
             } finally {
-                this.graphe.writeLock().unlock();
+                //this.graphe.writeLock().unlock();
             }
         } else {
             Log.LIDAR.warning("Graphe non instancié");
