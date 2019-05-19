@@ -195,7 +195,7 @@ public class MainMaster extends RobotEntryPoint {
         }
         robot.turn(Math.PI/2);
         //robot.gotoPoint(new VectCartesian(1500-250,707));
-        robot.gotoPoint(new VectCartesian(410,410-78+15-4-5));
+        robot.gotoPoint(new VectCartesian(-410,410-78+15-4-5));
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
