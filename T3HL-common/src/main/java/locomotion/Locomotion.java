@@ -237,21 +237,22 @@ public class Locomotion implements Service {
         Log.LOCOMOTION.debug("not moving!");
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
-                try {
-                    graphe.readLock().lock();
-                    encounteredEnemies.clear();
-                    start = graphe.addProvisoryNode(xyo.getPosition().clone());
-                    path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                synchronized (pointsQueue) {
+                    try {
+                        graphe.readLock().lock();
+                        encounteredEnemies.clear();
+                        //   start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                        path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                    }
+                    finally {
+                        graphe.readLock().unlock();
+                    }
+                    pointsQueue.clear();
+                    Log.PATHFINDING.debug("=== Nouveau chemin ===");
+                    path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
+                    Log.PATHFINDING.debug("=== Fin ===");
+                    pointsQueue.addAll(path);
                 }
-                finally {
-                    graphe.readLock().unlock();
-                }
-
-                pointsQueue.clear();
-                Log.PATHFINDING.debug("=== Nouveau chemin ===");
-                path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
-                Log.PATHFINDING.debug("=== Fin ===");
-                pointsQueue.addAll(path);
                 while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
                 //    System.out.println("xyo: "+xyo.getPosition()+" / aim: "+aim.getPosition());
                     if (exceptionsQueue.peek() != null) {
@@ -288,10 +289,17 @@ public class Locomotion implements Service {
                         e.printStackTrace();
                     }
 
-                    if(!SensorState.MOVING.getData()){
-                        start = graphe.addProvisoryNode(xyo.getPosition().clone());
-                        graphe.update();
-                        graphe.setUpdated(true);
+                    if(!SensorState.MOVING.getData()) {
+                        try {
+                            graphe.writeLock().lock();
+                            graphe.removeProvisoryNode(start);
+                            start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                            graphe.update();
+                            graphe.setUpdated(true);
+                        }
+                        finally {
+                            graphe.writeLock().unlock();
+                        }
                         break;
                     }
                 }
