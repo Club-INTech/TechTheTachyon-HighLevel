@@ -396,11 +396,12 @@ public class PathFollower extends ServiceThread {
                 }
             }
             try {
-                do {
+                hasNext = true;
+                while(hasNext) {
                     synchronized (pointsQueue) {
                         aim = pointsQueue.peek();
                         if(SensorState.MOVING.getData()) { // on bouge encore à cause d'un autre thread, on bouge pas
-                            break;
+                            continue;
                         }
                         Log.LOCOMOTION.debug("Move to "+aim+", current pos: "+XYO.getRobotInstance());
                         pointsQueue.poll();
@@ -408,7 +409,7 @@ public class PathFollower extends ServiceThread {
                         parallelActions = new Runnable[0];
                         hasNext = !pointsQueue.isEmpty();
                     }
-                } while (hasNext);
+                };
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
                 synchronized (pointsQueue) {
