@@ -1,14 +1,13 @@
 package scripts;
 
 import data.CouleurPalet;
+import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -17,7 +16,7 @@ public class PaletsX3Slave extends Script{
      * Position d'entrée du script
      */
 
-    private int xEntry = 1338;
+    private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     /**
      * constante
@@ -31,8 +30,10 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public void execute(Integer version) {
-
         try {
+            recalage();
+            robot.followPathTo(new VectCartesian(1338, yEntry));
+
             if(!symetrie) {
                 robot.turn(Math.PI);
             }
@@ -70,6 +71,24 @@ public class PaletsX3Slave extends Script{
         }
         catch (UnableToMoveException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void recalage() {
+        if(symetrie) {
+            try {
+                robot.turn(-Math.PI/2);
+                robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                robot.turn(Math.PI);
+                robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
         }
     }
 
