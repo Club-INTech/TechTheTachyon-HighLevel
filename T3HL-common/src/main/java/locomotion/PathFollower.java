@@ -34,6 +34,7 @@ import utils.math.*;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service permettant de suivre un chemin et de détecter les problèmes de suivit
@@ -398,6 +399,11 @@ public class PathFollower extends ServiceThread {
             try {
                 hasNext = true;
                 while(hasNext) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     synchronized (pointsQueue) {
                         aim = pointsQueue.peek();
                         if(SensorState.MOVING.getData()) { // on bouge encore à cause d'un autre thread, on bouge pas

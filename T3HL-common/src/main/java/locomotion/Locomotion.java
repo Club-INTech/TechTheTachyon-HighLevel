@@ -249,6 +249,9 @@ public class Locomotion implements Service {
                 // ça a pas beaucoup de conséquences dans notre cas mais si on peut sauver 20ms au HL, c'est pas mal (cf Thread.sleep(20) de PathFollower)
                 synchronized (pointsQueue) {
                     pointsQueue.clear();
+                    Log.PATHFINDING.debug("=== Nouveau chemin ===");
+                    pointsQueue.forEach(p -> Log.PATHFINDING.debug("\t"+p));
+                    Log.PATHFINDING.debug("=== Fin ===");
                     pointsQueue.addAll(path);
                 }
                 while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
