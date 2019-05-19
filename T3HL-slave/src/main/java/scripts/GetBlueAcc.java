@@ -79,7 +79,7 @@ public class GetBlueAcc extends Script {
             // test sans rotation
 
             robot.turn(Math.PI);
-            robot.followPathTo(new VectCartesian(xBlue, yBlue));
+            robot.followPathTo(new VectCartesian(xBlue, yBlue+10));
 
 
             if (!symetrie) {
