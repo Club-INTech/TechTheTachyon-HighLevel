@@ -232,7 +232,9 @@ public class Locomotion implements Service {
         Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
 
         // on attend d'être à l'arrêt
+        Log.LOCOMOTION.debug("followPathTo("+aim.getPosition()+")");
         waitWhileTrue(SensorState.MOVING::getData);
+        Log.LOCOMOTION.debug("not moving!");
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
                 try {
