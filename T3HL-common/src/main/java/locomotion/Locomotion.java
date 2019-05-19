@@ -241,14 +241,14 @@ public class Locomotion implements Service {
                     try {
                         graphe.readLock().lock();
                         encounteredEnemies.clear();
-                        //   start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                        start = graphe.addProvisoryNode(xyo.getPosition().clone());
                         path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
                     }
                     finally {
                         graphe.readLock().unlock();
                     }
                     pointsQueue.clear();
-                    Log.PATHFINDING.debug("=== Nouveau chemin ===");
+                    Log.PATHFINDING.debug("=== Nouveau chemin (current pos="+XYO.getRobotInstance().getPosition()+" | start="+start.getPosition()+") ===");
                     path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
                     Log.PATHFINDING.debug("=== Fin ===");
                     pointsQueue.addAll(path);
@@ -318,6 +318,9 @@ public class Locomotion implements Service {
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+
+        Log.LOCOMOTION.debug("Attente de la fin du mouvement en followpathto("+aim.getPosition()+")");
+        waitWhileTrue(SensorState.MOVING);
     }
 
     public void setAI(AIService ai) {
