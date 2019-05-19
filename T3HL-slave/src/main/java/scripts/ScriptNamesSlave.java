@@ -10,6 +10,7 @@ public enum ScriptNamesSlave implements ScriptNames {
     PALETSX6(PaletsX6Slave.class, "paletsX6"),
     CRACHEUR(Cracheur.class, "cracheur"),
     GETBLUEACC(GetBlueAcc.class, "getBlueAcc"),
+    GETREDDEP(GetRedDep.class, "getRedDep"),
     ;
 
     private Class<? extends Service> scriptClass;
