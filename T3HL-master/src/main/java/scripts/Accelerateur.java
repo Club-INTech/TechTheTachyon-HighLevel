@@ -52,7 +52,7 @@ public class Accelerateur extends Script {
     double ecart_mesures_sicks;
     double teta;
     //variable pour le calcul du recalage
-    int yEntryPostRecalage = 410-78+15-4-5;
+    int yEntryPostRecalage = 410-78+15-4;
 
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
