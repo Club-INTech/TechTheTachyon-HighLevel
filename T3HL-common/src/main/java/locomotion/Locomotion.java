@@ -250,7 +250,7 @@ public class Locomotion implements Service {
                 synchronized (pointsQueue) {
                     pointsQueue.clear();
                     Log.PATHFINDING.debug("=== Nouveau chemin ===");
-                    pointsQueue.forEach(p -> Log.PATHFINDING.debug("\t"+p));
+                    path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
                     Log.PATHFINDING.debug("=== Fin ===");
                     pointsQueue.addAll(path);
                 }
