@@ -18,30 +18,33 @@
 
 package data;
 
+import utils.Log;
+
 /**
  * Liste les données du robot et leurs état
  *
  * @author william
  */
 public class SensorState<DataType> {
-    public static final SensorState<Boolean> MOVING = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> STUCKED = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> LEFT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> RIGHT_ELEVATOR_MOVING = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Long> LAST_PONG = new SensorState<>(-1L, Long.class);
-    public static final SensorState<Boolean> WAITING_JUMPER = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> ELECTRON_ACTIVATED = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> ELECTRON_ARRIVED = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> LEFT_ARM_MOVING = new SensorState<>(false, Boolean.class);
-    public static final SensorState<Boolean> RIGHT_ARM_MOVING = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> MOVING = new SensorState<>("MOVING", false, Boolean.class);
+    public static final SensorState<Boolean> STUCKED = new SensorState<>("STUCKED", false, Boolean.class);
+    public static final SensorState<Boolean> LEFT_ELEVATOR_MOVING = new SensorState<>("LEFT_ELEVATOR_MOVING", false, Boolean.class);
+    public static final SensorState<Boolean> RIGHT_ELEVATOR_MOVING = new SensorState<>("RIGHT_ELEVATOR_MOVING", false, Boolean.class);
+    public static final SensorState<Boolean> ACTUATOR_ACTUATING = new SensorState<>("ACTUATOR_ACTUATING", false, Boolean.class);
+    public static final SensorState<Long> LAST_PONG = new SensorState<>("LAST_PONG", -1L, Long.class);
+    public static final SensorState<Boolean> WAITING_JUMPER = new SensorState<>("WAITING_JUMPER", false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ACTIVATED = new SensorState<>("ELECTRON_ACTIVATED", false, Boolean.class);
+    public static final SensorState<Boolean> ELECTRON_ARRIVED = new SensorState<>("ELECTRON_ARRIVED", false, Boolean.class);
+    public static final SensorState<Boolean> LEFT_ARM_MOVING = new SensorState<>("LEFT_ARM_MOVING",false, Boolean.class);
+    public static final SensorState<Boolean> RIGHT_ARM_MOVING = new SensorState<>("RIGHT_ARM_MOVING",false, Boolean.class);
 
     /**
      * Permet de désactiver le lidar à volonté (par exemple pendant une rotation)
      */
-    public static final SensorState<Boolean> DISABLE_LIDAR = new SensorState<>(false, Boolean.class);
+    public static final SensorState<Boolean> DISABLE_LIDAR = new SensorState<>("DISABLE_LIDAR",false, Boolean.class);
     ;
 
+    private String name;
     /**
      * La donnée
      */
@@ -55,7 +58,8 @@ public class SensorState<DataType> {
     /**
      * Construit un SensorState
      */
-    private SensorState(DataType object, Class<DataType> c) {
+    private SensorState(String name, DataType object, Class<DataType> c) {
+        this.name = name;
         this.data = object;
         this.c = c;
     }
@@ -76,6 +80,7 @@ public class SensorState<DataType> {
         if (object.getClass() != this.c) {
             throw new ClassCastException("Cette donnée est de type " + this.c + ", trouvé : " + object.getClass());
         }
+        Log.ORDERS.debug("SensorState."+name+" = "+object);
         this.data = object;
     }
 
