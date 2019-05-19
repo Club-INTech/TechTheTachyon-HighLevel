@@ -26,6 +26,7 @@ public class PaletsX6 extends Script {
     private static final int DISTANCE_INTER_PUCK = 100;
 
     private static int offsetY = -4;
+    private static int offsetX = -2;
 
     private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
 
@@ -66,12 +67,12 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version == 3 || version == 4) {
-                positions.add(new VectCartesian(1000, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(900, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(800 , 1204+10+5+offsetY));
-                positions.add(new VectCartesian(700 , 1204+10+5+offsetY));
-                positions.add(new VectCartesian(600, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(500, 1204+10+5+offsetY));
+                positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY)); // rouge (0)
+                positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY)); // vert (1)
+                positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY)); // rouge (2)
+                positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY)); // bleu (3)
+                positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
+                positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
             }
         try {
             if(symetry) {
@@ -85,56 +86,40 @@ public class PaletsX6 extends Script {
             robot.turn(Math.PI);
 
             if(version == 4) {
-                // on prend les 3 palets à droite qu'on met dans l'ascenseur droit
-                for (int j = 0; j < 3; j++) {
-                    if(j == 2) {
-                        grabPuck(robot, DISTANCE_INTER_PUCK*2, true, true); // skip le palet bleu
-                    } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
-                    }
+                //On prend le 1er palet
+                grabPuckGoto(robot, positions.get(1), false);
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
 
-                    // on ajoute le palet dans l'ascenseur
-                    switch (j) {
-                        case 0:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                        case 1:
-                            robot.pushPaletDroit(CouleurPalet.VERT);
-                            break;
-                        case 2:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                    }
-                }
+                //On prend le 2è palet
+                grabPuckGoto(robot, positions.get(2), false);
+                robot.pushPaletDroit(CouleurPalet.VERT);
 
-                // on prend les 2 autres palets
-                for (int j = 0; j < 2; j++) {
-                    // invert order pour utiliser la partie gauche du robot
-                    if(j == 1) {
-                        grabPuck(robot, -DISTANCE_INTER_PUCK*2, true, true); // retourne devant le bleu
-                    } else {
-                        grabPuck(robot, DISTANCE_INTER_PUCK, true, true);
-                    }
-                    switch (j) {
-                        case 0:
-                            robot.pushPaletDroit(CouleurPalet.ROUGE);
-                            break;
-                        case 1:
-                            robot.pushPaletDroit(CouleurPalet.VERT);
-                            break;
-                    }
-                }
-                // on prend le palet bleu
-                grabPuck(robot, 0, false, false);
+                //On prend le 4è palet
+                grabPuckGoto(robot, positions.get(4), false); // skip le palet bleu
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
 
-                // on va à la balance
+                //On prend le 5è palet
+                grabPuckGoto(robot, positions.get(5), false);
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
+
+                //On prend le 6ème palet
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false); // retourne devant le bleu
+                robot.pushPaletDroit(CouleurPalet.VERT);
+
+                //On prend le 4ème palet (bleu)
+                grabPuck(robot, 0, true);
+
+
+
+                // On va à la balance
                 robot.followPathTo(positionBalance);
-                // on dépose le bleu
+
+                // On dépose le bleu
                 robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                 robot.increaseScore(12);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
+                //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
             } else {
                 boolean first = true;
@@ -196,11 +181,10 @@ public class PaletsX6 extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
-     * @param ungrab 'true' si on lâche le palet dans l'ascenseur
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean ungrab, boolean lowerElevator) {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue) {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
@@ -208,24 +192,56 @@ public class PaletsX6 extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
         try {
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            if(blue) {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
+            } else {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            }
+            robot.turn(Math.PI); // réoriente le robot vers PI
             if(moveDistance == 0) {
-                if(lowerElevator) {
+                if(! blue) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                }
-                if(ungrab) {
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 }
             } else {
                 robot.moveLengthwise(moveDistance, false, () -> {
-                    if(lowerElevator) {
+                    if( ! blue) {
                         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    }
-                    if(ungrab) {
                         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                     }
                 });
             }
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Actions à faire pour une itération de prise de palet
+     * @param robot le robot
+     */
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) {
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+
+        // on s'assure que l'électrovanne est vraiment bien ouverte
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+
+        try {
+            if(blue) {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
+            } else {
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            }
+            async("Dépôt", () -> {
+                if( ! blue) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                }
+            });
+            robot.gotoPoint(pos);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
