@@ -240,6 +240,7 @@ public class Locomotion implements Service {
                 try {
                     graphe.readLock().lock();
                     encounteredEnemies.clear();
+                    start = graphe.addProvisoryNode(xyo.getPosition().clone());
                     path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
                 }
                 finally {
