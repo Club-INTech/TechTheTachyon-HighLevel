@@ -67,12 +67,12 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(834, 1206));
             }//version pour prendre les palets à la suite sauf le bleu
             else if (version == 3 || version == 4) {
-                positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY));
-                positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY));
+                positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY)); // rouge (0)
+                positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY)); // vert (1)
+                positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY)); // rouge (2)
+                positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY)); // bleu (3)
+                positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
+                positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
             }
         try {
             if(symetry) {
@@ -95,11 +95,11 @@ public class PaletsX6 extends Script {
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 3è palet
-                grabPuck(robot, DISTANCE_INTER_PUCK * 2, false); // skip le palet bleu
+                grabPuckGoto(robot, positions.get(3), false); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-                grabPuck(robot, DISTANCE_INTER_PUCK, false);
+                grabPuckGoto(robot, positions.get(5), false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 6ème palet
@@ -197,6 +197,7 @@ public class PaletsX6 extends Script {
             } else {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             }
+            robot.turn(Math.PI); // réoriente le robot vers PI
             if(moveDistance == 0) {
                 if(! blue) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
