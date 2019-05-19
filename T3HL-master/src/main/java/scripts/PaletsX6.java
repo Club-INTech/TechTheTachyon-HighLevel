@@ -94,8 +94,8 @@ public class PaletsX6 extends Script {
                 grabPuckGoto(robot, positions.get(2), false);
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
-                //On prend le 3è palet
-                grabPuckGoto(robot, positions.get(3), false); // skip le palet bleu
+                //On prend le 4è palet
+                grabPuckGoto(robot, positions.get(4), false); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
