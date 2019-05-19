@@ -92,7 +92,7 @@ public class XYO {
 
     @Override
     public String toString() {
-        return "XYO(xy="+position+", o="+orientation+")";
+        return String.format("XYO (x,y)=%s, o=%6f", this.position, this.orientation);
     }
 
     @Override
