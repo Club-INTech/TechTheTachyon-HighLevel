@@ -24,6 +24,9 @@ cp build/LiDAR_UST_10LX ../
 cd ../..
 echo $PWD
 
+#Suppression de l'ancienne lib du panal
+rm -f bin/lib/PanneauRaspi*
+
 #Build de tout le HL!
 mvn clean
 mvn package -DskipTests
