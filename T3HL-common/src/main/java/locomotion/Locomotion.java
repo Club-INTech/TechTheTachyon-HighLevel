@@ -232,23 +232,25 @@ public class Locomotion implements Service {
         Set<MobileCircularObstacle> encounteredEnemies = new HashSet<>();
 
         // on attend d'être à l'arrêt
+        Log.LOCOMOTION.debug("followPathTo("+aim.getPosition()+")");
         waitWhileTrue(SensorState.MOVING::getData);
+        Log.LOCOMOTION.debug("not moving!");
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
-                try {
-                    graphe.readLock().lock();
-                    encounteredEnemies.clear();
-                    path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
-                }
-                finally {
-                    graphe.readLock().unlock();
-                }
-
-                // on s'assure de bien avoir une liste non vide (s'il y a un chemin) dans PathFollower à la prochaine itération
-                // ce thread pourrait être interrompu entre le addAll et le clear ;(
-                // ça a pas beaucoup de conséquences dans notre cas mais si on peut sauver 20ms au HL, c'est pas mal (cf Thread.sleep(20) de PathFollower)
                 synchronized (pointsQueue) {
+                    try {
+                        graphe.readLock().lock();
+                        encounteredEnemies.clear();
+                        start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                        path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                    }
+                    finally {
+                        graphe.readLock().unlock();
+                    }
                     pointsQueue.clear();
+                    Log.PATHFINDING.debug("=== Nouveau chemin (current pos="+XYO.getRobotInstance().getPosition()+" | start="+start.getPosition()+") ===");
+                    path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
+                    Log.PATHFINDING.debug("=== Fin ===");
                     pointsQueue.addAll(path);
                 }
                 while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
@@ -287,7 +289,17 @@ public class Locomotion implements Service {
                         e.printStackTrace();
                     }
 
-                    if(!SensorState.MOVING.getData()){
+                    if(!SensorState.MOVING.getData()) {
+                        try {
+                            graphe.writeLock().lock();
+                            graphe.removeProvisoryNode(start);
+                            start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                            graphe.update();
+                            graphe.setUpdated(true);
+                        }
+                        finally {
+                            graphe.writeLock().unlock();
+                        }
                         break;
                     }
                 }
@@ -306,6 +318,9 @@ public class Locomotion implements Service {
         }
         pointsQueue.clear();
         exceptionsQueue.clear();
+
+        Log.LOCOMOTION.debug("Attente de la fin du mouvement en followpathto("+aim.getPosition()+")");
+        waitWhileTrue(SensorState.MOVING);
     }
 
     public void setAI(AIService ai) {

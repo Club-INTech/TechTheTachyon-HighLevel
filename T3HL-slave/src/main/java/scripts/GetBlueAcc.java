@@ -8,6 +8,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Log;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -89,12 +90,14 @@ public class GetBlueAcc extends Script {
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             } else {
                 robot.turn(Math.PI);
-                //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
                 robot.moveLengthwise(15, false);
-                //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             }
+            Log.STRATEGY.critical("DZQDL PRE SCORE");
             robot.increaseScore(10);
 
+            Log.STRATEGY.critical("DZQDL");
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

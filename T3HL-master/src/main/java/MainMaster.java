@@ -88,7 +88,7 @@ public class MainMaster extends RobotEntryPoint {
 
     protected void waitForAllConnectionsReady() {
         LEDs leds = null;
-        if(panneauService.getPanneau() != null) {
+        if(container.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
         }
         while (!connectionManager.areConnectionsInitiated()) {
@@ -194,6 +194,7 @@ public class MainMaster extends RobotEntryPoint {
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
         robot.turn(Math.PI/2);
+        robot.gotoPoint(new VectCartesian(1500-250,707));
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)

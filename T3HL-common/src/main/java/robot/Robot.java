@@ -99,6 +99,7 @@ public abstract class Robot implements Service {
     private boolean isMaster;
     private boolean symetry;
     private boolean forceInversion;
+    private boolean usingPanel;
 
     /**
      * @param locomotion
@@ -117,7 +118,7 @@ public abstract class Robot implements Service {
     public void increaseScore(int points) {
         this.score = this.score + points;
         try {
-            if(panneauService.getPanneau() != null) {
+            if(usingPanel && panneauService.getPanneau() != null) {
                 this.panneauService.getPanneau().printScore(score);
             }
         }catch(TooManyDigitsException | IOException e){
@@ -517,5 +518,6 @@ public abstract class Robot implements Service {
         inSimulation = config.getBoolean(ConfigData.SIMULATION);
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
         isMaster = config.getBoolean(ConfigData.MASTER);
+        usingPanel = config.getBoolean(ConfigData.USING_PANEL);
     }
 }

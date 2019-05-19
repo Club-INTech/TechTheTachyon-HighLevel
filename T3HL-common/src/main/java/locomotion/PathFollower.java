@@ -34,6 +34,7 @@ import utils.math.*;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service permettant de suivre un chemin et de détecter les problèmes de suivit
@@ -146,6 +147,7 @@ public class PathFollower extends ServiceThread {
                     handleEnemyForward(distance, aim, firstPass);
 
                     SensorState.MOVING.setData(true);
+                    Log.LOCOMOTION.debug("Move lengthwise "+toTravel);
                     this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
@@ -177,6 +179,7 @@ public class PathFollower extends ServiceThread {
         } finally {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         }
+        Log.LOCOMOTION.debug("End of move lengthwise");
     }
 
     /**
@@ -394,19 +397,27 @@ public class PathFollower extends ServiceThread {
                 }
             }
             try {
-                do {
+                hasNext = true;
+                while(hasNext) {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     synchronized (pointsQueue) {
                         aim = pointsQueue.peek();
-                        if(SensorState.MOVING.getData()) { // on bouge encore à cause d'un autre thread, on bouge pas
+                        if(aim == null) // fin de la liste
                             break;
+                        if(SensorState.MOVING.getData()) { // on bouge encore à cause d'un autre thread, on bouge pas
+                            continue;
                         }
                         Log.LOCOMOTION.debug("Move to "+aim+", current pos: "+XYO.getRobotInstance());
-                        pointsQueue.poll();
+                        aim = pointsQueue.poll();
                         this.moveToPoint(aim, parallelActions);
                         parallelActions = new Runnable[0];
                         hasNext = !pointsQueue.isEmpty();
                     }
-                } while (hasNext);
+                };
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
                 synchronized (pointsQueue) {
