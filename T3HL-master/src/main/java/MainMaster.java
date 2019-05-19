@@ -88,7 +88,7 @@ public class MainMaster extends RobotEntryPoint {
 
     protected void waitForAllConnectionsReady() {
         LEDs leds = null;
-        if(panneauService.getPanneau() != null) {
+        if(container.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
         }
         while (!connectionManager.areConnectionsInitiated()) {

@@ -118,7 +118,7 @@ public abstract class Robot implements Service {
     public void increaseScore(int points) {
         this.score = this.score + points;
         try {
-            if(panneauService.getPanneau() != null && usingPanel) {
+            if(usingPanel && panneauService.getPanneau() != null) {
                 this.panneauService.getPanneau().printScore(score);
             }
         }catch(TooManyDigitsException | IOException e){
