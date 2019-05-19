@@ -113,20 +113,10 @@ public class MainSlave extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
 */
-        //scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
-        //scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
-        //scriptManager.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
 
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
-        /*try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
-        robot.increaseScore(20);
 
         //robot.moveLengthwise(1000,false);
         //robot.moveLengthwise(-1000,false);
