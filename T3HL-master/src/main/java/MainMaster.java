@@ -196,6 +196,13 @@ public class MainMaster extends RobotEntryPoint {
         robot.turn(Math.PI/2);
         //robot.gotoPoint(new VectCartesian(1500-250,707));
         robot.gotoPoint(new VectCartesian(-410,410-78+15-4-5));
+        robot.turn(Math.PI);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
