@@ -194,7 +194,8 @@ public class MainMaster extends RobotEntryPoint {
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
         robot.turn(Math.PI/2);
-        robot.gotoPoint(new VectCartesian(1500-250,707));
+        //robot.gotoPoint(new VectCartesian(1500-250,707));
+        robot.gotoPoint(new VectCartesian(410,410-78+15-4-5));
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
@@ -209,7 +210,7 @@ public class MainMaster extends RobotEntryPoint {
             Vec2 entryPos = match.entryPosition(0);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
             double angleToStart = Math.atan2(entryPos.getY() - currentPosition.getY(), entryPos.getX() - currentPosition.getX());
-            robot.turn(angleToStart);
+            //robot.turn(angleToStart);
             orderWrapper.waitJumper();
             match.execute(0);
         } catch (ContainerException e) {
