@@ -406,11 +406,13 @@ public class PathFollower extends ServiceThread {
                     }
                     synchronized (pointsQueue) {
                         aim = pointsQueue.peek();
+                        if(aim == null) // fin de la liste
+                            break;
                         if(SensorState.MOVING.getData()) { // on bouge encore à cause d'un autre thread, on bouge pas
                             continue;
                         }
                         Log.LOCOMOTION.debug("Move to "+aim+", current pos: "+XYO.getRobotInstance());
-                        pointsQueue.poll();
+                        aim = pointsQueue.poll();
                         this.moveToPoint(aim, parallelActions);
                         parallelActions = new Runnable[0];
                         hasNext = !pointsQueue.isEmpty();
