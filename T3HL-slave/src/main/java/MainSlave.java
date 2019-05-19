@@ -115,6 +115,7 @@ public class MainSlave extends RobotEntryPoint {
 */
         scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
+        scriptManager.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
 
         //robot.moveLengthwise(1000,false);
         //robot.moveLengthwise(-1000,false);
