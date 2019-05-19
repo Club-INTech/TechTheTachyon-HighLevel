@@ -122,6 +122,7 @@ public abstract class Script implements Service {
         } finally {
             this.finalize(exception);
         }
+        Log.STRATEGY.debug("End of script "+getClass().getCanonicalName()+" v"+version);
     }
 
     /**

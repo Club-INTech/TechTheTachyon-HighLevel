@@ -146,6 +146,7 @@ public class PathFollower extends ServiceThread {
                     handleEnemyForward(distance, aim, firstPass);
 
                     SensorState.MOVING.setData(true);
+                    Log.LOCOMOTION.debug("Move lengthwise "+toTravel);
                     this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
@@ -177,6 +178,7 @@ public class PathFollower extends ServiceThread {
         } finally {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         }
+        Log.LOCOMOTION.debug("End of move lengthwise");
     }
 
     /**
