@@ -291,6 +291,9 @@ public class Locomotion implements Service {
                     }
 
                     if(!SensorState.MOVING.getData()){
+                        start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                        graphe.update();
+                        graphe.setUpdated(true);
                         break;
                     }
                 }
