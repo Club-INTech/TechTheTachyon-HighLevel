@@ -193,7 +193,7 @@ public class MainMaster extends RobotEntryPoint {
             Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
-        robot.turn(Math.PI/2);
+        /*robot.turn(Math.PI/2);
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
         //robot.gotoPoint(new VectCartesian(1500-250,707));
@@ -204,7 +204,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);*/
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
