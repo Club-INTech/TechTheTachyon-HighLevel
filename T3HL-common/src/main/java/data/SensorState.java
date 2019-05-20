@@ -80,7 +80,9 @@ public class SensorState<DataType> {
         if (object.getClass() != this.c) {
             throw new ClassCastException("Cette donnée est de type " + this.c + ", trouvé : " + object.getClass());
         }
-        Log.ORDERS.debug("SensorState."+name+" = "+object, 1);
+        if(object != data) {
+            Log.ORDERS.debug("SensorState."+name+" = "+object, 1);
+        }
         this.data = object;
     }
 
