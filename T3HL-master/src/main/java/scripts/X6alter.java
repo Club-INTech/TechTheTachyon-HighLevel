@@ -72,13 +72,14 @@ public class X6alter extends Script {
             positions.add(new VectCartesian(834, 1206));
         }//version pour prendre les palets à la suite sauf le bleu
         else if (version == 3 || version == 4) {
-            positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY)); // rouge (0)
-            positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY)); // vert (1)
-            positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY)); // rouge (2)
-            positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY)); // bleu (3)
-            positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
-            positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
+            positions.add(new VectCartesian(1000 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (0)
+            positions.add(new VectCartesian(900 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (1)
+            positions.add(new VectCartesian(800 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (2)
+            positions.add(new VectCartesian(700 + offsetX, 1204 + 10 + 5 + offsetY)); // bleu (3)
+            positions.add(new VectCartesian(600 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (4)
+            positions.add(new VectCartesian(500 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (5)
         }
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         premierPaletPris = false;
         try {
             if(symetry) {
@@ -228,27 +229,20 @@ public class X6alter extends Script {
      * @param robot le robot
      */
     private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) throws UnableToMoveException {
-
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         CompletableFuture<Void> armInPlace = null;
-        if (premierPaletPris) {
-            CompletableFuture<Void> finalPuckStored = puckStored;
-            armInPlace = async("Mets le bras devant le palet", () -> {
-                if(finalPuckStored != null) {
-                    try {
-                        finalPuckStored.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
+        CompletableFuture<Void> finalPuckStored = puckStored;
+        armInPlace = async("Mets le bras devant le palet", () -> {
+            if(finalPuckStored != null) {
+                try {
+                    finalPuckStored.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
-            });
-        } else {
-            premierPaletPris=true;
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
+            }
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-        }
+        });
         robot.gotoPoint(pos);
         if(armInPlace != null) {
             try {
