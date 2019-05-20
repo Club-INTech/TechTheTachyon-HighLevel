@@ -12,13 +12,15 @@ import utils.Log;
 import utils.container.ContainerException;
 import utils.math.*;
 
+import java.util.ArrayList;
+
 public class Accelerateur extends Script {
 
     /**
      * Position d'entrée du script
      */
-    private final int xEntry = -490+10;
-    private final int yEntry = 410-78+50;
+    //private final int xEntry = -490+10;
+    //private final int yEntry = 410-78+50+10;
     private final Container container;
 
     /**
@@ -57,6 +59,9 @@ public class Accelerateur extends Script {
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
         this.container = container;
+        versions = new ArrayList<>();
+        versions.add(0);  //version initiale (7 palets)
+        versions.add(1);  //version pour mettre 7 palets + le bleu initial
     }
 
     @Override
@@ -71,9 +76,15 @@ public class Accelerateur extends Script {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                robot.increaseScore(10);
+                if (version == 0) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+                    robot.increaseScore(10);
+                } else if (version == 1) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+                    robot.increaseScore(10);
+                }
+
                 if (robot.getNbPaletsDroits() > 1) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
@@ -154,7 +165,13 @@ public class Accelerateur extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        if (version == 1) {
+            return new VectCartesian(-490+10+76, 410-78+50+10);
+        } else if (version == 0) {
+            return new VectCartesian(-490+10, 410-78+50+10);
+        }
+        return null;
+
     }
 
     @Override
