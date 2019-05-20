@@ -68,7 +68,7 @@ public class Accelerateur extends Script {
     public void execute(Integer version) {
         try {
             if (version == 1) {
-                yEntryPostRecalage+=2;     // difference due aux positions des bras
+                yEntryPostRecalage+=4;     // difference due aux positions des bras
             }
             recalageAccelerateur();
 
