@@ -16,7 +16,7 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
-    private int xBlue = -140; //FIXME: positions à faire
+    private int xBlue = -140+20; //FIXME: positions à faire
     private int yBlue = 285+5+6;
     private boolean symetrie;
 
@@ -85,19 +85,19 @@ public class GetBlueAcc extends Script {
             // test sans rotation
 
             robot.turn(Math.PI);
-            robot.gotoPoint(new VectCartesian(xBlue+50-20, yBlue+10)); // on répète la position pour être sûr qu'il est là
+            robot.gotoPoint(new VectCartesian(xBlue+50, yBlue+10)); // on répète la position pour être sûr qu'il est là
 
 
             if (!symetrie) {
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(-120, false);
+                robot.moveLengthwise(-140, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true); // lâche le palet rouge
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             } else {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(120, false);
+                robot.moveLengthwise(140, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true); // lâche le palet rouge
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             }
