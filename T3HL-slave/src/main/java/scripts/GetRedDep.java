@@ -2,12 +2,11 @@ package scripts;
 
 import data.CouleurPalet;
 import data.Table;
-import locomotion.UnableToMoveException;
+import data.XYO;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
 
 public class GetRedDep extends Script {
     private final int xEntry = 1500-191-65;//1350;
@@ -19,27 +18,20 @@ public class GetRedDep extends Script {
     }
 
     public void execute(Integer version) {
-        try {
-            if (!symetrie) {
-                robot.turn(-(Math.PI/2));
-            } else {
-                robot.turn(Math.PI / 2);
-            }
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_SOL, true);
-            //robot.pushPaletDroit(CouleurPalet.ROUGE); TODO:push et pop pour le secondaire
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_SOL, true);
+        robot.pushPaletDroit(CouleurPalet.ROUGE);
+        table.removeTemporaryObstacle(table.getPaletRougeDroite());
+        async("Remonte et stock", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-
-        } catch (UnableToMoveException e) {
-        e.printStackTrace();
-        }
+        });
     }
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        return XYO.getRobotInstance().getPosition();
     }
 
     @Override
