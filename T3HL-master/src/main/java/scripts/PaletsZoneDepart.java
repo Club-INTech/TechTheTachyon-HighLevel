@@ -23,7 +23,7 @@ public class PaletsZoneDepart extends Script {
 
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65;//1244;
-    private final int yEntry = 450+605+300;//450;
+    private final int yEntry = 450+605;//;
 
     public PaletsZoneDepart(Master robot, Table table) {
         super(robot, table);
@@ -44,7 +44,7 @@ public class PaletsZoneDepart extends Script {
             positions = new VectCartesian[]{
                     //new VectCartesian(xEntry, yEntry),
                     new VectCartesian(entry.getX(), entry.getY()),
-                    new VectCartesian(entry.getX(),entry.getY()+302),
+                    new VectCartesian(entry.getX(),1050),
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }

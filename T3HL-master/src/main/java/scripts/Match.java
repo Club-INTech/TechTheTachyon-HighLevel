@@ -23,10 +23,10 @@ public class Match extends Script {
     @Override
     public void execute(Integer version) {
         // 0. Lancer l'électron
-        scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).goToThenExecute(0);
+        scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).execute(0);
 
         // 1. Zone de départ, juste la case bleue
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).goToThenExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).execute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
         /*
         // 2. Zone de chaos (tout)
