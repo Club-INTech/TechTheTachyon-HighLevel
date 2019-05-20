@@ -284,11 +284,11 @@ public class X6alter extends Script {
                     e.printStackTrace();
                 }
             }
+            if( ! blue) {
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+            }
         });
-        if( ! blue) {
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-        }
 
     }
 
