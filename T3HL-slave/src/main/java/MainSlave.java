@@ -80,17 +80,6 @@ public class MainSlave extends RobotEntryPoint {
     protected void act() throws UnableToMoveException {
         XYO.getRobotInstance().update(1200, 300, Math.PI);
 
-
-
-        /*for (int i =0; i < 100000; i++){
-            robot.moveLengthwise(1000, false);
-            robot.moveLengthwise(-1000, false);
-            robot.moveLengthwise(500, false);
-            robot.moveLengthwise(-500, false);
-            robot.moveLengthwise(100, false);
-            robot.moveLengthwise(-100, false);
-        }*/
-
         table.removeAllChaosObstacles();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
@@ -98,41 +87,21 @@ public class MainSlave extends RobotEntryPoint {
         Vec2 newPos = new VectCartesian(1500-191, 350);
         robot.setPositionAndOrientation(newPos, Math.PI);
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        robot.turn(Math.PI);
-
-
-
-        //table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        //table.removeTemporaryObstacle(table.getPaletVertDroite());
-        //table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        //table.removeAllChaosObstacles();
+        // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
+        robot.gotoPoint(new VectCartesian(1500-300, 405));
+        if(container.getConfig().getBoolean(ConfigData.COULEUR).equals("violet")) { // symétrie
+            robot.turn(Math.PI/2);
+        } else {
+            robot.turn(-Math.PI/2);
+        }
 
         orderWrapper.waitJumper();
 
-        /*robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR);
-*/
-        scriptManager.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
-        scriptManager.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
-        scriptManager.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
-
-
-        //robot.moveLengthwise(1000,false);
-        //robot.moveLengthwise(-1000,false);
-        //robot.moveLengthwise(1000,false);
-        //robot.turn(0);
-        //robot.moveLengthwise(1000,false);
-        //robot.turn(Math.PI);
-
-
-/*        try {
+        try {
             container.getService(MatchSlave.class).goToThenExecute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
-*/
     }
 
     private void initSimulator(){
