@@ -243,7 +243,7 @@ public class X6alter extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
             });
-
+            robot.gotoPoint(pos);
         }
         else {
             premierPaletPris=true;
@@ -251,7 +251,7 @@ public class X6alter extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
         }
-        robot.gotoPoint(pos);
+        //robot.gotoPoint(pos);
         if(armInPlace != null) {
             try {
                 armInPlace.get();
