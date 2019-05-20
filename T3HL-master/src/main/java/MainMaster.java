@@ -220,7 +220,8 @@ public class MainMaster extends RobotEntryPoint {
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
             double angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
-            robot.turn(angleToStart+Math.PI/2);
+            System.out.println("angleToStart : " + angleToStart);
+            robot.turn(angleToStart-Math.PI/2);
             orderWrapper.waitJumper();
             match.execute(0);
         } catch (ContainerException e) {
