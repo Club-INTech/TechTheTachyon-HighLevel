@@ -67,6 +67,9 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
+            if (version == 1) {
+                yEntryPostRecalage+=2;     // difference due aux positions des bras
+            }
             recalageAccelerateur();
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
