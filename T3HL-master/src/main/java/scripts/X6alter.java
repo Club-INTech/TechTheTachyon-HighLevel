@@ -79,7 +79,7 @@ public class X6alter extends Script {
             positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
             positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
         }
-        premierPaletPris = true;
+        premierPaletPris = false;
         try {
             if(symetry) {
                 robot.turn(0);
