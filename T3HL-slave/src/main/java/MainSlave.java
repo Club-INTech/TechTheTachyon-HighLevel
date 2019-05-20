@@ -36,6 +36,7 @@ import utils.ConfigData;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
+import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -89,17 +90,26 @@ public class MainSlave extends RobotEntryPoint {
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
         Vec2 pos = new VectCartesian(1500-300-10, 300+100);
+        double targetAngle;
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
+            targetAngle = Math.PI/2;
+        } else {
+            targetAngle = -Math.PI/2;
+        }
+
         for (int i = 0; i < 5; i++) {
-            if(XYO.getRobotInstance().getPosition().distanceTo(pos) >= 10) {
+            if(XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
                 robot.gotoPoint(pos);
             } else {
                 break;
             }
         }
-        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
-            robot.turn(Math.PI/2);
-        } else {
-            robot.turn(-Math.PI/2);
+        for (int i = 0; i < 5; i++) {
+            if(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI) >= 2*Math.PI/180.0f /* 2° */) {
+                robot.turn(targetAngle);
+            } else {
+                break;
+            }
         }
 
         orderWrapper.waitJumper();
