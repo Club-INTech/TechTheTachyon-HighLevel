@@ -9,6 +9,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Log;
+import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -22,7 +23,7 @@ public class GetBlueAcc extends Script {
     /**
      * Offset avec la planche
      */
-    private final int offsetRecalage = 31+5;
+    private final int offsetRecalage = 31;
 
     /**
      * Offset pour corriger la mesure des sicks (différence réel - mesuré)
@@ -34,6 +35,9 @@ public class GetBlueAcc extends Script {
      */
     private final int ySickToRobotCenter=100;
 
+    private final double dsick = 64;
+    private boolean inSimulation;
+
     public GetBlueAcc(Slave robot, Table table) {
         super(robot, table);
     }
@@ -42,6 +46,7 @@ public class GetBlueAcc extends Script {
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
+            recalage();
             /*
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
@@ -101,6 +106,26 @@ public class GetBlueAcc extends Script {
         }
     }
 
+    private void recalage() {
+        try {
+            robot.turn(Math.PI/2);
+
+            if(!inSimulation) {
+                robot.computeNewPositionAndOrientation(Sick.NOTHING);
+                int ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
+                double rapport = ecart_mesures_sicks / dsick;
+                double teta = Math.atan(-rapport);
+                float distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
+                Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
+
+                Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+                robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
+            }
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override //à adapter
     public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue+10, yBlue); }
 
@@ -110,6 +135,7 @@ public class GetBlueAcc extends Script {
     @Override
     public void updateConfig(Config config) {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.inSimulation = config.getBoolean(ConfigData.SIMULATION);
     }
 
 }
