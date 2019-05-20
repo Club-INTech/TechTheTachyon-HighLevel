@@ -25,7 +25,7 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
         scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).execute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
-        scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
+        scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
 
         if(true)
