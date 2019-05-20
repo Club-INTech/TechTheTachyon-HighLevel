@@ -94,10 +94,7 @@ public class GetBlueAcc extends Script {
                 robot.moveLengthwise(15, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             }
-            Log.STRATEGY.critical("DZQDL PRE SCORE");
             robot.increaseScore(10);
-
-            Log.STRATEGY.critical("DZQDL");
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
