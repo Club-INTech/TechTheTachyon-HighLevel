@@ -16,8 +16,8 @@ public class Goldenium extends Script {
 
     //position d'entrée
 
-    private int xEntry = -715 +40; //a tester
-    private int yEntry = 250+ 30+10  ; //a tester
+    private int xEntry = -715 ; //a tester
+    private int yEntry = 285;//250+ 30+10  ; //a tester
 
     //position de fin
 
@@ -40,14 +40,26 @@ public class Goldenium extends Script {
         //attention il n'y qu'une seule pompe sur le robot secondaire
         try {
             if(!symetrie) {
+                robot.turn(Math.PI);
+                try {
+                    robot.moveLengthwise(510,false);
+                } catch (UnableToMoveException e) {
+                    e.printStackTrace();
+                }
                 robot.turn(0);
             }
             else {
                 robot.turn(Math.PI);
+                try {
+                    robot.moveLengthwise(510,false);
+                } catch (UnableToMoveException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         /*try {
