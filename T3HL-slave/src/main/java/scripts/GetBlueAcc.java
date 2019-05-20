@@ -92,12 +92,12 @@ public class GetBlueAcc extends Script {
             if (!symetrie) {
                 robot.turn(0);
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(-15, false);
+                robot.moveLengthwise(-100, false);
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             } else {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(15, false);
+                robot.moveLengthwise(100, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR, true);
             }
             robot.increaseScore(10);
@@ -119,7 +119,7 @@ public class GetBlueAcc extends Script {
                 Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
 
                 Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-                robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
+                robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI/2, Math.PI));
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
