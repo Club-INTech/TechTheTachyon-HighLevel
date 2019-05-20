@@ -217,9 +217,10 @@ public class MainMaster extends RobotEntryPoint {
         try {
             Match match = container.getService(Match.class);
             Vec2 entryPos = match.entryPosition(0);
+            robot.gotoPoint(new VectCartesian(1350,900-195));
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
             double angleToStart = Math.atan2(entryPos.getY() - currentPosition.getY(), entryPos.getX() - currentPosition.getX());
-            robot.turn(angleToStart);
+            robot.turn(angleToStart+Math.PI/2);
             orderWrapper.waitJumper();
             match.execute(0);
         } catch (ContainerException e) {
