@@ -229,10 +229,10 @@ public class X6alter extends Script {
      * @param robot le robot
      */
     private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) throws UnableToMoveException {
-        CompletableFuture<Void> finalPuckStored = puckStored;
         CompletableFuture<Void> puckPickedUp = async("Mets le bras devant le palet", () -> {
-            if (finalPuckStored != null)
-                finalPuckStored.join();
+            if(puckStored != null) {
+                puckStored.join();
+            }
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         });
@@ -243,6 +243,7 @@ public class X6alter extends Script {
             } else {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
             }
         });
         robot.gotoPoint(pos);
@@ -250,8 +251,6 @@ public class X6alter extends Script {
 
         //robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-
-        puckStored.join();
     }
 
     /**
