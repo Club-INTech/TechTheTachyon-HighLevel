@@ -22,7 +22,7 @@ public class Goldenium extends Script {
     //position de fin
 
     private int xBalance = 137; //a tester
-    private int yBalance = 1385-150; //a tester (vraie valeur: 1388)
+    private int yBalance = 1385-150-20; //a tester (vraie valeur: 1388)
 
     //paramètres
 
