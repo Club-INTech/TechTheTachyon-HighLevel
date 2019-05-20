@@ -79,7 +79,7 @@ public class X6alter extends Script {
             positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
             positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
         }
-        premierPaletPris = true;
+        premierPaletPris = false;
         try {
             if(symetry) {
                 robot.turn(0);
@@ -247,6 +247,9 @@ public class X6alter extends Script {
         }
         else {
             premierPaletPris=true;
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
         }
         robot.gotoPoint(pos);
         if(armInPlace != null) {
@@ -262,7 +265,7 @@ public class X6alter extends Script {
         puckStored = null;
         elevatorAtRightPlace = null;
 
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+        //robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
         // on s'assure que l'électrovanne est vraiment bien ouverte
@@ -273,6 +276,7 @@ public class X6alter extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
             } else {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             }
         });
         CompletableFuture<Void> finalPuckStored1 = puckStored;
@@ -286,7 +290,6 @@ public class X6alter extends Script {
             }
             if( ! blue) {
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             }
         });
 
