@@ -79,7 +79,7 @@ public class X6alter extends Script {
             positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
             positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
         }
-        premierPaletPris = false;
+        premierPaletPris = true;
         try {
             if(symetry) {
                 robot.turn(0);
@@ -228,6 +228,7 @@ public class X6alter extends Script {
      * @param robot le robot
      */
     private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) throws UnableToMoveException {
+
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         CompletableFuture<Void> armInPlace = null;
         if (premierPaletPris) {
@@ -242,8 +243,7 @@ public class X6alter extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
             });
-            robot.gotoPoint(pos);
-            robot.turn(Math.PI);
+
         }
         else {
             premierPaletPris=true;
@@ -255,13 +255,15 @@ public class X6alter extends Script {
                 e.printStackTrace();
             }
         }
+        robot.gotoPoint(pos);
+        //robot.turn(Math.PI);
         // reset
         armInPlace = null;
         puckStored = null;
         elevatorAtRightPlace = null;
 
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+        //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
         // on s'assure que l'électrovanne est vraiment bien ouverte
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
