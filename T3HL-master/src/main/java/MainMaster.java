@@ -219,7 +219,7 @@ public class MainMaster extends RobotEntryPoint {
             Vec2 entryPos = new VectCartesian(1244,900-195);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            double angleToStart = Math.atan2(450- currentPosition.getY(),1000 - currentPosition.getX());
+            double angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
             robot.turn(angleToStart+Math.PI/2);
             orderWrapper.waitJumper();
             match.execute(0);
