@@ -248,6 +248,7 @@ public class X6alter extends Script {
         else {
             premierPaletPris=true;
         }
+        robot.gotoPoint(pos);
         if(armInPlace != null) {
             try {
                 armInPlace.get();
@@ -255,7 +256,6 @@ public class X6alter extends Script {
                 e.printStackTrace();
             }
         }
-        robot.gotoPoint(pos);
         //robot.turn(Math.PI);
         // reset
         armInPlace = null;
