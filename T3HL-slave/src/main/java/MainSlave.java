@@ -89,7 +89,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
         robot.gotoPoint(new VectCartesian(1500-300, 405));
-        if(container.getConfig().getBoolean(ConfigData.COULEUR).equals("violet")) { // symétrie
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
             robot.turn(Math.PI/2);
         } else {
             robot.turn(-Math.PI/2);
