@@ -3,6 +3,7 @@ package scripts;
 import data.CouleurPalet;
 import data.Sick;
 import data.Table;
+import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -50,7 +51,7 @@ public class PaletsZoneDepart extends Script {
         boolean premierPaletPris = false;
         int i =0;
         try {
-            robot.turn(Math.PI / 2);
+            //robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             CompletableFuture<Void> puckStored = null;
@@ -165,7 +166,8 @@ public class PaletsZoneDepart extends Script {
             return new VectCartesian(xEntry, yEntry);
         }
         else{
-            return new VectCartesian(xEntry, yEntry-605);
+            //return new VectCartesian(xEntry, yEntry-605);
+            return XYO.getRobotInstance().getPosition();
         }
     }
 
