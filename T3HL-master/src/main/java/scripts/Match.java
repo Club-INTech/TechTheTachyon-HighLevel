@@ -45,10 +45,10 @@ public class Match extends Script {
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre
             syncBuddy.sendPaletX6Free();
 
-            robot.followPathTo(accelerateurScript.entryPosition(0));
+            robot.followPathTo(accelerateurScript.entryPosition(1));
 
             // 6. Faire l'accélérateur
-            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).execute(0);
+            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).execute(1);
         } catch (UnableToMoveException | TimeoutError e) {
             e.printStackTrace();
             accelerateurScript.shouldContinueScript(e);
