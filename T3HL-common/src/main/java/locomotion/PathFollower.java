@@ -112,7 +112,7 @@ public class PathFollower extends ServiceThread {
      */
     public void gotoPoint(Vec2 aim) throws UnableToMoveException {
         SensorState.MOVING.setData(true);
-        orderWrapper.gotoPoint(aim);
+        orderWrapper.moveToPoint(aim);
 
         waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (SensorState.STUCKED.getData()) {
