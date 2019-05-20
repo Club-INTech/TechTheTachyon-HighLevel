@@ -240,10 +240,9 @@ public class X6alter extends Script {
                         e.printStackTrace();
                     }
                 }
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
+                //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR,true);
             });
-            robot.gotoPoint(pos);
-            robot.turn(Math.PI);
+
         }
         else {
             premierPaletPris=true;
@@ -255,6 +254,8 @@ public class X6alter extends Script {
                 e.printStackTrace();
             }
         }
+        robot.gotoPoint(pos);
+        //robot.turn(Math.PI);
         // reset
         armInPlace = null;
         puckStored = null;
