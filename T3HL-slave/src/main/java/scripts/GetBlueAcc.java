@@ -85,7 +85,7 @@ public class GetBlueAcc extends Script {
             // test sans rotation
 
             robot.turn(Math.PI);
-            robot.gotoPoint(new VectCartesian(xBlue-50, yBlue+10)); // on répète la position pour être sûr qu'il est là
+            robot.gotoPoint(new VectCartesian(xBlue+50, yBlue+10)); // on répète la position pour être sûr qu'il est là
 
 
             if (!symetrie) {
