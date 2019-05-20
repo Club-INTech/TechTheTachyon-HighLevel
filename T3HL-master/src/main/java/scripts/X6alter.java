@@ -17,20 +17,24 @@ import utils.math.VectCartesian;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
-public class PaletsX6 extends Script {
+public class X6alter extends Script {
     private ArrayList<VectCartesian> positions;
     private boolean symetry;
     boolean onvaprendrelebleu= false;
+    boolean premierPaletPris;
+    CompletableFuture<Void> puckStored = null;
+    CompletableFuture<Void> elevatorAtRightPlace = null;
 
     private static final int DISTANCE_INTER_PUCK = 100;
-
     private static int offsetY = -4;
     private static int offsetX = -2;
 
     private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
 
-    public PaletsX6(Master robot, Table table) {
+    public X6alter(Master robot, Table table) {
         super(robot, table);
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
@@ -52,28 +56,30 @@ public class PaletsX6 extends Script {
             /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
                 Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
              */
+
             int i=0;
-            //Position pour le côté droit
-            //difference de ~100  entre chaque palet
-            if (version == 0) { //rouge droite
+        //Position pour le côté droit
+        //difference de ~100  entre chaque palet
+        if (version == 0) { //rouge droite
             // version pour juste les rouges
-                positions.add(new VectCartesian(905, 1206));
-                positions.add(new VectCartesian(805 , 1206));
-                positions.add(new VectCartesian(597, 1206));
-            } else if (version == 1) {  // version pour juste les verts
-             positions.add(new VectCartesian(905, 1206));
-                positions.add(new VectCartesian(505, 1206));
-            } else if (version == 2) {  //// version pour juste le bleu
-                positions.add(new VectCartesian(834, 1206));
-            }//version pour prendre les palets à la suite sauf le bleu
-            else if (version == 3 || version == 4) {
-                positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY)); // rouge (0)
-                positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY)); // vert (1)
-                positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY)); // rouge (2)
-                positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY)); // bleu (3)
-                positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
-                positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
-            }
+            positions.add(new VectCartesian(905, 1206));
+            positions.add(new VectCartesian(805 , 1206));
+            positions.add(new VectCartesian(597, 1206));
+        } else if (version == 1) {  // version pour juste les verts
+            positions.add(new VectCartesian(905, 1206));
+            positions.add(new VectCartesian(505, 1206));
+        } else if (version == 2) {  //// version pour juste le bleu
+            positions.add(new VectCartesian(834, 1206));
+        }//version pour prendre les palets à la suite sauf le bleu
+        else if (version == 3 || version == 4) {
+            positions.add(new VectCartesian(1000+offsetX, 1204+10+5+offsetY)); // rouge (0)
+            positions.add(new VectCartesian(900+offsetX, 1204+10+5+offsetY)); // vert (1)
+            positions.add(new VectCartesian(800+offsetX, 1204+10+5+offsetY)); // rouge (2)
+            positions.add(new VectCartesian(700+offsetX, 1204+10+5+offsetY)); // bleu (3)
+            positions.add(new VectCartesian(600+offsetX, 1204+10+5+offsetY)); // rouge (4)
+            positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
+        }
+        premierPaletPris = false;
         try {
             if(symetry) {
                 robot.turn(0);
@@ -131,6 +137,7 @@ public class PaletsX6 extends Script {
                 Iterator<VectCartesian> positionIterator = positions.iterator();
                 while(positionIterator.hasNext()) {
                     Log.STRATEGY.debug("#Palets droits= "+robot.getNbPaletsDroits());
+                    CompletableFuture<Void> armInPlace = null;
                     if(robot.getNbPaletsDroits() == 5 && !hasSwitched) { // si on a plus de place, on retourne le robot
                         if (!hasSwitched){
                             onvaprendrelebleu = true;
@@ -182,7 +189,7 @@ public class PaletsX6 extends Script {
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean blue) {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue) throws UnableToMoveException {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
 
@@ -220,31 +227,67 @@ public class PaletsX6 extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      */
-    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) {
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) throws UnableToMoveException {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
+        CompletableFuture<Void> armInPlace = null;
+        if (premierPaletPris) {
+            CompletableFuture<Void> finalPuckStored = puckStored;
+            armInPlace = async("Mets le bras devant le palet", () -> {
+                if(finalPuckStored != null) {
+                    try {
+                        finalPuckStored.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DISTRIBUTEUR,true);
+            });
+            robot.gotoPoint(pos);
+            robot.turn(Math.PI);
+        }
+        else {
+            premierPaletPris=true;
+        }
+        if(armInPlace != null) {
+            try {
+                armInPlace.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        // reset
+        armInPlace = null;
+        puckStored = null;
+        elevatorAtRightPlace = null;
 
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
 
         // on s'assure que l'électrovanne est vraiment bien ouverte
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
-        try {
+        puckStored=async("Dépôt", () -> {
             if(blue) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
             } else {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
             }
-            async("Dépôt", () -> {
-                if( ! blue) {
-                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+        });
+        CompletableFuture<Void> finalPuckStored1 = puckStored;
+        elevatorAtRightPlace = async("Recalage ascenseur", () -> {
+            if(finalPuckStored1 != null) {
+                try {
+                    finalPuckStored1.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
                 }
-            });
-            robot.gotoPoint(pos);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
+            }
+        });
+        if( ! blue) {
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
         }
+
     }
 
     /**
