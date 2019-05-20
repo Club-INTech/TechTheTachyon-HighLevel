@@ -38,7 +38,7 @@ public class Goldenium extends Script {
     @Override
     public void execute(Integer version) {
         //attention il n'y qu'une seule pompe sur le robot secondaire
-        try {
+        /*try {
             if(!symetrie) {
                 robot.turn(Math.PI);
                 try {
@@ -58,7 +58,7 @@ public class Goldenium extends Script {
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
-        }
+        }*/
 
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
