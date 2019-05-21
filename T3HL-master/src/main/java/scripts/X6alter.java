@@ -1,8 +1,5 @@
 package scripts;
-import data.CouleurPalet;
-import data.SensorState;
-import data.Sick;
-import data.Table;
+import data.*;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -90,6 +87,12 @@ public class X6alter extends Script {
             robot.turn(Math.PI);
             if(symetry) {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                // remplacement de la position dans le HL
+                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()-Math.atan(5/100));
+
+                Log.LOCOMOTION.debug("New position with SICKs: "+XYO.getRobotInstance().getPosition());
+                // remplacement de la position dans le LL
+                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+Math.atan(5/100));
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
