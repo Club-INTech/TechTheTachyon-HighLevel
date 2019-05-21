@@ -69,11 +69,7 @@ public class PaletsZoneDepart extends Script {
                     CompletableFuture<Void> finalPuckStored = puckStored;
                     armInPlace = async("Mets le bras au dessus du palet", () -> {
                         if(finalPuckStored != null) {
-                            try {
-                                finalPuckStored.get();
-                            } catch (InterruptedException | ExecutionException e) {
-                                e.printStackTrace();
-                            }
+                            finalPuckStored.join();
                         }
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
                     });
@@ -85,11 +81,7 @@ public class PaletsZoneDepart extends Script {
                     premierPaletPris = true;
                 }
                 if(armInPlace != null) {
-                    try {
-                        armInPlace.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                    }
+                    armInPlace.join();
                 }
                 // reset
                 armInPlace = null;
@@ -110,11 +102,7 @@ public class PaletsZoneDepart extends Script {
                 CompletableFuture<Void> finalPuckStored1 = puckStored;
                 elevatorAtRightPlace = async("Recalage ascenseur", () -> {
                     if(finalPuckStored1 != null) {
-                        try {
-                            finalPuckStored1.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
+                        finalPuckStored1.join();
                     }
                     readjustElevator(puckIndex);
                 });
