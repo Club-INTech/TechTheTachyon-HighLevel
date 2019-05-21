@@ -47,6 +47,7 @@ public class X6alter extends Script {
         versions.add(1);
         versions.add(2);
         versions.add(3);
+        versions.add(4);
         /*position des 6 palets ( position dans le tableau positionS ) */
         this.positions = new ArrayList<>();
     }

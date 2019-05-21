@@ -91,13 +91,13 @@ public class MainSlave extends RobotEntryPoint {
         double targetAngle;
         //Pour aller à la bonne position de départ
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
-            XYO.getRobotInstance().update(1200, 300, Math.PI);
+            XYO.getRobotInstance().update(1500-191, 350, Math.PI);
             robot.setPositionAndOrientation(newPos, Math.PI);
             targetAngle = Math.PI / 2;
         }
         else{
             //s'oriente vers PI/2 avant de se recaler
-            XYO.getRobotInstance().update(1200, 300, Math.PI/2);
+            XYO.getRobotInstance().update(1500-191, 350, Math.PI/2);
             robot.setPositionAndOrientation(newPos, Math.PI/2);
             targetAngle = -Math.PI/2;
         }
