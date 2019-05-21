@@ -21,6 +21,10 @@ public enum Offsets implements ConfigInfo {
     ACCELERATEUR_Y_JAUNE(3),
 
     /*      SLAVE       */
+    PALETSX3_X_JAUNE(0),
+    PALETSX3_Y_JAUNE(0),
+    PALETSX3_X_VIOLET(0),
+    PALETSX3_Y_VIOLET(0),
 
     ;
 
