@@ -120,9 +120,13 @@ public class X6alter extends Script {
                 robot.followPathTo(positionBalance);
 
                 // On dépose le bleu
+                // on tourne en même temps qu'on lève le bras
+                CompletableFuture<Void> armInPlace = async("Dépose bleu dans la balance", () -> {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
+                });
                 robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                 robot.increaseScore(12);
+                armInPlace.join(); // on attend que le bras soit à la bonne position
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
