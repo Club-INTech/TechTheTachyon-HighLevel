@@ -22,6 +22,7 @@ public class PanneauService implements Service {
     private Container container;
     private int programPort;
     private int ledCount;
+    private boolean have7seg;
 
     public PanneauService(Container container) {
         this.container = container;
@@ -34,7 +35,7 @@ public class PanneauService implements Service {
     public Panneau getPanneau() {
         if(panel == null) {
             try {
-                panel = new Panneau(ledCount, programPort, RaspiPin.GPIO_07);
+                panel = new Panneau(ledCount, programPort, RaspiPin.GPIO_07, have7seg);
                 panel.addListener(teamColor -> {
                     couleur=panel.getTeamColor().toString().toLowerCase();
                     Log.STRATEGY.warning("Couleur: "+couleur);
@@ -58,5 +59,6 @@ public class PanneauService implements Service {
         couleur = config.getString(ConfigData.COULEUR);
         ledCount = config.getInt(ConfigData.LED_COUNT);
         programPort = config.getInt(ConfigData.LED_PROGRAM_PORT);
+        have7seg = config.getBoolean(ConfigData.USING_7_SEGMENTS);
     }
 }

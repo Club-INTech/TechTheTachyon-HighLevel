@@ -108,6 +108,7 @@ public enum ConfigData implements ConfigInfo
 
     LED_COUNT(16),
     LED_PROGRAM_PORT(19500),
+    USING_7_SEGMENTS(true),
 
     /**
      * Timings
