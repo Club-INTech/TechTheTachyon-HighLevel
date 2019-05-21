@@ -53,6 +53,7 @@ public class PaletsZoneDepart extends Script {
         try {
             //robot.turn(Math.PI / 2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             CompletableFuture<Void> puckStored = null;
             CompletableFuture<Void> elevatorAtRightPlace = null;
@@ -74,15 +75,16 @@ public class PaletsZoneDepart extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
+                int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
-                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                    if(puckIndex == 0) { // on retourne au sol que pour le 2e palet
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                    }
                 });
 
-                int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 CompletableFuture<Void> finalPuckStored1 = puckStored;
                 elevatorAtRightPlace = async("Recalage ascenseur", () -> {
                     if(finalPuckStored1 != null) {
@@ -144,10 +146,7 @@ public class PaletsZoneDepart extends Script {
 
 
     @Override
-    public void finalize(Exception e) {
-        // range le bras quand on a fini
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,false);
-    }
+    public void finalize(Exception e) { }
 
     @Override
     public void updateConfig(Config config) {
