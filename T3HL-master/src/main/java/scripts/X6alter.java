@@ -26,11 +26,10 @@ public class X6alter extends Script {
     CompletableFuture<Void> elevatorAtRightPlace = null;
 
     private static final int DISTANCE_INTER_PUCK = 100;
-    private static int offsetY = -4;
-    private static int offsetX = -2;
+    private static int offsetY ;
+    private static int offsetX ;
     private static double offsetTeta;
-
-    private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
+    private static  Vec2 positionBalance ;
 
     public X6alter(Master robot, Table table) {
         super(robot, table);
@@ -58,9 +57,16 @@ public class X6alter extends Script {
 
             int i=0;
             if (symetry){
-                offsetX=20;
-
+                offsetX=Offsets.PALETSX6_X_VIOLET.getOffset();
+                offsetY=Offsets.PALETSX6_Y_VIOLET.getOffset();
+                positionBalance=new VectCartesian(200,1204+10+5+offsetY+20);
             }
+            else{
+                offsetX=Offsets.PALETSX6_X_JAUNE.getOffset();
+                offsetY=Offsets.PALETSX6_Y_JAUNE.getOffset();
+                new VectCartesian(200,1204+10+5+offsetY+20);
+            }
+
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
         if (version == 0) { //rouge droite
@@ -87,18 +93,14 @@ public class X6alter extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
-                //offsetTeta=Math.atan(10/100);
+                offsetTeta=Math.atan(10/100);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
-                /*
                 // remplacement de la position dans le HL
                 XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+offsetTeta);
 
                 Log.LOCOMOTION.debug("New position with SICKs: "+XYO.getRobotInstance().getPosition());
-                */
                 // remplacement de la position dans le LL
-                //robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+offsetTeta);
-                robot.turn(Math.PI);
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
+                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+offsetTeta);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
