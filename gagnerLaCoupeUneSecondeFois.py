@@ -33,4 +33,4 @@ while GPIO.input(8) == GPIO.HIGH:
 GPIO.cleanup()
 os.system('wall "démarrage"')
 os.system("sudo killall -9 java")
-os.system("/home/pi/TechTheTachyon-HighLevel/run_slave_from_python")
+os.system("/home/pi/TechTheTachyon-HighLevel/run_slave_from_python.sh")
