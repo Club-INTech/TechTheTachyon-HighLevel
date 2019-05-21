@@ -101,7 +101,7 @@
         <dependency>
             <groupId>com.github.Club-INTech</groupId>
             <artifactId>PanneauRaspi</artifactId>
-            <version>python-SNAPSHOT</version>
+            <version>master-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
