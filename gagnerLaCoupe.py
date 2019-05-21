@@ -34,3 +34,16 @@ GPIO.cleanup()
 os.system('wall "démarrage"')
 os.system("sudo killall -9 java")
 os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh")
+
+"""
+while True:
+    while GPIO.input(8) == LOW:
+        wait()
+    os.system("sudo killall -9 java")
+    os.system('wall "HL tué"')
+    while GPIO.input(8) == HIGH:
+        wait()
+    os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh")
+    os.system('wall "HL relancé"'
+"""
+

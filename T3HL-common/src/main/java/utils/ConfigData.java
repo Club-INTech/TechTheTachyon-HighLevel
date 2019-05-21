@@ -104,8 +104,12 @@ public enum ConfigData implements ConfigInfo
     LL_MASTER_SIMULATEUR(10001),
     HL_SLAVE_SIMULATEUR(20001),
     HL_MASTER_SIMULATEUR(20002),
-    DEBUG_SIMULATEUR_PORT(19999),
+    DEBUG_SIMULATEUR_PORT(19999)
 
+    ,
+    /**
+     * Paramètres du panneau
+     */
     LED_COUNT(16),
     LED_PROGRAM_PORT(19500),
     USING_7_SEGMENTS(true),
