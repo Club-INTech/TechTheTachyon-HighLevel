@@ -64,41 +64,25 @@ public class PaletsZoneDepart extends Script {
                     robot.followPathTo(position,() -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
                 }
                 else if (premierPaletPris) {
-                    // SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                    //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,false);
-                    CompletableFuture<Void> finalPuckStored = puckStored;
-                    armInPlace = async("Mets le bras au dessus du palet", () -> {
-                        if(finalPuckStored != null) {
-                            finalPuckStored.join();
-                        }
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
-                    });
                     robot.followPathTo(position);
                     robot.turn(Math.PI / 2);
-                    //waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                    //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
                 } else {
                     premierPaletPris = true;
                 }
-                if(armInPlace != null) {
-                    armInPlace.join();
+                if(puckStored != null) {
+                    puckStored.join();
                 }
-                // reset
-                armInPlace = null;
-                puckStored = null;
-                elevatorAtRightPlace = null;
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,false);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
-
-                int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,false);
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true); // on n'attend pas que le vide se casse pour pouvoir bouger quand on pose le palet
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 });
 
+                int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 CompletableFuture<Void> finalPuckStored1 = puckStored;
                 elevatorAtRightPlace = async("Recalage ascenseur", () -> {
                     if(finalPuckStored1 != null) {
@@ -106,7 +90,6 @@ public class PaletsZoneDepart extends Script {
                     }
                     readjustElevator(puckIndex);
                 });
-
 
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
