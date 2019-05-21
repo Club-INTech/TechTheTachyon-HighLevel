@@ -103,7 +103,7 @@ public class Accelerateur extends Script {
             robot.turn(Math.PI);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
             recalageLeft.join();
-            while (robot.getNbPaletsGauches() > 0) {
+           /* while (robot.getNbPaletsGauches() > 0) {
                 robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
@@ -116,7 +116,29 @@ public class Accelerateur extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
                 robot.popPaletGauche();
-            }
+            }*/
+           robot.invertOrders(robot -> {
+               while (robot.getNbPaletsDroits() > 0) {
+                   robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+                   robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                   if (version == 0) {
+                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+                       robot.increaseScore(10);
+                   } else if (version == 1) {
+                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+                       robot.increaseScore(10);
+                   }
+
+                   if (robot.getNbPaletsDroits() > 1) {
+                       SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+                       robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                   }
+                   robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                   robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                   robot.popPaletDroit();
+               }
+           });
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
 
         } catch (UnableToMoveException e) {

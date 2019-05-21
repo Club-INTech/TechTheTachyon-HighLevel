@@ -200,12 +200,7 @@ public class X6alter extends Script {
             storePuck(blue);
 
             if (moveDistance != 0) {
-                robot.moveLengthwise(moveDistance, false, () -> {
-                    if( ! blue) {
-                        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
-                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                    }
-                });
+                robot.moveLengthwise(moveDistance, false);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
