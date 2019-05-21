@@ -103,18 +103,18 @@ public class MainSlave extends RobotEntryPoint {
         }
 
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-            robot.gotoPoint(pos);
-            for (int i = 0; i < 5; i++) {
-                if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
-                    robot.gotoPoint(pos);
-                } else {
-                    break;
-                }
+        robot.gotoPoint(pos);
+        for (int i = 0; i < 5; i++) {
+            if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
+                robot.gotoPoint(pos);
+            } else {
+                break;
             }
+        }
 
         //Pour se tourner vers la bonne orientation
         for (int i = 0; i < 5; i++) {
-            if(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI) >= 2*Math.PI/180.0f /* 2° */) {
+            if(Math.abs(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI)) >= 2*Math.PI/180.0f /* 2° */) {
                 robot.turn(targetAngle);
             } else {
                 break;
