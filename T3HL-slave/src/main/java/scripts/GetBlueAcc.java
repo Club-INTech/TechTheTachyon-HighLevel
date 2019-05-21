@@ -16,7 +16,7 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
-    private int xBlue = -140+20-10; //FIXME: positions à faire
+    private int xBlue = -140+20+10; //FIXME: positions à faire
     private int yBlue = 285+5+6+5+5;
     private boolean symetrie;
 
@@ -137,7 +137,7 @@ public class GetBlueAcc extends Script {
     }
 
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue+10, yBlue); }
+    public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue+10+10, yBlue); }
 
     @Override
     public void finalize(Exception e) { }
