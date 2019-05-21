@@ -13,6 +13,7 @@ import utils.container.ContainerException;
 import utils.math.*;
 
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 public class Accelerateur extends Script {
 
@@ -55,6 +56,8 @@ public class Accelerateur extends Script {
     double teta;
     //variable pour le calcul du recalage
     int yEntryPostRecalage = 410-78+15-4-5;
+    private CompletableFuture<Void> recalageLeft;
+    private CompletableFuture<Void> recalageRight;
 
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
@@ -72,12 +75,11 @@ public class Accelerateur extends Script {
             }
             recalageAccelerateur();
 
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
             robot.turn(0);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+            recalageRight.join();
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 if (version == 0) {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
@@ -94,14 +96,15 @@ public class Accelerateur extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
                 robot.popPaletDroit();
             }
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
             robot.turn(Math.PI);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            recalageLeft.join();
             while (robot.getNbPaletsGauches() > 0) {
                 robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
@@ -112,9 +115,9 @@ public class Accelerateur extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
                 robot.popPaletGauche();
             }
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
@@ -158,12 +161,16 @@ public class Accelerateur extends Script {
     @Override
     public void executeWhileMovingToEntry(int version) {
         robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, false);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+        recalageLeft = async("Recalage ascenseur gauche", () -> {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+        });
+        recalageRight = async("Recalage ascenseur droit", () -> {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+        });
     }
 
     @Override
