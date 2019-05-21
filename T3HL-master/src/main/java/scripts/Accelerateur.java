@@ -77,6 +77,7 @@ public class Accelerateur extends Script {
                     yEntryPostRecalage+=5;
                 }
             }
+            robot.turn(0);
             recalageAccelerateur();
 
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
