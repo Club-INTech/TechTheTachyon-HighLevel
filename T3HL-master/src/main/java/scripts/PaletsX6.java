@@ -75,13 +75,12 @@ public class PaletsX6 extends Script {
                 positions.add(new VectCartesian(500+offsetX, 1204+10+5+offsetY)); // vert (5)
             }
         try {
-            /*if(symetry) {
-                robot.turn(0);
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
-            } else {*/
-                robot.turn(Math.PI);
+            robot.turn(Math.PI);
+            if(symetry) {
+                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_PI);
+            } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-            //}
+            }
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
