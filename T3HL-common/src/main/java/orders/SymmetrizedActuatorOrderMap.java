@@ -68,6 +68,8 @@ public class SymmetrizedActuatorOrderMap implements Service {
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_GOLDONIUM, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_GOLDONIUM);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_BALANCE);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_TIENT_BLEU, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU);
+        correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_TIENT_BLEU);
         correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
         correspondenceMap.put(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET);
