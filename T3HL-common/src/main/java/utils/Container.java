@@ -19,6 +19,7 @@
 package utils;
 
 import pfg.config.Config;
+import pfg.config.ConfigInfo;
 import utils.container.ContainerException;
 import utils.container.Service;
 
@@ -108,7 +109,10 @@ public class Container implements Service {
         instanciedServices = new HashMap<>();
         instanciedThreads = new HashMap<>();
         System.out.println("Chargement de la config...");
-        config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile, "Offsets");
+        ConfigInfo[] values = new ConfigInfo[ConfigData.values().length + Offsets.values().length];
+        System.arraycopy(ConfigData.values(), 0, values, 0, ConfigData.values().length);
+        System.arraycopy(Offsets.values(), 0, values, ConfigData.values().length, Offsets.values().length);
+        config = new Config(values, true, "../config/config.txt", "Common", profile, "Offsets");
 
         Offsets.loadFromConfig(config);
         /* Le container est un service ! */
