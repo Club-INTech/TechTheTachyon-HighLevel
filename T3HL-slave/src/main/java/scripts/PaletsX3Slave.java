@@ -8,6 +8,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -18,12 +19,13 @@ public class PaletsX3Slave extends Script{
 
     private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
-    private int offsetX = 0;
-    private int offsetY = 0;
+    private int offsetX;
+    private int offsetY;
+
     /**
      * constante
      */
-    private boolean symetrie;
+    private boolean symetry;
 
 
     public PaletsX3Slave(Slave robot, Table table) {
@@ -33,10 +35,19 @@ public class PaletsX3Slave extends Script{
     @Override
     public void execute(Integer version) {
         try {
+
+            if (!symetry) {
+                offsetX= Offsets.PALETSX3_X_JAUNE.get();
+                offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+            } else {
+                offsetX=Offsets.PALETSX3_X_VIOLET.get();
+                offsetY=Offsets.PALETSX3_Y_VIOLET.get();
+            }
+
             recalage();
             robot.followPathTo(new VectCartesian(1338+offsetX, yEntry+offsetY));
 
-            if(!symetrie) {
+            if(!symetry) {
                 robot.turn(Math.PI);
             }
             else {
@@ -62,7 +73,7 @@ public class PaletsX3Slave extends Script{
     }
 
     private void recalage() {
-        if(symetrie) {
+        if(symetry) {
             try {
                 robot.turn(-Math.PI/2);
                 robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
@@ -91,6 +102,14 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public Vec2 entryPosition(Integer version) {
+        if (!symetry) {
+            offsetX= Offsets.PALETSX3_X_JAUNE.get();
+            offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+        } else {
+            offsetX=Offsets.PALETSX3_X_VIOLET.get();
+            offsetY=Offsets.PALETSX3_Y_VIOLET.get();
+        }
+
         return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
@@ -99,7 +118,7 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         super.updateConfig(config);
     }
 
