@@ -28,6 +28,7 @@ public class X6alter extends Script {
     private static final int DISTANCE_INTER_PUCK = 100;
     private static int offsetY = -4;
     private static int offsetX = -2;
+    private static double offsetTeta;
 
     private static final Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
 
@@ -86,13 +87,14 @@ public class X6alter extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
+                offsetTeta=Math.atan(10/100);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
                 // remplacement de la position dans le HL
-                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()-Math.atan(5/100));
+                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+offsetTeta);
 
                 Log.LOCOMOTION.debug("New position with SICKs: "+XYO.getRobotInstance().getPosition());
                 // remplacement de la position dans le LL
-                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+Math.atan(5/100));
+                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+offsetTeta);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
