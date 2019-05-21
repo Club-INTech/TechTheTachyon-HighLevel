@@ -7,6 +7,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Offsets;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -18,6 +19,8 @@ public class Goldenium extends Script {
 
     private int xEntry = -715 +20 ; //a tester
     private int yEntry = 285+20-39;//250+ 30+10  ; //a tester
+    private double offsetX;
+    private double offsetY;
 
     //position de fin
 
@@ -37,6 +40,7 @@ public class Goldenium extends Script {
 
     @Override
     public void execute(Integer version) {
+
         //attention il n'y qu'une seule pompe sur le robot secondaire
         /*try {
             if(!symetrie) {
@@ -104,7 +108,14 @@ public class Goldenium extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        if (!symetrie) {
+            offsetX = Offsets.GOLDENIUM_X_JAUNE.get();
+            offsetY = Offsets.GOLDENIUM_Y_JAUNE.get();
+        } else {
+            offsetX=Offsets.GOLDENIUM_X_VIOLET.get();
+            offsetY=Offsets.GOLDENIUM_Y_VIOLET.get();
+        }
+        return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
     @Override

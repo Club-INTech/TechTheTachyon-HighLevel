@@ -15,11 +15,11 @@ COULEUR                             =jaune
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
 SIMULATION                          =false
-USING_LIDAR                         =false
+USING_LIDAR                         =true
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 USING_PANEL                         =false
-CONNECT_TO_BUDDY                    =false
+CONNECT_TO_BUDDY                    =true
 
 #________________________________________________________________________________________________________________________
 

@@ -26,6 +26,11 @@ public enum Offsets implements ConfigInfo {
     PALETSX3_X_VIOLET(0),
     PALETSX3_Y_VIOLET(0),
 
+    GOLDENIUM_X_JAUNE(0),
+    GOLDENIUM_Y_JAUNE(0),
+    GOLDENIUM_X_VIOLET(0),
+    GOLDENIUM_Y_VIOLET(0),
+
     ;
 
     private double offset;
