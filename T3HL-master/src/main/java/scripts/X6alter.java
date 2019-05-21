@@ -94,6 +94,8 @@ public class X6alter extends Script {
 
             if(version == 4) {
                 //On prend le 1er palet
+
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 grabPuckGoto(robot, positions.get(1), false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
