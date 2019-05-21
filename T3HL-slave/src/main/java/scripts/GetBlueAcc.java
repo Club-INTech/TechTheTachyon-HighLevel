@@ -91,21 +91,21 @@ public class GetBlueAcc extends Script {
             if (!symetrie) {
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(-120, false);
+                robot.moveLengthwise(-20, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_RECULE,true);
-                robot.moveLengthwise(100,false);
+                robot.moveLengthwise(20,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR);
-                robot.moveLengthwise(-120,false);
+                robot.moveLengthwise(-20,false);
             } else {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_SECONDAIRE,true);
-                robot.moveLengthwise(120, false);
+                robot.moveLengthwise(20, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_RECULE,true);
-                robot.moveLengthwise(-100,false);
+                robot.moveLengthwise(-20,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR,true);
-                robot.moveLengthwise(120,false);
+                robot.moveLengthwise(20,false);
             }
             robot.increaseScore(10);
         } catch (UnableToMoveException e) {
