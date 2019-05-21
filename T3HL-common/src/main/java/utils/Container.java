@@ -108,8 +108,9 @@ public class Container implements Service {
         instanciedServices = new HashMap<>();
         instanciedThreads = new HashMap<>();
         System.out.println("Chargement de la config...");
-        config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile);
+        config = new Config(ConfigData.values(), true, "../config/config.txt", "Common", profile, "Offsets");
 
+        Offsets.loadFromConfig(config);
         /* Le container est un service ! */
         instanciedServices.put(getClass().getSimpleName(), this);
     }
@@ -290,6 +291,8 @@ public class Container implements Service {
                 continue;
             service.updateConfig(config);
         }
+
+        Offsets.loadFromConfig(config);
     }
 
     /**

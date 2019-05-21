@@ -44,3 +44,13 @@ USING_7_SEGMENTS                    = false
 ROBOT_RAY                           = 150
 BUDDY_RAY                           = 190
 VECTOR_COMPARISON_THRESHOLD         = 15
+
+#________________________________________________________________________________________________________________________
+[Offsets]
+PALETSX6_X_JAUNE                    =-2
+PALETSX6_Y_JAUNE                    =-4
+PALETSX6_X_VIOLET                   =20
+PALETSX6_Y_VIOLET                   =4
+
+ACCELERATEUR_Y_VIOLET               =6
+ACCELERATEUR_Y_JAUNE                =3

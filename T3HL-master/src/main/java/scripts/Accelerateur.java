@@ -9,6 +9,7 @@ import robot.Master;
 import utils.ConfigData;
 import utils.Container;
 import utils.Log;
+import utils.Offsets;
 import utils.container.ContainerException;
 import utils.math.*;
 
@@ -70,14 +71,15 @@ public class Accelerateur extends Script {
     @Override
     public void execute(Integer version) {
         try {
+            int yEntryPostRecalageAvecSymetrie = yEntryPostRecalage;
             if (version == 1) {
                 if (!symetry) {
-                    yEntryPostRecalage+=3;     // difference due aux positions des bras
+                    yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_JAUNE.get();     // difference due aux positions des bras
                 } else {
-                    yEntryPostRecalage+=5;
+                    yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_VIOLET.get();
                 }
             }
-            recalageAccelerateur();
+            recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             robot.turn(0);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
             recalageRight.join();
@@ -87,11 +89,10 @@ public class Accelerateur extends Script {
                 if (version == 0) {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                    robot.increaseScore(10);
                 } else if (version == 1) {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                    robot.increaseScore(10);
                 }
+                robot.increaseScore(10);
 
                 if (robot.getNbPaletsDroits() > 1) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
@@ -127,11 +128,10 @@ public class Accelerateur extends Script {
                    if (version == 0) {
                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                       robot.increaseScore(10);
                    } else if (version == 1) {
                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                       robot.increaseScore(10);
                    }
+                   robot.increaseScore(10);
 
                    if (robot.getNbPaletsDroits() > 1) {
                        SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
@@ -150,7 +150,7 @@ public class Accelerateur extends Script {
     }
 
 
-    public void recalageAccelerateur() throws UnableToMoveException {
+    public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
@@ -169,7 +169,7 @@ public class Accelerateur extends Script {
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
-        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntryPostRecalage));
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
     }
 
     @Override

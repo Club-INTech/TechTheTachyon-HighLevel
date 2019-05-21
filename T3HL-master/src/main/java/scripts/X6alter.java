@@ -7,6 +7,7 @@ import robot.Master;
 import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
+import utils.Offsets;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class X6alter extends Script {
     private ArrayList<VectCartesian> positions;
@@ -57,13 +57,13 @@ public class X6alter extends Script {
 
             int i=0;
             if (symetry){
-                offsetX=Offsets.PALETSX6_X_VIOLET.getOffset();
-                offsetY=Offsets.PALETSX6_Y_VIOLET.getOffset();
+                offsetX= Offsets.PALETSX6_X_VIOLET.get();
+                offsetY=Offsets.PALETSX6_Y_VIOLET.get();
                 positionBalance=new VectCartesian(200,1204+10+5+offsetY+20);
             }
             else{
-                offsetX=Offsets.PALETSX6_X_JAUNE.getOffset();
-                offsetY=Offsets.PALETSX6_Y_JAUNE.getOffset();
+                offsetX=Offsets.PALETSX6_X_JAUNE.get();
+                offsetY=Offsets.PALETSX6_Y_JAUNE.get();
                 new VectCartesian(200,1204+10+5+offsetY+20);
             }
 
