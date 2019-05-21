@@ -60,7 +60,8 @@ public class X6alter extends Script {
 
             int i=0;
             if (symetry){
-                offsetX=3;
+                offsetX=20;
+
             }
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
