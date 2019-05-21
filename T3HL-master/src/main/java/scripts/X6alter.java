@@ -82,11 +82,10 @@ public class X6alter extends Script {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         premierPaletPris = false;
         try {
+            robot.turn(Math.PI);
             if(symetry) {
-                robot.turn(0);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
-                robot.turn(Math.PI);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
             robot.followPathTo(positions.get(0));
