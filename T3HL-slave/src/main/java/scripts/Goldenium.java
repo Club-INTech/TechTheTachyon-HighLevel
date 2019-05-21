@@ -61,11 +61,12 @@ public class Goldenium extends Script {
         }*/
 
         try {
-            if(symetrie) {
+            robot.turn(0);
+            /*if(symetrie) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
-            }
+            }*/
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -84,12 +85,13 @@ public class Goldenium extends Script {
 
         try {
             robot.followPathTo(positionBalance);
-            if(!symetrie) {
+            robot.turn(0);
+           /* if(!symetrie) {
                 robot.turn(Math.PI);
             }
             else {
                 robot.turn(0);
-            }
+            }*/
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
