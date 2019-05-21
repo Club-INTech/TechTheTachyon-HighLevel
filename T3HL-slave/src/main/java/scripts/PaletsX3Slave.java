@@ -19,8 +19,8 @@ public class PaletsX3Slave extends Script{
 
     private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
-    private int offsetX;
-    private int offsetY;
+    private double offsetX;
+    private double offsetY;
 
     /**
      * constante
