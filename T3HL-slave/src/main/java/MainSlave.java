@@ -94,17 +94,11 @@ public class MainSlave extends RobotEntryPoint {
         double targetAngle;
         //Pour aller à la bonne position de départ
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
-            targetAngle = Math.PI/2;
-            robot.gotoPoint(posv);
-            for (int i = 0; i < 5; i++) {
-                if (XYO.getRobotInstance().getPosition().distanceTo(posv) >= 5) {
-                    robot.gotoPoint(posv);
-                } else {
-                    break;
-                }
-            }
-        } else {
+            targetAngle = Math.PI / 2;
+        }
+        else{
             targetAngle = -Math.PI/2;
+        }
             robot.gotoPoint(pos);
             for (int i = 0; i < 5; i++) {
                 if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
@@ -113,7 +107,6 @@ public class MainSlave extends RobotEntryPoint {
                     break;
                 }
             }
-        }
 
         //Pour se tourner vers la bonne orientation
         for (int i = 0; i < 5; i++) {
