@@ -79,32 +79,40 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
-        XYO.getRobotInstance().update(1200, 300, Math.PI);
+
 
         table.removeAllChaosObstacles();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
         Vec2 newPos = new VectCartesian(1500-191, 350);
-        robot.setPositionAndOrientation(newPos, Math.PI);
-        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
         Vec2 pos = new VectCartesian(1500-300-10, 300+100+10);
         double targetAngle;
+        //Pour aller à la bonne position de départ
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
-            targetAngle = Math.PI/2;
-        } else {
+            XYO.getRobotInstance().update(1200, 300, Math.PI);
+            robot.setPositionAndOrientation(newPos, Math.PI);
+            targetAngle = Math.PI / 2;
+        }
+        else{
+            //s'oriente vers PI/2 avant de se recaler
+            XYO.getRobotInstance().update(1200, 300, Math.PI/2);
+            robot.setPositionAndOrientation(newPos, Math.PI/2);
             targetAngle = -Math.PI/2;
         }
 
-        robot.gotoPoint(pos);
-        for (int i = 0; i < 5; i++) {
-            if(XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
-                robot.gotoPoint(pos);
-            } else {
-                break;
+        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+            robot.gotoPoint(pos);
+            for (int i = 0; i < 5; i++) {
+                if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
+                    robot.gotoPoint(pos);
+                } else {
+                    break;
+                }
             }
-        }
+
+        //Pour se tourner vers la bonne orientation
         for (int i = 0; i < 5; i++) {
             if(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI) >= 2*Math.PI/180.0f /* 2° */) {
                 robot.turn(targetAngle);

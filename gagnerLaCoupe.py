@@ -45,3 +45,4 @@ while True:
         wait()
     os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh")
     os.system('wall "HL relancé"')
+
