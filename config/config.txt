@@ -19,7 +19,7 @@ USING_LIDAR                         =true
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 USING_PANEL                         =false
-CONNECT_TO_BUDDY                    =true
+CONNECT_TO_BUDDY                    =false
 
 #________________________________________________________________________________________________________________________
 
