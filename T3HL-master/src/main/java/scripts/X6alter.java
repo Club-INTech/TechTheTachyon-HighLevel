@@ -59,6 +59,9 @@ public class X6alter extends Script {
              */
 
             int i=0;
+            if (symetry){
+                offsetX=3;
+            }
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
         if (version == 0) { //rouge droite
