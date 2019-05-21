@@ -77,7 +77,7 @@ public class PaletsX6 extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
-                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_PI);
+                robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
