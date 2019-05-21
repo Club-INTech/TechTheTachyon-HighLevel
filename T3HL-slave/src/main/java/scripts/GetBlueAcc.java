@@ -98,6 +98,7 @@ public class GetBlueAcc extends Script {
                 robot.moveLengthwise(80,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE);
                 robot.moveLengthwise(-80,false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
 
             } else {
                 robot.turn(Math.PI);
@@ -109,6 +110,7 @@ public class GetBlueAcc extends Script {
                 robot.moveLengthwise(-80,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
                 robot.moveLengthwise(80,false);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
 
             }
             robot.increaseScore(10);
