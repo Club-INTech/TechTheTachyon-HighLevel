@@ -10,11 +10,14 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.math.MathContext;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Script pour vider les ascenseurs dans la zone de départ si l'accélérateur est bloqué
  */
 public class VideDansZoneDepartSiProbleme extends Script {
+    private CompletableFuture<Void> recalageLeft;
+    private CompletableFuture<Void> recalageRight;
 
     public VideDansZoneDepartSiProbleme(Master robot, Table table) {
         super(robot, table);
@@ -30,6 +33,9 @@ public class VideDansZoneDepartSiProbleme extends Script {
         while(robot.getNbPaletsDroits() > 0 || robot.getNbPaletsGauches() > 0) {
             removePuck();
         }
+
+
+
     }
 
     /**
@@ -53,6 +59,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
         else {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
+            recalageLeft.join();
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
             try {
                 robot.turn(Math.PI/2);
@@ -78,12 +86,28 @@ public class VideDansZoneDepartSiProbleme extends Script {
     public Vec2 entryPosition(Integer version) {
         return new VectCartesian(900, 500);
     }
+    public Vec2 entryPosition2(Integer version) {
+        return new VectCartesian(900, 750);
+    }
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE,true);
+        recalageLeft = async("Recalage ascenseur gauche", () -> {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
+            robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
+            robot.waitForLeftElevator();
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
+        });
+        recalageRight = async("Recalage ascenseur droit", () -> {
+            //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            // robot.waitForRightElevator();
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
+            robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
+            robot.waitForRightElevator();
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+        });
+        recalageLeft.join();
+
 
     }
 
