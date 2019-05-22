@@ -48,7 +48,10 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART_INTERMEDIAIRE, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+
+            //TODO  DEFINIR LA POSITION SUIVANTE
+            //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART_INTERMEDIAIRE, true);
             CouleurPalet couleur = robot.popPaletDroit();
             if(couleur == CouleurPalet.VERT){robot.increaseScore(6);}
             else {robot.increaseScore(1);}
@@ -74,7 +77,9 @@ public class VideDansZoneDepartSiProbleme extends Script {
         while(robot.getNbPaletsGauches() > 0) {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART_INTERMEDIAIRE, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+
+            //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART_INTERMEDIAIRE, true);
             CouleurPalet couleur = robot.popPaletGauche();
             if(couleur == CouleurPalet.ROUGE){robot.increaseScore(6);}
             else {robot.increaseScore(1);}
