@@ -46,7 +46,7 @@ public class GetBlueAcc extends Script {
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
-            recalage();
+            //recalage();
             /*
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
@@ -84,7 +84,7 @@ public class GetBlueAcc extends Script {
 
             // test sans rotation
 
-            robot.gotoPoint(new VectCartesian(xBlue+50, yBlue+10)); // on répète la position pour être sûr qu'il est là
+            //robot.gotoPoint(new VectCartesian(xBlue+50, yBlue+10)); // on répète la position pour être sûr qu'il est là
 
             if (!symetrie) {
                 robot.turn(0);
