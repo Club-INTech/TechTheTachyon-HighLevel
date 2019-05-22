@@ -25,6 +25,9 @@ public class GetRedDep extends Script {
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
+
     }
 
     @Override
