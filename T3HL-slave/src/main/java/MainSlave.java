@@ -88,7 +88,7 @@ public class MainSlave extends RobotEntryPoint {
         Vec2 newPos = new VectCartesian(1500-242, 145+58);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
        // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
-        Vec2 pos = new VectCartesian(1500-300-10, 500);
+        Vec2 pos = new VectCartesian(1500-300-10, 450);
         double targetAngle;
         //Pour aller à la bonne position de départ
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
