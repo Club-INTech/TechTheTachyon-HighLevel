@@ -81,7 +81,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
                     robot.increaseScore(10); /* A CHANGER */
 
-                    if (robot.getNbPaletsDroits() > 1) {
+                    if (robot.getNbPaletsGauches() > 1) {
                         SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                         robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
                     }
