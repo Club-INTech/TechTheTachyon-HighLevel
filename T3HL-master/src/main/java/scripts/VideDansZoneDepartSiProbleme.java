@@ -84,7 +84,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             while (robot.getNbPaletsGauches() > 0) {
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
-                    //robot.turn(-Math.PI/4);
+                    robot.turn(-Math.PI/4);
                     if (robot.getNbPaletsGauches() > 1) {
                         SensorState.LEFT_ELEVATOR_MOVING.setData(true);
                         robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
