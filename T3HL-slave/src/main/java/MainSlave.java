@@ -85,7 +85,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
         robot.setRotationSpeed(Speed.SLOW_ALL);
-        Vec2 newPos = new VectCartesian(1500-242, 150);
+        Vec2 newPos = new VectCartesian(1500-242, 290);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
         Vec2 pos = new VectCartesian(1500-300-10, 300+100+10);
         double targetAngle;
@@ -97,8 +97,9 @@ public class MainSlave extends RobotEntryPoint {
         }
         else{
             //s'oriente vers PI/2 avant de se recaler
-            XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
-            robot.setPositionAndOrientation(newPos, Math.PI/2);
+            XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI);
+            //XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
+            robot.setPositionAndOrientation(newPos, Math.PI);
             targetAngle = -Math.PI/2;
         }
 
