@@ -51,8 +51,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
             CouleurPalet couleur = robot.popPaletDroit();
             if(couleur == CouleurPalet.VERT){robot.increaseScore(6);}
             else {robot.increaseScore(1);}
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET,true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
             robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
         }
@@ -74,8 +74,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
             CouleurPalet couleur = robot.popPaletGauche();
             if(couleur == CouleurPalet.ROUGE){robot.increaseScore(6);}
             else {robot.increaseScore(1);}
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         }
@@ -92,6 +92,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
@@ -106,7 +108,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });
-        recalageLeft.join();
+        recalageRight.join();
 
 
     }
