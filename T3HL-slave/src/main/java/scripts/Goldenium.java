@@ -17,7 +17,7 @@ public class Goldenium extends Script {
 
     //position d'entrée
 
-    private int xEntry = -715 +20 -50 ; //a tester
+    private int xEntry = -715 +20 -50 -20 ; //a tester
     private int yEntry = 285+20-39+10+20;//250+ 30+10  ; //a tester
     private double offsetX;
     private double offsetY;
@@ -76,13 +76,12 @@ public class Goldenium extends Script {
 
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         /*try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
