@@ -45,10 +45,11 @@ public class GetBlueAcc extends Script {
     @Override
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
-        try {
+        try {/*
+
           //  recalage();
            // robot.gotoPoint(new VectCartesian(xBlue, yBlue));
-            /*
+
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
 
@@ -112,6 +113,7 @@ public class GetBlueAcc extends Script {
             robot.turn(Math.PI/2);
 
             if(!inSimulation) {
+
                 robot.computeNewPositionAndOrientation(Sick.NOTHING);
                 int ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
                 double rapport = ecart_mesures_sicks / dsick;
@@ -121,6 +123,8 @@ public class GetBlueAcc extends Script {
 
                 Vec2 currentPosition = XYO.getRobotInstance().getPosition();
                 robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI/2, Math.PI));
+                System.out.println(" ALORS QUE JE SUIS LA : " + " Position =" + XYO.getRobotInstance().getPosition() + " orientation =" + XYO.getRobotInstance().getOrientation());
+
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
