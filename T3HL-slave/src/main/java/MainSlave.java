@@ -126,6 +126,7 @@ public class MainSlave extends RobotEntryPoint {
             }
         }
 
+        robot.setPositionAndOrientation(pos, -Math.PI/2);
         orderWrapper.waitJumper();
 
         try {
