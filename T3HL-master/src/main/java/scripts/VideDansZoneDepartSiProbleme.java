@@ -27,6 +27,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     public void execute(Integer version) {
         try {
             robot.turn(Math.PI/2);
+            recalageRight.join();
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
@@ -43,7 +44,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
             robot.turn(-Math.PI/2);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            recalageLeft.join();
             robot.invertOrders(robot -> {
                 while (robot.getNbPaletsDroits() > 0) {
                     robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
@@ -135,7 +137,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        /*recalageLeft = async("Recalage ascenseur gauche", () -> {
+        recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
             robot.waitForLeftElevator();
@@ -149,7 +151,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });
-        recalageRight.join();*/
+        recalageRight.join();
 
 
     }
