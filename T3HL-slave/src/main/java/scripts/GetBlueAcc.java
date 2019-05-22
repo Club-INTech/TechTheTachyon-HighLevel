@@ -89,14 +89,14 @@ public class GetBlueAcc extends Script {
             if (!symetrie) {
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(-95-50, false);
+                robot.moveLengthwise(-95-20, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
 
             } else {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(95+50, false);
+                robot.moveLengthwise(95+20, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
             }
