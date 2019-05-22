@@ -1,6 +1,7 @@
 package scripts;
 
 import data.CouleurPalet;
+import data.SensorState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -34,12 +35,13 @@ public class VideDansZoneDepartSiProbleme extends Script {
      */
     private void removePuck() {
         // pour s'assurer que le bras est au bon endroit
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+
         if(robot.getNbPaletsDroits() > 0) {
+            robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET,true);
             robot.waitForRightElevator();
             CouleurPalet couleur = robot.popPaletDroit();
             if(couleur == CouleurPalet.VERT){robot.increaseScore(6);}
@@ -48,9 +50,11 @@ public class VideDansZoneDepartSiProbleme extends Script {
         }
 
         if(robot.getNbPaletsGauches() > 0) {
+            robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,true);
             robot.waitForLeftElevator();
             CouleurPalet couleur = robot.popPaletGauche();
             if(couleur == CouleurPalet.ROUGE){robot.increaseScore(6);}
