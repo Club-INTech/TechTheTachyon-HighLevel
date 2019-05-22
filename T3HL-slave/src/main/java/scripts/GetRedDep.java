@@ -9,8 +9,8 @@ import robot.Slave;
 import utils.math.Vec2;
 
 public class GetRedDep extends Script {
-    private final int xEntry = 1500-191-65;//1350;
-    private final int yEntry = 450+605;//450;
+    private final int xEntry = 1500-300-10;//1350;
+    private final int yEntry = 500;//450;
     private boolean symetrie;
 
     public GetRedDep(Slave robot, Table table) {
