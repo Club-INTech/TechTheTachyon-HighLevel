@@ -34,6 +34,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     private final Container container;
 
     private boolean symetry=false;
+    private boolean lastWasRed=true;
 
 
     private CompletableFuture<Void> recalageLeft;
@@ -56,6 +57,15 @@ public class VideDansZoneDepartSiProbleme extends Script {
             recalageRight.join();
             while (robot.getNbPaletsDroits() > 0) {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                if (robot.getRightElevatorOrNull() != null) {
+                    if (robot.getRightElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
+                        robot.moveLengthwise(300, false);
+                        lastWasRed=true;
+                    } else if (robot.getRightElevatorOrNull().peek() == CouleurPalet.VERT && lastWasRed) {
+                        robot.moveLengthwise(-300, false);
+                        lastWasRed=false;
+                    }
+                }
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
 
                 if (robot.getNbPaletsDroits() > 1) {
@@ -65,27 +75,30 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+
+                robot.increaseScore(6);
+
                 if(robot.getRightElevatorOrNull() != null) {
-                    if (robot.getRightElevatorOrNull().peek() == CouleurPalet.ROUGE) {
-                        robot.increaseScore(6);
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-                        robot.popPaletDroit();
-                    }
-                    else if (robot.getRightElevatorOrNull().peek() == CouleurPalet.VERT) {
-                        robot.increaseScore(1);
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-                        robot.popPaletDroit();
-                    }
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+                    robot.popPaletDroit();
                 }
             }
+
 
             robot.turn(-Math.PI/2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
             recalageLeft.join();
-
-
             while (robot.getNbPaletsGauches() > 0) {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                if (robot.getLeftElevatorOrNull() != null) {
+                    if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
+                        robot.moveLengthwise(-300, false);
+                        lastWasRed=true;
+                    } else if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.VERT && lastWasRed) {
+                        robot.moveLengthwise(300, false);
+                        lastWasRed=false;
+                    }
+                }
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
                 if (robot.getNbPaletsGauches() > 1) {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(true);
@@ -94,21 +107,12 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+
+                robot.increaseScore(6);
+
                 if (robot.getRightElevatorOrNull() != null) {
-
-                    if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE) {
-                        robot.increaseScore(6);
-                        robot.popPaletGauche();
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-
-                    }
-                    else if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.VERT) {
-                        robot.increaseScore(1);
-                        robot.popPaletGauche();
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-
-                    }
-                    ;
+                    robot.popPaletGauche();
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
                 }
             }
 
