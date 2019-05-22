@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -40,7 +41,9 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
 
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-            robot.popPaletDroit();
+            CouleurPalet couleur = robot.popPaletDroit();
+            if(couleur == CouleurPalet.VERT){robot.increaseScore(6);}
+            else {robot.increaseScore(1);}
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         }
 
@@ -49,7 +52,9 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
 
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            robot.popPaletGauche();
+            CouleurPalet couleur = robot.popPaletDroit();
+            if(couleur == CouleurPalet.ROUGE){robot.increaseScore(6);}
+            else {robot.increaseScore(1);}
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         }
     }
