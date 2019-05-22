@@ -288,6 +288,7 @@ public abstract class Robot implements Service {
         if(inSimulation) {
             return;
         }
+        System.out.println(" JE CROIS ETRE ICI : " + " Position =" + XYO.getRobotInstance().getPosition() + " orientation =" + XYO.getRobotInstance().getOrientation());
 
         Sick.resetNewXYO();
         Sick.setSignificantSicks(significantSicks);

@@ -354,11 +354,13 @@ public class DataControler extends Thread implements Service {
                 orien= Calculs.modulo(Math.PI-orien, Math.PI);
                 System.out.println(orien);
                 if(orien<Math.PI/4 && orien > -Math.PI/4){
+                    System.out.println("On est passé par le premier cas");
                     teta=Math.atan(rapport);
                     xCalcule= -1500 + (int) (((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()])/2+vectSickSecondaire.getY()+offsetSick) * Math.cos(teta));
                     yCalcule=(int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSickDroitSecondaire) * Math.cos(teta));
                 }
                 else{
+                    System.out.println("On est passé par le deuxième cas");
                     teta=Math.atan(rapport);//Il faut enlever pi/2
                     xCalcule=-1500 + (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSickDroitSecondaire) * Math.cos(teta));
                     yCalcule = 2000 - (int) (((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()])/2+offsetSick+vectSickSecondaire.getY()) * Math.cos(teta));
@@ -370,12 +372,14 @@ public class DataControler extends Thread implements Service {
 
             } else {
                 if (Math.PI/4 < orien && orien <3*Math.PI/4){
+                    System.out.println("On est passé par le troisième cas");
                     teta=Math.atan(rapport); //Il faut ajouter pi/2
                     xCalcule = 1500 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSickDroitSecondaire) * Math.cos(teta));
                     yCalcule=(int) Math.round(((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()])/2+offsetSick+vectSickSecondaire.getY()) * Math.cos(teta));
                     teta+=Math.PI/2;
                 }
                 else{
+                    System.out.println("On est passé par le quatrième cas");
                     teta=Math.atan(rapport);//Il faut ajouter pi
                     xCalcule= 1500 - (int) (((sickMeasurements[significantSicks[2].getIndex()]+sickMeasurements[significantSicks[1].getIndex()])/2+offsetSick+vectSickSecondaire.getY()) * Math.cos(teta));
                     yCalcule= 2000 - (int) ((sickMeasurements[significantSicks[0].getIndex()]+vectSickSecondaire.getX()+offsetSickDroitSecondaire) * Math.cos(teta));
