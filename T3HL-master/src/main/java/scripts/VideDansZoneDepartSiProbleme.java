@@ -61,7 +61,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(1300, 350);
+        return new VectCartesian(1300, 600);
     }
 
     @Override
