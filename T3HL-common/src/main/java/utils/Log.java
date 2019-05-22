@@ -467,6 +467,10 @@ public enum Log
         startTime = System.currentTimeMillis();
     }
 
+    public static long getStartTime() {
+        return startTime;
+    }
+
     /**
      * Getters & Setters
      */

@@ -7,6 +7,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Offsets;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -16,13 +17,15 @@ public class Goldenium extends Script {
 
     //position d'entrée
 
-    private int xEntry = -715 +20 ; //a tester
-    private int yEntry = 285+20-39;//250+ 30+10  ; //a tester
+    private int xEntry = -715 +20 -50 -20-10 ; //a tester
+    private int yEntry = 285+20-39+10+20-5-5-5-5-5;//250+ 30+10  ; //a tester
+    private double offsetX;
+    private double offsetY;
 
     //position de fin
 
     private int xBalance = 137; //a tester
-    private int yBalance = 1385-150-15; //a tester (vraie valeur: 1388)
+    private int yBalance = 1385-150-10; //a tester (vraie valeur: 1388)
 
     //paramètres
 
@@ -37,6 +40,7 @@ public class Goldenium extends Script {
 
     @Override
     public void execute(Integer version) {
+
         //attention il n'y qu'une seule pompe sur le robot secondaire
         /*try {
             if(!symetrie) {
@@ -61,42 +65,39 @@ public class Goldenium extends Script {
         }*/
 
         try {
-            robot.turn(0);
-            /*if(symetrie) {
+            if(symetrie) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
-            }*/
+            }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
 
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         /*try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
         try {
             robot.followPathTo(positionBalance);
-            robot.turn(0);
-           /* if(!symetrie) {
+            if(!symetrie) {
                 robot.turn(Math.PI);
             }
             else {
                 robot.turn(0);
-            }*/
+            }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
 
-        //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.increaseScore(24);
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
@@ -106,7 +107,14 @@ public class Goldenium extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        if (!symetrie) {
+            offsetX = Offsets.GOLDENIUM_X_JAUNE.get();
+            offsetY = Offsets.GOLDENIUM_Y_JAUNE.get();
+        } else {
+            offsetX=Offsets.GOLDENIUM_X_VIOLET.get();
+            offsetY=Offsets.GOLDENIUM_Y_VIOLET.get();
+        }
+        return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
     @Override
