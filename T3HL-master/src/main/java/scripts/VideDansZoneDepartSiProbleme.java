@@ -93,7 +93,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
                     robot.popPaletGauche();
                 }
-            });
+
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
 
         } catch (UnableToMoveException e) {
