@@ -59,7 +59,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
         }
         else {
             try {
-                robot.turn(Math.PI/2);
+                robot.turn(- Math.PI/2);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
