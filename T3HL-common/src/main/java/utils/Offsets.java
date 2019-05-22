@@ -14,7 +14,7 @@ public enum Offsets implements ConfigInfo {
     PALETSX6_X_JAUNE(-2),
     PALETSX6_Y_JAUNE(-4),
     PALETSX6_X_VIOLET(20),
-    PALETSX6_Y_VIOLET(4),
+    PALETSX6_Y_VIOLET(10),
     PALETSX6_THETA_VIOLET(0.025/* atan(10.0/100.0) */),
 
     ACCELERATEUR_Y_VIOLET(6),
