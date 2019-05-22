@@ -62,6 +62,7 @@ public class Table implements Service {
     private Obstacle paletRedDeuxZoneChaosYellow;
     private Obstacle paletGreenZoneChaosYellow;
     private Obstacle paletBlueZoneChaosYellow;
+    private Obstacle separationRampe;
 
     /**
      * Obstacle mobile simulé
@@ -196,8 +197,8 @@ public class Table implements Service {
 
         Vec2 vecteurSeparationRampeCentre = new VectCartesian(0, 1478);
         CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, robotRay+obstacleMargin);
-        Obstacle separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
-        this.addFixedObstacleNoGraphChange(separationRampe);
+        this.separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
+        this.addTemporaryObstacle(separationRampe);
 
         Vec2 vecteurAccelerateurCentre = new VectCartesian(0, 18);                                 //arrondi
         CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000-robotRay-obstacleMargin, 36, robotRay+obstacleMargin);
@@ -721,6 +722,10 @@ public class Table implements Service {
         removeTemporaryObstacle(paletRedDeuxZoneChaosYellow);
         removeTemporaryObstacle(paletGreenZoneChaosYellow);
         removeTemporaryObstacle(paletBlueZoneChaosYellow);
+    }
+
+    public void removeTassot(){
+        removeTemporaryObstacle(separationRampe);
     }
 
     public void removeObstacleZoneChaos(Vec2 position){

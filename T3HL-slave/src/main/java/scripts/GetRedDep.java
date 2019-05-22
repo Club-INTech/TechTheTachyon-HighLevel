@@ -9,8 +9,8 @@ import robot.Slave;
 import utils.math.Vec2;
 
 public class GetRedDep extends Script {
-    private final int xEntry = 1500-300-10;//1350;
-    private final int yEntry = 500;//450;
+    private final int xEntry = 1244;//1350;
+    private final int yEntry = 1055;//450;
     private boolean symetrie;
 
     public GetRedDep(Slave robot, Table table) {
@@ -25,8 +25,8 @@ public class GetRedDep extends Script {
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
+        //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+        //robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
 
     }
 

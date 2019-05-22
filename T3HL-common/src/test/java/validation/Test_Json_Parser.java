@@ -4,9 +4,11 @@ import connection.Connection;
 import connection.ConnectionManager;
 import data.Graphe;
 import data.PaletsZoneChaos;
+import data.PaletsZoneDepart;
 import data.Table;
 import data.controlers.Listener;
 import data.controlers.PaletsChaosControler;
+import data.controlers.PaletsDepartControler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -29,11 +31,11 @@ public class Test_Json_Parser {
     private ConnectionManager connectionManager;
     private Container container;
     private Listener listener;
-    private PaletsChaosControler paletsChaosControler;
+    private PaletsDepartControler paletsDepartControler;
     private Table table;
     private Graphe graphe;
 
-    @Before
+    /*@Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
         connectionManager = container.getService(ConnectionManager.class);
@@ -45,8 +47,8 @@ public class Test_Json_Parser {
         table.initObstacles();
         table.setGraphe(graphe);
         listener.start();
-        paletsChaosControler = container.getService(PaletsChaosControler.class);
-    }
+        paletsDepartControler = container.getService(PaletsDepartControler.class);
+    }*/
 
     @Test
     public void testParse() {
@@ -57,46 +59,32 @@ public class Test_Json_Parser {
             File jsonFile = new File("src/test/java/validation/file1.txt");
             FileReader json= new FileReader(jsonFile);
             Object obj = parser.parse(json);
-            JSONObject jsonObject =(JSONObject) obj;
 
-            JSONArray purple_chaos_array = (JSONArray) jsonObject.get("purple_chaos");
-            JSONArray yellow_chaos_array = (JSONArray) jsonObject.get("yellow_chaos");
-            JSONArray purple_dispenser_array = (JSONArray) jsonObject.get("purple_dispenser");
-            JSONArray yellow_dispenser_array = (JSONArray) jsonObject.get("yellow_dispenser");
-
-            int x;
-            int y;
-            Vec2 position;
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray color_depart_array = (JSONArray) jsonObject.get("zone_depart");
+            String zone;
             String color;
-            boolean first_red = true;
-            for (int i = 0; i < purple_chaos_array.size(); i++) {
-                JSONObject jsonObj = (JSONObject) purple_chaos_array.get(i);
+            for (int i = 0; i < color_depart_array.size(); i++) {
+                JSONObject jsonObj = (JSONObject) color_depart_array.get(i);
+                zone = (String) jsonObj.get("zone");
                 color = (String) jsonObj.get("color");
-                x = toIntExact((long) jsonObj.get("x"));
-                y = toIntExact((long) jsonObj.get("y"));
-                position = new VectCartesian(x, y);
-                switch (color) {
-                    case "red":
-                        if (first_red) {
-                            PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.setPosition(position);
-                            first_red = false;
-                        } else {
-                            PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.setPosition(position);
-                        }
+
+                switch (zone) {
+                    case "R":
+                        PaletsZoneDepart.PALET_R.setCouleur(color);
                         break;
-                    case "blue":
-                        PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.setPosition(position);
+                    case "G":
+                        PaletsZoneDepart.PALET_G.setCouleur(color);
                         break;
-                    case "green":
-                        PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.setPosition(position);
+                    case "B":
+                        PaletsZoneDepart.PALET_B.setCouleur(color);
                         break;
                 }
             }
 
-            System.out.println(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition());
-            System.out.println(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition());
-            System.out.println(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition());
-            System.out.println(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition());
+            System.out.println(PaletsZoneDepart.PALET_R.getCouleur());
+            System.out.println(PaletsZoneDepart.PALET_G.getCouleur());
+            System.out.println(PaletsZoneDepart.PALET_B.getCouleur());
 
 
         }
@@ -108,11 +96,10 @@ public class Test_Json_Parser {
     }
     @Test
     public void testAvecZoneChaosControle(){
-        paletsChaosControler.run();
-        System.out.println(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition());
-        System.out.println(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition());
-        System.out.println(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition());
-        System.out.println(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition());
+        paletsDepartControler.run();
+        System.out.println(PaletsZoneDepart.PALET_R.getCouleur());
+        System.out.println(PaletsZoneDepart.PALET_G.getCouleur());
+        System.out.println(PaletsZoneDepart.PALET_B.getCouleur());
 
     }
 
