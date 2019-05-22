@@ -8,20 +8,28 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
+
+import java.util.ArrayList;
 
 public class PaletsX3Slave extends Script{
     /**
      * Position d'entrée du script
      */
 
+    private ArrayList<VectCartesian> positions;
     private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private double offsetX;
+    private double offsetY;
+    private static final int DISTANCE_INTER_PUCK = 100;
+
     /**
      * constante
      */
-    private boolean symetrie;
+    private boolean symetry;
 
 
     public PaletsX3Slave(Slave robot, Table table) {
@@ -31,41 +39,39 @@ public class PaletsX3Slave extends Script{
     @Override
     public void execute(Integer version) {
         try {
-            recalage();
-            robot.followPathTo(new VectCartesian(1338, yEntry));
 
-            if(!symetrie) {
+            if (!symetry) {
+                offsetX= Offsets.PALETSX3_X_JAUNE.get();
+                offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+            } else {
+                offsetX=Offsets.PALETSX3_X_VIOLET.get();
+                offsetY=Offsets.PALETSX3_Y_VIOLET.get();
+            }
+
+            positions.add(new VectCartesian(1338+offsetX, yEntry+offsetY));     //???
+            positions.add(new VectCartesian(xEntry+offsetX+DISTANCE_INTER_PUCK , yEntry+offsetY));
+            positions.add(new VectCartesian(xEntry+offsetX+2*DISTANCE_INTER_PUCK, yEntry+offsetY));
+
+            recalage();
+            robot.followPathTo(new VectCartesian(1338+offsetX, yEntry+offsetY));
+
+            if(!symetry) {
                 robot.turn(Math.PI);
             }
             else {
                 robot.turn(0);
             }
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);//TODO refaire position bras
-            robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+
+            getPuck();
             robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+            robot.gotoPoint(positions.get(1));
 
-            robot.moveLengthwise(-100,false);
-
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-            robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+            getPuck();
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
+            robot.gotoPoint(positions.get(2));
 
-            robot.moveLengthwise(-100,false);
-
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-            robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
+            getPuck();
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
-
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
         }
@@ -75,7 +81,7 @@ public class PaletsX3Slave extends Script{
     }
 
     private void recalage() {
-        if(symetrie) {
+        if(symetry) {
             try {
                 robot.turn(-Math.PI/2);
                 robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
@@ -92,9 +98,27 @@ public class PaletsX3Slave extends Script{
         }
     }
 
+
+    private void getPuck() {
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);//TODO refaire position bras
+        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+    }
+
     @Override
     public Vec2 entryPosition(Integer version) {
-        return new VectCartesian(xEntry, yEntry);
+        if (!symetry) {
+            offsetX= Offsets.PALETSX3_X_JAUNE.get();
+            offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+        } else {
+            offsetX=Offsets.PALETSX3_X_VIOLET.get();
+            offsetY=Offsets.PALETSX3_Y_VIOLET.get();
+        }
+
+        return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
     @Override
@@ -102,7 +126,7 @@ public class PaletsX3Slave extends Script{
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         super.updateConfig(config);
     }
 

@@ -23,10 +23,10 @@ public class Match extends Script {
     @Override
     public void execute(Integer version) {
         // 0. Lancer l'électron
-        scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).execute(0);
+        scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
 
         // 1. Zone de départ, juste la case bleue
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).execute(0/*PaletsZoneDepart.JUST_BLUE*/);
+        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
         /*
         // 2. Zone de chaos (tout)
@@ -49,7 +49,7 @@ public class Match extends Script {
             robot.followPathTo(accelerateurScript.entryPosition(accVersion), () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 
             // 6. Faire l'accélérateur
-            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).execute(accVersion);
+            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
         } catch (UnableToMoveException | TimeoutError e) {
             e.printStackTrace();
             accelerateurScript.shouldContinueScript(e);

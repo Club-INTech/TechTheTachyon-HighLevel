@@ -70,7 +70,7 @@ public abstract class SynchronizationCommon implements Service {
      */
     public void sendPosition(){
         Vec2 currentPos = XYO.getRobotInstance().getPosition();
-        this.sendString(String.format(Locale.US, "%s %d %d", Channel.BUDDY_POSITION.getHeaders(), currentPos.getX(), currentPos.getY()));
+        this.sendString(String.format(Locale.US, "%s%d %d", Channel.BUDDY_POSITION.getHeaders(), currentPos.getX(), currentPos.getY()));
     }
 
     /**
@@ -86,7 +86,7 @@ public abstract class SynchronizationCommon implements Service {
             serializePath.append(" ");
         }
         this.sendString(serializePath.toString());
-        this.sendString(String.format(Locale.US, "%s %s", Channel.BUDDY_PATH.getHeaders(), serializePath.toString()));
+        this.sendString(String.format(Locale.US, "%s%s", Channel.BUDDY_PATH.getHeaders(), serializePath.toString()));
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class SynchronizationCommon implements Service {
      * @param pris True si le palet a été pris, False sinon
      */
     public void sendPaletPris(Palet palet, boolean pris){
-        this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS.getHeaders(), palet.getId(), pris));
+        this.sendString(String.format(Locale.US, "%s%d %s", Channel.UPDATE_PALETS.getHeaders(), palet.getId(), pris));
     }
 
     /**
@@ -103,7 +103,7 @@ public abstract class SynchronizationCommon implements Service {
      * @param accessible True si le goldenium est accessible, False sinon
      */
     public void sendGoldeniumState(boolean accessible){
-        this.sendString(String.format(Locale.US, "%s %d %s", Channel.UPDATE_PALETS.getHeaders(), Palet.GOLDENIUM.getId(), accessible));
+        this.sendString(String.format(Locale.US, "%s%d %s", Channel.UPDATE_PALETS.getHeaders(), Palet.GOLDENIUM.getId(), accessible));
     }
 
     public void setConnection(Connection connection) {

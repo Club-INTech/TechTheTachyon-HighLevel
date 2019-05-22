@@ -40,7 +40,11 @@ public class VectCartesian extends Vec2 {
      * @param x
      * @param y
      */
-    public VectCartesian(float x, float y){
+    public VectCartesian(float x, float y) {
         super(Math.round(x), Math.round(y));
+    }
+
+    public VectCartesian(double x, double y) {
+        this((int)Math.round(x), (int)Math.round(y));
     }
 }

@@ -7,6 +7,7 @@ import robot.Master;
 import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
+import utils.Offsets;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class X6alter extends Script {
     private ArrayList<VectCartesian> positions;
@@ -26,10 +26,9 @@ public class X6alter extends Script {
     CompletableFuture<Void> elevatorAtRightPlace = null;
 
     private static final int DISTANCE_INTER_PUCK = 100;
-    private static int offsetY ;
-    private static int offsetX ;
-    private static double offsetTeta;
-    private static  Vec2 positionBalance ;
+    private static double offsetY ;
+    private static double offsetX ;
+    private static double offsetTheta;
 
     public X6alter(Master robot, Table table) {
         super(robot, table);
@@ -51,21 +50,17 @@ public class X6alter extends Script {
 
     @Override
     public void execute(Integer version) {
-            /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
-                Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
-             */
+        /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
+            Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
+         */
 
-            int i=0;
-            if (symetry){
-                offsetX=Offsets.PALETSX6_X_VIOLET.getOffset();
-                offsetY=Offsets.PALETSX6_Y_VIOLET.getOffset();
-                positionBalance=new VectCartesian(200,1204+10+5+offsetY+20);
-            }
-            else{
-                offsetX=Offsets.PALETSX6_X_JAUNE.getOffset();
-                offsetY=Offsets.PALETSX6_Y_JAUNE.getOffset();
-                new VectCartesian(200,1204+10+5+offsetY+20);
-            }
+        int i=0;
+        loadOffsets();
+        double offsetBalance = Offsets.PALETS_X6_BALANCE_Y_JAUNE.get();
+        if(symetry) {
+            offsetBalance = Offsets.PALETS_X6_BALANCE_Y_VIOLET.get();
+        }
+        Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20+offsetBalance);
 
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
@@ -93,14 +88,14 @@ public class X6alter extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
-                offsetTeta=Math.atan(10/100);
+                offsetTheta =Offsets.PALETSX6_THETA_VIOLET.get();
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
                 // remplacement de la position dans le HL
-                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+offsetTeta);
+                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+ offsetTheta);
 
                 Log.LOCOMOTION.debug("New position with SICKs: "+XYO.getRobotInstance().getPosition());
                 // remplacement de la position dans le LL
-                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+offsetTeta);
+                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+ offsetTheta);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
@@ -109,7 +104,7 @@ public class X6alter extends Script {
 
             if(version == 4) {
                 //On prend le 1er palet
-
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 grabPuckGoto(robot, positions.get(1), false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
@@ -133,6 +128,7 @@ public class X6alter extends Script {
                 //On prend le 4ème palet (bleu)
                 grabPuck(robot, 0, true);
 
+                long balanceStart = System.currentTimeMillis();
                 // On va à la balance
                 robot.followPathTo(positionBalance);
 
@@ -145,6 +141,9 @@ public class X6alter extends Script {
                 robot.increaseScore(12);
                 armInPlace.join(); // on attend que le bras soit à la bonne position
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+                long balanceEnd = System.currentTimeMillis();
+                long elapsed = balanceEnd-balanceStart;
+                Log.STRATEGY.warning("Balance took "+ formatTime(elapsed));
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
             } else {
@@ -236,6 +235,7 @@ public class X6alter extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
             }
         });
@@ -250,7 +250,6 @@ public class X6alter extends Script {
             puckStored.join();
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         storePuck(blue);
         robot.gotoPoint(pos);
     }
@@ -328,6 +327,7 @@ public class X6alter extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
+        loadOffsets();
         //position de départ directement au niveau du palet
         if (version == 0) {
             //Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
@@ -340,9 +340,20 @@ public class X6alter extends Script {
             return new VectCartesian(834,1206);
         }
         else if (version == 3 || version == 4) {
-            return new VectCartesian(1500-191-65,1204+10+5+offsetY);
+            System.err.println("OFFSET Y: "+offsetY);
+            return new VectCartesian(1500-191-65+offsetX, 1204+10+5+offsetY);
         }
         return null;
+    }
+
+    private void loadOffsets() {
+        if(symetry) {
+            offsetX = Offsets.PALETSX6_X_VIOLET.get();
+            offsetY = Offsets.PALETSX6_Y_VIOLET.get();
+        } else {
+            offsetX = Offsets.PALETSX6_X_JAUNE.get();
+            offsetY = Offsets.PALETSX6_Y_JAUNE.get();
+        }
     }
 
     @Override

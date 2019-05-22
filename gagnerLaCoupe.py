@@ -6,43 +6,57 @@ import time
 
 def terminate(signalNumber, frame):
     GPIO.cleanup()
+    restoreMotd()
     exit(0)
 
 
 def wait():
     try:
-        time.sleep(1)
+        time.sleep(0.2)
     except (InterruptedError, KeyboardInterrupt):
         GPIO.cleanup()
+        restoreMotd()
 
 
+def restoreMotd():
+    os.system('cp -f /etc/motd_save /etc/motd')
+
+
+def writeMotd(message):
+    os.system('sudo echo -e "\n\e[34m[HL] ' + message + '\n\e[0m" >>/etc/motd')
+    os.system('sudo wall -n "[HL] ' + message + '"')
+
+
+# catch 'killall -10 python3'
 signal.signal(signal.SIGUSR1, terminate)
+
+# save motd
+# os.system('sudo cp -f /etc/motd /etc/motd_save')
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(8, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-while GPIO.input(8) == GPIO.HIGH:
-    wait()
-os.system('wall "encore un aller-retour du switch pour démarrer"')
-os.system("sudo killall -9 java")
+if GPIO.input(8) == GPIO.LOW:
+    writeMotd("Positionner l\'interrupteur sur 0 pour commencer")
 while GPIO.input(8) == GPIO.LOW:
     wait()
-os.system('wall "basculer le switch pour démarrer"')
-while GPIO.input(8) == GPIO.HIGH:
-    wait()
-GPIO.cleanup()
-os.system('wall "démarrage"')
-os.system("sudo killall -9 java")
-os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh")
 
 
 while True:
+    restoreMotd()
+    writeMotd("Positionner l\'interrupteur sur 1 pour lancer le HL")
+    while GPIO.input(8) == GPIO.HIGH:
+        wait()
+    os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh &")
+    restoreMotd()
+    writeMotd("HL lancé!")
+
+    restoreMotd()
+    writeMotd("Positionner l\'interrupteur sur 0 pour libérer java")
     while GPIO.input(8) == GPIO.LOW:
         wait()
     os.system("sudo killall -9 java")
-    os.system('wall "HL tué"')
-    while GPIO.input(8) == GPIO.HIGH:
-        wait()
-    os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh")
-    os.system('wall "HL relancé"')
+    restoreMotd()
+    writeMotd("HL stoppé")
 
+GPIO.cleanup()

@@ -113,7 +113,7 @@ public abstract class Script implements Service {
 
         Exception exception = null;
         try {
-            this.execute(version);
+            this.timedExecute(version);
         } catch (Exception e) {
             e.printStackTrace();
             exception = e;
@@ -141,6 +141,24 @@ public abstract class Script implements Service {
      * @param version la version du script
      */
     public void executeWhileMovingToEntry(int version) {}
+
+    /**
+     * Executes le script et affiche le temps de départ, fin et durée du script
+     * @param version
+     */
+    public final void timedExecute(int version) {
+        long startTime = System.currentTimeMillis()-Log.getStartTime();
+        Log.STRATEGY.warning("Starting script "+getClass().getSimpleName()+" v"+version+" at "+ formatTime(startTime));
+        execute(version);
+        long endTime = System.currentTimeMillis()-Log.getStartTime();
+        Log.STRATEGY.warning("Ending script "+getClass().getSimpleName()+" v"+version+" at "+ formatTime(endTime));
+        long elapsed = endTime-startTime;
+        Log.STRATEGY.warning("Script "+getClass().getSimpleName()+" v"+version+" took "+ formatTime(elapsed));
+    }
+
+    protected String formatTime(long time) {
+        return String.format("%03d", time / 1000) + "." + String.format("%03d", time % 1000);
+    }
 
     /**
      * Methode d'execution du script !
