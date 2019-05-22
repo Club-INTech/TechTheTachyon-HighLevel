@@ -68,16 +68,16 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 if(robot.getRightElevatorOrNull() != null) {
                     if (robot.getRightElevatorOrNull().peek() == CouleurPalet.ROUGE) {
                         robot.increaseScore(6);
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
                         robot.popPaletDroit();
                     }
                     else if (robot.getRightElevatorOrNull().peek() == CouleurPalet.VERT) {
-                        robot.turn(-Math.PI / 4);
                         robot.increaseScore(1);
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
                         robot.popPaletDroit();
                     }
                 }
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
 
             robot.turn(-Math.PI/2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
@@ -99,16 +99,18 @@ public class VideDansZoneDepartSiProbleme extends Script {
                     if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE) {
                         robot.increaseScore(6);
                         robot.popPaletGauche();
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+
                     }
                     else if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.VERT) {
-                        robot.turn(-Math.PI / 4);
                         robot.increaseScore(1);
                         robot.popPaletGauche();
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+
                     }
                     ;
                 }
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
