@@ -37,7 +37,7 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 
 [Slave]
 MASTER                              = false
-COULEUR                             = violet
+COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
 
 # DIMENSIONS DES ROBOTS
@@ -50,7 +50,9 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =-4
 PALETSX6_X_VIOLET                   =20
-PALETSX6_Y_VIOLET                   =4
+PALETSX6_Y_VIOLET                   =0
+PALETSX6_THETA_VIOLET               =0.05
 
-ACCELERATEUR_Y_VIOLET               =6
+ACCELERATEUR_Y_VIOLET               =3
 ACCELERATEUR_Y_JAUNE                =3
+
