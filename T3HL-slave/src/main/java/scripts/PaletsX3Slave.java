@@ -12,15 +12,19 @@ import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.ArrayList;
+
 public class PaletsX3Slave extends Script{
     /**
      * Position d'entrée du script
      */
 
+    private ArrayList<VectCartesian> positions;
     private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private double offsetX;
     private double offsetY;
+    private static final int DISTANCE_INTER_PUCK = 100;
 
     /**
      * constante
@@ -44,6 +48,10 @@ public class PaletsX3Slave extends Script{
                 offsetY=Offsets.PALETSX3_Y_VIOLET.get();
             }
 
+            positions.add(new VectCartesian(1338+offsetX, yEntry+offsetY));     //???
+            positions.add(new VectCartesian(xEntry+offsetX+DISTANCE_INTER_PUCK , yEntry+offsetY));
+            positions.add(new VectCartesian(xEntry+offsetX+2*DISTANCE_INTER_PUCK, yEntry+offsetY));
+
             recalage();
             robot.followPathTo(new VectCartesian(1338+offsetX, yEntry+offsetY));
 
@@ -56,11 +64,11 @@ public class PaletsX3Slave extends Script{
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
-            robot.moveLengthwise(-100,false);
+            robot.gotoPoint(positions.get(1));
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
-            robot.moveLengthwise(-100,false);
+            robot.gotoPoint(positions.get(2));
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
