@@ -56,7 +56,11 @@ public class X6alter extends Script {
 
         int i=0;
         loadOffsets();
-        Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20);
+        double offsetBalance = Offsets.PALETS_X6_BALANCE_Y_JAUNE.get();
+        if(symetry) {
+            offsetBalance = Offsets.PALETS_X6_BALANCE_Y_VIOLET.get();
+        }
+        Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20+offsetBalance);
 
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
