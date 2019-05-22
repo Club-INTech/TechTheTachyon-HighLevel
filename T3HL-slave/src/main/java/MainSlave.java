@@ -104,7 +104,7 @@ public class MainSlave extends RobotEntryPoint {
             targetAngle = -Math.PI/2;
         }
 
-        //robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
         robot.gotoPoint(pos);
         for (int i = 0; i < 5; i++) {
             if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
