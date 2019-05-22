@@ -89,9 +89,11 @@ public class MainSlave extends RobotEntryPoint {
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
        // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
         Vec2 pos = new VectCartesian(1500-300-10, 500);
+        Vec2 posSansSick = new VectCartesian(1399, 450);
+
         double targetAngle;
         //Pour aller à la bonne position de départ
-        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
+        /*if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) { // symétrie
             XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
             //robot.setPositionAndOrientation(newPos, Math.PI);
             targetAngle = Math.PI / 2;
@@ -102,9 +104,8 @@ public class MainSlave extends RobotEntryPoint {
             //robot.setPositionAndOrientation(newPos, Math.PI);
             targetAngle = -Math.PI/2;
         }
-
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-
+/*
         robot.gotoPoint(pos);
         /*
         for (int i = 0; i < 5; i++) {
@@ -116,6 +117,7 @@ public class MainSlave extends RobotEntryPoint {
         }
         */
         //Pour se tourner vers la bonne orientation
+        /*
         for (int i = 0; i < 5; i++) {
             if(Math.abs(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI)) >= 2*Math.PI/180.0f ) { //2°
                 robot.turn(targetAngle);
@@ -123,8 +125,9 @@ public class MainSlave extends RobotEntryPoint {
                 break;
             }
         }
+        */
 
-
+        robot.setPositionAndOrientation(posSansSick, Math.PI);
         orderWrapper.waitJumper();
 
         try {

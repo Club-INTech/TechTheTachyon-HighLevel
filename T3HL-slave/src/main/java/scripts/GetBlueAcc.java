@@ -46,8 +46,8 @@ public class GetBlueAcc extends Script {
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
-            recalage();
-            robot.gotoPoint(new VectCartesian(xBlue, yBlue));
+          //  recalage();
+           // robot.gotoPoint(new VectCartesian(xBlue, yBlue));
             /*
             robot.turn(Math.PI);
             robot.followPathTo(new VectCartesian(xBlue, yBlue));
