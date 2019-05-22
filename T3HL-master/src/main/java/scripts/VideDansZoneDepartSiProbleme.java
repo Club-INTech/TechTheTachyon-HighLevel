@@ -95,8 +95,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 robot.increaseScore(1);
                 if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE) {
                     robot.increaseScore(5);
-                    robot.popPaletGauche();
                 }
+                robot.popPaletGauche();
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
 
