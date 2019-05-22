@@ -49,10 +49,10 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 [Offsets]
 PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =-4
-PALETSX6_X_VIOLET                   =20
-PALETSX6_Y_VIOLET                   =0
-PALETSX6_THETA_VIOLET               =0.05
+PALETSX6_X_VIOLET                   =10
+PALETSX6_Y_VIOLET                   =-12
+PALETSX6_THETA_VIOLET               =0.015
 
-ACCELERATEUR_Y_VIOLET               =3
+ACCELERATEUR_Y_VIOLET               =1
 ACCELERATEUR_Y_JAUNE                =3
 

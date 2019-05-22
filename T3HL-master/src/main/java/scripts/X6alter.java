@@ -28,7 +28,7 @@ public class X6alter extends Script {
     private static final int DISTANCE_INTER_PUCK = 100;
     private static double offsetY ;
     private static double offsetX ;
-    private static double offsetTeta;
+    private static double offsetTheta;
 
     public X6alter(Master robot, Table table) {
         super(robot, table);
@@ -84,14 +84,14 @@ public class X6alter extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
-                offsetTeta=Offsets.PALETSX6_THETA_VIOLET.get();
+                offsetTheta =Offsets.PALETSX6_THETA_VIOLET.get();
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
                 // remplacement de la position dans le HL
-                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+offsetTeta);
+                XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+ offsetTheta);
 
                 Log.LOCOMOTION.debug("New position with SICKs: "+XYO.getRobotInstance().getPosition());
                 // remplacement de la position dans le LL
-                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+offsetTeta);
+                robot.setPositionAndOrientation(XYO.getRobotInstance().getPosition(), XYO.getRobotInstance().getOrientation()+ offsetTheta);
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
@@ -100,7 +100,7 @@ public class X6alter extends Script {
 
             if(version == 4) {
                 //On prend le 1er palet
-
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 grabPuckGoto(robot, positions.get(1), false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
@@ -227,6 +227,7 @@ public class X6alter extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
             }
         });
@@ -241,7 +242,6 @@ public class X6alter extends Script {
             puckStored.join();
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         storePuck(blue);
         robot.gotoPoint(pos);
     }
