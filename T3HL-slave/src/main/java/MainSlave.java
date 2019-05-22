@@ -114,7 +114,7 @@ public class MainSlave extends RobotEntryPoint {
                 break;
             }
         }
-
+        */
         //Pour se tourner vers la bonne orientation
         for (int i = 0; i < 5; i++) {
             if(Math.abs(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI)) >= 2*Math.PI/180.0f ) { //2°
@@ -123,7 +123,7 @@ public class MainSlave extends RobotEntryPoint {
                 break;
             }
         }
-        */
+
 
         orderWrapper.waitJumper();
 
