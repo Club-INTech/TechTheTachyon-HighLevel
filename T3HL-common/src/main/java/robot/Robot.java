@@ -501,14 +501,22 @@ public abstract class Robot implements Service {
      * Renvoies l'ascenseur de gauche, ou 'null' s'il n'existe pas
      */
     public Stack<CouleurPalet> getLeftElevatorOrNull() {
-        return leftElevator;
+        if(isMaster && symetry()) {
+            return leftElevator;
+        } else {
+            return rightElevator;
+        }
     }
 
     /**
      * Renvoies l'ascenseur de droite, ou 'null' s'il n'existe pas
      */
     public Stack<CouleurPalet> getRightElevatorOrNull() {
-        return rightElevator;
+        if(isMaster && symetry()) {
+            return rightElevator;
+        } else {
+            return leftElevator;
+        }
     }
 
     public XYO getXyo() { return this.xyo;}
