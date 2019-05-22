@@ -1,6 +1,7 @@
 package scripts;
 
 import data.Table;
+import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -17,15 +18,15 @@ public class Goldenium extends Script {
 
     //position d'entrée
 
-    private int xEntry = -750; //a tester
-    private int yEntry = 92+150;//250+ 30+10  ; //a tester
+    private int xEntry = -775; //a tester
+    private int yEntry = 271;//250+ 30+10  ; //a tester
     private double offsetX;
     private double offsetY;
 
     //position de fin
 
-    private int xBalance =  200 ; //137//a tester
-    private int yBalance = 1340; //a tester (vraie valeur: 1388)
+    private int xBalance =  137 ; //137//a tester
+    private int yBalance = 1325; //a tester (vraie valeur: 1388)
 
     //paramètres
 
@@ -84,6 +85,8 @@ public class Goldenium extends Script {
         }*/
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
+
+        table.removeTassot();
 
         try {
             robot.followPathTo(positionBalance);
