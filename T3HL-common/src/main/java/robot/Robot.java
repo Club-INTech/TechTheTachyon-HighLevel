@@ -502,9 +502,9 @@ public abstract class Robot implements Service {
      */
     public Stack<CouleurPalet> getLeftElevatorOrNull() {
         if(isMaster && symetry()) {
-            return leftElevator;
-        } else {
             return rightElevator;
+        } else {
+            return leftElevator;
         }
     }
 
@@ -513,9 +513,9 @@ public abstract class Robot implements Service {
      */
     public Stack<CouleurPalet> getRightElevatorOrNull() {
         if(isMaster && symetry()) {
-            return rightElevator;
-        } else {
             return leftElevator;
+        } else {
+            return rightElevator;
         }
     }
 
