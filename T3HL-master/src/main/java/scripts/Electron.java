@@ -6,15 +6,10 @@ import data.Table;
 import data.XYO;
 import pfg.config.Config;
 import robot.Master;
-import robot.Robot;
-import sun.management.Sensor;
 import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
