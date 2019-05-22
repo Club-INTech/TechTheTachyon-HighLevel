@@ -23,7 +23,7 @@ public class MatchSlave extends Script {
     public void execute(Integer version) {
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
-        scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).goToThenExecute(0);
+        scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
