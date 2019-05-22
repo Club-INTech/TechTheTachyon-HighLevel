@@ -59,7 +59,7 @@ public class PaletsZoneDepart extends Script {
             CompletableFuture<Void> elevatorAtRightPlace = null;
             for (Vec2 position : positions) {
                 CompletableFuture<Void> armInPlace = null;
-                if(premierPaletPris&&version==JUST_BLUE){
+                if(premierPaletPris&&version==JUST_BLUE) {
                     robot.turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
                     robot.followPathTo(position,() -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
@@ -79,6 +79,7 @@ public class PaletsZoneDepart extends Script {
                 puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
+                    readjustElevator(puckIndex);
                     if(puckIndex == 0) { // on retourne au sol que pour le 2e palet
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
                         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
