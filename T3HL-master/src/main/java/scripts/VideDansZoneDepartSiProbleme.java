@@ -26,13 +26,61 @@ public class VideDansZoneDepartSiProbleme extends Script {
     @Override
     public void execute(Integer version) {
         try {
+            robot.turn(-Math.PI/2);
+            while (robot.getNbPaletsDroits() > 0) {
+                robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                if (version == 0) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+                } else if (version == 1) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+                }
+                robot.increaseScore(10);
+
+                if (robot.getNbPaletsDroits() > 1) {
+                    SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                }
+                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                robot.popPaletDroit();
+            }
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
             robot.turn(Math.PI/2);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            robot.invertOrders(robot -> {
+                while (robot.getNbPaletsDroits() > 0) {
+                    robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                    if (version == 0) {
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+                    } else if (version == 1) {
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+                    }
+                    robot.increaseScore(10);
+
+                    if (robot.getNbPaletsDroits() > 1) {
+                        SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+                        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                    }
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                    robot.popPaletDroit();
+                }
+            });
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+
+
+
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        while(robot.getNbPaletsDroits() > 0 || robot.getNbPaletsGauches() > 0) {
+
+        /*while(robot.getNbPaletsDroits() > 0 || robot.getNbPaletsGauches() > 0) {
             removePuck();
-        }
+        }*/
 
 
 
@@ -44,7 +92,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     private void removePuck() {
         // pour s'assurer que le bras est au bon endroit
 
-        if(robot.getNbPaletsDroits() > 0) {
+        /*if(robot.getNbPaletsDroits() > 0) {
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
@@ -88,7 +136,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.waitForLeftElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         }
-        }
+        }*/
     }
 
     @Override
