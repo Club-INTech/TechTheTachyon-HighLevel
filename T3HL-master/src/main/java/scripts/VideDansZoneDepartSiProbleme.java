@@ -54,7 +54,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
             recalageRight.join();
             while (robot.getNbPaletsDroits() > 0) {
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
 
                 robot.increaseScore(10); /* A CHANGER */
@@ -78,7 +77,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
             while (robot.getNbPaletsGauches() > 0) {
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                    robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
 
                     robot.increaseScore(10); /* A CHANGER */
