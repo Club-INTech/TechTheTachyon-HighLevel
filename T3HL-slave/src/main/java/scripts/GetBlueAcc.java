@@ -16,7 +16,7 @@ import utils.math.VectCartesian;
 public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
-    private int xBlue = -140+20+10+20; //FIXME: positions à faire (attention symétrie)
+    private int xBlue = -170; //FIXME: positions à faire (attention symétrie)
     private int yBlue = 285+5+6+5+5;
     private boolean symetrie;
 
@@ -100,12 +100,12 @@ public class GetBlueAcc extends Script {
             } else {
                 robot.turn(Math.PI);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(95+50, false);
+                robot.moveLengthwise(50, false);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_RECULE,true);
-                robot.moveLengthwise(-95-50,false);
+                robot.moveLengthwise(-50,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(95+50,false);
+                robot.moveLengthwise(50,false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
 
             }
