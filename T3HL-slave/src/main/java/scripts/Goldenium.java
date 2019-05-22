@@ -25,18 +25,23 @@ public class Goldenium extends Script {
 
     //position de fin
 
-    private int xBalance =  137 ; //137//a tester
-    private int yBalance = 1325; //a tester (vraie valeur: 1388)
+    private int xBalance1 =  137 ; //137//a tester
+    private int yBalance1 = 1325; //a tester (vraie valeur: 1388)
+
+    private int xBalance2 = 300;
+    private int yBalance2 = 1500-350;
 
     //paramètres
 
-    private final VectCartesian positionBalance;
+    private final VectCartesian positionBalance1;
+    private final VectCartesian positionBalance2;
     private boolean symetrie;
 
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
-        positionBalance = new VectCartesian(xBalance, yBalance);
+        positionBalance1 = new VectCartesian(xBalance1, yBalance1);
+        positionBalance2 =new VectCartesian(xBalance2, yBalance2);
     }
 
     @Override
@@ -86,10 +91,12 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
-        table.removeTassot();
+
 
         try {
-            robot.followPathTo(positionBalance);
+            robot.followPathTo(positionBalance2);
+            table.removeTassot();
+            robot.followPathTo(positionBalance1);
             if(!symetrie) {
                 robot.turn(Math.PI);
             }
