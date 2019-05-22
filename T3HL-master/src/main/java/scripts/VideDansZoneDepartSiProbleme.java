@@ -47,6 +47,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
         if(robot.getNbPaletsDroits() > 0) {
             robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             CouleurPalet couleur = robot.popPaletDroit();
             if(couleur == CouleurPalet.VERT){robot.increaseScore(6);}
@@ -62,6 +63,8 @@ public class VideDansZoneDepartSiProbleme extends Script {
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
@@ -90,8 +93,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
