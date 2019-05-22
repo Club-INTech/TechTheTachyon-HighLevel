@@ -17,7 +17,7 @@ public class GetBlueAcc extends Script {
     //private int xEntry = 1200; WTF les positions
     //private int yEntry = 250;
     private int xBlue = -170; //FIXME: positions à faire (attention symétrie)
-    private int yBlue = 285+5+6+5;
+    private int yBlue = 285+5+6+5+5;
     private boolean symetrie;
 
     /**
