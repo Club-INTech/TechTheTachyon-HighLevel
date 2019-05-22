@@ -45,7 +45,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
         // pour s'assurer que le bras est au bon endroit
 
         if(robot.getNbPaletsDroits() > 0) {
-            robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
@@ -72,7 +71,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
 
         while(robot.getNbPaletsGauches() > 0) {
-            robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             CouleurPalet couleur = robot.popPaletGauche();
