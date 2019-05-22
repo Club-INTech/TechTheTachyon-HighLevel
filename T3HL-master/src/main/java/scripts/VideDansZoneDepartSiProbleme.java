@@ -52,7 +52,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
 
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-            CouleurPalet couleur = robot.popPaletDroit();
+            CouleurPalet couleur = robot.popPaletGauche();
             if(couleur == CouleurPalet.ROUGE){robot.increaseScore(6);}
             else {robot.increaseScore(1);}
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
