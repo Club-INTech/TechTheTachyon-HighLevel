@@ -47,7 +47,7 @@ while True:
     writeMotd("Positionner l\'interrupteur sur 1 pour lancer le HL")
     while GPIO.input(8) == GPIO.HIGH:
         wait()
-    os.system("/home/pi/TechTheTachyon-HighLevel/run_master_from_python.sh &")
+    os.system("/home/pi/TechTheTachyon-HighLevel/run_master &")
     restoreMotd()
     writeMotd("HL lancé!")
 
