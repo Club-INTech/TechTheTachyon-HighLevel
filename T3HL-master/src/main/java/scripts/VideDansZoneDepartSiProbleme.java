@@ -26,52 +26,41 @@ public class VideDansZoneDepartSiProbleme extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.turn(-Math.PI/2);
+            robot.turn(Math.PI/2);
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                if (version == 0) {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                } else if (version == 1) {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                }
-                robot.increaseScore(10);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART);
+                robot.increaseScore(10);/* A CHANGER*/
 
                 if (robot.getNbPaletsDroits() > 1) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
                     robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART);
                 robot.popPaletDroit();
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-            robot.turn(Math.PI/2);
+            robot.turn(-Math.PI/2);
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
             robot.invertOrders(robot -> {
                 while (robot.getNbPaletsDroits() > 0) {
                     robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                     robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                    if (version == 0) {
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                    } else if (version == 1) {
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                    }
-                    robot.increaseScore(10);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART);
+                    robot.increaseScore(10);/* A CHANGER */
 
                     if (robot.getNbPaletsDroits() > 1) {
                         SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
                         robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
                     }
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART);
                     robot.popPaletDroit();
                 }
             });
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-
 
 
         } catch (UnableToMoveException e) {
@@ -146,7 +135,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
-        recalageLeft = async("Recalage ascenseur gauche", () -> {
+        /*recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
             robot.waitForLeftElevator();
@@ -160,7 +149,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });
-        recalageRight.join();
+        recalageRight.join();*/
 
 
     }
