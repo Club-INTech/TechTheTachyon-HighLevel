@@ -1,6 +1,5 @@
 package scripts;
 
-import data.SensorState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -24,8 +23,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        SensorState.RIGHT_ARM_MOVING.setData(false);
-        SensorState.LEFT_ARM_MOVING.setData(false);
         while(robot.getNbPaletsDroits() > 0 || robot.getNbPaletsGauches() > 0) {
             removePuck();
         }
@@ -36,26 +33,24 @@ public class VideDansZoneDepartSiProbleme extends Script {
      */
     private void removePuck() {
         // pour s'assurer que le bras est au bon endroit
-        waitWhileTrue(SensorState.LEFT_ARM_MOVING::getData);
-        waitWhileTrue(SensorState.RIGHT_ARM_MOVING::getData);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
         if(robot.getNbPaletsDroits() > 0) {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-            SensorState.RIGHT_ARM_MOVING.setData(true); // pour s'assurer que le bras est au bon endroit
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
             robot.popPaletDroit();
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
         }
 
         if(robot.getNbPaletsGauches() > 0) {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-            SensorState.LEFT_ARM_MOVING.setData(true); // pour s'assurer que le bras est au bon endroit
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
+
             robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
             robot.popPaletGauche();
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR);
         }
     }
 
