@@ -128,6 +128,7 @@ public class X6alter extends Script {
                 //On prend le 4ème palet (bleu)
                 grabPuck(robot, 0, true);
 
+                long balanceStart = System.currentTimeMillis();
                 // On va à la balance
                 robot.followPathTo(positionBalance);
 
@@ -140,6 +141,9 @@ public class X6alter extends Script {
                 robot.increaseScore(12);
                 armInPlace.join(); // on attend que le bras soit à la bonne position
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+                long balanceEnd = System.currentTimeMillis();
+                long elapsed = balanceEnd-balanceStart;
+                Log.STRATEGY.warning("Balance took "+ formatTime(elapsed));
                 //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, false);
                 // fin du script
             } else {

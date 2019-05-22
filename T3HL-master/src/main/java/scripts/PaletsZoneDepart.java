@@ -86,14 +86,6 @@ public class PaletsZoneDepart extends Script {
                     }
                 });
 
-                CompletableFuture<Void> finalPuckStored1 = puckStored;
-                elevatorAtRightPlace = async("Recalage ascenseur", () -> {
-                    if(finalPuckStored1 != null) {
-                        finalPuckStored1.join();
-                    }
-                    readjustElevator(puckIndex);
-                });
-
                 //il vaut mieux enlever les obstacles en même temps que attendre d'enlever les 3 nn ?
                 switch (i) {
                     case 0:

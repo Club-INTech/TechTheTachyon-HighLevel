@@ -148,15 +148,15 @@ public abstract class Script implements Service {
      */
     public final void timedExecute(int version) {
         long startTime = System.currentTimeMillis()-Log.getStartTime();
-        Log.STRATEGY.warning("Starting script "+getClass().getSimpleName()+" v"+version+" at "+format(startTime));
+        Log.STRATEGY.warning("Starting script "+getClass().getSimpleName()+" v"+version+" at "+ formatTime(startTime));
         execute(version);
         long endTime = System.currentTimeMillis()-Log.getStartTime();
-        Log.STRATEGY.warning("Ending script "+getClass().getSimpleName()+" v"+version+" at "+format(endTime));
+        Log.STRATEGY.warning("Ending script "+getClass().getSimpleName()+" v"+version+" at "+ formatTime(endTime));
         long elapsed = endTime-startTime;
-        Log.STRATEGY.warning("Script "+getClass().getSimpleName()+" v"+version+" took "+format(elapsed));
+        Log.STRATEGY.warning("Script "+getClass().getSimpleName()+" v"+version+" took "+ formatTime(elapsed));
     }
 
-    private String format(long time) {
+    protected String formatTime(long time) {
         return String.format("%03d", time / 1000) + "." + String.format("%03d", time % 1000);
     }
 
