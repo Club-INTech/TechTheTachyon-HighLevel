@@ -104,8 +104,9 @@ public class MainSlave extends RobotEntryPoint {
         }
 
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-        /*
+
         robot.gotoPoint(pos);
+        /*
         for (int i = 0; i < 5; i++) {
             if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
                 robot.gotoPoint(pos);
@@ -123,6 +124,7 @@ public class MainSlave extends RobotEntryPoint {
             }
         }
         */
+
         orderWrapper.waitJumper();
 
         try {
