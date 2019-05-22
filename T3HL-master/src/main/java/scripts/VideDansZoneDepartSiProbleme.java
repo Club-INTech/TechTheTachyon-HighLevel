@@ -57,16 +57,17 @@ public class VideDansZoneDepartSiProbleme extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR,true);
         }
         else {
-            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
-            recalageLeft.join();
-            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
             try {
                 robot.turn(Math.PI/2);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR,true);
+            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE,true);
+            recalageLeft.join();
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE,true);
+
         while(robot.getNbPaletsGauches() > 0) {
             robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
@@ -85,9 +86,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         return new VectCartesian(900, 500);
-    }
-    public Vec2 entryPosition2(Integer version) {
-        return new VectCartesian(900, 750);
     }
 
     @Override
