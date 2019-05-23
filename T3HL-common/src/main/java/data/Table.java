@@ -727,6 +727,7 @@ public class Table implements Service {
     public void removeTassot(){
         removeTemporaryObstacle(separationRampe);
     }
+    public void addTassot(){addTemporaryObstacle(separationRampe);}
 
     public void removeObstacleZoneChaos(Vec2 position){
 
