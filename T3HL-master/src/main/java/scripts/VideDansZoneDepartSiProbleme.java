@@ -1,6 +1,8 @@
 package scripts;
 
-import data.*;
+import data.CouleurPalet;
+import data.SensorState;
+import data.Table;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -8,18 +10,11 @@ import pfg.config.Config;
 import robot.Master;
 import utils.ConfigData;
 import utils.Container;
-import utils.Log;
-import utils.Offsets;
-import utils.container.ContainerException;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
-
-import static data.CouleurPalet.ROUGE;
 
 /**
  * Script pour vider les ascenseurs dans la zone de départ si l'accélérateur est bloqué
@@ -76,13 +71,12 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
 
                 robot.increaseScore(6);
 
                 if(robot.getRightElevatorOrNull() != null) {
-                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE,true);
                     robot.popPaletDroit();
                 }
             }
@@ -109,13 +103,12 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
 
                 robot.increaseScore(6);
 
                 if (robot.getRightElevatorOrNull() != null) {
-                    robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE,true);
                     robot.popPaletGauche();
                 }
             }
