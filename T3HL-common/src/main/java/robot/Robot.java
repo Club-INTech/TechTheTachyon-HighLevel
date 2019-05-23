@@ -27,6 +27,7 @@ import data.XYO;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
+import locomotion.UnableToMoveReason;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
@@ -251,7 +252,7 @@ public abstract class Robot implements Service {
             return e;
         } catch (TimeoutError e) {
             e.printStackTrace();
-            return null;
+            return new UnableToMoveException("TIMEOUT", new XYO(point, XYO.getRobotInstance().getOrientation()), UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
         }
     }
 
