@@ -260,7 +260,7 @@ public class Locomotion implements Service {
                             exception = exceptionsQueue.poll();
                         }
                         //exception.printStackTrace();
-                        if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED)) {
+                        if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED) || exception.getReason().equals(UnableToMoveReason.ENEMY_IN_PATH)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             Log.PATHFINDING.critical("Trajectory obstructed, recomputing");
                             if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
@@ -314,6 +314,9 @@ public class Locomotion implements Service {
                 } else {
                     throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
                 }
+            } finally {
+                pointsQueue.clear();
+                exceptionsQueue.clear();
             }
         }
         pointsQueue.clear();

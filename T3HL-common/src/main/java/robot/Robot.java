@@ -18,6 +18,7 @@
 
 package robot;
 
+import com.panneau.LEDs;
 import com.panneau.TooManyDigitsException;
 import data.CouleurPalet;
 import data.SensorState;
@@ -26,7 +27,6 @@ import data.XYO;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
-import locomotion.UnableToMoveReason;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
@@ -54,6 +54,11 @@ import java.util.function.Consumer;
  * @author rem
  */
 public abstract class Robot implements Service {
+
+    private static final LEDs.RGBColor BLACK = LEDs.RGBColor.NOIR;
+    private static final LEDs.RGBColor START_FOLLOW_PATH = LEDs.RGBColor.ROUGE;
+    private static final LEDs.RGBColor FOLLOW_PATH_REATTEMPT_EVEN = LEDs.RGBColor.BLEU;
+    private static final LEDs.RGBColor FOLLOW_PATH_REATTEMPT_ODD = LEDs.RGBColor.VERT;
 
     /**
      * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
@@ -161,31 +166,88 @@ public abstract class Robot implements Service {
     }
 
     /**
-     * Permet au robot d'aller jusqu'à un point donnée
+     * Cf {@link #followPathTo(Vec2, int)} (valeur de maxRetries à -1)
+     * @see #followPathTo(Vec2, int)
+     */
+    public void followPathTo(Vec2 point) throws UnableToMoveException {
+        followPathTo(point, -1);
+    }
+
+    /**
+     * Permet au robot d'aller jusqu'à un point donné. Actives les leds du robot en fonction de son état.<br/>
+     * <ul>
+     *     <li>Rouge: Première tentative de followpath</li>
+     *     <li>Bleu: Nouvelle tentative de followpath (indice pair)</li>
+     *     <li>Vert: Nouvelle tentative de followpath (indice impair)</li>
+     * </ul>
      * @param point
      *              le point visé
+     * @param maxRetries
+     *              le nombre de réessais à faire, 0 throw un UnableToMoveException dès le premier échec, -1 signifie de tester à l'infini
      * @throws UnableToMoveException
      *              en cas de problème de blocage/adversaire
      */
-    public void followPathTo(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
-        int attemptCount = 2;
-        for (int i = 0; i < attemptCount; i++) {
-            try {
-                this.locomotion.followPathTo(point, parallelActions);
-                parallelActions = null;
-                break;
-            } catch (UnableToMoveException e) {
-                if(e.getReason() == UnableToMoveReason.ENEMY_IN_PATH) {
-                    e.printStackTrace(); // on affiche l'erreur mais on réessaie dans 1/2s
+    public void followPathTo(Vec2 point, int maxRetries) throws UnableToMoveException {
+        try {
+            debugLeds(START_FOLLOW_PATH);
+            if(maxRetries == -1) {
+                int counter = 0;
+                while (true) {
+                    UnableToMoveException e = attemptToGoto(point);
+                    if(e == null) { // on a réussi
+                        break;
+                    }
+                    if (counter % 2 == 0) {
+                        debugLeds(FOLLOW_PATH_REATTEMPT_EVEN);
+                    } else {
+                        debugLeds(FOLLOW_PATH_REATTEMPT_ODD);
+                    }
+                    counter++;
                     try {
-                        TimeUnit.MILLISECONDS.sleep(500);
+                        TimeUnit.MILLISECONDS.sleep(10);
                     } catch (InterruptedException e1) {
                         break;
                     }
-                } else {
-                    throw e;
                 }
+            } else {
+                UnableToMoveException lastException = null;
+                for (int i = 0; i < maxRetries+1; i++) {
+                    lastException = attemptToGoto(point);
+                    if(lastException == null) { // on a réussi
+                        return;
+                    }
+                    if(i % 2 == 0) {
+                        debugLeds(FOLLOW_PATH_REATTEMPT_EVEN);
+                    } else {
+                        debugLeds(FOLLOW_PATH_REATTEMPT_ODD);
+                    }
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(10);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+                throw lastException;
             }
+        } finally {
+            debugLeds(BLACK);
+        }
+    }
+
+    private void debugLeds(LEDs.RGBColor color) {
+        if(usingPanel) {
+            LEDs leds = panneauService.getPanneau().getLeds();
+            leds.fillColor(color);
+        }
+    }
+
+    private UnableToMoveException attemptToGoto(Vec2 point) {
+        try {
+            this.locomotion.followPathTo(point);
+            return null;
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+            return e;
         }
     }
 
