@@ -103,7 +103,7 @@ public class MainSlave extends RobotEntryPoint {
             //s'oriente vers PI/2 avant de se recaler
             //XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI);
             XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
-            //robot.setPositionAndOrientation(newPos, Math.PI);
+            robot.setPositionAndOrientation(newPos, Math.PI/2);
             targetAngle = -Math.PI/2;
         }
         robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
