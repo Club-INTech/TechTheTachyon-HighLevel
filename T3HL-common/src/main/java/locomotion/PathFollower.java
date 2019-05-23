@@ -287,7 +287,7 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas de blocage mécanique ou d'adversaire
      */
-    private void moveToPoint(@NotNull Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
+    private void moveToPoint(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
         if(point==null){
             Log.LOCOMOTION.critical("je ne peux pas me déplacer vers un point null!");
         }
