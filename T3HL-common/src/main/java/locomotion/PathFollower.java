@@ -18,6 +18,7 @@
 
 package locomotion;
 
+import com.sun.istack.internal.NotNull;
 import data.SensorState;
 import data.Table;
 import data.XYO;
@@ -286,7 +287,7 @@ public class PathFollower extends ServiceThread {
      * @throws UnableToMoveException
      *              en cas de blocage mécanique ou d'adversaire
      */
-    private void moveToPoint(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
+    private void moveToPoint(@NotNull Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
         if(point==null){
             Log.LOCOMOTION.critical("je ne peux pas me déplacer vers un point null!");
         }
@@ -433,6 +434,9 @@ public class PathFollower extends ServiceThread {
                             continue;
                         }
                         Log.LOCOMOTION.debug("Move to "+aim+", current pos: "+XYO.getRobotInstance());
+                        if(pointsQueue.isEmpty()){
+                            Log.LOCOMOTION.critical("je n'ai plus de points dans pointsQueue");
+                        }
                         aim = pointsQueue.poll();
                         this.moveToPoint(aim, parallelActions);
                         parallelActions = new Runnable[0];
