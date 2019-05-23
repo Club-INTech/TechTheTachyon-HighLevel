@@ -19,7 +19,7 @@ public class PaletsX3Slave extends Script{
      * Position d'entrée du script
      */
 
-    private ArrayList<VectCartesian> positions;
+    private ArrayList<VectCartesian> positions = new ArrayList<>();
     private int xEntry = 1500-230;// 1338
     private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private double offsetX;
