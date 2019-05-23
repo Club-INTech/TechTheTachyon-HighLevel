@@ -46,7 +46,8 @@ public class Match extends Script {
             syncBuddy.sendPaletX6Free();
 
             int accVersion = 1;
-            robot.followPathTo(accelerateurScript.entryPosition(accVersion), () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
+            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
+            robot.followPathTo(accelerateurScript.entryPosition(accVersion));
 
             // 6. Faire l'accélérateur
             scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);

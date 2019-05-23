@@ -63,7 +63,8 @@ public class PaletsZoneDepart extends Script {
                 if(premierPaletPris&&version==JUST_BLUE) {
                     robot.turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-                    robot.followPathTo(position,() -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
+                    async("Descend ascenseur gauche", () -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
+                    robot.followPathTo(position);
                 }
                 else if (premierPaletPris) {
                     robot.followPathTo(position);

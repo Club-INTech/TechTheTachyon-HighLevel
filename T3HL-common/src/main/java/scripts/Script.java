@@ -102,7 +102,8 @@ public abstract class Script implements Service {
         }
 
         try {
-            this.robot.followPathTo(entryPosition, () -> this.executeWhileMovingToEntry(version));
+            async("Execution des actions pendant le déplacement du script "+getClass().getSimpleName()+" v"+version, () -> executeWhileMovingToEntry(version));
+            this.robot.followPathTo(entryPosition);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             if( ! shouldContinueScript(e)) {
