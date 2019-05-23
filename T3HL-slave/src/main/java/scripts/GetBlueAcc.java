@@ -105,6 +105,7 @@ public class GetBlueAcc extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
             }
             robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
+            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             robot.increaseScore(10);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
