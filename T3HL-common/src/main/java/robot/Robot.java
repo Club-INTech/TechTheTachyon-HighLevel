@@ -37,6 +37,7 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.RobotSide;
+import utils.TimeoutError;
 import utils.communication.SimulatorDebug;
 import utils.container.Service;
 import utils.math.Vec2;
@@ -187,7 +188,7 @@ public abstract class Robot implements Service {
      * @throws UnableToMoveException
      *              en cas de problème de blocage/adversaire
      */
-    public void followPathTo(Vec2 point, int maxRetries) throws UnableToMoveException {
+    public void followPathTo(Vec2 point, int maxRetries) throws UnableToMoveException, TimeoutError {
         try {
             debugLeds(START_FOLLOW_PATH);
             if(maxRetries == -1) {
@@ -248,6 +249,9 @@ public abstract class Robot implements Service {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             return e;
+        } catch (TimeoutError e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
