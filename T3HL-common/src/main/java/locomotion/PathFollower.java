@@ -94,6 +94,11 @@ public class PathFollower extends ServiceThread {
     private int blockTimeout;
 
     /**
+     * Est-ce qu'on a du ralentir à cause d'un ennemi dans le chemin?
+     */
+    private boolean alreadySlow;
+
+    /**
      * Construit le service de suivit de chemin
      * @param orderWrapper
      *              order wrapper
@@ -315,10 +320,13 @@ public class PathFollower extends ServiceThread {
                         segment.setPointB(nearDirection);
                         if( ! getEnemyInSegment(segment).isPresent()) { // la position d'arrivée est plus proche que l'ennemi, on peut encore avancer
                             //orderWrapper.immobilise();
-                            Log.PATHFINDING.debug("Enemy in front, slowing down... (enemy is "+enemy.get()+")");
-                            orderWrapper.setBothSpeed(Speed.SLOW_ALL);
-                            // on redemande le déplacement
-                            this.orderWrapper.moveToPoint(point);
+                            if(!alreadySlow) {
+                                Log.PATHFINDING.debug("Enemy in front, slowing down... (enemy is "+enemy.get()+")");
+                                orderWrapper.setBothSpeed(Speed.SLOW_ALL);
+                                // on redemande le déplacement
+                                this.orderWrapper.moveToPoint(point);
+                                alreadySlow = true;
+                            }
                             needsToStop = false;
                         }
                     }
@@ -336,6 +344,7 @@ public class PathFollower extends ServiceThread {
         } finally {
             // on reset la vitesse quoi qu'il arrive
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
+            alreadySlow = false;
         }
     }
 
