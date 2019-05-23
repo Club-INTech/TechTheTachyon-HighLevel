@@ -45,7 +45,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public void execute(Integer version) {
-        //TODO CHANGER LE SCORE
         try {
             robot.turn(Math.PI/2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
