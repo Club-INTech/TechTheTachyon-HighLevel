@@ -114,12 +114,7 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
         try {
-            if(!symetrie) {
                 robot.turn(0);
-            }
-            else{
-                robot.turn(Math.PI);
-            }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
