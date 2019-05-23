@@ -742,4 +742,10 @@ public class Table implements Service {
     public boolean isPositionInBalance(Vec2 center) {
         return balanceAndRamps.isInObstacle(center);
     }
+
+    public void removeAllTemporaryObstacles() {
+        synchronized (temporaryObstacles) {
+            temporaryObstacles.clear();
+        }
+    }
 }

@@ -106,6 +106,11 @@ public class X6alter extends Script {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 grabPuckGoto(robot, positions.get(1), false, true);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
@@ -130,7 +135,13 @@ public class X6alter extends Script {
 
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
-                robot.followPathTo(positionBalance);
+                try {
+                    SensorState.DISABLE_LIDAR.setData(true);
+                    table.removeAllTemporaryObstacles();
+                    robot.followPathTo(positionBalance);
+                } finally {
+                    SensorState.DISABLE_LIDAR.setData(false);
+                }
 
                 // On dépose le bleu
                 // on tourne en même temps qu'on lève le bras
@@ -239,6 +250,11 @@ public class X6alter extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
