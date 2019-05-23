@@ -223,7 +223,9 @@ public class Locomotion implements Service {
             });
         });
 
-        pointsQueue.clear();
+        synchronized (pointsQueue) {
+            pointsQueue.clear();
+        }
         exceptionsQueue.clear();
 
         pathFollower.setParallelActions(parallelActions);
@@ -315,11 +317,15 @@ public class Locomotion implements Service {
                     throw new UnableToMoveException(e.getMessage(), new XYO(aim.getPosition(), 0.0), UnableToMoveReason.NO_PATH);
                 }
             } finally {
-                pointsQueue.clear();
+                synchronized (pointsQueue) {
+                    pointsQueue.clear();
+                }
                 exceptionsQueue.clear();
             }
         }
-        pointsQueue.clear();
+        synchronized (pointsQueue) {
+            pointsQueue.clear();
+        }
         exceptionsQueue.clear();
 
         Log.LOCOMOTION.debug("Attente de la fin du mouvement en followpathto("+aim.getPosition()+")");

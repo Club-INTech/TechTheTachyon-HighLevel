@@ -418,7 +418,7 @@ public class PathFollower extends ServiceThread {
                 }
             }
             try {
-                hasNext = true;
+                hasNext = ! pointsQueue.isEmpty();
                 while(hasNext) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(5);
