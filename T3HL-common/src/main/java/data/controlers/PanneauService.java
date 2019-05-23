@@ -36,10 +36,9 @@ public class PanneauService implements Service {
         if(panel == null) {
             try {
                 panel = new Panneau(ledCount, programPort, RaspiPin.GPIO_07, have7seg);
-                Log.STRATEGY.debug("Appel au constructeur du panneau avec :"+ ledCount+" leds et 7seg = "+have7seg);
+                Log.STRATEGY.debug("Appel au constructeur du panneau avec "+ ledCount+" leds et 7seg = "+have7seg);
                 panel.addListener(teamColor -> {
                     couleur=panel.getTeamColor().toString().toLowerCase();
-                    Log.STRATEGY.warning("Couleur: "+couleur);
                     container.getConfig().override(ConfigData.COULEUR, couleur);
                     container.updateConfig(container.getConfig());
                 });
