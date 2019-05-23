@@ -106,6 +106,11 @@ public class X6alter extends Script {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 grabPuckGoto(robot, positions.get(1), false, true);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
@@ -239,6 +244,11 @@ public class X6alter extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
