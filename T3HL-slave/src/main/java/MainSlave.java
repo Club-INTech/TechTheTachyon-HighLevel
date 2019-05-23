@@ -107,7 +107,7 @@ public class MainSlave extends RobotEntryPoint {
             robot.setPositionAndOrientation(newPos, Math.PI/2);
             targetAngle = -Math.PI/2;
         }
-        robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
+        //robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
 
         //robot.gotoPoint(pos);
         //robot.turn(targetAngle);
