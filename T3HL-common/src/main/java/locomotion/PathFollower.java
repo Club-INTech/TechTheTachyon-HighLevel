@@ -18,7 +18,6 @@
 
 package locomotion;
 
-import com.sun.istack.internal.NotNull;
 import data.SensorState;
 import data.Table;
 import data.XYO;
