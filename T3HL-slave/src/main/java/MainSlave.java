@@ -89,7 +89,7 @@ public class MainSlave extends RobotEntryPoint {
         //Vec2 newPos = new VectCartesian(1500 -59 -145,400);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
        // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
-        Vec2 pos = new VectCartesian(1500-60-145, 500);
+        Vec2 pos = new VectCartesian(1500-449+148, 301+100);
        // Vec2 posSansSick = new VectCartesian(1399, 450);
 
 
