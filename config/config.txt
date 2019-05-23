@@ -18,7 +18,6 @@ SIMULATION                          =false
 USING_LIDAR                         =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
-USING_PANEL                         =false
 CONNECT_TO_BUDDY                    =false
 
 #________________________________________________________________________________________________________________________
@@ -26,7 +25,8 @@ CONNECT_TO_BUDDY                    =false
 [Master]
 MASTER                              = true
 USING_ELECTRON                      = false
-USING_PANEL                         = false
+USING_PANEL                         = true
+USING_LIDAR			    = true
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
@@ -40,6 +40,7 @@ MASTER                              = false
 COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
 USING_LIDAR			    = true
+LED_COUNT			    = 1
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
