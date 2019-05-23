@@ -21,6 +21,13 @@ public class MatchSlave extends Script {
 
     @Override
     public void execute(Integer version) {
+        try {
+            robot.turn(0);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+        robot.recalageMeca(300);
+        /*
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
         scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
@@ -41,16 +48,17 @@ public class MatchSlave extends Script {
 
         // 7. Attente que palets x6 soit libre
         syncBuddy.waitForFreePaletX6();
-        /*
+
         // 8. Palets x6 restants
         // (8,5. On retourne à la balance direct) ?
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX6).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
-        */
+
         // 9. Palets x3
         // 10. Balance
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
+        */
     }
 
     @Override
