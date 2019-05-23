@@ -287,7 +287,19 @@ public class PathFollower extends ServiceThread {
      *              en cas de blocage mécanique ou d'adversaire
      */
     private void moveToPoint(Vec2 point, Runnable... parallelActions) throws UnableToMoveException {
-        XYO aim = new XYO(point, Calculs.modulo(point.minusVector(robotXYO.getPosition()).getA(), Math.PI));
+        if(point==null){
+            Log.LOCOMOTION.critical("je ne peux pas me déplacer vers un point null!");
+        }
+        Vec2 maPosition=robotXYO.getPosition();
+        if(maPosition == null){
+            Log.LOCOMOTION.critical("ma position est null!");
+        }
+        Vec2 trajet=point.minusVector(maPosition);
+        if(trajet == null){
+            Log.LOCOMOTION.critical("Mon trajet est null!");
+        }
+        double alpha = Calculs.modulo(trajet.getA(), Math.PI);
+        XYO aim = new XYO(point, alpha);
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
