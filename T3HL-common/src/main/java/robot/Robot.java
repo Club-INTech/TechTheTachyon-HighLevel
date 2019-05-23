@@ -307,6 +307,19 @@ public abstract class Robot implements Service {
     }
 
     /**
+     * MECA >>>>>>>>>>> SICKS (recalage mecanique sur une distance à spécifier)
+     */
+    public void recalageMeca(int distance) {
+        this.disableRotation();
+        try {
+            this.moveLengthwise(distance, false);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+        this.ableRotation();
+    }
+
+    /**
      * Permet au robot d'utiliser un actionneur
      * @param order
      *              l'ordre que l'on veut executer

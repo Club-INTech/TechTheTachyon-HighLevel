@@ -89,13 +89,7 @@ public class Goldenium extends Script {
 
         //insert mechanicle recalation here
         //
-        robot.disableRotation();
-        try {
-            robot.moveLengthwise(20, false);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-        robot.ableRotation();
+        robot.recalageMeca(20);
         //
 
 
