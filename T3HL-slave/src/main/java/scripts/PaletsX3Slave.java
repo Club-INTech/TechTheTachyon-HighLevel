@@ -26,7 +26,7 @@ public class PaletsX3Slave extends Script{
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
     private int xFirstPuck=1250;
-    private int yFirstPuck=1670;
+    private int yFirstPuck=1650;
 
     /**
      * constante
