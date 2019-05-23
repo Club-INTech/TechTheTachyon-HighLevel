@@ -438,6 +438,9 @@ public class PathFollower extends ServiceThread {
                             Log.LOCOMOTION.critical("je n'ai plus de points dans pointsQueue");
                         }
                         aim = pointsQueue.poll();
+                        if(aim == null){
+                            Log.LOCOMOTION.critical("Je n'ai pas de but");
+                        }
                         this.moveToPoint(aim, parallelActions);
                         parallelActions = new Runnable[0];
                         hasNext = !pointsQueue.isEmpty();
