@@ -109,6 +109,7 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
             robot.increaseScore(10);
+            robot.gotoPoint(new VectCartesian(-400,300));
             recalage();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
