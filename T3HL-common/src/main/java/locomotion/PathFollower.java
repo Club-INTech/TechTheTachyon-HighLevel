@@ -426,7 +426,7 @@ public class PathFollower extends ServiceThread {
                         parallelActions = new Runnable[0];
                         hasNext = !pointsQueue.isEmpty();
                     }
-                };
+                }
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
                 synchronized (pointsQueue) {
