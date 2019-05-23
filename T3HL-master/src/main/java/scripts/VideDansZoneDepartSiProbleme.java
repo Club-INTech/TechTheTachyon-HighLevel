@@ -76,6 +76,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
 
                 robot.increaseScore(6);
@@ -108,6 +109,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 }
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
 
                 robot.increaseScore(6);
