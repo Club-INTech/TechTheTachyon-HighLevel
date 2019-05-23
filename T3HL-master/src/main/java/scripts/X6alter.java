@@ -106,27 +106,27 @@ public class X6alter extends Script {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-                grabPuckGoto(robot, positions.get(1), false);
+                grabPuckGoto(robot, positions.get(1), false, true);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 2è palet
-                grabPuckGoto(robot, positions.get(2), false);
+                grabPuckGoto(robot, positions.get(2), false, true);
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4è palet
-                grabPuckGoto(robot, positions.get(4), false); // skip le palet bleu
+                grabPuckGoto(robot, positions.get(4), false, true); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-                grabPuckGoto(robot, positions.get(5), false);
+                grabPuckGoto(robot, positions.get(5), false, true);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 6ème palet
-                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false); // retourne devant le bleu
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
-                grabPuck(robot, 0, true);
+                grabPuck(robot, 0, true, false);
 
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
@@ -208,7 +208,7 @@ public class X6alter extends Script {
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean blue) throws UnableToMoveException {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator) throws UnableToMoveException {
         if(puckStored != null) {
             puckStored.join();
         }
@@ -217,7 +217,7 @@ public class X6alter extends Script {
 
         try {
             robot.turn(Math.PI); // réoriente le robot vers PI
-            storePuck(blue);
+            storePuck(blue, moveElevator);
 
             if (moveDistance != 0) {
                 robot.moveLengthwise(moveDistance, false);
@@ -227,14 +227,16 @@ public class X6alter extends Script {
         }
     }
 
-    private void storePuck(boolean blue) {
+    private void storePuck(boolean blue, boolean moveElevator) {
         puckStored = async("Dépôt", () -> {
             if(blue) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
             } else {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                if(moveElevator) {
+                    robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                }
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
             }
@@ -245,12 +247,12 @@ public class X6alter extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      */
-    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue) throws UnableToMoveException {
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator) throws UnableToMoveException {
         if(puckStored != null) {
             puckStored.join();
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        storePuck(blue);
+        storePuck(blue, moveElevator);
         robot.gotoPoint(pos);
     }
 
