@@ -16,12 +16,16 @@ import utils.math.VectCartesian;
 
 public class Goldenium extends Script {
 
-    //position d'entrée
+    //position d'entrée pour le recalage mécanique
 
-    private int xEntry = -775; //a tester
-    private int yEntry = 280;//250+ 30+10  ; //a tester
+    private int xEntry = -500;
+    private int yEntry = 240;//250+ 30+10  ; //a tester
     private double offsetX;
     private double offsetY;
+
+    //position du goldenium (unused parce qu'on y va avec des moveLengthWise)
+    private int xGold = -775;
+    private int yGold = 280;
 
     //position de fin
 
@@ -33,6 +37,7 @@ public class Goldenium extends Script {
 
     //paramètres
 
+    private final VectCartesian positionGold;
     private final VectCartesian positionBalance1;
     private final VectCartesian positionBalance2;
     private boolean symetrie;
@@ -40,6 +45,7 @@ public class Goldenium extends Script {
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
+        positionGold = new VectCartesian(xGold, yGold);
         positionBalance1 = new VectCartesian(xBalance1, yBalance1);
         positionBalance2 =new VectCartesian(xBalance2, yBalance2);
     }
@@ -70,15 +76,39 @@ public class Goldenium extends Script {
             e.printStackTrace();
         }*/
 
+        /**
+         * on tente un recalage mécanique
+         */
+        /*
         try {
+            robot.turn(-Math.PI/2);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+
+
+        //insert mechanicle recalation here
+        //
+        robot.recalageMeca(20);
+        //
+
+
+
+        try {
+            robot.moveLengthwise(0, false);
             if(symetrie) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
             }
+            robot.moveLengthwise(0, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+        */
+
+
+
 
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
