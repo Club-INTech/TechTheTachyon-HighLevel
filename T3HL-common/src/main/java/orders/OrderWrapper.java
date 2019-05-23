@@ -179,6 +179,17 @@ public class OrderWrapper implements Service {
         this.sendString(MotionOrder.STOP.getOrderStr());
     }
 
+
+    /**
+     * Couper l'asserv en rotation
+     */
+    public void noRotationControl() {this.sendString(MotionOrder.NO_ROTATION_CONTROL.getOrderStr());}
+
+    /**
+     * Activer l'asserv en rotation
+     */
+    public void rotationControl() {this.sendString(MotionOrder.ROTATION_CONTROL.getOrderStr());}
+
     /**
      * On dit au bas niveau la vitesse de translation qu'on veut
      * @param speed la vitesse qu'on veut

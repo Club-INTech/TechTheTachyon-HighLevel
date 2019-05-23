@@ -34,6 +34,7 @@ import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.Speed;
 import orders.order.MontlheryOrder;
+import orders.order.MotionOrder;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
@@ -289,6 +290,20 @@ public abstract class Robot implements Service {
      */
     public void useActuator(ActuatorsOrder order, boolean waitForConfirmation) {
         this.orderWrapper.useActuator(order, waitForConfirmation);
+    }
+
+    /**
+     * Permet au robot de désactiver l'asserv en rotation
+     */
+    public void disableRotation() {
+        this.orderWrapper.noRotationControl();
+    }
+
+    /**
+     * Permet au robot d'activiter l'asserv en rotation
+     */
+    public void ableRotation() {
+        this.orderWrapper.rotationControl();
     }
 
     /**
