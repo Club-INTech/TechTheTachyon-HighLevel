@@ -20,11 +20,13 @@ public class PaletsX3Slave extends Script{
      */
 
     private ArrayList<VectCartesian> positions = new ArrayList<>();
-    private int xEntry = 1500-230;// 1338
-    private int yEntry = 1700 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int xEntry = 1500-270;// 1338
+    private int yEntry = 1700-450 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private double offsetX;
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
+    private int xFirstPuck=1230;
+    private int yFirstPuck=1700;
 
     /**
      * constante
@@ -42,18 +44,18 @@ public class PaletsX3Slave extends Script{
 
             if (!symetry) {
                 offsetX= Offsets.PALETSX3_X_JAUNE.get();
-                offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+                offsetY=Offsets.PALETSX3_Y_JAUNE.get();
             } else {
                 offsetX=Offsets.PALETSX3_X_VIOLET.get();
                 offsetY=Offsets.PALETSX3_Y_VIOLET.get();
             }
 
-            positions.add(new VectCartesian(1338+offsetX, yEntry+offsetY));     //???
-            positions.add(new VectCartesian(xEntry+offsetX+DISTANCE_INTER_PUCK , yEntry+offsetY));
-            positions.add(new VectCartesian(xEntry+offsetX+2*DISTANCE_INTER_PUCK, yEntry+offsetY));
+            positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
+            positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
+            positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
 
-            recalage();
-            robot.followPathTo(new VectCartesian(1338+offsetX, yEntry+offsetY));
+            //recalage();
+            robot.followPathTo(positions.get(0));
 
             if(!symetry) {
                 robot.turn(Math.PI);
@@ -64,11 +66,14 @@ public class PaletsX3Slave extends Script{
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
-            robot.gotoPoint(positions.get(1));
+            robot.moveLengthwise(-100,false);
+            //robot.gotoPoint(positions.get(1));
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
-            robot.gotoPoint(positions.get(2));
+
+            robot.moveLengthwise(-100,false);
+            //robot.gotoPoint(positions.get(2));
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
