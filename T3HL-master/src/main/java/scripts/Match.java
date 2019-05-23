@@ -1,22 +1,27 @@
 package scripts;
 
 import data.Table;
-import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
 import robot.Master;
+import utils.Container;
+import utils.Log;
 import utils.TimeoutError;
+import utils.container.ContainerException;
+import utils.container.Service;
 import utils.math.Vec2;
 
 public class Match extends Script {
     private final ScriptManagerMaster scriptManagerMaster;
     private SynchronizationWithBuddy syncBuddy;
+    private final Container container;
 
-    public Match(Master robot, Table table, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy) {
+    public Match(Master robot, Table table, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy, Container container) {
         super(robot,table);
         this.scriptManagerMaster = scriptManagerMaster;
         this.syncBuddy = syncBuddy;
+        this.container = container;
     }
 
 
@@ -41,21 +46,30 @@ public class Match extends Script {
         // (4,5. Désactiver la détection du secondaire ?)
         Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
+        // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
+        syncBuddy.sendPaletX6Free();
+
+        int accVersion = 1;
+        async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
+
         try {
-            // 5. Prévenir le secondaire que le distributeur de palets x6 est libre
-            syncBuddy.sendPaletX6Free();
-
-            int accVersion = 1;
-            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
-            robot.followPathTo(accelerateurScript.entryPosition(accVersion));
-
+            Service.withTimeout(5000, () -> {
+                try {
+                    robot.followPathTo(accelerateurScript.entryPosition(accVersion));
+                } catch (UnableToMoveException e) {
+                    e.printStackTrace();
+                }
+            });
             // 6. Faire l'accélérateur
             scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
-        } catch (UnableToMoveException | TimeoutError e) {
-            e.printStackTrace();
-            accelerateurScript.shouldContinueScript(e);
+        } catch (TimeoutError timeout) {
+            Log.STRATEGY.critical("Impossible d'atteindre l'accélérateur après 5s d'attente, on va vider les ascenseurs dans la zone de départ!");
+            try {
+                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+            } catch (ContainerException e1) {
+                e1.printStackTrace();
+            }
         }
-
     }
 
     @Override
