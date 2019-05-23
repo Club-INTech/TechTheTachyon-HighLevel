@@ -20,12 +20,12 @@ public class PaletsX3Slave extends Script{
      */
 
     private ArrayList<VectCartesian> positions = new ArrayList<>();
-    private int xEntry = 1500-300; //1235;// 1338
+    private int xEntry = 1500-200; //1235;// 1338
     private int yEntry = 1700-450 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private double offsetX;
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
-    private int xFirstPuck=1500-300; //1235;
+    private int xFirstPuck=1500-330; //1235;
     private int yFirstPuck=1670;
 
     /**
