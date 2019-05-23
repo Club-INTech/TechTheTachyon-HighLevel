@@ -208,7 +208,7 @@ public abstract class Robot implements Service {
                     try {
                         TimeUnit.MILLISECONDS.sleep(10);
                     } catch (InterruptedException e1) {
-                        break;
+                        return;
                     }
                 }
             } else {
@@ -226,7 +226,7 @@ public abstract class Robot implements Service {
                     try {
                         TimeUnit.MILLISECONDS.sleep(10);
                     } catch (InterruptedException e) {
-                        break;
+                        return;
                     }
                 }
                 throw lastException;
