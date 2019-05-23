@@ -135,7 +135,13 @@ public class X6alter extends Script {
 
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
-                robot.followPathTo(positionBalance);
+                try {
+                    SensorState.DISABLE_LIDAR.setData(true);
+                    table.removeAllTemporaryObstacles();
+                    robot.followPathTo(positionBalance);
+                } finally {
+                    SensorState.DISABLE_LIDAR.setData(false);
+                }
 
                 // On dépose le bleu
                 // on tourne en même temps qu'on lève le bras
