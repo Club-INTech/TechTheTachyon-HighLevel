@@ -27,6 +27,7 @@ public class MatchSlave extends Script {
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
+        table.addTassot();
 
         if(true)
             return;
