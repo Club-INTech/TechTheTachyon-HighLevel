@@ -88,16 +88,20 @@ public abstract class Script implements Service {
                 Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
 
                 // attente de qq secondes s'il y a un ennemi là où on veut aller
-                Service.withTimeout(blockTimeout, () -> {
-                    while(table.isPositionInMobileObstacle(entryPosition)) {
-                        try {
-                            Thread.sleep(50);
-                            Log.TABLE.critical("Robot in mobile obstacle");
-                        } catch (InterruptedException e) {
-                            break;
+                try {
+                    Service.withTimeout(blockTimeout, () -> {
+                        while (table.isPositionInMobileObstacle(entryPosition)) {
+                            try {
+                                Thread.sleep(50);
+                                Log.TABLE.critical("Robot in mobile obstacle");
+                            } catch (InterruptedException e) {
+                                break;
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (TimeoutError e) {
+                    e.printStackTrace();
+                }
             });
         }
 
