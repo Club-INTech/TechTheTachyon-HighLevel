@@ -21,13 +21,13 @@ public class MatchSlave extends Script {
 
     @Override
     public void execute(Integer version) {
-        try {
+       /* try {
             robot.turn(0);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        robot.recalageMeca();
-
+       robot.recalageMeca();
+        */
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
         scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
