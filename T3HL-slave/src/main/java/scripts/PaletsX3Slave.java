@@ -82,9 +82,14 @@ public class PaletsX3Slave extends Script{
             robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(2));
 
-            getPuck();
+            getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
+
+            robot.recalageMeca(false);
+            robot.turn(-Math.PI/2);
+            robot.moveLengthwise(450, false);
+            robot.turn(Math.PI);
 
         }
         catch (UnableToMoveException e) {
@@ -92,6 +97,7 @@ public class PaletsX3Slave extends Script{
         }
     }
 
+    /*
     private void recalage() {
         if(symetry) {
             try {
@@ -109,7 +115,7 @@ public class PaletsX3Slave extends Script{
             }
         }
     }
-
+    */
 
     private void getPuck() {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
