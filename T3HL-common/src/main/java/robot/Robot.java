@@ -312,7 +312,7 @@ public abstract class Robot implements Service {
     public void recalageMeca() {
         this.disableRotation();
         try {
-            this.setTranslationSpeed(Speed.ULTRA_VERY_SLOW_ALL);
+            this.setTranslationSpeed(Speed.SLOW_ALL);
             this.moveLengthwise(300, true);
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
             this.ableRotation();
