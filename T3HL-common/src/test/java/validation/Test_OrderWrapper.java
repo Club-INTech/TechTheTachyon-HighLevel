@@ -103,7 +103,7 @@ public class Test_OrderWrapper {
      */
     @Test
     public void moveLenghtwiseOrder() throws  Exception {
-        orderWrapper.moveLenghtwise(15);
+        orderWrapper.moveLenghtwise(15,false);
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
