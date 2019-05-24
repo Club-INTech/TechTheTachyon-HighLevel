@@ -22,7 +22,7 @@ public class GetRedDep extends Script {
     public void execute(Integer version) {
         //TODO : attendre le principal
         try {
-            robot.moveLengthwise(-110,false);
+            robot.moveLengthwise(-100,false);
             //robot.turn(-Math.PI/2);
           //robot.moveLengthwise(-106,false);
         } catch (UnableToMoveException e) {
