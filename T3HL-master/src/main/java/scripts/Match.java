@@ -53,7 +53,7 @@ public class Match extends Script {
         async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 
         try {
-            Service.withTimeout(10000, () -> {
+            Service.withTimeout(7000, () -> {
                 try {
                     robot.followPathTo(accelerateurScript.entryPosition(accVersion));
                 } catch (UnableToMoveException e) {
