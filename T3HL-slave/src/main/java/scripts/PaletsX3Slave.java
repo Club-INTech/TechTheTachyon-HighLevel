@@ -20,15 +20,15 @@ public class PaletsX3Slave extends Script{
      */
 
     private ArrayList<VectCartesian> positions = new ArrayList<>();
-    private int xEntry = 1500-200; //1235;// 1338
-    private int yEntry = 1700-450 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int xEntry = 1300; //1235;// 1338
+    private int yEntry = 1250 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private int xEntry2 = 1300;
     private int yEntry2 = 1630;
     private double offsetX;
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
-    private int xFirstPuck=1500-230; //1235;
-    private int yFirstPuck=1670-40;
+    private int xFirstPuck=1320; //1235;
+    private int yFirstPuck=1630;
 
     /**
      * constante
@@ -60,11 +60,9 @@ public class PaletsX3Slave extends Script{
 
             //recalage();
             robot.followPathTo(new VectCartesian(xEntry2,yEntry2));
-            robot.recalageMeca(true);
-            robot.moveLengthwise(-1800+positions.get(0).getY()+100,false);
+            robot.recalageMeca(true,-1800+positions.get(0).getY());
             robot.turn(Math.PI);
-            robot.recalageMeca(false);
-            robot.moveLengthwise(1500-positions.get(0).getX()-100,false);
+            robot.recalageMeca(false,1500-positions.get(0).getX());
 
 
             getPuck();
@@ -82,7 +80,7 @@ public class PaletsX3Slave extends Script{
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
-            robot.recalageMeca(false);
+            robot.recalageMeca(false,100);
             robot.turn(-Math.PI/2);
             robot.moveLengthwise(450, false);
             robot.turn(Math.PI);

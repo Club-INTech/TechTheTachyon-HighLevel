@@ -309,8 +309,9 @@ public abstract class Robot implements Service {
     /**
      * MECA >>>>>>>>>>> SICKS (recalage mecanique sur une distance à spécifier)
      */
-    public void recalageMeca(Boolean avant) {
+    public void recalageMeca(Boolean avant,int distReculeAbsolu) {
         this.disableRotation();
+        distReculeAbsolu=Math.abs(distReculeAbsolu);
         try {
             this.setTranslationSpeed(Speed.SLOW_ALL);
             if (avant) {
@@ -321,9 +322,9 @@ public abstract class Robot implements Service {
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
             this.ableRotation();
             if (avant) {
-                this.moveLengthwise(-100, false);
+                this.moveLengthwise(-distReculeAbsolu, false);
             } else {
-                this.moveLengthwise(100, false);
+                this.moveLengthwise(distReculeAbsolu, false);
             }
 
         } catch (UnableToMoveException e) {
