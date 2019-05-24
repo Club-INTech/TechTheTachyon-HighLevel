@@ -31,6 +31,8 @@ public enum Speed implements Order {
     //TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
 
     /** Vitesse ultra lente en translation, ultra lente en rotation */
+    ULTRA_VERY_SLOW_ALL(25,0.5D),
+
     ULTRA_SLOW_ALL(100,0.5D),
 
     /** Vitesse très lente en translation, très lente en rotation */
