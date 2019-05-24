@@ -96,13 +96,11 @@ public class Goldenium extends Script {
 
 
         try {
-            robot.moveLengthwise(0, false);
             if(symetrie) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
             }
-            robot.moveLengthwise(0, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -113,8 +111,12 @@ public class Goldenium extends Script {
             robot.turn(-Math.PI/2);
             robot.recalageMeca();
             robot.moveLengthwise(-yEntry,false);
-            robot.turn(Math.PI);
-            XYO.getRobotInstance().update(xEntry,yEntry,Math.PI);
+            if(symetrie) {
+                robot.turn(Math.PI);
+            } else {
+                robot.turn(0);
+            }
+
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

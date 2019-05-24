@@ -56,6 +56,9 @@ public class PaletsX3Slave extends Script{
 
             //recalage();
             robot.followPathTo(positions.get(0));
+            robot.turn(0);
+            robot.recalageMeca();
+            robot.moveLengthwise(-positions.get(0).getX(),false);
 
             if(!symetry) {
                 robot.turn(Math.PI);
