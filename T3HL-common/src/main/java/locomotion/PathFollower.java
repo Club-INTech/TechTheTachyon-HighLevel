@@ -153,7 +153,7 @@ public class PathFollower extends ServiceThread {
 
                     SensorState.MOVING.setData(true);
                     Log.LOCOMOTION.debug("Move lengthwise "+toTravel);
-                    this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
+                    this.orderWrapper.moveLenghtwise(toTravel, expectedWallImpact, parallelActionsLambda);
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
                     boolean finalFirstPass = firstPass;

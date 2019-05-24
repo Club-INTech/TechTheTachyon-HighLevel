@@ -141,9 +141,9 @@ public class OrderWrapper implements Service {
      * On envoit au bas niveau comme ordre d'avancer d'une certaine distance
      * @param distance distance dont on avance
      */
-    public void moveLenghtwise(double distance, Runnable... parallelActions) {
+    public void moveLenghtwise(double distance, boolean expectedWallImpact, Runnable... parallelActions) {
         int d = (int) Math.round(distance);
-        this.sendString(String.format(Locale.US, "%s %d", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d));
+        this.sendString(String.format(Locale.US, "%s %d %b", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d, expectedWallImpact));
         runAll(parallelActions);
     }
 
