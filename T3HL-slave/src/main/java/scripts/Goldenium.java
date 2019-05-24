@@ -1,6 +1,7 @@
 package scripts;
 
 import data.Table;
+import data.XYO;
 import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -111,8 +112,9 @@ public class Goldenium extends Script {
         try {
             robot.turn(-Math.PI/2);
             robot.recalageMeca();
-            robot.moveLengthwise(-240,false);
+            robot.moveLengthwise(-yEntry,false);
             robot.turn(Math.PI);
+            XYO.getRobotInstance().update(xEntry,yEntry,Math.PI);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
