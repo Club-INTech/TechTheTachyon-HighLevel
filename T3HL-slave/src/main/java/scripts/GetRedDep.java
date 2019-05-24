@@ -8,6 +8,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class GetRedDep extends Script {
     private final int xEntry = 1500-449+148; //1244;//1350;
@@ -40,7 +41,7 @@ public class GetRedDep extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return XYO.getRobotInstance().getPosition();
+        return new VectCartesian(xEntry, yEntry);
     }
 
     @Override
