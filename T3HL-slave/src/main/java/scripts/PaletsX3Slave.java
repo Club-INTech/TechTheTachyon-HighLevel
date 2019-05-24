@@ -22,8 +22,8 @@ public class PaletsX3Slave extends Script{
     private ArrayList<VectCartesian> positions = new ArrayList<>();
     private int xEntry = 1300; //1235;// 1338
     private int yEntry = 1250 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
-    private int xEntry2 = 1300;
-    private int yEntry2 = 1630;
+//    private int xEntry2 = 1300;
+//    private int yEntry2 = 1630;
     private double offsetX;
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
@@ -59,7 +59,6 @@ public class PaletsX3Slave extends Script{
             positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
 
             //recalage();
-            robot.followPathTo(new VectCartesian(xEntry2,yEntry2));
             robot.recalageMeca(true,-1800+positions.get(0).getY());
             robot.turn(Math.PI);
             robot.recalageMeca(false,1500-positions.get(0).getX());
