@@ -130,9 +130,10 @@ public class MainSlave extends RobotEntryPoint {
             }
         }*/
 
-
+        robot.recalageMeca(false);
         //robot.setPositionAndOrientation(pos, -Math.PI/2);
         orderWrapper.waitJumper();
+
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);
