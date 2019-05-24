@@ -20,6 +20,7 @@ public class Cracheur extends Script {
     private int xEntry = 1500-1280;
     private int yEntry = 1180;
     private boolean symetrie;
+    private boolean first = true;
 
     private int nbPalets = robot.getNbPaletsDroits();
 
@@ -47,11 +48,16 @@ public class Cracheur extends Script {
             e.printStackTrace();
         }
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
+            if (first) {
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
+            }
             robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET, true);
             robot.popPaletDroit();
         }
+
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
     }
     @Override //à adapter
     public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
