@@ -21,15 +21,21 @@ public class MatchSlave extends Script {
 
     @Override
     public void execute(Integer version) {
+       /* try {
+            robot.turn(0);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+       robot.recalageMeca();
+        */
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
-       // scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
+        scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         table.addTassot();
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
-
 
         if(true)
             return;
@@ -39,7 +45,7 @@ public class MatchSlave extends Script {
         // 6 Pose le Gold dans la balance
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
 
-        // 7. Attente que palets x6 est libre
+        // 7. Attente que palets x6 soit libre
         syncBuddy.waitForFreePaletX6();
 
         // 8. Palets x6 restants
@@ -51,6 +57,7 @@ public class MatchSlave extends Script {
         // 10. Balance
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
+
     }
 
     @Override

@@ -39,7 +39,7 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 MASTER                              = false
 COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
-USING_LIDAR			    = true
+USING_LIDAR			    = false
 LED_COUNT			    = 1
 
 # DIMENSIONS DES ROBOTS

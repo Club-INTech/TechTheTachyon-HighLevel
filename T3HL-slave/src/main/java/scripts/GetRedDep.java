@@ -3,14 +3,16 @@ package scripts;
 import data.CouleurPalet;
 import data.Table;
 import data.XYO;
+import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class GetRedDep extends Script {
-    private final int xEntry = 1244;//1350;
-    private final int yEntry = 1055;//450;
+    private final int xEntry = 1500-449+148; //1244;//1350;
+    private final int yEntry = 301+100; //1055;//450;
     private boolean symetrie;
 
     public GetRedDep(Slave robot, Table table) {
@@ -18,6 +20,14 @@ public class GetRedDep extends Script {
     }
 
     public void execute(Integer version) {
+        //TODO : attendre le principal
+        try {
+            robot.moveLengthwise(-110,false);
+            //robot.turn(-Math.PI/2);
+          //robot.moveLengthwise(-106,false);
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_SOL, true);
@@ -32,7 +42,7 @@ public class GetRedDep extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        return XYO.getRobotInstance().getPosition();
+        return new VectCartesian(xEntry, yEntry);
     }
 
     @Override

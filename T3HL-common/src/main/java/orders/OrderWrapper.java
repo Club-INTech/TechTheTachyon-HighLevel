@@ -141,9 +141,9 @@ public class OrderWrapper implements Service {
      * On envoit au bas niveau comme ordre d'avancer d'une certaine distance
      * @param distance distance dont on avance
      */
-    public void moveLenghtwise(double distance, Runnable... parallelActions) {
+    public void moveLenghtwise(double distance, boolean expectedWallImpact, Runnable... parallelActions) {
         int d = (int) Math.round(distance);
-        this.sendString(String.format(Locale.US, "%s %d", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d));
+        this.sendString(String.format(Locale.US, "%s %d %b", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d, expectedWallImpact));
         runAll(parallelActions);
     }
 
@@ -178,6 +178,17 @@ public class OrderWrapper implements Service {
     public void immobilise() {
         this.sendString(MotionOrder.STOP.getOrderStr());
     }
+
+
+    /**
+     * Couper l'asserv en rotation
+     */
+    public void noRotationControl() {this.sendString(MotionOrder.NO_ROTATION_CONTROL.getOrderStr());}
+
+    /**
+     * Activer l'asserv en rotation
+     */
+    public void rotationControl() {this.sendString(MotionOrder.ROTATION_CONTROL.getOrderStr());}
 
     /**
      * On dit au bas niveau la vitesse de translation qu'on veut

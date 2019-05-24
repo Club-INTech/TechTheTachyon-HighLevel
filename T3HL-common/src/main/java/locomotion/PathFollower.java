@@ -116,6 +116,7 @@ public class PathFollower extends ServiceThread {
      * @param aim le point à atteindre
      */
     public void gotoPoint(Vec2 aim) throws UnableToMoveException {
+        SensorState.STUCKED.setData(false);
         SensorState.MOVING.setData(true);
         orderWrapper.moveToPoint(aim);
 
@@ -138,12 +139,14 @@ public class PathFollower extends ServiceThread {
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
         try {
+            SensorState.STUCKED.setData(false);
             Runnable[] parallelActionsLambda = parallelActions;
             int travelledDistance = 0;
             Vec2 start = robotXYO.getPosition().clone();
 
             // permet de vérifier qu'on essaie pour la première fois: on évite de s'arrêter et de diminuer la vitesse à chaque itération si on rencontre un ennemi plus loin que là où on veut aller
             boolean firstPass = true;
+            boolean shouldRetry = true;
             XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
             do {
                 int toTravel = distance - travelledDistance;
@@ -153,7 +156,7 @@ public class PathFollower extends ServiceThread {
 
                     SensorState.MOVING.setData(true);
                     Log.LOCOMOTION.debug("Move lengthwise "+toTravel);
-                    this.orderWrapper.moveLenghtwise(toTravel, parallelActionsLambda);
+                    this.orderWrapper.moveLenghtwise(toTravel, expectedWallImpact, parallelActionsLambda);
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
                     boolean finalFirstPass = firstPass;
@@ -164,6 +167,7 @@ public class PathFollower extends ServiceThread {
                             throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
                         }
                     });
+
                 } catch (UnableToMoveException e) {
                     if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
                         Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
@@ -180,9 +184,17 @@ public class PathFollower extends ServiceThread {
 
                 travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
                 firstPass = false;
-            } while (Math.abs(travelledDistance-distance) >= 5);
+                if(SensorState.STUCKED.getData() && expectedWallImpact){
+                    shouldRetry=false;
+                }
+            } while ((Math.abs(travelledDistance-distance) >= 5) && shouldRetry);
         } finally {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
+            if(expectedWallImpact){
+                SensorState.STUCKED.setData(false);
+                orderWrapper.immobilise();
+                Log.LOCOMOTION.critical("UnableToMove");
+            }
         }
         Log.LOCOMOTION.debug("End of move lengthwise");
     }
@@ -259,6 +271,7 @@ public class PathFollower extends ServiceThread {
      */
     public void turn(double angle, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
         try {
+            SensorState.STUCKED.setData(false);
             // on désactive le lidar pendant qu'on tourne pour éviter d'avoir des "traces" des obstacles lors de la rotation
             SensorState.DISABLE_LIDAR.setData(true);
             XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
@@ -303,6 +316,7 @@ public class PathFollower extends ServiceThread {
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
+        SensorState.STUCKED.setData(false);
         orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         this.orderWrapper.moveToPoint(point, parallelActions);
 
