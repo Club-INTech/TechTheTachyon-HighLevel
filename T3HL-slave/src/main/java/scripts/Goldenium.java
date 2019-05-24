@@ -114,12 +114,12 @@ public class Goldenium extends Script {
            // robot.recalageMeca();
             //robot.moveLengthwise(-yEntry,false);
             //robot.moveLengthwise(-72+25,false);
-            if(symetrie) {
+           if(symetrie) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
             }
-            robot.moveLengthwise(-240-55,false);
+            robot.moveLengthwise(-522,false);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();

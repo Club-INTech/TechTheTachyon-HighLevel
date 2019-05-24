@@ -53,7 +53,7 @@ public class GetBlueAcc extends Script {
             robot.turn(-Math.PI/2);
             robot.recalageMeca();
             //robot.moveLengthwise(-yEntry,false);
-            robot.moveLengthwise(-72+17,false);
+            robot.moveLengthwise(-72+21,false);
             if(symetrie) {
                 robot.turn(Math.PI);
             } else {
@@ -64,6 +64,7 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
             TimeUnit.SECONDS.sleep(1);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
+            robot.increaseScore(10);
 
 
             robot.moveLengthwise(230,false);
@@ -137,6 +138,7 @@ public class GetBlueAcc extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+
             //robot.increaseScore(10);
             //robot.gotoPoint(new VectCartesian(-400,300));
             //recalage();

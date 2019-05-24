@@ -43,7 +43,7 @@ public class MatchSlave extends Script {
         // 4. Rush vers balance
         // (5 Attente du principal?) <- à tester si on passe
         // 6 Pose le Gold dans la balance
-        scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
+        scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
 
         // 7. Attente que palets x6 soit libre
         syncBuddy.waitForFreePaletX6();
