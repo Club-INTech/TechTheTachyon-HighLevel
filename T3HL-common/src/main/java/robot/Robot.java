@@ -309,10 +309,10 @@ public abstract class Robot implements Service {
     /**
      * MECA >>>>>>>>>>> SICKS (recalage mecanique sur une distance à spécifier)
      */
-    public void recalageMeca(int distance) {
+    public void recalageMeca() {
         this.disableRotation();
         try {
-            this.moveLengthwise(distance, true);
+            this.moveLengthwise(1000, true);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

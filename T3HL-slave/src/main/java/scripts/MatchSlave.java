@@ -26,7 +26,7 @@ public class MatchSlave extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        robot.recalageMeca(300);
+        robot.recalageMeca();
 
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
