@@ -116,6 +116,7 @@ public class PathFollower extends ServiceThread {
      * @param aim le point à atteindre
      */
     public void gotoPoint(Vec2 aim) throws UnableToMoveException {
+        SensorState.STUCKED.setData(false);
         SensorState.MOVING.setData(true);
         orderWrapper.moveToPoint(aim);
 
@@ -138,6 +139,7 @@ public class PathFollower extends ServiceThread {
      */
     public void moveLengthwise(int distance, boolean expectedWallImpact, final Runnable... parallelActions) throws UnableToMoveException, TimeoutError {
         try {
+            SensorState.STUCKED.setData(false);
             Runnable[] parallelActionsLambda = parallelActions;
             int travelledDistance = 0;
             Vec2 start = robotXYO.getPosition().clone();
@@ -269,6 +271,7 @@ public class PathFollower extends ServiceThread {
      */
     public void turn(double angle, boolean expectedWallImpact, Runnable... parallelActions) throws UnableToMoveException {
         try {
+            SensorState.STUCKED.setData(false);
             // on désactive le lidar pendant qu'on tourne pour éviter d'avoir des "traces" des obstacles lors de la rotation
             SensorState.DISABLE_LIDAR.setData(true);
             XYO aim = new XYO(robotXYO.getPosition().clone(), Calculs.modulo(robotXYO.getOrientation() + angle, Math.PI));
@@ -313,6 +316,7 @@ public class PathFollower extends ServiceThread {
         Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
+        SensorState.STUCKED.setData(false);
         orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
         this.orderWrapper.moveToPoint(point, parallelActions);
 
