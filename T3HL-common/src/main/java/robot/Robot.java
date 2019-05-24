@@ -312,7 +312,7 @@ public abstract class Robot implements Service {
     public void recalageMeca(int distance) {
         this.disableRotation();
         try {
-            this.moveLengthwise(distance, false);
+            this.moveLengthwise(distance, true);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
