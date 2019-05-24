@@ -313,6 +313,7 @@ public abstract class Robot implements Service {
         this.disableRotation();
         try {
             this.moveLengthwise(1000, true);
+            this.moveLengthwise(100,false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

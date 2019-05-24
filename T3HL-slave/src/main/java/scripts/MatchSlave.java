@@ -30,13 +30,12 @@ public class MatchSlave extends Script {
 
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
-        /*scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
+        scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).goToThenExecute(0);
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         table.addTassot();
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).goToThenExecute(0);
-*/
 
         if(true)
             return;
