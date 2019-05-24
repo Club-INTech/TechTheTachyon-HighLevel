@@ -20,7 +20,7 @@ public class Goldenium extends Script {
     //position d'entrée pour le recalage mécanique
 
     private int xEntry = -500;
-    private int yEntry = 246;//250+ 30+10  ; //a tester
+    private int yEntry = 250;//250+ 30+10  ; //a tester
     private double offsetX;
     private double offsetY;
 
@@ -108,7 +108,7 @@ public class Goldenium extends Script {
 
 
         try {
-            robot.turn(-Math.PI/2);
+           // robot.turn(-Math.PI/2);
            // robot.recalageMeca();
             //robot.moveLengthwise(-yEntry,false);
             //robot.moveLengthwise(-72+25,false);
@@ -117,7 +117,7 @@ public class Goldenium extends Script {
             } else {
                 robot.turn(0);
             }
-            robot.moveLengthwise(-240-60,false);
+            robot.moveLengthwise(-240-55,false);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
