@@ -314,13 +314,13 @@ public abstract class Robot implements Service {
         try {
             this.setTranslationSpeed(Speed.ULTRA_VERY_SLOW_ALL);
             this.moveLengthwise(300, true);
-            this.moveLengthwise(-100,false);
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
+            this.ableRotation();
+            this.moveLengthwise(-100,false);
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        this.ableRotation();
     }
 
     /**
