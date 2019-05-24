@@ -19,6 +19,8 @@ public class GetBlueAcc extends Script {
     private int xBlue = -170; //FIXME: positions à faire (attention symétrie)
     private int yBlue = 150+150;
     private boolean symetrie;
+    private int xEntry = -500;
+    private int yEntry = 240;//250+ 30+10  ; //a tester
 
     /**
      * Offset avec la planche
@@ -46,6 +48,18 @@ public class GetBlueAcc extends Script {
     public void execute(Integer version) {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
+            robot.turn(-Math.PI/2);
+            robot.recalageMeca();
+            //robot.moveLengthwise(-yEntry,false);
+            robot.moveLengthwise(-72+25,false);
+            if(symetrie) {
+                robot.turn(Math.PI);
+            } else {
+                robot.turn(0);
+            }
+            // TODO rajouter le code pour qu'il dépose le palet rouge dans l'accélérateur
+
+            robot.moveLengthwise(220,false);
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR_RED);
             /*
 
@@ -91,24 +105,26 @@ public class GetBlueAcc extends Script {
             //robot.gotoPoint(new VectCartesian(xBlue+50, yBlue+10)); // on répète la position pour être sûr qu'il est là
 
             if (!symetrie) {
-                robot.turn(0);
-              //  robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(-95-20, false);
+                //robot.moveLengthwise(-95-20, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
 
             } else {
-                robot.turn(Math.PI);
-               // robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
+                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
+                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR2_SECONDAIRE,true);
-                robot.moveLengthwise(95+20, false);
+                //robot.moveLengthwise(95+20, false);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
             }
             robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
             robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-            robot.increaseScore(10);
+            //robot.increaseScore(10);
             //robot.gotoPoint(new VectCartesian(-400,300));
             //recalage();
         } catch (UnableToMoveException e) {
@@ -140,7 +156,7 @@ public class GetBlueAcc extends Script {
     }
 
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(xBlue+10+10, yBlue); }
+    public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
 
     @Override
     public void finalize(Exception e) { }
