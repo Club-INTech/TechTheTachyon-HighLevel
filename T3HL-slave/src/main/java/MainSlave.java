@@ -130,6 +130,8 @@ public class MainSlave extends RobotEntryPoint {
             }
         }*/
 
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE_APRES_STOCK);
+
         //robot.setPositionAndOrientation(pos, -Math.PI/2);
         orderWrapper.waitJumper();
 
