@@ -110,10 +110,12 @@ public class Goldenium extends Script {
 
         try {
             robot.turn(-Math.PI/2);
+            robot.recalageMeca(200);
+            robot.moveLengthwise(-240,false);
+            robot.turn(Math.PI);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        robot.recalageMeca(200);
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
