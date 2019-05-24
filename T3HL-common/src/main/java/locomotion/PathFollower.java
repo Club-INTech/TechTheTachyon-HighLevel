@@ -144,6 +144,7 @@ public class PathFollower extends ServiceThread {
 
             // permet de vérifier qu'on essaie pour la première fois: on évite de s'arrêter et de diminuer la vitesse à chaque itération si on rencontre un ennemi plus loin que là où on veut aller
             boolean firstPass = true;
+            boolean shouldRetry = true;
             XYO aim = new XYO(start.plusVector(new VectPolar(distance, robotXYO.getOrientation())), robotXYO.getOrientation());
             do {
                 int toTravel = distance - travelledDistance;
@@ -164,6 +165,10 @@ public class PathFollower extends ServiceThread {
                             throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
                         }
                     });
+                    if(SensorState.STUCKED.getData() && expectedWallImpact){
+                        shouldRetry=false;
+                    }
+
                 } catch (UnableToMoveException e) {
                     if (e.getReason() == UnableToMoveReason.TRAJECTORY_OBSTRUCTED) {
                         Log.LOCOMOTION.critical("Failed to reach position because of someone in front of me! " + e.getMessage());
@@ -180,9 +185,13 @@ public class PathFollower extends ServiceThread {
 
                 travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
                 firstPass = false;
-            } while (Math.abs(travelledDistance-distance) >= 5);
+            } while ((Math.abs(travelledDistance-distance) >= 5) && shouldRetry);
         } finally {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
+            if(expectedWallImpact){
+                SensorState.STUCKED.setData(false);
+                Log.LOCOMOTION.critical("UnableToMove");
+            }
         }
         Log.LOCOMOTION.debug("End of move lengthwise");
     }

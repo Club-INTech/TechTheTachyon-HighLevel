@@ -175,6 +175,9 @@ public class DataControler extends Thread implements Service {
         }
         String[] event = message.split(ARGUMENTS_SEPARATOR);
         switch (event[0]) {
+            case "unableToMove":
+                SensorState.STUCKED.setData(true);
+                break;
             case "pong":
                 SensorState.LAST_PONG.setData(System.currentTimeMillis());
                 break;
