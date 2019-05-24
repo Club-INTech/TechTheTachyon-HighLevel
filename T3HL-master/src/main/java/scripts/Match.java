@@ -98,7 +98,7 @@ public class Match extends Script {
                             }
                         }
                     }
-                    if (wasBlocked) {
+                    if (!wasBlocked) {
                         scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
                     }
                 }
@@ -125,7 +125,7 @@ public class Match extends Script {
             }
             //Si aucun n'ennemi ne s'est placé à l'accélérateur pendant tout le temps qu'on y arrive
             //On exécute le script accélérateur
-            if (wasBlocked) {
+            if (!wasBlocked) {
                 scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
             }
         }
