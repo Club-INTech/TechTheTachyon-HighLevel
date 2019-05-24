@@ -71,9 +71,9 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+                robot.increaseScore(6);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
 
-                robot.increaseScore(6);
 
                 if(robot.getRightElevatorOrNull() != null) {
                     robot.popPaletDroit();
