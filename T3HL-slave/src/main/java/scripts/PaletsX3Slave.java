@@ -50,6 +50,8 @@ public class PaletsX3Slave extends Script{
                 offsetY=Offsets.PALETSX3_Y_VIOLET.get();
             }
 
+
+
             positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
             positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
@@ -57,7 +59,7 @@ public class PaletsX3Slave extends Script{
             //recalage();
             robot.followPathTo(positions.get(0));
             robot.turn(0);
-            robot.recalageMeca();
+            robot.recalageMeca(true);
             robot.moveLengthwise(-positions.get(0).getX(),false);
 
             if(!symetry) {

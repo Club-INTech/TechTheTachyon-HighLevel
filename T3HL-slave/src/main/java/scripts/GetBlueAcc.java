@@ -51,7 +51,7 @@ public class GetBlueAcc extends Script {
         // Nouvelle strat: on va pousser le bleu en premier, en faisant un arc de cercle avec le bras du secondaire
         try {
             robot.turn(-Math.PI/2);
-            robot.recalageMeca();
+            robot.recalageMeca(true);
             //robot.moveLengthwise(-yEntry,false);
             robot.moveLengthwise(-72+21,false);
             if(symetrie) {
