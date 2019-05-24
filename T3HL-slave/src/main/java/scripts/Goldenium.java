@@ -109,7 +109,7 @@ public class Goldenium extends Script {
 
         try {
             robot.turn(-Math.PI/2);
-            robot.recalageMeca();
+           // robot.recalageMeca();
             //robot.moveLengthwise(-yEntry,false);
             robot.moveLengthwise(-72+25,false);
             if(symetrie) {
