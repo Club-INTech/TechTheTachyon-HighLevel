@@ -27,7 +27,7 @@ public enum SpeedOrder implements Order {
 
     SET_TRANSLATION_SPEED("maxtr"),
     SET_ROTATIONNAL_SPEED("maxro"),
-    SET_SPEED("maxrotr"),
+    SET_SPEED("maxtrro"),
     ;
 
     /**
