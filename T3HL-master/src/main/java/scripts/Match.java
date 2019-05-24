@@ -3,6 +3,7 @@ package scripts;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
+import locomotion.UnableToMoveReason;
 import pfg.config.Config;
 import robot.Master;
 import utils.Container;
@@ -52,22 +53,80 @@ public class Match extends Script {
         int accVersion = 1;
         async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 
-        try {
-            Service.withTimeout(7000, () -> {
-                try {
-                    robot.followPathTo(accelerateurScript.entryPosition(accVersion));
-                } catch (UnableToMoveException e) {
-                    e.printStackTrace();
-                }
-            });
-            // 6. Faire l'accélérateur
-            scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
-        } catch (TimeoutError timeout) {
-            Log.STRATEGY.critical("Impossible d'atteindre l'accélérateur après 5s d'attente, on va vider les ascenseurs dans la zone de départ!");
+
+        if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
+            //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
             try {
-                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
-            } catch (ContainerException e1) {
-                e1.printStackTrace();
+                //On regarde s'il est toujours au bout de 5 secondes
+                Service.withTimeout(5000, () -> {
+                    try {
+                        robot.followPathTo(accelerateurScript.entryPosition(accVersion));
+                    } catch (UnableToMoveException e) {
+                        e.printStackTrace();
+                    }
+                });
+                // 6. Faire l'accélérateur
+                scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
+            } catch (TimeoutError timeout) {
+                if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
+                    //S'il y est toujours au bout de 5 secondes
+                    //On exécute le script de secours
+                    Log.STRATEGY.critical("Impossible d'atteindre l'accélérateur après 5s d'attente, on va vider les ascenseurs dans la zone de départ!");
+                    try {
+                        container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                    } catch (ContainerException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                else {
+                    //S'il n'y est plus au bout de 7 secondes
+                    //On exécute le script accélérateur
+                    Log.STRATEGY.critical("L'ennemi n'est plus à l'accélérateur, on peut y aller");
+                    boolean wasBlocked = false;
+                    try {
+                        robot.followPathTo(accelerateurScript.entryPosition(accVersion));
+                    } catch (UnableToMoveException e) {
+                        e.printStackTrace();
+                        if (e.getReason() == UnableToMoveReason.NO_PATH) {
+                            //Si un ennemi a décidé de se mettre au niveau de l'accélérateur alors qu'il n'y était pas au début
+                            //On lance le script de secours
+                            try {
+                                wasBlocked = true;
+                                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                            } catch (ContainerException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                    if (wasBlocked) {
+                        scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
+                    }
+                }
+            }
+        }
+        else {
+            //Si il n'y a pas d'ennemis quand on souhaite faire l'accélérateur
+            //On fait le script accélérateur
+            boolean wasBlocked = false;
+            try {
+                robot.followPathTo(accelerateurScript.entryPosition(accVersion));
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+                if (e.getReason() == UnableToMoveReason.NO_PATH) {
+                    //Si un ennemi a décidé de se mettre au niveau de l'accélérateur alors qu'il n'y était pas au début
+                    //On lance le script de secours
+                    try {
+                        wasBlocked = true;
+                        container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                    } catch (ContainerException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+            //Si aucun n'ennemi ne s'est placé à l'accélérateur pendant tout le temps qu'on y arrive
+            //On exécute le script accélérateur
+            if (wasBlocked) {
+                scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
             }
         }
     }
