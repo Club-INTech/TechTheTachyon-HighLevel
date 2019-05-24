@@ -20,7 +20,7 @@ public class Goldenium extends Script {
     //position d'entrée pour le recalage mécanique
 
     private int xEntry = -500;
-    private int yEntry = 240;//250+ 30+10  ; //a tester
+    private int yEntry = 246;//250+ 30+10  ; //a tester
     private double offsetX;
     private double offsetY;
 
