@@ -190,6 +190,7 @@ public class PathFollower extends ServiceThread {
             orderWrapper.setBothSpeed(Speed.DEFAULT_SPEED);
             if(expectedWallImpact){
                 SensorState.STUCKED.setData(false);
+                orderWrapper.immobilise();
                 Log.LOCOMOTION.critical("UnableToMove");
             }
         }
