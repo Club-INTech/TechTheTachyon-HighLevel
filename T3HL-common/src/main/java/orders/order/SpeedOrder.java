@@ -25,9 +25,9 @@ package orders.order;
  */
 public enum SpeedOrder implements Order {
 
-    SET_TRANSLATION_SPEED("ctv"),
-    SET_ROTATIONNAL_SPEED("crv"),
-    SET_SPEED("ctrv"),
+    SET_TRANSLATION_SPEED("maxtr"),
+    SET_ROTATIONNAL_SPEED("maxro"),
+    SET_SPEED("maxrotr"),
     ;
 
     /**
