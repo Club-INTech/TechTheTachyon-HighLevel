@@ -133,7 +133,7 @@ public class MainSlave extends RobotEntryPoint {
         orderWrapper.waitJumper();
 
         robot.disableRotation();
-        robot.moveLengthwise(300, true);
+        robot.moveLengthwise(100, true);
 
         try {
             container.getService(MatchSlave.class).goToThenExecute(0);
