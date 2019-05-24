@@ -112,9 +112,9 @@ public class Goldenium extends Script {
         try {
             robot.turn(-Math.PI/2);
             robot.recalageMeca();
-            robot.moveLengthwise(-240,false);
+            robot.moveLengthwise(-yEntry,false);
             robot.turn(Math.PI);
-            XYO.getRobotInstance().update(-500,240,Math.PI);
+            XYO.getRobotInstance().update(xEntry,yEntry,Math.PI);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
