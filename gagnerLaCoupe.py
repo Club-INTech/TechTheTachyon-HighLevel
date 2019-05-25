@@ -29,6 +29,7 @@ def writeMotd(message):
 
 # catch 'killall -10 python3'
 signal.signal(signal.SIGUSR1, terminate)
+signal.signal(signal.SIGTERM, terminate)
 
 # save motd
 # os.system('sudo cp -f /etc/motd /etc/motd_save')
