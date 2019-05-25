@@ -41,7 +41,8 @@ public class PaletsZoneDepart extends Script {
     public void execute(Integer version) {
         Vec2[] positions;
         Vec2 entry = entryPosition(version);
-        double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
+        //double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
+        double OffX = 0;
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(entry.getX(), entry.getY()),
@@ -56,11 +57,6 @@ public class PaletsZoneDepart extends Script {
                     new VectCartesian(entry.getX()+OffX,1050),
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
-        }
-        try {
-            robot.followPathTo(positions[0]);
-        }catch (Exception e){
-            e.printStackTrace();
         }
         boolean premierPaletPris = false;
         int i =0;
@@ -147,8 +143,8 @@ public class PaletsZoneDepart extends Script {
             return new VectCartesian(xEntry, yEntry);
         }
         else{
-            return new VectCartesian(xEntry + (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get(), yEntry-605);
-            //return XYO.getRobotInstance().getPosition();
+            //return new VectCartesian(xEntry + (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get(), yEntry-605);
+            return XYO.getRobotInstance().getPosition();
         }
     }
 
