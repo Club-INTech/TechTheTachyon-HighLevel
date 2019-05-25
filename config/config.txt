@@ -25,8 +25,8 @@ CONNECT_TO_BUDDY                    =false
 MASTER                              = true
 USING_ELECTRON                      = false
 USING_PANEL                         = true
-USING_LIDAR			    = true
-LED_COUNT			    = 16
+USING_LIDAR			                = true
+LED_COUNT			                = 16
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
@@ -39,8 +39,8 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 MASTER                              = false
 COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
-USING_LIDAR			    = false
-LED_COUNT			    = 1
+USING_LIDAR			                = false
+LED_COUNT			                = 1
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
@@ -52,8 +52,8 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =0
 PALETSX6_X_VIOLET                   =10
-PALETSX6_Y_VIOLET                   =-10
-PALETSX6_THETA_VIOLET               =0.015
+PALETSX6_Y_VIOLET                   =-9
+PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
