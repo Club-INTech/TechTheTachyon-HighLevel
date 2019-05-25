@@ -265,6 +265,28 @@ public abstract class Robot implements Service {
         }
     }
 
+
+    /**
+     * Permet au robot de se tourner vers un point
+     * @param point point vers lequel se tourner
+     */
+    public void turnToPoint(Vec2 point) throws UnableToMoveException {
+        this.turn(point.minusVector(XYO.getRobotInstance().getPosition()).getA());
+    }
+
+    /**
+     * Permet au robot de faire un GoTo en utilisant les ordres de base
+     * @param point
+     *              point vers lequel le robot se rend
+     * @param expectingWallImpact
+     *              true si l'on s'attend à un blocage mécanique (lorsque l'on veut se caler contre le mur par exemple)
+     * @throws UnableToMoveException
+     */
+    public void softGoTo(Vec2 point, boolean expectingWallImpact) throws UnableToMoveException {
+        this.turnToPoint(point);
+        this.moveLengthwise((int)Math.round(point.distanceTo(XYO.getRobotInstance().getPosition())), expectingWallImpact);
+    }
+
     /**
      * Permet au robot d'avancer/recluer en ligne droite
      * @param distance
