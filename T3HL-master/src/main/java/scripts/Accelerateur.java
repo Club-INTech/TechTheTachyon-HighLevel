@@ -82,6 +82,7 @@ public class Accelerateur extends Script {
             recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             robot.turn(0);
             recalageRight.join();
+
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
