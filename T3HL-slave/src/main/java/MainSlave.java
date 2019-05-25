@@ -60,6 +60,7 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void preLLConnection() throws ContainerException {
+        waitForColorSwitch();
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = container.getService(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {

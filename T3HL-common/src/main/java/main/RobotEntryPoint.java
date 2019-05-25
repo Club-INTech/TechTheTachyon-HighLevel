@@ -18,6 +18,9 @@
 package main;
 
 import ai.AIService;
+import com.panneau.LEDs;
+import com.panneau.Panneau;
+import com.panneau.TooManyDigitsException;
 import connection.ConnectionManager;
 import data.Table;
 import data.controlers.LidarControler;
@@ -34,6 +37,9 @@ import utils.Log;
 import utils.MatchTimer;
 import utils.communication.KeepAlive;
 import utils.container.ContainerException;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author nayth
@@ -82,15 +88,94 @@ public abstract class RobotEntryPoint {
     protected abstract void act() throws UnableToMoveException;
 
     protected void waitForAllConnectionsReady() {
+        LEDs leds = null;
+        if(container.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
+            leds = panneauService.getPanneau().getLeds();
+        }
         while (!connectionManager.areConnectionsInitiated()) {
             try {
-                Thread.sleep(100);
+                if(leds != null) {
+                    float f = (float) Math.min(1, Math.sin(System.currentTimeMillis()/1000.0 * Math.PI)*0.5f+0.5f);
+                    leds.fillColor(new LEDs.RGBColor(f, 0f, 1f-f));
+                }
+
+                Thread.sleep(50);
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if(leds != null) {
+            resetColorToTeamColor(panneauService.getPanneau());
+        }
+    }
+
+    protected void waitForColorSwitch() {
+        if( ! container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
+            panneauService.setPanel(null);
+            return;
+        }
+        Panneau panneau = panneauService.getPanneau();
+        if(panneau != null) {
+            try {
+                try {
+                    panneau.printScore(5005);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Panneau.TeamColor initialColor = panneau.getTeamColor();
+                LEDs leds = panneau.getLeds();
+                LEDs.RGBColor waitingColor1 = new LEDs.RGBColor(0.5f, 0.5f, 0.0f);
+                LEDs.RGBColor waitingColor2 = new LEDs.RGBColor(0.5f, 0.0f, 0.5f);
+
+                // on attend une première activation du switch
+                while(initialColor == panneau.getTeamColor()) {
+                    try {
+                        panneau.printScore(5005);
+                        leds.fillColor(waitingColor1);
+                        TimeUnit.MILLISECONDS.sleep(100);
+                        panneau.printScore(550);
+                        leds.fillColor(waitingColor2);
+                        TimeUnit.MILLISECONDS.sleep(100);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                resetColorToTeamColor(panneau);
+
+                initialColor = panneau.getTeamColor();
+                // on attend une deuxième activation du switch ou 5s
+                long delay = 5000;
+                long start = System.currentTimeMillis();
+                while(initialColor == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
+                    try {
+                        panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    TimeUnit.MILLISECONDS.sleep(1);
+                }
+
+                resetColorToTeamColor(panneau);
+                Log.STRATEGY.warning("Couleur: "+panneau.getTeamColor());
+            } catch (InterruptedException | TooManyDigitsException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    private void resetColorToTeamColor(Panneau panneau) {
+        LEDs leds = panneau.getLeds();
+        switch (panneau.getTeamColor()) {
+            case JAUNE:
+                leds.fillColor(LEDs.RGBColor.JAUNE);
+                break;
+
+            case VIOLET:
+                leds.fillColor(LEDs.RGBColor.MAGENTA);
+                break;
+        }
+    }
     protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
         try {
             // trouve la couleur
