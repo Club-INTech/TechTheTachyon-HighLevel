@@ -57,6 +57,11 @@ public class PaletsZoneDepart extends Script {
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
+        try {
+            robot.followPathTo(positions[0]);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         boolean premierPaletPris = false;
         int i =0;
         try {
