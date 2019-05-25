@@ -47,7 +47,7 @@ public class PanneauService implements Service {
                     container.getConfig().override(ConfigData.COULEUR, couleur);
                     container.updateConfig(container.getConfig());
                 });
-                panel.getLeds().fillColor(new LEDs.RGBColor(0,0,0));
+                panel.getLeds().fillColor(LEDs.RGBColor.NOIR);
             } catch (IOException | I2CFactory.UnsupportedBusNumberException e){
                 e.printStackTrace();
             }
@@ -66,5 +66,12 @@ public class PanneauService implements Service {
         ledCount = config.getInt(ConfigData.LED_COUNT);
         programPort = config.getInt(ConfigData.LED_PROGRAM_PORT);
         have7seg = config.getBoolean(ConfigData.USING_7_SEGMENTS);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        panel.getLeds().fillColor(LEDs.RGBColor.NOIR);
+        panel.printScore(8888);
+        super.finalize();
     }
 }
