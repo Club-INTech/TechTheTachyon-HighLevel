@@ -8,12 +8,16 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
+import static utils.Offsets.*;
 
 public class PaletsZoneDepart extends Script {
 
@@ -22,18 +26,22 @@ public class PaletsZoneDepart extends Script {
      */
     public static int JUST_BLUE = 1;
 
+    Container container;
+
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65+ (int)Offsets.ZDD_X_VIOLET.get();//1244;
     private final int yEntry = 450+605;//;
 
-    public PaletsZoneDepart(Master robot, Table table) {
+    public PaletsZoneDepart(Master robot, Table table, Container container) {
         super(robot, table);
+        this.container=container;
     }
 
     @Override
     public void execute(Integer version) {
         Vec2[] positions;
         Vec2 entry = entryPosition(version);
+        double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(entry.getX(), entry.getY()),
@@ -44,8 +52,8 @@ public class PaletsZoneDepart extends Script {
         } else {
             positions = new VectCartesian[]{
                     //new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(entry.getX(), entry.getY()),
-                    new VectCartesian(entry.getX(),1050),
+                    new VectCartesian(entry.getX()+OffX, entry.getY()),
+                    new VectCartesian(entry.getX()+OffX,1050),
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
