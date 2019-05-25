@@ -25,6 +25,7 @@ import data.SensorState;
 import data.Sick;
 import data.XYO;
 import data.controlers.PanneauService;
+import data.synchronization.SynchronizationWithBuddy;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import locomotion.UnableToMoveReason;
@@ -36,11 +37,9 @@ import orders.Speed;
 import orders.order.MontlheryOrder;
 import orders.order.MotionOrder;
 import pfg.config.Config;
-import utils.ConfigData;
-import utils.Log;
-import utils.RobotSide;
-import utils.TimeoutError;
+import utils.*;
 import utils.communication.SimulatorDebug;
+import utils.container.ContainerException;
 import utils.container.Service;
 import utils.math.Vec2;
 
@@ -125,12 +124,21 @@ public abstract class Robot implements Service {
 
     public void increaseScore(int points) {
         this.score = this.score + points;
-        try {
-            if(usingPanel && panneauService.getPanneau() != null) {
-                this.panneauService.getPanneau().printScore(score);
+        if (isMaster) {
+            try {
+                if (usingPanel && panneauService.getPanneau() != null) {
+                    this.panneauService.getPanneau().printScore(score);
+                }
+            } catch (TooManyDigitsException | IOException e) {
+                e.printStackTrace();
             }
-        }catch(TooManyDigitsException | IOException e){
-            e.printStackTrace();
+        }
+        else{
+            try {
+                Container.getInstance("slave").getService(SynchronizationWithBuddy.class).increaseScore(points);
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
         }
     }
 
