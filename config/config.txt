@@ -52,8 +52,8 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =0
 PALETSX6_X_VIOLET                   =10
-PALETSX6_Y_VIOLET                   =-10
-PALETSX6_THETA_VIOLET               =0.015
+PALETSX6_Y_VIOLET                   =-9
+PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
@@ -63,4 +63,4 @@ ACCELERATEUR_Y_JAUNE                =0
 PALETS_DEPART_X_JAUNE               =10
 PALETS_DEPART_X_VIOLET              =10
 
-ZDD_X_VIOLET                        =-2
+ZDD_X_VIOLET                        =-10
