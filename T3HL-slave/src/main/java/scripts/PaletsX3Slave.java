@@ -74,13 +74,14 @@ public class PaletsX3Slave extends Script{
 
             getPuck();
             //robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+            robot.moveLengthwise(-100,false);
+            //robot.gotoPoint(positions.get(1));
+
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            robot.moveLengthwise(-100,false);
-            //robot.gotoPoint(positions.get(1));
 
             getPuck();
             //robot.pushPaletDroit(CouleurPalet.VERT); // TODO
