@@ -13,6 +13,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class PaletsX3Slave extends Script{
     /**
@@ -73,6 +74,11 @@ public class PaletsX3Slave extends Script{
 
             getPuck();
             //robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
