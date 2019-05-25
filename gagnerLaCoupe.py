@@ -52,10 +52,14 @@ while True:
     writeMotd("HL lancé!")
 
     restoreMotd()
-    writeMotd("Positionner l\'interrupteur sur 0 pour libérer java")
+    writeMotd("Positionner l\'interrupteur sur 0 pour stopeer le HL")
     while GPIO.input(8) == GPIO.LOW:
         wait()
     os.system("sudo killall -9 java")
+    PID = open("/home/pi/panneauRaspi/LED/PID", "r")
+    killPID = PID.readline()
+    PID.close()
+    os.system("sudo kill -10 " + killPID)
     restoreMotd()
     writeMotd("HL stoppé")
 
