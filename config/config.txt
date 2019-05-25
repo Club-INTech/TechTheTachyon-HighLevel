@@ -15,7 +15,6 @@ COULEUR                             =jaune
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
 VISUALISATION                       =false
 SIMULATION                          =false
-USING_LIDAR                         =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 CONNECT_TO_BUDDY                    =false
@@ -27,6 +26,7 @@ MASTER                              = true
 USING_ELECTRON                      = false
 USING_PANEL                         = true
 USING_LIDAR			    = true
+LED_COUNT			    = 16
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190

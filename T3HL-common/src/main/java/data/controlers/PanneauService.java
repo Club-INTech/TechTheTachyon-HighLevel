@@ -1,5 +1,6 @@
 package data.controlers;
 
+import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CFactory;
@@ -46,6 +47,7 @@ public class PanneauService implements Service {
                     container.getConfig().override(ConfigData.COULEUR, couleur);
                     container.updateConfig(container.getConfig());
                 });
+                panel.getLeds().fillColor(new LEDs.RGBColor(0,0,0));
             } catch (IOException | I2CFactory.UnsupportedBusNumberException e){
                 e.printStackTrace();
             }
