@@ -142,8 +142,8 @@ public class PaletsZoneDepart extends Script {
             return new VectCartesian(xEntry, yEntry);
         }
         else{
-            //return new VectCartesian(xEntry, yEntry-605);
-            return XYO.getRobotInstance().getPosition();
+            return new VectCartesian(xEntry + (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get(), yEntry-605);
+            //return XYO.getRobotInstance().getPosition();
         }
     }
 
