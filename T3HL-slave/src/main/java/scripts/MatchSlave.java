@@ -32,7 +32,6 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
         scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
 
-        async("Execution des actions pendant le déplacement", () -> scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).executeWhileMovingToEntry(0));
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
