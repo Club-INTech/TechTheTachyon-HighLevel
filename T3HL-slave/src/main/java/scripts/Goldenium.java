@@ -177,7 +177,7 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
         try {
-                robot.moveLengthwise(-50,false);
+                robot.moveLengthwise(-60,false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
