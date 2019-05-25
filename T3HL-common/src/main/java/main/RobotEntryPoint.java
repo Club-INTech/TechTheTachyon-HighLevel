@@ -133,7 +133,7 @@ public abstract class RobotEntryPoint {
                         panneauService.printScore(5005);
                         leds.fillColor(waitingColor1);
                         TimeUnit.MILLISECONDS.sleep(100);
-                        panneau.printScore(550);
+                        panneauService.printScore(550);
                         leds.fillColor(waitingColor2);
                         TimeUnit.MILLISECONDS.sleep(100);
                     } catch (IOException e) {
