@@ -38,6 +38,7 @@ import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.Container;
 import utils.Log;
+import utils.Offsets;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Calculs;
@@ -129,7 +130,13 @@ public class MainMaster extends RobotEntryPoint {
             Vec2 entryPos = new VectCartesian(1244,900-195);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            double angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
+            double angleToStart;
+            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")){
+                angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX()+ Offsets.ZDD_X_VIOLET.get());
+            }
+            else {
+                angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
+            }
             System.out.println("angleToStart : " + angleToStart);
             robot.turn(angleToStart-Math.PI/2);
             orderWrapper.waitJumper();
