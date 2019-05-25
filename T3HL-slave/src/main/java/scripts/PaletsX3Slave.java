@@ -73,23 +73,17 @@ public class PaletsX3Slave extends Script{
 
 
             getPuck();
-            //robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
             robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             getPuck();
-            //robot.pushPaletDroit(CouleurPalet.VERT); // TODO
+            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            robot.moveLengthwise(-100,false);
+            //robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(2));
 
-            getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
+            //getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
             //robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
