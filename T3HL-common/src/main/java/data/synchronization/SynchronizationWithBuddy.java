@@ -49,4 +49,16 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
             Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que palets x6 est libre");
         }
     }
+
+    /**
+     * Permet d'incrémenter les points sur le principal quand appelé par le secondaire
+     * @param points nombre de points à incrémenter
+     */
+    public void increaseScore(int points){
+        if(connection.isInitiated()) {
+            sendString(String.format("%sincreaseScore %d", Channel.BUDDY_EVENT.getHeaders(), points));
+        }else {
+            Log.STRATEGY.critical("Pas de connexion au buddy, on ne peut pas incrémenter les points");
+        }
+    }
 }

@@ -25,8 +25,8 @@ CONNECT_TO_BUDDY                    =false
 MASTER                              = true
 USING_ELECTRON                      = false
 USING_PANEL                         = true
-USING_LIDAR			    = true
-LED_COUNT			    = 16
+USING_LIDAR			                = true
+LED_COUNT			                = 16
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
@@ -39,8 +39,8 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 MASTER                              = false
 COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
-USING_LIDAR			    = false
-LED_COUNT			    = 1
+USING_LIDAR			                = false
+LED_COUNT			                = 1
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
@@ -64,3 +64,16 @@ PALETS_DEPART_X_JAUNE               =10
 PALETS_DEPART_X_VIOLET              =10
 
 ZDD_X_VIOLET                        =-10
+<<<<<<< HEAD
+=======
+
+PALETSX3_X_JAUNE                    =0
+PALETSX3_Y_JAUNE                    =0
+PALETSX3_X_VIOLET                   =0
+PALETSX3_Y_VIOLET                   =0
+
+GOLDENIUM_X_JAUNE                   =0
+GOLDENIUM_Y_JAUNE                   =0
+GOLDENIUM_X_VIOLET                  =0
+GOLDENIUM_Y_VIOLET                  =0
+>>>>>>> 1f70fa927b6b4d0d4bacfdabbea0c4d224a7311e

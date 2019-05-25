@@ -137,7 +137,7 @@ public class GetBlueAcc extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
             }
-            robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
+          //  robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
             //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
 
             //robot.increaseScore(10);
@@ -175,6 +175,18 @@ public class GetBlueAcc extends Script {
 
     @Override //à adapter
     public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
+
+
+    /**
+     * Exécution d'actions pendant le mouvement jusqu'à la position d'entrée du script. Utile pour mettre les bras à la bonne position, baisser un ascenseur, etc.
+     * @param version la version du script
+     */
+    @Override
+    public void executeWhileMovingToEntry(int version){
+        robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+    }
 
     @Override
     public void finalize(Exception e) { }

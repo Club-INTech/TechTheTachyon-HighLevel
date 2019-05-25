@@ -32,6 +32,8 @@ public class PaletsZoneDepart extends Script {
     private final int xEntry = 1500-191-65+ (int)Offsets.ZDD_X_VIOLET.get();//1244;
     private final int yEntry = 450+605;//;
 
+    private boolean symetry;
+
     public PaletsZoneDepart(Master robot, Table table, Container container) {
         super(robot, table);
         this.container=container;
@@ -43,6 +45,9 @@ public class PaletsZoneDepart extends Script {
         Vec2 entry = entryPosition(version);
         //double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
         double OffX = 0;
+        if (symetry){
+            OffX= ZDD_X_VIOLET.get();
+        }
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(entry.getX(), entry.getY()),
@@ -155,5 +160,6 @@ public class PaletsZoneDepart extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 }
