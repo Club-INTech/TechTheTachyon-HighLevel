@@ -45,9 +45,9 @@ public class PaletsZoneDepart extends Script {
         Vec2 entry = entryPosition(version);
         //double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
         double OffX = 0;
-        if (symetry){
+       /* if (symetry){
             OffX= ZDD_X_VIOLET.get();
-        }
+        }*/
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{
                     new VectCartesian(entry.getX(), entry.getY()),
