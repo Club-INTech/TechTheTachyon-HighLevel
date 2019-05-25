@@ -68,7 +68,7 @@ public class GetBlueAcc extends Script {
 
 
             //robot.moveLengthwise(230,false);
-            robot.softGoTo(new VectCartesian(-500+230,154+100+34-10),false);
+            robot.softGoTo(new VectCartesian(-500+230,154+100+34-30),false);
             robot.turn(0);
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR_RED);
             /*
