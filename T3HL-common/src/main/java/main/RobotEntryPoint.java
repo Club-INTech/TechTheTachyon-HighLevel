@@ -118,7 +118,7 @@ public abstract class RobotEntryPoint {
         if(panneau != null) {
             try {
                 try {
-                    panneau.printScore(5005);
+                    panneauService.printScore(5005);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -130,7 +130,7 @@ public abstract class RobotEntryPoint {
                 // on attend une première activation du switch
                 while(initialColor == panneau.getTeamColor()) {
                     try {
-                        panneau.printScore(5005);
+                        panneauService.printScore(5005);
                         leds.fillColor(waitingColor1);
                         TimeUnit.MILLISECONDS.sleep(100);
                         panneau.printScore(550);
@@ -149,7 +149,7 @@ public abstract class RobotEntryPoint {
                 long start = System.currentTimeMillis();
                 while(initialColor == panneau.getTeamColor() && (System.currentTimeMillis() - start) <= delay) {
                     try {
-                        panneau.printScore((int) (delay-(System.currentTimeMillis()-start)));
+                        panneauService.printScore((int) (delay-(System.currentTimeMillis()-start)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

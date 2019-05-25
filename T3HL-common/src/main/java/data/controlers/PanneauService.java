@@ -2,6 +2,7 @@ package data.controlers;
 
 import com.panneau.LEDs;
 import com.panneau.Panneau;
+import com.panneau.TooManyDigitsException;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CFactory;
 import pfg.config.Config;
@@ -57,6 +58,12 @@ public class PanneauService implements Service {
 
     public String getCouleur(){
         return couleur;
+    }
+
+    public void printScore(int score) throws IOException, TooManyDigitsException {
+        if(have7seg){
+            panel.printScore(score);
+        }
     }
 
     @Override
