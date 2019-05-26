@@ -106,10 +106,16 @@ public class PaletsX3Slave extends Script{
             //robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
-            robot.recalageMeca(false,100);
-            robot.turn(-Math.PI/2);
-            robot.moveLengthwise(450, false);
+            //robot.recalageMeca(false,100);
+            if(!symetry){
+                robot.turn(-Math.PI/2);
+            }
+            else{
+                robot.turn(Math.PI/2);
+            }
+            robot.moveLengthwise(600, false);
             robot.turn(Math.PI);
+
 
         }
         catch (UnableToMoveException e) {
