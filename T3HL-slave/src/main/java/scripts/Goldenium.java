@@ -56,7 +56,7 @@ public class Goldenium extends Script {
             positionBalance2 =new VectCartesian(xBalance2, yBalance2);
         }
         else {
-            positionBalance1 = new VectCartesian(xBalance1, yBalance1);
+            positionBalance1 = new VectCartesian(xBalance1, yBalance1-10);
             positionBalance2 = new VectCartesian(xBalance2, yBalance2);
         }
 
