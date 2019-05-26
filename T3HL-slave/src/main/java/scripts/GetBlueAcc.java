@@ -191,7 +191,7 @@ public class GetBlueAcc extends Script {
     @Override //à adapter
     public Vec2 entryPosition(Integer version) {
         if (symetrie){
-            return new VectCartesian(xEntry+10,yEntry);
+            return new VectCartesian(xEntry+20,yEntry);
         }
         else {
             return new VectCartesian(xEntry, yEntry);
