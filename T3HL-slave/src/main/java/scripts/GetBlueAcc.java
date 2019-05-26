@@ -24,6 +24,7 @@ public class GetBlueAcc extends Script {
     private int xEntry = -500;
     private int yEntry = 240;//250+ 30+10  ; //a tester
 
+
     /**
      * Offset avec la planche
      */
@@ -190,7 +191,7 @@ public class GetBlueAcc extends Script {
     @Override //à adapter
     public Vec2 entryPosition(Integer version) {
         if (symetrie){
-            return new VectCartesian(xEntry-30,yEntry);
+            return new VectCartesian(xEntry-60,yEntry);
         }
         else {
             return new VectCartesian(xEntry, yEntry);
