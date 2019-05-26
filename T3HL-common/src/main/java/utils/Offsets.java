@@ -22,10 +22,8 @@ public enum Offsets implements ConfigInfo {
     PALETS_X6_BALANCE_Y_JAUNE(0),
     PALETS_X6_BALANCE_Y_VIOLET(10),
 
-    PALETS_DEPART_X_JAUNE(0),
-    PALETS_DEPART_X_VIOLET(0),
-
     ZDD_X_VIOLET(5),
+    ZDD_X_JAUNE(5),
 
     /*      SLAVE       */
     PALETSX3_X_JAUNE(0),

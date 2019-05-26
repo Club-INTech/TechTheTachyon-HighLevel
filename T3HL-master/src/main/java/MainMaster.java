@@ -126,8 +126,9 @@ public class MainMaster extends RobotEntryPoint {
 
 
         try {
+            double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_X_VIOLET.get() : Offsets.ZDD_X_JAUNE.get();
             Match match = container.getService(Match.class);
-            Vec2 entryPos = new VectCartesian(1244,900-195);
+            Vec2 entryPos = new VectCartesian(1244+offX,900-195);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
             double angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
