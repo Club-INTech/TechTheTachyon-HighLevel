@@ -1,6 +1,5 @@
 #!/bin/bash
 sudo killall java
-sudo killall -10 python3
 sudo fuser -k 19500
 ./reset_internet
 cd bin/
