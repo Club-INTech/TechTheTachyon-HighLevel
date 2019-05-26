@@ -27,6 +27,7 @@ USING_ELECTRON                      = true
 USING_PANEL                         = false
 USING_LIDAR			                = true
 LED_COUNT			                = 16
+HOMOLOGATION                        = true
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190

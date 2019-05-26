@@ -38,6 +38,11 @@ public enum ConfigData implements ConfigInfo
     ETHERNET_DEFAULT_TIME(1),
 
     /**
+     * Le script d'homologation doit-il être exécuté
+     */
+    HOMOLOGATION(false),
+
+    /**
      * Couleur
      */
     COULEUR("jaune"),

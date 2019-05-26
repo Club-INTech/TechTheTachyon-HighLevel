@@ -6,6 +6,7 @@ import locomotion.UnableToMoveException;
 import locomotion.UnableToMoveReason;
 import pfg.config.Config;
 import robot.Master;
+import utils.ConfigData;
 import utils.Container;
 import utils.Log;
 import utils.TimeoutError;
@@ -28,48 +29,39 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-        // 0. Lancer l'électron
-        scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
 
-        // 1. Zone de départ, juste la case bleue
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
+        if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
+            scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
+        }else {
 
-        /*
-        // 2. Zone de chaos (tout)
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);*/
+            // 0. Lancer l'électron
+            scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
 
-        // 3. Palets x6
-        scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
+            // 1. Zone de départ, juste la case bleue
+            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
-        // (3,5. Prendre les palets restants de la zone de départ?)
+            /*
+            // 2. Zone de chaos (tout)
+            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);*/
 
-        // 4. Aller vers l'accélérateur
-        // (4,5. Désactiver la détection du secondaire ?)
-        Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
+            // 3. Palets x6
+            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
 
-        // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
-        syncBuddy.sendPaletX6Free();
+            // (3,5. Prendre les palets restants de la zone de départ?)
 
-        int accVersion = 1;
-        async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
+            // 4. Aller vers l'accélérateur
+            // (4,5. Désactiver la détection du secondaire ?)
+            Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
+
+            // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
+            syncBuddy.sendPaletX6Free();
+
+            int accVersion = 1;
+            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 
 
-        //On tente d'aller à l'accélérateur
-        boolean exceptionRaised = false;
-        try {
-            robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
-        } catch (UnableToMoveException e) {
-            exceptionRaised = true;
-            e.printStackTrace();
-        }
-        if (exceptionRaised) {
-            //Si on n'a pas réussi, on attend 2 secondes et on retente
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            exceptionRaised = false;
+            //On tente d'aller à l'accélérateur
+            boolean exceptionRaised = false;
             try {
                 robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
             } catch (UnableToMoveException e) {
@@ -77,7 +69,7 @@ public class Match extends Script {
                 e.printStackTrace();
             }
             if (exceptionRaised) {
-                //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
+                //Si on n'a pas réussi, on attend 2 secondes et on retente
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -90,24 +82,38 @@ public class Match extends Script {
                     exceptionRaised = true;
                     e.printStackTrace();
                 }
+                if (exceptionRaised) {
+                    //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    exceptionRaised = false;
+                    try {
+                        robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+                    } catch (UnableToMoveException e) {
+                        exceptionRaised = true;
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if (exceptionRaised) {
+                //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
+                try {
+                    container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                } catch (ContainerException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //Si on a réussi à aller à l'accélérateur, on exécute le script
+                try {
+                    container.getService(Accelerateur.class).timedExecute(accVersion);
+                } catch (ContainerException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        if (exceptionRaised) {
-            //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
-            try {
-                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
-            } catch (ContainerException e) {
-                e.printStackTrace();
-            }
-        } else {
-            //Si on a réussi à aller à l'accélérateur, on exécute le script
-            try {
-                container.getService(Accelerateur.class).timedExecute(accVersion);
-            } catch (ContainerException e) {
-                e.printStackTrace();
-            }
-        }
-
 /*
         if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
             //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
