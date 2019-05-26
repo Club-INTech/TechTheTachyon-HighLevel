@@ -59,21 +59,25 @@ public class PaletsX3Slave extends Script{
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
             positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
 
-            robot.recalageMeca(true,1500-positions.get(0).getX());
+
             //recalage();
             if(symetry) {
+                robot.recalageMeca(true,1500-positions.get(0).getX()+25);
                 robot.turn(Math.PI/2);
             }
             else{
+                robot.recalageMeca(true,1500-positions.get(0).getX());
                 robot.turn(-Math.PI/2);
             }
 
-            robot.moveLengthwise(400,false);
-            robot.recalageMeca(true,-1800+positions.get(0).getY());
+            robot.moveLengthwise(500,false);
+
             if(!symetry) {
+                robot.recalageMeca(true,-1800+positions.get(0).getY());
                 robot.turn(Math.PI);
             }
             else{
+                robot.recalageMeca(true,-1800+positions.get(0).getY()-10);
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
