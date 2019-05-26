@@ -50,7 +50,7 @@ public class Goldenium extends Script {
         super(robot, table);
         if (symetrie){
             positionGold = new VectCartesian(xGold, yGold);
-            positionBalance1 = new VectCartesian(xBalance1-80, yBalance1+70);
+            positionBalance1 = new VectCartesian(xBalance1-60, yBalance1+100);
             positionBalance2 =new VectCartesian(xBalance2-20, yBalance2+20);
         }
         else {
@@ -155,6 +155,7 @@ public class Goldenium extends Script {
             }
             else {
                 robot.turn(0);
+                robot.moveLengthwise(-40,false);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
