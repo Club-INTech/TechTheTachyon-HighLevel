@@ -7,6 +7,7 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
+import utils.ConfigData;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -22,7 +23,12 @@ public class GetRedDep extends Script {
     public void execute(Integer version) {
         //TODO : attendre le principal
         try {
-            robot.moveLengthwise(-100,false);
+            if (symetrie) {
+                robot.moveLengthwise(100,false);
+            }
+            else {
+                robot.moveLengthwise(-100, false);
+            }
             //robot.turn(-Math.PI/2);
           //robot.moveLengthwise(-106,false);
         } catch (UnableToMoveException e) {
@@ -51,6 +57,8 @@ public class GetRedDep extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+
     }
 
 }
