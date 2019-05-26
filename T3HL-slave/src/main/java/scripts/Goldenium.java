@@ -51,7 +51,7 @@ public class Goldenium extends Script {
         if (symetrie){
             positionGold = new VectCartesian(xGold, yGold);
             positionBalance1 = new VectCartesian(xBalance1, yBalance1);
-            positionBalance2 =new VectCartesian(xBalance2-50, yBalance2);
+            positionBalance2 =new VectCartesian(xBalance2-20, yBalance2+20);
         }
         else {
             positionGold = new VectCartesian(xGold, yGold);
