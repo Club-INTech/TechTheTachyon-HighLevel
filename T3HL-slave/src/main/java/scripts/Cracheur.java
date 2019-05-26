@@ -11,6 +11,8 @@ import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.util.concurrent.TimeUnit;
+
 public class Cracheur extends Script {
     /**
      * Position d'entrée du script
@@ -37,23 +39,25 @@ public class Cracheur extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        try {
-            if (!symetrie){
-                robot.turn(Math.PI);
-            }
-            else {
-                robot.turn(0);
-            }
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE,true);
+
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
-            if (first) {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
-            }
+
             robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
+            robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET, true);
+            try {
+                TimeUnit.MILLISECONDS.sleep(250);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             robot.popPaletDroit();
         }
 

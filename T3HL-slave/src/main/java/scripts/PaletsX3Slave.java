@@ -1,7 +1,6 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -62,12 +61,7 @@ public class PaletsX3Slave extends Script{
 
             //recalage();
 
-            if(symetry) {
-                robot.turn(Math.PI/2);
-            }
-            else{
-                robot.turn(-Math.PI/2);
-            }
+            robot.turn(Math.PI/2);
 
             robot.moveLengthwise(600,false);
 
@@ -82,17 +76,20 @@ public class PaletsX3Slave extends Script{
             //robot.recalageMeca(false,1500-positions.get(0).getX());
 
             if(symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX()-90);
+                robot.recalageMeca(true,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
                 //robot.turn(Math.PI/2);
+                robot.setOrientation(0);
             }
             else{
                 robot.recalageMeca(true,1500-positions.get(0).getX());
                 //robot.turn(-Math.PI/2);
+                robot.setOrientation(Math.PI);
+
             }
 
-            getPuck();
-            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
-            robot.moveLengthwise(-100,false);
+//            getPuck();
+//            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+//            robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
             getPuck();
@@ -103,18 +100,16 @@ public class PaletsX3Slave extends Script{
 
             getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
             robot.moveLengthwise(150,false);
-            //robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
+            robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
             //robot.recalageMeca(false,100);
-            if(!symetry){
-                robot.turn(-Math.PI/2);
-            }
-            else{
-                robot.turn(Math.PI/2);
-            }
+
+            robot.turn(-Math.PI/2);
+
             robot.moveLengthwise(600, false);
             robot.turn(Math.PI);
+
 
 
         }
