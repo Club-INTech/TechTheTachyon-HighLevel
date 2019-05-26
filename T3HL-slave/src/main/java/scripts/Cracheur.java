@@ -37,20 +37,9 @@ public class Cracheur extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        try {
-            if (!symetrie){
-                robot.turn(Math.PI);
-            }
-            else {
-                robot.turn(0);
-            }
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
+
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
-            if (first) {
-                robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
-            }
+            
             robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET, true);

@@ -100,7 +100,7 @@ public class PaletsX3Slave extends Script{
 
             getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
             robot.moveLengthwise(150,false);
-            //robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
+            robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
             //robot.recalageMeca(false,100);
@@ -109,6 +109,7 @@ public class PaletsX3Slave extends Script{
 
             robot.moveLengthwise(600, false);
             robot.turn(Math.PI);
+
 
 
         }
