@@ -41,7 +41,7 @@ public class Test_Communication {
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
         Log.init();
-        interface1 = new SocketServerInterface("localhost", 10200);
+        interface1 = new SocketServerInterface("localhost", 10200, true);
         interface1.init();
     }
 
@@ -58,7 +58,7 @@ public class Test_Communication {
 
     @Test
     public void testBidirectionnal() throws Exception {
-        interface2 = new SocketClientInterface("localhost", 10200);
+        interface2 = new SocketClientInterface("localhost", 10200, true);
         interface2.init();
 
         while (!interface1.isInitiated() || !interface2.isInitiated()) {

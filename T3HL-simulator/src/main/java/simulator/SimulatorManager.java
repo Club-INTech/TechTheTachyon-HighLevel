@@ -339,7 +339,7 @@ public class SimulatorManager extends Thread {
     /** Compare une string et un ordre
      * @param arguments arguments envoyés au simulateur
      * @param order ordre auquel on compare le message reçu
-     * @param nb_args nombre d'arguments attendus (comprenant l'ordre)
+     * @param nb_args nombre d'arguments minimum attendus (comprenant l'ordre)
      * @return True, si le bon nombre d'arguments est reçu par le simulateur, et que l'ordre correspond au message envoyé, False sinon
      * @throws OrderException si un mauvais nombre d'arguments est reçu par le simulateur
      */
@@ -349,7 +349,7 @@ public class SimulatorManager extends Thread {
 
     private boolean testOrder(String[] arguments, String orderStr, int nb_args) throws OrderException {
         if (arguments[0].equals(orderStr)){
-            if (arguments.length==nb_args){
+            if (arguments.length>=nb_args){
                 return true;
             }
             else{

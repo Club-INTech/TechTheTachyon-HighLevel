@@ -176,7 +176,7 @@ public class Listener extends ServiceThread {
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
-        while (!connectionManager.areConnectionsInitiated()) {
+        while (!connectionManager.areMandatoryConnectionsInitiated()) {
             try {
                 Thread.sleep(TIME_LOOP);
             } catch (InterruptedException e) {

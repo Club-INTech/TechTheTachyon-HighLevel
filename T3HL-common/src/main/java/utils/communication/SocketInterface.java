@@ -38,6 +38,11 @@ import java.util.Optional;
  */
 public abstract class SocketInterface implements CommunicationInterface {
     /**
+     * Est-ce que cette connexion est obligatoire pour démarrer?
+     */
+    private final boolean mandatory;
+
+    /**
      * Adresse ip à laquelle se connecter
      */
     protected String ipAddress;
@@ -77,26 +82,29 @@ public abstract class SocketInterface implements CommunicationInterface {
      * @param ipAddress     l'addresse ip sur laquelle se connecter
      * @param port          port de connexion
      */
-    public SocketInterface(String ipAddress, int port) {
+    public SocketInterface(String ipAddress, int port, boolean mandatory) {
         this.ipAddress = ipAddress;
         this.port = port;
         this.initiated = false;
+        this.mandatory = mandatory;
     }
 
     @Override
     public abstract void init() throws CommunicationException;
 
     @Override
-    public synchronized void send(String message) throws CommunicationException {
+    public synchronized boolean send(String message) throws CommunicationException {
         try {
             if (this.initiated) {
                 this.output.write(message);
                 this.output.newLine();
                 this.output.flush();
+                return true;
             }
         } catch (IOException e) {
             throw new CommunicationException("Envoie du message " + message + " impossible");
         }
+        return false;
     }
 
     @Override
@@ -148,6 +156,11 @@ public abstract class SocketInterface implements CommunicationInterface {
         } catch (IOException e) {
             throw new CommunicationException("Impossible de créer les buffers IO");
         }
+    }
+
+    @Override
+    public boolean isMandatory() {
+        return mandatory;
     }
 
     /**

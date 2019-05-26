@@ -18,21 +18,25 @@ import static com.fazecast.jSerialComm.SerialPort.TIMEOUT_SCANNER;
 public class SerialInterface implements CommunicationInterface {
 
     private static int BAUD_RATE = 2_000_000;
+    private final boolean mandatory;
     private SerialPort port;
     private PrintStream printer;
     private boolean open;
     private BufferedReader reader;
 
-    public SerialInterface(String ip, int port) {
+    public SerialInterface(String ip, int port, boolean mandatory) {
         // on n'utilise pas l'IP ni le port
+        this.mandatory = mandatory;
     }
 
     @Override
-    public void send(String message) throws CommunicationException {
+    public boolean send(String message) throws CommunicationException {
         if (port != null) {
             printer.println(message + "\n");
             printer.flush();
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -83,6 +87,11 @@ public class SerialInterface implements CommunicationInterface {
     public void close() throws CommunicationException {
         port.closePort();
         open = false;
+    }
+
+    @Override
+    public boolean isMandatory() {
+        return mandatory;
     }
 
     @Override

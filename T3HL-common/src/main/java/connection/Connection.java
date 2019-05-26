@@ -34,13 +34,13 @@ import java.util.concurrent.TimeUnit;
  * @author william, rem
  */
 public enum Connection {
-    MASTER(ConfigData.MASTER_IP, ConfigData.MASTER_PORT, SocketClientInterface.class),
-    SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class),
+    MASTER(ConfigData.MASTER_IP, ConfigData.MASTER_PORT, SocketClientInterface.class, false),
+    SLAVE(ConfigData.LOCALHOST, ConfigData.MASTER_PORT, SocketServerInterface.class, false),
     LIDAR_DATA(ConfigData.LOCALHOST, ConfigData.LIDAR_DATA_PORT, SocketClientInterface.class),
     TEENSY_MASTER(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, /*SocketServerInterface.class*/SerialInterface.class),
     TEENSY_MASTER_MONTHLERY(ConfigData.TEENSY_MASTER_IP, ConfigData.TEENSY_MASTER_PORT, SerialInterface.class),
     TEENSY_SLAVE(ConfigData.TEENSY_SLAVE_IP, ConfigData.TEENSY_SLAVE_PORT, SerialInterface.class),
-    ELECTRON(ConfigData.ELECTRON_IP, ConfigData.ELECTRON_PORT, SocketClientInterface.class),
+    ELECTRON(ConfigData.ELECTRON_IP, ConfigData.ELECTRON_PORT, SocketClientInterface.class, false),
 
     LOCALHOST_SERVER(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketServerInterface.class),
     LOCALHOST_CLIENT(ConfigData.LOCALHOST, ConfigData.LOCALSERVER_PORT, SocketClientInterface.class),
@@ -69,6 +69,7 @@ public enum Connection {
      * Communication Interface à instancier
      */
     private Class<?> aClass;
+    private boolean mandatory;
 
     /**
      * Interface de communication à ajouter
@@ -76,15 +77,27 @@ public enum Connection {
     private CommunicationInterface communicationInterface;
 
     /**
-     * Construit une connection
+     * Construit une connection obligatoire
      * @param ipKey     clef config pour récupérer l'ip
      * @param portKey   clef config pour le port
      * @param c         type de Communication Interface à instancier
      */
     Connection(ConfigData ipKey, ConfigData portKey, Class<?> c) {
+        this(ipKey, portKey, c, true);
+    }
+
+    /**
+     * Construit une connection
+     * @param ipKey     clef config pour récupérer l'ip
+     * @param portKey   clef config pour le port
+     * @param c         type de Communication Interface à instancier
+     * @param mandatory cette connexion est-elle obligatoire pour démarrer?
+     */
+    Connection(ConfigData ipKey, ConfigData portKey, Class<?> c, boolean mandatory) {
         this.ipKey = ipKey;
         this.portKey = portKey;
         this.aClass = c;
+        this.mandatory = mandatory;
     }
 
     /**
@@ -97,7 +110,7 @@ public enum Connection {
         Constructor constructor = aClass.getDeclaredConstructors()[0];
         try {
             this.communicationInterface = (CommunicationInterface) constructor
-                    .newInstance(config.getString(this.ipKey), config.getInt(this.portKey));
+                    .newInstance(config.getString(this.ipKey), config.getInt(this.portKey), isMandatory());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new CommunicationException("Impossible d'instancier l'interface de comm");
         }
@@ -121,16 +134,18 @@ public enum Connection {
      * @throws CommunicationException
      *                  in case of communication problem
      */
-    public void send(String message) throws CommunicationException {
+    public boolean send(String message) throws CommunicationException {
+        if(!isMandatory() && !communicationInterface.isInterfaceOpen())
+            return false;
         while(!this.communicationInterface.isInterfaceOpen()) {
             try {
-                Log.COMMUNICATION.critical("WAITING FOR OPENNESS");
+                Log.COMMUNICATION.critical(this.name()+" WAITING FOR OPENNESS");
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        this.communicationInterface.send(message);
+        return this.communicationInterface.send(message);
     }
 
     /**
@@ -140,9 +155,11 @@ public enum Connection {
      *                  in case of communication problem
      */
     public Optional<String> read() throws CommunicationException {
+        if(!isMandatory() && !communicationInterface.isInterfaceOpen())
+            return Optional.empty();
         while(!this.communicationInterface.isInterfaceOpen()) {
             try {
-                Log.COMMUNICATION.critical("WAITING FOR OPENNESS");
+                Log.COMMUNICATION.critical(this.name()+" WAITING FOR OPENNESS", 1);
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -167,5 +184,9 @@ public enum Connection {
         if(communicationInterface == null)
             return false;
         return communicationInterface.isInterfaceOpen();
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
     }
 }

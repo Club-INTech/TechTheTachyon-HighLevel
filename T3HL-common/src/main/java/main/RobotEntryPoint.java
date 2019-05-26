@@ -92,7 +92,7 @@ public abstract class RobotEntryPoint {
         if(container.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
         }
-        while (!connectionManager.areConnectionsInitiated()) {
+        while (!connectionManager.areMandatoryConnectionsInitiated()) {
             try {
                 if(leds != null) {
                     float f = (float) Math.min(1, Math.sin(System.currentTimeMillis()/1000.0 * Math.PI)*0.5f+0.5f);

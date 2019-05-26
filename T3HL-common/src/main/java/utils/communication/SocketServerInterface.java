@@ -40,8 +40,8 @@ public class SocketServerInterface extends SocketInterface {
      * @param ipAddress     ip à laquelle se connecté
      * @param port          port de connexion du serveur
      */
-    public SocketServerInterface(String ipAddress, int port) {
-        super(ipAddress, port);
+    public SocketServerInterface(String ipAddress, int port, boolean mandatory) {
+        super(ipAddress, port, mandatory);
     }
 
     @Override

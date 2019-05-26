@@ -29,10 +29,11 @@ public interface CommunicationInterface {
     /**
      * Méthode pour envoyer un message
      * @param message   le corps du message
+     * @return un booléen pour savoir si l'envoi a réussi
      * @throws CommunicationException
      *                  en cas de problèmes de communication
      */
-    void send(String message) throws CommunicationException;
+    boolean send(String message) throws CommunicationException;
 
     /**
      * Méthode de lecture d'un message
@@ -60,4 +61,10 @@ public interface CommunicationInterface {
      * @return true si l'on peut communiquer avec cette interface
      */
     boolean isInterfaceOpen();
+
+    /**
+     * Est-ce qu'on peut démarrer sans cette connexion?
+     * @return 'true' si on peut démarrer sans cette connexion, 'false' si non
+     */
+    boolean isMandatory();
 }

@@ -36,8 +36,8 @@ public class SocketClientInterface extends SocketInterface {
      * @param ipAdress  adresse ip
      * @param port      port auquel se connecter
      */
-    public SocketClientInterface(String ipAdress, int port) {
-        super(ipAdress, port);
+    public SocketClientInterface(String ipAdress, int port, boolean mandatory) {
+        super(ipAdress, port, mandatory);
     }
 
     @Override

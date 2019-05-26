@@ -80,9 +80,9 @@ public class ConnectionManager implements Service {
     /**
      * @return true si les connexions instanciées sont prêtes
      */
-    public boolean areConnectionsInitiated() {
+    public boolean areMandatoryConnectionsInitiated() {
         for (Connection connection : initiatedConnections) {
-            if (!connection.isInitiated()) {
+            if (connection.isMandatory() && !connection.isInitiated()) {
                 return false;
             }
         }

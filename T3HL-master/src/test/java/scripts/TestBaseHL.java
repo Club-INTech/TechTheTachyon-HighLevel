@@ -65,7 +65,7 @@ public abstract class TestBaseHL {
 
     private void waitForLLConnection() {
         System.out.println("Waiting for connections...");
-        while(!connectionManager.areConnectionsInitiated()) {
+        while(!connectionManager.areMandatoryConnectionsInitiated()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

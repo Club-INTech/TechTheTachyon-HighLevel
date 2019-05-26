@@ -57,7 +57,7 @@ public class TestPathFollower {
     }
 
     private void waitForLL() {
-        while(!connectionManager.areConnectionsInitiated()) {
+        while(!connectionManager.areMandatoryConnectionsInitiated()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
