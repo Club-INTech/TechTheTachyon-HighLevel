@@ -40,28 +40,25 @@ public class Goldenium extends Script {
 
     //paramètres
 
-    private final VectCartesian positionGold;
-    private final VectCartesian positionBalance1;
-    private final VectCartesian positionBalance2;
+    private VectCartesian positionBalance1;
+    private VectCartesian positionBalance2;
     private boolean symetrie;
 
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
-        if (symetrie){
-            positionGold = new VectCartesian(xGold, yGold);
-            positionBalance1 = new VectCartesian(xBalance1-30, yBalance1+350);
-            positionBalance2 =new VectCartesian(xBalance2, yBalance2+180);
-        }
-        else {
-            positionGold = new VectCartesian(xGold, yGold);
-            positionBalance1 = new VectCartesian(xBalance1, yBalance1);
-            positionBalance2 = new VectCartesian(xBalance2, yBalance2);
-        }
     }
 
     @Override
     public void execute(Integer version) {
+        if (symetrie){
+            positionBalance1 = new VectCartesian(xBalance1+30, yBalance1+40);
+            positionBalance2 =new VectCartesian(xBalance2, yBalance2);
+        }
+        else {
+            positionBalance1 = new VectCartesian(xBalance1, yBalance1);
+            positionBalance2 = new VectCartesian(xBalance2, yBalance2);
+        }
 
         //attention il n'y qu'une seule pompe sur le robot secondaire
         /*try {
@@ -155,7 +152,7 @@ public class Goldenium extends Script {
             }
             else {
                 robot.turn(0);
-                robot.moveLengthwise(-70,false);
+                robot.moveLengthwise(-100,false);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

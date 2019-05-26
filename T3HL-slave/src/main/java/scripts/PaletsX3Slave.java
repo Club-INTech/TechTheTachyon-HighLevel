@@ -61,12 +61,11 @@ public class PaletsX3Slave extends Script{
 
 
             //recalage();
+
             if(symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX()-90);
                 robot.turn(Math.PI/2);
             }
             else{
-                robot.recalageMeca(true,1500-positions.get(0).getX());
                 robot.turn(-Math.PI/2);
             }
 
@@ -77,10 +76,19 @@ public class PaletsX3Slave extends Script{
                 robot.turn(Math.PI);
             }
             else{
-                robot.recalageMeca(true,-1800+positions.get(0).getY()+10);
+                robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
+
+            if(symetry) {
+                robot.recalageMeca(true,1500-positions.get(0).getX()-90);
+                //robot.turn(Math.PI/2);
+            }
+            else{
+                robot.recalageMeca(true,1500-positions.get(0).getX());
+                //robot.turn(-Math.PI/2);
+            }
 
             getPuck();
             robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
@@ -98,10 +106,16 @@ public class PaletsX3Slave extends Script{
             //robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
-            robot.recalageMeca(false,100);
-            robot.turn(-Math.PI/2);
-            robot.moveLengthwise(450, false);
+            //robot.recalageMeca(false,100);
+            if(!symetry){
+                robot.turn(-Math.PI/2);
+            }
+            else{
+                robot.turn(Math.PI/2);
+            }
+            robot.moveLengthwise(600, false);
             robot.turn(Math.PI);
+
 
         }
         catch (UnableToMoveException e) {
