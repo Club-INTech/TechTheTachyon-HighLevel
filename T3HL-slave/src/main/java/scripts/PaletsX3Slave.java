@@ -66,7 +66,7 @@ public class PaletsX3Slave extends Script{
             robot.moveLengthwise(600,false);
 
             if(!symetry) {
-                robot.recalageMeca(true,-1800+positions.get(0).getY());
+                robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
                 robot.turn(Math.PI);
             }
             else{
@@ -75,15 +75,15 @@ public class PaletsX3Slave extends Script{
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
 
-            if(symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
-                //robot.turn(Math.PI/2);
-                robot.setOrientation(0);
-            }
-            else{
+            if(!symetry) {
                 robot.recalageMeca(true,1500-positions.get(0).getX());
                 //robot.turn(-Math.PI/2);
                 robot.setOrientation(Math.PI);
+            }
+            else{
+                robot.recalageMeca(true,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
+                //robot.turn(Math.PI/2);
+                robot.setOrientation(0);
 
             }
 
