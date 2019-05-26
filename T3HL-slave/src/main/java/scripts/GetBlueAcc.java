@@ -59,7 +59,7 @@ public class GetBlueAcc extends Script {
                 robot.recalageMeca(true,100+54);
             }
 
-            
+            robot.setOrientation(-Math.PI/2);
             //robot.moveLengthwise(-yEntry,false);
             if(symetrie) {
                 robot.turn(Math.PI);
