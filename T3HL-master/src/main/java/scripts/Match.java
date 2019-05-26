@@ -102,7 +102,7 @@ public class Match extends Script {
         } else {
             //Si on a réussi à aller à l'accélérateur, on exécute le script
             try {
-                container.getService(Accelerateur.class).execute(0);
+                container.getService(Accelerateur.class).timedExecute(accVersion);
             } catch (ContainerException e) {
                 e.printStackTrace();
             }
