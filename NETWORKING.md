@@ -5,7 +5,7 @@ Réseaux sans fil à configurer
 =============================
 wlan0
 ----
-* Nuc en Access Point
+* RPi en Access Point
 
 Adresses et interfaces
 ======================
@@ -31,7 +31,7 @@ Raspberry du principal
 | Physique              | Nom de l'interface | Utilisations                         | Adresse statique  |
 | --------------------- |:------------------:|:------------------------------------:|:-----------------:|
 | Port Ethernet (RJ45)  | eth0               | Lidar                                | 192.168.0.20/24   |
-| WiFi intégré          | wlan0              | Connexion à l'AP du Nuc              | 192.168.12.2/24   |
+| WiFi intégré          | wlan0              | Connexion à l'AP de la Balise              | 192.168.12.2/24   |
 
 
 **Adresses**
@@ -68,7 +68,7 @@ Raspberry du secondaire
 | Physique              | Nom de l'interface | Utilisations             | Adresse statique  |
 | --------------------- |:------------------:|:------------------------:|:-----------------:|
 | Port Ethernet (RJ45)  | eth0               | Lidar                    | 192.168.0.20/24   |
-| WiFi intégré          | wlan0              | Connexion à l'AP du Nuc  | 192.168.12.3/24   |
+| WiFi intégré          | wlan0              | Connexion à l'AP de la balise | 192.168.12.3/24   |
 
 
 **Adresses**
@@ -103,7 +103,7 @@ Electron
 
 | Physique              | Nom de l'interface | Utilisations            | Adresse statique  |
 | --------------------- |:------------------:|:-----------------------:|:-----------------:|
-| WiFi intégré          | N/A                | Connexion à l'AP du Nuc | 192.168.12.69/24  |
+| WiFi intégré          | N/A                | AP | 192.168.42.69/24  |
 
 
 **Adresses**
