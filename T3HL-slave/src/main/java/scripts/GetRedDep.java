@@ -23,11 +23,8 @@ public class GetRedDep extends Script {
     public void execute(Integer version) {
         //TODO : attendre le principal
         try {
-            if (symetrie) {
-                robot.moveLengthwise(100,false);
-            }
-            else {
-                robot.moveLengthwise(-100, false);
+            if (!symetrie) {
+                robot.moveLengthwise(-100,false);
             }
             //robot.turn(-Math.PI/2);
           //robot.moveLengthwise(-106,false);
@@ -48,7 +45,9 @@ public class GetRedDep extends Script {
 
     @Override
     public Vec2 entryPosition(Integer version) {
+
         return new VectCartesian(xEntry, yEntry);
+
     }
 
     @Override
