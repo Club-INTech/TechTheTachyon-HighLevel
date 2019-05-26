@@ -23,8 +23,8 @@ CONNECT_TO_BUDDY                    =false
 
 [Master]
 MASTER                              = true
-USING_ELECTRON                      = false
-USING_PANEL                         = true
+USING_ELECTRON                      = true
+USING_PANEL                         = false
 USING_LIDAR			                = true
 LED_COUNT			                = 16
 
@@ -52,7 +52,7 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =0
 PALETSX6_X_VIOLET                   =10
-PALETSX6_Y_VIOLET                   =-9
+PALETSX6_Y_VIOLET                   =-7
 PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
@@ -64,8 +64,6 @@ PALETS_DEPART_X_JAUNE               =10
 PALETS_DEPART_X_VIOLET              =10
 
 ZDD_X_VIOLET                        =-10
-<<<<<<< HEAD
-=======
 
 PALETSX3_X_JAUNE                    =0
 PALETSX3_Y_JAUNE                    =0
@@ -76,4 +74,3 @@ GOLDENIUM_X_JAUNE                   =0
 GOLDENIUM_Y_JAUNE                   =0
 GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
->>>>>>> 1f70fa927b6b4d0d4bacfdabbea0c4d224a7311e
