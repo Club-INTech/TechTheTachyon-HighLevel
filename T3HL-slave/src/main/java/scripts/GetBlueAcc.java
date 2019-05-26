@@ -74,7 +74,7 @@ public class GetBlueAcc extends Script {
 
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(-500+230+100,154+100+34),false);
+                robot.softGoTo(new VectCartesian(-500+230+100,154+100+34+10),false);
                 robot.turn(Math.PI);
             }
             else {
@@ -188,7 +188,14 @@ public class GetBlueAcc extends Script {
     }
 
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
+    public Vec2 entryPosition(Integer version) {
+        if (symetrie){
+            return new VectCartesian(xEntry-30,yEntry);
+        }
+        else {
+            return new VectCartesian(xEntry, yEntry);
+        }
+    }
 
 
     /**
