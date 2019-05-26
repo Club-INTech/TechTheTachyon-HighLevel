@@ -39,7 +39,7 @@ public class Cracheur extends Script {
         }
 
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
-            
+
             robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
             robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET, true);
