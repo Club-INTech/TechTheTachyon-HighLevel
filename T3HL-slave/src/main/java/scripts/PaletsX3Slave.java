@@ -156,7 +156,9 @@ public class PaletsX3Slave extends Script{
             offsetX=Offsets.PALETSX3_X_VIOLET.get();
             offsetY=Offsets.PALETSX3_Y_VIOLET.get();
         }
-
+        if (!symetry) {
+            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-50);
+        }
         return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
