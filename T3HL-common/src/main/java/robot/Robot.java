@@ -410,6 +410,10 @@ public abstract class Robot implements Service {
         this.orderWrapper.setPositionAndOrientation(pos, orientation);
     }
 
+    public void setOrientation(double orientation) {
+        this.orderWrapper.setOrientation(orientation);
+    }
+
     /**
      * Configure des hooks
      * @param hooks

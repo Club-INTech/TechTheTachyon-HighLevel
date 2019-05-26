@@ -58,6 +58,8 @@ public class GetBlueAcc extends Script {
             else{
                 robot.recalageMeca(true,100+54);
             }
+
+            
             //robot.moveLengthwise(-yEntry,false);
             if(symetrie) {
                 robot.turn(Math.PI);
@@ -138,7 +140,7 @@ public class GetBlueAcc extends Script {
             //robot.moveLengthwise(95+20, false);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
             robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
-            
+
           //  robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);
             //robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
 
