@@ -62,7 +62,7 @@ public class PaletsX3Slave extends Script{
 
             //recalage();
             if(symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX()-80);
+                robot.recalageMeca(true,1500-positions.get(0).getX()-90);
                 robot.turn(Math.PI/2);
             }
             else{
