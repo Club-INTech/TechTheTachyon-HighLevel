@@ -55,7 +55,7 @@ public class GetBlueAcc extends Script {
                 robot.recalageMeca(true,100+51);
             }
             else{
-                robot.recalageMeca(true,100+54);
+                robot.recalageMeca(true,100+60);
             }
             //robot.moveLengthwise(-yEntry,false);
             if(symetrie) {
