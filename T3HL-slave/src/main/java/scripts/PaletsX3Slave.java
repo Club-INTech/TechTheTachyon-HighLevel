@@ -76,7 +76,7 @@ public class PaletsX3Slave extends Script{
             //robot.recalageMeca(false,1500-positions.get(0).getX());
 
             if(symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX()-90);
+                robot.recalageMeca(true,1500-positions.get(0).getX()-190);          //-90 si on prend le rouge
                 //robot.turn(Math.PI/2);
                 robot.setOrientation(0);
             }
@@ -87,9 +87,9 @@ public class PaletsX3Slave extends Script{
 
             }
 
-            getPuck();
-            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
-            robot.moveLengthwise(-100,false);
+//            getPuck();
+//            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+//            robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
             getPuck();

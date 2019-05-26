@@ -66,7 +66,7 @@ ZDD_X_JAUNE                         =-3
 PALETSX3_X_JAUNE                    =0
 PALETSX3_Y_JAUNE                    =0
 PALETSX3_X_VIOLET                   =0
-PALETSX3_Y_VIOLET                   =10
+PALETSX3_Y_VIOLET                   =15
 
 GOLDENIUM_X_JAUNE                   =0
 GOLDENIUM_Y_JAUNE                   =0
