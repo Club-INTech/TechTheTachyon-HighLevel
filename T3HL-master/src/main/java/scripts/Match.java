@@ -19,7 +19,7 @@ public class Match extends Script {
     private final Container container;
 
     public Match(Master robot, Table table, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy, Container container) {
-        super(robot,table);
+        super(robot, table);
         this.scriptManagerMaster = scriptManagerMaster;
         this.syncBuddy = syncBuddy;
         this.container = container;
@@ -54,6 +54,61 @@ public class Match extends Script {
         async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 
 
+        //On tente d'aller à l'accélérateur
+        boolean exceptionRaised = false;
+        try {
+            robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+        } catch (UnableToMoveException e) {
+            exceptionRaised = true;
+            e.printStackTrace();
+        }
+        if (exceptionRaised) {
+            //Si on n'a pas réussi, on attend 2 secondes et on retente
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            exceptionRaised = false;
+            try {
+                robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+            } catch (UnableToMoveException e) {
+                exceptionRaised = true;
+                e.printStackTrace();
+            }
+            if (exceptionRaised) {
+                //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                exceptionRaised = false;
+                try {
+                    robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+                } catch (UnableToMoveException e) {
+                    exceptionRaised = true;
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (exceptionRaised) {
+            //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
+            try {
+                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //Si on a réussi à aller à l'accélérateur, on exécute le script
+            try {
+                container.getService(Accelerateur.class).execute(0);
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        }
+
+/*
         if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
             //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
             try {
@@ -129,6 +184,7 @@ public class Match extends Script {
                 scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(accVersion);
             }
         }
+        */
     }
 
     @Override
