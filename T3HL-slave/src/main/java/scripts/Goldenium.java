@@ -48,9 +48,16 @@ public class Goldenium extends Script {
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
-        positionGold = new VectCartesian(xGold, yGold);
-        positionBalance1 = new VectCartesian(xBalance1, yBalance1);
-        positionBalance2 =new VectCartesian(xBalance2, yBalance2);
+        if (symetrie){
+            positionGold = new VectCartesian(xGold, yGold);
+            positionBalance1 = new VectCartesian(xBalance1, yBalance1);
+            positionBalance2 =new VectCartesian(xBalance2-50, yBalance2);
+        }
+        else {
+            positionGold = new VectCartesian(xGold, yGold);
+            positionBalance1 = new VectCartesian(xBalance1, yBalance1);
+            positionBalance2 = new VectCartesian(xBalance2, yBalance2);
+        }
     }
 
     @Override
@@ -116,7 +123,7 @@ public class Goldenium extends Script {
             //robot.moveLengthwise(-72+25,false);
            if(symetrie) {
                 robot.turn(Math.PI);
-               robot.moveLengthwise(517-30,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
+               robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
             } else {
                 robot.turn(0);
                robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
