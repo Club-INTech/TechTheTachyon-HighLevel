@@ -70,14 +70,14 @@ public class PaletsX3Slave extends Script{
                 robot.turn(-Math.PI/2);
             }
 
-            robot.moveLengthwise(500,false);
+            robot.moveLengthwise(600,false);
 
             if(!symetry) {
                 robot.recalageMeca(true,-1800+positions.get(0).getY());
                 robot.turn(Math.PI);
             }
             else{
-                robot.recalageMeca(true,-1800+positions.get(0).getY()-50);
+                robot.recalageMeca(true,-1800+positions.get(0).getY());
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
