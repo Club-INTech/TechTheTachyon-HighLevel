@@ -1,7 +1,6 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
@@ -84,10 +83,13 @@ public class PaletsX3Slave extends Script{
             if(symetry) {
                 robot.recalageMeca(true,1500-positions.get(0).getX()-90);
                 //robot.turn(Math.PI/2);
+                robot.setOrientation(0);
             }
             else{
                 robot.recalageMeca(true,1500-positions.get(0).getX());
                 //robot.turn(-Math.PI/2);
+                robot.setOrientation(Math.PI);
+
             }
 
             getPuck();
