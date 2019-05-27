@@ -2,6 +2,7 @@ package scripts;
 
 import data.Table;
 import data.XYO;
+import data.synchronization.SynchronizationWithBuddy;
 import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -43,10 +44,12 @@ public class Goldenium extends Script {
     private VectCartesian positionBalance1;
     private VectCartesian positionBalance2;
     private boolean symetrie;
+    private SynchronizationWithBuddy syncBuddy;
 
 
     public Goldenium(Slave robot, Table table) {
         super(robot, table);
+        this.syncBuddy = syncBuddy;
     }
 
     @Override
@@ -192,6 +195,7 @@ public class Goldenium extends Script {
                 robot.moveLengthwise(60, false);
             }
             robot.softGoTo(new VectCartesian(420,750),false);
+            syncBuddy.sendBalanceFree();
             robot.softGoTo(new VectCartesian(1200,750),false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
