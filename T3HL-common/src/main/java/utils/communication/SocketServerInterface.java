@@ -74,7 +74,7 @@ public class SocketServerInterface extends SocketInterface {
                                     socket.setTcpNoDelay(true);
                                 }
                                 Log.COMMUNICATION.debug(String.format("Connection accepted on port %d", port));
-                                initBuffers();
+                                initBuffers(privSocket);
                                 Log.COMMUNICATION.debug(String.format("Connection initialized on port %d", port));
                                 send("ping");
                                 Log.COMMUNICATION.debug("Initialized connection with a 'ping'");

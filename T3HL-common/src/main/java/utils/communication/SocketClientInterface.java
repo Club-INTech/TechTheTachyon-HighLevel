@@ -51,7 +51,7 @@ public class SocketClientInterface extends SocketInterface {
                         Log.COMMUNICATION.debug(String.format("Trying to connect to %s on port %d",ipAddress, port));
                         this.socket = new Socket(ipAddress, port);
                         Log.COMMUNICATION.debug(String.format("Socket created to %s on port %d", ipAddress, port));
-                        this.initBuffers();
+                        this.initBuffers(socket);
                         break;
                     } catch (IOException | CommunicationException e) {
                         Log.COMMUNICATION.warning(String.format("Failed trying to connect to %s on port %d",ipAddress, port));

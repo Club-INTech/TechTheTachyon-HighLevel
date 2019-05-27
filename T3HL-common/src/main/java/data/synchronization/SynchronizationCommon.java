@@ -58,7 +58,7 @@ public abstract class SynchronizationCommon implements Service {
                 this.connection.send(message);
                 Log.ORDERS.debug("Sent to BUDDY: "+message);
             } else {
-                Log.ORDERS.debug("Wanted to send to BUDDY: '"+message+"' but no connection!");
+                Log.ORDERS.critical("Wanted to send to BUDDY: '"+message+"' but no connection!");
             }
         } catch (CommunicationException e) {
             e.printStackTrace();
