@@ -186,13 +186,13 @@ public class GetBlueAcc extends Script {
     public Vec2 entryPosition(Integer version) {
         if (symetrie){
 
-            offsetX = (int)Offsets.GETBLUEACC_X_JAUNE.get();
-            offsetY = (int)Offsets.GETBLUEACC_Y_JAUNE.get();
+            offsetX = (int)Offsets.GETBLUEACC_X_VIOLET.get();
+            offsetY = (int)Offsets.GETBLUEACC_Y_VIOLET.get();
             return new VectCartesian(xEntry+110,yEntry);
         }
         else {
-            offsetX = (int)Offsets.GETBLUEACC_X_VIOLET.get();
-            offsetY = (int)Offsets.GETBLUEACC_Y_VIOLET.get();
+            offsetX = (int)Offsets.GETBLUEACC_X_JAUNE.get();
+            offsetY = (int)Offsets.GETBLUEACC_Y_JAUNE.get();
             return new VectCartesian(xEntry, yEntry);
         }
     }
