@@ -47,7 +47,7 @@ public class Goldenium extends Script {
     private SynchronizationWithBuddy syncBuddy;
 
 
-    public Goldenium(Slave robot, Table table) {
+    public Goldenium(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
         this.syncBuddy = syncBuddy;
     }
