@@ -134,6 +134,19 @@ public class DataControler extends Thread implements Service {
             case "balancefree":
                 GameState.BALANCE_FREE.setData(true);
                 break;
+            case "increaseScore": {
+                if (isMaster) {
+                    try {
+                        int points = Integer.parseInt(parts[1]);
+                        Container.getInstance("master").getService(Robot.class).increaseScore(points);
+                    }
+                    catch (NumberFormatException | ContainerException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            }
+
         }
 
         Log.COMMUNICATION.debug("Got event from buddy: "+message);
@@ -257,19 +270,6 @@ public class DataControler extends Thread implements Service {
             case "armIsSpeaking": {
                 String side = event[1];
                 Log.COMMUNICATION.warning("Le bras '"+side+"' n'est plus muet!");
-                break;
-            }
-
-            case "increaseScore": {
-                if (isMaster) {
-                    try {
-                        int points = Integer.parseInt(event[1]);
-                        Container.getInstance("master").getService(Robot.class).increaseScore(points);
-                    }
-                    catch (NumberFormatException | ContainerException e) {
-                        e.printStackTrace();
-                    }
-                }
                 break;
             }
         }

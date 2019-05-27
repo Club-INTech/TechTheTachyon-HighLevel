@@ -42,4 +42,5 @@ public enum GameState {
     public synchronized void setData(Object value){
         this.valueObject=value;
     }
+
 }
