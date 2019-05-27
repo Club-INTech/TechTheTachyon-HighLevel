@@ -150,7 +150,7 @@ public class LidarControler extends ServiceThread {
                     e.printStackTrace();
                 }
             }
-            XYO currentXYO = XYO.getRobotInstance().clone();
+            XYO currentXYO = XYO.getRobotInstance();
             points = messageStack.pop().split(POINT_SEPARATOR);
             if(SensorState.DISABLE_LIDAR.getData()) {
                 continue; // on ignore les valeurs renvoyées par le lidar pendant qu'il est désactivé
@@ -170,6 +170,7 @@ public class LidarControler extends ServiceThread {
 
                 // signes différents, on est de deux côtés de la table différents
                 if(SensorState.DISABLE_ENNEMIES_OTHER_SIDE.getData() && obstacleCenter.getX() * currentXYO.getPosition().getX() <= 0) {
+                    Log.LIDAR.warning("On ignore l'ennemi à "+obstacleCenter+" parce qu'on a désactivé les ennemis de l'autre côté de la table");
                     continue;
                 }
 
