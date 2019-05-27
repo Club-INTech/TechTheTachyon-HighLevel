@@ -33,6 +33,7 @@ import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
 
+import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -404,6 +405,14 @@ public class OrderWrapper implements Service {
             }
         }
         Log.STRATEGY.debug("GOGOGO!!!");
+        if(!simulation) {
+            Log.STRATEGY.warning("Reset des routes réseaux");
+            try {
+                Runtime.getRuntime().exec("/home/pi/TechTheTachyon-HighLevel/reset_internet");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void endMatch() {
