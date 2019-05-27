@@ -11,6 +11,7 @@ public enum ScriptNamesSlave implements ScriptNames {
     CRACHEUR(Cracheur.class, "cracheur"),
     GETBLUEACC(GetBlueAcc.class, "getBlueAcc"),
     GETREDDEP(GetRedDep.class, "getRedDep"),
+    HOMOLOGATION(ScriptHomologationSlave.class,"homologation"),
     ;
 
     private Class<? extends Service> scriptClass;
