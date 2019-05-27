@@ -198,6 +198,7 @@ public class GetBlueAcc extends Script {
     public void executeWhileMovingToEntry(int version){
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE, true);
         //c cassé, jsp pk il envoie down, demande d'attendre et reçoit quasi instantanément la confirmation de "je bouge plus" ...
         /*
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);

@@ -151,7 +151,7 @@ public class PaletsX3Slave extends Script{
     public Vec2 entryPosition(Integer version) {
         if (!symetry) {
             offsetX= Offsets.PALETSX3_X_JAUNE.get();
-            offsetY=Offsets.PALETSX6_Y_JAUNE.get();
+            offsetY=Offsets.PALETSX3_Y_JAUNE.get();
         } else {
             offsetX=Offsets.PALETSX3_X_VIOLET.get();
             offsetY=Offsets.PALETSX3_Y_VIOLET.get();
