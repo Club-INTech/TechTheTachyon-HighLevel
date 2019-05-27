@@ -28,10 +28,19 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.isMaster = config.getBoolean(ConfigData.MASTER);
         this.simulationActive = config.getBoolean(ConfigData.SIMULATION);
-        if (this.simulationActive) {
-            this.connection = Connection.SLAVE_SIMULATEUR;
+
+        if(isMaster) {
+            if (this.simulationActive) {
+                this.connection = Connection.SLAVE_SIMULATEUR;
+            } else {
+                this.connection = Connection.SLAVE;
+            }
         } else {
-            this.connection = Connection.SLAVE;
+            if (this.simulationActive) {
+                this.connection = Connection.SLAVE_SIMULATEUR; // TODO
+            } else {
+                this.connection = Connection.MASTER;
+            }
         }
     }
 
