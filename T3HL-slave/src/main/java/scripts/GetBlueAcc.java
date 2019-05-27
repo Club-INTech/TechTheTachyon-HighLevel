@@ -9,6 +9,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Log;
+import utils.Offsets;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -23,6 +24,8 @@ public class GetBlueAcc extends Script {
     private boolean symetrie;
     private int xEntry = -500;
     private int yEntry = 240;//250+ 30+10  ; //a tester
+    private int offsetY;
+    private int offsetX;
 
 
     /**
@@ -53,10 +56,10 @@ public class GetBlueAcc extends Script {
         try {
             robot.turn(-Math.PI/2);
             if (symetrie) {
-                robot.recalageMeca(true,100+51);
+                robot.recalageMeca(true,100+51+offsetY);
             }
             else{
-                robot.recalageMeca(true,100+54);
+                robot.recalageMeca(true,100+54+offsetY);
             }
 
             robot.setOrientation(-Math.PI/2);
@@ -77,11 +80,11 @@ public class GetBlueAcc extends Script {
 
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(-500+230+100,154+100+34+10),false);
+                robot.softGoTo(new VectCartesian(-500+230+100+offsetX,154+100+34+10+offsetY),false);
                 robot.turn(Math.PI);
             }
             else {
-                robot.softGoTo(new VectCartesian(-500 + 230, 154 + 100 + 34 - 30), false);
+                robot.softGoTo(new VectCartesian(-500 + 230+offsetX, 154 + 100 + 34 - 30+offsetY), false);
                 robot.turn(0);
             }
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR_RED);
@@ -182,9 +185,14 @@ public class GetBlueAcc extends Script {
     @Override //à adapter
     public Vec2 entryPosition(Integer version) {
         if (symetrie){
+
+            offsetX = (int)Offsets.GETBLUEACC_X_VIOLET.get();
+            offsetY = (int)Offsets.GETBLUEACC_Y_VIOLET.get();
             return new VectCartesian(xEntry+110,yEntry);
         }
         else {
+            offsetX = (int)Offsets.GETBLUEACC_X_JAUNE.get();
+            offsetY = (int)Offsets.GETBLUEACC_Y_JAUNE.get();
             return new VectCartesian(xEntry, yEntry);
         }
     }
