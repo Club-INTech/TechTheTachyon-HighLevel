@@ -33,6 +33,7 @@ public class X6alter extends Script {
     private static double offsetX ;
     private static double offsetTheta;
     private SynchronizationWithBuddy syncBuddy;
+    private long balanceWaitTime;
 
     public X6alter(Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
@@ -142,7 +143,7 @@ public class X6alter extends Script {
                 // On va à la balance
                 try {
                     try {
-                        Service.withTimeout(10000, () -> syncBuddy.waitForFreeBalance());
+                        Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
                     } catch (TimeoutError error) {
                         error.printStackTrace();
                     }
@@ -401,6 +402,7 @@ public class X6alter extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
     }
 }

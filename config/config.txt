@@ -18,6 +18,7 @@ SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 CONNECT_TO_BUDDY                    =false
+BALANCE_WAIT_TIME                   =14000
 
 #________________________________________________________________________________________________________________________
 

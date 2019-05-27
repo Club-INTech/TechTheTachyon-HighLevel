@@ -42,7 +42,6 @@ public class MatchSlave extends Script {
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
-        syncBuddy.sendBalanceFree();
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         table.addTassot();
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).execute(0);

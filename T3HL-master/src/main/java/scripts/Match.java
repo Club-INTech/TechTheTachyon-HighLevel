@@ -50,8 +50,6 @@ public class Match extends Script {
             Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
-            syncBuddy.sendBalanceFree();
-
             int accVersion = 1;
             async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
 

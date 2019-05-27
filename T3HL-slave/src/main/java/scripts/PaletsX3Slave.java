@@ -2,6 +2,7 @@ package scripts;
 
 import data.CouleurPalet;
 import data.Table;
+import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -34,10 +35,12 @@ public class PaletsX3Slave extends Script{
      * constante
      */
     private boolean symetry;
+    private SynchronizationWithBuddy syncBuddy;
 
 
-    public PaletsX3Slave(Slave robot, Table table) {
+    public PaletsX3Slave(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
+        this.syncBuddy = syncBuddy;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class PaletsX3Slave extends Script{
                 offsetY=Offsets.PALETSX3_Y_VIOLET.get();
             }
 
-
+            syncBuddy.sendBalanceFree();
 
             positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
