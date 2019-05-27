@@ -26,7 +26,7 @@ package data;
 public enum GameState {
 
     GOLDENIUM_LIBERE(false),
-    PALETS_X6_FREE(false),
+    BALANCE_FREE(false),
     ;
     private Object valueObject;
     GameState(Object valueObject){

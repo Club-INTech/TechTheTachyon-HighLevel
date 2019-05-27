@@ -17,7 +17,6 @@ import utils.math.VectCartesian;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 /**
@@ -132,8 +131,8 @@ public class DataControler extends Thread implements Service {
         String[] parts = message.split(" ");
         String type = parts[0];
         switch (type) {
-            case "paletsx6free":
-                GameState.PALETS_X6_FREE.setData(true);
+            case "balancefree":
+                GameState.BALANCE_FREE.setData(true);
                 break;
         }
 

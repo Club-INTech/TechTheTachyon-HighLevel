@@ -1,5 +1,6 @@
 package scripts;
 import data.*;
+import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
@@ -8,6 +9,8 @@ import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
 import utils.Offsets;
+import utils.TimeoutError;
+import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -29,9 +32,11 @@ public class X6alter extends Script {
     private static double offsetY ;
     private static double offsetX ;
     private static double offsetTheta;
+    private SynchronizationWithBuddy syncBuddy;
 
-    public X6alter(Master robot, Table table) {
+    public X6alter(Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
+        this.syncBuddy = syncBuddy;
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
          *  (selon si on est plus proche d'une extrémité ?)
@@ -136,6 +141,11 @@ public class X6alter extends Script {
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
                 try {
+                    try {
+                        Service.withTimeout(10000, () -> syncBuddy.waitForFreeBalance());
+                    } catch (TimeoutError error) {
+                        error.printStackTrace();
+                    }
                     SensorState.DISABLE_LIDAR.setData(true);
                     table.removeAllTemporaryObstacles();
                     robot.followPathTo(positionBalance);

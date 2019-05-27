@@ -3,15 +3,11 @@ package scripts;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
-import locomotion.UnableToMoveReason;
 import pfg.config.Config;
 import robot.Master;
 import utils.ConfigData;
 import utils.Container;
-import utils.Log;
-import utils.TimeoutError;
 import utils.container.ContainerException;
-import utils.container.Service;
 import utils.math.Vec2;
 
 public class Match extends Script {
@@ -54,7 +50,7 @@ public class Match extends Script {
             Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
-            syncBuddy.sendPaletX6Free();
+            syncBuddy.sendBalanceFree();
 
             int accVersion = 1;
             async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));

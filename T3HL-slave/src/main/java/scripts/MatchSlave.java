@@ -1,10 +1,8 @@
 package scripts;
 
-import data.CouleurPalet;
 import data.Table;
 import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
-import locomotion.UnableToMoveException;
 import pfg.config.Config;
 import robot.Slave;
 import utils.math.Vec2;
@@ -35,7 +33,7 @@ public class MatchSlave extends Script {
 
         // on attend que le principal parte
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(4);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -44,6 +42,7 @@ public class MatchSlave extends Script {
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
+        syncBuddy.sendBalanceFree();
         scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
         table.addTassot();
         scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).execute(0);
@@ -57,7 +56,7 @@ public class MatchSlave extends Script {
         scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(0);
 
         // 7. Attente que palets x6 soit libre
-        syncBuddy.waitForFreePaletX6();
+        syncBuddy.waitForFreeBalance();
 
         // 8. Palets x6 restants
         // (8,5. On retourne à la balance direct) ?

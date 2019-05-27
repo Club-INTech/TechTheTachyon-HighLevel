@@ -38,15 +38,15 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     /**
      * Permet de prévenir le secondaire que le distributeur x6 est libre
      */
-    public void sendPaletX6Free() {
-        sendString(String.format("%spaletsx6free", Channel.BUDDY_EVENT.getHeaders()));
+    public void sendBalanceFree() {
+        sendString(String.format("%sbalancefree", Channel.BUDDY_EVENT.getHeaders()));
     }
 
-    public void waitForFreePaletX6() {
+    public void waitForFreeBalance() {
         if(connection.isInitiated()) {
-            waitWhileTrue(() -> !((boolean)GameState.PALETS_X6_FREE.getData()));
+            waitWhileTrue(() -> !((boolean)GameState.BALANCE_FREE.getData()));
         } else {
-            Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que palets x6 est libre");
+            Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que la balance est libre");
         }
     }
 
