@@ -195,8 +195,8 @@ public class Goldenium extends Script {
                 robot.moveLengthwise(60, false);
             }
             robot.softGoTo(new VectCartesian(420,750),false);
-            syncBuddy.sendBalanceFree();
             robot.softGoTo(new VectCartesian(1200,750),false);
+            syncBuddy.sendBalanceFree();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
