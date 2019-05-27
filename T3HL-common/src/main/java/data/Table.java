@@ -295,6 +295,7 @@ public class Table implements Service {
         Log.LIDAR.debug("Mise à jour des Obstacle...");
 
         mobileObstacleBuffer.clear();
+        slaveObstacle.setLifeTime(Long.MAX_VALUE);
         synchronized (mobileObstacles) {
             Iterator<MobileCircularObstacle> mobileObstacleIterator = mobileObstacles.iterator();
 
@@ -331,7 +332,6 @@ public class Table implements Service {
         }
 
         synchronized (mobileObstacles) {
-            mobileObstacles.add(slaveObstacle);
             mobileObstacles.addAll(mobileObstacleBuffer); // on envoie tout d'un coup
         }
 
@@ -661,8 +661,10 @@ public class Table implements Service {
         this.width = config.getInt(ConfigData.TABLE_Y);
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
 
+        mobileObstacles.clear();
         // on clone pas la position pour que l'obstacle se déplace comme par magie
         this.slaveObstacle = new MobileCircularObstacle(XYO.getBuddyInstance().getPosition(), buddyRobotRay+robotRay);
+        mobileObstacles.add(slaveObstacle);
     }
 
     public Obstacle getPaletRougeDroite() {
