@@ -41,6 +41,8 @@ public class Cracheur extends Script {
         }
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE,true);
+        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS, true);
+
 
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
 
