@@ -43,8 +43,9 @@ public class Test_DataControler {
     public void setUp() throws Exception{
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
-        listener=new Listener(connectionManager, new SynchronizationWithBuddy(Container.getInstance("Master")));
-        dataControler =new DataControler(listener, null, null);
+        Container container = Container.getInstance("Master");
+        listener=new Listener(connectionManager, new SynchronizationWithBuddy(container));
+        dataControler =new DataControler(container, listener, null, null);
     }
 
     @Test

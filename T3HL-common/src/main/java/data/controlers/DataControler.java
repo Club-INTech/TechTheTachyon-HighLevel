@@ -36,6 +36,7 @@ public class DataControler extends Thread implements Service {
      */
     private static final String ARGUMENTS_SEPARATOR = " ";
 
+    private Container container;
     /**
      * Listener
      */
@@ -76,7 +77,8 @@ public class DataControler extends Thread implements Service {
      * @param listener
      *              le listener
      */
-    public DataControler(Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
+    public DataControler(Container container, Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
+        this.container = container;
         this.listener = listener;
         this.timer = timer;
         this.orderWrapper = orderWrapper;
@@ -138,7 +140,7 @@ public class DataControler extends Thread implements Service {
                 if (isMaster) {
                     try {
                         int points = Integer.parseInt(parts[1]);
-                        Container.getInstance("master").getService(Robot.class).increaseScore(points);
+                        container.getService(Robot.class).increaseScore(points);
                     }
                     catch (NumberFormatException | ContainerException e) {
                         e.printStackTrace();
