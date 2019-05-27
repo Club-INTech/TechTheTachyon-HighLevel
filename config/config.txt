@@ -25,10 +25,10 @@ BALANCE_WAIT_TIME                   =14000
 [Master]
 MASTER                              = true
 USING_ELECTRON                      = true
-USING_PANEL                         = false
+USING_PANEL                         = true
 USING_LIDAR			                = true
 LED_COUNT			                = 16
-HOMOLOGATION                        = true
+HOMOLOGATION                        = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
@@ -41,7 +41,7 @@ VECTOR_COMPARISON_THRESHOLD         = 5
 MASTER                              = false
 COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
-USING_LIDAR			                = false
+USING_LIDAR			                = true
 LED_COUNT			                = 1
 
 # DIMENSIONS DES ROBOTS

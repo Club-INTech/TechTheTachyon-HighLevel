@@ -144,34 +144,27 @@ public class X6alter extends Script {
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
                 try {
-                    SensorState.DISABLE_LIDAR.setData(true);
                     try {
+                        SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(true);
                         Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
                     } catch (TimeoutError error) {
                         error.printStackTrace();
-                        SensorState.DISABLE_LIDAR.setData(false);
-                        // si jamais on attend trop longtemps, on réactive le lidar pour éviter de foncer dans le secondaire
-                        try {
-                            TimeUnit.MILLISECONDS.sleep(25*4); // 4 ticks de lidar pour être sûr d'avoir bien vu le secondaire
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                     table.removeAllTemporaryObstacles();
                     robot.followPathTo(positionBalance);
-                } finally {
-                    SensorState.DISABLE_LIDAR.setData(false);
-                }
 
-                // On dépose le bleu
-                // on tourne en même temps qu'on lève le bras
-                CompletableFuture<Void> armInPlace = async("Dépose bleu dans la balance", () -> {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
-                });
-                robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
-                robot.increaseScore(12);
-                armInPlace.join(); // on attend que le bras soit à la bonne position
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+                    // On dépose le bleu
+                    // on tourne en même temps qu'on lève le bras
+                    CompletableFuture<Void> armInPlace = async("Dépose bleu dans la balance", () -> {
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
+                    });
+                    robot.turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
+                    robot.increaseScore(12);
+                    armInPlace.join(); // on attend que le bras soit à la bonne position
+                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+                } finally {
+                    SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(false);
+                }
                 long balanceEnd = System.currentTimeMillis();
                 long elapsed = balanceEnd-balanceStart;
                 Log.STRATEGY.warning("Balance took "+ formatTime(elapsed));

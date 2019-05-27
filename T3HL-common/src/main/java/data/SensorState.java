@@ -42,6 +42,11 @@ public class SensorState<DataType> {
      * Permet de désactiver le lidar à volonté (par exemple pendant une rotation)
      */
     public static final SensorState<Boolean> DISABLE_LIDAR = new SensorState<>("DISABLE_LIDAR",false, Boolean.class);
+
+    /**
+     * Permet de désactiver les obstacles de l'autre côté de la table. ça permet d'ignorer les ennemis lorsque le principal va au niveau de la balance
+     */
+    public static final SensorState<Boolean> DISABLE_ENNEMIES_OTHER_SIDE = new SensorState<>("DISABLE_ENNEMIES_OTHER_SIDE",false, Boolean.class);
     ;
 
     private String name;
