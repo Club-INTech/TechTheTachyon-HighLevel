@@ -63,9 +63,6 @@ public class Goldenium extends Script {
             positionBalance2 = new VectCartesian(xBalance2, yBalance2);
         }
 
-        if (version==0){
-            syncBuddy.waitForFreeBalance();
-        }
 
 
         //attention il n'y qu'une seule pompe sur le robot secondaire
@@ -151,7 +148,9 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
-
+        if (version==0){
+            syncBuddy.waitForFreeBalance();
+        }
 
         try {
             robot.followPathTo(positionBalance2);
