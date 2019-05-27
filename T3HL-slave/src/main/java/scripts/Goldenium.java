@@ -11,6 +11,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
+import utils.container.Service;
 import utils.math.Circle;
 import utils.math.Shape;
 import utils.math.Vec2;
@@ -45,6 +46,7 @@ public class Goldenium extends Script {
     private VectCartesian positionBalance2;
     private boolean symetrie;
     private SynchronizationWithBuddy syncBuddy;
+    private long balanceWaitTime;
 
 
     public Goldenium(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
@@ -149,7 +151,7 @@ public class Goldenium extends Script {
         robot.increaseScore(20);
 
         if (version==0){
-            syncBuddy.waitForFreeBalance();
+            Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
         }
 
         try {
@@ -213,7 +215,7 @@ public class Goldenium extends Script {
             e.printStackTrace();
         }
         if(version==1){
-            syncBuddy.sendBalanceFree();
+            Service.withTimeout(balanceWaitTime, () -> syncBuddy.sendBalanceFree());
         }
 
     }
@@ -238,6 +240,7 @@ public class Goldenium extends Script {
     @Override
     public void updateConfig(Config config) {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
         super.updateConfig(config);
     }
 }
