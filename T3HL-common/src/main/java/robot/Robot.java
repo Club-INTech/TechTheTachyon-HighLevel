@@ -255,8 +255,10 @@ public abstract class Robot implements Service {
 
     private void debugLeds(LEDs.RGBColor color) {
         if(usingPanel) {
-            LEDs leds = panneauService.getPanneau().getLeds();
-            leds.fillColor(color);
+            if(panneauService.getPanneau() != null && panneauService.getPanneau().getLeds() != null) {
+                LEDs leds = panneauService.getPanneau().getLeds();
+                leds.fillColor(color);
+            }
         }
     }
 
