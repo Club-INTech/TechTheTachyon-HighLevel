@@ -68,9 +68,10 @@ public abstract class SynchronizationCommon implements Service {
     /**
      * Envoie notre position
      */
-    public void sendPosition(){
-        Vec2 currentPos = XYO.getRobotInstance().getPosition();
-        this.sendString(String.format(Locale.US, "%s%d %d", Channel.BUDDY_POSITION.getHeaders(), currentPos.getX(), currentPos.getY()));
+    public void sendPosition() {
+        XYO xyo = XYO.getRobotInstance();
+        Vec2 currentPos = xyo.getPosition();
+        this.sendString(String.format(Locale.US, "%s%d %d %f", Channel.BUDDY_POSITION.getHeaders(), currentPos.getX(), currentPos.getY(), xyo.getOrientation()));
     }
 
     /**
