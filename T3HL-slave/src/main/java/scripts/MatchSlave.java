@@ -9,6 +9,8 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.math.Vec2;
 
+import java.util.concurrent.TimeUnit;
+
 public class MatchSlave extends Script {
     private final ScriptManagerSlave scriptManagerSlave;
     private SynchronizationWithBuddy syncBuddy;
@@ -30,6 +32,13 @@ public class MatchSlave extends Script {
         */
         // 1. Rush Bleu Accélérateur
         // 2. Pousse le palet bleu
+
+        // on attend que le principal parte
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         scriptManagerSlave.getScript(ScriptNamesSlave.GETREDDEP).timedExecute(0);
 
         scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
