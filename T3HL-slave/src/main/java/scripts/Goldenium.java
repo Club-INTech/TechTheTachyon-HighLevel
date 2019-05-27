@@ -194,9 +194,17 @@ public class Goldenium extends Script {
             else{
                 robot.moveLengthwise(60, false);
             }
-            robot.softGoTo(new VectCartesian(200,750),false);
+/*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
-            syncBuddy.sendBalanceFree();
+            syncBuddy.sendBalanceFree();*/
+            async("On dit que la balance est libre", () -> {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                syncBuddy.sendBalanceFree();
+            });
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

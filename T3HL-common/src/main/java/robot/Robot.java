@@ -24,6 +24,7 @@ import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
+import data.controlers.DataControler;
 import data.controlers.PanneauService;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.Locomotion;
@@ -67,6 +68,7 @@ public abstract class Robot implements Service {
      */
     private final PanneauService panneauService;
 
+    private Container container;
     /**
      * Permet d'envoyer des infos de debug
      */
@@ -114,12 +116,18 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+        this.container = container;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
         this.panneauService = panneauService;
+        try {
+            container.getService(DataControler.class).setRobotClass(getClass());
+        } catch (ContainerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void increaseScore(int points) {
@@ -135,7 +143,7 @@ public abstract class Robot implements Service {
         }
         else{
             try {
-                Container.getInstance("slave").getService(SynchronizationWithBuddy.class).increaseScore(points);
+                container.getService(SynchronizationWithBuddy.class).increaseScore(points);
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

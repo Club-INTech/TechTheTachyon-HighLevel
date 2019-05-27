@@ -20,11 +20,13 @@ package robot;
 
 import data.CouleurPalet;
 import com.panneau.Panneau;
+import data.controlers.DataControler;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
 import pfg.config.Config;
+import utils.Container;
 import utils.communication.SimulatorDebug;
 
 import java.util.Stack;
@@ -36,8 +38,8 @@ import java.util.Stack;
  */
 public class Master extends Robot {
 
-    public Master(Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
-        super(locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
+    public Master(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+        super(container, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
         createLeftElevator();
         createRightElevator();
     }
