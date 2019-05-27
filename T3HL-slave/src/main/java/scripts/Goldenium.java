@@ -2,6 +2,7 @@ package scripts;
 
 import data.Table;
 import data.XYO;
+import data.synchronization.SynchronizationWithBuddy;
 import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
@@ -43,10 +44,12 @@ public class Goldenium extends Script {
     private VectCartesian positionBalance1;
     private VectCartesian positionBalance2;
     private boolean symetrie;
+    private SynchronizationWithBuddy syncBuddy;
 
 
-    public Goldenium(Slave robot, Table table) {
+    public Goldenium(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
+        this.syncBuddy = syncBuddy;
     }
 
     @Override
@@ -59,6 +62,8 @@ public class Goldenium extends Script {
             positionBalance1 = new VectCartesian(xBalance1+20, yBalance1-10);
             positionBalance2 = new VectCartesian(xBalance2, yBalance2);
         }
+
+
 
         //attention il n'y qu'une seule pompe sur le robot secondaire
         /*try {
@@ -143,7 +148,9 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
-
+        if (version==0){
+            syncBuddy.waitForFreeBalance();
+        }
 
         try {
             robot.followPathTo(positionBalance2);
@@ -192,10 +199,22 @@ public class Goldenium extends Script {
             else{
                 robot.moveLengthwise(60, false);
             }
-            robot.softGoTo(new VectCartesian(420,750),false);
+/*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
+            syncBuddy.sendBalanceFree();*/
+            async("On dit que la balance est libre", () -> {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                syncBuddy.sendBalanceFree();
+            });
         } catch (UnableToMoveException e) {
             e.printStackTrace();
+        }
+        if(version==1){
+            syncBuddy.sendBalanceFree();
         }
 
     }

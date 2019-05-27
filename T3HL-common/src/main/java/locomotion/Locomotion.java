@@ -237,23 +237,28 @@ public class Locomotion implements Service {
         Log.LOCOMOTION.debug("followPathTo("+aim.getPosition()+")");
         waitWhileTrue(SensorState.MOVING::getData);
         Log.LOCOMOTION.debug("not moving!");
+
+        boolean encounteredException = true; // 'true' pour forcer le calcul
         while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
             try {
-                synchronized (pointsQueue) {
-                    try {
-                        graphe.readLock().lock();
-                        encounteredEnemies.clear();
-                        start = graphe.addProvisoryNode(xyo.getPosition().clone());
-                        path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                if (encounteredException) {
+                    synchronized (pointsQueue) {
+                        try {
+                            graphe.readLock().lock();
+                            encounteredEnemies.clear();
+                            start = graphe.addProvisoryNode(xyo.getPosition().clone());
+                            path = pathfinder.findPath(start, aim, encounteredEnemies); // FIXME: détecter s'il y a une erreur à cause d'un ennemi
+                        }
+                        finally {
+                            graphe.readLock().unlock();
+                        }
+                        pointsQueue.clear();
+                        Log.PATHFINDING.debug("=== Nouveau chemin (current pos="+XYO.getRobotInstance().getPosition()+" | start="+start.getPosition()+") ===");
+                        path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
+                        Log.PATHFINDING.debug("=== Fin ===");
+                        pointsQueue.addAll(path);
                     }
-                    finally {
-                        graphe.readLock().unlock();
-                    }
-                    pointsQueue.clear();
-                    Log.PATHFINDING.debug("=== Nouveau chemin (current pos="+XYO.getRobotInstance().getPosition()+" | start="+start.getPosition()+") ===");
-                    path.forEach(p -> Log.PATHFINDING.debug("\t"+p));
-                    Log.PATHFINDING.debug("=== Fin ===");
-                    pointsQueue.addAll(path);
+                    encounteredException = false;
                 }
                 while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
                 //    System.out.println("xyo: "+xyo.getPosition()+" / aim: "+aim.getPosition());
@@ -261,6 +266,7 @@ public class Locomotion implements Service {
                         synchronized (exceptionsQueue) {
                             exception = exceptionsQueue.poll();
                         }
+                        encounteredException = true;
                         //exception.printStackTrace();
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED) || exception.getReason().equals(UnableToMoveReason.ENEMY_IN_PATH)) {
                             XYO buddyPos = XYO.getBuddyInstance();
@@ -293,6 +299,7 @@ public class Locomotion implements Service {
 
                     if(!SensorState.MOVING.getData()) {
                         try {
+                            encounteredException = true;
                             graphe.writeLock().lock();
                             graphe.removeProvisoryNode(start);
                             start = graphe.addProvisoryNode(xyo.getPosition().clone());

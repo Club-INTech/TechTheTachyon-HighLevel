@@ -55,7 +55,7 @@ public class PaletsX3Slave extends Script{
                 offsetY=Offsets.PALETSX3_Y_VIOLET.get();
             }
 
-            syncBuddy.sendBalanceFree();
+            //syncBuddy.sendBalanceFree();
 
             positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
@@ -79,12 +79,12 @@ public class PaletsX3Slave extends Script{
             //robot.recalageMeca(false,1500-positions.get(0).getX());
 
             if(!symetry) {
-                robot.recalageMeca(true,1500-positions.get(0).getX());
+                robot.recalageMeca(false,1500-positions.get(0).getX());
                 //robot.turn(-Math.PI/2);
                 robot.setOrientation(Math.PI);
             }
             else{
-                robot.recalageMeca(true,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
+                robot.recalageMeca(false,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
                 //robot.turn(Math.PI/2);
                 robot.setOrientation(0);
 

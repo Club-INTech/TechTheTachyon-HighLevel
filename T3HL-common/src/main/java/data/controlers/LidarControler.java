@@ -162,10 +162,17 @@ public class LidarControler extends ServiceThread {
                 if(symetrie) {
                     obstacleCenter.setA(-obstacleCenter.getA());
                 }
+
                 if(obstacleCenter.getR() <= robotRadius)
                     continue;
                 obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
                 obstacleCenter.plus(currentXYO.getPosition());
+
+                // signes différents, on est de deux côtés de la table différents
+                if(SensorState.DISABLE_ENNEMIES_OTHER_SIDE.getData() && obstacleCenter.getX() * currentXYO.getPosition().getX() <= 0) {
+                    continue;
+                }
+
                 // on ajoute l'obstacle que s'il est dans la table et qu'il est pas dans les rampes
                 if(tableBB.isInShape(obstacleCenter) && !table.isPositionInBalance(obstacleCenter)) {
                     mobileObstacles.add(obstacleCenter);

@@ -71,6 +71,7 @@ public class DataControler extends Thread implements Service {
     private int offsetSickDroitSecondaire=2;
     private int posUpdates = 0;
     private boolean symetry;
+    private Class<? extends Robot> robotClass;
 
     /**
      * Construit un gestionnaire de capteur
@@ -140,7 +141,7 @@ public class DataControler extends Thread implements Service {
                 if (isMaster) {
                     try {
                         int points = Integer.parseInt(parts[1]);
-                        container.getService(Robot.class).increaseScore(points);
+                        container.getService(robotClass).increaseScore(points);
                     }
                     catch (NumberFormatException | ContainerException e) {
                         e.printStackTrace();
@@ -148,6 +149,10 @@ public class DataControler extends Thread implements Service {
                 }
                 break;
             }
+
+            default:
+
+                break;
 
         }
 
@@ -517,5 +522,13 @@ public class DataControler extends Thread implements Service {
         posUpdates = 2;
         // on attend d'en avoir reçu deux
         waitWhileTrue(() -> posUpdates > 0);
+    }
+
+    public void setRobotClass(Class<? extends Robot> robotClass) {
+        this.robotClass = robotClass;
+    }
+
+    public Class<? extends Robot> getRobotClass() {
+        return robotClass;
     }
 }

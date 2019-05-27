@@ -84,6 +84,16 @@ public class Listener extends ServiceThread {
     private boolean connectToBuddy;
 
     /**
+     * Temps entre deux envois de positions au buddy
+     */
+    private long timeBetweenBuddyPosUpdates;
+
+    /**
+     * Date du dernier envoi de position
+     */
+    private long lastTimeSinceBuddyUpdate;
+
+    /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
@@ -203,8 +213,9 @@ public class Listener extends ServiceThread {
                             message = buffer.get().substring(2);
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                                if(buddy.isInitiated()) {
+                                if(buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenBuddyPosUpdates) {
                                     buddySync.sendPosition();
+                                    lastTimeSinceBuddyUpdate = System.currentTimeMillis();
                                 }
                             }
                         }
@@ -239,5 +250,6 @@ public class Listener extends ServiceThread {
         this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
         this.connectToBuddy = config.getBoolean(ConfigData.CONNECT_TO_BUDDY);
+        this.timeBetweenBuddyPosUpdates = config.getLong(ConfigData.TIME_BETWEEN_POS_UPDATES);
     }
 }
