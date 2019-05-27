@@ -423,8 +423,8 @@ public class PathFollower extends ServiceThread {
         // TODO cont. : En théorie, l'utilisation des ConcurrentLinkedList fait qu'il n'y en a pas besoin
         Vec2 aim;
         boolean hasNext;
-        while (!Thread.currentThread().isInterrupted()) {
-            while (this.pointsQueue.peek() == null) {
+        while (!isInterrupted()) {
+            while (pointsQueue.isEmpty()) {
                 try {
                     Thread.sleep(20);
                 } catch (InterruptedException e) {
@@ -432,7 +432,7 @@ public class PathFollower extends ServiceThread {
                 }
             }
             try {
-                hasNext = ! pointsQueue.isEmpty();
+                hasNext = true;
                 while(hasNext) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(5);

@@ -266,8 +266,8 @@ public class Locomotion implements Service {
                         synchronized (exceptionsQueue) {
                             exception = exceptionsQueue.poll();
                         }
-                        encounteredException = true;
                         //exception.printStackTrace();
+                        encounteredException = true;
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED) || exception.getReason().equals(UnableToMoveReason.ENEMY_IN_PATH)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             Log.PATHFINDING.critical("Trajectory obstructed, recomputing");

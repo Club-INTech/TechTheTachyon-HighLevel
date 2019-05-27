@@ -177,6 +177,7 @@ public class OrderWrapper implements Service {
      */
     public void immobilise() {
         this.sendString(MotionOrder.STOP.getOrderStr());
+        SensorState.MOVING.setData(false);
     }
 
 
