@@ -83,7 +83,7 @@ public class X6alter extends Script {
         } else if (version == 2) {  //// version pour juste le bleu
             positions.add(new VectCartesian(834, 1206));
         }//version pour prendre les palets à la suite sauf le bleu
-        else if (version == 3 || version == 4) {
+        else if (version == 3 || version == 4 || version == 5) {
             positions.add(new VectCartesian(1000 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (0)
             positions.add(new VectCartesian(900 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (1)
             positions.add(new VectCartesian(800 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (2)
@@ -224,6 +224,10 @@ public class X6alter extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             // TODO
+        }
+
+        if(version==5){
+            Service.withTimeout(balanceWaitTime, () -> syncBuddy.sendBalanceFree());
         }
     }
 
