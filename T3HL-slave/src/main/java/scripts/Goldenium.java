@@ -63,6 +63,11 @@ public class Goldenium extends Script {
             positionBalance2 = new VectCartesian(xBalance2, yBalance2);
         }
 
+        if (version==0){
+            syncBuddy.waitForFreeBalance();
+        }
+
+
         //attention il n'y qu'une seule pompe sur le robot secondaire
         /*try {
             if(!symetrie) {
@@ -207,6 +212,9 @@ public class Goldenium extends Script {
             });
         } catch (UnableToMoveException e) {
             e.printStackTrace();
+        }
+        if(version==1){
+            syncBuddy.sendBalanceFree();
         }
 
     }
