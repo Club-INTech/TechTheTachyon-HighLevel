@@ -43,6 +43,7 @@ COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
 USING_LIDAR			                = true
 LED_COUNT			                = 1
+HOMOLOGATION                        = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150

@@ -85,7 +85,7 @@ public class MainSlave extends RobotEntryPoint {
         table.removeAllChaosObstacles();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
-        robot.setRotationSpeed(Speed.SLOW_ALL);
+        //robot.setRotationSpeed(Speed.SLOW_ALL);
         //Vec2 newPos = new VectCartesian(1500-242, 145+58);
         //Vec2 newPos = new VectCartesian(1500 -59 -145,400);
         Vec2 newPos = new VectCartesian(1500 -297,400);
