@@ -15,10 +15,12 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class X6alter extends Script {
     private ArrayList<VectCartesian> positions;
@@ -142,12 +144,19 @@ public class X6alter extends Script {
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
                 try {
+                    SensorState.DISABLE_LIDAR.setData(true);
                     try {
                         Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
                     } catch (TimeoutError error) {
                         error.printStackTrace();
+                        SensorState.DISABLE_LIDAR.setData(false);
+                        // si jamais on attend trop longtemps, on réactive le lidar pour éviter de foncer dans le secondaire
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(25*4); // 4 ticks de lidar pour être sûr d'avoir bien vu le secondaire
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    SensorState.DISABLE_LIDAR.setData(true);
                     table.removeAllTemporaryObstacles();
                     robot.followPathTo(positionBalance);
                 } finally {
