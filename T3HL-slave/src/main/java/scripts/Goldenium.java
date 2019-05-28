@@ -151,14 +151,8 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.increaseScore(20);
 
-        if (version==0){
-            try {
-                Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
-            } catch (TimeoutError error) {
-                error.printStackTrace();
-            }
-        }
-
+        // TODO: Timeout?
+        syncBuddy.waitForFreeBalance();
         try {
             robot.followPathTo(positionBalance2);
             table.removeTassot();
@@ -173,6 +167,7 @@ public class Goldenium extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+        syncBuddy.sendAcceleratorFree();
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
@@ -212,10 +207,6 @@ public class Goldenium extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        if(version==1){
-            syncBuddy.sendBalanceFree();
-        }
-
     }
 
     @Override

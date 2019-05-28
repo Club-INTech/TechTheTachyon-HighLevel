@@ -11,6 +11,7 @@ import utils.container.ContainerException;
 import utils.math.Vec2;
 
 public class Match extends Script {
+    public static final int ACC_VERSION = 1;
     private final ScriptManagerMaster scriptManagerMaster;
     private SynchronizationWithBuddy syncBuddy;
     private final Container container;
@@ -51,14 +52,13 @@ public class Match extends Script {
             Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
-            int accVersion = 1;
-            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(accVersion));
+            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
 
 
             //On tente d'aller à l'accélérateur
             boolean exceptionRaised = false;
             try {
-                robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+                robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
             } catch (UnableToMoveException e) {
                 exceptionRaised = true;
                 e.printStackTrace();
@@ -72,7 +72,7 @@ public class Match extends Script {
                 }
                 exceptionRaised = false;
                 try {
-                    robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+                    robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
                 } catch (UnableToMoveException e) {
                     exceptionRaised = true;
                     e.printStackTrace();
@@ -86,7 +86,7 @@ public class Match extends Script {
                     }
                     exceptionRaised = false;
                     try {
-                        robot.followPathTo(accelerateurScript.entryPosition(accVersion), 0);
+                        robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
                     } catch (UnableToMoveException e) {
                         exceptionRaised = true;
                         e.printStackTrace();
@@ -103,7 +103,7 @@ public class Match extends Script {
             } else {
                 //Si on a réussi à aller à l'accélérateur, on exécute le script
                 try {
-                    container.getService(Accelerateur.class).timedExecute(accVersion);
+                    container.getService(Accelerateur.class).timedExecute(ACC_VERSION);
                 } catch (ContainerException e) {
                     e.printStackTrace();
                 }

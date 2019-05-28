@@ -137,6 +137,10 @@ public class DataControler extends Thread implements Service {
             case "balancefree":
                 GameState.BALANCE_FREE.setData(true);
                 break;
+
+            case "acceleratorfree":
+                GameState.ACCELERATOR_FREE.setData(true);
+                break;
             case "increaseScore": {
                 if (isMaster) {
                     try {
