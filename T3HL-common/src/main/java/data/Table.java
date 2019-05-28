@@ -729,17 +729,15 @@ public class Table implements Service {
     public void addTassot(){addTemporaryObstacle(separationRampe);}
 
     public void removeObstacleZoneChaos(Vec2 position){
-
         for(Obstacle obstacle : this.temporaryObstacles) {
             if(obstacle.getPosition().equals(position)){
                 removeTemporaryObstacle(obstacle);
             }
-
         }
     }
 
     public boolean isPositionInBalance(Vec2 center) {
-        return balanceAndRamps.isInObstacle(center);
+        return Math.abs(center.getX()) < 1030 && center.getY() > 2000-400;
     }
 
     public void removeAllTemporaryObstacles() {
