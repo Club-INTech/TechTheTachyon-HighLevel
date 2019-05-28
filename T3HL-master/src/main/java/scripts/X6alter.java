@@ -110,7 +110,7 @@ public class X6alter extends Script {
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            if(version == 4) {
+            if(version == 4 || version == 5) {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
@@ -147,8 +147,7 @@ public class X6alter extends Script {
                     try {
                         SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(true);
                         if(version==4){
-                            //Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
-                            syncBuddy.waitForFreeBalance();
+                            Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
                         }
                     } catch (TimeoutError error) {
                         error.printStackTrace();
