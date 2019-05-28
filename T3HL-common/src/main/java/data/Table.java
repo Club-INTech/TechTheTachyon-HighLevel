@@ -663,7 +663,12 @@ public class Table implements Service {
 
         mobileObstacles.clear();
         // on clone pas la position pour que l'obstacle se déplace comme par magie
-        this.slaveObstacle = new MobileCircularObstacle(XYO.getBuddyInstance().getPosition(), buddyRobotRay+robotRay);
+        this.slaveObstacle = new MobileCircularObstacle(XYO.getBuddyInstance().getPosition(), buddyRobotRay+robotRay) {
+            @Override
+            public String toString() {
+                return "(Secondaire) "+super.toString();
+            }
+        };
         mobileObstacles.add(slaveObstacle);
     }
 
