@@ -203,17 +203,18 @@ public class Goldenium extends Script {
 /*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
             syncBuddy.sendBalanceFree();*/
-            async("On dit que la balance est libre", () -> {
+
+           /* async("On dit que la balance est libre", () -> {
 
                 Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
-            });
+            });*/
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        if(version==1){
+  /*      if(version==1){
             syncBuddy.sendBalanceFree();
         }
-
+*/
     }
 
     @Override

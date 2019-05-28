@@ -147,7 +147,8 @@ public class X6alter extends Script {
                     try {
                         SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(true);
                         if(version==4){
-                            Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
+                            //Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
+                            syncBuddy.waitForFreeBalance();
                         }
                     } catch (TimeoutError error) {
                         error.printStackTrace();
