@@ -33,7 +33,7 @@ HOMOLOGATION                        = true
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
-BUDDY_RAY                           = 120
+BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
 
 #________________________________________________________________________________________________________________________
@@ -48,7 +48,7 @@ HOMOLOGATION                        = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
-BUDDY_RAY                           = 150
+BUDDY_RAY                           = 190
 VECTOR_COMPARISON_THRESHOLD         = 15
 
 #________________________________________________________________________________________________________________________
