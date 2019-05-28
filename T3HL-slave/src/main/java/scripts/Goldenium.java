@@ -154,6 +154,8 @@ public class Goldenium extends Script {
         // TODO: Timeout?
         syncBuddy.waitForFreeBalance();
         try {
+            // le principal part en même temps que nous
+            syncBuddy.sendAcceleratorFree();
             robot.followPathTo(positionBalance2);
             table.removeTassot();
             robot.followPathTo(positionBalance1);
@@ -167,7 +169,6 @@ public class Goldenium extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        syncBuddy.sendAcceleratorFree();
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
