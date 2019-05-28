@@ -164,7 +164,7 @@ public class X6alter extends Script {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                         robot.turn(0);
                         syncBuddy.sendBalanceFree();
-                        robot.moveLengthwise(500,false);
+                        robot.moveLengthwise(600,false);
                         try {
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {

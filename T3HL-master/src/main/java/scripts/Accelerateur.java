@@ -151,6 +151,7 @@ public class Accelerateur extends Script {
 
     public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
         robot.turn(Math.PI);
+        robot.useActuator(ActuatorsOrder.REBOOT_LES_BRAS);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
