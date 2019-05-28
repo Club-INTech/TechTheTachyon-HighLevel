@@ -11,6 +11,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Circle;
 import utils.math.Shape;
@@ -151,7 +152,11 @@ public class Goldenium extends Script {
         robot.increaseScore(20);
 
         if (version==0){
-            Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
+            try {
+                Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
+            } catch (TimeoutError error) {
+                error.printStackTrace();
+            }
         }
 
         try {
@@ -204,19 +209,12 @@ public class Goldenium extends Script {
 /*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
             syncBuddy.sendBalanceFree();*/
-            async("On dit que la balance est libre", () -> {
-                try {
-                    TimeUnit.MILLISECONDS.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                syncBuddy.sendBalanceFree();
-            });
+
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
         if(version==1){
-            Service.withTimeout(balanceWaitTime, () -> syncBuddy.sendBalanceFree());
+            syncBuddy.sendBalanceFree();
         }
 
     }
@@ -241,7 +239,7 @@ public class Goldenium extends Script {
     @Override
     public void updateConfig(Config config) {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
-        balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
+        balanceWaitTime = config.getLong(ConfigData.BALANCE_SLAVE_WAIT_TIME);
         super.updateConfig(config);
     }
 }

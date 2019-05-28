@@ -3,6 +3,7 @@ package scripts;
 import data.Table;
 import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
+import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
@@ -36,6 +37,7 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
 
         // on attend que le principal parte
+
         if (container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
         } else {
@@ -48,10 +50,10 @@ public class MatchSlave extends Script {
 
             scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
-            scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(1);
+            scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).timedExecute(0);
             scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
             table.addTassot();
-            scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).execute(0);
+            scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).timedExecute(0);
 
             if (true)
                 return;

@@ -110,7 +110,7 @@ public class X6alter extends Script {
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            if(version == 4) {
+            if(version == 4 || version == 5) {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
@@ -229,7 +229,7 @@ public class X6alter extends Script {
         }
 
         if(version==5){
-            Service.withTimeout(balanceWaitTime, () -> syncBuddy.sendBalanceFree());
+            syncBuddy.sendBalanceFree();
         }
     }
 
@@ -376,7 +376,7 @@ public class X6alter extends Script {
         else if (version == 2) {
             return new VectCartesian(834,1206);
         }
-        else if (version == 3 || version == 4) {
+        else if (version == 3 || version == 4 || version == 5) {
             System.err.println("OFFSET Y: "+offsetY);
             return new VectCartesian(1500-191-65+offsetX, 1204+10+5+offsetY);
         }

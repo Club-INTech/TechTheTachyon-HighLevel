@@ -24,7 +24,7 @@ public class ScriptHomologationSlave extends Script {
             robot.turn(-Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET, false);
             robot.turn(0);
-            robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
+            robot.moveLengthwise(DISTANCE_INTERPALET*2+150, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
