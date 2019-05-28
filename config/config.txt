@@ -68,7 +68,7 @@ ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
 
 PALETSX3_X_JAUNE                    =0
-PALETSX3_Y_JAUNE                    =-
+PALETSX3_Y_JAUNE                    =0
 PALETSX3_X_VIOLET                   =0
 PALETSX3_Y_VIOLET                   =20
 
@@ -78,6 +78,6 @@ GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
 GETBLUEACC_X_JAUNE                  =0
-GETBLUEACC_Y_JAUNE                  =0
+GETBLUEACC_Y_JAUNE                  =2
 GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =4
