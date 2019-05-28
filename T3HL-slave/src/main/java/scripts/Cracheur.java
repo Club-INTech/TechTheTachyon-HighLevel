@@ -40,7 +40,10 @@ public class Cracheur extends Script {
             e.printStackTrace();
         }
 
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_OUST_BRAS,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE_APRES_STOCK,true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+
+        /*robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_OUST_BRAS,true);
         robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_DE_UN_PALET_ET_MONTE_POUR_CRACHER_LES_PALETS, true);
         robot.waitForRightElevator();
 
@@ -64,7 +67,7 @@ public class Cracheur extends Script {
             }
         }
 
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);*/
     }
     @Override //à adapter
     public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
