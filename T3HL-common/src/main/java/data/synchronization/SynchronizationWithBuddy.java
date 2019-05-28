@@ -45,10 +45,17 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     }
 
     /**
-     * Permet de prévenir le secondaire que le distributeur x6 est libre
+     * Permet de prévenir le secondaire que la balance est libre
      */
     public void sendBalanceFree() {
         sendString(String.format("%sbalancefree", Channel.BUDDY_EVENT.getHeaders()));
+    }
+
+    /**
+     * Permet de prévenir le principal que le distributeur x6 est libre
+     */
+    public void sendAcceleratorFree() {
+        sendString(String.format("%sacceleratorfree", Channel.BUDDY_EVENT.getHeaders()));
     }
 
     public void waitForFreeBalance() {
@@ -56,6 +63,14 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
             waitWhileTrue(() -> !((boolean)GameState.BALANCE_FREE.getData()));
         } else {
             Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que la balance est libre");
+        }
+    }
+
+    public void waitForFreeAccelerator() {
+        if(connection.isInitiated()) {
+            waitWhileTrue(() -> !((boolean)GameState.ACCELERATOR_FREE.getData()));
+        } else {
+            Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que l'accélérateur est libre");
         }
     }
 

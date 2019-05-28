@@ -41,14 +41,11 @@ public class Cracheur extends Script {
         }
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_OUST_BRAS,true);
-        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS, true);
+        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_DE_UN_PALET_ET_MONTE_POUR_CRACHER_LES_PALETS, true);
         robot.waitForRightElevator();
 
 
         for (int i = 0; i < robot.getNbPaletsDroits(); i++) {
-
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
-            robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET, true);
             try {
                 TimeUnit.MILLISECONDS.sleep(250);
@@ -62,6 +59,9 @@ public class Cracheur extends Script {
                 e.printStackTrace();
             }
             robot.popPaletDroit();
+            if(i != robot.getNbPaletsDroits()-1){
+                robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET, true);
+            }
         }
 
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);

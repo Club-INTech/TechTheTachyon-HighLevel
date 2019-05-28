@@ -6,21 +6,17 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
-import utils.ConfigData;
-import utils.Log;
-import utils.Offsets;
-import utils.TimeoutError;
+import utils.*;
+import utils.container.ContainerException;
 import utils.container.Service;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 public class X6alter extends Script {
     private ArrayList<VectCartesian> positions;
@@ -34,11 +30,13 @@ public class X6alter extends Script {
     private static double offsetY ;
     private static double offsetX ;
     private static double offsetTheta;
+    private Container container;
     private SynchronizationWithBuddy syncBuddy;
     private long balanceWaitTime;
 
-    public X6alter(Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
+    public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
+        this.container = container;
         this.syncBuddy = syncBuddy;
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
@@ -83,7 +81,7 @@ public class X6alter extends Script {
         } else if (version == 2) {  //// version pour juste le bleu
             positions.add(new VectCartesian(834, 1206));
         }//version pour prendre les palets à la suite sauf le bleu
-        else if (version == 3 || version == 4 || version == 5) {
+        else if (version == 3 || version == 4) {
             positions.add(new VectCartesian(1000 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (0)
             positions.add(new VectCartesian(900 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (1)
             positions.add(new VectCartesian(800 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (2)
@@ -110,7 +108,7 @@ public class X6alter extends Script {
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            if(version == 4 || version == 5) {
+            if(version == 4) {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
@@ -146,9 +144,6 @@ public class X6alter extends Script {
                 try {
                     try {
                         SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(true);
-                        if(version==4){
-                            Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeBalance());
-                        }
                     } catch (TimeoutError error) {
                         error.printStackTrace();
                     }
@@ -164,6 +159,26 @@ public class X6alter extends Script {
                     robot.increaseScore(12);
                     armInPlace.join(); // on attend que le bras soit à la bonne position
                     robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true); // on a lâché le palet
+
+                    try {
+                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
+                        robot.turn(0);
+                        syncBuddy.sendBalanceFree();
+                        robot.moveLengthwise(500,false);
+                        try {
+                            robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
+                        } catch (ContainerException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (UnableToMoveException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeAccelerator());
+                    } catch (TimeoutError error) {
+                        error.printStackTrace();
+                    }
                 } finally {
                     SensorState.DISABLE_ENNEMIES_OTHER_SIDE.setData(false);
                 }
@@ -226,10 +241,6 @@ public class X6alter extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
             // TODO
-        }
-
-        if(version==5){
-            syncBuddy.sendBalanceFree();
         }
     }
 
