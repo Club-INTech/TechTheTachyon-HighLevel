@@ -76,7 +76,7 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_DEPOT_FINAL,true);
             TimeUnit.SECONDS.sleep(1);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
-            robot.increaseScore(10);
+            robot.increaseScore(20);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
 
 
