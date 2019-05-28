@@ -50,13 +50,6 @@ public class PaletsX3Slave extends Script{
                 syncBuddy.sendBalanceFree();
             }
 
-            if (!symetry) {
-                offsetX= Offsets.PALETSX3_X_JAUNE.get();
-                offsetY=Offsets.PALETSX3_Y_JAUNE.get();
-            } else {
-                offsetX=Offsets.PALETSX3_X_VIOLET.get();
-                offsetY=Offsets.PALETSX3_Y_VIOLET.get();
-            }
 
             //syncBuddy.sendBalanceFree();
 
@@ -163,7 +156,7 @@ public class PaletsX3Slave extends Script{
             offsetY=Offsets.PALETSX3_Y_VIOLET.get();
         }
         if (!symetry) {
-            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-150);
+            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-200);
         }
         return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
