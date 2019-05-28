@@ -1,6 +1,9 @@
 package scripts;
 
-import data.*;
+import data.SensorState;
+import data.Sick;
+import data.Table;
+import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -10,11 +13,13 @@ import utils.ConfigData;
 import utils.Container;
 import utils.Log;
 import utils.Offsets;
-import utils.container.ContainerException;
-import utils.math.*;
+import utils.math.Calculs;
+import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class Accelerateur extends Script {
 
@@ -151,7 +156,6 @@ public class Accelerateur extends Script {
 
     public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
         robot.turn(Math.PI);
-        robot.useActuator(ActuatorsOrder.REBOOT_LES_BRAS);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
@@ -170,8 +174,6 @@ public class Accelerateur extends Script {
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
         robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
-        robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_GAUCHE);
-        robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
     }
 
     @Override
@@ -181,6 +183,14 @@ public class Accelerateur extends Script {
 
     @Override
     public void executeWhileMovingToEntry(int version) {
+        robot.useActuator(ActuatorsOrder.REBOOT_LES_BRAS, true);
+        try {
+            TimeUnit.MILLISECONDS.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_GAUCHE);
+        robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
