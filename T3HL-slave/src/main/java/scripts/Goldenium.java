@@ -202,6 +202,8 @@ public class Goldenium extends Script {
             else{
                 robot.moveLengthwise(60, false);
             }
+            robot.turn(-Math.PI/2);
+            robot.moveLengthwise(200,false);
 /*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
             syncBuddy.sendBalanceFree();*/
