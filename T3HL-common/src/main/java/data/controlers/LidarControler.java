@@ -150,7 +150,7 @@ public class LidarControler extends ServiceThread {
                     e.printStackTrace();
                 }
             }
-            XYO currentXYO = XYO.getRobotInstance().clone();
+            XYO currentXYO = XYO.getRobotInstance();
             points = messageStack.pop().split(POINT_SEPARATOR);
             if(SensorState.DISABLE_LIDAR.getData()) {
                 continue; // on ignore les valeurs renvoyées par le lidar pendant qu'il est désactivé
@@ -168,13 +168,14 @@ public class LidarControler extends ServiceThread {
                 obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
                 obstacleCenter.plus(currentXYO.getPosition());
 
-                // signes différents, on est de deux côtés de la table différents
-                if(SensorState.DISABLE_ENNEMIES_OTHER_SIDE.getData() && obstacleCenter.getX() * currentXYO.getPosition().getX() <= 0) {
-                    continue;
-                }
 
                 // on ajoute l'obstacle que s'il est dans la table et qu'il est pas dans les rampes
                 if(tableBB.isInShape(obstacleCenter) && !table.isPositionInBalance(obstacleCenter)) {
+                    // signes différents, on est de deux côtés de la table différents
+                    if(SensorState.DISABLE_ENNEMIES_OTHER_SIDE.getData() && obstacleCenter.getX() * currentXYO.getPosition().getX() <= 0) {
+                        Log.LIDAR.warning("On ignore l'ennemi à "+obstacleCenter+" parce qu'on a désactivé les ennemis de l'autre côté de la table");
+                        continue;
+                    }
                     mobileObstacles.add(obstacleCenter);
                 }
             }

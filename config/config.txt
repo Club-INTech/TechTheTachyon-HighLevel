@@ -43,6 +43,7 @@ COULEUR                             = jaune
 USING_7_SEGMENTS                    = false
 USING_LIDAR			                = true
 LED_COUNT			                = 1
+HOMOLOGATION                        = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
@@ -74,3 +75,8 @@ GOLDENIUM_X_JAUNE                   =0
 GOLDENIUM_Y_JAUNE                   =0
 GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
+
+GETBLUEACC_X_JAUNE                  =0
+GETBLUEACC_Y_JAUNE                  =0
+GETBLUEACC_X_VIOLET                 =0
+GETBLUEACC_Y_VIOLET                 =4

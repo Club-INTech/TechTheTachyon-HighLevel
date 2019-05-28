@@ -36,6 +36,11 @@ public enum Offsets implements ConfigInfo {
     GOLDENIUM_X_VIOLET(0),
     GOLDENIUM_Y_VIOLET(0),
 
+    GETBLUEACC_X_JAUNE(0),
+    GETBLUEACC_Y_JAUNE(0),
+    GETBLUEACC_X_VIOLET(0),
+    GETBLUEACC_Y_VIOLET(0),
+
     ;
 
     private double offset;

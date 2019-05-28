@@ -142,7 +142,7 @@ public class MobileCircularObstacle extends Obstacle {
     public long getOutDatedTime() {
         return outDatedTime;
     }
-    public void setLifeTime(int lifeTime) {
+    public void setLifeTime(long lifeTime) {
         this.outDatedTime = lifeTime;
     }
 

@@ -124,6 +124,7 @@ public class Table implements Service {
      */
     private StillCircularRectangularObstacle balanceAndRamps;
 
+    private MobileCircularObstacle slaveObstacle;
 
     /**
      * Constructeur de la table
@@ -294,6 +295,7 @@ public class Table implements Service {
         Log.LIDAR.debug("Mise à jour des Obstacle...");
 
         mobileObstacleBuffer.clear();
+        slaveObstacle.setLifeTime(Long.MAX_VALUE);
         synchronized (mobileObstacles) {
             Iterator<MobileCircularObstacle> mobileObstacleIterator = mobileObstacles.iterator();
 
@@ -303,7 +305,10 @@ public class Table implements Service {
                 while (pointIterator.hasNext()) {
                     point = pointIterator.next();
                     if (obstacle.isInObstacle(point)) {
-                        obstacle.update(point);
+                        // si c'est pas le secondaire, on met à jour la position de l'obstacle
+                        if (point.distanceTo(XYO.getBuddyInstance().getPosition()) >= compareThreshold) {
+                            obstacle.update(point);
+                        }
                         Log.LIDAR.debug("MàJ de l'obstacle mobile : " + obstacle);
                         pointIterator.remove();
                     }
@@ -318,7 +323,8 @@ public class Table implements Service {
         for (Vec2 pt : points) {
             int ray = ennemyRobotRay;
             if (pt.distanceTo(XYO.getBuddyInstance().getPosition()) < compareThreshold) {
-                ray = buddyRobotRay;
+                Log.LIDAR.debug("Obstacle mobile non ajouté (car c'est le secondaire) de centre: " + pt);
+                continue;
             }
             MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray+robotRay);
             Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
@@ -654,6 +660,11 @@ public class Table implements Service {
         this.length = config.getInt(ConfigData.TABLE_X);
         this.width = config.getInt(ConfigData.TABLE_Y);
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
+
+        mobileObstacles.clear();
+        // on clone pas la position pour que l'obstacle se déplace comme par magie
+        this.slaveObstacle = new MobileCircularObstacle(XYO.getBuddyInstance().getPosition(), buddyRobotRay+robotRay);
+        mobileObstacles.add(slaveObstacle);
     }
 
     public Obstacle getPaletRougeDroite() {
