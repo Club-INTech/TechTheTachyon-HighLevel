@@ -11,6 +11,7 @@ import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
+import utils.TimeoutError;
 import utils.container.Service;
 import utils.math.Circle;
 import utils.math.Shape;
@@ -151,7 +152,11 @@ public class Goldenium extends Script {
         robot.increaseScore(20);
 
         if (version==0){
-            Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
+            try {
+                Service.withTimeout(balanceWaitTime, () ->  syncBuddy.waitForFreeBalance());
+            } catch (TimeoutError error) {
+                error.printStackTrace();
+            }
         }
 
         try {
