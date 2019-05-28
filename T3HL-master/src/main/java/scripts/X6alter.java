@@ -110,7 +110,7 @@ public class X6alter extends Script {
             robot.followPathTo(positions.get(0));
             robot.turn(Math.PI);
 
-            if(version == 4 || version == 5) {
+            if(version == 4) {
                 //On prend le 1er palet
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
@@ -228,7 +228,16 @@ public class X6alter extends Script {
             // TODO
         }
 
-        if(version==5){
+        try {
+            robot.turn(0);
+            robot.moveLengthwise(-400,false);
+            robot.turnToPoint(new VectCartesian(-490+10+76, 410-78+50+10));
+        } catch (UnableToMoveException e) {
+            e.printStackTrace();
+        }
+
+
+        if(version==4){
             syncBuddy.sendBalanceFree();
         }
     }

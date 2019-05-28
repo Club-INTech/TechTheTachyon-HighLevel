@@ -203,7 +203,7 @@ public class Goldenium extends Script {
 /*            robot.softGoTo(new VectCartesian(200,750),false);
             robot.softGoTo(new VectCartesian(1200,750),false);
             syncBuddy.sendBalanceFree();*/
-
+            
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
