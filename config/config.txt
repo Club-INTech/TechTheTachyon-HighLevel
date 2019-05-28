@@ -18,7 +18,7 @@ SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 CONNECT_TO_BUDDY                    =true
-BALANCE_WAIT_TIME                   =14000
+BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
 
 #________________________________________________________________________________________________________________________
