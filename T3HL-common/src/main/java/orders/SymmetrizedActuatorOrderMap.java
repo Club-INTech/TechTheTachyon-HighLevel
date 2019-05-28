@@ -104,6 +104,9 @@ public class SymmetrizedActuatorOrderMap implements Service {
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ZONE_DEPART);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE);
         correspondenceMap.put(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE);
+
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_GAUCHE, ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
+        correspondenceMap.put(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT, ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_GAUCHE);
     }
 
     /**
