@@ -69,7 +69,7 @@ public class PaletsX3Slave extends Script{
                 robot.turn(Math.PI);
             }
             else{
-                robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
+                robot.recalageMeca(true,-1800+positions.get(0).getY()+5-85);
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
@@ -91,16 +91,16 @@ public class PaletsX3Slave extends Script{
 //            robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
-            getPuck();
-            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
+//            getPuck();
+//            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            robot.moveLengthwise(-85,false);
+//            robot.moveLengthwise(-85,false);
             //robot.gotoPoint(positions.get(2));
 
             getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
             robot.moveLengthwise(150,false);
-            robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
+            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
+//            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
             //robot.recalageMeca(false,100);
 
@@ -142,8 +142,8 @@ public class PaletsX3Slave extends Script{
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);//TODO refaire position bras
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+//        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
+//        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
     }
 
     @Override
