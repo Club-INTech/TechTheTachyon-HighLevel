@@ -37,7 +37,7 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
 
         // on attend que le principal parte
-       
+
         if (container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
         } else {

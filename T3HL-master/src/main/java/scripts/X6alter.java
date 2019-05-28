@@ -229,7 +229,7 @@ public class X6alter extends Script {
         }
 
         if(version==5){
-            Service.withTimeout(balanceWaitTime, () -> syncBuddy.sendBalanceFree());
+            syncBuddy.sendBalanceFree();
         }
     }
 
