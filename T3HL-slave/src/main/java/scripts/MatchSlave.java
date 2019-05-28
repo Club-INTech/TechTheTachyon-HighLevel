@@ -37,8 +37,7 @@ public class MatchSlave extends Script {
         // 2. Pousse le palet bleu
 
         // on attend que le principal parte
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_OUST_BRAS,true);
-        robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
+       
         if (container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
         } else {
