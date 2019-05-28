@@ -169,9 +169,9 @@ public class Accelerateur extends Script {
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
+        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
         robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_GAUCHE);
         robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
-        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
     }
 
     @Override
