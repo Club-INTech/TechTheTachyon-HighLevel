@@ -48,10 +48,10 @@ public class MatchSlave extends Script {
 
             scriptManagerSlave.getScript(ScriptNamesSlave.GETBLUEACC).goToThenExecute(0);
 
-            scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).execute(1);
+            scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).timedExecute(1);
             scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
             table.addTassot();
-            scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).execute(0);
+            scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).timedExecute(0);
 
             if (true)
                 return;
