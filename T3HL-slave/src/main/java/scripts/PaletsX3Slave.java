@@ -69,7 +69,7 @@ public class PaletsX3Slave extends Script{
                 robot.turn(Math.PI);
             }
             else{
-                robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
+                robot.recalageMeca(true,-1800+positions.get(0).getY()+5-85);
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
@@ -91,10 +91,10 @@ public class PaletsX3Slave extends Script{
 //            robot.moveLengthwise(-100,false);
             //robot.gotoPoint(positions.get(1));
 
-            getPuck();
-            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
+//            getPuck();
+//            robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            robot.moveLengthwise(-85,false);
+//            robot.moveLengthwise(-85,false);
             //robot.gotoPoint(positions.get(2));
 
             getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
