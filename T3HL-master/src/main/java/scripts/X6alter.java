@@ -385,7 +385,7 @@ public class X6alter extends Script {
         else if (version == 2) {
             return new VectCartesian(834,1206);
         }
-        else if (version == 3 || version == 4) {
+        else if (version == 3 || version == 4 || version == 5) {
             System.err.println("OFFSET Y: "+offsetY);
             return new VectCartesian(1500-191-65+offsetX, 1204+10+5+offsetY);
         }
