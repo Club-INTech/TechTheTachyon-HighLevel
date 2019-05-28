@@ -27,6 +27,7 @@ public class Match extends Script {
     public void execute(Integer version) {
 
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
+            scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
         }else {
 
