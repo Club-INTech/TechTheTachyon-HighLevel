@@ -46,6 +46,9 @@ public class PaletsX3Slave extends Script{
     @Override
     public void execute(Integer version) {
         try {
+            if(version == 0) {
+                syncBuddy.sendBalanceFree();
+            }
 
             if (!symetry) {
                 offsetX= Offsets.PALETSX3_X_JAUNE.get();
