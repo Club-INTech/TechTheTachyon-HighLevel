@@ -1,0 +1,17 @@
+
+{
+  "zone_depart":[
+    {
+      "zone" : "R"
+      "color":"green"
+    },
+    {
+      "zone" : "G"
+      "color":"red"
+    },
+    {
+      "zone" : "B"
+      "color":"red"
+    }
+  ]
+}

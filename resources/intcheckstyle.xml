@@ -3,8 +3,12 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
     <module name="TreeWalker">
-        <module name="AvoidStarImport">
-            <property name="severity" value="warning" />
+        <property name="tabWidth" value="4" />
+        <module name="JavadocMethod">
+            <property name="severity" value="warning"/>
         </module>
+        <module name="MethodName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
     </module>
 </module>

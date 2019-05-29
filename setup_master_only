@@ -1,0 +1,14 @@
+#!/bin/bash -v
+
+#Build du master
+cd T3HL-master/
+mvn clean
+mvn package -DskipTests
+cd ..
+
+mkdir ./bin/lib/
+
+# Copie des fichiers compilés et des libs du maître
+cp -r T3HL-master/target/lib ./bin/
+
+cp T3HL-master/target/TTHL-master-1.0.jar ./bin/

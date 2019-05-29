@@ -1,0 +1,44 @@
+#!/bin/bash -v
+if [ ! -d "bin" ]; then
+    mkdir "bin"
+fi
+
+cd bin
+echo $PWD
+
+# Préparation du code pour le Lidar
+if [ ! -d "UST-10LX" ]; then
+    echo "Pas de dossier UST_10LX, clonage depuis GitHub"
+    git clone https://github.com/Club-INTech/UST-10LX
+fi
+
+cd UST-10LX
+echo $PWD
+
+echo "Compilation du code du Lidar..."
+chmod u+x compile
+
+./compile
+cp build/LiDAR_UST_10LX ../
+
+cd ../..
+echo $PWD
+
+#Suppression de l'ancienne lib du panal
+rm -f bin/lib/PanneauRaspi*
+
+#Build de tout le HL!
+mvn clean
+mvn package -DskipTests
+
+mkdir ./bin/lib/
+
+# Copie des fichiers compilés et des libs du maître
+cp -r T3HL-master/target/lib ./bin/
+
+cp T3HL-master/target/TTHL-master-1.0.jar ./bin/
+
+# Copie des fichiers compilés et des libs de l'esclave
+cp -r T3HL-slave/target/lib ./bin/
+
+cp T3HL-slave/target/TTHL-slave-1.0.jar ./bin/

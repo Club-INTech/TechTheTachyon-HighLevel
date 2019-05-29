@@ -1,50 +1,69 @@
-## TechTheTachion-HighLevel - T³HL
+# TechTheTachion-HighLevel - T3HL
+
 Code de l'année 2019 
 
 ### TODO
 * [x] Découvrir le HL et sa doc
-* [ ] Scripts
-* [ ] Cas particulier pathfinding
+* [x] Scripts
+* [?] Cas particulier pathfinding
 * [x] Créer les ordres (avec le LL)
 * [x] S'occuper du recalage avec les sicks (commencer par voir les maths)
 * [x] Com avec l'électron
-* [ ] Tester la COM LL <-> HL
-* [ ] Tester la COM master <-> slave
-* [ ] Test LIDAR + Pathfinging
+* [x] Tester la COM LL <-> HL
+* [x] Tester la COM master <-> slave
+* [x] Test LIDAR + Pathfinging
 * [ ] IA
 
-### Installation - IntelliJ
-#### Prérequis
+## Setup sur le robot
+1. Cloner le repo sur la Rapsi
+2. Lancer le script 'setup' dans le dossier racine du projet
+3. ???
+4. Profit. Tout est déjà fait!
+
+## Installation - IntelliJ
+### Prérequis
 1. Installer Java (Par défaut sur beacoup de distribution)
 2. Installer Maven (gestionnaire de dépendance, compilation, ...)
 
-##### Si un projet est ouvert 
+#### Si un projet est ouvert 
 File -\> New... -\> Project from Existing Sources... -\> Import Project from external models (Maven)
 
 Laissez tout par défaut
-##### Si sur la fenêtre de démarrage 
+#### Si sur la fenêtre de démarrage 
 Import Project -\> Choisir le dossier du dépôt cloné -\> Import Project from external models (Maven)
 
 Laissez tout par défaut
 
-#### Installer les dépendances
+### Installer les dépendances
 Alt+F12 pour ouvrir le terminal : 
+```bash
+mvn clean install -DskipTests
+```
 
-    mvn clean install -DskipTests
+### Installer les plugins
+File -\> Settings... -\> Plugins
+
+Installer les plugins Checkstyle-IDEA et MarkDown Navigator (ou MarkDown support)
+
+Redémarrer IntelliJ et revenir dans File -\> Settings... -\> Checkstyle
+
+Sous _Configuration File_, ajouter le fichier _resources/intcheckstyle.xml_
 
 Vous êtes parrés pour naviguer dans le HL !
 
-### Architecture générale
+## Architecture générale
 Le HL est composé de trois modules Maven :
     
-* **T³HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
+* **T3HL-common** : Socle commun aux codes des deux robots, il regroupe la gestion des données des capteurs, la gestion
     des mouvements du robot et la gestion des ordres à envoyer au LL
     
-* **T³HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
+* **T3HL-master** : IA du robot principal, il concentre toutes les décisions stratégiques
 
-* **T³HL-slave** : IA du robot secondaire
+* **T3HL-slave** : IA du robot secondaire
 
-#### T³HL-common
+* **T3HL-simulator** : Simulateur du LL permettant de faire tourner le HL
+
+### T3HL-common
 
 L'architecture de ce projet est orientée micro-services : l'IA se base sur plusieurs modules qui ont tous une tâche bien
 définie, et qui communiquent entre eux si besoin. Elle est construite de manière à ce qu'elle soit maintenable, 
@@ -68,7 +87,7 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
   Niveau sans avoir à s'occuper du côté de la table sur lequel navigue notre robot, et surtout sans avoir
   d'incompréhension lorsque l'on parle à ce cher Bas Niveau. Il offre aux autres modules, via la classe principale
   OrderWrapper les méthodes permettant d'envoyer tous les ordres que le Bas Niveau gère.
-  
+
 * Data : le plus gros package, et sans doute le plus complexe du HL, il regroupe toutes les données provenant de 
   l'extérieur, à savoir celles du Lidar ou des capteurs infrarouges Sick par exemple, ainsi que les contrôleurs qui
   récupèrent ces données et les traitent afin qu'elles soient utilisables par tous les autres modules du HL. Par exemple, 
@@ -76,9 +95,12 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
   classes, également dans le package data, définissent également comment est-ce que l'on représente la table afin que
   l'on puisse aisément s'y déplacer !
   
-* Locomotion : dernier package à ce jour, ce module un peu plus haut niveau regroupe les fonctions permettant au robot
+* Locomotion : ce module un peu plus haut niveau regroupe les fonctions permettant au robot
   de se déplacer en évitant si possible l'adversaire et les collisions avec les bords de la table et les obstacles
-  
+
+* Scripts : ce package regroupe les classes abstraites et interfaces definissant le fonctionnement d'un script ! Un script
+  est une suite d'action à faire pour le robot, implémentée dans la methode _Script.execute_.
+
 L'orchestration de tous ces packages et modules se fait de la manière suivante :
 
 ![TTHL - Architecture générale](doc/images/TTHL.png)
@@ -87,121 +109,127 @@ L'orchestration de tous ces packages et modules se fait de la manière suivante 
 
 **Pour une vue plus précise, voir les annexes. Il existe un MEMO uml si besoin (doc/MEMO.md)**
 
-#### T³HL-master
-#### T³HL-slave
+### T3HL-master
+### T3HL-slave
 
-### Architecture détaillée
+## Architecture détaillée
 Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
-#### T³HL-common
-##### Utils 
+### T3HL-common
+#### Utils 
 * **Log**
 
-Le service de log est une enum : chaque instance représente un canal de journalisation que l'on peut activer et
+Le service de log est une `enum` : chaque instance représente un canal de journalisation que l'on peut activer et
 désactiver au besoin, le but étant d'éviter de surcharger le terminal d'informations lorsque l'on se concentre sur une
-fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print. Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche
-toujours, que le canal spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas 
-instancié !
+fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print.
+Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche toujours, que le canal
+spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas instancié !
 Utilisation :
-    
-    Log.CANNAL.setActive(true);
-    Log.CANNAL.debug("Debut de la methode A");  // Ca s'affiche !
-    Log.CANNAL.setActive(false);
-    Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
-    Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
+```Java
+Log.CANNAL.setActive(true);
+Log.CANNAL.debug("Debut de la methode A");  // Ca s'affiche !
+Log.CANNAL.setActive(false);
+Log.CANNAL.warning("Fin de la methode A");  // Ca ne s'affiche pas...
+Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
+```
 
 * **Config**
 
 La config est une librairie externe utilisée pour changer des paramètres dans le Haut Niveau sans avoir à recompiler. Par 
-exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui aussi géré par le 
-container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
+exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui
+aussi géré par le container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
 les valeurs des paramètres par défaut. Les valeurs chargées par le container à l'instanciation des services sont 
-présentes dans le fichier config.txt. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
+présentes dans le fichier `config.txt`. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
 
 * **Container**
 
 Le container fait office à la fois de factory .ie il instancie les services(toutes les classes qui implémentent l'interface Service), 
-et de gestion des dépendances : lorsque  l'on demande un service via la méthode _getService(Class class)_, le container va instancier 
-tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
-    
-    Container container = Container.getInstance("Master");
-    MonService service = container.getService(MonService.class);
-    
+et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va
+instancier tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
+```Java
+Container container = Container.getInstance("Master");
+MonService service = container.getService(MonService.class);
+```
 "Tu nous parles de service depuis tout à l'heure mais c'est quoi au juste un service ???"
 
 Et bien c'est un **singleton** offrant des **fonctionnalités** bien définies ! Dans notre cas c'est une interface qui 
-doit surcharger la méthode _public void updateConfig(Config config)_, qui permet justement de récupérer des valeurs de 
-la config ! On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
+doit surcharger la méthode `updateConfig(Config config)`, qui permet justement de récupérer des valeurs de la config !
+On entend par singleton une classe qui n'a qu'un seule instance. Exemple :
 
 ConfigData.java :
-
-    import pfg.config.ConfigInfo;
+```Java
+import pfg.config.ConfigInfo;
     
-    public enum ConfigData implements ConfigInfo {
-        PARAM_MONSERVICE(18)
-        ;
-    }
+public enum ConfigData implements ConfigInfo {
+    PARAM_MONSERVICE(18)
+    ;
+}
+```
 config/config.txt :
-
-    ...
-    PARAM_MONSERVICE =              24
-    ...
-MonService.java :
-
-    import utils.container.Service
+```
+...
+PARAM_MONSERVICE =              24
+...
+```
     
-    public class MonService implements Service {
-        private int param;
-        public MonService(MonAutreService ah) {...}
-        @Override
-        public void updateConfig(Config config) {
-            this.param = config.getInt(ConfigData.PARAM_MONSERVICE);
-        }
+MonService.java :
+```Java
+import utils.container.Service
+    
+public class MonService implements Service {
+    private int param;
+    public MonService(MonAutreService ah) {...}
+    @Override
+    public void updateConfig(Config config) {
+        this.param = config.getInt(ConfigData.PARAM_MONSERVICE);
     }
+}
+```
 
-##### Connection
+#### Connection
 * **ConnectionManager**
 
 Ce service sert à gérer des IO (Input Output) du HL, c'est-à-dire l'échange de messages entre le HL et le LL,
 mais aussi avec le Lidar, et la communication Master-Slave. Il se base sur l'enum Connection qui répertorie les
-connections du HL. Après avoir initialiser les connections à l'aide de la méthode _initConnections(Connection... connections)_,
+connections du HL. Après avoir initialiser les connections à l'aide de la méthode `initConnections(Connection... connections)`,
 on peut simplement envoyer et lire des messages grâce aux autres méthodes :
+```Java
+import connection.ConnectionManager
+import connection.Connection
 
-    import connection.ConnectionManager
-    import connection.Connection
+public static void main(String[] args) {
+    Container container = Container.getInstance("Master");
+    ConnectionManager connectionManager = container.getService(ConnectionManager.class);
 
-    public static void main(String[] args) {
-        Container container = Container.getInstance("Master");
-        ConnectionManager connectionManager = container.getService(ConnectionManager.class);
-
-        connectionManager.initConnections(Connection.LOCALHOST_SERVER, Connection.LOCALHOST_CLIENT);
-        Connection.LOCALHOST_SERVER.send("Hello !");
-        Optional<String> m = Connection.LOCALHOST_CLIENT.read();
-        String mess;
-        if (m.isPresent()) {
-            mess = m.get();
-        }
+    connectionManager.initConnections(Connection.LOCALHOST_SERVER, Connection.LOCALHOST_CLIENT);
+    Connection.LOCALHOST_SERVER.send("Hello !");
+    Optional<String> m = Connection.LOCALHOST_CLIENT.read();
+    String mess;
+    if (m.isPresent()) {
+        mess = m.get();
     }
+}
+```
 
-**ATTENTION** : Dans le HL, les connections sont initialisées dans le Listener ! (voir plus bas)
+**ATTENTION** : Dans le HL, les connections sont initialisées dans le `Listener` ! (voir plus bas)
 
-##### Orders
+#### Orders
 * **OrderWrapper**
 
 L'order wrapper est un service servant à simplifier l'envoi d'ordres au bas niveau via des méthodes plus simples
 d'utilisation. Par exemple, plutôt que de devoir écrire, à chaque fois que l'on veut envoyer au bas niveau l'ordre 
-d'avancer d'une certaine distance _Connection.TEENSY_MASTER.send("d 100")_, on préfère utiliser une méthode
-du style _orderWrapper.moveLenghtwise(100)_ ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
-sur des enums qui implémentent l'interface _orders.order.Order_, et qui typent les chaînes de caractères correspondant aux
-ordres que l'on envoie au bas niveau. Regardez la classe _orders.order.MotionOrder_ ainsi que dans l'order wrapper
+d'avancer d'une certaine distance `Connection.TEENSY_MASTER.send("d 100")`, on préfère utiliser une méthode
+du style `orderWrapper.moveLenghtwise(100)` ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
+sur des enums qui implémentent l'interface `orders.order.Order`, et qui typent les chaînes de caractères correspondant aux
+ordres que l'on envoie au bas niveau. Regardez la classe `orders.order.MotionOrder` ainsi que dans l'order wrapper
 pour plus d'informations.
 
 L'order wrapper ne s'occupe pas que de simplifier l'envoie d'ordre au bas-niveau, il est également en charge de
 la symétrisation des ordres. Pour ne pas avoir à écrire deux version du code, une pour chaque côté de la table, le
 haut niveau réfléchit toujours du même côté et symétrise les ordres envoyés au bas niveau si nécessaire. C'est
 au niveau de l'order wrapper que cela se fait. Imaginons que le HL réfléchisse toujours du côté violet, et que
-l'on utilise la méthode _moveToPoint(Vec2 point)_, avec _point\[x: 370, y: 800\] (voir en annexe pour le repère
-de la table). Si l'on est du côté violet, l'order wrapper doit envoyé au LL la chaîne de caractères _"p 370 800"_.
-Si l'on est du côté jaune, il envoie _"p -370 800"_.
+l'on utilise la méthode `moveToPoint(Vec2 point)`, avec point\[x: 370, y: 800\] (voir en annexe pour le repère
+de la table). Si l'on est du côté violet, l'order wrapper doit envoyé au LL la chaîne de caractères `"p 370 800"`.
+Si l'on est du côté jaune, il envoie `"p -370 800"`.
 
 "Et du coup comment je crée un ordre ?"
 
@@ -209,27 +237,29 @@ La première chose à faire est de se mettre d'accord avec le bas niveau sur la 
 et le format d'envoi si nécéssaire. Une fois ceci fait, c'est tout simple si c'est un actionneur !
 
 orders.order.ActuatorsOrder.java:
-
-    public enum ActuatorsOrder {
-        ...
-        MON_ORDRE_ACTIONNEUR("ordre LL", 100);
-        MON_ORDRE_SYMETRIQUE("ordre LL 2", 100); // S'il a besoin d'être symétrisé
-        ...
-    }
+```Java
+public enum ActuatorsOrder {
+    ...
+    MON_ORDRE_ACTIONNEUR("ordre LL", 100);
+    MON_ORDRE_SYMETRIQUE("ordre LL 2", 100); // S'il a besoin d'être symétrisé
+    ...
+}
+```
 
 Si l'ordre a besoin d'être symétrisé (si l'actionneur à bouger dépend du côté de la couleur qui nous a été attribuée) :
 
 orders.SymmetrizedActuatorOrderMap.java:
-
-    public class SymmetrizedActuatorOrderMap implement Service {
-        ...
-        private SymmetrizedActuatorOrderMap {
-            correspondanceMap.put(ActuatorOrder.MON_ORDRE_ACTIONNEUR, ActuatorOrder.MON_ORDRE_SYMETRIQUE);
-        }
-        ...
+```Java
+public class SymmetrizedActuatorOrderMap implement Service {
+    ...
+    private SymmetrizedActuatorOrderMap {
+        correspondanceMap.put(ActuatorOrder.MON_ORDRE_ACTIONNEUR, ActuatorOrder.MON_ORDRE_SYMETRIQUE);
     }
+    ...
+}
+```
 
-Voilà pour un ordre de type actionneur, la méthode _useActuator(ActuatorOrder order, boolean waitForCompletion)_
+Voilà pour un ordre de type actionneur, la méthode `useActuator(ActuatorOrder order, boolean waitForCompletion)`
 s'occupe du reste !
 
 "Le reste ? Du genre l'entier à côté de la chaîne de caractère et le booléen waitForCompletion
@@ -240,7 +270,7 @@ l'action est considérée comme immédiate et le HL va continuer sa réflexion e
 souvent à des actions qui se déroulent en même temps, et ce n'est pas toujours souhaitable. Cependant il y a bien des
 fois où c'est pratique de déplier/replier des actionneurs en même temps ! C'est pourquoi ce petit booléen
 waitForCompletion existe dans le prototype de la méthode. Mis à false, le HL ne va pas attendre le temps indiqué
-dans la classe _orders.order.ActuatorsOrder_ avant de passer à la suite.
+dans la classe `orders.order.ActuatorsOrder` avant de passer à la suite.
 * **HookFactory**
 
 Le service HookFactory comme son nom l'indique, permet de créer des Hooks ! Un hook est tout simplement un mécanisme
@@ -248,49 +278,50 @@ qui permet d'effectuer une action en mouvement. C'est le LL qui s'occupe d'exéc
 crée les hooks et décide s'ils doivent être activés ou non. Pour créer un hook, rien de plus simple :
 
 oders.hooks.HookNames.java:
-
-    public enum HookNames {
-        ...
-        MON_HOOK(1, new VectCartesian(500, 400), 10, Math.PI/2, Math.PI/8, ActuatorsOrder.MON_ORDRE_ACTIONNEUR),
-        ...
-    }
+```Java
+public enum HookNames {
+    ...
+    MON_HOOK(1, new VectCartesian(500, 400), 10, Math.PI/2, Math.PI/8, ActuatorsOrder.MON_ORDRE_ACTIONNEUR),
+    ...
+}
+```
 
 Le hook est maintenant créé ! Mais il faut le configurer, c'est-à-dire dire au LL qu'il existe lors de l'exécution,
 et l'activer. Par exemple dans la classe Main.java:
-
-    public class Main {
-        Container container;
-        HookFactory factory;
+```Java
+public class Main {
+    Container container;
+    HookFactory factory;
+    ...
+    public static void main(String[] args) {
+        container = Container.getInstance("Master");
+        factory = container.getService(HookFactory.class);
         ...
-        public static void main(String[] args) {
-            container = Container.getInstance("Master");
-            factory = container.getService(HookFactory.class);
-            ...
-            factory.configureHook(HookNames.MON_HOOK);
-            factory.enableHook(HookNames.MON_HOOK);
-            ...
-            // Do what you want !
-        }
+        factory.configureHook(HookNames.MON_HOOK);
+        factory.enableHook(HookNames.MON_HOOK);
+        ...
+        // Do what you want !
     }
-
-##### Data
+}
+```
+#### Data
 * **Table**
 
 Cette classe représente la table et contient donc les obstacles et tout ce qu'on peut faire avec, les supprimer ou les
 bouger par exemple. Cette classe s'appuie donc sur la classe Obstacle est ses classes filles. La principale modification
 effectuée dans cette classe est l'ajout des obstacles fixes (les élements de jeu dont on connait la position exacte au top
 départ)
-
-    public class Table {
-        ...
-        private void initObstacle() {
-            StillRectangularObstacle monObstacle = new StillRectangularObstacle(
-                new VectCartesian(0, 1800), 1600 + 2* this.robotRay, 300 + 2* this.robotRay);
-            this.fixedObstacles.add(monObstacle);
-        }
-        ...
+```Java
+public class Table {
+    ...
+    private void initObstacle() {
+        StillRectangularObstacle monObstacle = new StillRectangularObstacle(
+            new VectCartesian(0, 1800), 1600 + 2* this.robotRay, 300 + 2* this.robotRay);
+        this.fixedObstacles.add(monObstacle);
     }
-
+    ...
+}
+```
 * **Graphe**
 
 Le Graphe sert à paramétrer la table pour qu'elle soit plus facilement navigable : on la modélise sous forme de noeuds,
@@ -303,11 +334,12 @@ de support à la réflexion pour le parcours de la table en évitant tous les ob
 
 Cette enum regroupe l'état des capteurs du robots qui ne nécessite pas de traitement, comme des contacteurs ou certains
 capteurs de présence. Pour ajouter un capteur, rien de plus simple, on spécifie son type :
-
-    public enum SensorState {
-        EXEMPLE(1.8, Double.class),
-        ;
-    }
+```Java
+public enum SensorState {
+    EXEMPLE(1.8, Double.class),
+    ;
+}
+```
 
 * **XYO**
 
@@ -322,40 +354,42 @@ indiqué par le header du message. Ces headers sont définis dans l'enum data.co
 caractère à un type enuméré (instance d'enum). Ces messages sont redistribués aux controlers, qui traitent et stockent
 les données reçues. Un controler "s'abonne" à un cannal via le Listener pour recevoir et traiter les données :
 data.controlers.Channel.java :
-
-    public enum Channel {
-        MY_CHANNEL((char) 0x28, (char) 0x22),
-        ;
-    }
+```Java
+public enum Channel {
+    MY_CHANNEL((char) 0x28, (char) 0x22),
+    ;
+}
+```
 
 data.controlers.MonControler.java :
+```Java
+public class MonContoler extends Thread implement Service {
+    ...
+    private boolean symetry;
+    private ConcurrentLinkedQueue<String> messageQueue;
 
-    public class MonContoler extends Thread implement Service {
-        ...
-        private boolean symetry;
-        private ConcurrentLinkedQueue<String> messageQueue;
-
-        private MonControler(Listener listener) {
-            messageQueue = new ConcurrentLinkedQueue<>();
-            listener.addQueue(Channel.MY_CHANNEL, messageQueue);
-        }
-
-        ...
-        @Override
-        public void run() {
-            ...
-        }
-
-        @Override
-        public void updateConfig(Config config) {
-            this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
-        }
+    private MonControler(Listener listener) {
+        messageQueue = new ConcurrentLinkedQueue<>();
+        listener.addQueue(Channel.MY_CHANNEL, messageQueue);
     }
+
+    ...
+    @Override
+    public void run() {
+        ...
+    }
+
+    @Override
+    public void updateConfig(Config config) {
+        this.symetry = config.getString(ConfigInfoData.COLOR).equals("jaune");
+    }
+}
+```
 
 Les controlers ont aussi un rôle de symetrisation ! Il symetrise, si besoin, les données envoyées, afin que le HL s'y
 retrouve.
 
-##### Locomotion
+#### Locomotion
 * **PathFollower**
 
 Le PathFollower est un service de suivit du chemin : ce service est chargé d'envoyer les ordres appropriés au bas niveau
@@ -372,10 +406,16 @@ atteindre. Cela permet d'anticiper les changements du graphe, i.e les mouvements
 Bien entendus, on ne peut pas tout voir dans le futur : c'est pourquoi il y a beaucoup de cas à traiter. Pour plus
 d'informations, voir les commentaires.
 
-#### T³HL-master
-#### T³HL-slave
+### T3HL-master
+A compléter...
+
+### T3HL-slave
+A compléter...
+
+### T3HL-simulator
+A compléter...
     
-### Tests
+## Tests
 Les tests, indispensables pour la maintenabilité du HL, et permettant d'être efficace pour trouver l'origine de vos bugs
 lorsque vous développez de nouvelles fonctionnalités, sont découpés ici en trois packages :
 
@@ -395,7 +435,7 @@ lorsque vous développez de nouvelles fonctionnalités, sont découpés ici en t
 Ces tests sont destinés à être exécutés quotidiennement par un bot Jenkins (excépté pour les réels), vous permettant de 
 vite voir si un bug a été introduit par une feature et d'indentifier plus rapidement son origine.
 
-### Annexes
+## Annexes
 * **Utils** :
 
 ![utils.communication](doc/uml/utils.communication.png)
