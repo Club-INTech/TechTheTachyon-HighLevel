@@ -62,7 +62,7 @@ PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
-ACCELERATEUR_Y_VIOLET               =-2
+ACCELERATEUR_Y_VIOLET               =-3
 ACCELERATEUR_Y_JAUNE                =-2
 
 ZDD_X_VIOLET                        =-3
