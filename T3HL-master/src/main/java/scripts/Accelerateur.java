@@ -65,6 +65,16 @@ public class Accelerateur extends Script {
     private CompletableFuture<Void> recalageLeft;
     private CompletableFuture<Void> recalageRight;
 
+
+
+    final int decalageAccelerateur = -100;
+
+
+    /**
+     * Est-ce qu'on se recale à l'accélérateur?
+     */
+    private boolean recalageAcc;
+
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
         this.container = container;
@@ -84,7 +94,9 @@ public class Accelerateur extends Script {
                     yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_VIOLET.get();
                 }
             }
-            recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
+            if(recalageAcc) {
+                recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
+            }
             robot.turn(0);
             recalageRight.join();
 
@@ -173,7 +185,7 @@ public class Accelerateur extends Script {
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
-        robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
+        robot.gotoPoint(new VectCartesian(currentPosition.getX()-decalageAccelerateur, yEntry));
     }
 
     @Override
@@ -218,9 +230,9 @@ public class Accelerateur extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         if (version == 1) {
-            return new VectCartesian(-490+10+76, 410-78+50+10);
+            return new VectCartesian(-490+10+76 + decalageAccelerateur, 410-78+50+10);
         } else if (version == 0) {
-            return new VectCartesian(-490+10, 410-78+50+10);
+            return new VectCartesian(-490+10 + decalageAccelerateur, 410-78+50+10);
         }
         return null;
 
@@ -235,6 +247,7 @@ public class Accelerateur extends Script {
     public void updateConfig(Config config) {
         super.updateConfig(config);
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        this.recalageAcc = config.getBoolean(ConfigData.RECALAGE_ACC);
     }
 
 }

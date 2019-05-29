@@ -35,6 +35,7 @@ HOMOLOGATION                        = false
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
+RECALAGE_ACC                        = true
 
 #________________________________________________________________________________________________________________________
 
@@ -61,6 +62,7 @@ PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
+
 ACCELERATEUR_Y_VIOLET               =-5
 ACCELERATEUR_Y_JAUNE                =3
 
@@ -81,3 +83,8 @@ GETBLUEACC_X_JAUNE                  =0
 GETBLUEACC_Y_JAUNE                  =2
 GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =4
+
+SECONDAIRE_BALANCE_OFFSET_X_VIOLET  =10
+SECONDAIRE_BALANCE_OFFSET_X_JAUNE   =0
+SECONDAIRE_BALANCE_OFFSET_Y_VIOLET  =0
+SECONDAIRE_BALANCE_OFFSET_Y_JAUNE   =0
