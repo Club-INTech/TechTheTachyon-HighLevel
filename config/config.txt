@@ -63,7 +63,7 @@ PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
 ACCELERATEUR_Y_VIOLET               =-3
-ACCELERATEUR_Y_JAUNE                =-2
+ACCELERATEUR_Y_JAUNE                =0
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
