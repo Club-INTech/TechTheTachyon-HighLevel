@@ -88,17 +88,17 @@ GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
 GOLDENIUM_GOTO_X_JAUNE              =0
-GOLDENIUM_GOTO_Y_JAUNE              =20
+GOLDENIUM_GOTO_Y_JAUNE              =45
 GOLDENIUM_GOTO_X_VIOLET             =0
 GOLDENIUM_GOTO_Y_VIOLET             =0
 
 GETBLUEACC_X_JAUNE                  =0
-GETBLUEACC_Y_JAUNE                  =-1
+GETBLUEACC_Y_JAUNE                  =2
 GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =4
 
 GETBLUEACC_X_RETRAIT_JAUNE            =0
-GETBLUEACC_Y_RETRAIT_JAUNE            =-1
+GETBLUEACC_Y_RETRAIT_JAUNE            =-7
 GETBLUEACC_X_RETRAIT_VIOLET           =0
 GETBLUEACC_Y_RETRAIT_VIOLET           =0
 
