@@ -84,7 +84,7 @@ public class Accelerateur extends Script {
                     yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_VIOLET.get();
                 }
             }
-            recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
+            //recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             robot.turn(0);
             recalageRight.join();
 
