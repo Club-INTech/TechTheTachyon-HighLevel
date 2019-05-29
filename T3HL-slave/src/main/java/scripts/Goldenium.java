@@ -7,6 +7,7 @@ import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
+import orders.OrderWrapper;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
@@ -48,10 +49,12 @@ public class Goldenium extends Script {
     private boolean symetrie;
     private SynchronizationWithBuddy syncBuddy;
     private long balanceWaitTime;
+	private OrderWrapper orderWrapper;
 
 
-    public Goldenium(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
+    public Goldenium(Slave robot, OrderWrapper orderWrapper, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
+	this.orderWrapper = orderWrapper;
         this.syncBuddy = syncBuddy;
     }
 
@@ -127,25 +130,34 @@ public class Goldenium extends Script {
         */
 
 
-        try {
+        //try {
            // robot.turn(-Math.PI/2);
            // robot.recalageMeca();
             //robot.moveLengthwise(-yEntry,false);
             //robot.moveLengthwise(-72+25,false);
-           if(symetrie) {
-                robot.turn(Math.PI);
-                //robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-                robot.moveLengthwise(517-10,false);     //FIXME
-            } else {
-                robot.turn(0);
-                //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-                robot.moveLengthwise(-517,false);       //FIXME
-            }
-            //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-
-        } catch (UnableToMoveException e) {
+	try  {
+		Service.withTimeout(5000, () -> {
+		try {
+        	   if(symetrie) {
+                	robot.turn(Math.PI);
+	                //robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
+        	        robot.moveLengthwise(517-10,false);     //FIXME
+           	 } else {
+              	  robot.turn(0);
+              	  //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
+               	 robot.moveLengthwise(-517,false);       //FIXME
+            	}
+		} catch(UnableToMoveException e) {
+			e.printStackTrace();
+		}
+           	 //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
+		});
+	} catch(Exception error) {
+		orderWrapper.immobilise();
+	}
+        /*} catch (UnableToMoveException e) {
             e.printStackTrace();
-        }
+        }*/
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
