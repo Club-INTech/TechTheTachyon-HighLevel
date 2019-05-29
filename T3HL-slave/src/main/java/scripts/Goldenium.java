@@ -57,13 +57,19 @@ public class Goldenium extends Script {
 
     @Override
     public void execute(Integer version) {
+        double balanceOffsetX;
+        double balanceOffsetY;
         if (symetrie){
-            positionBalance1 = new VectCartesian(xBalance1+30, yBalance1+40);
-            positionBalance2 =new VectCartesian(xBalance2, yBalance2);
+            balanceOffsetX = Offsets.SECONDAIRE_BALANCE_OFFSET_X_VIOLET.get();
+            balanceOffsetY = Offsets.SECONDAIRE_BALANCE_OFFSET_Y_VIOLET.get();
+            positionBalance1 = new VectCartesian(xBalance1+30+balanceOffsetX, yBalance1+40+balanceOffsetY);
+            positionBalance2 =new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
         else {
-            positionBalance1 = new VectCartesian(xBalance1+20, yBalance1-10);
-            positionBalance2 = new VectCartesian(xBalance2, yBalance2);
+            balanceOffsetX = Offsets.SECONDAIRE_BALANCE_OFFSET_X_JAUNE.get();
+            balanceOffsetY = Offsets.SECONDAIRE_BALANCE_OFFSET_Y_JAUNE.get();
+            positionBalance1 = new VectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10+balanceOffsetY);
+            positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
 
