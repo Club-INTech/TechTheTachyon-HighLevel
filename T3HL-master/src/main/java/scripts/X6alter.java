@@ -62,6 +62,11 @@ public class X6alter extends Script {
     //variable pour le calcul du recalage
     int yEntryPostRecalage = 410-78+15-4-5;
 
+    /**
+     * Est-ce qu'on a un recalage sur x6?
+     */
+    private boolean usingRecalageX6;
+
     public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
         this.container = container;
@@ -193,7 +198,9 @@ public class X6alter extends Script {
                         syncBuddy.sendBalanceFree();
                         robot.turn(0);
                         robot.moveLengthwise(600,false);
-                        recalageX6();
+                        if(usingRecalageX6) {
+                            recalageX6();
+                        }
                         try {
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
@@ -475,5 +482,6 @@ public class X6alter extends Script {
         super.updateConfig(config);
         balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        usingRecalageX6 = ! config.getBoolean(ConfigData.RECALAGE_ACC);
     }
 }
