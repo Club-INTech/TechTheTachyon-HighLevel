@@ -34,6 +34,34 @@ public class X6alter extends Script {
     private SynchronizationWithBuddy syncBuddy;
     private long balanceWaitTime;
 
+    float distanceToWall;
+
+    /**
+     * Offset avec la planche
+     */
+    private final int offsetRecalage = 36;
+
+    /*
+     * Offset pour corriger la mesure des sicks (différence réel - mesuré)
+     */
+    private final int offsetSick= 6;
+
+    /**
+     * Différence en Y et X entre le sick et le centre du robot
+     */
+    private final int ySickToRobotCenter=113;
+
+    /**
+     * Distance entre les sicks et rapport entre dsick et écart de valeures mesurées pour faire un recalage en rotation
+     */
+
+    private final int dsick = 173;
+    double rapport ;
+    double ecart_mesures_sicks;
+    double teta;
+    //variable pour le calcul du recalage
+    int yEntryPostRecalage = 410-78+15-4-5;
+
     public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
         this.container = container;
@@ -162,9 +190,10 @@ public class X6alter extends Script {
 
                     try {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
-                        robot.turn(0);
                         syncBuddy.sendBalanceFree();
-                        robot.moveLengthwise(500,false);
+                        robot.turn(0);
+                        robot.moveLengthwise(600,false);
+                        recalageX6();
                         try {
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
@@ -372,6 +401,29 @@ public class X6alter extends Script {
             e.printStackTrace();
         }
     }
+
+    public void recalageX6(/*int yEntry*/) throws UnableToMoveException {
+        robot.turn(0);
+        robot.computeNewPositionAndOrientation(Sick.NOTHING);
+        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
+            rapport = ecart_mesures_sicks / dsick;
+            teta = Math.atan(-rapport);
+            distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_ARRIERE_DROIT.getLastMeasure() + Sick.SICK_AVANT_DROIT.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
+            Log.POSITION.critical("symetrie" + Sick.SICK_ARRIERE_DROIT.getLastMeasure() + " " + Sick.SICK_AVANT_DROIT.getLastMeasure() + " " + distanceToWall);
+        }
+        else {
+            ecart_mesures_sicks=Sick.SICK_AVANT_GAUCHE.getLastMeasure() - Sick.SICK_ARRIERE_GAUCHE.getLastMeasure();
+            rapport = ecart_mesures_sicks / dsick;
+            teta = Math.atan(-rapport);
+            distanceToWall = (float) (Math.cos(teta)*((Sick.SICK_AVANT_GAUCHE.getLastMeasure() + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure()) / 2 + offsetSick + ySickToRobotCenter));
+            Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
+        }
+        Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), 1543-distanceToWall), Calculs.modulo(teta, Math.PI));
+        //robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
+    }
+
 
     @Override
     public Vec2 entryPosition(Integer version) {

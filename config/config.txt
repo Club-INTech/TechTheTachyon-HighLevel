@@ -18,7 +18,7 @@ SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
 CONNECT_TO_BUDDY                    =true
-BALANCE_WAIT_TIME                   =14000
+BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
 
 #________________________________________________________________________________________________________________________
@@ -61,8 +61,8 @@ PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
-ACCELERATEUR_Y_VIOLET               =1
-ACCELERATEUR_Y_JAUNE                =-4
+ACCELERATEUR_Y_VIOLET               =-2
+ACCELERATEUR_Y_JAUNE                =-2
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
@@ -78,6 +78,6 @@ GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
 GETBLUEACC_X_JAUNE                  =0
-GETBLUEACC_Y_JAUNE                  =0
+GETBLUEACC_Y_JAUNE                  =2
 GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =4

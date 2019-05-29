@@ -92,6 +92,7 @@ public enum ActuatorsOrder implements Order {
     ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE("deposePaletZoneDep2Stock left"),
     ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE("deposePaletZoneDep2Stock right"),
     ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_OUST_BRAS("oustBras right"),
+    REBOOT_LES_BRAS("forceArmsReboot"),
     MONTE_ASCENCEUR_DROIT_DE_UN_PALET("up right"),
     MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET("up left"),
     MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET("updown right"),
@@ -121,6 +122,11 @@ public enum ActuatorsOrder implements Order {
     DESACTIVE_ELECTROVANNE_DROITE("valveoff right", 300),
     DESACTIVE_ELECTROVANNE_GAUCHE("valveoff left", 300),
     DESACTIVE_ELECTROVANNE_DU_SECONDAIRE("valveoff right", 300),
+
+    ACTIVE_COUPLE_DU_BRAS_GAUCHE("enableTorque left"),
+    ACTIVE_COUPLE_DU_BRAS_DROIT("enableTorque right"),
+    DESACTIVE_COUPLE_DU_BRAS_GAUCHE("disableTorque left"),
+    DESACTIVE_COUPLE_DU_BRAS_DROIT("disableTorque right"),
 
     ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_DEPOT("putPuckAcc right",300),
     ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_DEPOT_FINAL("putPuckAccFinalize right", 300),

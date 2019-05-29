@@ -50,16 +50,6 @@ public class PaletsX3Slave extends Script{
                 syncBuddy.sendBalanceFree();
             }
 
-            if (!symetry) {
-                offsetX= Offsets.PALETSX3_X_JAUNE.get();
-                offsetY=Offsets.PALETSX3_Y_JAUNE.get();
-            } else {
-                offsetX=Offsets.PALETSX3_X_VIOLET.get();
-                offsetY=Offsets.PALETSX3_Y_VIOLET.get();
-            }
-
-            //syncBuddy.sendBalanceFree();
-
             positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
             positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
@@ -101,15 +91,15 @@ public class PaletsX3Slave extends Script{
             getPuck();
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            robot.moveLengthwise(-85,false);
+            //robot.moveLengthwise(-85,false);
             //robot.gotoPoint(positions.get(2));
 
-            getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
-            robot.moveLengthwise(150,false);
+           // getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
+          /*  robot.moveLengthwise(150,false);
             robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
 
-            //robot.recalageMeca(false,100);
+            //robot.recalageMeca(false,100);*/
 
             robot.turn(-Math.PI/2);
 
@@ -146,11 +136,11 @@ public class PaletsX3Slave extends Script{
 
     private void getPuck() {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true);//TODO refaire position bras
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true); //TODO refaire position bras
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
+        /*robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
+        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);*/
     }
 
     @Override
@@ -163,7 +153,7 @@ public class PaletsX3Slave extends Script{
             offsetY=Offsets.PALETSX3_Y_VIOLET.get();
         }
         if (!symetry) {
-            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-150);
+            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-300);
         }
         return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
