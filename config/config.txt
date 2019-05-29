@@ -17,7 +17,7 @@ VISUALISATION                       =false
 SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
-CONNECT_TO_BUDDY                    =true
+CONNECT_TO_BUDDY                    =false
 BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
 
@@ -88,7 +88,7 @@ GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
 GOLDENIUM_GOTO_X_JAUNE              =0
-GOLDENIUM_GOTO_Y_JAUNE              =0
+GOLDENIUM_GOTO_Y_JAUNE              =20
 GOLDENIUM_GOTO_X_VIOLET             =0
 GOLDENIUM_GOTO_Y_VIOLET             =0
 
