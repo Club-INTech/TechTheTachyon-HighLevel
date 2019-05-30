@@ -35,6 +35,8 @@ HOMOLOGATION                        = false
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
+RECALAGE_ACC                        = true
+SECOURS                             =true
 
 #________________________________________________________________________________________________________________________
 
@@ -53,7 +55,7 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 
 #________________________________________________________________________________________________________________________
 [Offsets]
-PALETSX6_X_JAUNE                    =-2
+PALETSX6_X_JAUNE                    =-4
 PALETSX6_Y_JAUNE                    =5
 PALETSX6_X_VIOLET                   =10
 PALETSX6_Y_VIOLET                   =-7
@@ -61,11 +63,19 @@ PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
-ACCELERATEUR_Y_VIOLET               =-2
-ACCELERATEUR_Y_JAUNE                =-2
+ZDD_POST_BALANCE_X_JAUNE            =0
+ZDD_POST_BALANCE_Y_JAUNE            =100
+ZDD_POST_BALANCE_X_VIOLET           =0
+ZDD_POST_BALANCE_Y_VIOLET           =100
+
+ACCELERATEUR_Y_VIOLET               =-5
+ACCELERATEUR_Y_JAUNE                =-5
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
+
+ZDD_Y_JAUNE                         =-5
+ZDD_Y_VIOLET                        =-5
 
 PALETSX3_X_JAUNE                    =0
 PALETSX3_Y_JAUNE                    =0
@@ -81,3 +91,8 @@ GETBLUEACC_X_JAUNE                  =0
 GETBLUEACC_Y_JAUNE                  =2
 GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =4
+
+SECONDAIRE_BALANCE_OFFSET_X_VIOLET  =10
+SECONDAIRE_BALANCE_OFFSET_X_JAUNE   =0
+SECONDAIRE_BALANCE_OFFSET_Y_VIOLET  =0
+SECONDAIRE_BALANCE_OFFSET_Y_JAUNE   =0

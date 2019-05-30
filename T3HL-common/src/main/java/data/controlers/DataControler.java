@@ -79,6 +79,7 @@ public class DataControler extends Thread implements Service {
      *              le listener
      */
     public DataControler(Container container, Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
+        super("DataController");
         this.container = container;
         this.listener = listener;
         this.timer = timer;
@@ -123,8 +124,10 @@ public class DataControler extends Thread implements Service {
         }
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
-        while (!Thread.currentThread().isInterrupted()) {
-            for (ChannelHandler channelHandler : this.channelHandlers){
+        ArrayList<ChannelHandler> handlers = this.channelHandlers;
+        while (!isInterrupted()) {
+            for (int i = 0; i < handlers.size(); i++) {
+                ChannelHandler channelHandler = handlers.get(i);
                 channelHandler.checkAndHandle();
             }
         }

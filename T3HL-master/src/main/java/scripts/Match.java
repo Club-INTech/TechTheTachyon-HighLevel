@@ -15,6 +15,7 @@ public class Match extends Script {
     private final ScriptManagerMaster scriptManagerMaster;
     private SynchronizationWithBuddy syncBuddy;
     private final Container container;
+    private boolean secours;
 
     public Match(Master robot, Table table, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy, Container container) {
         super(robot, table);
@@ -57,20 +58,9 @@ public class Match extends Script {
 
             //On tente d'aller à l'accélérateur
             boolean exceptionRaised = false;
-            try {
-                robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
-            } catch (UnableToMoveException e) {
-                exceptionRaised = true;
-                e.printStackTrace();
-            }
-            if (exceptionRaised) {
-                //Si on n'a pas réussi, on attend 2 secondes et on retente
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                exceptionRaised = false;
+
+
+            if(!secours) {
                 try {
                     robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
                 } catch (UnableToMoveException e) {
@@ -78,7 +68,7 @@ public class Match extends Script {
                     e.printStackTrace();
                 }
                 if (exceptionRaised) {
-                    //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
+                    //Si on n'a pas réussi, on attend 2 secondes et on retente
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e) {
@@ -91,9 +81,24 @@ public class Match extends Script {
                         exceptionRaised = true;
                         e.printStackTrace();
                     }
+                    if (exceptionRaised) {
+                        //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        exceptionRaised = false;
+                        try {
+                            robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
+                        } catch (UnableToMoveException e) {
+                            exceptionRaised = true;
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-            if (exceptionRaised) {
+            if (secours || exceptionRaised) {
                 //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
                 try {
                     container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
@@ -201,5 +206,6 @@ public class Match extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
+        this.secours = config.getBoolean(ConfigData.SECOURS);
     }
 }

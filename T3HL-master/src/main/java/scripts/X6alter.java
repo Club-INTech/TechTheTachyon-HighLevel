@@ -62,6 +62,11 @@ public class X6alter extends Script {
     //variable pour le calcul du recalage
     int yEntryPostRecalage = 410-78+15-4-5;
 
+    /**
+     * Est-ce qu'on a un recalage sur x6?
+     */
+    private boolean usingRecalageX6;
+
     public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
         this.container = container;
@@ -87,6 +92,14 @@ public class X6alter extends Script {
         /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
             Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
          */
+
+        double offsetZddX = Offsets.ZDD_POST_BALANCE_X_JAUNE.get();
+        double offsetZddY = Offsets.ZDD_POST_BALANCE_Y_JAUNE.get();
+        if(symetry) {
+            offsetZddX = Offsets.ZDD_POST_BALANCE_X_VIOLET.get();
+            offsetZddY = Offsets.ZDD_POST_BALANCE_Y_VIOLET.get();
+        }
+        Vec2 positionZoneDepart = new VectCartesian(1500-250+offsetZddX, 500+offsetZddY);
 
         int i=0;
         loadOffsets();
@@ -145,27 +158,28 @@ public class X6alter extends Script {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                grabPuckGoto(robot, positions.get(1), false, true);
+                grabPuckGoto(robot, positions.get(1), false, true, false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 2è palet
-                grabPuckGoto(robot, positions.get(2), false, true);
+                grabPuckGoto(robot, positions.get(2), false, true, false);
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4è palet
-                grabPuckGoto(robot, positions.get(4), false, true); // skip le palet bleu
+                grabPuckGoto(robot, positions.get(4), false, true, false); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-                grabPuckGoto(robot, positions.get(5), false, true);
+                grabPuckGoto(robot, positions.get(5), false, true, false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 6ème palet
-                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
+
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false, false); // retourne devant le bleu
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
-                grabPuck(robot, 0, true, false);
+                grabPuck(robot, 0, true, false, false);
 
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
@@ -191,10 +205,16 @@ public class X6alter extends Script {
                     try {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                         syncBuddy.sendBalanceFree();
-                        robot.turn(0);
-                        robot.moveLengthwise(600,false);
-                        recalageX6();
+
+                      //  robot.turn(0);
+                      //  robot.moveLengthwise(600,false);
+                        if(usingRecalageX6) {
+                            recalageX6();
+                        }
+
+                        // on va dans notre zone de départ pour libérer le chemin
                         try {
+                            robot.followPathTo(positionZoneDepart);
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
                             e.printStackTrace();
@@ -278,16 +298,19 @@ public class X6alter extends Script {
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator) throws UnableToMoveException {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator, boolean lastInChain) throws UnableToMoveException {
+        Log.STRATEGY.critical("Entrée dans grabPuck");
         if(puckStored != null) {
+            Log.STRATEGY.warning("Attente de puckStored");
             puckStored.join();
+            Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
 
         try {
             robot.turn(Math.PI); // réoriente le robot vers PI
-            storePuck(blue, moveElevator);
+            storePuck(blue, moveElevator, lastInChain);
 
             if (moveDistance != 0) {
                 robot.moveLengthwise(moveDistance, false);
@@ -295,9 +318,11 @@ public class X6alter extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+
+        Log.STRATEGY.critical("Sortie de grabPuck");
     }
 
-    private void storePuck(boolean blue, boolean moveElevator) {
+    private void storePuck(boolean blue, boolean moveElevator, boolean lastInChain) {
         puckStored = async("Dépôt", () -> {
             if(blue) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
@@ -314,6 +339,9 @@ public class X6alter extends Script {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if(lastInChain) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DERNIER_PALET, true);
+                }
             }
         });
     }
@@ -322,13 +350,17 @@ public class X6alter extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      */
-    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator) throws UnableToMoveException {
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator, boolean lastInChain) throws UnableToMoveException {
+        Log.STRATEGY.critical("Entrée dans grabPuckGoto");
         if(puckStored != null) {
+            Log.STRATEGY.warning("Attente de puckStored");
             puckStored.join();
+            Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        storePuck(blue, moveElevator);
+        storePuck(blue, moveElevator, lastInChain);
         robot.gotoPoint(pos);
+        Log.STRATEGY.critical("Sortie dans grabPuckGoto");
     }
 
     /**
@@ -475,5 +507,6 @@ public class X6alter extends Script {
         super.updateConfig(config);
         balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
         symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        usingRecalageX6 = ! config.getBoolean(ConfigData.RECALAGE_ACC);
     }
 }

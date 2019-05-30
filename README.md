@@ -2,13 +2,16 @@
 
 Code de l'année 2019 
 
-## TODO
-* [ ] Découvrir le HL et sa doc
-* [ ] Script
-* [ ] Cas particulier pathfinding
-* [ ] Créer les ordres (avec le LL)
-* [ ] S'occuper du recalage avec les sicks (commencer par voir les maths)
-* [ ] Com avec l'électron
+### TODO
+* [x] Découvrir le HL et sa doc
+* [x] Scripts
+* [?] Cas particulier pathfinding
+* [x] Créer les ordres (avec le LL)
+* [x] S'occuper du recalage avec les sicks (commencer par voir les maths)
+* [x] Com avec l'électron
+* [x] Tester la COM LL <-> HL
+* [x] Tester la COM master <-> slave
+* [x] Test LIDAR + Pathfinging
 * [ ] IA
 
 ## Setup sur le robot

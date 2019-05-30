@@ -58,6 +58,7 @@ public class Electron extends Script{
 
             robot.increaseScore(20);
         });
+        electronThread.setName("Electron");
         electronThread.setDaemon(true);
         electronThread.start();
     }

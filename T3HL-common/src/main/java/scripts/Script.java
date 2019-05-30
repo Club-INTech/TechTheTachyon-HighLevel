@@ -196,8 +196,9 @@ public abstract class Script implements Service {
         Thread thread = new Thread(() -> {
             action.run();
             future.complete(null);
+            Log.STDOUT.critical("Fin async "+name);
         });
-        thread.setName(name);
+        thread.setName(name+" (async)");
         thread.setDaemon(true);
         thread.start();
         return future;

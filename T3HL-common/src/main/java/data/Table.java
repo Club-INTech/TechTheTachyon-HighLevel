@@ -290,7 +290,7 @@ public class Table implements Service {
     public void updateMobileObstacles(List<Vec2> points) {
         MobileCircularObstacle obstacle;
         Vec2 point;
-        Log.LIDAR.debug("Mise à jour des Obstacle...");
+      //  Log.LIDAR.debug("Mise à jour des Obstacle...");
 
         mobileObstacleBuffer.clear();
         synchronized (mobileObstacles) {
@@ -303,12 +303,12 @@ public class Table implements Service {
                     point = pointIterator.next();
                     if (obstacle.isInObstacle(point)) {
                         obstacle.update(point);
-                        Log.LIDAR.debug("MàJ de l'obstacle mobile : " + obstacle);
+                   //     Log.LIDAR.debug("MàJ de l'obstacle mobile : " + obstacle);
                         pointIterator.remove();
                     }
                 }
                 if (obstacle.getOutDatedTime() < System.currentTimeMillis()) {
-                    Log.LIDAR.debug("Mort de l'obstacle mobile : " + obstacle);
+            //        Log.LIDAR.debug("Mort de l'obstacle mobile : " + obstacle);
                     mobileObstacleIterator.remove();
                 }
             }
@@ -320,7 +320,7 @@ public class Table implements Service {
                 ray = buddyRobotRay;
             }
             MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray+robotRay);
-            Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
+     //       Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
             mobileObstacleBuffer.add(obst);
         }
 
@@ -339,7 +339,7 @@ public class Table implements Service {
                 //this.graphe.writeLock().unlock();
             }
         } else {
-            Log.LIDAR.warning("Graphe non instancié");
+       //     Log.LIDAR.warning("Graphe non instancié");
         }
         Log.LIDAR.debug("Mise à jour des obstacles terminées");
     }
