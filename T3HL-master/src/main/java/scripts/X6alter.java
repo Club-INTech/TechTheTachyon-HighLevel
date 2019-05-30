@@ -206,8 +206,8 @@ public class X6alter extends Script {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                         syncBuddy.sendBalanceFree();
 
-                        robot.turn(0);
-                        robot.moveLengthwise(600,false);
+                      //  robot.turn(0);
+                      //  robot.moveLengthwise(600,false);
                         if(usingRecalageX6) {
                             recalageX6();
                         }
