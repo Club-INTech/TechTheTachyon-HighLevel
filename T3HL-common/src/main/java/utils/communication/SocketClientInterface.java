@@ -45,7 +45,7 @@ public class SocketClientInterface extends SocketInterface {
         this.initiated = false;
         Thread thread = new Thread(() -> {
             long start = System.currentTimeMillis();
-            while (System.currentTimeMillis() - start < SocketInterface.CONNECTION_TIMEOUT) {
+            while (System.currentTimeMillis() - start < SocketInterface.CONNECTION_TIMEOUT || !isMandatory()) {
                 synchronized (this) {
                     try {
                         Log.COMMUNICATION.debug(String.format("Trying to connect to %s on port %d",ipAddress, port));
@@ -63,7 +63,7 @@ public class SocketClientInterface extends SocketInterface {
                     e.printStackTrace();
                 }
             }
-            if (System.currentTimeMillis() - start > SocketClientInterface.CONNECTION_TIMEOUT) {
+            if (System.currentTimeMillis() - start > SocketClientInterface.CONNECTION_TIMEOUT && isMandatory()) {
                 Log.COMMUNICATION.critical(String.format("FAILED to connect to %s on port %d", ipAddress, port));
             }
             else{
