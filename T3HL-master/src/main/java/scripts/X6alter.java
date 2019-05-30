@@ -162,8 +162,10 @@ public class X6alter extends Script {
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-                grabPuckGoto(robot, positions.get(5), false, true);
-                robot.pushPaletDroit(CouleurPalet.ROUGE);
+// FIXME
+//                grabPuckGoto(robot, positions.get(5), false, true);
+//                robot.pushPaletDroit(CouleurPalet.ROUGE);
+                robot.gotoPoint(positions.get(4));
 
                 //On prend le 6ème palet
                 grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
@@ -287,7 +289,9 @@ public class X6alter extends Script {
      */
     private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator) throws UnableToMoveException {
         if(puckStored != null) {
+            Log.STRATEGY.warning("Attente de puckStored");
             puckStored.join();
+            Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
@@ -331,7 +335,9 @@ public class X6alter extends Script {
      */
     private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator) throws UnableToMoveException {
         if(puckStored != null) {
+            Log.STRATEGY.warning("Attente de puckStored");
             puckStored.join();
+            Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
         storePuck(blue, moveElevator);
