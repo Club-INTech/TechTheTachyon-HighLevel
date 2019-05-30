@@ -139,7 +139,7 @@ public class Goldenium extends Script {
               	  robot.turn(0);
               	  //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
                	 //robot.moveLengthwise(-517,false);       //FIXME
-                   robot.softGoTo(new VectCartesian(-500 + 230-517,154 + 100 + 34 - 30),false);
+                   robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
             	}
         } catch(UnableToMoveException e) {
             e.printStackTrace();
