@@ -23,6 +23,7 @@ import connection.ConnectionManager;
 import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
 import utils.ConfigData;
+import utils.LastElementCollection;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ServiceThread;
@@ -92,6 +93,7 @@ public class Listener extends ServiceThread {
      * Date du dernier envoi de position
      */
     private long lastTimeSinceBuddyUpdate;
+    private List<Channel> channelList;
 
     /**
      * Construit un listener
@@ -101,6 +103,7 @@ public class Listener extends ServiceThread {
         this.connectionManager = connectionManager;
         this.buddySync = buddySync;
         this.collectionMap = new HashMap<>();
+        this.channelList = new LinkedList<>();
         this.setPriority(Thread.MAX_PRIORITY);
     }
 
@@ -111,7 +114,8 @@ public class Listener extends ServiceThread {
      */
     private void handleMessage(String header, String message) {
       //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
-        for (Channel registeredChannel : collectionMap.keySet()) {
+        for (int i = 0; i < channelList.size(); i++) {
+            Channel registeredChannel = channelList.get(i);
             if (registeredChannel.getHeaders().equals(header)) {
                 collectionMap.get(registeredChannel).add(message);
             }
@@ -125,6 +129,7 @@ public class Listener extends ServiceThread {
      */
     public void addCollection(Channel channel, Collection<String> queue){
         collectionMap.put(channel, queue);
+        channelList.add(channel);
     }
 
     @Override
@@ -199,21 +204,20 @@ public class Listener extends ServiceThread {
         String header;
         String message;
         Optional<String> buffer;
-        Iterator<Connection> iterator;
-        Connection current;
+        ArrayList<Connection> initiatedConnections = connectionManager.getInitiatedConnections();
+        LinkedList<Connection> toClose = new LinkedList<>();
         while (!isInterrupted()) {
-            iterator = connectionManager.getInitiatedConnections().iterator();
-            while (iterator.hasNext()){
-                current = iterator.next();
+            for (int i = 0; i < initiatedConnections.size(); i++) {
+                Connection current = initiatedConnections.get(i);
                 try {
                     buffer = current.read();
-                    while(buffer.isPresent()) {
-                        if(buffer.get().length() >= 2) {
+                    while (buffer.isPresent()) {
+                        if (buffer.get().length() >= 2) {
                             header = buffer.get().substring(0, 2);
                             message = buffer.get().substring(2);
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                                if(buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenBuddyPosUpdates) {
+                                if (buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenBuddyPosUpdates) {
                                     buddySync.sendPosition();
                                     lastTimeSinceBuddyUpdate = System.currentTimeMillis();
                                 }
@@ -225,9 +229,12 @@ public class Listener extends ServiceThread {
                 } catch (CommunicationException e) {
                     e.printStackTrace();
                     Log.COMMUNICATION.critical("Impossible de lire sur la connexion " + current.name() + " : fermeture de la connexion");
-                    iterator.remove();
+                    toClose.add(current);
                 }
             }
+
+            initiatedConnections.removeAll(toClose);
+            toClose.clear();
         }
     }
 

@@ -29,6 +29,7 @@ public class SimulatorManager extends Thread {
     /* ============================================= Constructeur ============================================= */
     /** Constructeur */
     SimulatorManager(){
+        super("SimulatorManagerThread");
         this.initDefaultPassedParameters();
     }
 
