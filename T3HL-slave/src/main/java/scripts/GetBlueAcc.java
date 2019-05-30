@@ -88,11 +88,11 @@ public class GetBlueAcc extends Script {
             }
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(-500+230+100+offsetX+offsetXGoto,154+100+34+10+offsetY+offsetYGoto),false);
+                robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
                 robot.turn(Math.PI);
             }
             else {
-                robot.softGoTo(new VectCartesian(-500 + 230+offsetX+offsetXGoto, 154 + 100 + 34 - 30+offsetY+offsetYGoto), false);
+                robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
                 robot.turn(0);
             }
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR_RED);
