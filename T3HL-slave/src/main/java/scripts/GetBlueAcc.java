@@ -80,13 +80,19 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
 
 
+            double offsetXGoto = Offsets.GETBLUEACC_X_DEPOT_JAUNE.get();
+            double offsetYGoto = Offsets.GETBLUEACC_Y_DEPOT_JAUNE.get();
+            if(symetrie) {
+                offsetXGoto = Offsets.GETBLUEACC_X_DEPOT_VIOLET.get();
+                offsetYGoto = Offsets.GETBLUEACC_Y_DEPOT_VIOLET.get();
+            }
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(-500+230+100+offsetX,154+100+34+10+offsetY),false);
+                robot.softGoTo(new VectCartesian(-500+230+100+offsetX+offsetXGoto,154+100+34+10+offsetY+offsetYGoto),false);
                 robot.turn(Math.PI);
             }
             else {
-                robot.softGoTo(new VectCartesian(-500 + 230+offsetX, 154 + 100 + 34 - 30+offsetY), false);
+                robot.softGoTo(new VectCartesian(-500 + 230+offsetX+offsetXGoto, 154 + 100 + 34 - 30+offsetY+offsetYGoto), false);
                 robot.turn(0);
             }
             //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR_RED);
