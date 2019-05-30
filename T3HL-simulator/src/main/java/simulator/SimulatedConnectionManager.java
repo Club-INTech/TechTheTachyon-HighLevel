@@ -25,9 +25,10 @@ public class SimulatedConnectionManager extends Thread {
      * @param port port sur lequel écoute le simulateur
      */
     SimulatedConnectionManager(int port){
+        super("SimulatedConnectionManager (port "+port+")");
         this.port=port;
         //On initialise le dernier message reçu et le serveur Socket
-        this.receivedMessage = new ConcurrentLinkedQueue<String>();
+        this.receivedMessage = new ConcurrentLinkedQueue<>();
         if(port != VISUALISATION_PORT) {
             try {
                 System.out.println("Ouverture d'une socket sur le port "+port);
