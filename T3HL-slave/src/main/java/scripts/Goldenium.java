@@ -78,15 +78,19 @@ public class Goldenium extends Script {
         try  {
             if(symetrie) {
                 robot.turn(Math.PI);
+                robot.setTranslationSpeed(Speed.SLOW_ALL);
                 robot.moveLengthwise(-517, false);
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
             } else {
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
                 robot.turn(0);
+                robot.setTranslationSpeed(Speed.SLOW_ALL);
                 robot.moveLengthwise(-517, false);
             }
         } catch(UnableToMoveException e) {
             e.printStackTrace();
+        } finally {
+            robot.setTranslationSpeed(Speed.DEFAULT_SPEED);
         }
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
