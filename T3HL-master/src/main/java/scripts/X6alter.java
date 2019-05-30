@@ -158,20 +158,17 @@ public class X6alter extends Script {
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4è palet
-                grabPuckGoto(robot, positions.get(4), false, true, true); // skip le palet bleu
+                grabPuckGoto(robot, positions.get(4), false, true, false); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
-//                grabPuckGoto(robot, positions.get(5), false, true);
-//                robot.pushPaletDroit(CouleurPalet.ROUGE);
+                grabPuckGoto(robot, positions.get(5), false, true, false);
+                robot.pushPaletDroit(CouleurPalet.ROUGE);
 
-                robot.gotoPoint(positions.get(5));
                 //On prend le 6ème palet
 
-                robot.moveLengthwise(-DISTANCE_INTER_PUCK*2, false);
-                // FIXME
-                //grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
-                ///robot.pushPaletDroit(CouleurPalet.VERT);
+                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false, false); // retourne devant le bleu
+                robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
                 grabPuck(robot, 0, true, false, false);
