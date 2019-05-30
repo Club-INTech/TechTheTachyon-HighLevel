@@ -141,12 +141,13 @@ public class Goldenium extends Script {
         	   if(symetrie) {
                 	robot.turn(Math.PI);
 	                //robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-        	        //robot.moveLengthwise(517-10,false);     //FIXME
-                   robot.softGoTo(new VectCartesian(-500 + 230-507,154 + 100 + 34 - 30),false);
+        	        robot.moveLengthwise(517-10,false);     //FIXME
+                   //robot.softGoTo(new VectCartesian(-500 + 230-507,154 + 100 + 34 - 30),false);
            	 } else {
               	  robot.turn(0);
               	  //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-               	 robot.moveLengthwise(-517,false);       //FIXME
+               	 //robot.moveLengthwise(-517,false);       //FIXME
+                   robot.softGoTo(new VectCartesian(-500 + 230-517,154 + 100 + 34 - 30),false);
             	}
 		} catch(UnableToMoveException e) {
 			e.printStackTrace();
