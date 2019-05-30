@@ -75,10 +75,8 @@ public class GetBlueAcc extends Script {
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_PREND_BLEU,true);
             TimeUnit.MILLISECONDS.sleep(250);
-            async("Remonte le palet bleu dans l'ascenseur du secondaire", () -> {
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
-            });
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+            robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
