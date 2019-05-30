@@ -150,15 +150,15 @@ public class X6alter extends Script {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                grabPuckGoto(robot, positions.get(1), false, true);
+                grabPuckGoto(robot, positions.get(1), false, true, false);
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 2è palet
-                grabPuckGoto(robot, positions.get(2), false, true);
+                grabPuckGoto(robot, positions.get(2), false, true, false);
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4è palet
-                grabPuckGoto(robot, positions.get(4), false, true); // skip le palet bleu
+                grabPuckGoto(robot, positions.get(4), false, true, true); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
@@ -174,7 +174,7 @@ public class X6alter extends Script {
                 ///robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
-                grabPuck(robot, 0, true, false);
+                grabPuck(robot, 0, true, false, false);
 
                 long balanceStart = System.currentTimeMillis();
                 // On va à la balance
@@ -289,7 +289,7 @@ public class X6alter extends Script {
      * @param robot le robot
      * @param moveDistance la distance au prochain palet
      */
-    private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator) throws UnableToMoveException {
+    private void grabPuck(Robot robot, int moveDistance, boolean blue, boolean moveElevator, boolean lastInChain) throws UnableToMoveException {
         Log.STRATEGY.critical("Entrée dans grabPuck");
         if(puckStored != null) {
             Log.STRATEGY.warning("Attente de puckStored");
@@ -301,7 +301,7 @@ public class X6alter extends Script {
 
         try {
             robot.turn(Math.PI); // réoriente le robot vers PI
-            storePuck(blue, moveElevator);
+            storePuck(blue, moveElevator, lastInChain);
 
             if (moveDistance != 0) {
                 robot.moveLengthwise(moveDistance, false);
@@ -313,13 +313,12 @@ public class X6alter extends Script {
         Log.STRATEGY.critical("Sortie de grabPuck");
     }
 
-    private void storePuck(boolean blue, boolean moveElevator) {
+    private void storePuck(boolean blue, boolean moveElevator, boolean lastInChain) {
         puckStored = async("Dépôt", () -> {
             if(blue) {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
             } else {
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DERNIER_PALET);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
                 if(moveElevator) {
                     robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
@@ -331,6 +330,9 @@ public class X6alter extends Script {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if(lastInChain) {
+                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DERNIER_PALET, true);
+                }
             }
         });
     }
@@ -339,7 +341,7 @@ public class X6alter extends Script {
      * Actions à faire pour une itération de prise de palet
      * @param robot le robot
      */
-    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator) throws UnableToMoveException {
+    private void grabPuckGoto(Robot robot, Vec2 pos, boolean blue, boolean moveElevator, boolean lastInChain) throws UnableToMoveException {
         Log.STRATEGY.critical("Entrée dans grabPuckGoto");
         if(puckStored != null) {
             Log.STRATEGY.warning("Attente de puckStored");
@@ -347,7 +349,7 @@ public class X6alter extends Script {
             Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        storePuck(blue, moveElevator);
+        storePuck(blue, moveElevator, lastInChain);
         robot.gotoPoint(pos);
         Log.STRATEGY.critical("Sortie dans grabPuckGoto");
     }
