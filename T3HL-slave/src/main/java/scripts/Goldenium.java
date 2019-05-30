@@ -175,7 +175,11 @@ public class Goldenium extends Script {
         robot.increaseScore(20);
 
         // TODO: Timeout?
-        syncBuddy.waitForFreeBalance();
+        try {
+            Service.withTimeout(3000, () -> syncBuddy.waitForFreeBalance());
+        } catch (TimeoutError error) {
+            error.printStackTrace();
+        }
         try {
             // le principal part en même temps que nous
             syncBuddy.sendAcceleratorFree();

@@ -66,6 +66,7 @@ public class X6alter extends Script {
      * Est-ce qu'on a un recalage sur x6?
      */
     private boolean usingRecalageX6;
+    private VectCartesian pos;
 
     public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
@@ -158,7 +159,7 @@ public class X6alter extends Script {
                 robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4è palet
-                grabPuckGoto(robot, positions.get(4), false, true); // skip le palet bleu
+                grabPuckGoto(robot, pos, false, true); // skip le palet bleu
                 robot.pushPaletDroit(CouleurPalet.ROUGE);
 
                 //On prend le 5è palet
