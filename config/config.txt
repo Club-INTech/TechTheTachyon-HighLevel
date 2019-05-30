@@ -87,10 +87,10 @@ GOLDENIUM_Y_JAUNE                   =0
 GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
-MOVE_GOLDENIUM_JAUNE                =507
+MOVE_GOLDENIUM_JAUNE                =517
 MOVE_GOLDENIUM_VIOLET               =507
 
-DECALAGE_GOLD_JAUNE                 =20
+DECALAGE_GOLD_JAUNE                 =-5
 DECALAGE_GOLD_VIOLET                =30
 
 GOLDENIUM_GOTO_X_JAUNE              =0
@@ -104,7 +104,7 @@ GETBLUEACC_X_VIOLET                 =0
 GETBLUEACC_Y_VIOLET                 =6
 
 GETBLUEACC_X_RETRAIT_JAUNE            =-20
-GETBLUEACC_Y_RETRAIT_JAUNE            =-7
+GETBLUEACC_Y_RETRAIT_JAUNE            =-37
 GETBLUEACC_X_RETRAIT_VIOLET           =-20
 GETBLUEACC_Y_RETRAIT_VIOLET           =-2
 
