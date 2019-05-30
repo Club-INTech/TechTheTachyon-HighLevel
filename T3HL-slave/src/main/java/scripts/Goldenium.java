@@ -177,7 +177,7 @@ public class Goldenium extends Script {
         // TODO: Timeout?
         try {
             Service.withTimeout(3000, () -> syncBuddy.waitForFreeBalance());
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(5);
         } catch (TimeoutError error) {
             error.printStackTrace();
         } catch (InterruptedException e) {
