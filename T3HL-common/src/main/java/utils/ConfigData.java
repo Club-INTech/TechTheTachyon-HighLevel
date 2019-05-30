@@ -169,7 +169,10 @@ public enum ConfigData implements ConfigInfo
     /**
      * On se recale à l'accélérateur? Si non c'est à x6
      */
-    RECALAGE_ACC(true);
+    RECALAGE_ACC(true),
+
+    SECOURS(true)
+    ;
 
     /**
      * Valeur par défaut de la config (en dure)
