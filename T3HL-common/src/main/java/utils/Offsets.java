@@ -52,6 +52,9 @@ public enum Offsets implements ConfigInfo {
     SECONDAIRE_BALANCE_OFFSET_Y_JAUNE(0),
     SECONDAIRE_BALANCE_OFFSET_Y_VIOLET(0),
 
+    MOVE_GOLDENIUM_JAUNE(0),
+    MOVE_GOLDENIUM_VIOLET(0),
+
     ;
 
     private double offset;

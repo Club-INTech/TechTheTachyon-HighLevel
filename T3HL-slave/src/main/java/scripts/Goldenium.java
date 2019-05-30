@@ -130,34 +130,17 @@ public class Goldenium extends Script {
         */
 
 
-        //try {
-           // robot.turn(-Math.PI/2);
-           // robot.recalageMeca();
-            //robot.moveLengthwise(-yEntry,false);
-            //robot.moveLengthwise(-72+25,false);
-	try  {
-		Service.withTimeout(5000, () -> {
-		try {
-        	   if(symetrie) {
-                	robot.turn(Math.PI);
-	                //robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-        	        robot.moveLengthwise(517-10,false);     //FIXME
-           	 } else {
-              	  robot.turn(0);
-              	  //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-               	 robot.moveLengthwise(-517,false);       //FIXME
-            	}
-		} catch(UnableToMoveException e) {
-			e.printStackTrace();
-		}
-           	 //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-		});
-	} catch(Exception error) {
-		orderWrapper.immobilise();
-	}
-        /*} catch (UnableToMoveException e) {
+        try  {
+            if(symetrie) {
+                robot.turn(Math.PI);
+                robot.moveLengthwise((int) (517-10+Offsets.MOVE_GOLDENIUM_VIOLET.get()),false);     //FIXME
+            } else {
+                robot.turn(0);
+                robot.moveLengthwise((int) (-517+Offsets.MOVE_GOLDENIUM_JAUNE.get()),false);       //FIXME
+            }
+        } catch(UnableToMoveException e) {
             e.printStackTrace();
-        }*/
+        }
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
