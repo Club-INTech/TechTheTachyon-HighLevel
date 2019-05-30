@@ -168,8 +168,8 @@ public class X6alter extends Script {
                 robot.gotoPoint(positions.get(4));
 
                 //On prend le 6ème palet
-                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
-                robot.pushPaletDroit(CouleurPalet.VERT);
+//                grabPuck(robot, -DISTANCE_INTER_PUCK * 2, false, false); // retourne devant le bleu
+//                robot.pushPaletDroit(CouleurPalet.VERT);
 
                 //On prend le 4ème palet (bleu)
                 grabPuck(robot, 0, true, false);
