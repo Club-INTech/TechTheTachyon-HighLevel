@@ -164,8 +164,12 @@ public enum ConfigData implements ConfigInfo
     /**
      * Paramètres de chemins
      */
-    LIDAR_PROCESS_PATH("../bin/LiDAR_UST_10LX")
-    ;
+    LIDAR_PROCESS_PATH("../bin/LiDAR_UST_10LX"),
+
+    /**
+     * On se recale à l'accélérateur? Si non c'est à x6
+     */
+    RECALAGE_ACC(true);
 
     /**
      * Valeur par défaut de la config (en dure)
