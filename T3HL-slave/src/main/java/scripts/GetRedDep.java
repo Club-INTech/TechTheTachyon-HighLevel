@@ -21,13 +21,10 @@ public class GetRedDep extends Script {
     }
 
     public void execute(Integer version) {
-        //TODO : attendre le principal
         try {
             if (!symetrie) {
                 robot.moveLengthwise(-100,false);
             }
-            //robot.turn(-Math.PI/2);
-          //robot.moveLengthwise(-106,false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -37,17 +34,11 @@ public class GetRedDep extends Script {
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
         robot.pushPaletDroit(CouleurPalet.ROUGE);
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
-
-        //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-        //robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
-
     }
 
     @Override
     public Vec2 entryPosition(Integer version) {
-
         return new VectCartesian(xEntry, yEntry);
-
     }
 
     @Override
@@ -57,7 +48,6 @@ public class GetRedDep extends Script {
     public void updateConfig(Config config) {
         super.updateConfig(config);
         symetrie = config.getString(ConfigData.COULEUR).equals("violet");
-
     }
 
 }

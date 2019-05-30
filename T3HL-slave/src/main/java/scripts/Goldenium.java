@@ -75,60 +75,6 @@ public class Goldenium extends Script {
             positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
-
-
-        //attention il n'y qu'une seule pompe sur le robot secondaire
-        /*try {
-            if(!symetrie) {
-                robot.turn(Math.PI);
-                try {
-                    robot.moveLengthwise(510,false);
-                } catch (UnableToMoveException e) {
-                    e.printStackTrace();
-                }
-                robot.turn(0);
-            }
-            else {
-                robot.turn(Math.PI);
-                try {
-                    robot.moveLengthwise(510,false);
-                } catch (UnableToMoveException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }*/
-
-        /**
-         * on tente un recalage mécanique
-         */
-        /*
-        try {
-            robot.turn(-Math.PI/2);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-
-
-        //insert mechanicle recalation here
-        //
-        robot.recalageMeca(20);
-        //
-
-
-
-        try {
-            if(symetrie) {
-                robot.turn(Math.PI);
-            } else {
-                robot.turn(0);
-            }
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-        */
-
         try  {
             if(symetrie) {
                 robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
@@ -144,16 +90,11 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         try {
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        /*try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR);
         robot.increaseScore(20);
 
         // TODO: Timeout?
@@ -185,21 +126,7 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.increaseScore(24);
-        /*robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.MONTE_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
-        try {
-            robot.turn(Math.PI/2);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);
-        robot.useActuator(ActuatorsOrder.CRACHE_UN_PALET);
-        robot.useActuator(ActuatorsOrder.RANGE_CRACHE_PALET);
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);*/
 
-        //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR);
-        //robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE_APRES_STOCK,true);
@@ -216,10 +143,6 @@ public class Goldenium extends Script {
             }
             robot.turn(-Math.PI/2);
             robot.moveLengthwise(200,false);
-/*            robot.softGoTo(new VectCartesian(200,750),false);
-            robot.softGoTo(new VectCartesian(1200,750),false);
-            syncBuddy.sendBalanceFree();*/
-            
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
