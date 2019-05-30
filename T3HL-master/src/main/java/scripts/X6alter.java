@@ -93,6 +93,14 @@ public class X6alter extends Script {
             Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
          */
 
+        double offsetZddX = Offsets.ZDD_POST_BALANCE_X_JAUNE.get();
+        double offsetZddY = Offsets.ZDD_POST_BALANCE_Y_JAUNE.get();
+        if(symetry) {
+            offsetZddX = Offsets.ZDD_POST_BALANCE_X_VIOLET.get();
+            offsetZddY = Offsets.ZDD_POST_BALANCE_Y_VIOLET.get();
+        }
+        Vec2 positionZoneDepart = new VectCartesian(1500-250+offsetZddX, 500+offsetZddY);
+
         int i=0;
         loadOffsets();
         double offsetBalance = Offsets.PALETS_X6_BALANCE_Y_JAUNE.get();
@@ -197,12 +205,16 @@ public class X6alter extends Script {
                     try {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                         syncBuddy.sendBalanceFree();
+
                         robot.turn(0);
                         robot.moveLengthwise(600,false);
                         if(usingRecalageX6) {
                             recalageX6();
                         }
+
+                        // on va dans notre zone de départ pour libérer le chemin
                         try {
+                            robot.followPathTo(positionZoneDepart);
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
                             e.printStackTrace();
