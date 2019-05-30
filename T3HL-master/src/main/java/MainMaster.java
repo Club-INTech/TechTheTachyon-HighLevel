@@ -141,9 +141,9 @@ public class MainMaster extends RobotEntryPoint {
             System.out.println("angleToStart : " + angleToStart);
             robot.turn(angleToStart-Math.PI/2);
             orderWrapper.waitJumper();
-            Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
+            /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
             robot.gotoPoint(entryPos2);
-            robot.turn(angleToStart-Math.PI/2);
+            robot.turn(angleToStart-Math.PI/2);*/
             match.execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
