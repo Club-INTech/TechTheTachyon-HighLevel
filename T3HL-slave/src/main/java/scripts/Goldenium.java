@@ -129,16 +129,8 @@ public class Goldenium extends Script {
         }
         */
 
-
-        //try {
-           // robot.turn(-Math.PI/2);
-           // robot.recalageMeca();
-            //robot.moveLengthwise(-yEntry,false);
-            //robot.moveLengthwise(-72+25,false);
-	try  {
-		Service.withTimeout(5000, () -> {
-		try {
-        	   if(symetrie) {
+        try  {
+            if(symetrie) {
                 	robot.turn(Math.PI);
 	                //robot.moveLengthwise(517-10,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
         	        robot.moveLengthwise(517-10,false);     //FIXME
@@ -149,17 +141,9 @@ public class Goldenium extends Script {
                	 //robot.moveLengthwise(-517,false);       //FIXME
                    robot.softGoTo(new VectCartesian(-500 + 230-517,154 + 100 + 34 - 30),false);
             	}
-		} catch(UnableToMoveException e) {
-			e.printStackTrace();
-		}
-           	 //robot.moveLengthwise(-517,false,() -> { robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET);});
-		});
-	} catch(Exception error) {
-		orderWrapper.immobilise();
-	}
-        /*} catch (UnableToMoveException e) {
+        } catch(UnableToMoveException e) {
             e.printStackTrace();
-        }*/
+        }
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
