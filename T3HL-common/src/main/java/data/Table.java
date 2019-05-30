@@ -341,7 +341,7 @@ public class Table implements Service {
         } else {
        //     Log.LIDAR.warning("Graphe non instancié");
         }
-       // Log.LIDAR.debug("Mise à jour des obstacles terminées");
+        Log.LIDAR.debug("Mise à jour des obstacles terminées");
     }
 
     /**
