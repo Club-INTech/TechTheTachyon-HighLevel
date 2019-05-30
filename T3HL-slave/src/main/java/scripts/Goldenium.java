@@ -131,8 +131,8 @@ public class Goldenium extends Script {
 
         try  {
             if(symetrie) {
+                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
                 robot.turn(Math.PI);
-                robot.moveLengthwise(517-10,false);     //FIXME
             } else {
                 robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
                 robot.turn(0);
