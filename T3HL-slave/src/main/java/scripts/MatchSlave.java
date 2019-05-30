@@ -42,7 +42,7 @@ public class MatchSlave extends Script {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
         } else {
             try {
-                TimeUnit.SECONDS.sleep(7);
+                TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
