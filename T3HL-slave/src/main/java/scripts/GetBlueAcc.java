@@ -1,16 +1,12 @@
 package scripts;
 
-import data.Sick;
 import data.Table;
-import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
-import utils.Log;
 import utils.Offsets;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -57,11 +53,11 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
 
 
-            double offsetXGoto = Offsets.GETBLUEACC_X_DEPOT_JAUNE.get();
-            double offsetYGoto = Offsets.GETBLUEACC_Y_DEPOT_JAUNE.get();
+            double offsetXGoto = Offsets.GETBLUEACC_X_RETRAIT_JAUNE.get();
+            double offsetYGoto = Offsets.GETBLUEACC_Y_RETRAIT_JAUNE.get();
             if(symetrie) {
-                offsetXGoto = Offsets.GETBLUEACC_X_DEPOT_VIOLET.get();
-                offsetYGoto = Offsets.GETBLUEACC_Y_DEPOT_VIOLET.get();
+                offsetXGoto = Offsets.GETBLUEACC_X_RETRAIT_VIOLET.get();
+                offsetYGoto = Offsets.GETBLUEACC_Y_RETRAIT_VIOLET.get();
             }
             //robot.moveLengthwise(230,false);
             if (symetrie){
