@@ -28,7 +28,7 @@ public class Match extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.turn(0);
+            robot.turn(Math.PI);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
