@@ -133,6 +133,15 @@ public class MainSlave extends RobotEntryPoint {
 
 
         //robot.setPositionAndOrientation(pos, -Math.PI/2);
+
+        table.removeTemporaryObstacle(table.getPaletRougeDroite());
+        table.removeTemporaryObstacle(table.getPaletBleuDroite());
+        table.removeTemporaryObstacle(table.getPaletVertDroite());
+
+        table.removeTemporaryObstacle(table.getPaletRougeGauche());
+        table.removeTemporaryObstacle(table.getPaletBleuGauche());
+        table.removeTemporaryObstacle(table.getPaletVertGauche());
+
         orderWrapper.waitJumper();
 
 
