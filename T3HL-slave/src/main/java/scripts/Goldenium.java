@@ -134,6 +134,7 @@ public class Goldenium extends Script {
             robot.followPathTo(positionBalance1);
             if(!symetrie) {
                 robot.turn(Math.PI);
+                depose();
             }
             else {
                 robot.turn(0);
