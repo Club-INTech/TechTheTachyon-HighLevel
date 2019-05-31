@@ -74,6 +74,7 @@ public class Accelerateur extends Script {
      * Est-ce qu'on se recale à l'accélérateur?
      */
     private boolean recalageAcc;
+    private boolean recalageMecaAcc;
 
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
@@ -99,6 +100,9 @@ public class Accelerateur extends Script {
             }
             robot.turn(0);
             recalageRight.join();
+            if(recalageMecaAcc) {
+                robot.recalageMeca(true, 100);
+            }
 
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);

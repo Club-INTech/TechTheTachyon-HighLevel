@@ -87,6 +87,7 @@ public class MainMaster extends RobotEntryPoint {
         }
     }
 
+
     @Override
     protected void act() throws UnableToMoveException {
         robot.increaseScore(5); // présence de l'expérience
