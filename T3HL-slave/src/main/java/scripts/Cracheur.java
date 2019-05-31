@@ -36,11 +36,11 @@ public class Cracheur extends Script {
         try {
             robot.softGoTo(new VectCartesian(1500-1330+60, 1380),false);
             if (symetrie){
-                robot.turn(Math.PI);
+                robot.turn(0);
                 robot.moveLengthwise(-60,false);
             }
             else{
-                robot.turn(0);
+                robot.turn(Math.PI);
                 robot.moveLengthwise(60,false);
             }
         } catch (UnableToMoveException e) {
@@ -73,7 +73,7 @@ public class Cracheur extends Script {
 
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);*/
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_PREND_BLEU,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
         if (symetrie){
             robot.increaseScore(12);
