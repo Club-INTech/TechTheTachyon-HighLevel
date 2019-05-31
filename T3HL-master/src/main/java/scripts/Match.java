@@ -59,7 +59,7 @@ public class Match extends Script {
             //On tente d'aller à l'accélérateur
             boolean exceptionRaised = false;
 
-
+            System.out.println("boolean secours =" + secours);
             if(!secours) {
                 try {
                     robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
