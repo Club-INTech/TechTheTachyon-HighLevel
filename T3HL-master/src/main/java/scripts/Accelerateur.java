@@ -102,7 +102,7 @@ public class Accelerateur extends Script {
             recalageRight.join();
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
-                robot.recalageMeca(false, 100);
+                robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
                 robot.turn(0);
             }
 

@@ -31,6 +31,8 @@ public enum Offsets implements ConfigInfo {
     ZDD_POST_BALANCE_Y_JAUNE(0),
     ZDD_POST_BALANCE_Y_VIOLET(0),
 
+    ACCELERATEUR_Y_RECALAGE(100),
+
     /*      SLAVE       */
     PALETSX3_X_JAUNE(0),
     PALETSX3_Y_JAUNE(0),
