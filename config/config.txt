@@ -37,6 +37,7 @@ BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
 RECALAGE_ACC                        =false
 SECOURS                             =false
+RECALAGE_MECA_ACC                   =true
 
 #________________________________________________________________________________________________________________________
 
