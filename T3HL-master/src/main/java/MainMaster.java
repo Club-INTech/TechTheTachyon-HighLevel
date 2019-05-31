@@ -132,7 +132,13 @@ public class MainMaster extends RobotEntryPoint {
             Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            double angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
+            double angleToStart;
+            if (container.getConfig().getString(ConfigData.COULEUR).equals("jaune")) {
+                angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
+            }
+            else {
+                angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
+            }
            /* if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")){
                 angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX()+ Offsets.ZDD_X_VIOLET.get());
             }
