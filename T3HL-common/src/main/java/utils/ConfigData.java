@@ -171,7 +171,7 @@ public enum ConfigData implements ConfigInfo
      */
     RECALAGE_ACC(true),
 
-    SECOURS(true)
+    SECOURS(false),
     ;
 
     /**
