@@ -153,7 +153,7 @@ public class Goldenium extends Script {
                             depose();
                         }
                     });
-                    robot.moveLengthwise(-110,false);
+                    robot.moveLengthwise(-100,false);
                 } catch (UnableToMoveException e) {
                     e.printStackTrace();
                 }
