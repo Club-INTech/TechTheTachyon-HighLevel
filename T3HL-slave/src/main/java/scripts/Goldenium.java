@@ -138,7 +138,8 @@ public class Goldenium extends Script {
             else {
                 robot.turn(0);
                 try {
-                    robot.moveLengthwise(-110,false);
+                    robot.moveLengthwise(-110,true);
+                    robot.turn(0);
                 } catch (UnableToMoveException e) {
                     e.printStackTrace();
                 }
