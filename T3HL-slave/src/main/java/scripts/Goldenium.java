@@ -145,6 +145,8 @@ public class Goldenium extends Script {
                             e.printStackTrace();
                         }
                     });
+                } catch (TimeoutError error) {
+                    error.printStackTrace();
                 } finally {
                     orderWrapper.immobilise();
                 }
