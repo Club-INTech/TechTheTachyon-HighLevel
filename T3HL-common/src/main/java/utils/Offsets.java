@@ -64,6 +64,9 @@ public enum Offsets implements ConfigInfo {
     GOLDENIUM_GOTO_Y_JAUNE(0),
     GOLDENIUM_GOTO_X_VIOLET(0),
     GOLDENIUM_GOTO_Y_VIOLET(0),
+
+    DECALAGE_GOLD_JAUNE(20),
+    DECALAGE_GOLD_VIOLET(20),
     ;
 
     private double offset;

@@ -75,6 +75,11 @@ public class Goldenium extends Script {
             positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
+        double decalageGold = Offsets.DECALAGE_GOLD_JAUNE.get();
+        if(symetrie) {
+            decalageGold = Offsets.DECALAGE_GOLD_VIOLET.get();
+        }
+
         try  {
             if(symetrie) {
                 robot.turn(Math.PI);
@@ -86,6 +91,14 @@ public class Goldenium extends Script {
                 robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
                 robot.moveLengthwise((int) Offsets.MOVE_GOLDENIUM_JAUNE.get(), false);
+                robot.turn(0);
+            }
+
+            robot.turn(Math.PI/2);
+            robot.moveLengthwise((int) decalageGold, false);
+            if(symetrie) {
+                robot.turn(Math.PI);
+            } else {
                 robot.turn(0);
             }
         } catch(UnableToMoveException e) {

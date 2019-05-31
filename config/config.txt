@@ -90,6 +90,9 @@ GOLDENIUM_Y_VIOLET                  =0
 MOVE_GOLDENIUM_JAUNE                =517
 MOVE_GOLDENIUM_VIOLET               =517
 
+DECALAGE_GOLD_JAUNE                 =20
+DECALAGE_GOLD_VIOLET                =20
+
 GOLDENIUM_GOTO_X_JAUNE              =0
 GOLDENIUM_GOTO_Y_JAUNE              =45
 GOLDENIUM_GOTO_X_VIOLET             =0
