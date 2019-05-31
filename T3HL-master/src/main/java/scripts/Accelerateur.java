@@ -230,9 +230,19 @@ public class Accelerateur extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         if (version == 1) {
-            return new VectCartesian(-490+10+76 + decalageAccelerateur, 410-78+50+10);
+            if (symetry) {
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 410 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+            }
+            else {
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 410 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+            }
         } else if (version == 0) {
-            return new VectCartesian(-490+10 + decalageAccelerateur, 410-78+50+10);
+            if (symetry) {
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 410 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+            }
+            else {
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 410 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+            }
         }
         return null;
 
