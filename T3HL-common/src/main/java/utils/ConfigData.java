@@ -169,7 +169,9 @@ public enum ConfigData implements ConfigInfo
     /**
      * On se recale à l'accélérateur? Si non c'est à x6
      */
-    RECALAGE_ACC(true),
+    RECALAGE_ACC(false),
+
+    RECALAGE_MECA_ACC(true),
 
     SECOURS(false),
     ;
