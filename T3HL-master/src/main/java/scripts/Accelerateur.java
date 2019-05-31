@@ -258,6 +258,7 @@ public class Accelerateur extends Script {
         super.updateConfig(config);
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.recalageAcc = config.getBoolean(ConfigData.RECALAGE_ACC);
+        this.recalageAcc=false;
     }
 
 }
