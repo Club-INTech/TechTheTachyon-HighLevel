@@ -35,8 +35,8 @@ HOMOLOGATION                        = false
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
-RECALAGE_ACC                        = true
-SECOURS                             =true
+RECALAGE_ACC                        =false
+SECOURS                             =false
 
 #________________________________________________________________________________________________________________________
 
