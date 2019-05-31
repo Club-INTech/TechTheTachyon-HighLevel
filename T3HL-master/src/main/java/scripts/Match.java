@@ -27,6 +27,7 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
+        robot.setOrientation(Math.PI/2);
         scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(ACC_VERSION);
         if(true)
             return;
