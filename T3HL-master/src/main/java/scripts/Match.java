@@ -27,12 +27,7 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-        try {
-            robot.turn(0);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-        robot.recalageMeca(true, 1000);
+        robot.recalageMeca(false, 1000);
         /*
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
