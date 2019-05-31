@@ -17,7 +17,7 @@ VISUALISATION                       =false
 SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
-CONNECT_TO_BUDDY                    =true
+CONNECT_TO_BUDDY                    =false
 BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
 
@@ -35,8 +35,8 @@ HOMOLOGATION                        = false
 ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
-RECALAGE_ACC                        = true
-SECOURS                             =true
+RECALAGE_ACC                        =false
+SECOURS                             =false
 
 #________________________________________________________________________________________________________________________
 
@@ -68,8 +68,8 @@ ZDD_POST_BALANCE_Y_JAUNE            =100
 ZDD_POST_BALANCE_X_VIOLET           =0
 ZDD_POST_BALANCE_Y_VIOLET           =100
 
-ACCELERATEUR_Y_VIOLET               =-5
-ACCELERATEUR_Y_JAUNE                =-5
+ACCELERATEUR_Y_VIOLET               =-15
+ACCELERATEUR_Y_JAUNE                =-25
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
@@ -87,10 +87,26 @@ GOLDENIUM_Y_JAUNE                   =0
 GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
+MOVE_GOLDENIUM_JAUNE                =517
+MOVE_GOLDENIUM_VIOLET               =517
+
+DECALAGE_GOLD_JAUNE                 =20
+DECALAGE_GOLD_VIOLET                =29
+
+GOLDENIUM_GOTO_X_JAUNE              =0
+GOLDENIUM_GOTO_Y_JAUNE              =45
+GOLDENIUM_GOTO_X_VIOLET             =0
+GOLDENIUM_GOTO_Y_VIOLET             =0
+
 GETBLUEACC_X_JAUNE                  =0
-GETBLUEACC_Y_JAUNE                  =2
+GETBLUEACC_Y_JAUNE                  =3
 GETBLUEACC_X_VIOLET                 =0
-GETBLUEACC_Y_VIOLET                 =4
+GETBLUEACC_Y_VIOLET                 =6
+
+GETBLUEACC_X_RETRAIT_JAUNE            =0
+GETBLUEACC_Y_RETRAIT_JAUNE            =-7
+GETBLUEACC_X_RETRAIT_VIOLET           =0
+GETBLUEACC_Y_RETRAIT_VIOLET           =5
 
 SECONDAIRE_BALANCE_OFFSET_X_VIOLET  =10
 SECONDAIRE_BALANCE_OFFSET_X_JAUNE   =0

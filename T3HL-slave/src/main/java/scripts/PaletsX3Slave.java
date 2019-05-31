@@ -22,7 +22,7 @@ public class PaletsX3Slave extends Script{
 
     private ArrayList<VectCartesian> positions = new ArrayList<>();
     private int xEntry = 1300; //1235;// 1338
-    private int yEntry = 1250 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
+    private int yEntry = 1300 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
 //    private int xEntry2 = 1300;
 //    private int yEntry2 = 1630;
     private double offsetX;
@@ -66,7 +66,7 @@ public class PaletsX3Slave extends Script{
                 robot.turn(Math.PI);
             }
             else{
-                robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
+                robot.recalageMeca(true,-1800+positions.get(0).getY()-15);
                 robot.turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
@@ -77,7 +77,7 @@ public class PaletsX3Slave extends Script{
                 robot.setOrientation(Math.PI);
             }
             else{
-                robot.recalageMeca(true,1500-positions.get(0).getX()+10);          //-90 si on prend le rouge
+                robot.recalageMeca(true,1400-positions.get(0).getX());          //-90 si on prend le rouge
                 //robot.turn(Math.PI/2);
                 robot.setOrientation(0);
 
@@ -138,7 +138,8 @@ public class PaletsX3Slave extends Script{
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true); //TODO refaire position bras
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
+        //robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR, true);
         /*robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);*/
     }
