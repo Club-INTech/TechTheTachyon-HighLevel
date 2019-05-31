@@ -68,7 +68,7 @@ ZDD_POST_BALANCE_Y_JAUNE            =100
 ZDD_POST_BALANCE_X_VIOLET           =0
 ZDD_POST_BALANCE_Y_VIOLET           =100
 
-ACCELERATEUR_Y_VIOLET               =-17
+ACCELERATEUR_Y_VIOLET               =-15
 ACCELERATEUR_Y_JAUNE                =-25
 
 ZDD_X_VIOLET                        =-3
