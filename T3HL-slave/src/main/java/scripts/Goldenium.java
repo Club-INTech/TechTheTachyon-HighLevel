@@ -137,7 +137,19 @@ public class Goldenium extends Script {
             }
             else {
                 robot.turn(0);
-                robot.moveLengthwise(-115,false);
+                try {
+                    Service.withTimeout(3000, () -> {
+                        try {
+                            robot.moveLengthwise(-110,true);
+                        } catch (UnableToMoveException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (TimeoutError error) {
+                    error.printStackTrace();
+                } finally {
+                    orderWrapper.immobilise();
+                }
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

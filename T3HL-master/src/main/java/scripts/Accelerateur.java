@@ -231,17 +231,17 @@ public class Accelerateur extends Script {
     public Vec2 entryPosition(Integer version) {
         if (version == 1) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
             }
             else {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
             }
         } else if (version == 0) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
             }
             else {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
             }
         }
         return null;
@@ -258,7 +258,6 @@ public class Accelerateur extends Script {
         super.updateConfig(config);
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.recalageAcc = config.getBoolean(ConfigData.RECALAGE_ACC);
-        this.recalageAcc=false;
     }
 
 }
