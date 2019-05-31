@@ -35,7 +35,11 @@ public class Cracheur extends Script {
     public void execute(Integer version) {
         try {
             robot.softGoTo(new VectCartesian(1500-1330, 1380),false);
-            robot.turn(Math.PI);
+            if(symetrie) {
+                robot.turn(0);
+            } else {
+                robot.turn(Math.PI);
+            }
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
