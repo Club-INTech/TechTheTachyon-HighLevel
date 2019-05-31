@@ -35,7 +35,7 @@ public class Cracheur extends Script {
     public void execute(Integer version) {
         try {
             robot.softGoTo(new VectCartesian(1500-1330, 1380),false);
-            //robot.turn(Math.PI / 2);
+            robot.turn(Math.PI);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
@@ -65,7 +65,8 @@ public class Cracheur extends Script {
         }
 
         robot.useActuator(ActuatorsOrder.DESCEND_ASCENCEUR_DU_SECONDAIRE_POUR_CRACHER_LES_PALETS);*/
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
     }
     @Override //à adapter
