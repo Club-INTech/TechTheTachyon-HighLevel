@@ -79,13 +79,14 @@ public class Goldenium extends Script {
             if(symetrie) {
                 robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise(-517, false);
+                robot.moveLengthwise((int) Offsets.MOVE_GOLDENIUM_VIOLET.get(), false);
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
             } else {
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
-                robot.turn(0);
+                robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise(-517, false);
+                robot.moveLengthwise((int) Offsets.MOVE_GOLDENIUM_JAUNE.get(), false);
+                robot.turn(0);
             }
         } catch(UnableToMoveException e) {
             e.printStackTrace();
@@ -96,7 +97,7 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM,true);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         try {
-            TimeUnit.MILLISECONDS.sleep(500);
+            TimeUnit.MILLISECONDS.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
