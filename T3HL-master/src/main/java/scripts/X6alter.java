@@ -211,7 +211,7 @@ public class X6alter extends Script {
                         // on va dans notre zone de départ pour libérer le chemin
                         try {
                             robot.followPathTo(positionZoneDepart);
-                            robot.turn(0);
+                            robot.turn(Math.PI);
                             if(usingRecalageX6) {
                                 recalageX6();
                             }

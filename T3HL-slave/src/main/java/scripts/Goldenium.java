@@ -140,7 +140,7 @@ public class Goldenium extends Script {
                 try {
                     Service.withTimeout(1000, () -> {
                         try {
-                            robot.moveLengthwise(-115,false);
+                            robot.moveLengthwise(-110,true);
                         } catch (UnableToMoveException e) {
                             e.printStackTrace();
                         }
