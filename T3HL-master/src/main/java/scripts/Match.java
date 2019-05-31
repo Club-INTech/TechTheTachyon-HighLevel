@@ -27,6 +27,9 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
+        scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR).timedExecute(ACC_VERSION);
+        if(true)
+            return;
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
