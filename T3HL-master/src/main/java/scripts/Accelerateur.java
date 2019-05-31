@@ -98,11 +98,11 @@ public class Accelerateur extends Script {
             if(recalageAcc) {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
-            robot.turn(0);
             recalageRight.join();
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
                 robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
+                robot.setOrientation(Math.PI/2);
                 robot.turn(0);
             }
 
