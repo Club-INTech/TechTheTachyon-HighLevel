@@ -349,7 +349,7 @@ public abstract class Robot implements Service {
     /**
      * MECA >>>>>>>>>>> SICKS (recalage mecanique sur une distance à spécifier)
      */
-    public void recalageMeca(Boolean avant,int distReculeAbsolu) {
+    public void recalageMeca(boolean avant,int distReculeAbsolu) {
         this.disableRotation();
         distReculeAbsolu=Math.abs(distReculeAbsolu);
         try {
