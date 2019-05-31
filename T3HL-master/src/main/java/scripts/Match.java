@@ -32,7 +32,7 @@ public class Match extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-        robot.recalageMeca(false, 1000);
+        robot.recalageMeca(false, 100);
         /*
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
