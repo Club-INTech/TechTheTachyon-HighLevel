@@ -52,12 +52,13 @@ public class MatchSlave extends Script {
 
             scriptManagerSlave.getScript(ScriptNamesSlave.GOLDENIUM).timedExecute(0);
 
+            if (true)
+                return;
+
             scriptManagerSlave.getScript(ScriptNamesSlave.PALETSX3).goToThenExecute(0);
             table.addTassot();
             scriptManagerSlave.getScript(ScriptNamesSlave.CRACHEUR).timedExecute(0);
 
-            if (true)
-                return;
             // 3. Gold à prendre
             // 4. Rush vers balance
             // (5 Attente du principal?) <- à tester si on passe
