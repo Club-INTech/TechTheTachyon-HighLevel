@@ -102,7 +102,7 @@ public class Accelerateur extends Script {
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
                 robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
-                robot.setOrientation(Math.PI/2);
+                robot.setOrientation(Math.PI/2+Offsets.ACCELERATEUR_THETA_RECALAGE.get());
                 robot.turn(0);
             }
 

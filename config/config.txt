@@ -73,6 +73,7 @@ ACCELERATEUR_Y_VIOLET               =-15
 ACCELERATEUR_Y_JAUNE                =-25
 
 ACCELERATEUR_Y_RECALAGE             =100
+ACCELERATEUR_THETA_RECALAGE         =0.1
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
