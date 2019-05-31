@@ -123,21 +123,7 @@ public class Accelerateur extends Script {
 
             robot.turn(Math.PI);
             recalageLeft.join();
-           /* while (robot.getNbPaletsGauches() > 0) {
-                robot.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                robot.increaseScore(10);
-                if (robot.getNbPaletsGauches() > 1) {
-                    SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
-                }
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-                robot.popPaletGauche();
-            }*/
-           robot.invertOrders(robot -> {
+            robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
                    robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
                    robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
