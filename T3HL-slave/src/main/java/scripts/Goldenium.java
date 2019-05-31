@@ -138,8 +138,21 @@ public class Goldenium extends Script {
             else {
                 robot.turn(0);
                 try {
-                    robot.moveLengthwise(-110,true);
-                    robot.turn(0);
+                    async("balance gold", () -> {
+                        try {
+                            TimeUnit.SECONDS.sleep(5);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        try  {
+                            orderWrapper.immobilise();
+                        } catch (Exception e)  {
+                            e.printStackTrace();
+                        } finally {
+                            depose();
+                        }
+                    });
+                    robot.moveLengthwise(-110,false);
                 } catch (UnableToMoveException e) {
                     e.printStackTrace();
                 }
@@ -147,18 +160,6 @@ public class Goldenium extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        robot.increaseScore(24);
-
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE_APRES_STOCK,true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        robot.increaseScore(12);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
        /* try {
             if(!symetrie) {
                 robot.moveLengthwise(-60, false);
@@ -171,6 +172,21 @@ public class Goldenium extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }*/
+    }
+
+    private void depose() {
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_DEPOT,true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.increaseScore(24);
+
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_BALANCE_APRES_STOCK,true);
+        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
+        robot.increaseScore(12);
+        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
+
     }
 
     @Override
