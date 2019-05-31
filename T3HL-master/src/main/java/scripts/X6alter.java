@@ -452,7 +452,7 @@ public class X6alter extends Script {
             Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), 1543-distanceToWall), Calculs.modulo(teta, Math.PI));
+        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), 1543-distanceToWall+36), Calculs.modulo(teta, Math.PI));
         System.out.println("JE SUIS LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + " " + XYO.getRobotInstance().getPosition());
         //robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
     }
