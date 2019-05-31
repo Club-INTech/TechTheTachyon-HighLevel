@@ -208,13 +208,13 @@ public class X6alter extends Script {
 
                       //  robot.turn(0);
                       //  robot.moveLengthwise(600,false);
-                        if(usingRecalageX6) {
-                            recalageX6();
-                        }
-
                         // on va dans notre zone de départ pour libérer le chemin
                         try {
                             robot.followPathTo(positionZoneDepart);
+                            robot.turn(0);
+                            if(usingRecalageX6) {
+                                recalageX6();
+                            }
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
                             e.printStackTrace();
@@ -435,7 +435,7 @@ public class X6alter extends Script {
     }
 
     public void recalageX6(/*int yEntry*/) throws UnableToMoveException {
-        robot.turn(0);
+        /*robot.turn(0);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
@@ -454,9 +454,14 @@ public class X6alter extends Script {
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), 1543-distanceToWall+36), Calculs.modulo(teta, Math.PI));
         System.out.println("JE SUIS LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + " " + XYO.getRobotInstance().getPosition());
-        //robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
+        //robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));*/
+        if (symetry) {
+            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+        } else {
+            Log.TABLE.critical("Couleur pour le recalage : jaune");
+            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+        }
     }
-
 
     @Override
     public Vec2 entryPosition(Integer version) {
