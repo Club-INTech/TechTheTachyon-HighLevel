@@ -453,6 +453,7 @@ public class X6alter extends Script {
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
         robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), 1543-distanceToWall), Calculs.modulo(teta, Math.PI));
+        System.out.println("JE SUIS LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + " " + XYO.getRobotInstance().getPosition());
         //robot.gotoPoint(new VectCartesian(currentPosition.getX(), yEntry));
     }
 

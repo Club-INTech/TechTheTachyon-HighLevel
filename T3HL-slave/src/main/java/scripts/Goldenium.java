@@ -156,10 +156,10 @@ public class Goldenium extends Script {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
         try {
             if(!symetrie) {
-                robot.moveLengthwise(-60, false);
+                robot.moveLengthwise(-50, true);
             }
             else{
-                robot.moveLengthwise(60, false);
+                robot.moveLengthwise(50, true);
             }
             robot.turn(-Math.PI/2);
             robot.moveLengthwise(200,false);
