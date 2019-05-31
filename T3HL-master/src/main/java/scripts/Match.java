@@ -27,16 +27,10 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-        try {
-            robot.turn(Math.PI);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
-        }else {
+        } else {
 
             // 0. Lancer l'électron
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
@@ -44,9 +38,6 @@ public class Match extends Script {
             // 1. Zone de départ, juste la case bleue
             scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
-
-            // 2. Zone de chaos (tout)
-            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);
 
             // 3. Palets x6
             scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
