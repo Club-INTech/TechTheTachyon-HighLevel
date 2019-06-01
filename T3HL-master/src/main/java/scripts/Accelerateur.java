@@ -107,7 +107,11 @@ public class Accelerateur extends Script {
             }
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
-                robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
+                double recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_JAUNE.get();
+                if(symetry) {
+                    recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_VIOLET.get();
+                }
+                robot.recalageMeca(false, (int)recalageY);
                 robot.setOrientation(Math.PI/2);
                 robot.turn(offsetTheta+0);
             }
