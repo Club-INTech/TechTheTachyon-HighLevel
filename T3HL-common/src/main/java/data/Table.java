@@ -239,7 +239,7 @@ public class Table implements Service {
         Obstacle tableBordBas = new StillRectangularObstacle(formeTableBordBas);
         this.addFixedObstacleNoGraphChange(tableBordBas);
 
-        this.addFixedObstacleNoGraphChange(goldeniumGauche);
+    //    this.addFixedObstacleNoGraphChange(goldeniumGauche);
 
         /**
          * Couleur représente la couleur de la zone se situant derrière le palet !
