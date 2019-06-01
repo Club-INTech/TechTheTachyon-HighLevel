@@ -36,7 +36,7 @@ public class Match extends Script {
         // FIXME: REMOVE
         // FIXME: REMOVE
         Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
-        async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
+        async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION)).join();
         robot.setOrientation(Math.PI/2);
 
         for (int i = 0; i < 5; i++) {
