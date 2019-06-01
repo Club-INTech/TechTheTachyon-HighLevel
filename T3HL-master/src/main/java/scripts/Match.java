@@ -37,11 +37,11 @@ public class Match extends Script {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
 
             // 1. Zone de départ, juste la case bleue
-            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*///);
+            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*/);
 
 
             // 3. Palets x6
-            /*scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
+            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
 
             // (3,5. Prendre les palets restants de la zone de départ?)
 
@@ -107,10 +107,6 @@ public class Match extends Script {
             }
         }
         */
-<<<<<<< HEAD
-=======
-
->>>>>>> 11c495a9f4523bf4677dbb1f145832cf4fb6fa30
 /*
         if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
             //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
