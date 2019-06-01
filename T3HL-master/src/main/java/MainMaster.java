@@ -96,7 +96,35 @@ public class MainMaster extends RobotEntryPoint {
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
-        robot.setPositionAndOrientation(newPos, Math.PI);
+        robot.setPositionAndOrientation(newPos, Math.PI/2);
+
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME            ANGLE
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
+        // FIXME
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             Log.TABLE.critical("Couleur pour le recalage : violet");
@@ -149,6 +177,7 @@ public class MainMaster extends RobotEntryPoint {
             }
             System.out.println("angleToStart : " + angleToStart);
             robot.turn(angleToStart-Math.PI/2);*/
+
             orderWrapper.waitJumper();
             /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
             robot.gotoPoint(entryPos2);
