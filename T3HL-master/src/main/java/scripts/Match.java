@@ -63,9 +63,9 @@ public class Match extends Script {
 
             // 4. Aller vers l'accélérateur
             // (4,5. Désactiver la détection du secondaire ?)
-            Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
+//            Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
-            accelerateurScript.goToThenExecute(ACC_VERSION);
+  //          accelerateurScript.goToThenExecute(ACC_VERSION);
         }
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
 /*            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
