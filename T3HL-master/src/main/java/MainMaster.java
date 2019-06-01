@@ -98,43 +98,13 @@ public class MainMaster extends RobotEntryPoint {
         Vec2 newPos = new VectCartesian(1500-191, 350);
         robot.setPositionAndOrientation(newPos, Math.PI/2);
 
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME            ANGLE
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-        // FIXME
-
-        /* FIXME
-        FIXME FIXME
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             Log.TABLE.critical("Couleur pour le recalage : violet");
             robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         } else {
             Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-        }*/
+        }
 
 
         /*robot.turn(Math.PI/2);
@@ -162,13 +132,8 @@ public class MainMaster extends RobotEntryPoint {
             double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_X_VIOLET.get() : Offsets.ZDD_X_JAUNE.get();
             double offY = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_Y_VIOLET.get() : Offsets.ZDD_Y_JAUNE.get();
 
-// TODO FIXME
-// TODO FIXME
-// TODO FIXME
-// TODO FIXME
-// TODO FIXME
             Match match = container.getService(Match.class);
-            /*
+
             Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
@@ -180,7 +145,7 @@ public class MainMaster extends RobotEntryPoint {
                 angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
             }
             System.out.println("angleToStart : " + angleToStart);
-            robot.turn(angleToStart-Math.PI/2);*/
+            robot.turn(angleToStart-Math.PI/2);
 
             orderWrapper.waitJumper();
             /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);

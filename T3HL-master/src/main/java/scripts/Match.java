@@ -28,28 +28,6 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        // FIXME: REMOVE
-        Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
-        robot.setOrientation(Math.PI/2);
-        async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION)).join();
-
-        for (int i = 0; i < 5; i++) {
-            robot.pushPaletDroit(CouleurPalet.ROUGE);
-            robot.pushPaletGauche(CouleurPalet.ROUGE);
-        }
-        accelerateurScript.timedExecute(ACC_VERSION);
-        if(true) {
-            return;
-        }
-        // FIXME: REMOVE
-
-
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
@@ -69,9 +47,9 @@ public class Match extends Script {
 
             // 4. Aller vers l'accélérateur
             // (4,5. Désactiver la détection du secondaire ?)
-//            Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
+            Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
-  //          accelerateurScript.goToThenExecute(ACC_VERSION);
+            accelerateurScript.goToThenExecute(ACC_VERSION);
         }
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
 /*            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
