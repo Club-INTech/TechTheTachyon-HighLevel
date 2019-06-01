@@ -67,7 +67,7 @@ public class GetBlueAcc extends Script {
                 robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
             }
             robot.turn(-Math.PI/2);
-            robot.recalageMeca(true, 150/*rayon robot*/ + 110 /*bras*/);
+            robot.recalageMeca(true, 150/*rayon robot*/ + 10 /*bras*/);
 
             if(symetrie) {
                 robot.turn(Math.PI);
