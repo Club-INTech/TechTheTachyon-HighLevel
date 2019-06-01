@@ -99,10 +99,10 @@ public class Accelerateur extends Script {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
             recalageRight.join();
+            double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE.get();
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
                 robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
-                double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE.get();
                 robot.setOrientation(Math.PI/2);
                 robot.turn(offsetTheta+0);
             }
@@ -128,7 +128,7 @@ public class Accelerateur extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
-            robot.turn(Math.PI);
+            robot.turn(Math.PI+offsetTheta);
             recalageLeft.join();
             robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
