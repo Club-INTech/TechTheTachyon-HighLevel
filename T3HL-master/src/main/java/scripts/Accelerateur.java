@@ -103,10 +103,8 @@ public class Accelerateur extends Script {
                 robot.turn(Math.PI/2);
                 robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
                 double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE.get();
-                if(symetry)
-                    offsetTheta *= -1;
-                robot.setOrientation(Math.PI/2+offsetTheta);
-                robot.turn(0);
+                robot.setOrientation(Math.PI/2);
+                robot.turn(offsetTheta+0);
             }
 
             while (robot.getNbPaletsDroits() > 0) {

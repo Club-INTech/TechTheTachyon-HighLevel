@@ -259,13 +259,6 @@ public class OrderWrapper implements Service {
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
         this.sendString(String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
-
-        waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-        try {
-            container.getService(DataControler.class).waitForTwoPositionUpdates();
-        } catch (ContainerException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
