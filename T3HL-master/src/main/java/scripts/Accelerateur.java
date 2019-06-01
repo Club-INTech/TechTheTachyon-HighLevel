@@ -128,7 +128,7 @@ public class Accelerateur extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
-            robot.turn(Math.PI+offsetTheta);
+            robot.turn(Math.PI-offsetTheta);
             recalageLeft.join();
             robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
