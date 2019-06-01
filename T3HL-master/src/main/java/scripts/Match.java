@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
@@ -37,6 +38,11 @@ public class Match extends Script {
         Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
         async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
         robot.setOrientation(Math.PI/2);
+
+        for (int i = 0; i < 5; i++) {
+            robot.pushPaletDroit(CouleurPalet.ROUGE);
+            robot.pushPaletGauche(CouleurPalet.ROUGE);
+        }
         accelerateurScript.timedExecute(ACC_VERSION);
         if(true) {
             return;
