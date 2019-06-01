@@ -96,7 +96,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
         Vec2 newPos = new VectCartesian(1500-191, 350);
-        robot.setPositionAndOrientation(newPos, Math.PI/2);
+        robot.setPositionAndOrientation(newPos, Math.PI);
 
         if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
             Log.TABLE.critical("Couleur pour le recalage : violet");
