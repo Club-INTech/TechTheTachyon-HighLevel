@@ -67,7 +67,7 @@ public class Accelerateur extends Script {
 
 
 
-    final int decalageAccelerateur = -100;
+    final int decalageAccelerateur = 0;
 
 
     /**
