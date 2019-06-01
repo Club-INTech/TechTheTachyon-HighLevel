@@ -208,12 +208,12 @@ public class Table implements Service {
         CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 40, robotRay+obstacleMargin);
         Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
         this.addFixedObstacleNoGraphChange(goldeniumDroite);
-
+/*
         Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736, 46);
         CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 40, robotRay+obstacleMargin);
         Obstacle goldeniumGauche = new StillCircularRectangularObstacle(formeGoldeniumGauche);
-        this.addFixedObstacle(goldeniumGauche);
-
+        this.addFixedObstacleNoGraphChange(goldeniumGauche);
+*/
         /**
          * Bord de la table !
          */
