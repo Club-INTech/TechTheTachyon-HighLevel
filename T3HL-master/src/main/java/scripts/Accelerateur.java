@@ -99,7 +99,10 @@ public class Accelerateur extends Script {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
             recalageRight.join();
-            double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE.get();
+            double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_JAUNE.get();
+            if(symetry) {
+                offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_VIOLET.get();
+            }
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
                 robot.recalageMeca(false, (int)Offsets.ACCELERATEUR_Y_RECALAGE.get());
