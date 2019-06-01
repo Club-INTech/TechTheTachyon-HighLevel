@@ -83,6 +83,7 @@ public class MainSlave extends RobotEntryPoint {
 
 
         table.removeAllChaosObstacles();
+        table.removeAllTemporaryObstacles();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
 
         //robot.setRotationSpeed(Speed.SLOW_ALL);
