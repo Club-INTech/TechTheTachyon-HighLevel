@@ -61,7 +61,8 @@ public class GetBlueAcc extends Script {
             }
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
+                robot.softGoTo(new VectCartesian(
+                        -500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
                 robot.turn(Math.PI);
             }
             else {
