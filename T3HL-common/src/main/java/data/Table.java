@@ -204,10 +204,11 @@ public class Table implements Service {
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
         this.addFixedObstacleNoGraphChange(accelerateur);
 
+        /*
         Vec2 vecteurGoldeniumDroiteCentre = new VectCartesian(736, 46);
         CircularRectangle formeGoldeniumDroite = new CircularRectangle(vecteurGoldeniumDroiteCentre, 102, 40, robotRay+obstacleMargin);
         Obstacle goldeniumDroite = new StillCircularRectangularObstacle(formeGoldeniumDroite);
-        this.addFixedObstacleNoGraphChange(goldeniumDroite);
+        this.addFixedObstacleNoGraphChange(goldeniumDroite);*/
 /*
         Vec2 vecteurGoldeniumGaucheCentre = new VectCartesian(-736, 46);
         CircularRectangle formeGoldeniumGauche = new CircularRectangle(vecteurGoldeniumGaucheCentre, 102, 40, robotRay+obstacleMargin);
