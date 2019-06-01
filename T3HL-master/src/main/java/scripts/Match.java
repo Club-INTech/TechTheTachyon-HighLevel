@@ -1,5 +1,6 @@
 package scripts;
 
+import data.CouleurPalet;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
@@ -27,17 +28,10 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-        try {
-            robot.turn(Math.PI);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }
-        robot.recalageMeca(false, 100);
-        /*
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
-        }else {
+        } else {
 
             // 0. Lancer l'électron
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
@@ -45,9 +39,6 @@ public class Match extends Script {
             // 1. Zone de départ, juste la case bleue
             scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_DEPART).timedExecute(0/*PaletsZoneDepart.JUST_BLUE*///);
 
-            /*
-            // 2. Zone de chaos (tout)
-            scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).goToThenExecute(0);*/
 
             // 3. Palets x6
             /*scriptManagerMaster.getScript(ScriptNamesMaster.PALETS6ALTER).goToThenExecute(4);
@@ -58,17 +49,12 @@ public class Match extends Script {
             // (4,5. Désactiver la détection du secondaire ?)
             Script accelerateurScript = scriptManagerMaster.getScript(ScriptNamesMaster.ACCELERATEUR);
 
+            accelerateurScript.goToThenExecute(ACC_VERSION);
+        }
             // 5. Prévenir le secondaire que le distributeur de palets x6 est libre => TODO: c'est la balance en fait qui coince
-            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
+/*            async("Execution des actions pendant le déplacement", () -> accelerateurScript.executeWhileMovingToEntry(ACC_VERSION));
 
-
-            //On tente d'aller à l'accélérateur
-            boolean exceptionRaised = false;
-
-            System.out.println("boolean secours =" + secours);
-            if(!secours) {
-                try {
-                    robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
+            robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
                 } catch (UnableToMoveException e) {
                     exceptionRaised = true;
                     e.printStackTrace();
@@ -121,6 +107,10 @@ public class Match extends Script {
             }
         }
         */
+<<<<<<< HEAD
+=======
+
+>>>>>>> 11c495a9f4523bf4677dbb1f145832cf4fb6fa30
 /*
         if (table.isPositionInMobileObstacle(accelerateurScript.entryPosition(accVersion))) {
             //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
