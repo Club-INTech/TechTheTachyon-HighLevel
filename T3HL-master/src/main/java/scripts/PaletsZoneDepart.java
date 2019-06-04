@@ -60,8 +60,8 @@ public class PaletsZoneDepart extends Script {
         } else {
             positions = new VectCartesian[]{
                     //new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(entry.getX()+offX, entry.getY()),
-                    new VectCartesian(entry.getX()+offX-20,1040),
+                    new VectCartesian(xEntry+offX, entry.getY()),
+                    new VectCartesian(xEntry+offX-20,1040),
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
