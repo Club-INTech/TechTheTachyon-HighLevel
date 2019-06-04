@@ -29,7 +29,9 @@ import main.RobotEntryPoint;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import robot.Master;
+import robot.Robot;
 import scripts.Match;
+import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
@@ -68,6 +70,19 @@ public class MainMaster extends RobotEntryPoint {
     }
 
     @Override
+    protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
+        super.initServices(container, robotClass, scriptManagerClass);
+        if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
+            try {
+                MontlheryController montlheryController = container.getService(MontlheryController.class);
+                montlheryController.start();
+            } catch (ContainerException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
     protected void preLLConnection() throws ContainerException {
         waitForColorSwitch();
 
@@ -89,6 +104,16 @@ public class MainMaster extends RobotEntryPoint {
 
     @Override
     protected void act() throws UnableToMoveException {
+        if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
+            while(true) {
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+            return;
+        }
         robot.increaseScore(5); // présence de l'expérience
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);

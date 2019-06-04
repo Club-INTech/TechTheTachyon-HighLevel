@@ -27,11 +27,12 @@ public class Match extends Script {
 
     @Override
     public void execute(Integer version) {
-
         if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
-        }else {
+        } else if(container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
+            scriptManagerMaster.getScript(ScriptNamesMaster.OPEN_THE_GATE).timedExecute(0);
+        } else {
 
             // 0. Lancer l'électron
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);

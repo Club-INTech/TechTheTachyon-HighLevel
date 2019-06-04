@@ -61,14 +61,22 @@ public class GetBlueAcc extends Script {
             }
             //robot.moveLengthwise(230,false);
             if (symetrie){
-                robot.softGoTo(new VectCartesian(
-                        -500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
-                robot.turn(Math.PI);
+
+                robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
+
             }
             else {
                 robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
+            }
+            robot.turn(-Math.PI/2);
+            robot.recalageMeca(true, 150/*rayon robot*/ + 10+7 /*bras*/);
+
+            if(symetrie) {
+                robot.turn(Math.PI);
+            } else {
                 robot.turn(0);
             }
+
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
             robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_GOLDONIUM_POUR_BLEU,true); /*Cette position permet de ne pas taper dans le palet*/

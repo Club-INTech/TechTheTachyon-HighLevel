@@ -13,6 +13,7 @@ public enum ScriptNamesMaster implements ScriptNames {
     HOMOLOGATION(ScriptHomologation.class, "homologation"),
     PRECOUPE_ACC(precoupeAccelerateurx6.class, "precoupeAccelerateurx6"),
     ELECTRON(Electron.class, "electron"),
+    OPEN_THE_GATE(OpenTheGate.class, "openthegate"),
     ;
 
     private Class<? extends Service> scriptClass;
