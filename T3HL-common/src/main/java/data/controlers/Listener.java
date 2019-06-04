@@ -73,6 +73,8 @@ public class Listener extends ServiceThread {
      */
     private boolean useBaliseImage;
 
+    private boolean testZoneChaos;
+
     private boolean visualize;
     /**
      * Est-ce qu'on active l'éléctron ?
@@ -177,7 +179,7 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.debug("Debug connection ready!");
                 }
             }
-            if(useBaliseImage){
+            if(useBaliseImage || testZoneChaos){
                 connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
             if(useLidar) {
@@ -255,6 +257,7 @@ public class Listener extends ServiceThread {
         this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
         this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
         this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
+        this.testZoneChaos = config.getBoolean(ConfigData.ZONE_CHAOS_TEST);
         this.visualize = config.getBoolean(ConfigData.VISUALISATION);
         this.connectToBuddy = config.getBoolean(ConfigData.CONNECT_TO_BUDDY);
         this.timeBetweenBuddyPosUpdates = config.getLong(ConfigData.TIME_BETWEEN_POS_UPDATES);
