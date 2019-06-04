@@ -20,14 +20,13 @@ public class OpenTheGate extends Script {
 
     @Override
     public void execute(Integer version) {
-        double width = 1500;
+        double width = 500;
         double height = 500;
-        Vec2 lowerLeft = new VectCartesian(-width/2, 250);
-        Vec2 upperLeft = new VectCartesian(-width/2, 250+height);
-        Vec2 lowerRight = new VectCartesian(width/2, 250);
-        Vec2 upperRight = new VectCartesian(width/2, 250+height);
+        Vec2 lowerLeft = new VectCartesian(250, 250);
+        Vec2 upperLeft = new VectCartesian(250, 250+height);
+        Vec2 lowerRight = new VectCartesian(250+width, 250);
+        Vec2 upperRight = new VectCartesian(250+width, 250+height);
 
-        robot.setPositionAndOrientation(upperLeft.clone(), 0.0);
         while (true) {
             try {
                 robot.followPathTo(lowerLeft);
