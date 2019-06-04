@@ -9,7 +9,7 @@ NBR_NOEUDS_CIRCLE                   = 14
 ESPACEMENT_CIRCLE                   = 1.2
 
 #Couleur
-COULEUR                             =violet
+COULEUR                             =jaune
 
 #CHEMIN D'EXECUTION DU PROCESSUS LIDAR
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX

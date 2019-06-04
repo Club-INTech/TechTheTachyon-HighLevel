@@ -123,6 +123,7 @@ public class Table implements Service {
      * Rampes et balance (dans une variable pour que le lidar détecte pas le mat de la balance)
      */
     private StillCircularRectangularObstacle balanceAndRamps;
+    private boolean openTheGate;
 
     /**
      * Constructeur de la table
@@ -274,6 +275,10 @@ public class Table implements Service {
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletBleuGauche);
         this.paletBleuGauche = paletBleuGauche;
+
+        if(openTheGate) {
+            addFixedObstacle(new StillRectangularObstacle(new Rectangle(new VectCartesian(0, 1000), 2, 2000)));
+        }
     }
 
     /**
@@ -654,6 +659,7 @@ public class Table implements Service {
         this.length = config.getInt(ConfigData.TABLE_X);
         this.width = config.getInt(ConfigData.TABLE_Y);
         this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
+        this.openTheGate = config.getBoolean(ConfigData.OPEN_THE_GATE);
     }
 
     public Obstacle getPaletRougeDroite() {
