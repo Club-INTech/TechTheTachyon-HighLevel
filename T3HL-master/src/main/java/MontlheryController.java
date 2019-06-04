@@ -4,6 +4,7 @@ import orders.order.ActuatorsOrder;
 import orders.order.MontlheryOrder;
 import orders.order.Order;
 import pfg.config.Config;
+import robot.Master;
 import robot.Robot;
 import utils.container.Service;
 
@@ -26,7 +27,7 @@ public class MontlheryController extends Thread implements Service {
     private ArmState armPosition = ArmState.NO_IDEA;
     private Order lastOrder;
 
-    public MontlheryController(Robot robot, OrderWrapper orders) {
+    public MontlheryController(Master robot, OrderWrapper orders) {
         this.robot = robot;
         this.orders = orders;
     }
@@ -41,7 +42,7 @@ public class MontlheryController extends Thread implements Service {
 
         ControllerIndex controller = controllers.getControllerIndex(0);
 
-        while (!Thread.currentThread().isInterrupted()) {
+        while (!isInterrupted()) {
             controllers.update();
             if (controller.isConnected()) {
                 try {
