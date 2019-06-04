@@ -35,9 +35,9 @@ public class OpenTheGate extends Script {
             offX= ZDD_X_JAUNE.get();
         }
         Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
-        Vec2 lowerLeft = new VectCartesian(450, 300);
+        Vec2 lowerLeft = new VectCartesian(650, 300);
         Vec2 lowerRight = new VectCartesian(zoneDep.getX(), 300);
-        Vec2 upperLeft = new VectCartesian(450, 1300);
+        Vec2 upperLeft = new VectCartesian(650, 1300);
         Vec2 upperRight = new VectCartesian(zoneDep.getX(), 1300);
 
         while (true) {

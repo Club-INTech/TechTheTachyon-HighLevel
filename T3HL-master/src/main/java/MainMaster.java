@@ -50,6 +50,9 @@ import utils.math.VectCartesian;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static utils.Offsets.ZDD_X_JAUNE;
+import static utils.Offsets.ZDD_X_VIOLET;
+
 /**
  * @author nayth, jglrxavpok
  */
@@ -120,16 +123,30 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
-        Vec2 newPos = new VectCartesian(1500-191, 350);
-        robot.setPositionAndOrientation(newPos, Math.PI);
+        boolean openTheGate = container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE);
+        if(openTheGate) {
+            double offX;
+            boolean symetry = container.getConfig().getString(ConfigData.COULEUR).equals("violet");
+            if (symetry){
+                offX= ZDD_X_VIOLET.get();
+            } else {
+                offX= ZDD_X_JAUNE.get();
+            }
+            Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
 
-        if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
-            Log.TABLE.critical("Couleur pour le recalage : violet");
-            robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+            robot.setPositionAndOrientation(zoneDep, Math.PI/2);
         } else {
-            Log.TABLE.critical("Couleur pour le recalage : jaune");
-            robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-        }
+
+            Vec2 newPos = new VectCartesian(1500-191, 350);
+            robot.setPositionAndOrientation(newPos, Math.PI);
+
+            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+                Log.TABLE.critical("Couleur pour le recalage : violet");
+                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
+            } else {
+                Log.TABLE.critical("Couleur pour le recalage : jaune");
+                robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
+            }
 
 
         /*robot.turn(Math.PI/2);
@@ -144,6 +161,7 @@ public class MainMaster extends RobotEntryPoint {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);*/
+        }
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
@@ -162,18 +180,20 @@ public class MainMaster extends RobotEntryPoint {
 
             Match match = container.getService(Match.class);
 
-            Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
-            robot.gotoPoint(entryPos);
-            Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-            double angleToStart;
-            if (container.getConfig().getString(ConfigData.COULEUR).equals("jaune")) {
-                angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
+            if( ! openTheGate) {
+                Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
+                robot.gotoPoint(entryPos);
+                Vec2 currentPosition = XYO.getRobotInstance().getPosition();
+                double angleToStart;
+                if (container.getConfig().getString(ConfigData.COULEUR).equals("jaune")) {
+                    angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
+                }
+                else {
+                    angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
+                }
+                System.out.println("angleToStart : " + angleToStart);
+                robot.turn(angleToStart-Math.PI/2);
             }
-            else {
-                angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
-            }
-            System.out.println("angleToStart : " + angleToStart);
-            robot.turn(angleToStart-Math.PI/2);
 
             orderWrapper.waitJumper();
             /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
