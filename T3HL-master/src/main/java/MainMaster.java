@@ -147,8 +147,11 @@ public class MainMaster extends RobotEntryPoint {
 
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
+
+        if( ! container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
+            table.removeTemporaryObstacle(table.getPaletVertDroite());
+        }
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletVertDroite());
         table.removeTemporaryObstacle(table.getPaletBleuDroite());
         table.removeAllChaosObstacles();
 

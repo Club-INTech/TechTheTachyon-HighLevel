@@ -34,12 +34,12 @@ public class OpenTheGate extends Script {
         } else {
             offX= ZDD_X_JAUNE.get();
         }
-        Vec2 lowerLeft = new VectCartesian(450, 350);
-        Vec2 lowerRight = new VectCartesian(1100, 350);
-        Vec2 upperLeft = new VectCartesian(450, 1250);
-        Vec2 upperRight = new VectCartesian(1100, 1250);
+        Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
+        Vec2 lowerLeft = new VectCartesian(450, 300);
+        Vec2 lowerRight = new VectCartesian(zoneDep.getX(), 300);
+        Vec2 upperLeft = new VectCartesian(450, 1300);
+        Vec2 upperRight = new VectCartesian(zoneDep.getX(), 1300);
 
-        Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040);
         while (true) {
             try {
                 robot.followPathTo(zoneDep, 0);
@@ -63,16 +63,6 @@ public class OpenTheGate extends Script {
             }
 
             try {
-                robot.followPathTo(lowerLeft, 0);
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            }
-            try {
-                robot.followPathTo(lowerRight, 0);
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            }
-            try {
                 robot.followPathTo(upperRight, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
@@ -82,6 +72,17 @@ public class OpenTheGate extends Script {
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
+            try {
+                robot.followPathTo(lowerLeft, 0);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+            try {
+                robot.followPathTo(lowerRight, 0);
+            } catch (UnableToMoveException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
