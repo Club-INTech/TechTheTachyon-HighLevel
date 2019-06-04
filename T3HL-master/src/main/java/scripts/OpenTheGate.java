@@ -57,6 +57,7 @@ public class OpenTheGate extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
