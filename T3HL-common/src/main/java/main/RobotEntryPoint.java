@@ -23,10 +23,7 @@ import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import connection.ConnectionManager;
 import data.Table;
-import data.controlers.LidarControler;
-import data.controlers.Listener;
-import data.controlers.PanneauService;
-import data.controlers.DataControler;
+import data.controlers.*;
 import locomotion.UnableToMoveException;
 import orders.OrderWrapper;
 import robot.Robot;
@@ -55,6 +52,7 @@ public abstract class RobotEntryPoint {
     protected LidarControler lidarControler;
     protected Table table;
     protected Robot robot;
+    protected PaletsChaosControler paletsChaosControler;
     // Regardez, c'est GLaDOS!
     protected AIService ai;
     protected PanneauService panneauService;
@@ -218,6 +216,10 @@ public abstract class RobotEntryPoint {
             robot = container.getService(robotClass);
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
+            if(container.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
+                paletsChaosControler = container.getService(PaletsChaosControler.class);
+                paletsChaosControler.start();
+            }
             ai = container.getService(AIService.class);
             MatchTimer timer = container.getService(MatchTimer.class);
             timer.start();
