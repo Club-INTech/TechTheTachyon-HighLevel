@@ -20,7 +20,8 @@ USING_BALISE_IMAGE                  =false
 CONNECT_TO_BUDDY                    =false
 BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
-MODE_MONTHLERY                      =true
+MODE_MONTHLERY                      =false
+OPEN_THE_GATE                       =true
 
 #________________________________________________________________________________________________________________________
 

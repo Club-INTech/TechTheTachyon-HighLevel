@@ -111,7 +111,8 @@ public enum ConfigData implements ConfigInfo
     HL_MASTER_SIMULATEUR(20002),
     DEBUG_SIMULATEUR_PORT(19999),
 
-    MODE_MONTHLERY(true),
+    MODE_MONTHLERY(false),
+    OPEN_THE_GATE(true),
 
 
     /**
