@@ -184,7 +184,7 @@ public class PathFollower extends ServiceThread {
 
                 travelledDistance = (int) (start.distanceTo(robotXYO.getPosition()) * Math.signum(distance)); // distance entre la position de départ et la position actuelle
                 firstPass = false;
-                if(SensorState.STUCKED.getData() && expectedWallImpact){
+                if(SensorState.STUCKED.getData() && expectedWallImpact) {
                     shouldRetry=false;
                 }
             } while ((Math.abs(travelledDistance-distance) >= 5) && shouldRetry);

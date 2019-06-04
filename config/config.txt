@@ -9,7 +9,7 @@ NBR_NOEUDS_CIRCLE                   = 14
 ESPACEMENT_CIRCLE                   = 1.2
 
 #Couleur
-COULEUR                             =jaune
+COULEUR                             =violet
 
 #CHEMIN D'EXECUTION DU PROCESSUS LIDAR
 LIDAR_PROCESS_PATH                  =../bin/LiDAR_UST_10LX
@@ -28,9 +28,9 @@ ZONE_CHAOS_TEST                     =false
 
 [Master]
 MASTER                              = true
-USING_ELECTRON                      = true
-USING_PANEL                         = true
-USING_LIDAR			                = true
+USING_ELECTRON                      = false
+USING_PANEL                         = false
+USING_LIDAR			                = false
 LED_COUNT			                = 16
 HOMOLOGATION                        = false
 
@@ -39,7 +39,8 @@ ROBOT_RAY                           = 190
 BUDDY_RAY                           = 150
 VECTOR_COMPARISON_THRESHOLD         = 5
 RECALAGE_ACC                        =false
-SECOURS                             =true
+SECOURS                             =false
+RECALAGE_MECA_ACC                   =true
 
 #________________________________________________________________________________________________________________________
 
@@ -73,6 +74,13 @@ ZDD_POST_BALANCE_Y_VIOLET           =100
 
 ACCELERATEUR_Y_VIOLET               =-15
 ACCELERATEUR_Y_JAUNE                =-25
+
+ACCELERATEUR_THETA_RECALAGE_JAUNE   =0.06
+ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2   =0.06
+ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2  =0.075
+ACCELERATEUR_THETA_RECALAGE_VIOLET  =0.05
+ACCELERATEUR_Y_RECALAGE_VIOLET             =123
+ACCELERATEUR_Y_RECALAGE_JAUNE             =122
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3

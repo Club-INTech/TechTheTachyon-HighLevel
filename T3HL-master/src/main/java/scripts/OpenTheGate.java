@@ -20,12 +20,10 @@ public class OpenTheGate extends Script {
 
     @Override
     public void execute(Integer version) {
-        double width = 500;
-        double height = 500;
-        Vec2 lowerLeft = new VectCartesian(250, 250);
-        Vec2 upperLeft = new VectCartesian(250, 250+height);
-        Vec2 lowerRight = new VectCartesian(250+width, 250);
-        Vec2 upperRight = new VectCartesian(250+width, 250+height);
+        Vec2 lowerLeft = new VectCartesian(450, 350);
+        Vec2 lowerRight = new VectCartesian(1100, 350);
+        Vec2 upperLeft = new VectCartesian(450, 1250);
+        Vec2 upperRight = new VectCartesian(1100, 1250);
 
         while (true) {
             try {

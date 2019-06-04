@@ -102,6 +102,7 @@ public class MainMaster extends RobotEntryPoint {
         }
     }
 
+
     @Override
     protected void act() throws UnableToMoveException {
         if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
@@ -129,6 +130,8 @@ public class MainMaster extends RobotEntryPoint {
             Log.TABLE.critical("Couleur pour le recalage : jaune");
             robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
         }
+
+
         /*robot.turn(Math.PI/2);
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
@@ -153,7 +156,9 @@ public class MainMaster extends RobotEntryPoint {
         try {
             double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_X_VIOLET.get() : Offsets.ZDD_X_JAUNE.get();
             double offY = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_Y_VIOLET.get() : Offsets.ZDD_Y_JAUNE.get();
+
             Match match = container.getService(Match.class);
+
             Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
             robot.gotoPoint(entryPos);
             Vec2 currentPosition = XYO.getRobotInstance().getPosition();
@@ -164,14 +169,9 @@ public class MainMaster extends RobotEntryPoint {
             else {
                 angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
             }
-           /* if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")){
-                angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX()+ Offsets.ZDD_X_VIOLET.get());
-            }
-            else {
-                angleToStart = Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
-            }*/
             System.out.println("angleToStart : " + angleToStart);
             robot.turn(angleToStart-Math.PI/2);
+
             orderWrapper.waitJumper();
             /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
             robot.gotoPoint(entryPos2);

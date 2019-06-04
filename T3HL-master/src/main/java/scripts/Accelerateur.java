@@ -67,13 +67,14 @@ public class Accelerateur extends Script {
 
 
 
-    final int decalageAccelerateur = -100;
+    final int decalageAccelerateur = -50;
 
 
     /**
      * Est-ce qu'on se recale à l'accélérateur?
      */
     private boolean recalageAcc;
+    private boolean recalageMecaAcc;
 
     public Accelerateur(Master robot, Table table, Container container) {
         super(robot, table);
@@ -97,8 +98,23 @@ public class Accelerateur extends Script {
             if(recalageAcc) {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
-            robot.turn(0);
             recalageRight.join();
+            double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_JAUNE.get();
+            double offsetThetaAutreCote = Offsets.ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2.get();
+            if(symetry) {
+                offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_VIOLET.get();
+                offsetThetaAutreCote = Offsets.ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2.get();
+            }
+            if(recalageMecaAcc) {
+                robot.turn(Math.PI/2);
+                double recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_JAUNE.get();
+                if(symetry) {
+                    recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_VIOLET.get();
+                }
+                robot.recalageMeca(false, (int)recalageY);
+                robot.setOrientation(Math.PI/2);
+                robot.turn(offsetTheta+0);
+            }
 
             while (robot.getNbPaletsDroits() > 0) {
                 robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
@@ -121,7 +137,7 @@ public class Accelerateur extends Script {
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
 
-            robot.turn(Math.PI);
+            robot.turn(Math.PI-offsetThetaAutreCote);
             recalageLeft.join();
             robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
@@ -244,6 +260,7 @@ public class Accelerateur extends Script {
         super.updateConfig(config);
         this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
         this.recalageAcc = config.getBoolean(ConfigData.RECALAGE_ACC);
+        this.recalageMecaAcc = config.getBoolean(ConfigData.RECALAGE_MECA_ACC);
     }
 
 }
