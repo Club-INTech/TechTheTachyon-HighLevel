@@ -28,6 +28,7 @@ public enum GameState {
     GOLDENIUM_LIBERE(false),
     BALANCE_FREE(false),
     ACCELERATOR_FREE(false),
+    POSITIONS_CHAOS_RECUES(false),
     ;
     private Object valueObject;
     GameState(Object valueObject){

@@ -1,5 +1,6 @@
 package data.controlers;
 
+import data.GameState;
 import data.PaletsZoneChaos;
 import data.Table;
 import org.json.simple.JSONArray;
@@ -141,6 +142,7 @@ public class PaletsChaosControler extends Thread implements Service {
                         }
                     }
                 }
+                GameState.POSITIONS_CHAOS_RECUES.setData(true);
 
                 /*for (int i = 0; i < purple_dispenser_array.size(); i++) {
                     System.out.println(purple_dispenser_array.get(i));
