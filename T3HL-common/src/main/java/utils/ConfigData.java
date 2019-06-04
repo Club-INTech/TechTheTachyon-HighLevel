@@ -113,6 +113,7 @@ public enum ConfigData implements ConfigInfo
 
     MODE_MONTHLERY(false),
     OPEN_THE_GATE(true),
+    ZONE_CHAOS_TEST(false),
 
 
     /**
