@@ -80,61 +80,65 @@ public class PaletsChaosControler extends Thread implements Service {
                 String color;
                 boolean first_red_purple = true;
                 boolean first_red_yellow = true;
-                for (int i = 0; i < purple_chaos_array.size(); i++) {
-                    JSONObject jsonObj = (JSONObject) purple_chaos_array.get(i);
-                    color = (String) jsonObj.get("color");
-                    x = toIntExact((long) jsonObj.get("x"));
-                    y = toIntExact((long) jsonObj.get("y"));
-                    position = new VectCartesian(x, y);
-                    switch (color) {
-                        case "red":
-                            if (first_red_purple) {
-                                table.getPaletRedUnZoneChaosPurple().setPosition(position);
-                                PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.setPosition(position);
-                                first_red_purple = false;
-                            } else {
-                                table.getPaletRedDeuxZoneChaosPurple().setPosition(position);
-                                PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.setPosition(position);
-                            }
-                            break;
-                        case "blue":
-                            PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.setPosition(position);
-                            table.getPaletBlueZoneChaosPurple().setPosition(position);
-                            break;
-                        case "green":
-                            PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.setPosition(position);
-                            table.getPaletGreenZoneChaosPurple().setPosition(position);
-                            break;
+                if(symetrie) {
+                    for (int i = 0; i < purple_chaos_array.size(); i++) {
+                        JSONObject jsonObj = (JSONObject) purple_chaos_array.get(i);
+                        color = (String) jsonObj.get("color");
+                        x = toIntExact((long) jsonObj.get("x"));
+                        y = toIntExact((long) jsonObj.get("y"));
+                        position = new VectCartesian(x, y);
+                        switch (color) {
+                            case "red":
+                                if (first_red_purple) {
+                                    table.getPaletRedUnZoneChaosPurple().setPosition(position);
+                                    PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.setPosition(position);
+                                    first_red_purple = false;
+                                } else {
+                                    table.getPaletRedDeuxZoneChaosPurple().setPosition(position);
+                                    PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.setPosition(position);
+                                }
+                                break;
+                            case "blue":
+                                PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.setPosition(position);
+                                table.getPaletBlueZoneChaosPurple().setPosition(position);
+                                break;
+                            case "green":
+                                PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.setPosition(position);
+                                table.getPaletGreenZoneChaosPurple().setPosition(position);
+                                break;
+                        }
                     }
                 }
+                else {
 
-                for (int i = 0; i < yellow_chaos_array.size(); i++) {
-                    System.out.println(yellow_chaos_array.get(i));
-                    JSONObject jsonObj = (JSONObject) yellow_chaos_array.get(i);
-                    x = toIntExact((long) jsonObj.get("x"));
-                    y = toIntExact((long) jsonObj.get("y"));
-                    color = (String) jsonObj.get("color");
-                    position = new VectCartesian(x, y);
+                    for (int i = 0; i < yellow_chaos_array.size(); i++) {
+                        System.out.println(yellow_chaos_array.get(i));
+                        JSONObject jsonObj = (JSONObject) yellow_chaos_array.get(i);
+                        x = toIntExact((long) jsonObj.get("x"));
+                        y = toIntExact((long) jsonObj.get("y"));
+                        color = (String) jsonObj.get("color");
+                        position = new VectCartesian(x, y);
 
-                    switch (color) {
-                        case "red":
-                            if (first_red_yellow) {
-                                table.getPaletRedUnZoneChaosYellow().setPosition(position);
-                                PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.setPosition(position);
-                                first_red_yellow = false;
-                            } else {
-                                table.getPaletRedDeuxZoneChaosYellow().setPosition(position);
-                                PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.setPosition(position);
-                            }
-                            break;
-                        case "blue":
-                            PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.setPosition(position);
-                            table.getPaletBlueZoneChaosYellow().setPosition(position);
-                            break;
-                        case "green":
-                            PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.setPosition(position);
-                            table.getPaletGreenZoneChaosPurple().setPosition(position);
-                            break;
+                        switch (color) {
+                            case "red":
+                                if (first_red_yellow) {
+                                    table.getPaletRedUnZoneChaosYellow().setPosition(position);
+                                    PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.setPosition(position);
+                                    first_red_yellow = false;
+                                } else {
+                                    table.getPaletRedDeuxZoneChaosYellow().setPosition(position);
+                                    PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.setPosition(position);
+                                }
+                                break;
+                            case "blue":
+                                PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.setPosition(position);
+                                table.getPaletBlueZoneChaosYellow().setPosition(position);
+                                break;
+                            case "green":
+                                PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.setPosition(position);
+                                table.getPaletGreenZoneChaosPurple().setPosition(position);
+                                break;
+                        }
                     }
                 }
 
