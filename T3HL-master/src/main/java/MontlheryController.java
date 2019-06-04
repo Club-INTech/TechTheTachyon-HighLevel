@@ -22,6 +22,8 @@ public class MontlheryController extends Thread implements Service {
     private boolean wasLeftTriggerPressed;
     private boolean wasRightTriggerPressed;
     private boolean wasMoving;
+    private boolean translating;
+    private boolean rotating;
     private final OrderWrapper orders;
     private Robot robot;
     private ArmState armPosition = ArmState.NO_IDEA;
@@ -77,11 +79,11 @@ public class MontlheryController extends Thread implements Service {
                     }
                     if(leftTriggerPressed && !wasLeftTriggerPressed) {
                         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
                     }
                     if(rightTriggerPressed && !wasRightTriggerPressed) {
                         robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
                     }
 
                     wasAPressed = aPressed;
@@ -100,10 +102,15 @@ public class MontlheryController extends Thread implements Service {
                             order(MontlheryOrder.RECULE);
                         }
                         moving = true;
+                        translating = true;
+                    } else if(translating) {
+                        order(MontlheryOrder.STOP_TRANSLATION);
+                        translating = false;
                     }
 
                     if(epsilonCheck(rightAxisX)) {
                         moving = true;
+                        rotating = true;
                         if(rightAxisX < 0) {
                             if(leftAxisY > 0) {
                                 order(MontlheryOrder.LEFT);
@@ -117,6 +124,9 @@ public class MontlheryController extends Thread implements Service {
                                 order(MontlheryOrder.LEFT);
                             }
                         }
+                    } else if(rotating) {
+                        order(MontlheryOrder.STOP_ROTATION);
+                        rotating = false;
                     }
 
                     if(!moving) {
@@ -135,7 +145,7 @@ public class MontlheryController extends Thread implements Service {
             }
 
             try {
-                Thread.sleep(5);
+                Thread.sleep(16);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
