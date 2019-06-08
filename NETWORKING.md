@@ -97,6 +97,16 @@ Balise
 | --------------------- |:------------------:|:------------------------:|:-------------------------:|
 | TODO                  | TODO               | TODO                     | TODO                      |
 
+Nuc
+======
+
+**Interfaces**
+
+| Physique              | Nom de l'interface | Utilisations      | Adresse statique  |
+| --------------------- |:------------------:|:-----------------:|:-----------------:|
+| WiFi intégré          | wlan0              | k6op détection de palet| 192.168.12.12              |
+
+
 Electron
 ========
 **Interfaces**
