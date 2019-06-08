@@ -17,18 +17,14 @@ VISUALISATION                       =false
 SIMULATION                          =false
 USING_ELECTRON                      =false
 USING_BALISE_IMAGE                  =false
-CONNECT_TO_BUDDY                    =false
-BALANCE_WAIT_TIME                   =5000
-BALANCE_SLAVE_WAIT_TIME             =3000
-MODE_MONTHLERY                      =false
-OPEN_THE_GATE                       =false
-ZONE_CHAOS_TEST                     =true
+CONNECT_TO_BUDDY                    =true
+BALANCE_WAIT_TIME                   =14000
 
 #________________________________________________________________________________________________________________________
 
 [Master]
 MASTER                              = true
-USING_ELECTRON                      = false
+USING_ELECTRON                      = true
 USING_PANEL                         = true
 USING_LIDAR			                = true
 LED_COUNT			                = 16
@@ -36,11 +32,8 @@ HOMOLOGATION                        = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 190
-BUDDY_RAY                           = 150
+BUDDY_RAY                           = 120
 VECTOR_COMPARISON_THRESHOLD         = 5
-RECALAGE_ACC                        =false
-SECOURS                             =false
-RECALAGE_MECA_ACC                   =true
 
 #________________________________________________________________________________________________________________________
 
@@ -59,7 +52,7 @@ VECTOR_COMPARISON_THRESHOLD         = 15
 
 #________________________________________________________________________________________________________________________
 [Offsets]
-PALETSX6_X_JAUNE                    =-4
+PALETSX6_X_JAUNE                    =-2
 PALETSX6_Y_JAUNE                    =5
 PALETSX6_X_VIOLET                   =10
 PALETSX6_Y_VIOLET                   =-7
@@ -67,59 +60,23 @@ PALETSX6_THETA_VIOLET               =0.0115
 PALETS_X6_BALANCE_Y_JAUNE           =0
 PALETS_X6_BALANCE_Y_VIOLET          =10
 
-ZDD_POST_BALANCE_X_JAUNE            =0
-ZDD_POST_BALANCE_Y_JAUNE            =100
-ZDD_POST_BALANCE_X_VIOLET           =0
-ZDD_POST_BALANCE_Y_VIOLET           =100
-
-ACCELERATEUR_Y_VIOLET               =-15
-ACCELERATEUR_Y_JAUNE                =-25
-
-ACCELERATEUR_THETA_RECALAGE_JAUNE   =0.06
-ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2   =0.06
-ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2  =0.075
-ACCELERATEUR_THETA_RECALAGE_VIOLET  =0.05
-ACCELERATEUR_Y_RECALAGE_VIOLET             =123
-ACCELERATEUR_Y_RECALAGE_JAUNE             =122
+ACCELERATEUR_Y_VIOLET               =1
+ACCELERATEUR_Y_JAUNE                =-4
 
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
 
-ZDD_Y_JAUNE                         =-5
-ZDD_Y_VIOLET                        =-5
-
 PALETSX3_X_JAUNE                    =0
 PALETSX3_Y_JAUNE                    =0
 PALETSX3_X_VIOLET                   =0
-PALETSX3_Y_VIOLET                   =0
+PALETSX3_Y_VIOLET                   =20
 
 GOLDENIUM_X_JAUNE                   =0
 GOLDENIUM_Y_JAUNE                   =0
 GOLDENIUM_X_VIOLET                  =0
 GOLDENIUM_Y_VIOLET                  =0
 
-MOVE_GOLDENIUM_JAUNE                =517
-MOVE_GOLDENIUM_VIOLET               =507
-
-DECALAGE_GOLD_JAUNE                 =-5
-DECALAGE_GOLD_VIOLET                =30
-
-GOLDENIUM_GOTO_X_JAUNE              =0
-GOLDENIUM_GOTO_Y_JAUNE              =45
-GOLDENIUM_GOTO_X_VIOLET             =0
-GOLDENIUM_GOTO_Y_VIOLET             =0
-
 GETBLUEACC_X_JAUNE                  =0
-GETBLUEACC_Y_JAUNE                  =3
+GETBLUEACC_Y_JAUNE                  =0
 GETBLUEACC_X_VIOLET                 =0
-GETBLUEACC_Y_VIOLET                 =6
-
-GETBLUEACC_X_RETRAIT_JAUNE            =20
-GETBLUEACC_Y_RETRAIT_JAUNE            =-39
-GETBLUEACC_X_RETRAIT_VIOLET           =-20
-GETBLUEACC_Y_RETRAIT_VIOLET           =-2
-
-SECONDAIRE_BALANCE_OFFSET_X_VIOLET  =10
-SECONDAIRE_BALANCE_OFFSET_X_JAUNE   =-20
-SECONDAIRE_BALANCE_OFFSET_Y_VIOLET  =0
-SECONDAIRE_BALANCE_OFFSET_Y_JAUNE   =20
+GETBLUEACC_Y_VIOLET                 =4
