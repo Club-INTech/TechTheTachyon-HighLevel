@@ -20,6 +20,7 @@ package robot;
 
 import com.panneau.LEDs;
 import com.panneau.TooManyDigitsException;
+import connection.Connection;
 import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
@@ -39,6 +40,7 @@ import orders.order.MontlheryOrder;
 import orders.order.MotionOrder;
 import pfg.config.Config;
 import utils.*;
+import utils.communication.CommunicationException;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.container.Service;
@@ -370,6 +372,22 @@ public abstract class Robot implements Service {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Recalage LiDAR (par rapport aux 3 balises)
+     */
+    public void recalageLidar(){
+        SensorState.RECALAGE_LIDAR_EN_COURS.setData(true);
+        try {
+            Connection.LIDAR_DATA.send(""); //Envoie d'une requête pour avoir des données brutes
+        } catch (CommunicationException e) {
+            Log.STDOUT.critical("Envoi impossible de la requête de données brutes au processus Lidar");
+            e.printStackTrace();
+            SensorState.RECALAGE_LIDAR_EN_COURS.setData(false);
+            return;
+        }
+        waitWhileTrue(SensorState.RECALAGE_LIDAR_EN_COURS);
     }
 
     /**

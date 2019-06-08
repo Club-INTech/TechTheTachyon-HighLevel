@@ -37,6 +37,7 @@ public class SensorState<DataType> {
     public static final SensorState<Boolean> ELECTRON_ARRIVED = new SensorState<>("ELECTRON_ARRIVED", false, Boolean.class);
     public static final SensorState<Boolean> LEFT_ARM_MOVING = new SensorState<>("LEFT_ARM_MOVING",false, Boolean.class);
     public static final SensorState<Boolean> RIGHT_ARM_MOVING = new SensorState<>("RIGHT_ARM_MOVING",false, Boolean.class);
+    public static final SensorState<Boolean> RECALAGE_LIDAR_EN_COURS = new SensorState<>("RECALAGE_LIDAR_EN_COURS",false, Boolean.class);
 
     /**
      * Permet de désactiver le lidar à volonté (par exemple pendant une rotation)
