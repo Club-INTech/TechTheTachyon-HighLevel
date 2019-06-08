@@ -21,7 +21,7 @@ CONNECT_TO_BUDDY                    =false
 BALANCE_WAIT_TIME                   =5000
 BALANCE_SLAVE_WAIT_TIME             =3000
 MODE_MONTHLERY                      =false
-OPEN_THE_GATE                       =true
+OPEN_THE_GATE                       =false
 ZONE_CHAOS_TEST                     =true
 
 #________________________________________________________________________________________________________________________

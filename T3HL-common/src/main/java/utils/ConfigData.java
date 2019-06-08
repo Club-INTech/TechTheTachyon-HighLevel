@@ -112,8 +112,8 @@ public enum ConfigData implements ConfigInfo
     DEBUG_SIMULATEUR_PORT(19999),
 
     MODE_MONTHLERY(false),
-    OPEN_THE_GATE(true),
-    ZONE_CHAOS_TEST(false),
+    OPEN_THE_GATE(false),
+    ZONE_CHAOS_TEST(true),
 
 
     /**

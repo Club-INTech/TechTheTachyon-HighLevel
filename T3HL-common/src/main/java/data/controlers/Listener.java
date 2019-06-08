@@ -179,7 +179,8 @@ public class Listener extends ServiceThread {
                     Log.COMMUNICATION.debug("Debug connection ready!");
                 }
             }
-            if(useBaliseImage || testZoneChaos){
+            //if(useBaliseImage || testZoneChaos){
+            if(useBaliseImage ){
                 connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
             if(useLidar) {
