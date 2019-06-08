@@ -34,6 +34,7 @@ public class Match extends Script {
         } else if(container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.OPEN_THE_GATE).timedExecute(0);
         } else if(container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
+            System.out.println("ok ok ");
             scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).timedExecute(0);
         } else {
             // 0. Lancer l'électron
