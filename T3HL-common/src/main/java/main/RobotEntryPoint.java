@@ -217,6 +217,7 @@ public abstract class RobotEntryPoint {
             KeepAlive keepAliveService = container.getService(KeepAlive.class);
             keepAliveService.start();
             if(container.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
+                System.out.println("suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuus");
                 paletsChaosControler = container.getService(PaletsChaosControler.class);
                 paletsChaosControler.start();
             }
