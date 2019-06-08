@@ -399,6 +399,7 @@ public class OrderWrapper implements Service {
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
         if(useBalise_Image) {
             try {
+                System.out.println("Message envoyeeeeeeeeeeeeeeeeeeeeeeeee");
                 Connection.BALISE_IMAGE.send("GO");
             } catch (CommunicationException e) {
                 e.printStackTrace();
