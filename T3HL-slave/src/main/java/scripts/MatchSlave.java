@@ -40,9 +40,8 @@ public class MatchSlave extends Script {
 
         if (container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
-        } else if(container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
-            scriptManagerSlave.getScript(ScriptNamesSlave.OPEN_THE_GATE).timedExecute(0);
-        } else {
+        }
+        else {
             try {
                 TimeUnit.SECONDS.sleep(5);
             } catch (InterruptedException e) {
