@@ -47,6 +47,7 @@ public enum Channel {
 
     //LidarControler
     OBSTACLES('!', '!'),
+    RAW_LIDAR_DATA('!', 'R'),
 
     //PaletChaosControler,
     PALETS_POSITION('!', '-'),
