@@ -200,10 +200,10 @@ public class MainMaster extends RobotEntryPoint {
             robot.gotoPoint(entryPos2);
             robot.turn(angleToStart-Math.PI/2);*/
 
-            robot.gotoPoint(new VectCartesian(0,1000));
+            //robot.gotoPoint(new VectCartesian(0,1000));
 
 
-            //match.execute(0);
+            match.execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
