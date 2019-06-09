@@ -75,7 +75,7 @@ public enum ConfigData implements ConfigInfo
     /**
      * Si on utilise la balise pour le traitement d'images
      */
-    USING_BALISE_IMAGE(false),
+    USING_BALISE_IMAGE(true),
 
     /**
      * Si on utilise le panneau
@@ -98,8 +98,8 @@ public enum ConfigData implements ConfigInfo
     TEENSY_SLAVE_IP("192.168.12.3"),
     TEENSY_SLAVE_PORT(13500),
     LIDAR_DATA_PORT(17865),
-    BALISE_IP("192.168.12.12"),
-    BALISE_PORT(1111),
+    BALISE_IP("192.168.12.7"),
+    BALISE_PORT(42111),
     IA_PORT(16000),
     ELECTRON_IP("192.168.42.69"),
     ELECTRON_PORT(18900),
