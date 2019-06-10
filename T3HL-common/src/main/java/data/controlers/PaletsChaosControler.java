@@ -109,6 +109,7 @@ public class PaletsChaosControler extends Thread implements Service {
                                 break;
                         }
                     }
+                    System.out.println("Traitement fini !!!!!!!!!! ");
                 }
                 else {
 
@@ -141,7 +142,10 @@ public class PaletsChaosControler extends Thread implements Service {
                                 break;
                         }
                     }
+                    System.out.println("Traitement fini !!!!!!!!!! ");
                 }
+
+                System.out.println("CHAOS : TRUEEEEEEEEEE : GAME STATE à TRUEEEEEE ");
                 GameState.POSITIONS_CHAOS_RECUES.setData(true);
 
                 /*for (int i = 0; i < purple_dispenser_array.size(); i++) {
