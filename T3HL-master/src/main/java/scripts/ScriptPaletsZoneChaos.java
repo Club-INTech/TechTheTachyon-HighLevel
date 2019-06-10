@@ -31,13 +31,13 @@ public class ScriptPaletsZoneChaos extends Script {
     @Override
     public void execute(Integer version) {
 
-        while (!(boolean) (GameState.POSITIONS_CHAOS_RECUES.getData())) {
+        /*while (!(boolean) (GameState.POSITIONS_CHAOS_RECUES.getData())) {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
         if (symetry) {
 
             positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet ), PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getY());
