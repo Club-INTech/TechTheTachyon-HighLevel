@@ -11,11 +11,10 @@ public enum PaletsZoneChaos {
      */
 
 
-
-    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new VectCartesian(525,1161)),
-    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new VectCartesian(431,1099)),
-    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new VectCartesian(600,1051)),
-    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new VectCartesian(469,1016)),
+    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new VectCartesian(474,1144)),
+    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new VectCartesian(566,1141)),
+    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new VectCartesian(459,1050)),
+    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new VectCartesian(555,1049)),
 
     RED_1_ZONE_CHAOS_YELLOW(7,CouleurPalet.ROUGE,false,false,new VectCartesian(426,1050)),
     RED_2_ZONE_CHAOS_YELLOW(8,CouleurPalet.ROUGE,false,false,new VectCartesian(574,1050)),
