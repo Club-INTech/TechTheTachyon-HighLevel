@@ -426,6 +426,6 @@ public class OrderWrapper implements Service {
     }
 
     public void forceStop() {
-        sendString(MotionOrder.FORCE_STOP);
+        sendString(MotionOrder.FORCE_STOP.getOrderStr());
     }
 }
