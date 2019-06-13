@@ -29,7 +29,7 @@ echo $PWD
 
 #Build de tout le HL!
 mvn clean
-mvn package -DskipTests -o
+mvn package -DskipTests
 
 mkdir ./bin/lib/
 
