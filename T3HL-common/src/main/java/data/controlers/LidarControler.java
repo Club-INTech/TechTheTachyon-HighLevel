@@ -122,6 +122,7 @@ public class LidarControler extends ServiceThread {
         this.table = table;
         this.listener = listener;
         this.messageStack = new LastElementCollection<>();
+        this.recalageDataStack = new LastElementCollection<>();
         listener.addCollection(Channel.OBSTACLES, this.messageStack);
         listener.addCollection(Channel.RAW_LIDAR_DATA, this.recalageDataStack);
     }
@@ -168,7 +169,7 @@ public class LidarControler extends ServiceThread {
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
         float margin = 10;
-        Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
+        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
         while (true) {
             if (!recalageDataStack.isEmpty()) {
                 handleRecalageData();
