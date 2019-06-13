@@ -129,6 +129,7 @@ public class Goldenium extends Script {
         try {
             // le principal part en même temps que nous
             syncBuddy.sendAcceleratorFree();
+            robot.getAudioPlayer().play("DEJAVU");
             robot.followPathTo(positionBalance2);
             table.removeTassot();
             robot.followPathTo(positionBalance1);
