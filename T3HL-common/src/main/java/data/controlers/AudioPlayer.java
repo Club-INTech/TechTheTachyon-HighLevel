@@ -46,11 +46,14 @@ public class AudioPlayer implements Service {
 
             try {
                 AudioInputStream audioInputStream = loadFile(name);
-                Clip clip = AudioSystem.getClip();
+                Clip clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
                 clip.open(audioInputStream);
+
 
                 synchronized(clip){
                     clip.start();
+                    Thread.sleep(1);
+                    clip.drain();
                     try{
                         double clipLength = audioInputStream.getFrameLength() /
                                 audioInputStream.getFormat().getFrameRate();
