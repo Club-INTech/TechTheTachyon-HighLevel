@@ -43,7 +43,7 @@ public class AudioPlayer implements Service {
     public void play(String name) {
         Thread thread = new Thread(() -> {
             System.out.println("Audio Thread Running ("+name+")");
-
+/*
             try {
                 AudioInputStream audioInputStream = loadFile(name);
                 Clip clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
@@ -67,7 +67,12 @@ public class AudioPlayer implements Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("Audio Thread Finished");
+            System.out.println("Audio Thread Finished");*/
+            try {
+                Runtime.getRuntime().exec(new String[]{"aplay", audioNames.getProperty(name)});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         thread.setName("Audio Thread ("+name+")");
 
