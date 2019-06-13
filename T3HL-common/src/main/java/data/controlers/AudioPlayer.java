@@ -14,7 +14,6 @@ public class AudioPlayer implements Service {
 
     private AudioInputStream audioInputStream;
     private AudioFormat audioFormat;
-    private SourceDataLine audioLine;
 
     private Properties audioNames;
 
@@ -35,53 +34,36 @@ public class AudioPlayer implements Service {
         }
     }
 
-    private void loadFile(String name) {
+    private AudioInputStream loadFile(String name) throws IOException, UnsupportedAudioFileException {
         File file = new File(audioNames.getProperty(name));
 
-        try{
-            audioInputStream = AudioSystem.getAudioInputStream(file);
-
-        } catch (UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        audioFormat = audioInputStream.getFormat();
-
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-
-        try {
-            audioLine = (SourceDataLine) AudioSystem.getLine(info);
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
+        return AudioSystem.getAudioInputStream(file);
     }
 
     public void play(String name) {
-        loadFile(name);
         Thread thread = new Thread(() -> {
             System.out.println("Audio Thread Running ("+name+")");
-            try {
-                audioLine.open(audioFormat);
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-                return;
-            }
-
-            audioLine.start();
 
             try {
-                byte[] bytes = new byte[1024];
-                int bytesRead;
-                while (((bytesRead = audioInputStream.read(bytes, 0, bytes.length)) != -1)) {
-                    audioLine.write(bytes, 0, bytesRead);
+                AudioInputStream audioInputStream = loadFile(name);
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+
+                synchronized(clip){
+                    clip.start();
+                    try{
+                        double clipLength = audioInputStream.getFrameLength() /
+                                audioInputStream.getFormat().getFrameRate();
+                        clip.wait(Math.round(clipLength +.5)*1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    clip.stop();
                 }
-            } catch (IOException io) {
-                io.printStackTrace();
-                return;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            audioLine.close();
             System.out.println("Audio Thread Finished");
         });
         thread.setName("Audio Thread ("+name+")");

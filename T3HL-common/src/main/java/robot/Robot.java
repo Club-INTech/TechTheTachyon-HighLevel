@@ -366,6 +366,7 @@ public abstract class Robot implements Service {
             }
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
             this.ableRotation();
+            audioPlayer.play("IMOKAY");
             if (avant) {
                 this.moveLengthwise(-distReculeAbsolu, false);
             } else {
