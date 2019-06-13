@@ -1,5 +1,15 @@
 package data.controlers;
 
+import kotlin.Triple;
+import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.audiokode.Source;
+import org.jglrxavpok.audiokode.ThreadedSoundEngine;
+import org.jglrxavpok.audiokode.decoders.DirectWaveDecoder;
+import org.jglrxavpok.audiokode.decoders.StreamingWaveDecoder;
+import org.jglrxavpok.audiokode.filters.AudioFilter;
+import org.jglrxavpok.audiokode.filters.AudioFilterKt;
+import org.jglrxavpok.audiokode.finders.AudioFinder;
+import org.jglrxavpok.audiokode.finders.AudioInfo;
 import pfg.config.Config;
 import utils.Log;
 import utils.communication.CopyIOThread;
@@ -14,13 +24,30 @@ import java.util.Properties;
 
 public class AudioPlayer implements Service {
 
-    private AudioInputStream audioInputStream;
-    private AudioFormat audioFormat;
+    private static final Triple<Float, Float, Float> ZERO = new Triple<>(0f,0f,0f);
+    private final ThreadedSoundEngine engine;
 
     private Properties audioNames;
 
-    public AudioPlayer(){
+    public AudioPlayer() {
         audioNames = new Properties();
+
+        engine = new ThreadedSoundEngine();
+        engine.initWithDefaultOpenAL();
+        engine.addFinder(new AudioFinder() {
+            @NotNull
+            @Override
+            public AudioInfo findAudio(@NotNull String s) {
+                return new AudioInfo(() -> {
+                    try {
+                        return new FileInputStream(s);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }, DirectWaveDecoder.INSTANCE, StreamingWaveDecoder.INSTANCE);
+            }
+        });
 
         FileInputStream input = null;
         try {
@@ -45,7 +72,7 @@ public class AudioPlayer implements Service {
     public void play(String name) {
         Thread thread = new Thread(() -> {
             System.out.println("Audio Thread Running ("+name+")");
-            try {
+           /* try {
                 AudioInputStream audioInputStream = loadFile(name);
                 Clip clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
                 clip.open(audioInputStream);
@@ -67,7 +94,8 @@ public class AudioPlayer implements Service {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+            engine.quickplayMusic(audioNames.getProperty(name), false, AudioFilterKt.getNoFilter(), ZERO, ZERO, 1f, 1f);
             System.out.println("Audio Thread Finished");
 /*            try {
                 ProcessBuilder builder = new ProcessBuilder("mplayer", audioNames.getProperty(name));
