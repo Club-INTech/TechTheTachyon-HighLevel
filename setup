@@ -34,11 +34,11 @@ mvn package -DskipTests
 mkdir ./bin/lib/
 
 # Extraction des fichiers natifs de LWJGL
-cd bin/lib/
-unzip lwjgl-openal-3.1.2-natives-linux.jar
-unzip lwjgl-3.1.2-natives-linux.jar
+#cd bin/lib/
+#unzip lwjgl-openal-3.1.2-natives-linux.jar
+#unzip lwjgl-3.1.2-natives-linux.jar
 
-cd ../..
+#cd ../..
 # Copie des fichiers compilés et des libs du maître
 cp -r T3HL-master/target/lib ./bin/
 
