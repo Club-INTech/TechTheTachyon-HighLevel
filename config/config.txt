@@ -47,8 +47,9 @@ RECALAGE_MECA_ACC                   =true
 [Slave]
 MASTER                              = false
 COULEUR                             = jaune
+USING_PANEL				= false
 USING_7_SEGMENTS                    = false
-USING_LIDAR			                = true
+USING_LIDAR			                =false
 LED_COUNT			                = 1
 HOMOLOGATION                        = false
 
