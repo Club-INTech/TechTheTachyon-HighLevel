@@ -148,6 +148,7 @@ public class Goldenium extends Script {
                         }
                         try  {
                             orderWrapper.immobilise();
+                            orderWrapper.forceStop();
                         } catch (Exception e)  {
                             e.printStackTrace();
                         } finally {

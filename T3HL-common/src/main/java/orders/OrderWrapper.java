@@ -424,4 +424,8 @@ public class OrderWrapper implements Service {
     public void setInverted(boolean inverted) {
         this.forceInversion = inverted;
     }
+
+    public void forceStop() {
+        sendString(MotionOrder.FORCE_STOP);
+    }
 }
