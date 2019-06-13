@@ -45,7 +45,6 @@ public class AudioPlayer implements Service {
     public void play(String name) {
         Thread thread = new Thread(() -> {
             System.out.println("Audio Thread Running ("+name+")");
-/*
             try {
                 AudioInputStream audioInputStream = loadFile(name);
                 Clip clip = (Clip)AudioSystem.getLine(new Line.Info(Clip.class));
@@ -69,8 +68,8 @@ public class AudioPlayer implements Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println("Audio Thread Finished");*/
-            try {
+            System.out.println("Audio Thread Finished");
+/*            try {
                 ProcessBuilder builder = new ProcessBuilder("mplayer", audioNames.getProperty(name));
                 Process process = builder.start();
                 Runtime.getRuntime().addShutdownHook(new Thread(process::destroyForcibly));
@@ -78,7 +77,7 @@ public class AudioPlayer implements Service {
                 process.waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         });
         thread.setName("Audio Thread ("+name+")");
 
