@@ -69,7 +69,7 @@ public class AudioPlayer implements Service {
             }
             System.out.println("Audio Thread Finished");*/
             try {
-                Runtime.getRuntime().exec(new String[]{"mplayer", audioNames.getProperty(name)}).waitFor();
+                Runtime.getRuntime().exec(new String[]{"sudo", "omxplayer", audioNames.getProperty(name)}).waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
