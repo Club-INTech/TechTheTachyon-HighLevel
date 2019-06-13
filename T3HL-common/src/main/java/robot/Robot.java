@@ -25,6 +25,7 @@ import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
+import data.controlers.AudioPlayer;
 import data.controlers.DataControler;
 import data.controlers.PanneauService;
 import data.synchronization.SynchronizationWithBuddy;
@@ -69,6 +70,7 @@ public abstract class Robot implements Service {
      * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
      */
     private final PanneauService panneauService;
+    private AudioPlayer audioPlayer;
 
     private Container container;
     /**
@@ -118,13 +120,14 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService, AudioPlayer audioPlayer) {
         this.container = container;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
         this.panneauService = panneauService;
+        this.audioPlayer = audioPlayer;
         try {
             container.getService(DataControler.class).setRobotClass(getClass());
         } catch (ContainerException e) {
@@ -690,6 +693,11 @@ public abstract class Robot implements Service {
     }
 
     public XYO getXyo() { return this.xyo;}
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
+
 
     @Override
     public void updateConfig(Config config) {
