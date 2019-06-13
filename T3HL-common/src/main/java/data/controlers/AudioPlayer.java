@@ -69,7 +69,8 @@ public class AudioPlayer implements Service {
             }
             System.out.println("Audio Thread Finished");*/
             try {
-                Runtime.getRuntime().exec(new String[]{"sudo", "omxplayer", audioNames.getProperty(name)}).waitFor();
+                ProcessBuilder builder = new ProcessBuilder("omxplayer", audioNames.getProperty(name));
+                builder.inheritIO().start().waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
