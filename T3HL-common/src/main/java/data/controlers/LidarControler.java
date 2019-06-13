@@ -100,7 +100,7 @@ public class LidarControler extends ServiceThread {
     private String[] points;
     private List<Vec2> mobileObstacles = new LinkedList<>();
     private float margin = 10;
-    private Rectangle tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
+    private Rectangle tableBB;
 
     /**
      * Objets servant au recalage du Lidar
