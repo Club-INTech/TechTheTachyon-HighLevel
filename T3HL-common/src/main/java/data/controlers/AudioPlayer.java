@@ -25,13 +25,13 @@ import java.util.Properties;
 public class AudioPlayer implements Service {
 
     private static final Triple<Float, Float, Float> ZERO = new Triple<>(0f,0f,0f);
-    private final ThreadedSoundEngine engine;
+  //  private final ThreadedSoundEngine engine;
 
     private Properties audioNames;
 
     public AudioPlayer() {
         audioNames = new Properties();
-
+/*
         engine = new ThreadedSoundEngine();
         engine.initWithDefaultOpenAL();
         engine.addFinder(new AudioFinder() {
@@ -47,7 +47,7 @@ public class AudioPlayer implements Service {
                     return null;
                 }, DirectWaveDecoder.INSTANCE, StreamingWaveDecoder.INSTANCE);
             }
-        });
+        });*/
 
         FileInputStream input = null;
         try {
@@ -95,7 +95,7 @@ public class AudioPlayer implements Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }*/
-            engine.quickplayMusic(audioNames.getProperty(name), false, AudioFilterKt.getNoFilter(), ZERO, ZERO, 1f, 1f);
+          // FIXME, si un jour OpenAL fonctionne sur RPi  engine.quickplayMusic(audioNames.getProperty(name), false, AudioFilterKt.getNoFilter(), ZERO, ZERO, 1f, 1f);
             System.out.println("Audio Thread Finished");
 /*            try {
                 ProcessBuilder builder = new ProcessBuilder("mplayer", audioNames.getProperty(name));
