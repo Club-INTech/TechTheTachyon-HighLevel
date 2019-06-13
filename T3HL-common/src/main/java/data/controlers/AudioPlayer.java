@@ -1,6 +1,8 @@
 package data.controlers;
 
 import pfg.config.Config;
+import utils.Log;
+import utils.communication.CopyIOThread;
 import utils.container.Service;
 
 import javax.sound.sampled.*;
@@ -69,8 +71,11 @@ public class AudioPlayer implements Service {
             }
             System.out.println("Audio Thread Finished");*/
             try {
-                ProcessBuilder builder = new ProcessBuilder("omxplayer", audioNames.getProperty(name));
-                builder.inheritIO().start().waitFor();
+                ProcessBuilder builder = new ProcessBuilder("mplayer", audioNames.getProperty(name));
+                Process process = builder.start();
+                Runtime.getRuntime().addShutdownHook(new Thread(process::destroyForcibly));
+                new CopyIOThread(process, Log.STDOUT).start();
+                process.waitFor();
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
