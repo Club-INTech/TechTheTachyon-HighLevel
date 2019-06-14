@@ -71,7 +71,7 @@ public class Goldenium extends Script {
         else {
             balanceOffsetX = Offsets.SECONDAIRE_BALANCE_OFFSET_X_JAUNE.get();
             balanceOffsetY = Offsets.SECONDAIRE_BALANCE_OFFSET_Y_JAUNE.get();
-            positionBalance1 = new VectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10+balanceOffsetY);
+            positionBalance1 = new VectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10-50+balanceOffsetY);
             positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
