@@ -6,6 +6,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -20,6 +21,7 @@ public class GetBlueAcc extends Script {
     private int yEntry = 240;//250+ 30+10  ; //a tester
     private int offsetY;
     private int offsetX;
+    private boolean recalageMeca;
 
     public GetBlueAcc(Slave robot, Table table) {
         super(robot, table);
@@ -28,14 +30,14 @@ public class GetBlueAcc extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            robot.turn(-Math.PI/2);
-            if (symetrie) {
-                robot.recalageMeca(true,100+51+offsetY);
+            if(recalageMeca) {
+                robot.turn(-Math.PI / 2);
+                if (symetrie) {
+                    robot.recalageMeca(true, 100 + 51 + offsetY);
+                } else {
+                    robot.recalageMeca(true, 100 + 54 + offsetY);
+                }
             }
-            else{
-                robot.recalageMeca(true,100+54+offsetY);
-            }
-
             robot.setOrientation(-Math.PI/2);
             if(symetrie) {
                 robot.turn(Math.PI);
@@ -117,7 +119,7 @@ public class GetBlueAcc extends Script {
     public void executeWhileMovingToEntry(int version){
 
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-        //c cassé, jsp pk il envoie down, demande d'attendre et reçoit quasi instantanément la confirmation de "je bouge plus" ...
+        //c cassé, jsp pk il envoie down, demande d'attendre et reçoit quasi instantanéturnment la confirmation de "je bouge plus" ...
         /*
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR_HAUT,true);
@@ -136,6 +138,7 @@ public class GetBlueAcc extends Script {
     @Override
     public void updateConfig(Config config) {
         this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.recalageMeca = config.getBoolean(ConfigData.RECALAGE_MECA_BLUE_ACC);
     }
 
 }

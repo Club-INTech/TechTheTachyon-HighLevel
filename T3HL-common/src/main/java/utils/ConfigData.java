@@ -177,6 +177,8 @@ public enum ConfigData implements ConfigInfo
 
     RECALAGE_MECA_ACC(true),
 
+    RECALAGE_MECA_BLUE_ACC(true),
+
     SECOURS(false),
     ;
 
