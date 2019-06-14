@@ -52,6 +52,7 @@ USING_7_SEGMENTS                    = false
 USING_LIDAR			                =false
 LED_COUNT			                = 1
 HOMOLOGATION                        = false
+RECALAGE_MECA_BLUE_ACC              = false
 
 # DIMENSIONS DES ROBOTS
 ROBOT_RAY                           = 150
