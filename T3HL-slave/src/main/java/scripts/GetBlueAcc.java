@@ -21,7 +21,7 @@ public class GetBlueAcc extends Script {
     private int yEntry = 240;//250+ 30+10  ; //a tester
     private int offsetY;
     private int offsetX;
-    private boolean recalageMeca;
+    private boolean recalageMeca=false;
 
     public GetBlueAcc(Slave robot, Table table) {
         super(robot, table);
