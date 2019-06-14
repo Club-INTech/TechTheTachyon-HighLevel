@@ -30,14 +30,14 @@ public class GetBlueAcc extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            if(recalageMeca) {
-                robot.turn(-Math.PI / 2);
-                if (symetrie) {
-                    robot.recalageMeca(true, 100 + 51 + offsetY);
-                } else {
-                    robot.recalageMeca(true, 100 + 54 + offsetY);
-                }
+
+            robot.turn(-Math.PI / 2);
+            if (symetrie) {
+                robot.recalageMeca(true, 100 + 51 + offsetY);
+            } else {
+                robot.recalageMeca(true, 100 + 54 + offsetY);
             }
+
             robot.setOrientation(-Math.PI/2);
             if(symetrie) {
                 robot.turn(Math.PI);
@@ -70,9 +70,10 @@ public class GetBlueAcc extends Script {
             else {
                 robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
             }
-            robot.turn(-Math.PI/2);
-            robot.recalageMeca(true, 150/*rayon robot*/ + 10+7 /*bras*/);
-
+            if(recalageMeca) {
+                robot.turn(-Math.PI / 2);
+                robot.recalageMeca(true, 150/*rayon robot*/ + 10 + 7 /*bras*/);
+            }
             if(symetrie) {
                 robot.turn(Math.PI);
             } else {
