@@ -12,7 +12,6 @@ public enum ScriptNamesSlave implements ScriptNames {
     GETBLUEACC(GetBlueAcc.class, "getBlueAcc"),
     GETREDDEP(GetRedDep.class, "getRedDep"),
     HOMOLOGATION(ScriptHomologationSlave.class,"homologation"),
-    OPEN_THE_GATE(OpenTheGateSlave.class, "openthegate"),
     ;
 
     private Class<? extends Service> scriptClass;

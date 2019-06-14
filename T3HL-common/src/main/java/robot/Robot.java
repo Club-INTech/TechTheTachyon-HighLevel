@@ -20,10 +20,12 @@ package robot;
 
 import com.panneau.LEDs;
 import com.panneau.TooManyDigitsException;
+import connection.Connection;
 import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
+import data.controlers.AudioPlayer;
 import data.controlers.DataControler;
 import data.controlers.PanneauService;
 import data.synchronization.SynchronizationWithBuddy;
@@ -39,6 +41,7 @@ import orders.order.MontlheryOrder;
 import orders.order.MotionOrder;
 import pfg.config.Config;
 import utils.*;
+import utils.communication.CommunicationException;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.container.Service;
@@ -67,6 +70,7 @@ public abstract class Robot implements Service {
      * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
      */
     private final PanneauService panneauService;
+    private AudioPlayer audioPlayer;
 
     private Container container;
     /**
@@ -116,13 +120,14 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
+    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService, AudioPlayer audioPlayer) {
         this.container = container;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
         this.panneauService = panneauService;
+        this.audioPlayer = audioPlayer;
         try {
             container.getService(DataControler.class).setRobotClass(getClass());
         } catch (ContainerException e) {
@@ -361,6 +366,7 @@ public abstract class Robot implements Service {
             }
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
             this.ableRotation();
+            audioPlayer.play("IMOKAY");
             if (avant) {
                 this.moveLengthwise(-distReculeAbsolu, false);
             } else {
@@ -370,6 +376,22 @@ public abstract class Robot implements Service {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Recalage LiDAR (par rapport aux 3 balises)
+     */
+    public void recalageLidar(){
+        SensorState.RECALAGE_LIDAR_EN_COURS.setData(true);
+        try {
+            Connection.LIDAR_DATA.send(""); //Envoie d'une requête pour avoir des données brutes
+        } catch (CommunicationException e) {
+            Log.STDOUT.critical("Envoi impossible de la requête de données brutes au processus Lidar");
+            e.printStackTrace();
+            SensorState.RECALAGE_LIDAR_EN_COURS.setData(false);
+            return;
+        }
+        waitWhileTrue(SensorState.RECALAGE_LIDAR_EN_COURS);
     }
 
     /**
@@ -672,6 +694,11 @@ public abstract class Robot implements Service {
     }
 
     public XYO getXyo() { return this.xyo;}
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
+    }
+
 
     @Override
     public void updateConfig(Config config) {

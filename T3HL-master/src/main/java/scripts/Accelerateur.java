@@ -4,6 +4,7 @@ import data.SensorState;
 import data.Sick;
 import data.Table;
 import data.XYO;
+import data.controlers.AudioPlayer;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -66,6 +67,10 @@ public class Accelerateur extends Script {
     private CompletableFuture<Void> recalageRight;
 
 
+    private int distavance = 0;
+    private int palet = 90;
+    
+    private AudioPlayer audioPlayer;
 
     final int decalageAccelerateur = -50;
 
@@ -82,6 +87,7 @@ public class Accelerateur extends Script {
         versions = new ArrayList<>();
         versions.add(0);  //version initiale (7 palets)
         versions.add(1);  //version pour mettre 7 palets + le bleu initial
+        this.audioPlayer = robot.getAudioPlayer();
     }
 
     @Override
@@ -217,7 +223,7 @@ public class Accelerateur extends Script {
         });
         recalageRight = async("Recalage ascenseur droit", () -> {
             //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-           // robot.waitForRightElevator();
+            // robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
             robot.waitForRightElevator();

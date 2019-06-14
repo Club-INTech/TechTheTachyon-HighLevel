@@ -32,6 +32,8 @@ public enum MotionOrder implements Order {
     MOVE_TO_POINT("goto"),
     /**S'arrêter*/
     STOP("stop"),
+    /** On force l'arrêt */
+    FORCE_STOP("sstop"),
     /** Couper l'asserv en rotation */
     NO_ROTATION_CONTROL("cr0"),
     /** Activer l'asserv en rotation */

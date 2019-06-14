@@ -40,15 +40,15 @@ public class ScriptPaletsZoneChaos extends Script {
         }
         if (symetry) {
 
-            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet ), PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet ), PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition().getX() + (rayonRobot + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
         } else {
-            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet + 10), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet), PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet), PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition().getX() + (rayonRobot + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
         }
 /**
  * On trie les palets selon l'axe X pour les prendre de droite à gauche
@@ -107,7 +107,7 @@ public class ScriptPaletsZoneChaos extends Script {
                         table.removeTemporaryObstacle(table.getPaletBlueZoneChaosYellow());
                         robot.pushPaletGauche(CouleurPalet.BLEU);
                     }*/
-                table.removeObstacleZoneChaos(position);
+                //table.removeObstacleZoneChaos(position);
 
             }
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);

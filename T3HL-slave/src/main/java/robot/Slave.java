@@ -18,12 +18,11 @@
 
 package robot;
 
-import com.panneau.Panneau;
+import data.controlers.AudioPlayer;
 import data.controlers.PanneauService;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
-import pfg.config.Config;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 
@@ -35,12 +34,8 @@ import utils.communication.SimulatorDebug;
 public class Slave extends Robot {
 
     public Slave(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService) {
-        super(container, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
+        super(container, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService, new AudioPlayer());
         createRightElevator();
     }
 
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-    }
 }

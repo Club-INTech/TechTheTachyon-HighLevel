@@ -180,6 +180,7 @@ public class Listener extends ServiceThread {
                 }
             }
             if(useBaliseImage || testZoneChaos){
+            //if(useBaliseImage ){
                 connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
             if(useLidar) {

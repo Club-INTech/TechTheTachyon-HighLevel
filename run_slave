@@ -5,4 +5,4 @@ sudo killall LiDAR_UST_10LX
 ./reset_internet_slave
 cd bin/
 sudo route add -net 192.168.0.0 netmask 255.255.255.0 eth0
-java -jar TTHL-slave-1.0.jar
+java -Dorg.lwjgl.librarypath=lib/ -jar TTHL-slave-1.0.jar
