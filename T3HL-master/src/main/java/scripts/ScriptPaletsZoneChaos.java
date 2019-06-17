@@ -114,8 +114,6 @@ public class ScriptPaletsZoneChaos extends Script {
             robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
     }
