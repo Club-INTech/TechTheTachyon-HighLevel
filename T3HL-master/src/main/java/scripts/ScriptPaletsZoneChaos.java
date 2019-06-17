@@ -75,6 +75,7 @@ public class ScriptPaletsZoneChaos extends Script {
                 robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET); // on baisse l'ascenseur pendant le mouvement du bras
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_INTERMEDIAIRE, true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
                 robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false);
 
