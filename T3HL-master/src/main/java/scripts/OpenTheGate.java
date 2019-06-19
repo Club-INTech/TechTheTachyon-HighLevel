@@ -7,6 +7,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
 import utils.ConfigData;
+import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -30,9 +31,9 @@ public class OpenTheGate extends Script {
     public void execute(Integer version) {
         double offX;
         if (symetry){
-            offX= ZDD_X_VIOLET.get();
+            offX= Offsets.get(ZDD_X_VIOLET);
         } else {
-            offX= ZDD_X_JAUNE.get();
+            offX= Offsets.get(ZDD_X_JAUNE);
         }
         Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
         Vec2 lowerLeft = new VectCartesian(650, 300);

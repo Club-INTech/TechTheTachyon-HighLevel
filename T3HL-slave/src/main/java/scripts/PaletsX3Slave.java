@@ -15,7 +15,7 @@ import utils.math.VectCartesian;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class PaletsX3Slave extends Script{
+public class PaletsX3Slave extends Script implements Offsets {
     /**
      * Position d'entrée du script
      */
@@ -147,11 +147,11 @@ public class PaletsX3Slave extends Script{
     @Override
     public Vec2 entryPosition(Integer version) {
         if (!symetry) {
-            offsetX= Offsets.PALETSX3_X_JAUNE.get();
-            offsetY=Offsets.PALETSX3_Y_JAUNE.get();
+            offsetX = Offsets.get(PALETSX3_X_JAUNE);
+            offsetY = Offsets.get(PALETSX3_Y_JAUNE);
         } else {
-            offsetX=Offsets.PALETSX3_X_VIOLET.get();
-            offsetY=Offsets.PALETSX3_Y_VIOLET.get();
+            offsetX = Offsets.get(PALETSX3_X_VIOLET);
+            offsetY = Offsets.get(PALETSX3_Y_VIOLET);
         }
         if (!symetry) {
             return new VectCartesian(xEntry+offsetX, yEntry+offsetY-300);

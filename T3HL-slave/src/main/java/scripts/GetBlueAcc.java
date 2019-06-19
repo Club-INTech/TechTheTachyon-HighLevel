@@ -13,7 +13,7 @@ import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
-public class GetBlueAcc extends Script {
+public class GetBlueAcc extends Script implements Offsets {
     private int xBlue = -170; //FIXME: positions à faire (attention symétrie)
     private int yBlue = 150+150;
     private boolean symetrie;
@@ -55,11 +55,11 @@ public class GetBlueAcc extends Script {
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
 
 
-            double offsetXGoto = Offsets.GETBLUEACC_X_RETRAIT_JAUNE.get();
-            double offsetYGoto = Offsets.GETBLUEACC_Y_RETRAIT_JAUNE.get();
+            double offsetXGoto = Offsets.get(GETBLUEACC_X_RETRAIT_JAUNE);
+            double offsetYGoto = Offsets.get(GETBLUEACC_Y_RETRAIT_JAUNE);
             if(symetrie) {
-                offsetXGoto = Offsets.GETBLUEACC_X_RETRAIT_VIOLET.get();
-                offsetYGoto = Offsets.GETBLUEACC_Y_RETRAIT_VIOLET.get();
+                offsetXGoto = Offsets.get(GETBLUEACC_X_RETRAIT_VIOLET);
+                offsetYGoto = Offsets.get(GETBLUEACC_Y_RETRAIT_VIOLET);
             }
             //robot.moveLengthwise(230,false);
             if (symetrie){
@@ -100,13 +100,13 @@ public class GetBlueAcc extends Script {
     public Vec2 entryPosition(Integer version) {
         if (symetrie){
 
-            offsetX = (int)Offsets.GETBLUEACC_X_VIOLET.get();
-            offsetY = (int)Offsets.GETBLUEACC_Y_VIOLET.get();
+            offsetX = Offsets.get(GETBLUEACC_X_VIOLET);
+            offsetY = Offsets.get(GETBLUEACC_Y_VIOLET);
             return new VectCartesian(xEntry+110,yEntry);
         }
         else {
-            offsetX = (int)Offsets.GETBLUEACC_X_JAUNE.get();
-            offsetY = (int)Offsets.GETBLUEACC_Y_JAUNE.get();
+            offsetX = Offsets.get(GETBLUEACC_X_JAUNE);
+            offsetY = Offsets.get(GETBLUEACC_Y_JAUNE);
             return new VectCartesian(xEntry, yEntry);
         }
     }

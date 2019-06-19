@@ -10,10 +10,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Master;
-import utils.ConfigData;
-import utils.Container;
-import utils.Log;
-import utils.Offsets;
+import utils.*;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -22,7 +19,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-public class Accelerateur extends Script {
+public class Accelerateur extends Script implements Offsets {
 
     /**
      * Position d'entrée du script
@@ -96,26 +93,26 @@ public class Accelerateur extends Script {
             int yEntryPostRecalageAvecSymetrie = yEntryPostRecalage;
             if (version == 1) {
                 if (!symetry) {
-                    yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_JAUNE.get();     // difference due aux positions des bras
+                    yEntryPostRecalageAvecSymetrie += Offsets.get(ACCELERATEUR_Y_JAUNE);     // difference due aux positions des bras
                 } else {
-                    yEntryPostRecalageAvecSymetrie += Offsets.ACCELERATEUR_Y_VIOLET.get();
+                    yEntryPostRecalageAvecSymetrie += Offsets.get(ACCELERATEUR_Y_VIOLET);
                 }
             }
             if(recalageAcc) {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
             recalageRight.join();
-            double offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_JAUNE.get();
-            double offsetThetaAutreCote = Offsets.ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2.get();
+            double offsetTheta = Offsets.get(ACCELERATEUR_THETA_RECALAGE_JAUNE);
+            double offsetThetaAutreCote = Offsets.get(ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2);
             if(symetry) {
-                offsetTheta = Offsets.ACCELERATEUR_THETA_RECALAGE_VIOLET.get();
-                offsetThetaAutreCote = Offsets.ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2.get();
+                offsetTheta = Offsets.get(ACCELERATEUR_THETA_RECALAGE_VIOLET);
+                offsetThetaAutreCote = Offsets.get(ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2);
             }
             if(recalageMecaAcc) {
                 robot.turn(Math.PI/2);
-                double recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_JAUNE.get();
+                double recalageY = Offsets.get(ACCELERATEUR_Y_RECALAGE_JAUNE);
                 if(symetry) {
-                    recalageY = Offsets.ACCELERATEUR_Y_RECALAGE_VIOLET.get();
+                    recalageY = Offsets.get(ACCELERATEUR_Y_RECALAGE_VIOLET);
                 }
                 robot.recalageMeca(false, (int)recalageY);
                 robot.setOrientation(Math.PI/2);
@@ -239,17 +236,17 @@ public class Accelerateur extends Script {
     public Vec2 entryPosition(Integer version) {
         if (version == 1) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
             }
             else {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
             }
         } else if (version == 0) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_VIOLET.get());
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
             }
             else {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.ACCELERATEUR_Y_JAUNE.get());
+                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
             }
         }
         return null;

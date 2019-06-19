@@ -18,6 +18,7 @@
 
 package utils;
 
+import pfg.config.BaseConfigInfo;
 import pfg.config.ConfigInfo;
 
 /**
@@ -27,188 +28,163 @@ import pfg.config.ConfigInfo;
  *
  * @author rem
  */
-public enum ConfigData implements ConfigInfo
+public interface ConfigData
 {
     /**
      * Constantes (rarement modifiées)
      */
-    TABLE_X(3000),
-    TABLE_Y(2000),
-    TEMPS_MATCH(100),
-    ETHERNET_DEFAULT_TIME(1),
+    ConfigInfo<Integer> TABLE_X = new BaseConfigInfo<>(3000, Integer.TYPE);
+    ConfigInfo<Integer> TABLE_Y = new BaseConfigInfo<>(2000, Integer.TYPE);
+    ConfigInfo<Long> TEMPS_MATCH = new BaseConfigInfo<>(100L, Long.TYPE);
+    ConfigInfo<Long> ETHERNET_DEFAULT_TIME = new BaseConfigInfo<>(1L, Long.TYPE);
 
     /**
      * Le script d'homologation doit-il être exécuté
      */
-    HOMOLOGATION(false),
+    ConfigInfo<Boolean> HOMOLOGATION = new BaseConfigInfo<>(false, Boolean.TYPE);
 
     /**
      * Couleur
      */
-    COULEUR("jaune"),
+    ConfigInfo<String> COULEUR = new BaseConfigInfo<>("jaune", String.class);
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)
      */
-    MASTER(true),
+    ConfigInfo<Boolean> MASTER = new BaseConfigInfo<>(true, Boolean.TYPE);
 
     /**
      * Simulation active
      */
-    SIMULATION(false),
+    ConfigInfo<Boolean> SIMULATION = new BaseConfigInfo<>(false, Boolean.TYPE);
 
     /**
      * Visualisation des actions active
      */
-    VISUALISATION(true),
+    ConfigInfo<Boolean> VISUALISATION = new BaseConfigInfo<>(true, Boolean.TYPE);
 
     /**
      * Si on utilise le Lidar
      */
-    USING_LIDAR(false),
+    ConfigInfo<Boolean> USING_LIDAR = new BaseConfigInfo<>(false, Boolean.TYPE);
 
     /**
      * Si on utilise l'électron
      */
-    USING_ELECTRON(false),
+    ConfigInfo<Boolean> USING_ELECTRON = new BaseConfigInfo<>(false, Boolean.TYPE);
 
     /**
      * Si on utilise la balise pour le traitement d'images
      */
-    USING_BALISE_IMAGE(true),
+    ConfigInfo<Boolean> USING_BALISE_IMAGE = new BaseConfigInfo<>(true, Boolean.TYPE);
 
     /**
      * Si on utilise le panneau
      */
-    USING_PANEL(true),
+    ConfigInfo<Boolean> USING_PANEL = new BaseConfigInfo<>(true, Boolean.TYPE);
 
 
     /**
      * Si on se connecte au copain
      */
-    CONNECT_TO_BUDDY(true),
+    ConfigInfo<Boolean> CONNECT_TO_BUDDY = new BaseConfigInfo<>(true, Boolean.TYPE);
 
     /**
      * Ips et ports des raspis, lidar & teensy
      */
-    MASTER_IP("192.168.12.2"),
-    MASTER_PORT(14500),
-    TEENSY_MASTER_IP("192.168.1.1"),
-    TEENSY_MASTER_PORT(13500),
-    TEENSY_SLAVE_IP("192.168.12.3"),
-    TEENSY_SLAVE_PORT(13500),
-    LIDAR_DATA_PORT(17865),
-    BALISE_IP("192.168.12.12"),
-    BALISE_PORT(42111),
-    IA_PORT(16000),
-    ELECTRON_IP("192.168.42.69"),
-    ELECTRON_PORT(18900),
+    ConfigInfo<String> MASTER_IP = new BaseConfigInfo<>("192.168.12.2", String.class);
+    ConfigInfo<Integer> MASTER_PORT = new BaseConfigInfo<>(14500, Integer.TYPE);
+    ConfigInfo<String> TEENSY_MASTER_IP = new BaseConfigInfo<>("192.168.1.1", String.class);
+    ConfigInfo<Integer> TEENSY_MASTER_PORT = new BaseConfigInfo<>(13500, Integer.TYPE);
+    ConfigInfo<String> TEENSY_SLAVE_IP = new BaseConfigInfo<>("192.168.12.3", String.class);
+    ConfigInfo<Integer> TEENSY_SLAVE_PORT = new BaseConfigInfo<>(13500, Integer.TYPE);
+    ConfigInfo<Integer> LIDAR_DATA_PORT = new BaseConfigInfo<>(17865, Integer.TYPE);
+    ConfigInfo<String> BALISE_IP = new BaseConfigInfo<>("192.168.12.12", String.class);
+    ConfigInfo<Integer> BALISE_PORT = new BaseConfigInfo<>(42111, Integer.TYPE);
+    ConfigInfo<Integer> IA_PORT = new BaseConfigInfo<>(16000, Integer.TYPE);
+    ConfigInfo<String> ELECTRON_IP = new BaseConfigInfo<>("192.168.42.69", String.class);
+    ConfigInfo<Integer> ELECTRON_PORT = new BaseConfigInfo<>(18900, Integer.TYPE);
 
-    LOCALHOST("localhost"),
-    LOCALSERVER_PORT(13550),
-    LL_MASTER_SIMULATEUR(10001),
-    HL_SLAVE_SIMULATEUR(20001),
-    HL_MASTER_SIMULATEUR(20002),
-    DEBUG_SIMULATEUR_PORT(19999),
+    ConfigInfo<String> LOCALHOST = new BaseConfigInfo<>("localhost", String.class);
+    ConfigInfo<Integer> LOCALSERVER_PORT = new BaseConfigInfo<>(13550, Integer.TYPE);
+    ConfigInfo<Integer> LL_MASTER_SIMULATEUR = new BaseConfigInfo<>(10001, Integer.TYPE);
+    ConfigInfo<Integer> HL_SLAVE_SIMULATEUR = new BaseConfigInfo<>(20001, Integer.TYPE);
+    ConfigInfo<Integer> HL_MASTER_SIMULATEUR = new BaseConfigInfo<>(20002, Integer.TYPE);
+    ConfigInfo<Integer> DEBUG_SIMULATEUR_PORT = new BaseConfigInfo<>(19999, Integer.TYPE);
 
-    MODE_MONTHLERY(false),
-    OPEN_THE_GATE(false),
-    ZONE_CHAOS_TEST(true),
+    ConfigInfo<Boolean> MODE_MONTHLERY = new BaseConfigInfo<>(false, Boolean.TYPE);
+    ConfigInfo<Boolean> OPEN_THE_GATE = new BaseConfigInfo<>(false, Boolean.TYPE);
+    ConfigInfo<Boolean> ZONE_CHAOS_TEST = new BaseConfigInfo<>(true, Boolean.TYPE);
 
 
     /**
      * Paramètres du panneau
      */
-    LED_COUNT(16),
-    LED_PROGRAM_PORT(19500),
-    USING_7_SEGMENTS(true),
+    ConfigInfo<Integer> LED_COUNT = new BaseConfigInfo<>(16, Integer.TYPE);
+    ConfigInfo<Integer> LED_PROGRAM_PORT = new BaseConfigInfo<>(19500, Integer.TYPE);
+    ConfigInfo<Boolean> USING_7_SEGMENTS = new BaseConfigInfo<>(true, Boolean.TYPE);
 
     /**
      * Timings
      */
-    PING_INTERVAL(100), // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
-    PING_TIMEOUT(500), // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
-    BALANCE_WAIT_TIME(14000), // combien de temps on attend le secondaire
-    BALANCE_SLAVE_WAIT_TIME(3000),
-    TIME_BETWEEN_POS_UPDATES(200), // durée entre deux envois de positions entre principal et secondaire
+    ConfigInfo<Long> PING_INTERVAL = new BaseConfigInfo<>(100L, Long.TYPE); // durée entre deux pings, en ms (permet de confirmer que la connexion fonctionne encore)
+    ConfigInfo<Long> PING_TIMEOUT = new BaseConfigInfo<>(500L, Long.TYPE); // durée d'attente pour déclarer un timeout de la connexion, en ms (permet de confirmer que la connexion fonctionne encore)
+    ConfigInfo<Long> BALANCE_WAIT_TIME = new BaseConfigInfo<>(14000L, Long.TYPE); // combien de temps on attend le secondaire
+    ConfigInfo<Long> BALANCE_SLAVE_WAIT_TIME = new BaseConfigInfo<>(3000L, Long.TYPE);
+    ConfigInfo<Long> TIME_BETWEEN_POS_UPDATES = new BaseConfigInfo<>(200L, Long.TYPE); // durée entre deux envois de positions entre principal et secondaire
 
-    LOCOMOTION_OBSTRUCTED_TIMEOUT(2000),
+    ConfigInfo<Long> LOCOMOTION_OBSTRUCTED_TIMEOUT = new BaseConfigInfo<>(2000L, Long.TYPE);
 
-    SCORE_UPDATE_PERIOD(100), // période entre deux mises à jour de l'affichage du score
+    ConfigInfo<Long> SCORE_UPDATE_PERIOD = new BaseConfigInfo<>(100L, Long.TYPE); // période entre deux mises à jour de l'affichage du score
 
     /**
      * Dimensions du robot
      */
-    ROBOT_RAY(190),
-    BUDDY_RAY(150),
-    ENNEMY_RAY(220),
+    ConfigInfo<Integer> ROBOT_RAY = new BaseConfigInfo<>(190, Integer.TYPE);
+    ConfigInfo<Integer> BUDDY_RAY = new BaseConfigInfo<>(150, Integer.TYPE);
+    ConfigInfo<Integer> ENNEMY_RAY = new BaseConfigInfo<>(220, Integer.TYPE);
 
     /**
      * Threshold de comparaison de deux positions
      */
-    VECTOR_COMPARISON_THRESHOLD(5),
+    ConfigInfo<Integer> VECTOR_COMPARISON_THRESHOLD = new BaseConfigInfo<>(5, Integer.TYPE);
 
     /**
      * Paramètres du Graphe
      */
-    NBR_NOEUDS_X(/*30*/45),
-    NBR_NOEUDS_Y(/*20*/30),
-    NBR_NOEUDS_CIRCLE(12),
-    ESPACEMENT_CIRCLE(1.2),
-    PARTITION_WIDTH(25),
-    PARTITION_HEIGHT(25),
+    ConfigInfo<Integer> NBR_NOEUDS_X = new BaseConfigInfo<>(/*30*/45, Integer.TYPE);
+    ConfigInfo<Integer> NBR_NOEUDS_Y = new BaseConfigInfo<>(/*20*/30, Integer.TYPE);
+    ConfigInfo<Integer> NBR_NOEUDS_CIRCLE = new BaseConfigInfo<>(12, Integer.TYPE);
+    ConfigInfo<Double> ESPACEMENT_CIRCLE = new BaseConfigInfo<>(1.2, Double.TYPE);
+    ConfigInfo<Integer> PARTITION_WIDTH = new BaseConfigInfo<>(25, Integer.TYPE);
+    ConfigInfo<Integer> PARTITION_HEIGHT = new BaseConfigInfo<>(25, Integer.TYPE);
 
     /**
      * Paramètre Locomotion
      */
-    LOCOMOTION_LOOP_DELAY(20),
-    LOCOMOTION_DISTANCE_CHECK(200),
-    LOCOMOTION_RADIUS_CHECK(200),
+    ConfigInfo<Long> LOCOMOTION_LOOP_DELAY = new BaseConfigInfo<>(20L, Long.TYPE);
+    ConfigInfo<Integer> LOCOMOTION_DISTANCE_CHECK = new BaseConfigInfo<>(200, Integer.TYPE);
+    ConfigInfo<Integer> LOCOMOTION_RADIUS_CHECK = new BaseConfigInfo<>(200, Integer.TYPE);
 
     /**
      * Paramètres de chemins
      */
-    LIDAR_PROCESS_PATH("../bin/LiDAR_UST_10LX"),
+    ConfigInfo<String> LIDAR_PROCESS_PATH = new BaseConfigInfo<>("../bin/LiDAR_UST_10LX", String.class);
 
     /**
      * On se recale à l'accélérateur? Si non c'est à x6
      */
-    RECALAGE_ACC(false),
+    ConfigInfo<Boolean> RECALAGE_ACC = new BaseConfigInfo<>(false, Boolean.TYPE);
 
-    RECALAGE_MECA_ACC(true),
+    ConfigInfo<Boolean> RECALAGE_MECA_ACC = new BaseConfigInfo<>(true, Boolean.TYPE);
 
-    RECALAGE_MECA_BLUE_ACC(true),
+    ConfigInfo<Boolean> RECALAGE_MECA_BLUE_ACC = new BaseConfigInfo<>(true, Boolean.TYPE);
 
-    SECOURS(false),
-    ;
+    ConfigInfo<Boolean> SECOURS = new BaseConfigInfo<>(false, Boolean.TYPE);
 
-    /**
-     * Valeur par défaut de la config (en dure)
-     */
-    private Object defaultValue;
+    ConfigInfo<?>[] ALL_VALUES = ConfigInfo.findAllIn(ConfigData.class);
 
-    /**
-     * Constructor with some default value
-     *
-     * @param defaultValue  valeur par défaut du paramètre
-     */
-    ConfigData(Object defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
-    /**
-     * Just a getter
-     */
-    @Override
-    public Object getDefaultValue() {
-        return defaultValue;
-    }
-
-    /**
-     * Permet de changer la valeur par défaut
-     * @param defaultValue
-     */
-    public void setDefaultValue(Object defaultValue) {
-        this.defaultValue = defaultValue;
+    static ConfigInfo<?>[] values() {
+        return ALL_VALUES;
     }
 }

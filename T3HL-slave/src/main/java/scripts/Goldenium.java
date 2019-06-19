@@ -17,7 +17,7 @@ import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
-public class Goldenium extends Script {
+public class Goldenium extends Script implements Offsets {
 
     //position d'entrée pour le recalage mécanique
 
@@ -59,39 +59,39 @@ public class Goldenium extends Script {
         double balanceOffsetX;
         double balanceOffsetY;
         if (symetrie){
-            balanceOffsetX = Offsets.SECONDAIRE_BALANCE_OFFSET_X_VIOLET.get();
-            balanceOffsetY = Offsets.SECONDAIRE_BALANCE_OFFSET_Y_VIOLET.get();
+            balanceOffsetX = Offsets.get(SECONDAIRE_BALANCE_OFFSET_X_VIOLET);
+            balanceOffsetY = Offsets.get(SECONDAIRE_BALANCE_OFFSET_Y_VIOLET);
             positionBalance1 = new VectCartesian(xBalance1+30+balanceOffsetX, yBalance1+40+balanceOffsetY);
             positionBalance2 =new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
         else {
-            balanceOffsetX = Offsets.SECONDAIRE_BALANCE_OFFSET_X_JAUNE.get();
-            balanceOffsetY = Offsets.SECONDAIRE_BALANCE_OFFSET_Y_JAUNE.get();
+            balanceOffsetX = Offsets.get(SECONDAIRE_BALANCE_OFFSET_X_JAUNE);
+            balanceOffsetY = Offsets.get(SECONDAIRE_BALANCE_OFFSET_Y_JAUNE);
             positionBalance1 = new VectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10-50+balanceOffsetY);
             positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
-        double decalageGold = Offsets.DECALAGE_GOLD_JAUNE.get();
+        int decalageGold = Offsets.get(DECALAGE_GOLD_JAUNE);
         if(symetrie) {
-            decalageGold = Offsets.DECALAGE_GOLD_VIOLET.get();
+            decalageGold = Offsets.get(DECALAGE_GOLD_VIOLET);
         }
 
         try  {
             if(symetrie) {
                 robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise((int) Offsets.MOVE_GOLDENIUM_VIOLET.get(), false);
+                robot.moveLengthwise(Offsets.get(MOVE_GOLDENIUM_VIOLET), false);
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
             } else {
 //                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
                 robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise((int) Offsets.MOVE_GOLDENIUM_JAUNE.get(), false);
+                robot.moveLengthwise(Offsets.get(MOVE_GOLDENIUM_JAUNE), false);
                 robot.turn(0);
             }
 
             robot.turn(Math.PI/2);
-            robot.moveLengthwise((int) decalageGold, false);
+            robot.moveLengthwise(decalageGold, false);
             if(symetrie) {
                 robot.turn(Math.PI);
             } else {
@@ -196,11 +196,11 @@ public class Goldenium extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         if (!symetrie) {
-            offsetX = Offsets.GOLDENIUM_X_JAUNE.get();
-            offsetY = Offsets.GOLDENIUM_Y_JAUNE.get();
+            offsetX = Offsets.get(GOLDENIUM_X_JAUNE);
+            offsetY = Offsets.get(GOLDENIUM_Y_JAUNE);
         } else {
-            offsetX=Offsets.GOLDENIUM_X_VIOLET.get();
-            offsetY=Offsets.GOLDENIUM_Y_VIOLET.get();
+            offsetX = Offsets.get(GOLDENIUM_X_VIOLET);
+            offsetY = Offsets.get(GOLDENIUM_Y_VIOLET);
         }
         return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
     }

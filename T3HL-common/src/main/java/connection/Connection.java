@@ -19,6 +19,7 @@
 package connection;
 
 import pfg.config.Config;
+import pfg.config.ConfigInfo;
 import utils.ConfigData;
 import utils.Log;
 import utils.communication.*;
@@ -58,12 +59,12 @@ public enum Connection {
     /**
      * clef config pour trouver l'ip si instanciation
      */
-    private ConfigData ipKey;
+    private ConfigInfo<String> ipKey;
 
     /**
      * clef config pour trouver le port si instanciation
      */
-    private ConfigData portKey;
+    private ConfigInfo<Integer> portKey;
 
     /**
      * Communication Interface à instancier
@@ -82,7 +83,7 @@ public enum Connection {
      * @param portKey   clef config pour le port
      * @param c         type de Communication Interface à instancier
      */
-    Connection(ConfigData ipKey, ConfigData portKey, Class<?> c) {
+    Connection(ConfigInfo<String> ipKey, ConfigInfo<Integer> portKey, Class<?> c) {
         this(ipKey, portKey, c, true);
     }
 
@@ -93,7 +94,7 @@ public enum Connection {
      * @param c         type de Communication Interface à instancier
      * @param mandatory cette connexion est-elle obligatoire pour démarrer?
      */
-    Connection(ConfigData ipKey, ConfigData portKey, Class<?> c, boolean mandatory) {
+    Connection(ConfigInfo<String> ipKey, ConfigInfo<Integer> portKey, Class<?> c, boolean mandatory) {
         this.ipKey = ipKey;
         this.portKey = portKey;
         this.aClass = c;

@@ -19,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 
 import static utils.Offsets.*;
 
-public class PaletsZoneDepart extends Script {
+public class PaletsZoneDepart extends Script implements Offsets {
 
     /**
      * Version qui ne prend que le palet devant la case bleue
@@ -29,7 +29,7 @@ public class PaletsZoneDepart extends Script {
     Container container;
 
     private static final int DISTANCE_INTERPALET = 300;
-    private final int xEntry = 1500-191-65+ (int)Offsets.ZDD_X_VIOLET.get();//1244;
+    private final int xEntry = 1500-191-65+ Offsets.get(ZDD_X_VIOLET);//1244;
     private final int yEntry = 450+605;//;
 
     private boolean symetry;
@@ -46,9 +46,9 @@ public class PaletsZoneDepart extends Script {
         //double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
         double offX;
         if (symetry){
-            offX= ZDD_X_VIOLET.get();
+            offX= Offsets.get(ZDD_X_VIOLET);
         } else {
-            offX= ZDD_X_JAUNE.get();
+            offX= Offsets.get(ZDD_X_JAUNE);
         }
         if(version == JUST_BLUE) {
             positions = new VectCartesian[]{

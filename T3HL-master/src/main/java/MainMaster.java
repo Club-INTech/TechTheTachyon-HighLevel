@@ -57,7 +57,7 @@ import static utils.Offsets.ZDD_X_VIOLET;
  * @author nayth, jglrxavpok
  */
 
-public class MainMaster extends RobotEntryPoint {
+public class MainMaster extends RobotEntryPoint implements Offsets {
 
     private SimulatorManagerLauncher simulatorLauncher;
     // Regardez, c'est GLaDOS!
@@ -128,9 +128,9 @@ public class MainMaster extends RobotEntryPoint {
             double offX;
             boolean symetry = container.getConfig().getString(ConfigData.COULEUR).equals("violet");
             if (symetry){
-                offX= ZDD_X_VIOLET.get();
+                offX= Offsets.get(ZDD_X_VIOLET);
             } else {
-                offX= ZDD_X_JAUNE.get();
+                offX= Offsets.get(ZDD_X_JAUNE);
             }
             Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
 
@@ -175,8 +175,8 @@ public class MainMaster extends RobotEntryPoint {
 
 
         try {
-            double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_X_VIOLET.get() : Offsets.ZDD_X_JAUNE.get();
-            double offY = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.ZDD_Y_VIOLET.get() : Offsets.ZDD_Y_JAUNE.get();
+            double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
+            double offY = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
 
             Match match = container.getService(Match.class);
 

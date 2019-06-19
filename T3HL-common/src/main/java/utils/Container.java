@@ -292,6 +292,11 @@ public class Container implements Module {
         for(Module module :instanciedServices.values()){
             if(module instanceof Container)
                 continue;
+            try {
+                config.loadInto(module);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
             module.updateConfig(config);
         }
 

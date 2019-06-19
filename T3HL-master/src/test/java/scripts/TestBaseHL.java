@@ -76,8 +76,8 @@ public abstract class TestBaseHL {
     }
 
     protected void setup(boolean simulationMode) {
-        ConfigData.SIMULATION.setDefaultValue(simulationMode);
         container = Container.getInstance("Master");
+        container.getConfig().override(ConfigData.SIMULATION, simulationMode);
         try {
 //            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
             connectionManager = container.getService(ConnectionManager.class);

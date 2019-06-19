@@ -14,7 +14,7 @@ public class TestLidarMove extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
-        ConfigData.USING_LIDAR.setDefaultValue(true);
+        container.getConfig().override(ConfigData.USING_LIDAR, true);
         super.setup(simulationMode);
     }
 

@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 
-public class X6alter extends Script {
+public class X6alter extends Script implements Offsets {
     private ArrayList<VectCartesian> positions;
     private boolean symetry;
     boolean onvaprendrelebleu= false;
@@ -93,19 +93,19 @@ public class X6alter extends Script {
             Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
          */
 
-        double offsetZddX = Offsets.ZDD_POST_BALANCE_X_JAUNE.get();
-        double offsetZddY = Offsets.ZDD_POST_BALANCE_Y_JAUNE.get();
+        double offsetZddX = Offsets.get(ZDD_POST_BALANCE_X_JAUNE);
+        double offsetZddY = Offsets.get(ZDD_POST_BALANCE_Y_JAUNE);
         if(symetry) {
-            offsetZddX = Offsets.ZDD_POST_BALANCE_X_VIOLET.get();
-            offsetZddY = Offsets.ZDD_POST_BALANCE_Y_VIOLET.get();
+            offsetZddX = Offsets.get(ZDD_POST_BALANCE_X_VIOLET);
+            offsetZddY = Offsets.get(ZDD_POST_BALANCE_Y_VIOLET);
         }
         Vec2 positionZoneDepart = new VectCartesian(1500-250+offsetZddX, 500+offsetZddY);
 
         int i=0;
         loadOffsets();
-        double offsetBalance = Offsets.PALETS_X6_BALANCE_Y_JAUNE.get();
+        double offsetBalance = Offsets.get(PALETS_X6_BALANCE_Y_JAUNE);
         if(symetry) {
-            offsetBalance = Offsets.PALETS_X6_BALANCE_Y_VIOLET.get();
+            offsetBalance = Offsets.get(PALETS_X6_BALANCE_Y_VIOLET);
         }
         Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20+offsetBalance);
 
@@ -135,7 +135,7 @@ public class X6alter extends Script {
         try {
             robot.turn(Math.PI);
             if(symetry) {
-                offsetTheta =Offsets.PALETSX6_THETA_VIOLET.get();
+                offsetTheta = Offsets.get(PALETSX6_THETA_VIOLET);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
                 // remplacement de la position dans le HL
                 XYO.getRobotInstance().update(XYO.getRobotInstance().getPosition().getX(), XYO.getRobotInstance().getPosition().getY(), XYO.getRobotInstance().getOrientation()+ offsetTheta);
@@ -486,11 +486,11 @@ public class X6alter extends Script {
 
     private void loadOffsets() {
         if(symetry) {
-            offsetX = Offsets.PALETSX6_X_VIOLET.get();
-            offsetY = Offsets.PALETSX6_Y_VIOLET.get();
+            offsetX = Offsets.get(PALETSX6_X_VIOLET);
+            offsetY = Offsets.get(PALETSX6_Y_VIOLET);
         } else {
-            offsetX = Offsets.PALETSX6_X_JAUNE.get();
-            offsetY = Offsets.PALETSX6_Y_JAUNE.get();
+            offsetX = Offsets.get(PALETSX6_X_JAUNE);
+            offsetY = Offsets.get(PALETSX6_Y_JAUNE);
         }
     }
 
