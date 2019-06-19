@@ -139,7 +139,7 @@ public class MainSlave extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuGauche());
         table.removeTemporaryObstacle(table.getPaletVertGauche());
 
-
+        robot.setSpeed(Speed.SLOW_ALL);
 
         orderWrapper.waitJumper();
 

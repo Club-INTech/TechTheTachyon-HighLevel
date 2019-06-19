@@ -39,10 +39,10 @@ public enum Speed implements Order {
     VERY_SLOW_ALL(150,0.75D),
 
     /** Vitesse lente en translation, lente en rotation */
-    SLOW_ALL(250, 1*Math.PI),
+    SLOW_ALL(250, 1D),
 
     /** Vitesse standard de déplacement et rotation */
-    MEDIUM_ALL(400,2D),
+    MEDIUM_ALL(400, Math.PI),
 
     /** Vitesse rapide en translation et rotation */
     FAST_ALL(500,2*Math.PI),
