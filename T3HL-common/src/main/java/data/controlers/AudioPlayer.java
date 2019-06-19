@@ -1,19 +1,8 @@
 package data.controlers;
 
 import kotlin.Triple;
-import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.audiokode.Source;
-import org.jglrxavpok.audiokode.ThreadedSoundEngine;
-import org.jglrxavpok.audiokode.decoders.DirectWaveDecoder;
-import org.jglrxavpok.audiokode.decoders.StreamingWaveDecoder;
-import org.jglrxavpok.audiokode.filters.AudioFilter;
-import org.jglrxavpok.audiokode.filters.AudioFilterKt;
-import org.jglrxavpok.audiokode.finders.AudioFinder;
-import org.jglrxavpok.audiokode.finders.AudioInfo;
 import pfg.config.Config;
-import utils.Log;
-import utils.communication.CopyIOThread;
-import utils.container.Service;
+import utils.container.Module;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -22,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
-public class AudioPlayer implements Service {
+public class AudioPlayer implements Module {
 
     private static final Triple<Float, Float, Float> ZERO = new Triple<>(0f,0f,0f);
   //  private final ThreadedSoundEngine engine;

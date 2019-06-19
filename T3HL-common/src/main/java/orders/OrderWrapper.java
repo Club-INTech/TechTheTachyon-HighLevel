@@ -29,11 +29,10 @@ import utils.Container;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
 
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -41,7 +40,7 @@ import java.util.Locale;
  *
  * @author yousra
  */
-public class OrderWrapper implements Service {
+public class OrderWrapper implements Module {
 
     /**
      * Symétrie

@@ -70,7 +70,7 @@ définie, et qui communiquent entre eux si besoin. Elle est construite de maniè
 performante (dans la limite du language utilisé), et tolérante aux fautes (voir norme ISO/IEC 25010).
 
 Dans le dossier des sources, plusieurs packages regroupent les classes par fonctionnalités :
-* Utils : il contient tous les utilitaires du code, tels que le service de Log, la Config, ou encore le Container, 
+* Utils : il contient tous les utilitaires du code, tels que le module de Log, la Config, ou encore le Container, 
   qui permettent de faciliter la programmation du HL et de l'IA. (
   Ce paragraphe présente l'architecture d'une manière assez générale, pour plus de détails concernant chaque package, je
   vous invite à voir le paragraphe suivant "Architecture détaillée" qui détaille plus les classes évoquées.
@@ -79,7 +79,7 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
   à quelques exceptions près.
   
 * Connection : ce petit package contient simplement les interfaces de communication que l'on souhaite créer avec 
-  l'extérieur, ainsi qu'un service de gestion de ces dernières. Actuellement, elle sont au nombre de cinq : la Teensy 
+  l'extérieur, ainsi qu'un module de gestion de ces dernières. Actuellement, elle sont au nombre de cinq : la Teensy 
   pour communiquer avec le Bas Niveau, la Raspi pour communiquer avec le Haut Niveau Maître/Esclave, le processus
   s'occupant du Lidar et deux LocalHost servant à effectuer des tests d'intégrité du HL.
   
@@ -118,9 +118,9 @@ Prenez une grande inspiration, on rentre ici dans le détail de l'architecture !
 #### Utils 
 * **Log**
 
-Le service de log est une `enum` : chaque instance représente un canal de journalisation que l'on peut activer et
+Le module de log est une `enum` : chaque instance représente un canal de journalisation que l'on peut activer et
 désactiver au besoin, le but étant d'éviter de surcharger le terminal d'informations lorsque l'on se concentre sur une
-fonctionnalité du robot. Ce service est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print.
+fonctionnalité du robot. Ce module est utilisé quand on souhaite débuger, il s'agit donc d'une surchouche de System.out.print.
 Il y a trois niveau de log : debug, warning, et critical. Ce dernier niveau de log s'affiche toujours, que le canal
 spécifié soit activé ou non. Attention à bien initialiser log si le container n'est pas instancié !
 Utilisation :
@@ -135,7 +135,7 @@ Log.CANNAL.critical("AH GROS BUG");         // Ca s'affiche !
 * **Config**
 
 La config est une librairie externe utilisée pour changer des paramètres dans le Haut Niveau sans avoir à recompiler. Par 
-exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce service est lui
+exemple, le rayon du robot ennemi. Il a été developpé par PF Gimenez, un vieux d'Intech aujourd'hui docteur ! Bref, ce module est lui
 aussi géré par le container. Les paramètres que l'on veut manipuler/retirer/ajouter sont rassemblés dans l'enum ConfigData, qui contient
 les valeurs des paramètres par défaut. Les valeurs chargées par le container à l'instanciation des services sont 
 présentes dans le fichier `config.txt`. Attention à utiliser les mêmes clés et types entre le fichier texte et l'enum !
@@ -143,13 +143,13 @@ présentes dans le fichier `config.txt`. Attention à utiliser les mêmes clés 
 * **Container**
 
 Le container fait office à la fois de factory .ie il instancie les services(toutes les classes qui implémentent l'interface Service), 
-et de gestion des dépendances : lorsque  l'on demande un service via la méthode `getService(Class class)`, le container va
-instancier tous les paramètres du constructeur en tant que service s'ils n'ont pas déjà été instanciés. Utilisation :
+et de gestion des dépendances : lorsque  l'on demande un module via la méthode `getService(Class class)`, le container va
+instancier tous les paramètres du constructeur en tant que module s'ils n'ont pas déjà été instanciés. Utilisation :
 ```Java
 Container container = Container.getInstance("Master");
-MonService service = container.getService(MonService.class);
+MonService module = container.getService(MonService.class);
 ```
-"Tu nous parles de service depuis tout à l'heure mais c'est quoi au juste un service ???"
+"Tu nous parles de module depuis tout à l'heure mais c'est quoi au juste un module ???"
 
 Et bien c'est un **singleton** offrant des **fonctionnalités** bien définies ! Dans notre cas c'est une interface qui 
 doit surcharger la méthode `updateConfig(Config config)`, qui permet justement de récupérer des valeurs de la config !
@@ -173,7 +173,7 @@ PARAM_MONSERVICE =              24
     
 MonService.java :
 ```Java
-import utils.container.Service
+import utils.container.Module
     
 public class MonService implements Service {
     private int param;
@@ -188,7 +188,7 @@ public class MonService implements Service {
 #### Connection
 * **ConnectionManager**
 
-Ce service sert à gérer des IO (Input Output) du HL, c'est-à-dire l'échange de messages entre le HL et le LL,
+Ce module sert à gérer des IO (Input Output) du HL, c'est-à-dire l'échange de messages entre le HL et le LL,
 mais aussi avec le Lidar, et la communication Master-Slave. Il se base sur l'enum Connection qui répertorie les
 connections du HL. Après avoir initialiser les connections à l'aide de la méthode `initConnections(Connection... connections)`,
 on peut simplement envoyer et lire des messages grâce aux autres méthodes :
@@ -215,7 +215,7 @@ public static void main(String[] args) {
 #### Orders
 * **OrderWrapper**
 
-L'order wrapper est un service servant à simplifier l'envoi d'ordres au bas niveau via des méthodes plus simples
+L'order wrapper est un module servant à simplifier l'envoi d'ordres au bas niveau via des méthodes plus simples
 d'utilisation. Par exemple, plutôt que de devoir écrire, à chaque fois que l'on veut envoyer au bas niveau l'ordre 
 d'avancer d'une certaine distance `Connection.TEENSY_MASTER.send("d 100")`, on préfère utiliser une méthode
 du style `orderWrapper.moveLenghtwise(100)` ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
@@ -273,7 +273,7 @@ waitForCompletion existe dans le prototype de la méthode. Mis à false, le HL n
 dans la classe `orders.order.ActuatorsOrder` avant de passer à la suite.
 * **HookFactory**
 
-Le service HookFactory comme son nom l'indique, permet de créer des Hooks ! Un hook est tout simplement un mécanisme
+Le module HookFactory comme son nom l'indique, permet de créer des Hooks ! Un hook est tout simplement un mécanisme
 qui permet d'effectuer une action en mouvement. C'est le LL qui s'occupe d'exécuter des hooks mais c'est le HL qui
 crée les hooks et décide s'ils doivent être activés ou non. Pour créer un hook, rien de plus simple :
 
@@ -349,7 +349,7 @@ d'englober Vecteur et double dans une seule classe.
 
 * **Controlers & Listener**
 
-Le listener est un service qui écoute toutes les données envoyées au HL, et les redistribus en fonctions du type de donnée,
+Le listener est un module qui écoute toutes les données envoyées au HL, et les redistribus en fonctions du type de donnée,
 indiqué par le header du message. Ces headers sont définis dans l'enum data.controlers.Channel, qui lie les chaînes de
 caractère à un type enuméré (instance d'enum). Ces messages sont redistribués aux controlers, qui traitent et stockent
 les données reçues. Un controler "s'abonne" à un cannal via le Listener pour recevoir et traiter les données :
@@ -392,10 +392,10 @@ retrouve.
 #### Locomotion
 * **PathFollower**
 
-Le PathFollower est un service de suivit du chemin : ce service est chargé d'envoyer les ordres appropriés au bas niveau
+Le PathFollower est un module de suivit du chemin : ce module est chargé d'envoyer les ordres appropriés au bas niveau
 et de vérifier que le trajectoire n'est pas obstruée au fur et à mesure que le robot avance. Pour cela il s'appuie sur
 les données de la tables pour vérifier que le robot ne vas pas cogner un obstacle ou un robot adverse ! Si tel est le
-cas lors du suivit d'un chemin, il le communique au service Pathfinder via une file de message. Il reçoit les points à
+cas lors du suivit d'un chemin, il le communique au module Pathfinder via une file de message. Il reçoit les points à
 atteindre via une autre file de message.
 
 * **PathFinder**

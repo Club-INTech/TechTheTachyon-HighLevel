@@ -19,16 +19,16 @@
 package scripts;
 
 import utils.Container;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.util.HashMap;
 
 /**
- * Service de gestion des scripts
+ * Module de gestion des scripts
  *
  * @author rem
  */
-public abstract class ScriptManager implements Service {
+public abstract class ScriptManager implements Module {
 
     /**
      * Container pour construire les scripts

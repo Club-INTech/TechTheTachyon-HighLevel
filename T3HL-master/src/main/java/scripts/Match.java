@@ -116,7 +116,7 @@ public class Match extends Script {
             //Si il y a un ennemi au niveau de l'accélérateur quand on souhaite y aller
             try {
                 //On regarde s'il est toujours au bout de 5 secondes
-                Service.withTimeout(5000, () -> {
+                Module.withTimeout(5000, () -> {
                     try {
                         robot.followPathTo(accelerateurScript.entryPosition(accVersion));
                     } catch (UnableToMoveException e) {

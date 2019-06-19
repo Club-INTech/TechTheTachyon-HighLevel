@@ -2,9 +2,9 @@ package utils;
 
 import orders.OrderWrapper;
 import pfg.config.Config;
-import utils.container.ServiceThread;
+import utils.container.ModuleThread;
 
-public class MatchTimer extends ServiceThread {
+public class MatchTimer extends ModuleThread {
     private static final long MATCH_LENGTH = 100 * 1000;
     private long startTime;
     private OrderWrapper orderWrapper;

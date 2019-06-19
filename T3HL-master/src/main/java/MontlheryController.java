@@ -6,9 +6,9 @@ import orders.order.Order;
 import pfg.config.Config;
 import robot.Master;
 import robot.Robot;
-import utils.container.Service;
+import utils.container.Module;
 
-public class MontlheryController extends Thread implements Service {
+public class MontlheryController extends Thread implements Module {
 
     enum ArmState {
         GROUND, ELEVATOR, NO_IDEA

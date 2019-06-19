@@ -26,7 +26,7 @@ import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
 import utils.TimeoutError;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Vec2;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @author rem
  */
-public abstract class Script implements Service {
+public abstract class Script implements Module {
 
     /**
      * Le robot
@@ -89,7 +89,7 @@ public abstract class Script implements Service {
 
                 // attente de qq secondes s'il y a un ennemi là où on veut aller
                 try {
-                    Service.withTimeout(blockTimeout, () -> {
+                    Module.withTimeout(blockTimeout, () -> {
                         while (table.isPositionInMobileObstacle(entryPosition)) {
                             try {
                                 Thread.sleep(50);

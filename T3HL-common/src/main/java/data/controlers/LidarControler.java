@@ -28,7 +28,7 @@ import utils.LastElementCollection;
 import utils.Log;
 import utils.MatchTimer;
 import utils.communication.CopyIOThread;
-import utils.container.ServiceThread;
+import utils.container.ModuleThread;
 import utils.math.*;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @author rem
  */
-public class LidarControler extends ServiceThread {
+public class LidarControler extends ModuleThread {
 
     /**
      * Temps d'attente entre deux vérification de la queue

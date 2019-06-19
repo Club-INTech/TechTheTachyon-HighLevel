@@ -8,7 +8,7 @@ import robot.Master;
 import robot.Robot;
 import utils.*;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -224,7 +224,7 @@ public class X6alter extends Script {
                     }
 
                     try {
-                        Service.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeAccelerator());
+                        Module.withTimeout(balanceWaitTime, () -> syncBuddy.waitForFreeAccelerator());
                     } catch (TimeoutError error) {
                         error.printStackTrace();
                     }

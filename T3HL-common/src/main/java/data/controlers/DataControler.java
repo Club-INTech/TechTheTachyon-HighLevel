@@ -9,7 +9,7 @@ import utils.Container;
 import utils.Log;
 import utils.MatchTimer;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
  *
  * @author rem
  */
-public class DataControler extends Thread implements Service {
+public class DataControler extends Thread implements Module {
 
     /**
      * Temps d'attente entre deux vérification de la queue

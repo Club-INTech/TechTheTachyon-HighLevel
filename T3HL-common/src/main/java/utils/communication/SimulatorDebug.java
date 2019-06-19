@@ -6,11 +6,11 @@ import data.CouleurPalet;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.RobotSide;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.util.Stack;
 
-public class SimulatorDebug implements Service {
+public class SimulatorDebug implements Module {
 
     private final ConnectionManager manager;
     private boolean active;

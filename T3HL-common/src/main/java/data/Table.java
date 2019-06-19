@@ -18,12 +18,11 @@
 
 package data;
 
-import data.controlers.PaletsChaosControler;
 import data.table.*;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.*;
 
 import java.util.*;
@@ -33,7 +32,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Classe représentant la table et gérant les obstacles
  * @author rem
  */
-public class Table implements Service {
+public class Table implements Module {
     /**
      * Graphe
      */
@@ -649,7 +648,7 @@ public class Table implements Service {
     }
 
     /**
-     * @see Service#updateConfig(Config)
+     * @see Module#updateConfig(Config)
      */
     @Override
     public void updateConfig(Config config) {

@@ -9,14 +9,14 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Container;
 import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.io.IOException;
 
 /**
- * Service & Thread qui gère la """comm""" avec le panneau: score et sélection de couleur au début du match
+ * Module & Thread qui gère la """comm""" avec le panneau: score et sélection de couleur au début du match
  */
-public class PanneauService implements Service {
+public class PanneauModule implements Module {
 
     private Panneau panel;
     private long updatePeriod;
@@ -26,7 +26,7 @@ public class PanneauService implements Service {
     private int ledCount;
     private boolean have7seg;
 
-    public PanneauService(Container container) {
+    public PanneauModule(Container container) {
         this.container = container;
     }
 

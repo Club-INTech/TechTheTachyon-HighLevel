@@ -2,7 +2,7 @@ package scripts;
 
 import utils.Container;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 
 public enum ScriptNamesMaster implements ScriptNames {
     ACCELERATEUR(Accelerateur.class, "accelerateur"),
@@ -16,10 +16,10 @@ public enum ScriptNamesMaster implements ScriptNames {
     OPEN_THE_GATE(OpenTheGate.class, "openthegate"),
     ;
 
-    private Class<? extends Service> scriptClass;
+    private Class<? extends Module> scriptClass;
     private String scriptName;
 
-    ScriptNamesMaster(Class<? extends Service> scriptClass, String scriptName){
+    ScriptNamesMaster(Class<? extends Module> scriptClass, String scriptName){
         this.scriptClass = scriptClass;
         this.scriptName = scriptName;
     }

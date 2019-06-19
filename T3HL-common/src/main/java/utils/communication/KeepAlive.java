@@ -5,10 +5,9 @@ import data.SensorState;
 import orders.OrderWrapper;
 import pfg.config.Config;
 import utils.ConfigData;
-import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 
-public class KeepAlive extends Thread implements Service {
+public class KeepAlive extends Thread implements Module {
 
     private final OrderWrapper orderWrapper;
     private long pingInterval;

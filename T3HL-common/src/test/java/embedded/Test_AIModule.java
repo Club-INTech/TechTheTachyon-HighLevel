@@ -1,21 +1,20 @@
 package embedded;
 
-import ai.AIService;
-import data.controlers.Listener;
+import ai.AIModule;
 import org.junit.*;
 import utils.Container;
 
-public class Test_AIService {
+public class Test_AIModule {
 
     private Container container;
 
-    private AIService ai;
+    private AIModule ai;
 
     @Ignore
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        ai = container.getService(AIService.class);
+        ai = container.getService(AIModule.class);
     }
 
     @Ignore

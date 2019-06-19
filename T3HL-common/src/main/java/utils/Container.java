@@ -21,7 +21,7 @@ package utils;
 import pfg.config.Config;
 import pfg.config.ConfigInfo;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -29,17 +29,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Stack;
 
 /**
  * Gestionnaire des singletons et dépendances entre les classes du code.
- * Un singleton est une classe implémentant "Service", et permettant d'instancier les autres services dépendant.
+ * Un singleton est une classe implémentant "Module", et permettant d'instancier les autres services dépendant.
  * Il stocke également toute les références des services à partir d'un dictionnaire.
  *
  * @author pf, rem
  */
-public class Container implements Service {
+public class Container implements Module {
     /**
      * Instance du container (Singleton comme tous les services)
      */
@@ -54,7 +53,7 @@ public class Container implements Service {
      * Liste des services déjà instanciés. Contient au moins Config et Log.
      * Les autres services appelables seront présents quand ils auront été appelés
      */
-    private HashMap<String, Service> instanciedServices;
+    private HashMap<String, Module> instanciedServices;
 
     /**
      * Liste des threads instanciés
@@ -174,7 +173,7 @@ public class Container implements Service {
      * @return  référene de l'instance de la classe demandée
      * @throws  ContainerException
      */
-    public synchronized <S extends Service> S getService(Class<S> service) throws ContainerException {
+    public synchronized <S extends Module> S getService(Class<S> service) throws ContainerException {
         return getService(service, new Stack<String>());
     }
 
@@ -190,7 +189,7 @@ public class Container implements Service {
      *                              circulaire
      */
     @SuppressWarnings("unchecked")
-    private synchronized <S extends Service> S getService(Class<S> service, Stack<String> stack) throws ContainerException {
+    private synchronized <S extends Module> S getService(Class<S> service, Stack<String> stack) throws ContainerException {
         try {
             /* Si l'objet à déjà été instancié, on renvoie la référence */
             if (instanciedServices.containsKey(service.getSimpleName()))
@@ -219,7 +218,7 @@ public class Container implements Service {
 
             /* Récupération du constructeur & des paramètres */
             Constructor<S> constructor = (Constructor<S>) service.getDeclaredConstructors()[0];
-            Class<Service>[] param = (Class<Service>[]) constructor.getParameterTypes();
+            Class<Module>[] param = (Class<Module>[]) constructor.getParameterTypes();
 
             /* On demande récursivement chacun des paramètres */
             Object[] paramObject = new Object[param.length];
@@ -233,7 +232,7 @@ public class Container implements Service {
             Log.DATA_HANDLER.debug("Initialisation du service "+service.getSimpleName());
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
-            instanciedServices.put(service.getSimpleName(), (Service) s);
+            instanciedServices.put(service.getSimpleName(), (Module) s);
 
             /* Si c'est un Thread, on l'ajoute dans une liste à part */
             if (s instanceof Thread)
@@ -244,7 +243,7 @@ public class Container implements Service {
             Log.DATA_HANDLER.debug("Mise à jour de la config du service "+service.getSimpleName()+" après son initialisation.");
             /* Mise à jour de la config */
             s.updateConfig(this.config);
-            Log.DATA_HANDLER.debug("Service "+service.getSimpleName()+" prêt");
+            Log.DATA_HANDLER.debug("Module "+service.getSimpleName()+" prêt");
 
             /* Mise à jour de la pile */
             stack.pop();
@@ -286,14 +285,14 @@ public class Container implements Service {
     }
 
     /**
-     * @see Service
+     * @see Module
      */
     @Override
     public void updateConfig(Config config) {
-        for(Service service:instanciedServices.values()){
-            if(service instanceof Container)
+        for(Module module :instanciedServices.values()){
+            if(module instanceof Container)
                 continue;
-            service.updateConfig(config);
+            module.updateConfig(config);
         }
 
         Offsets.loadFromConfig(config);
@@ -305,7 +304,7 @@ public class Container implements Service {
     public Config getConfig() {
         return config;
     }
-    public HashMap<String, Service> getInstanciedServices() {
+    public HashMap<String, Module> getInstanciedServices() {
         return instanciedServices;
     }
 }

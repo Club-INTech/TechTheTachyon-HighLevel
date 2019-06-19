@@ -21,7 +21,7 @@ package orders;
 import pfg.config.Config;
 import orders.order.ActuatorsOrder;
 import orders.order.Order;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * @author yousra
  */
-public class SymmetrizedActuatorOrderMap implements Service {
+public class SymmetrizedActuatorOrderMap implements Module {
 
     /**
      * Map contenant un actionneur pour clé, et son symétrique pour valeur

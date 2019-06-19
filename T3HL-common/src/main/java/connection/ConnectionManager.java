@@ -20,7 +20,7 @@ package connection;
 
 import pfg.config.Config;
 import utils.communication.CommunicationException;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,7 +30,7 @@ import java.util.Iterator;
  *
  * @author william, rem
  */
-public class ConnectionManager implements Service {
+public class ConnectionManager implements Module {
 
     /**
      * Config pour récupérer ip & port
@@ -102,7 +102,7 @@ public class ConnectionManager implements Service {
     }
 
     /**
-     * @see Service#updateConfig(Config)
+     * @see Module#updateConfig(Config)
      */
     @Override
     public void updateConfig(Config config) {

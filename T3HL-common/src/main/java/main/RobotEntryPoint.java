@@ -17,7 +17,7 @@
  **/
 package main;
 
-import ai.AIService;
+import ai.AIModule;
 import com.panneau.LEDs;
 import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
@@ -54,8 +54,8 @@ public abstract class RobotEntryPoint {
     protected Robot robot;
     protected PaletsChaosControler paletsChaosControler;
     // Regardez, c'est GLaDOS!
-    protected AIService ai;
-    protected PanneauService panneauService;
+    protected AIModule ai;
+    protected PanneauModule panneauService;
 
     public void entryPoint(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) throws ContainerException {
         this.container = container;
@@ -177,7 +177,7 @@ public abstract class RobotEntryPoint {
     protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
         try {
             // trouve la couleur
-            panneauService = container.getService(PanneauService.class);
+            panneauService = container.getService(PanneauModule.class);
             if(container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
                 if(panneauService.getPanneau() != null) {
                     if(panneauService.getPanneau().isViolet()) {
@@ -221,7 +221,7 @@ public abstract class RobotEntryPoint {
                 paletsChaosControler = container.getService(PaletsChaosControler.class);
                 paletsChaosControler.start();
             }
-            ai = container.getService(AIService.class);
+            ai = container.getService(AIModule.class);
             MatchTimer timer = container.getService(MatchTimer.class);
             timer.start();
         } catch (ContainerException e) {

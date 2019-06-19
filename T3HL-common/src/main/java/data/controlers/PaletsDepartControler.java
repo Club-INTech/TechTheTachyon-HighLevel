@@ -1,6 +1,5 @@
 package data.controlers;
 
-import data.PaletsZoneChaos;
 import data.PaletsZoneDepart;
 import data.Table;
 import org.json.simple.JSONArray;
@@ -10,15 +9,11 @@ import org.json.simple.parser.ParseException;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
-import utils.container.Service;
-import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.container.Module;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.lang.Math.toIntExact;
-
-public class PaletsDepartControler extends Thread implements Service {
+public class PaletsDepartControler extends Thread implements Module {
 
     private Table table;
 

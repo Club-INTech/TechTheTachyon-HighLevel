@@ -29,8 +29,8 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.TimeoutError;
-import utils.container.Service;
-import utils.container.ServiceThread;
+import utils.container.Module;
+import utils.container.ModuleThread;
 import utils.math.*;
 
 import java.util.Optional;
@@ -38,11 +38,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Service permettant de suivre un chemin et de détecter les problèmes de suivit
+ * Module permettant de suivre un chemin et de détecter les problèmes de suivit
  *
  * @author rem
  */
-public class PathFollower extends ServiceThread {
+public class PathFollower extends ModuleThread {
 
     /**
      * Order Wrapper
@@ -250,7 +250,7 @@ public class PathFollower extends ServiceThread {
 
             // attente de qq secondes s'il y a un ennemi là où on veut aller
             try {
-                Service.withTimeout(blockTimeout, () -> {
+                Module.withTimeout(blockTimeout, () -> {
                     while(getEnemyForward(distanceToAim).isPresent()) {
                         try {
                             Thread.sleep(50);
@@ -494,7 +494,7 @@ public class PathFollower extends ServiceThread {
     }
 
     /**
-     * @see Service#updateConfig(Config)
+     * @see Module#updateConfig(Config)
      */
     @Override
     public void updateConfig(Config config) {

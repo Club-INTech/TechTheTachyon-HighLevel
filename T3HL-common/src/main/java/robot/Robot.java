@@ -27,7 +27,7 @@ import data.Sick;
 import data.XYO;
 import data.controlers.AudioPlayer;
 import data.controlers.DataControler;
-import data.controlers.PanneauService;
+import data.controlers.PanneauModule;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
@@ -38,13 +38,12 @@ import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.Speed;
 import orders.order.MontlheryOrder;
-import orders.order.MotionOrder;
 import pfg.config.Config;
 import utils.*;
 import utils.communication.CommunicationException;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Vec2;
 
 import java.io.IOException;
@@ -59,7 +58,7 @@ import java.util.function.Consumer;
  *
  * @author rem
  */
-public abstract class Robot implements Service {
+public abstract class Robot implements Module {
 
     private static final LEDs.RGBColor BLACK = LEDs.RGBColor.NOIR;
     private static final LEDs.RGBColor START_FOLLOW_PATH = LEDs.RGBColor.ROUGE;
@@ -67,9 +66,9 @@ public abstract class Robot implements Service {
     private static final LEDs.RGBColor FOLLOW_PATH_REATTEMPT_ODD = LEDs.RGBColor.VERT;
 
     /**
-     * Service qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
+     * Module qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
      */
-    private final PanneauService panneauService;
+    private final PanneauModule panneauService;
     private AudioPlayer audioPlayer;
 
     private Container container;
@@ -81,17 +80,17 @@ public abstract class Robot implements Service {
     public int score ;
 
     /**
-     * Service qui permet au robot de bouger
+     * Module qui permet au robot de bouger
      */
     protected Locomotion locomotion;
 
     /**
-     * Service qui permet au robot d'envoyer des ordres au LL
+     * Module qui permet au robot d'envoyer des ordres au LL
      */
     protected OrderWrapper orderWrapper;
 
     /**
-     * Service de gestion des hooks
+     * Module de gestion des hooks
      */
     protected HookFactory hookFactory;
 
@@ -120,7 +119,7 @@ public abstract class Robot implements Service {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService, AudioPlayer audioPlayer) {
+    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService, AudioPlayer audioPlayer) {
         this.container = container;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;

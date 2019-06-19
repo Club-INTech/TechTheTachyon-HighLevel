@@ -1,13 +1,13 @@
 package utils.container;
 
 /**
- * Classe qui regroupe à la fois un Thread et un Service. Elle permet de forcer la réimplémentation de toString() pour avoir des noms lisibles dans les profileurs
+ * Classe qui regroupe à la fois un Thread et un Module. Elle permet de forcer la réimplémentation de toString() pour avoir des noms lisibles dans les profileurs
  *
  * @author jglrxavpok
  */
-public abstract class ServiceThread extends Thread implements Service {
+public abstract class ModuleThread extends Thread implements Module {
 
-    public ServiceThread() {
+    public ModuleThread() {
         super();
         setName(toString());
     }

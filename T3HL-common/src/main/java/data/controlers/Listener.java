@@ -23,10 +23,9 @@ import connection.ConnectionManager;
 import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
 import utils.ConfigData;
-import utils.LastElementCollection;
 import utils.Log;
 import utils.communication.CommunicationException;
-import utils.container.ServiceThread;
+import utils.container.ModuleThread;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ import java.util.*;
  *
  * @author rem
  */
-public class Listener extends ServiceThread {
+public class Listener extends ModuleThread {
 
     /**
      * Temps d'attente entre chaque boucle pour l'initialisation des connexions

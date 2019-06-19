@@ -2,7 +2,7 @@ package scripts;
 
 import utils.Container;
 import utils.container.ContainerException;
-import utils.container.Service;
+import utils.container.Module;
 
 public enum ScriptNamesSlave implements ScriptNames {
     GOLDENIUM(Goldenium.class,"goldenium"),
@@ -14,10 +14,10 @@ public enum ScriptNamesSlave implements ScriptNames {
     HOMOLOGATION(ScriptHomologationSlave.class,"homologation"),
     ;
 
-    private Class<? extends Service> scriptClass;
+    private Class<? extends Module> scriptClass;
     private String scriptName;
 
-    ScriptNamesSlave(Class<? extends Service> scriptClass, String scriptName){
+    ScriptNamesSlave(Class<? extends Module> scriptClass, String scriptName){
         this.scriptClass = scriptClass;
         this.scriptName = scriptName;
     }

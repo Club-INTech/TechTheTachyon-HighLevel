@@ -19,12 +19,12 @@
 package unitaires.container;
 
 import pfg.config.Config;
-import utils.container.Service;
+import utils.container.Module;
 
 /**
  * Classe de test pour le Container
  */
-public class A implements Service
+public class A implements Module
 {
     private A(B b) {}
 

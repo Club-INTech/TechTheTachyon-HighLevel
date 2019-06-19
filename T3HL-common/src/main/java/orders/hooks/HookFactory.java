@@ -22,7 +22,7 @@ import orders.order.Order;
 import pfg.config.Config;
 import orders.OrderWrapper;
 import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ import java.util.ArrayList;
  *
  * @author yousra
  */
-public class HookFactory implements Service {
+public class HookFactory implements Module {
 
     /** OrderWrapper */
     private OrderWrapper orderWrapper;

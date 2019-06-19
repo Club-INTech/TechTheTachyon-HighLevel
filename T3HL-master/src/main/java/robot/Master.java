@@ -19,7 +19,7 @@
 package robot;
 
 import data.controlers.AudioPlayer;
-import data.controlers.PanneauService;
+import data.controlers.PanneauModule;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
@@ -33,7 +33,7 @@ import utils.communication.SimulatorDebug;
  */
 public class Master extends Robot {
 
-    public Master(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauService panneauService, AudioPlayer audioPlayer) {
+    public Master(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService, AudioPlayer audioPlayer) {
         super(container, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService, audioPlayer);
         createLeftElevator();
         createRightElevator();

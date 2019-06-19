@@ -18,12 +18,11 @@
 
 package locomotion;
 
-import ai.AIService;
+import ai.AIModule;
 import data.Graphe;
 import data.SensorState;
 import data.Table;
 import data.XYO;
-import data.controlers.AudioPlayer;
 import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
@@ -31,7 +30,7 @@ import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
 import utils.TimeoutError;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -41,19 +40,19 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 /**
- * Service permettant au robot de se déplacer
+ * Module permettant au robot de se déplacer
  *
  * @author rem
  */
-public class Locomotion implements Service {
+public class Locomotion implements Module {
 
     /**
-     * Service de recherche de chemin
+     * Module de recherche de chemin
      */
     private Pathfinder pathfinder;
 
     /**
-     * Service de suivit de chemin
+     * Module de suivit de chemin
      */
     private PathFollower pathFollower;
 
@@ -78,7 +77,7 @@ public class Locomotion implements Service {
     private ConcurrentLinkedQueue<Vec2> pointsQueue;
     private ConcurrentLinkedQueue<UnableToMoveException> exceptionsQueue;
 
-    private AIService ai;
+    private AIModule ai;
 
     /**
      * Seuil de distance par rapport à un point pour savoir si un point est considéré comme dans l'autre robot
@@ -213,7 +212,7 @@ public class Locomotion implements Service {
 
             // FIXME: gérer le TimeoutError
             // attente de qq secondes s'il y a un ennemi là où on veut aller
-            Service.withTimeout(blockTimeout, () -> {
+            Module.withTimeout(blockTimeout, () -> {
                 while(table.isPositionInMobileObstacle(point)) {
                     try {
                         Thread.sleep(50);
@@ -340,12 +339,12 @@ public class Locomotion implements Service {
         waitWhileTrue(SensorState.MOVING);
     }
 
-    public void setAI(AIService ai) {
+    public void setAI(AIModule ai) {
         this.ai = ai;
     }
 
     /**
-     * @see Service#updateConfig(Config)
+     * @see Module#updateConfig(Config)
      */
     @Override
     public void updateConfig(Config config) {

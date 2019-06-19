@@ -23,7 +23,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
- * Service de Log par canaux
+ * Module de Log par canaux
  *
  * @author rem, jglrxavpok
  */

@@ -32,7 +32,7 @@ import java.util.function.Supplier;
  *
  * @author pf
  */
-public interface Service
+public interface Module
 {
     int WAIT_LOOP_DELAY = 5;
 

@@ -23,17 +23,17 @@ import data.graphe.Node;
 import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
 import pfg.config.Config;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Vec2;
 
 import java.util.*;
 
 /**
- * Service déstiner à calculer un chemin entre deux points de la table
+ * Module déstiner à calculer un chemin entre deux points de la table
  *
  * @author rem
  */
-public class Pathfinder implements Service {
+public class Pathfinder implements Module {
 
     /**
      * Graphe de recherche de chemin

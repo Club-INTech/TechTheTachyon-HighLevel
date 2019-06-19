@@ -25,11 +25,11 @@ import locomotion.Pathfinder;
 import pfg.config.Config;
 import utils.Container;
 import utils.Log;
-import utils.container.ServiceThread;
+import utils.container.ModuleThread;
 
 import static data.controlers.Listener.TIME_LOOP;
 
-public class AIService extends ServiceThread {
+public class AIModule extends ModuleThread {
 
     private final Locomotion locomotion;
     private final ActionGraph graph;
@@ -37,7 +37,7 @@ public class AIService extends ServiceThread {
     private final SpectreRobot spectre;
     private final Config config;
 
-    public AIService(Container container, Locomotion locomotion, Pathfinder pathfinder) {
+    public AIModule(Container container, Locomotion locomotion, Pathfinder pathfinder) {
         this.config = container.getConfig();
         this.locomotion = locomotion;
         this.graph = new ActionGraph(new AINodeComparator());

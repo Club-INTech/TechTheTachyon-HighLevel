@@ -1,9 +1,7 @@
 package scripts;
 
 import data.Table;
-import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
-import data.table.Obstacle;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
@@ -13,9 +11,7 @@ import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
 import utils.TimeoutError;
-import utils.container.Service;
-import utils.math.Circle;
-import utils.math.Shape;
+import utils.container.Module;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -119,7 +115,7 @@ public class Goldenium extends Script {
 
         // TODO: Timeout?
         try {
-            Service.withTimeout(3000, () -> syncBuddy.waitForFreeBalance());
+            Module.withTimeout(3000, () -> syncBuddy.waitForFreeBalance());
             TimeUnit.SECONDS.sleep(5);
         } catch (TimeoutError error) {
             error.printStackTrace();

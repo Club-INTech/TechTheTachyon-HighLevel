@@ -8,13 +8,13 @@ import pfg.config.Config;
 import utils.Container;
 import utils.Log;
 import utils.communication.CommunicationException;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Vec2;
 
 import java.util.List;
 import java.util.Locale;
 
-public abstract class SynchronizationCommon implements Service {
+public abstract class SynchronizationCommon implements Module {
 
     /**
      * Boolean de symétrie

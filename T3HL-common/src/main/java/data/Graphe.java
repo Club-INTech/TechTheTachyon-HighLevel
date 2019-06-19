@@ -26,7 +26,7 @@ import data.table.Obstacle;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Circle;
 import utils.math.Segment;
 import utils.math.Vec2;
@@ -43,7 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author rem
  */
-public class Graphe implements Service {
+public class Graphe implements Module {
 
     /**
      * Mémoire qui contient les chemins déjà calculés pour le pathfinding (vidée dès que le graphe change)
@@ -461,7 +461,7 @@ public class Graphe implements Service {
     }
 
     /**
-     * @see Service#updateConfig(Config)
+     * @see Module#updateConfig(Config)
      */
     @Override
     public void updateConfig(Config config) {

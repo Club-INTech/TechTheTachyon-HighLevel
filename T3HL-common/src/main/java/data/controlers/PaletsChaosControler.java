@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 import pfg.config.Config;
 import utils.ConfigData;
 import utils.Log;
-import utils.container.Service;
+import utils.container.Module;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.toIntExact;
 
-public class PaletsChaosControler extends Thread implements Service {
+public class PaletsChaosControler extends Thread implements Module {
 
     private Table table;
 
