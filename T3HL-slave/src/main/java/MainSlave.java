@@ -24,10 +24,7 @@ import main.RobotEntryPoint;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import robot.Slave;
-import scripts.MatchSlave;
-import scripts.PaletsX6Slave;
-import scripts.ScriptManagerSlave;
-import scripts.ScriptNamesSlave;
+import scripts.*;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -60,7 +57,7 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void preLLConnection() throws ContainerException {
-        robot.getAudioPlayer().play("STARTUP");
+        //robot.getAudioPlayer().play("STARTUP");
         waitForColorSwitch();
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = container.getService(SimulatorDebug.class);
@@ -82,7 +79,6 @@ public class MainSlave extends RobotEntryPoint {
     @Override
     protected void act() throws UnableToMoveException {
 
-
         table.removeAllChaosObstacles();
         table.removeAllTemporaryObstacles();
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
@@ -95,7 +91,6 @@ public class MainSlave extends RobotEntryPoint {
        // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
         Vec2 pos = new VectCartesian(1500-449+148, 301+100);
        // Vec2 posSansSick = new VectCartesian(1399, 450);
-
 
         double targetAngle;
         //Pour aller à la bonne position de départ
@@ -144,11 +139,13 @@ public class MainSlave extends RobotEntryPoint {
         table.removeTemporaryObstacle(table.getPaletBleuGauche());
         table.removeTemporaryObstacle(table.getPaletVertGauche());
 
+
+
         orderWrapper.waitJumper();
 
 
         try {
-            container.getService(MatchSlave.class).execute(0);
+            container.getService(OpenTheGateSlave.class).execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

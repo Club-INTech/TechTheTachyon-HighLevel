@@ -220,7 +220,8 @@ public class Table implements Service {
          * Bord de la table !
          */
 
-        Vec2 vecteurTableBordDroit = new VectCartesian(1500,1000);
+        //Vec2 vecteurTableBordDroit = new VectCartesian(1500,1000);
+        Vec2 vecteurTableBordDroit = new VectCartesian(0,1000); //pour soutenance cassiopee
         Rectangle formeTableBordDroit = new Rectangle(vecteurTableBordDroit, 2*robotRay,2000);
         Obstacle tableBordDroit = new StillRectangularObstacle(formeTableBordDroit);
         this.addFixedObstacleNoGraphChange(tableBordDroit);
