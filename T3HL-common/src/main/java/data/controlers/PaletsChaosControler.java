@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
@@ -26,7 +27,8 @@ public class PaletsChaosControler extends Thread implements Module {
 
     private Listener listener;
 
-    private boolean symetrie;
+    @Configurable
+    private boolean symetry;
 
     private static final String ARGUMENTS_SEPARATOR = " ";
 
@@ -81,7 +83,7 @@ public class PaletsChaosControler extends Thread implements Module {
                 String color;
                 boolean first_red_purple = true;
                 boolean first_red_yellow = true;
-                if(symetrie) {
+                if(symetry) {
                     for (int i = 0; i < purple_chaos_array.size(); i++) {
                         JSONObject jsonObj = (JSONObject) purple_chaos_array.get(i);
                         color = (String) jsonObj.get("color");
@@ -165,7 +167,5 @@ public class PaletsChaosControler extends Thread implements Module {
     }
 
     @Override
-    public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
-    }
+    public void updateConfig(Config config) {}
 }

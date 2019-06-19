@@ -4,6 +4,7 @@ import data.*;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.ConfigData;
 import utils.math.Vec2;
@@ -20,6 +21,8 @@ public class ScriptPaletsZoneChaos extends Script {
     private int xEntry = 900;
     private int yEntry = 1055;
     private Vec2[] positions = new VectCartesian[4];
+
+    @Configurable
     private boolean symetry;
     int rayonRobot = 190;
     int rayonPalet = 38;
@@ -131,6 +134,5 @@ public class ScriptPaletsZoneChaos extends Script {
     public void updateConfig(Config config) {
         super.updateConfig(config);
         rayonRobot = config.get(ConfigData.ROBOT_RAY) + 1;
-        symetry = config.get(ConfigData.SYMETRY);
     }
 }

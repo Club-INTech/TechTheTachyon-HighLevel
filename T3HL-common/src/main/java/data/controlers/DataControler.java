@@ -3,6 +3,7 @@ package data.controlers;
 import data.*;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Robot;
 import utils.ConfigData;
 import utils.Container;
@@ -70,6 +71,8 @@ public class DataControler extends Thread implements Module {
     private int offsetSick= 6;
     private int offsetSickDroitSecondaire=2;
     private int posUpdates = 0;
+
+    @Configurable
     private boolean symetry;
     private Class<? extends Robot> robotClass;
 
@@ -491,7 +494,6 @@ public class DataControler extends Thread implements Module {
     @Override
     public void updateConfig(Config config) {
         this.isMaster = config.get(ConfigData.MASTER);
-        this.symetry = config.get(ConfigData.SYMETRY);
     }
 
     @Override

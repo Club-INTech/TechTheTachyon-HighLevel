@@ -24,6 +24,7 @@ import data.controlers.DataControler;
 import orders.order.*;
 import pfg.config.Config;
 import orders.hooks.HookNames;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Container;
 import utils.Log;
@@ -45,6 +46,7 @@ public class OrderWrapper implements Module {
     /**
      * Symétrie
      */
+    @Configurable
     private boolean symetry;
 
     /**
@@ -367,7 +369,6 @@ public class OrderWrapper implements Module {
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        symetry = config.get(ConfigData.SYMETRY);
         this.simulation = config.get(ConfigData.SIMULATION);
         useBalise_Image = config.get(ConfigData.USING_BALISE_IMAGE);
 

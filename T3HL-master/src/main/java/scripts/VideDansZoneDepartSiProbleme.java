@@ -7,6 +7,7 @@ import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.ConfigData;
 import utils.Container;
@@ -28,6 +29,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     //private final int yEntry = 410-78+50+10;
     private final Container container;
 
+    @Configurable
     private boolean symetry=false;
     private boolean lastWasRed=true;
 
@@ -150,7 +152,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        this.symetry = config.get(ConfigData.SYMETRY);
     }
 
 }

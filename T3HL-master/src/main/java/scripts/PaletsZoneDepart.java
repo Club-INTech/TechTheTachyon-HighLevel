@@ -7,6 +7,7 @@ import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.ConfigData;
 import utils.Container;
@@ -32,6 +33,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
     private final int xEntry = 1500-191-65+ Offsets.get(ZDD_X_VIOLET);//1244;
     private final int yEntry = 450+605;//;
 
+    @Configurable
     private boolean symetry;
 
     public PaletsZoneDepart(Master robot, Table table, Container container) {
@@ -158,10 +160,4 @@ public class PaletsZoneDepart extends Script implements Offsets {
 
     @Override
     public void finalize(Exception e) { }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        symetry = config.get(ConfigData.SYMETRY);
-    }
 }

@@ -4,6 +4,7 @@ import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
@@ -14,6 +15,8 @@ import static utils.Offsets.ZDD_X_JAUNE;
 import static utils.Offsets.ZDD_X_VIOLET;
 
 public class OpenTheGateSlave extends Script {
+
+    @Configurable
     private boolean symetry;
 
     /**
@@ -73,7 +76,6 @@ public class OpenTheGateSlave extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        symetry = config.get(ConfigData.SYMETRY);
     }
 
     @Override

@@ -7,6 +7,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
@@ -42,7 +43,9 @@ public class Goldenium extends Script implements Offsets {
 
     private VectCartesian positionBalance1;
     private VectCartesian positionBalance2;
-    private boolean symetrie;
+
+    @Configurable
+    private boolean symetry;
     private SynchronizationWithBuddy syncBuddy;
     private long balanceWaitTime;
 	private OrderWrapper orderWrapper;
@@ -58,7 +61,7 @@ public class Goldenium extends Script implements Offsets {
     public void execute(Integer version) {
         double balanceOffsetX;
         double balanceOffsetY;
-        if (symetrie){
+        if (symetry){
             balanceOffsetX = Offsets.get(SECONDAIRE_BALANCE_OFFSET_X_VIOLET);
             balanceOffsetY = Offsets.get(SECONDAIRE_BALANCE_OFFSET_Y_VIOLET);
             positionBalance1 = new VectCartesian(xBalance1+30+balanceOffsetX, yBalance1+40+balanceOffsetY);
@@ -72,12 +75,12 @@ public class Goldenium extends Script implements Offsets {
         }
 
         int decalageGold = Offsets.get(DECALAGE_GOLD_JAUNE);
-        if(symetrie) {
+        if(symetry) {
             decalageGold = Offsets.get(DECALAGE_GOLD_VIOLET);
         }
 
         try  {
-            if(symetrie) {
+            if(symetry) {
                 robot.turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
                 robot.moveLengthwise(Offsets.get(MOVE_GOLDENIUM_VIOLET), false);
@@ -92,7 +95,7 @@ public class Goldenium extends Script implements Offsets {
 
             robot.turn(Math.PI/2);
             robot.moveLengthwise(decalageGold, false);
-            if(symetrie) {
+            if(symetry) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
@@ -129,7 +132,7 @@ public class Goldenium extends Script implements Offsets {
             robot.followPathTo(positionBalance2);
             table.removeTassot();
             robot.followPathTo(positionBalance1);
-            if(!symetrie) {
+            if(!symetry) {
                 robot.turn(Math.PI);
                 depose();
             }
@@ -160,7 +163,7 @@ public class Goldenium extends Script implements Offsets {
             e.printStackTrace();
         }
        /* try {
-            if(!symetrie) {
+            if(!symetry) {
                 robot.moveLengthwise(-60, false);
             }
             else{
@@ -195,7 +198,7 @@ public class Goldenium extends Script implements Offsets {
 
     @Override
     public Vec2 entryPosition(Integer version) {
-        if (!symetrie) {
+        if (!symetry) {
             offsetX = Offsets.get(GOLDENIUM_X_JAUNE);
             offsetY = Offsets.get(GOLDENIUM_Y_JAUNE);
         } else {
@@ -212,7 +215,6 @@ public class Goldenium extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
         balanceWaitTime = config.get(ConfigData.BALANCE_SLAVE_WAIT_TIME);
         super.updateConfig(config);
     }

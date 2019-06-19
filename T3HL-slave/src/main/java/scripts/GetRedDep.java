@@ -2,10 +2,10 @@ package scripts;
 
 import data.CouleurPalet;
 import data.Table;
-import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
 import utils.math.Vec2;
@@ -14,7 +14,9 @@ import utils.math.VectCartesian;
 public class GetRedDep extends Script {
     private final int xEntry = 1500-449+148; //1244;//1350;
     private final int yEntry = 301+100; //1055;//450;
-    private boolean symetrie;
+
+    @Configurable
+    private boolean symetry;
 
     public GetRedDep(Slave robot, Table table) {
         super(robot, table);
@@ -22,7 +24,7 @@ public class GetRedDep extends Script {
 
     public void execute(Integer version) {
         try {
-            if (!symetrie) {
+            if (!symetry) {
                 robot.moveLengthwise(-100,false);
             }
         } catch (UnableToMoveException e) {
@@ -47,7 +49,6 @@ public class GetRedDep extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        symetrie = config.get(ConfigData.SYMETRY);
     }
 
 }

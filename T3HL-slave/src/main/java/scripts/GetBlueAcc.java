@@ -4,9 +4,9 @@ import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
-import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -16,7 +16,9 @@ import java.util.concurrent.TimeUnit;
 public class GetBlueAcc extends Script implements Offsets {
     private int xBlue = -170; //FIXME: positions à faire (attention symétrie)
     private int yBlue = 150+150;
-    private boolean symetrie;
+
+    @Configurable
+    private boolean symetry;
     private int xEntry = -500;
     private int yEntry = 240;//250+ 30+10  ; //a tester
     private int offsetY;
@@ -32,14 +34,14 @@ public class GetBlueAcc extends Script implements Offsets {
         try {
 
             robot.turn(-Math.PI / 2);
-            if (symetrie) {
+            if (symetry) {
                 robot.recalageMeca(true, 100 + 51 + offsetY);
             } else {
                 robot.recalageMeca(true, 100 + 54 + offsetY);
             }
 
             robot.setOrientation(-Math.PI/2);
-            if(symetrie) {
+            if(symetry) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
@@ -57,12 +59,12 @@ public class GetBlueAcc extends Script implements Offsets {
 
             double offsetXGoto = Offsets.get(GETBLUEACC_X_RETRAIT_JAUNE);
             double offsetYGoto = Offsets.get(GETBLUEACC_Y_RETRAIT_JAUNE);
-            if(symetrie) {
+            if(symetry) {
                 offsetXGoto = Offsets.get(GETBLUEACC_X_RETRAIT_VIOLET);
                 offsetYGoto = Offsets.get(GETBLUEACC_Y_RETRAIT_VIOLET);
             }
             //robot.moveLengthwise(230,false);
-            if (symetrie){
+            if (symetry){
 
                 robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
 
@@ -74,7 +76,7 @@ public class GetBlueAcc extends Script implements Offsets {
                 robot.turn(-Math.PI / 2);
                 robot.recalageMeca(true, 150/*rayon robot*/ + 10 + 7 /*bras*/);
             }
-            if(symetrie) {
+            if(symetry) {
                 robot.turn(Math.PI);
             } else {
                 robot.turn(0);
@@ -98,7 +100,7 @@ public class GetBlueAcc extends Script implements Offsets {
 
     @Override //à adapter
     public Vec2 entryPosition(Integer version) {
-        if (symetrie){
+        if (symetry){
 
             offsetX = Offsets.get(GETBLUEACC_X_VIOLET);
             offsetY = Offsets.get(GETBLUEACC_Y_VIOLET);
@@ -138,7 +140,6 @@ public class GetBlueAcc extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
         this.recalageMeca = config.get(ConfigData.RECALAGE_MECA_BLUE_ACC);
     }
 

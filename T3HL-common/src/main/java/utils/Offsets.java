@@ -7,6 +7,9 @@ import pfg.config.ConfigInfo;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author mikail, jglrxavpok
+ */
 public interface Offsets {
 
     /*

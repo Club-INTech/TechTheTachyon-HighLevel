@@ -5,6 +5,7 @@ import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.ConfigData;
 import utils.Offsets;
@@ -15,6 +16,7 @@ import static utils.Offsets.ZDD_X_JAUNE;
 import static utils.Offsets.ZDD_X_VIOLET;
 
 public class OpenTheGate extends Script {
+    @Configurable
     private boolean symetry;
 
     /**
@@ -90,12 +92,6 @@ public class OpenTheGate extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         return XYO.getRobotInstance().getPosition();
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        symetry = config.get(ConfigData.SYMETRY);
     }
 
     @Override

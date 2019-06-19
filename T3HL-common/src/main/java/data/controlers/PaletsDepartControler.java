@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
@@ -21,7 +22,8 @@ public class PaletsDepartControler extends Thread implements Module {
 
     private Listener listener;
 
-    private boolean symetrie;
+    @Configurable
+    private boolean symetry;
 
     private static final String ARGUMENTS_SEPARATOR = " ";
 
@@ -97,8 +99,6 @@ public class PaletsDepartControler extends Thread implements Module {
     }
 
     @Override
-    public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
-    }
+    public void updateConfig(Config config) {}
 }
 

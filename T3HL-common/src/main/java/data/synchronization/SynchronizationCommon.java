@@ -5,6 +5,7 @@ import data.Palet;
 import data.XYO;
 import data.controlers.Channel;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.Container;
 import utils.Log;
 import utils.communication.CommunicationException;
@@ -19,6 +20,7 @@ public abstract class SynchronizationCommon implements Module {
     /**
      * Boolean de symétrie
      */
+    @Configurable
     protected boolean symetry;
 
     /**

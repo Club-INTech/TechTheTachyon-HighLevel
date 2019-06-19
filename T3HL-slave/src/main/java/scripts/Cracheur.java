@@ -4,14 +4,10 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import data.Table;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.util.concurrent.TimeUnit;
 
 public class Cracheur extends Script {
     /**
@@ -21,7 +17,9 @@ public class Cracheur extends Script {
     //Valeurs à ajuster pour le robot secondaire
     private int xEntry = 1500-1280;
     private int yEntry = 1180;
-    private boolean symetrie;
+
+    @Configurable
+    private boolean symetry;
     private boolean first = true;
 
     private int nbPalets = robot.getNbPaletsDroits();
@@ -35,7 +33,7 @@ public class Cracheur extends Script {
     public void execute(Integer version) {
         try {
             robot.softGoTo(new VectCartesian(1500-1330+60, 1380),false);
-            if (symetrie){
+            if (symetry){
                 robot.turn(0);
                 robot.moveLengthwise(-60,false);
             }
@@ -75,7 +73,7 @@ public class Cracheur extends Script {
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR,true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_PREND_BLEU,true);
         robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        if (symetrie){
+        if (symetry){
             robot.increaseScore(12);
         }
         else{
@@ -90,6 +88,5 @@ public class Cracheur extends Script {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
     }
 }

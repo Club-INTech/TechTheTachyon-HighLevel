@@ -4,6 +4,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import robot.Robot;
 import utils.*;
@@ -20,6 +21,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class X6alter extends Script implements Offsets {
     private ArrayList<VectCartesian> positions;
+
+    @Configurable
     private boolean symetry;
     boolean onvaprendrelebleu= false;
     boolean premierPaletPris;
@@ -512,7 +515,6 @@ public class X6alter extends Script implements Offsets {
     public void updateConfig(Config config) {
         super.updateConfig(config);
         balanceWaitTime = config.get(ConfigData.BALANCE_WAIT_TIME);
-        symetry = config.get(ConfigData.SYMETRY);
         usingRecalageX6 = ! config.get(ConfigData.RECALAGE_ACC);
     }
 }

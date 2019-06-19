@@ -111,7 +111,6 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     @Override
     public void updateConfig(Config config) {
         // On est du côté jaune par défaut , le HL pense en jaune
-        this.symetry = config.get(ConfigData.SYMETRY);
         this.isMaster = config.get(ConfigData.MASTER);
         this.simulationActive = config.get(ConfigData.SIMULATION);
         if (this.simulationActive) {

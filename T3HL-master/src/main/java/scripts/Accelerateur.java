@@ -9,6 +9,7 @@ import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.*;
 import utils.math.Calculs;
@@ -31,6 +32,7 @@ public class Accelerateur extends Script implements Offsets {
     /**
      * Boolean de symétrie
      */
+    @Configurable
     private boolean symetry = false;
 
     float distanceToWall;
@@ -174,7 +176,7 @@ public class Accelerateur extends Script implements Offsets {
     public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
-        if(container.getConfig().getBoolean(ConfigData.SYMETRY)) {
+        if(symetry) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
             rapport = ecart_mesures_sicks / dsick;
             teta = Math.atan(-rapport);
@@ -261,7 +263,6 @@ public class Accelerateur extends Script implements Offsets {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        this.symetry = config.get(ConfigData.SYMETRY);
         this.recalageAcc = config.get(ConfigData.RECALAGE_ACC);
         this.recalageMecaAcc = config.get(ConfigData.RECALAGE_MECA_ACC);
     }

@@ -6,6 +6,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
 import utils.Offsets;
@@ -34,6 +35,7 @@ public class PaletsX3Slave extends Script implements Offsets {
     /**
      * constante
      */
+    @Configurable
     private boolean symetry;
     private SynchronizationWithBuddy syncBuddy;
 
@@ -164,7 +166,6 @@ public class PaletsX3Slave extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetry = config.get(ConfigData.SYMETRY);
         super.updateConfig(config);
     }
 

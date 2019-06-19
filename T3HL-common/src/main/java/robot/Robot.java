@@ -39,6 +39,7 @@ import orders.order.ActuatorsOrder;
 import orders.Speed;
 import orders.order.MontlheryOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.*;
 import utils.communication.CommunicationException;
 import utils.communication.SimulatorDebug;
@@ -109,6 +110,8 @@ public abstract class Robot implements Module {
     private boolean inSimulation;
 
     private boolean isMaster;
+
+    @Configurable
     private boolean symetry;
     private boolean forceInversion;
     private boolean usingPanel;
@@ -703,7 +706,6 @@ public abstract class Robot implements Module {
     public void updateConfig(Config config) {
         loopSleepTime = config.get(ConfigData.LOCOMOTION_LOOP_DELAY);
         inSimulation = config.get(ConfigData.SIMULATION);
-        symetry = config.get(ConfigData.SYMETRY);
         isMaster = config.get(ConfigData.MASTER);
         usingPanel = config.get(ConfigData.USING_PANEL);
     }

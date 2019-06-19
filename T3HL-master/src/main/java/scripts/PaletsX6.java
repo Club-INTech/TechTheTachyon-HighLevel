@@ -6,6 +6,7 @@ import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import robot.Robot;
 import utils.ConfigData;
@@ -20,6 +21,8 @@ import java.util.Iterator;
 
 public class PaletsX6 extends Script {
     private ArrayList<VectCartesian> positions;
+
+    @Configurable
     private boolean symetry;
     boolean onvaprendrelebleu= false;
 
@@ -353,6 +356,5 @@ public class PaletsX6 extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        symetry = config.get(ConfigData.SYMETRY);
     }
 }

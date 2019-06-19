@@ -23,6 +23,7 @@ import data.SensorState;
 import data.Table;
 import data.XYO;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.LastElementCollection;
 import utils.Log;
@@ -83,7 +84,8 @@ public class LidarControler extends ModuleThread {
     /**
      * True si autre couleur
      */
-    private boolean symetrie;
+    @Configurable
+    private boolean symetry;
     private int robotRadius;
     private int enemyRadius;
 
@@ -197,7 +199,7 @@ public class LidarControler extends ModuleThread {
         for (String point : points) {
             Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
                     Double.parseDouble(point.split(COORDONATE_SEPARATOR)[1]));
-            if(symetrie) {
+            if(symetry) {
                 obstacleCenter.setA(-obstacleCenter.getA());
             }
 
@@ -261,7 +263,7 @@ public class LidarControler extends ModuleThread {
 
         System.out.println("PointsInPoto1:");
         for (Vec2 point : pointsInPoto1){
-            if(symetrie) {
+            if(symetry) {
                 point.setA(-point.getA());
             }
             point.setA(Calculs.modulo(point.getA() + currentRobotOr, Math.PI));
@@ -271,7 +273,7 @@ public class LidarControler extends ModuleThread {
 
         System.out.println("PointsInPoto2:");
         for (Vec2 point : pointsInPoto2){
-            if(symetrie) {
+            if(symetry) {
                 point.setA(-point.getA());
             }
             point.setA(Calculs.modulo(point.getA() + currentRobotOr, Math.PI));
@@ -281,7 +283,7 @@ public class LidarControler extends ModuleThread {
 
         System.out.println("PointsInPoto3:");
         for (Vec2 point : pointsInPoto3){
-            if(symetrie) {
+            if(symetry) {
                 point.setA(-point.getA());
             }
             point.setA(Calculs.modulo(point.getA() + currentRobotOr, Math.PI));
@@ -294,7 +296,6 @@ public class LidarControler extends ModuleThread {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
         this.robotRadius = config.get(ConfigData.ROBOT_RAY);
         this.enemyRadius = config.get(ConfigData.ENNEMY_RAY);
         this.processPath = config.get(ConfigData.LIDAR_PROCESS_PATH);

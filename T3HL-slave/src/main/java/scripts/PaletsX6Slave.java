@@ -4,10 +4,9 @@ import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Slave;
 import utils.ConfigData;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -18,8 +17,8 @@ public class PaletsX6Slave extends Script {
     /**
      * constante
      */
-
-    private boolean symetrie;
+    @Configurable
+    private boolean symetry;
 
 
     public PaletsX6Slave(Slave robot, Table table) {
@@ -29,7 +28,7 @@ public class PaletsX6Slave extends Script {
     @Override
     public void execute(Integer version) {
         try {
-            if(!symetrie){
+            if(!symetry){
                 robot.turn(Math.PI);
             }
             else {
@@ -56,8 +55,4 @@ public class PaletsX6Slave extends Script {
     @Override
     public void finalize(Exception e) { }
 
-    @Override
-    public void updateConfig(Config config) {
-        this.symetrie = config.get(ConfigData.SYMETRY);
-    }
 }

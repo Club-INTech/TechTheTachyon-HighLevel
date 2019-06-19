@@ -25,6 +25,7 @@ import utils.container.Module;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -242,6 +243,12 @@ public class Container implements Module {
 
             Log.DATA_HANDLER.debug("Mise à jour de la config du service "+service.getSimpleName()+" après son initialisation.");
             /* Mise à jour de la config */
+
+            try {
+                config.loadInto(s);
+            } catch (ReflectiveOperationException e) {
+                e.printStackTrace();
+            }
             s.updateConfig(this.config);
             Log.DATA_HANDLER.debug("Module "+service.getSimpleName()+" prêt");
 

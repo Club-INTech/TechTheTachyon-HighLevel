@@ -27,7 +27,7 @@ import pfg.config.DerivedConfigInfo;
  * La valeur associée dans cette classe est celle attribuée par défaut, lorsque l'on fait une faute d'orthographe
  * dans le nom de la clé par exemple.
  *
- * @author rem
+ * @author rem, jglrxavpok
  */
 public interface ConfigData
 {

@@ -108,7 +108,7 @@
         <dependency>
             <groupId>com.github.Club-INTech</groupId>
             <artifactId>config</artifactId>
-            <version>v2.1</version>
+            <version>00052ea51c</version>
         </dependency>
 
 
