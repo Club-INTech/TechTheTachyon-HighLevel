@@ -89,5 +89,7 @@ public class Cracheur extends Script {
     public void finalize(Exception e) { }
 
     @Override
-    public void updateConfig(Config config) { this.symetrie = config.getString(ConfigData.COULEUR).equals("violet"); }
+    public void updateConfig(Config config) {
+        this.symetrie = config.get(ConfigData.SYMETRY);
+    }
 }

@@ -150,7 +150,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.get(ConfigData.SYMETRY);
     }
 
 }

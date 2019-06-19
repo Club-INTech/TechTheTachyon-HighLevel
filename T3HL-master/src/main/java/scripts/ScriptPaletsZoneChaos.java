@@ -130,7 +130,7 @@ public class ScriptPaletsZoneChaos extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        rayonRobot = config.getInt(ConfigData.ROBOT_RAY) + 1;
-        symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        rayonRobot = config.get(ConfigData.ROBOT_RAY) + 1;
+        symetry = config.get(ConfigData.SYMETRY);
     }
 }

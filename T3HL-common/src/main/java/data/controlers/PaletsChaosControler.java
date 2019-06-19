@@ -166,6 +166,6 @@ public class PaletsChaosControler extends Thread implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetrie = config.get(ConfigData.SYMETRY);
     }
 }

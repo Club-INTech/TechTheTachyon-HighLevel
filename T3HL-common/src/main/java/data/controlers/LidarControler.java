@@ -294,10 +294,10 @@ public class LidarControler extends ModuleThread {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
-        this.robotRadius = config.getInt(ConfigData.ROBOT_RAY);
-        this.enemyRadius = config.getInt(ConfigData.ENNEMY_RAY);
-        this.processPath = config.getString(ConfigData.LIDAR_PROCESS_PATH);
-        this.shouldRun = config.getBoolean(ConfigData.USING_LIDAR);
+        this.symetrie = config.get(ConfigData.SYMETRY);
+        this.robotRadius = config.get(ConfigData.ROBOT_RAY);
+        this.enemyRadius = config.get(ConfigData.ENNEMY_RAY);
+        this.processPath = config.get(ConfigData.LIDAR_PROCESS_PATH);
+        this.shouldRun = config.get(ConfigData.USING_LIDAR);
     }
 }

@@ -174,7 +174,7 @@ public class Accelerateur extends Script implements Offsets {
     public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
         robot.turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
-        if(container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+        if(container.getConfig().getBoolean(ConfigData.SYMETRY)) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
             rapport = ecart_mesures_sicks / dsick;
             teta = Math.atan(-rapport);
@@ -261,9 +261,9 @@ public class Accelerateur extends Script implements Offsets {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
-        this.recalageAcc = config.getBoolean(ConfigData.RECALAGE_ACC);
-        this.recalageMecaAcc = config.getBoolean(ConfigData.RECALAGE_MECA_ACC);
+        this.symetry = config.get(ConfigData.SYMETRY);
+        this.recalageAcc = config.get(ConfigData.RECALAGE_ACC);
+        this.recalageMecaAcc = config.get(ConfigData.RECALAGE_MECA_ACC);
     }
 
 }

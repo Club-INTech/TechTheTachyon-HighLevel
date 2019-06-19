@@ -511,8 +511,8 @@ public class X6alter extends Script implements Offsets {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        balanceWaitTime = config.getLong(ConfigData.BALANCE_WAIT_TIME);
-        symetry = config.getString(ConfigData.COULEUR).equals("violet");
-        usingRecalageX6 = ! config.getBoolean(ConfigData.RECALAGE_ACC);
+        balanceWaitTime = config.get(ConfigData.BALANCE_WAIT_TIME);
+        symetry = config.get(ConfigData.SYMETRY);
+        usingRecalageX6 = ! config.get(ConfigData.RECALAGE_ACC);
     }
 }

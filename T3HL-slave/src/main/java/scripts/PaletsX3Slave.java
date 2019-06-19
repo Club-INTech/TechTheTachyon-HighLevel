@@ -164,7 +164,7 @@ public class PaletsX3Slave extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        this.symetry = config.get(ConfigData.SYMETRY);
         super.updateConfig(config);
     }
 

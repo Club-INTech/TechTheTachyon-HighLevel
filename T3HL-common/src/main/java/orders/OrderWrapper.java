@@ -367,11 +367,11 @@ public class OrderWrapper implements Module {
     @Override
     public void updateConfig(Config config) {
         // On est du côté violet par défaut , le HL pense en violet
-        symetry = config.getString(ConfigData.COULEUR).equals("violet");
-        this.simulation = config.getBoolean(ConfigData.SIMULATION);
-        useBalise_Image = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
+        symetry = config.get(ConfigData.SYMETRY);
+        this.simulation = config.get(ConfigData.SIMULATION);
+        useBalise_Image = config.get(ConfigData.USING_BALISE_IMAGE);
 
-        boolean isMaster = config.getBoolean(ConfigData.MASTER);
+        boolean isMaster = config.get(ConfigData.MASTER);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {

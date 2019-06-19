@@ -108,7 +108,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
 
     @Override
     protected void act() throws UnableToMoveException {
-        if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
+        if(container.getConfig().get(ConfigData.MODE_MONTHLERY)) {
             while(true) {
                 try {
                     TimeUnit.SECONDS.sleep(5);
@@ -123,10 +123,10 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
-        boolean openTheGate = container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE);
+        boolean openTheGate = container.getConfig().get(ConfigData.OPEN_THE_GATE);
         if(openTheGate) {
             double offX;
-            boolean symetry = container.getConfig().getString(ConfigData.COULEUR).equals("violet");
+            boolean symetry = container.getConfig().get(ConfigData.SYMETRY);
             if (symetry){
                 offX= Offsets.get(ZDD_X_VIOLET);
             } else {
@@ -140,7 +140,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             Vec2 newPos = new VectCartesian(1500-191, 350);
             robot.setPositionAndOrientation(newPos, Math.PI);
 
-            if (container.getConfig().getString(ConfigData.COULEUR).equals("violet")) {
+            if (container.getConfig().get(ConfigData.COULEUR).equals("violet")) {
                 Log.TABLE.critical("Couleur pour le recalage : violet");
                 robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
             } else {
@@ -166,7 +166,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
 
-        if( ! container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
+        if( ! container.getConfig().get(ConfigData.OPEN_THE_GATE)) {
             table.removeTemporaryObstacle(table.getPaletVertDroite());
         }
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
@@ -175,8 +175,8 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
 
 
         try {
-            double offX = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
-            double offY = container.getConfig().getString(ConfigData.COULEUR).equals("violet") ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
+            double offX = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
+            double offY = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
 
             Match match = container.getService(Match.class);
 
@@ -185,7 +185,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
                 robot.gotoPoint(entryPos);
                 Vec2 currentPosition = XYO.getRobotInstance().getPosition();
                 double angleToStart;
-                if (container.getConfig().getString(ConfigData.COULEUR).equals("jaune")) {
+                if (container.getConfig().get(ConfigData.SYMETRY)) {
                     angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
                 }
                 else {

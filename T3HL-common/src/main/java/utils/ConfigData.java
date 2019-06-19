@@ -20,6 +20,7 @@ package utils;
 
 import pfg.config.BaseConfigInfo;
 import pfg.config.ConfigInfo;
+import pfg.config.DerivedConfigInfo;
 
 /**
  * Enumération contenant la liste des valeurs configurable via un fichier (config/config.txt),
@@ -47,6 +48,7 @@ public interface ConfigData
      * Couleur
      */
     ConfigInfo<String> COULEUR = new BaseConfigInfo<>("jaune", String.class);
+    ConfigInfo<Boolean> SYMETRY = new DerivedConfigInfo<>(false, Boolean.TYPE, config -> config.get(COULEUR).equals("violet"));
 
     /**
      * Informations relatives au status du robot (Maître ou esclave ?)

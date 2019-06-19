@@ -68,11 +68,11 @@ public class PanneauModule implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        updatePeriod = config.getLong(ConfigData.SCORE_UPDATE_PERIOD);
-        couleur = config.getString(ConfigData.COULEUR);
-        ledCount = config.getInt(ConfigData.LED_COUNT);
-        programPort = config.getInt(ConfigData.LED_PROGRAM_PORT);
-        have7seg = config.getBoolean(ConfigData.USING_7_SEGMENTS);
+        updatePeriod = config.get(ConfigData.SCORE_UPDATE_PERIOD);
+        couleur = config.get(ConfigData.COULEUR);
+        ledCount = config.get(ConfigData.LED_COUNT);
+        programPort = config.get(ConfigData.LED_PROGRAM_PORT);
+        have7seg = config.get(ConfigData.USING_7_SEGMENTS);
     }
 
     @Override

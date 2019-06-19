@@ -353,6 +353,6 @@ public class PaletsX6 extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        symetry = config.get(ConfigData.SYMETRY);
     }
 }

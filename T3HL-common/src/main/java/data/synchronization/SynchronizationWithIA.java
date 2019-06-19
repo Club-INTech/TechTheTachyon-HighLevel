@@ -111,9 +111,9 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     @Override
     public void updateConfig(Config config) {
         // On est du côté jaune par défaut , le HL pense en jaune
-        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
-        this.isMaster = config.getBoolean(ConfigData.MASTER);
-        this.simulationActive = config.getBoolean(ConfigData.SIMULATION);
+        this.symetry = config.get(ConfigData.SYMETRY);
+        this.isMaster = config.get(ConfigData.MASTER);
+        this.simulationActive = config.get(ConfigData.SIMULATION);
         if (this.simulationActive) {
             this.connection = Connection.BALISE_IA;
         } else {

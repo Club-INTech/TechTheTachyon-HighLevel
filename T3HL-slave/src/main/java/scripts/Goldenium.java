@@ -212,8 +212,8 @@ public class Goldenium extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
-        balanceWaitTime = config.getLong(ConfigData.BALANCE_SLAVE_WAIT_TIME);
+        this.symetrie = config.get(ConfigData.SYMETRY);
+        balanceWaitTime = config.get(ConfigData.BALANCE_SLAVE_WAIT_TIME);
         super.updateConfig(config);
     }
 }

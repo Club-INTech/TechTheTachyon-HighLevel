@@ -701,10 +701,10 @@ public abstract class Robot implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        loopSleepTime = config.getLong(ConfigData.LOCOMOTION_LOOP_DELAY);
-        inSimulation = config.getBoolean(ConfigData.SIMULATION);
-        symetry = config.getString(ConfigData.COULEUR).equals("violet");
-        isMaster = config.getBoolean(ConfigData.MASTER);
-        usingPanel = config.getBoolean(ConfigData.USING_PANEL);
+        loopSleepTime = config.get(ConfigData.LOCOMOTION_LOOP_DELAY);
+        inSimulation = config.get(ConfigData.SIMULATION);
+        symetry = config.get(ConfigData.SYMETRY);
+        isMaster = config.get(ConfigData.MASTER);
+        usingPanel = config.get(ConfigData.USING_PANEL);
     }
 }

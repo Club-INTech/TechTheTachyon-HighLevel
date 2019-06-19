@@ -138,8 +138,8 @@ public class GetBlueAcc extends Script implements Offsets {
 
     @Override
     public void updateConfig(Config config) {
-        this.symetrie = config.getString(ConfigData.COULEUR).equals("violet");
-        this.recalageMeca = config.getBoolean(ConfigData.RECALAGE_MECA_BLUE_ACC);
+        this.symetrie = config.get(ConfigData.SYMETRY);
+        this.recalageMeca = config.get(ConfigData.RECALAGE_MECA_BLUE_ACC);
     }
 
 }

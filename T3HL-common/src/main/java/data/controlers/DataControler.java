@@ -490,8 +490,8 @@ public class DataControler extends Thread implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        this.isMaster = config.getBoolean(ConfigData.MASTER);
-        this.symetry = config.getString(ConfigData.COULEUR).equals("violet");
+        this.isMaster = config.get(ConfigData.MASTER);
+        this.symetry = config.get(ConfigData.SYMETRY);
     }
 
     @Override

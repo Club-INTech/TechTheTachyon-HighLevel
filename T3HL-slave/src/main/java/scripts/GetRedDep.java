@@ -47,7 +47,7 @@ public class GetRedDep extends Script {
     @Override
     public void updateConfig(Config config) {
         super.updateConfig(config);
-        symetrie = config.getString(ConfigData.COULEUR).equals("violet");
+        symetrie = config.get(ConfigData.SYMETRY);
     }
 
 }
