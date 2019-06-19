@@ -29,17 +29,10 @@ public class CloseTheCassiopeeSlave extends Script {
     @SuppressWarnings("Duplicates")
     @Override
     public void execute(Integer version) {
-        double offX;
-        if (symetry){
-            offX= ZDD_X_VIOLET.get();
-        } else {
-            offX= ZDD_X_JAUNE.get();
-        }
-        Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
         Vec2 lowerLeft = new VectCartesian(650, 300);
-        Vec2 lowerRight = new VectCartesian(zoneDep.getX(), 300);
+        Vec2 lowerRight = new VectCartesian(1200, 300);
         Vec2 upperLeft = new VectCartesian(650, 1200);
-        Vec2 upperRight = new VectCartesian(zoneDep.getX(), 1200);
+        Vec2 upperRight = new VectCartesian(1200, 1200);
 
         try {
             robot.gotoPoint(lowerRight);
