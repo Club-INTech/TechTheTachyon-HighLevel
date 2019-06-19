@@ -9,14 +9,10 @@ public enum PaletsZoneChaos {
     /**
      * Instances de paletsZoneChaos avec des positions et des couleurs par défaut
      */
-
-
-
-
-    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new VectCartesian(532,1170)),
-    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new VectCartesian(427,1112)),
-    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new VectCartesian(459,996)),
-    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new VectCartesian(563,1017)),
+    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new VectCartesian(413,1029)),
+    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new VectCartesian(571,1009)),
+    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new VectCartesian(569,1129)),
+    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new VectCartesian(400,1133)),
 
     RED_1_ZONE_CHAOS_YELLOW(7,CouleurPalet.ROUGE,false,false,new VectCartesian(426,1050)),
     RED_2_ZONE_CHAOS_YELLOW(8,CouleurPalet.ROUGE,false,false,new VectCartesian(574,1050)),
