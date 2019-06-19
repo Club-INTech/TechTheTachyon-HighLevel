@@ -49,13 +49,13 @@ MASTER                              = false
 COULEUR                             = jaune
 USING_PANEL				= false
 USING_7_SEGMENTS                    = false
-USING_LIDAR			                =false
+USING_LIDAR			                = true
 LED_COUNT			                = 1
 HOMOLOGATION                        = false
 RECALAGE_MECA_BLUE_ACC              = false
 
 # DIMENSIONS DES ROBOTS
-ROBOT_RAY                           = 150
+ROBOT_RAY                           = 170
 BUDDY_RAY                           = 190
 VECTOR_COMPARISON_THRESHOLD         = 15
 

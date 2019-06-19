@@ -16,7 +16,6 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
@@ -33,7 +32,6 @@ import utils.ConfigData;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
