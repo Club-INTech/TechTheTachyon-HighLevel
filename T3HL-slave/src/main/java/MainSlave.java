@@ -145,7 +145,7 @@ public class MainSlave extends RobotEntryPoint {
 
 
         try {
-            container.getService(OpenTheGateSlave.class).execute(0);
+            container.getService(CloseTheCassiopeeSlave.class).execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
