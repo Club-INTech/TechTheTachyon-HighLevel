@@ -117,7 +117,7 @@ public class PrecoupeAccelerateurx6 extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_RECULE, true);
                 robot.moveLengthwise(-distanceToCorner, false);
 
-                robot.gotoPoint(position3palet6);
+                robot.followPathTo(position3palet6);
                 robot.turn(0);
                 robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
                 robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
