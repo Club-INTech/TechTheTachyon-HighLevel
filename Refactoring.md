@@ -1,6 +1,10 @@
 Refactoring du HL - Chronologie
 ===
 
+10/07/2019 - 21h27
+----
+* Passage sous Gradle pour simplifier la lecture et le rajout de dépendances
+
 19/06/2019 - 22h33
 ----
 + Création de ce document

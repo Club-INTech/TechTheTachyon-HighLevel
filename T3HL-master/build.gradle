@@ -1,0 +1,7 @@
+archivesBaseName = "master"
+
+dependencies {
+    implementation project(":T3HL-common")
+    implementation project(":T3HL-simulator")
+    implementation 'com.github.WilliamAHartman:Jamepad:1.2'
+}

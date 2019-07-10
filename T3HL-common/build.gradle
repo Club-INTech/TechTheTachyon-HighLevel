@@ -1,0 +1,5 @@
+archivesBaseName = "common"
+
+dependencies {
+    implementation 'com.github.WilliamAHartman:Jamepad:1.2'
+}

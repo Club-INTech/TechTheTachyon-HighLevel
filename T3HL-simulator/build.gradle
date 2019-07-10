@@ -1,0 +1,5 @@
+archivesBaseName = "simulator"
+
+dependencies {
+    implementation project(":T3HL-common")
+}

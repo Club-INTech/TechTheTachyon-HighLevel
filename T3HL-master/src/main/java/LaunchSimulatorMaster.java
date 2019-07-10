@@ -13,7 +13,7 @@ public class LaunchSimulatorMaster {
         //container.getConfig().override(ConfigData.COULEUR, "violet");
         container.getConfig().override(ConfigData.SIMULATION, true);
         container.getConfig().override(ConfigData.VISUALISATION, false);
-      //  container.getConfig().override(ConfigData.USING_LIDAR, true);
+        container.getConfig().override(ConfigData.USING_LIDAR, false);
         MainMaster.main(args);
     }
 }

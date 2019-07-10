@@ -13,3 +13,9 @@ sick-*.csv
 
 # Doc
 doc/formation/*.pdf
+
+# Gradle files
+**/build/
+**.gradle/
+
+# **DO NOT** put gradle/ or gradlew here, they allow the project to be imported without having to download&install Gradle!

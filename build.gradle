@@ -1,0 +1,47 @@
+// On dit à Gradle qu'on va faire du Java
+subprojects {
+    apply plugin: 'java-library'
+
+    group 'fr.club_intech.hl'
+    version '2019-indev'
+
+// On dit que c'est du Java 8
+    sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+    compileJava {
+        sourceCompatibility = targetCompatibility = '1.8'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { // Repo Maven de PFGimenez (auteur de Kraken, ancien du club)
+            url "https://packagecloud.io/PFGimenez/Kraken/maven2"
+        }
+
+        maven { // Sonatype Snapshot repository
+            url 'https://oss.sonatype.org/content/groups/public'
+        }
+        maven { // Jitpack repository (basé sur GitHub)
+            url 'https://jitpack.io'
+        }
+    }
+
+    dependencies {
+        // https://stackoverflow.com/questions/44493378/whats-the-difference-between-implementation-and-compile-in-gradle
+        // Tests unitaires
+        implementation 'junit:junit:4.10'
+        // Parseur de JSON
+        implementation 'org.json:json:20180813'
+        // Parseur de JSON
+        implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+        // Lib pour communiquer avec les ports série
+        implementation 'com.fazecast:jSerialComm:2.5.1'
+        // Lib pour communiquer avec le panneau de score et de sélection de couleur sur le robot
+        implementation 'com.github.Club-INTech:PanneauRaspi:master-SNAPSHOT' // TODO: remove -SNAPSHOT or replace lib
+        // Lib qui gère la config du robot
+        implementation 'com.github.Club-INTech:config:00052ea51c'
+        // Lib audio
+        implementation 'com.github.jglrxavpok:Audiokode:aa1606587b'
+    }
+}
