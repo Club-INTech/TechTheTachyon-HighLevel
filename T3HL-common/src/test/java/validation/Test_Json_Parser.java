@@ -1,30 +1,21 @@
 package validation;
 
-import connection.Connection;
 import connection.ConnectionManager;
 import data.Graphe;
-import data.PaletsZoneChaos;
 import data.PaletsZoneDepart;
 import data.Table;
 import data.controlers.Listener;
-import data.controlers.PaletsChaosControler;
 import data.controlers.PaletsDepartControler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.Test;
 import utils.Container;
-import utils.math.Vec2;
-import utils.math.VectCartesian;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-import static java.lang.Math.toIntExact;
 
 public class Test_Json_Parser {
 
@@ -38,16 +29,16 @@ public class Test_Json_Parser {
     /*@Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        connectionManager = container.getService(ConnectionManager.class);
+        connectionManager = container.module(ConnectionManager.class);
         connectionManager.initConnections(Connection.BALISE_IA);
-        listener = container.getService(Listener.class);
-        table = container.getService(Table.class);
-        graphe = container.getService(Graphe.class);
+        listener = container.module(Listener.class);
+        table = container.module(Table.class);
+        graphe = container.module(Graphe.class);
         graphe.reInit();
         table.initObstacles();
         table.setGraphe(graphe);
         listener.start();
-        paletsDepartControler = container.getService(PaletsDepartControler.class);
+        paletsDepartControler = container.module(PaletsDepartControler.class);
     }*/
 
     @Test

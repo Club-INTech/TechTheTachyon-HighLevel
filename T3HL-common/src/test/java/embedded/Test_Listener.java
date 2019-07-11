@@ -34,7 +34,7 @@ public class Test_Listener {
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        listener = container.getService(Listener.class);
+        listener = container.module(Listener.class);
     }
 
     @Ignore

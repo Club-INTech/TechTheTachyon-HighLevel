@@ -177,7 +177,7 @@ public abstract class RobotEntryPoint {
     protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
         try {
             // trouve la couleur
-            panneauService = container.getService(PanneauModule.class);
+            panneauService = container.module(PanneauModule.class);
             if(container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
                 if(panneauService.getPanneau() != null) {
                     if(panneauService.getPanneau().isViolet()) {
@@ -202,27 +202,27 @@ public abstract class RobotEntryPoint {
             }
 //            container.getConfig().override(ConfigData.COULEUR, "jaune");
             Log.STRATEGY.debug("Couleur: "+container.getConfig().get(ConfigData.COULEUR));
-            scriptManager = container.getService(scriptManagerClass);
-            connectionManager = container.getService(ConnectionManager.class);
-            orderWrapper = container.getService(OrderWrapper.class);
-            listener = container.getService(Listener.class);
+            scriptManager = container.module(scriptManagerClass);
+            connectionManager = container.module(ConnectionManager.class);
+            orderWrapper = container.module(OrderWrapper.class);
+            listener = container.module(Listener.class);
             listener.start();
-            dataControler = container.getService(DataControler.class);
+            dataControler = container.module(DataControler.class);
             dataControler.start();
-            table = container.getService(Table.class);
+            table = container.module(Table.class);
             table.initObstacles();
-            lidarControler = container.getService(LidarControler.class);
+            lidarControler = container.module(LidarControler.class);
             lidarControler.start();
-            robot = container.getService(robotClass);
-            KeepAlive keepAliveService = container.getService(KeepAlive.class);
+            robot = container.module(robotClass);
+            KeepAlive keepAliveService = container.module(KeepAlive.class);
             keepAliveService.start();
             if(container.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
                 System.out.println("suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuus");
-                paletsChaosControler = container.getService(PaletsChaosControler.class);
+                paletsChaosControler = container.module(PaletsChaosControler.class);
                 paletsChaosControler.start();
             }
-            ai = container.getService(AIModule.class);
-            MatchTimer timer = container.getService(MatchTimer.class);
+            ai = container.module(AIModule.class);
+            MatchTimer timer = container.module(MatchTimer.class);
             timer.start();
         } catch (ContainerException e) {
             e.printStackTrace();

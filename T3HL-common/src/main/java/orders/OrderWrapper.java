@@ -21,9 +21,9 @@ package orders;
 import connection.Connection;
 import data.SensorState;
 import data.controlers.DataControler;
+import orders.hooks.HookNames;
 import orders.order.*;
 import pfg.config.Config;
-import orders.hooks.HookNames;
 import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Container;
@@ -243,7 +243,7 @@ public class OrderWrapper implements Module {
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
             try {
-                container.getService(DataControler.class).waitForTwoPositionUpdates();
+                container.module(DataControler.class).waitForTwoPositionUpdates();
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

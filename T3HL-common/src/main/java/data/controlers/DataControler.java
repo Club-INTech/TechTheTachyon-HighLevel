@@ -2,10 +2,8 @@ package data.controlers;
 
 import data.*;
 import orders.OrderWrapper;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.ConfigData;
 import utils.Container;
 import utils.Log;
 import utils.MatchTimer;
@@ -152,7 +150,7 @@ public class DataControler extends Thread implements Module {
                 if (master) {
                     try {
                         int points = Integer.parseInt(parts[1]);
-                        container.getService(robotClass).increaseScore(points);
+                        container.module(robotClass).increaseScore(points);
                     }
                     catch (NumberFormatException | ContainerException e) {
                         e.printStackTrace();

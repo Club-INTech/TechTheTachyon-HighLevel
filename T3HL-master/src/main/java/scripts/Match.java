@@ -95,14 +95,14 @@ public class Match extends Script {
             if (secours || exceptionRaised) {
                 //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
                 try {
-                    container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                    container.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
                 } catch (ContainerException e) {
                     e.printStackTrace();
                 }
             } else {
                 //Si on a réussi à aller à l'accélérateur, on exécute le script
                 try {
-                    container.getService(Accelerateur.class).timedExecute(ACC_VERSION);
+                    container.module(Accelerateur.class).timedExecute(ACC_VERSION);
                 } catch (ContainerException e) {
                     e.printStackTrace();
                 }
@@ -129,7 +129,7 @@ public class Match extends Script {
                     //On exécute le script de secours
                     Log.STRATEGY.critical("Impossible d'atteindre l'accélérateur après 5s d'attente, on va vider les ascenseurs dans la zone de départ!");
                     try {
-                        container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                        container.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
                     } catch (ContainerException e1) {
                         e1.printStackTrace();
                     }
@@ -148,7 +148,7 @@ public class Match extends Script {
                             //On lance le script de secours
                             try {
                                 wasBlocked = true;
-                                container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                                container.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
                             } catch (ContainerException e1) {
                                 e1.printStackTrace();
                             }
@@ -173,7 +173,7 @@ public class Match extends Script {
                     //On lance le script de secours
                     try {
                         wasBlocked = true;
-                        container.getService(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                        container.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
                     } catch (ContainerException e1) {
                         e1.printStackTrace();
                     }

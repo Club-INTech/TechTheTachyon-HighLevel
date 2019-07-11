@@ -24,7 +24,7 @@ public enum ScriptNamesSlave implements ScriptNames {
 
     @Override
     public Script createScript(Container container) throws ContainerException {
-        return (Script)container.getService(scriptClass);
+        return (Script)container.module(scriptClass);
     }
 
     /**

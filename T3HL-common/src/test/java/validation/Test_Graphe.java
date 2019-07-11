@@ -50,11 +50,11 @@ public class Test_Graphe {
 
     @Test
     public void testInstanciation() throws Exception {
-        Table table = container.getService(Table.class);
+        Table table = container.module(Table.class);
         table.addFixedObstacle(new StillCircularObstacle(new VectPolar(300, 300), 200));
         table.addFixedObstacle(new StillRectangularObstacle(new VectPolar(600, 300), 300, 200));
 
-        graphe = container.getService(Graphe.class);
+        graphe = container.module(Graphe.class);
 
         Assert.assertEquals(graphe, table.getGraphe());
 
@@ -69,7 +69,7 @@ public class Test_Graphe {
 
     @Test
     public void testAddProvisoryNode1() throws Exception {
-        graphe = container.getService(Graphe.class);
+        graphe = container.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().clone();
         int nbNode = graphe.getNodes().size();
 
@@ -81,7 +81,7 @@ public class Test_Graphe {
 
     @Test
     public void testAddProvisoryNode2() throws Exception {
-        graphe = container.getService(Graphe.class);
+        graphe = container.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 
@@ -94,7 +94,7 @@ public class Test_Graphe {
     @Ignore
     @Test
     public void testRemoveProvisoryNode1() throws Exception {
-        graphe = container.getService(Graphe.class);
+        graphe = container.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().clone();
         int nbNode = graphe.getNodes().size();
 
@@ -107,7 +107,7 @@ public class Test_Graphe {
     @Ignore
     @Test
     public void testRemoveProvisoryNode2() throws Exception {
-        graphe = container.getService(Graphe.class);
+        graphe = container.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 

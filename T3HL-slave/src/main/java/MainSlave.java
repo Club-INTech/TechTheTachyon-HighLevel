@@ -16,18 +16,14 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
-import orders.Speed;
 import orders.order.ActuatorsOrder;
 import robot.Slave;
 import scripts.MatchSlave;
-import scripts.PaletsX6Slave;
 import scripts.ScriptManagerSlave;
-import scripts.ScriptNamesSlave;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -36,7 +32,6 @@ import utils.ConfigData;
 import utils.Container;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -63,7 +58,7 @@ public class MainSlave extends RobotEntryPoint {
         robot.getAudioPlayer().play("STARTUP");
         waitForColorSwitch();
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-            SimulatorDebug debug = container.getService(SimulatorDebug.class);
+            SimulatorDebug debug = container.module(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 // TODO: LL Slave Simulateur?
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
@@ -148,7 +143,7 @@ public class MainSlave extends RobotEntryPoint {
 
 
         try {
-            container.getService(MatchSlave.class).execute(0);
+            container.module(MatchSlave.class).execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -167,7 +162,7 @@ public class MainSlave extends RobotEntryPoint {
         //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -191,7 +186,7 @@ public class MainSlave extends RobotEntryPoint {
         simulatorLauncher.setVisualisationMode(Slave.class);
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

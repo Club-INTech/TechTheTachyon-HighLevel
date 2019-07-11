@@ -223,7 +223,7 @@ public class X6alter extends Script implements Offsets {
                             if(!recalageAcc) {
                                 recalageX6();
                             }
-                            robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
+                            robot.turnToPoint(container.module(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
                             e.printStackTrace();
                         }

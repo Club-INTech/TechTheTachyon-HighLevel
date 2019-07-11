@@ -22,9 +22,9 @@ import data.Graphe;
 import data.Table;
 import data.XYO;
 import data.graphe.Ridge;
+import data.table.MobileCircularObstacle;
 import data.table.StillCircularObstacle;
 import data.table.StillRectangularObstacle;
-import data.table.MobileCircularObstacle;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -47,8 +47,8 @@ public class Test_Table {
     @Before
     public void setUp() throws ContainerException {
         container = Container.getInstance("Master");
-        table = container.getService(Table.class);
-        container.getService(Graphe.class);
+        table = container.module(Table.class);
+        container.module(Graphe.class);
     }
 
     @After
@@ -178,7 +178,7 @@ public class Test_Table {
 
     @Test
     public void testUpdateMobileObstaclesFull() throws Exception {
-        Graphe graphe = container.getService(Graphe.class);
+        Graphe graphe = container.module(Graphe.class);
         graphe.reInit();
         XYO.getBuddyInstance().update(20, 10, 0.0);
         ArrayList<Vec2> points = new ArrayList<>();

@@ -33,14 +33,16 @@ import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import locomotion.UnableToMoveReason;
 import orders.OrderWrapper;
+import orders.Speed;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
-import orders.Speed;
 import orders.order.MontlheryOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.*;
+import utils.Container;
+import utils.Log;
+import utils.RobotSide;
+import utils.TimeoutError;
 import utils.communication.CommunicationException;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
@@ -135,7 +137,7 @@ public abstract class Robot implements Module {
         this.panneauService = panneauService;
         this.audioPlayer = audioPlayer;
         try {
-            container.getService(DataControler.class).setRobotClass(getClass());
+            container.module(DataControler.class).setRobotClass(getClass());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -154,7 +156,7 @@ public abstract class Robot implements Module {
         }
         else{
             try {
-                container.getService(SynchronizationWithBuddy.class).increaseScore(points);
+                container.module(SynchronizationWithBuddy.class).increaseScore(points);
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

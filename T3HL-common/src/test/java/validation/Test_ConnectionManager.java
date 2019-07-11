@@ -35,7 +35,7 @@ public class Test_ConnectionManager {
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        connectionManager = container.getService(ConnectionManager.class);
+        connectionManager = container.module(ConnectionManager.class);
     }
 
     @After

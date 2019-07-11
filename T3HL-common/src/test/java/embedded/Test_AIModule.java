@@ -1,7 +1,10 @@
 package embedded;
 
 import ai.AIModule;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import utils.Container;
 
 public class Test_AIModule {
@@ -14,7 +17,7 @@ public class Test_AIModule {
     @Before
     public void setUp() throws Exception {
         container = Container.getInstance("Master");
-        ai = container.getService(AIModule.class);
+        ai = container.module(AIModule.class);
     }
 
     @Ignore

@@ -1,10 +1,7 @@
 package scripts;
 
-import data.Sick;
-import data.XYO;
 import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
-import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -40,7 +37,7 @@ public class TestPositions extends TestBaseHL {
 
     @Override
     public void action() throws InterruptedException, ContainerException {
-        SymmetrizedActuatorOrderMap symetry = container.getService(SymmetrizedActuatorOrderMap.class);
+        SymmetrizedActuatorOrderMap symetry = container.module(SymmetrizedActuatorOrderMap.class);
         for (int i = 0; i < 1000; i++) {
             ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
             //robot.useActuator(order);

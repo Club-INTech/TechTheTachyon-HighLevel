@@ -1,8 +1,8 @@
 import connection.ConnectionManager;
 import data.Graphe;
 import data.XYO;
-import data.controlers.Listener;
 import data.controlers.DataControler;
+import data.controlers.Listener;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import locomotion.PathFollower;
@@ -32,15 +32,15 @@ public class TestPathFollower {
     public void init() {
         container = Container.getInstance("robot.Master");
         try {
-            connectionManager = container.getService(ConnectionManager.class);
-            orderWrapper = container.getService(OrderWrapper.class);
-            listener = container.getService(Listener.class);
+            connectionManager = container.module(ConnectionManager.class);
+            orderWrapper = container.module(OrderWrapper.class);
+            listener = container.module(Listener.class);
             listener.start();
-            graphe = container.getService(Graphe.class);
-            pathFollower = container.getService(PathFollower.class);
-            sensorController = container.getService(DataControler.class);
+            graphe = container.module(Graphe.class);
+            pathFollower = container.module(PathFollower.class);
+            sensorController = container.module(DataControler.class);
             sensorController.start();
-            robot = container.getService(Master.class);
+            robot = container.module(Master.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

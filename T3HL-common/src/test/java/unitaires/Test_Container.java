@@ -53,19 +53,19 @@ public class Test_Container
     @Test(expected = ContainerException.class)
     public void testCircularDependencies() throws Exception
     {
-        container.getService(A.class);
+        container.module(A.class);
     }
 
     @Test(expected = ContainerException.class)
     public void testMultipleConstructors() throws Exception
     {
-        container.getService(C.class);
+        container.module(C.class);
     }
 
     @Test
     public void testSimple() throws Exception
     {
-        D d = container.getService(D.class);
+        D d = container.module(D.class);
         Assert.assertTrue(container.getInstanciedServices().containsKey(E.class.getSimpleName()));
         Assert.assertTrue(container.getInstanciedServices().containsKey(D.class.getSimpleName()));
         Assert.assertTrue(((E)container.getInstanciedServices().get(E.class.getSimpleName())).isConfig());

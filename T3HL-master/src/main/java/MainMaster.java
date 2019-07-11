@@ -16,11 +16,6 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import com.panneau.LEDs;
-import com.panneau.Panneau;
-import com.panneau.TooManyDigitsException;
-import data.CouleurPalet;
-import data.SensorState;
 import data.Sick;
 import data.XYO;
 import locomotion.PathFollower;
@@ -43,15 +38,10 @@ import utils.Log;
 import utils.Offsets;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import static utils.Offsets.ZDD_X_JAUNE;
-import static utils.Offsets.ZDD_X_VIOLET;
 
 /**
  * @author nayth, jglrxavpok
@@ -77,7 +67,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         super.initServices(container, robotClass, scriptManagerClass);
         if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
             try {
-                MontlheryController montlheryController = container.getService(MontlheryController.class);
+                MontlheryController montlheryController = container.module(MontlheryController.class);
                 montlheryController.start();
             } catch (ContainerException e) {
                 e.printStackTrace();
@@ -90,7 +80,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         waitForColorSwitch();
 
         if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-            SimulatorDebug debug = container.getService(SimulatorDebug.class);
+            SimulatorDebug debug = container.module(SimulatorDebug.class);
             if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
             } else {
@@ -178,7 +168,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             double offX = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
             double offY = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
 
-            Match match = container.getService(Match.class);
+            Match match = container.module(Match.class);
 
             if( ! openTheGate) {
                 Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
@@ -224,7 +214,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -247,7 +237,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         simulatorLauncher.setVisualisationMode(Master.class);
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

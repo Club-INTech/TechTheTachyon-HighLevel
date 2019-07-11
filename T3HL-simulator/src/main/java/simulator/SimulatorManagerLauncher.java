@@ -315,7 +315,7 @@ public class SimulatorManagerLauncher extends Thread{
 
         System.out.println("Instanciation de l'interface graphique");
         try {
-            this.table = this.container.getService(Table.class);
+            this.table = this.container.module(Table.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

@@ -11,7 +11,7 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public void initState(Container container) throws ContainerException {
-        Table table = container.getService(Table.class);
+        Table table = container.module(Table.class);
         table.removeAllChaosObstacles();
         table.removeFixedObstacle(table.getPaletBleuGauche());
         table.removeFixedObstacle(table.getPaletRougeGauche());

@@ -20,7 +20,6 @@ package validation;
 
 import connection.Connection;
 import connection.ConnectionManager;
-import data.SensorState;
 import orders.OrderWrapper;
 import orders.hooks.HookNames;
 import orders.order.*;
@@ -29,7 +28,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pfg.config.Config;
-import sun.management.Sensor;
 import utils.Container;
 import utils.math.VectCartesian;
 
@@ -60,8 +58,8 @@ public class Test_OrderWrapper {
     public void setUp() throws Exception{
         container = Container.getInstance("Master");
         config = container.getConfig();
-        orderWrapper=container.getService(OrderWrapper.class);
-        connectionsManager=container.getService(ConnectionManager.class);
+        orderWrapper=container.module(OrderWrapper.class);
+        connectionsManager=container.module(ConnectionManager.class);
         connectionsManager.initConnections(Connection.LOCALHOST_SERVER);
         Thread.sleep(50);
         connectionsManager.initConnections(Connection.LOCALHOST_CLIENT);

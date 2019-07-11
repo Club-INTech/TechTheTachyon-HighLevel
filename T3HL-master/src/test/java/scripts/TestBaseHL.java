@@ -3,9 +3,9 @@ package scripts;
 import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
+import data.controlers.DataControler;
 import data.controlers.LidarControler;
 import data.controlers.Listener;
-import data.controlers.DataControler;
 import locomotion.PathFollower;
 import orders.OrderWrapper;
 import org.junit.After;
@@ -79,21 +79,21 @@ public abstract class TestBaseHL {
         container = Container.getInstance("Master");
         container.getConfig().override(ConfigData.SIMULATION, simulationMode);
         try {
-//            ScriptManagerMaster scriptManager = container.getService(ScriptManagerMaster.class);
-            connectionManager = container.getService(ConnectionManager.class);
-            orderWrapper = container.getService(OrderWrapper.class);
-            DataControler sensorControler = container.getService(DataControler.class);
+//            ScriptManagerMaster scriptManager = container.module(ScriptManagerMaster.class);
+            connectionManager = container.module(ConnectionManager.class);
+            orderWrapper = container.module(OrderWrapper.class);
+            DataControler sensorControler = container.module(DataControler.class);
             sensorControler.start();
 
             if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
-                LidarControler lidarControler = container.getService(LidarControler.class);
+                LidarControler lidarControler = container.module(LidarControler.class);
                 lidarControler.start();
             }
 
-            Listener listener = container.getService(Listener.class);
+            Listener listener = container.module(Listener.class);
             listener.start();
 
-            table = container.getService(Table.class);
+            table = container.module(Table.class);
             table.initObstacles();
             robot = getRobot();
 
@@ -117,9 +117,9 @@ public abstract class TestBaseHL {
             simulatorLauncher.setColorblindMode(false);
             try {
                 if(simulationMode) {
-                    simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+                    simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
                 } else {
-                    simulatorLauncher.setPathfollowerToShow(container.getService(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+                    simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
                 }
             } catch (ContainerException e) {
                 e.printStackTrace();
@@ -141,7 +141,7 @@ public abstract class TestBaseHL {
 
         try {
             if(simulationMode || visualise) {
-                SimulatorDebug debug = container.getService(SimulatorDebug.class);
+                SimulatorDebug debug = container.module(SimulatorDebug.class);
                 if(simulationMode) {
                     debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
                 } else {
@@ -154,7 +154,7 @@ public abstract class TestBaseHL {
             XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
             robot.setPositionAndOrientation(start, startOrientation());
 
-            KeepAlive keepAliveService = container.getService(KeepAlive.class);
+            KeepAlive keepAliveService = container.module(KeepAlive.class);
             keepAliveService.start();
         } catch (ContainerException e) {
             e.printStackTrace();
@@ -162,6 +162,6 @@ public abstract class TestBaseHL {
     }
 
     private Robot getRobot() throws ContainerException {
-        return container.getService(Master.class);
+        return container.module(Master.class);
     }
 }

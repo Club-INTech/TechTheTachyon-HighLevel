@@ -6,7 +6,6 @@ import data.controlers.Channel;
 import data.table.MobileCircularObstacle;
 import pfg.config.Config;
 import robot.Robot;
-import utils.ConfigData;
 import utils.Container;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -65,7 +64,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     public void sendPaletsAscenseurDroit(){
         Robot robot = null;
         try {
-            robot = this.container.getService(Robot.class);
+            robot = this.container.module(Robot.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -86,7 +85,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     public void sendPaletsAscenseurGauche(){
         Robot robot = null;
         try {
-            robot = this.container.getService(Robot.class);
+            robot = this.container.module(Robot.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

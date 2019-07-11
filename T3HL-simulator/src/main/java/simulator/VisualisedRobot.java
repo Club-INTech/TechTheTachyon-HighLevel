@@ -20,7 +20,7 @@ public class VisualisedRobot implements IRobot {
 
     public VisualisedRobot(Container container, Class<? extends Robot> robotClass) throws ContainerException {
         this.container = container;
-        robot = container.getService(robotClass);
+        robot = container.module(robotClass);
     }
 
     @Override

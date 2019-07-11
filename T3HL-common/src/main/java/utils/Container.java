@@ -23,9 +23,11 @@ import pfg.config.ConfigInfo;
 import utils.container.ContainerException;
 import utils.container.Module;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -174,8 +176,8 @@ public class Container implements Module {
      * @return  référene de l'instance de la classe demandée
      * @throws  ContainerException
      */
-    public synchronized <S extends Module> S getService(Class<S> service) throws ContainerException {
-        return getService(service, new Stack<String>());
+    public synchronized <S extends Module> S module(Class<S> service) throws ContainerException {
+        return module(service, new Stack<String>());
     }
 
     /**
@@ -190,7 +192,7 @@ public class Container implements Module {
      *                              circulaire
      */
     @SuppressWarnings("unchecked")
-    private synchronized <S extends Module> S getService(Class<S> service, Stack<String> stack) throws ContainerException {
+    private synchronized <S extends Module> S module(Class<S> service, Stack<String> stack) throws ContainerException {
         try {
             /* Si l'objet à déjà été instancié, on renvoie la référence */
             if (instanciedServices.containsKey(service.getSimpleName()))
@@ -225,7 +227,7 @@ public class Container implements Module {
             Object[] paramObject = new Object[param.length];
             for (int i = 0; i < param.length; i++)
             {
-                paramObject[i] = getService(param[i], stack);
+                paramObject[i] = module(param[i], stack);
             }
 
             /* On instancie l'objet ou on le stocke dans le dico */
