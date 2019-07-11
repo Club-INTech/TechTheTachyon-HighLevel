@@ -25,8 +25,7 @@ import data.controlers.AudioPlayer;
 import data.table.MobileCircularObstacle;
 import orders.OrderWrapper;
 import orders.Speed;
-import pfg.config.Config;
-import utils.ConfigData;
+import pfg.config.Configurable;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -73,17 +72,20 @@ public class PathFollower extends ModuleThread {
     /**
      * Temps entre 2 vérifications de blocage
      */
-    private int loopDelay;
+    @Configurable
+    private long locomotionLoopDelay;
 
     /**
      * Distance de vérification d'adversaire
      */
-    private int distanceCheck;
+    @Configurable
+    private int locomotionDistanceCheck;
 
     /**
      * Rayon du robot
      */
-    private int radiusCheck;
+    @Configurable
+    private int locomotionRadiusCheck;
 
     /**
      * Actions exécutées en parallèle du mouvement
@@ -93,7 +95,11 @@ public class PathFollower extends ModuleThread {
     /**
      * Timeout avant d'arrêter d'essayer de se déplacer avec un moveLengthwise
      */
-    private int blockTimeout;
+    @Configurable
+    private long locomotionObstructedTimeout;
+
+    @Configurable
+    private boolean simulation;
 
     /**
      * Est-ce qu'on a du ralentir à cause d'un ennemi dans le chemin?
@@ -165,6 +171,24 @@ public class PathFollower extends ModuleThread {
                     boolean finalFirstPass = firstPass;
                     waitWhileTrue(SensorState.MOVING::getData, () -> {
                         handleEnemyForward(distance, aim, finalFirstPass);
+                        if(expectedWallImpact && simulation) {
+                            if(table.isPositionInFixedObstacle(robotXYO.getPosition(), true)) {
+                                orderWrapper.immobilise();
+                                // permet de déloger le robot de l'obstacle
+                                while(table.isPositionInFixedObstacle(robotXYO.getPosition(), true)) {
+                                    this.orderWrapper.moveLenghtwise(-Math.signum(distance)*5, false);
+                                    try {
+                                        Thread.sleep(10);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                        break;
+                                    }
+                                }
+                                orderWrapper.immobilise();
+                                SensorState.STUCKED.setData(true);
+                                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
+                            }
+                        }
                         if (SensorState.STUCKED.getData() && !expectedWallImpact) {
                             orderWrapper.immobilise();
                             throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
@@ -219,13 +243,13 @@ public class PathFollower extends ModuleThread {
         }
 
         Segment segment = new Segment(robotXYO.getPosition().clone(),
-                robotXYO.getPosition().plusVector(new VectPolar(distanceCheck, orientation)));
+                robotXYO.getPosition().plusVector(new VectPolar(locomotionDistanceCheck, orientation)));
 
         if (enemy.isPresent()) {
             // on vérifie si l'endroit où on veut aller est plus proche:
             double distanceToAim = aim.getPosition().distanceTo(XYO.getRobotInstance().getPosition());
 
-            if(distanceToAim < distanceCheck) { // si c'est plus proche que la distance de vérification
+            if(distanceToAim < locomotionDistanceCheck) { // si c'est plus proche que la distance de vérification
                 Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
                 nearDirection.setR(distanceToAim);
                 nearDirection.plus(XYO.getRobotInstance().getPosition());
@@ -243,14 +267,14 @@ public class PathFollower extends ModuleThread {
             // l'ennemi est vraiment devant nous
             MobileCircularObstacle obstacle = enemy.get();
             Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
-            Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+            Log.LOCOMOTION.warning("Attente de "+ locomotionObstructedTimeout +" ms tant que ça se libère pas...");
 
             audioPlayer.play("AH");
             orderWrapper.immobilise();
 
             // attente de qq secondes s'il y a un ennemi là où on veut aller
             try {
-                Module.withTimeout(blockTimeout, () -> {
+                Module.withTimeout(locomotionObstructedTimeout, () -> {
                     while(getEnemyForward(distanceToAim).isPresent()) {
                         try {
                             Thread.sleep(50);
@@ -331,7 +355,7 @@ public class PathFollower extends ModuleThread {
                     throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                 }
                 Vec2 nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
-                nearDirection.setR(this.distanceCheck);
+                nearDirection.setR(this.locomotionDistanceCheck);
                 nearDirection.plus(XYO.getRobotInstance().getPosition());
                 segment.setPointB(nearDirection);
 
@@ -343,7 +367,7 @@ public class PathFollower extends ModuleThread {
                     double distanceToAim = aim.getPosition().distanceTo(XYO.getRobotInstance().getPosition());
 
                     boolean needsToStop = true;
-                    if(distanceToAim < distanceCheck) {
+                    if(distanceToAim < locomotionDistanceCheck) {
                         nearDirection = aim.getPosition().minusVector(XYO.getRobotInstance().getPosition());
                         nearDirection.setR(distanceToAim);
                         nearDirection.plus(XYO.getRobotInstance().getPosition());
@@ -392,7 +416,7 @@ public class PathFollower extends ModuleThread {
             orientation = Calculs.modulo(orientation + Math.PI, Math.PI);
         }
         Segment segment = new Segment(robotXYO.getPosition().clone(),
-                robotXYO.getPosition().plusVector(new VectPolar(distanceCheck, orientation)));
+                robotXYO.getPosition().plusVector(new VectPolar(locomotionDistanceCheck, orientation)));
         return getEnemyInSegment(segment);
     }
 
@@ -493,16 +517,6 @@ public class PathFollower extends ModuleThread {
         return pointsQueue;
     }
 
-    /**
-     * @see Module#updateConfig(Config)
-     */
-    @Override
-    public void updateConfig(Config config) {
-        this.loopDelay = config.getInt(ConfigData.LOCOMOTION_LOOP_DELAY);
-        this.distanceCheck = config.getInt(ConfigData.LOCOMOTION_DISTANCE_CHECK);
-        this.radiusCheck = config.getInt(ConfigData.LOCOMOTION_RADIUS_CHECK);
-        this.blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
-    }
     /**
      * Getters & Setters
      */

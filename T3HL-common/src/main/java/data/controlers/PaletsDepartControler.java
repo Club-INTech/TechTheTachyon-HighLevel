@@ -97,8 +97,5 @@ public class PaletsDepartControler extends Thread implements Module {
 
         }
     }
-
-    @Override
-    public void updateConfig(Config config) {}
 }
 

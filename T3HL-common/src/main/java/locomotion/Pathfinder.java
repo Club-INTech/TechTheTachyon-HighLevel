@@ -258,11 +258,6 @@ public class Pathfinder implements Module {
         return path;
     }
 
-    @Override
-    public void updateConfig(Config config) {
-
-    }
-
     public Graphe getGraphe() {
         return graphe;
     }

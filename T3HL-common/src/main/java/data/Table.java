@@ -20,6 +20,7 @@ package data;
 
 import data.table.*;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
@@ -77,31 +78,37 @@ public class Table implements Module {
     /**
      * Longueur de la table (en x, en mm)
      */
+    @Configurable("tableX")
     private int length;
 
     /**
      * Longueur de la table (en y, en mm)
      */
-    private int width;
+    @Configurable("tableY")
+    private int height;
 
     /**
      * Rayon du robot
      */
+    @Configurable
     private int robotRay;
 
     /**
      * Rayon du buddy robot !
      */
-    private int buddyRobotRay;
+    @Configurable
+    private int buddyRay;
 
     /**
      * Rayon des robots adverses
      */
-    private int ennemyRobotRay;
+    @Configurable
+    private int ennemyRay;
 
     /**
      * Limite lorque l'on compare deux positions
      */
+    @Configurable("vectorComparisonThreshold")
     private int compareThreshold;
 
     /**
@@ -122,6 +129,8 @@ public class Table implements Module {
      * Rampes et balance (dans une variable pour que le lidar détecte pas le mat de la balance)
      */
     private StillCircularRectangularObstacle balanceAndRamps;
+
+    @Configurable
     private boolean openTheGate;
 
     /**
@@ -320,9 +329,9 @@ public class Table implements Module {
         }
 
         for (Vec2 pt : points) {
-            int ray = ennemyRobotRay;
+            int ray = ennemyRay;
             if (pt.distanceTo(XYO.getBuddyInstance().getPosition()) < compareThreshold) {
-                ray = buddyRobotRay;
+                ray = buddyRay;
             }
             MobileCircularObstacle obst = new MobileCircularObstacle(pt, ray+robotRay);
      //       Log.LIDAR.debug("Obstacle mobile ajouté : " + obst);
@@ -585,7 +594,7 @@ public class Table implements Module {
      * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
      */
     public void SIMULATEDaddMobileObstacle() {
-        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRobotRay+robotRay);
+        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRay +robotRay);
         this.simulatedObstacle.setLifeTime(100000);
         this.mobileObstacles.add(this.simulatedObstacle);
     }
@@ -640,25 +649,11 @@ public class Table implements Module {
     }
 
     public int getWidth() {
-        return width;
+        return height;
     }
 
     public MobileCircularObstacle getSimulatedObstacle() {
         return simulatedObstacle;
-    }
-
-    /**
-     * @see Module#updateConfig(Config)
-     */
-    @Override
-    public void updateConfig(Config config) {
-        this.robotRay = config.getInt(ConfigData.ROBOT_RAY);
-        this.buddyRobotRay = config.getInt(ConfigData.BUDDY_RAY);
-        this.ennemyRobotRay = config.getInt(ConfigData.ENNEMY_RAY);
-        this.length = config.getInt(ConfigData.TABLE_X);
-        this.width = config.getInt(ConfigData.TABLE_Y);
-        this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
-        this.openTheGate = config.getBoolean(ConfigData.OPEN_THE_GATE);
     }
 
     public Obstacle getPaletRougeDroite() {

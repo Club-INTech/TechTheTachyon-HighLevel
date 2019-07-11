@@ -25,17 +25,14 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     @Override
     public void updateConfig(Config config) {
         // On est du côté jaune par défaut , le HL pense en jaune
-        this.isMaster = config.get(ConfigData.MASTER);
-        this.simulationActive = config.get(ConfigData.SIMULATION);
-
-        if(isMaster) {
-            if (this.simulationActive) {
+        if(master) {
+            if (this.simulation) {
                 this.connection = Connection.SLAVE_SIMULATEUR;
             } else {
                 this.connection = Connection.SLAVE;
             }
         } else {
-            if (this.simulationActive) {
+            if (this.simulation) {
                 this.connection = Connection.SLAVE_SIMULATEUR; // TODO
             } else {
                 this.connection = Connection.MASTER;

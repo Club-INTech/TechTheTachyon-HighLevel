@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  * Interface servant à définir un service : un service est un singleton qui doit implémenter la méthode updateConfig,
  * et être instancié par le container
  *
- * @author pf
+ * @author pf, jglrxavpok
  */
 public interface Module
 {
@@ -41,10 +41,10 @@ public interface Module
     }
 
     /**
-     * Cette méthode est appelée par le container après instanciation du service.
-     * Elle sert à attribuer à des attributs des valeurs contenus dans la config.
+     * Cette méthode est appelée par le container après instanciation du service, ou rechargement de la config.
+     * Elle sert à attribuer à des attributs des valeurs contenues dans la config, quand {@link pfg.config.Configurable} ne suffit pas.
      */
-    void updateConfig(Config config);
+    default void updateConfig(Config config) {}
 
     default void waitWhileTrue(SensorState<Boolean> condition) {
         waitWhileTrue(condition::getData, () -> {});

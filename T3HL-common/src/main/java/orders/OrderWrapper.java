@@ -52,6 +52,7 @@ public class OrderWrapper implements Module {
     /**
      * Simulation active
      */
+    @Configurable
     private boolean simulation;
 
     /**
@@ -62,7 +63,8 @@ public class OrderWrapper implements Module {
     /**
      * Si on utlise la balise
      */
-    private Boolean useBalise_Image;
+    @Configurable
+    private boolean usingBaliseImage;
     private Container container;
     /**
      * Le service de symétrie des ordres
@@ -368,15 +370,11 @@ public class OrderWrapper implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        // On est du côté violet par défaut , le HL pense en violet
-        this.simulation = config.get(ConfigData.SIMULATION);
-        useBalise_Image = config.get(ConfigData.USING_BALISE_IMAGE);
-
-        boolean isMaster = config.get(ConfigData.MASTER);
+        boolean master = config.get(ConfigData.MASTER);
         if (this.simulation) {
             this.llConnection = Connection.MASTER_LL_SIMULATEUR;
         } else {
-            if(isMaster) {
+            if(master) {
                 this.llConnection = Connection.TEENSY_MASTER;
             } else {
                 this.llConnection = Connection.TEENSY_SLAVE;
@@ -397,7 +395,7 @@ public class OrderWrapper implements Module {
         SensorState.WAITING_JUMPER.setData(true);
         sendString("waitJumper");
         waitWhileTrue(SensorState.WAITING_JUMPER::getData);
-        if(useBalise_Image) {
+        if(usingBaliseImage) {
             try {
                 System.out.println("Message envoyeeeeeeeeeeeeeeeeeeeeeeeee");
                 Connection.BALISE_IMAGE.send("GO");

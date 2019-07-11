@@ -24,6 +24,7 @@ import data.table.StillCircularObstacle;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
@@ -100,9 +101,13 @@ public class Graphe implements Module {
     /**
      * Paramètres du graphe
      */
-    private int nodeCricleNbr;
+    @Configurable("nbrNoeudsCircle")
+    private int nodeCircleNbr;
+    @Configurable("espacementCircle")
     private double spaceCircleParameter;
+    @Configurable("nbrNoeudsX")
     private int nodeXNbr;
+    @Configurable("nbrNoeudsY")
     private int nodeYNbr;
 
     /**
@@ -115,7 +120,9 @@ public class Graphe implements Module {
      */
     private NodeList[][] partitions;
 
+    @Configurable("partitionWidth")
     private int partitioningX = 25;
+    @Configurable("partitionHeight")
     private int partitioningY = 25;
 
     /**
@@ -182,9 +189,9 @@ public class Graphe implements Module {
         Vec2 pos = new VectCartesian(0, 0);
         Log.GRAPHE.debug("Placement de noeuds autour de l'obstacle "+obstacle);
         if (obstacle instanceof StillCircularObstacle) {
-            for (int i = 0; i < nodeCricleNbr; i++) {
+            for (int i = 0; i < nodeCircleNbr; i++) {
                 pos.setR(spaceCircleParameter * ((Circle) obstacle.getShape()).getRadius());
-                pos.setA(i * 2 * Math.PI / nodeCricleNbr);
+                pos.setA(i * 2 * Math.PI / nodeCircleNbr);
                 pos.plus(obstacle.getPosition());
 
                 if (!table.isPositionInFixedObstacle(pos, false)) {
@@ -465,7 +472,6 @@ public class Graphe implements Module {
      */
     @Override
     public void updateConfig(Config config) {
-        updateConfigNoInit(config);
         // L'initialisation du Graphe a besoin des données de la config :'(
         if( ! initialized) {
             synchronized (fixedObstacles) {
@@ -475,14 +481,5 @@ public class Graphe implements Module {
                 }
             }
         }
-    }
-
-    public void updateConfigNoInit(Config config) {
-        nodeXNbr = config.getInt(ConfigData.NBR_NOEUDS_X);
-        nodeYNbr = config.getInt(ConfigData.NBR_NOEUDS_Y);
-        spaceCircleParameter = config.getDouble(ConfigData.ESPACEMENT_CIRCLE);
-        nodeCricleNbr = config.getInt(ConfigData.NBR_NOEUDS_CIRCLE);
-        partitioningX = config.getInt(ConfigData.PARTITION_WIDTH);
-        partitioningY = config.getInt(ConfigData.PARTITION_HEIGHT);
     }
 }

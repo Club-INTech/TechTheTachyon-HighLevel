@@ -165,7 +165,4 @@ public class PaletsChaosControler extends Thread implements Module {
 
         }
     }
-
-    @Override
-    public void updateConfig(Config config) {}
 }

@@ -53,7 +53,8 @@ public class DataControler extends Thread implements Module {
     /**
      * True si master
      */
-    private boolean isMaster;
+    @Configurable
+    private boolean master;
 
     /**
      * Variables pour éviter de faire des new
@@ -148,7 +149,7 @@ public class DataControler extends Thread implements Module {
                 GameState.ACCELERATOR_FREE.setData(true);
                 break;
             case "increaseScore": {
-                if (isMaster) {
+                if (master) {
                     try {
                         int points = Integer.parseInt(parts[1]);
                         container.getService(robotClass).increaseScore(points);
@@ -322,7 +323,7 @@ public class DataControler extends Thread implements Module {
         double teta;
         double newOrientation;
 
-        if (isMaster) {
+        if (master) {
             dsick = 173;
             double rapport = ((double)esick) / dsick;
             VectCartesian vectsick = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
@@ -444,7 +445,7 @@ public class DataControler extends Thread implements Module {
     private void handleBuddyPos(String message) {
         String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
         XYO.getBuddyInstance().update(Integer.parseInt(coordonates[0]), Integer.parseInt(coordonates[1]), Double.parseDouble(coordonates[2]));
-        Log.COMMUNICATION.debug("Received buddy pos: " + XYO.getBuddyInstance() + " isMaster=" + isMaster);
+        Log.COMMUNICATION.debug("Received buddy pos: " + XYO.getBuddyInstance() + " master=" + master);
     }
 
     /**
@@ -489,11 +490,6 @@ public class DataControler extends Thread implements Module {
 
     private boolean symetry() {
         return orderWrapper.shouldSymetrize();
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        this.isMaster = config.get(ConfigData.MASTER);
     }
 
     @Override

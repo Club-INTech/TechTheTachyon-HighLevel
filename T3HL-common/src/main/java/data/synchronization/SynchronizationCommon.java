@@ -26,12 +26,14 @@ public abstract class SynchronizationCommon implements Module {
     /**
      * Boolean de simulation
      */
-    protected boolean simulationActive;
+    @Configurable
+    protected boolean simulation;
 
     /**
      * Boolean de pour savoir si on est master
      */
-    protected boolean isMaster;
+    @Configurable
+    protected boolean master;
 
     /**
      * Connection avec qui envoyer
@@ -113,6 +115,4 @@ public abstract class SynchronizationCommon implements Module {
         this.connection = connection;
     }
 
-    @Override
-    public abstract void updateConfig(Config config);
 }

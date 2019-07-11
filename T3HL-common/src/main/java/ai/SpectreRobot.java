@@ -95,7 +95,11 @@ public class SpectreRobot {
 
     public void updateConfig(Config config) {
         fakeTable.updateConfig(config);
-        fakeGraphe.updateConfigNoInit(config); // pas besoin d'init le graphe, l'appel de #updateTableAfterFixedObstaclesChanges va le faire dans copyFromBase
+        try {
+            config.loadInto(fakeGraphe); // pas besoin d'init le graphe, l'appel de #updateTableAfterFixedObstaclesChanges va le faire dans copyFromBase
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
     }
 
     public Graphe getSimulatedGraph() {

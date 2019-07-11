@@ -4,6 +4,7 @@ import connection.Connection;
 import connection.ConnectionManager;
 import data.CouleurPalet;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.RobotSide;
 import utils.container.Module;
@@ -13,6 +14,7 @@ import java.util.Stack;
 public class SimulatorDebug implements Module {
 
     private final ConnectionManager manager;
+    @Configurable("simulation")
     private boolean active;
     private int senderPort;
 
@@ -43,8 +45,4 @@ public class SimulatorDebug implements Module {
         this.senderPort = senderPort;
     }
 
-    @Override
-    public void updateConfig(Config config) {
-        active = config.getBoolean(ConfigData.SIMULATION);
-    }
 }

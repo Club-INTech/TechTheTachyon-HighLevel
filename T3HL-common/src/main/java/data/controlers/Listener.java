@@ -21,8 +21,7 @@ package data.controlers;
 import connection.Connection;
 import connection.ConnectionManager;
 import data.synchronization.SynchronizationWithBuddy;
-import pfg.config.Config;
-import utils.ConfigData;
+import pfg.config.Configurable;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ModuleThread;
@@ -50,6 +49,7 @@ public class Listener extends ModuleThread {
     /**
      * Pour connaître les redirections à effectuer
      */
+    @Configurable
     private boolean master;
 
     /**
@@ -60,35 +60,43 @@ public class Listener extends ModuleThread {
     /**
      * Si on est en simulation
      */
+    @Configurable
     private boolean simulation;
 
     /**
      * Est-ce qu'on utilise le Lidar?
      */
-    private boolean useLidar;
+    @Configurable
+    private boolean usingLidar;
 
     /**
      * Si on utilise la balise pour le traitement d'images
      */
-    private boolean useBaliseImage;
+    @Configurable
+    private boolean usingBaliseImage;
 
-    private boolean testZoneChaos;
+    @Configurable
+    private boolean zoneChaosTest;
 
-    private boolean visualize;
+    @Configurable
+    private boolean visualisation;
     /**
-     * Est-ce qu'on active l'éléctron ?
+     * Est-ce qu'on active l'électron ?
      */
-    private boolean useElectron;
+    @Configurable
+    private boolean usingElectron;
 
     /**
      * Est-ce qu'on se connecte au copain?
      */
+    @Configurable
     private boolean connectToBuddy;
 
     /**
      * Temps entre deux envois de positions au buddy
      */
-    private long timeBetweenBuddyPosUpdates;
+    @Configurable
+    private long timeBetweenPosUpdates;
 
     /**
      * Date du dernier envoi de position
@@ -172,21 +180,21 @@ public class Listener extends ModuleThread {
 
                 buddySync.setConnection(buddy);
 
-                if(visualize) {
+                if(visualisation) {
                     Log.COMMUNICATION.debug("Debug connection init...");
                     connectionManager.initConnections(Connection.DEBUG_SIMULATEUR);
                     Log.COMMUNICATION.debug("Debug connection ready!");
                 }
             }
-            if(useBaliseImage || testZoneChaos){
-            //if(useBaliseImage ){
+            if(usingBaliseImage || zoneChaosTest){
+            //if(usingBaliseImage ){
                 connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
-            if(useLidar) {
+            if(usingLidar) {
                 connectionManager.initConnections(Connection.LIDAR_DATA);
                 Log.COMMUNICATION.debug("Lidar connected");
             }
-            if(useElectron) {
+            if(usingElectron) {
                 connectionManager.initConnections(Connection.ELECTRON);
                 Log.COMMUNICATION.debug("Electron connected");
             }
@@ -219,7 +227,7 @@ public class Listener extends ModuleThread {
                             message = buffer.get().substring(2);
                             handleMessage(header, message);
                             if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                                if (buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenBuddyPosUpdates) {
+                                if (buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenPosUpdates) {
                                     buddySync.sendPosition();
                                     lastTimeSinceBuddyUpdate = System.currentTimeMillis();
                                 }
@@ -250,16 +258,4 @@ public class Listener extends ModuleThread {
         }
     }
 
-    @Override
-    public void updateConfig(Config config) {
-        this.master = config.getBoolean(ConfigData.MASTER);
-        this.simulation=config.getBoolean(ConfigData.SIMULATION);
-        this.useLidar = config.getBoolean(ConfigData.USING_LIDAR);
-        this.useElectron = config.getBoolean(ConfigData.USING_ELECTRON);
-        this.useBaliseImage = config.getBoolean(ConfigData.USING_BALISE_IMAGE);
-        this.testZoneChaos = config.getBoolean(ConfigData.ZONE_CHAOS_TEST);
-        this.visualize = config.getBoolean(ConfigData.VISUALISATION);
-        this.connectToBuddy = config.getBoolean(ConfigData.CONNECT_TO_BUDDY);
-        this.timeBetweenBuddyPosUpdates = config.getLong(ConfigData.TIME_BETWEEN_POS_UPDATES);
-    }
 }

@@ -32,11 +32,6 @@ public class MatchTimer extends ModuleThread {
         }
     }
 
-    @Override
-    public void updateConfig(Config config) {
-
-    }
-
     public long getTimeElapsed() {
         if(startTime <= 0)
             return 0;

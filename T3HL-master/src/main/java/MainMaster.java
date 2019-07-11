@@ -215,6 +215,8 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         //On set tous les LL qui sont simulés
         simulatorLauncher.setLLMasterPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
 
+        simulatorLauncher.setSpeedFactor(2f);
+
         //On set tous les HL qui recevront des messages
         // FIXME/TODO simulatorLauncher.setHLSlavePort((int)ConfigData.HL_SLAVE_SIMULATEUR.getDefaultValue());
 

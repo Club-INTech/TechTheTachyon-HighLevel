@@ -100,9 +100,4 @@ public class AudioPlayer implements Module {
 
         thread.start();
     }
-
-    @Override
-    public void updateConfig(Config config) {
-
-    }
 }

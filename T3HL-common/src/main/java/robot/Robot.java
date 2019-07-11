@@ -99,7 +99,8 @@ public abstract class Robot implements Module {
      * Position et Orientation du robot
      */
     protected XYO xyo;
-    private long loopSleepTime;
+    @Configurable
+    private long locomotionLoopDelay;
 
     private Stack<CouleurPalet> leftElevator;
     private Stack<CouleurPalet> rightElevator;
@@ -107,13 +108,16 @@ public abstract class Robot implements Module {
     /**
      * Est-ce qu'on est en mode simulation?
      */
-    private boolean inSimulation;
+    @Configurable
+    private boolean simulation;
 
-    private boolean isMaster;
+    @Configurable
+    private boolean master;
 
     @Configurable
     private boolean symetry;
     private boolean forceInversion;
+    @Configurable
     private boolean usingPanel;
 
     /**
@@ -139,7 +143,7 @@ public abstract class Robot implements Module {
 
     public void increaseScore(int points) {
         this.score = this.score + points;
-        if (isMaster) {
+        if (master) {
             try {
                 if (usingPanel && panneauService.getPanneau() != null) {
                     this.panneauService.getPanneau().printScore(score);
@@ -461,7 +465,7 @@ public abstract class Robot implements Module {
      * Méthode qui permet le recalage avec les sicks
      */
     public void computeNewPositionAndOrientation(Sick[] significantSicks){
-        if(inSimulation) {
+        if(simulation) {
             return;
         }
         System.out.println(" JE CROIS ETRE ICI : " + " Position =" + XYO.getRobotInstance().getPosition() + " orientation =" + XYO.getRobotInstance().getOrientation());
@@ -497,7 +501,7 @@ public abstract class Robot implements Module {
      * @return
      */
     public int getNbPaletsGauches() {
-        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+        if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
             return getNbPaletsDroitsNoSymetry();
         } else {
             return getNbPaletsGauchesNoSymetry();
@@ -509,7 +513,7 @@ public abstract class Robot implements Module {
      * @return
      */
     public int getNbPaletsDroits() {
-        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+        if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
             return getNbPaletsGauchesNoSymetry();
         } else {
             return getNbPaletsDroitsNoSymetry();
@@ -563,7 +567,7 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletDroit(CouleurPalet palet) {
-       if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+       if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
            pushPaletGaucheNoSymetry(palet);
        } else {
            pushPaletDroitNoSymetry(palet);
@@ -575,7 +579,7 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletGauche(CouleurPalet palet) {
-        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+        if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
             pushPaletDroitNoSymetry(palet);
         } else {
             pushPaletGaucheNoSymetry(palet);
@@ -613,7 +617,7 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletDroit() {
-        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+        if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
             return popPaletGaucheNoSymetry();
         } else {
             return popPaletDroitNoSymetry();
@@ -625,7 +629,7 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public CouleurPalet popPaletGauche() {
-        if(isMaster && symetry()) { // le secondaire ne fait pas de symétrie ici
+        if(master && symetry()) { // le secondaire ne fait pas de symétrie ici
             return popPaletDroitNoSymetry();
         } else {
             return popPaletGaucheNoSymetry();
@@ -670,14 +674,14 @@ public abstract class Robot implements Module {
     }
 
     public boolean symetry() {
-        return isMaster && (symetry ^ forceInversion);
+        return master && (symetry ^ forceInversion);
     }
 
     /**
      * Renvoies l'ascenseur de gauche, ou 'null' s'il n'existe pas
      */
     public Stack<CouleurPalet> getLeftElevatorOrNull() {
-        if(isMaster && symetry()) {
+        if(master && symetry()) {
             return rightElevator;
         } else {
             return leftElevator;
@@ -688,7 +692,7 @@ public abstract class Robot implements Module {
      * Renvoies l'ascenseur de droite, ou 'null' s'il n'existe pas
      */
     public Stack<CouleurPalet> getRightElevatorOrNull() {
-        if(isMaster && symetry()) {
+        if(master && symetry()) {
             return leftElevator;
         } else {
             return rightElevator;
@@ -701,12 +705,4 @@ public abstract class Robot implements Module {
         return audioPlayer;
     }
 
-
-    @Override
-    public void updateConfig(Config config) {
-        loopSleepTime = config.get(ConfigData.LOCOMOTION_LOOP_DELAY);
-        inSimulation = config.get(ConfigData.SIMULATION);
-        isMaster = config.get(ConfigData.MASTER);
-        usingPanel = config.get(ConfigData.USING_PANEL);
-    }
 }

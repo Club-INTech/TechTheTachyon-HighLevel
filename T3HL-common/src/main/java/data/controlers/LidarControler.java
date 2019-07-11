@@ -86,14 +86,18 @@ public class LidarControler extends ModuleThread {
      */
     @Configurable
     private boolean symetry;
-    private int robotRadius;
-    private int enemyRadius;
+    @Configurable
+    private int robotRay;
+    @Configurable
+    private int ennemyRay;
 
     /**
      * Chemin du processus gèrant le Lidar (absolu ou relatif au dossier d'exécution)
      */
-    private String processPath;
-    private boolean shouldRun;
+    @Configurable
+    private String lidarProcessPath;
+    @Configurable
+    private boolean usingLidar;
 
 
     /**
@@ -131,13 +135,13 @@ public class LidarControler extends ModuleThread {
 
     @Override
     public void run() {
-        if(!shouldRun) {
+        if(!usingLidar) {
             return;
         }
         Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
         Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
         try {
-            Process lidarProcess = new ProcessBuilder(processPath).start();
+            Process lidarProcess = new ProcessBuilder(lidarProcessPath).start();
 
             // force l'extinction du programme quand la VM s'arrête
             Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
@@ -171,7 +175,7 @@ public class LidarControler extends ModuleThread {
         String[] points;
         List<Vec2> mobileObstacles = new LinkedList<>();
         float margin = 10;
-        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2*enemyRadius- 2*margin, table.getWidth()-2*enemyRadius- 2*margin);
+        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2* ennemyRay - 2*margin, table.getWidth()-2* ennemyRay - 2*margin);
         while (true) {
             if (!recalageDataStack.isEmpty()) {
                 handleRecalageData();
@@ -203,7 +207,7 @@ public class LidarControler extends ModuleThread {
                 obstacleCenter.setA(-obstacleCenter.getA());
             }
 
-            if(obstacleCenter.getR() <= robotRadius)
+            if(obstacleCenter.getR() <= robotRay)
                 continue;
             obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
             obstacleCenter.plus(currentXYO.getPosition());
@@ -292,13 +296,5 @@ public class LidarControler extends ModuleThread {
         }
 
         SensorState.RECALAGE_LIDAR_EN_COURS.setData(false);
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        this.robotRadius = config.get(ConfigData.ROBOT_RAY);
-        this.enemyRadius = config.get(ConfigData.ENNEMY_RAY);
-        this.processPath = config.get(ConfigData.LIDAR_PROCESS_PATH);
-        this.shouldRun = config.get(ConfigData.USING_LIDAR);
     }
 }

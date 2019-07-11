@@ -36,15 +36,13 @@ subprojects {
         // Tests unitaires
         implementation 'junit:junit:4.10'
         // Parseur de JSON
-        implementation 'org.json:json:20180813'
-        // Parseur de JSON
         implementation 'com.googlecode.json-simple:json-simple:1.1.1'
         // Lib pour communiquer avec les ports série
         implementation 'com.fazecast:jSerialComm:2.5.1'
         // Lib pour communiquer avec le panneau de score et de sélection de couleur sur le robot
         implementation 'com.github.Club-INTech:PanneauRaspi:master-SNAPSHOT' // TODO: remove -SNAPSHOT or replace lib
         // Lib qui gère la config du robot
-        implementation 'com.github.Club-INTech:config:00052ea51c'
+        implementation 'com.github.Club-INTech:config:d190abd67e'
         // Lib audio
         implementation 'com.github.jglrxavpok:Audiokode:aa1606587b'
     }
@@ -52,50 +50,4 @@ subprojects {
 
 project.evaluationDependsOnChildren()
 
-// Méthode utilitaire pour générer les configurations de lancement d'IDEA
-task genIntellijRuns {
-
-    def xmlFile = rootProject.projectDir.canonicalPath+'/.idea/workspace.xml'
-    def xml = new XmlParser().parse(xmlFile)
-    def runManager = xml.component.find { it.@name == 'RunManager' }
-    if(!runManager) {
-        def builder = new NodeBuilder()
-        runManager = builder.component(name: "RunManager") {
-
-        }
-        xml.append runManager
-    }
-
-    subprojects.each {
-        def moduleName = "${it.rootProject.name}.${it.name}"
-        println "Getting run configurations from $moduleName"
-        def subproject = it
-        //def list = subproject.tasks.runConfigList.list()
-        def list = it.runConfigs
-        println "$moduleName: $list"
-        list.each {
-            def className = it
-            println "Checking run configuration '$it' presense"
-            def existingRunConfiguration = runManager.configuration.find { it.@name == className }
-            if (!existingRunConfiguration) {
-                println "Run configuration '$it' not present, creating it"
-                def builder = new NodeBuilder()
-                def runConfig = builder.configuration(name: it, type: "Application", factoryName: "Application") {
-                    option(name: "MAIN_CLASS_NAME", value: className) // classe principale
-                    module(name: "${moduleName}.main")
-                    option(name: "WORKING_DIRECTORY", value: "\$PROJECT_DIR\$/bin") // chemin d'exécution
-                    method(v: "2") {
-                        option(name: "Make", enabled: true)
-                    }
-                }
-                runManager.append runConfig
-            }
-        }
-    }
-
-    new XmlNodePrinter(new PrintWriter(new FileWriter(xmlFile))).print(xml)
-}
-
-tasks.idea {
-    dependsOn genIntellijRuns
-}
+apply from: 'runConfigs.gradle'

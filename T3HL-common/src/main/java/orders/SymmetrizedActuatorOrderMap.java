@@ -118,7 +118,4 @@ public class SymmetrizedActuatorOrderMap implements Module {
     {
         return correspondenceMap.getOrDefault(order,order);
     }
-
-    @Override
-    public void updateConfig(Config config) {}
 }

@@ -22,6 +22,7 @@ import data.Table;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Robot;
 import utils.ConfigData;
 import utils.Log;
@@ -59,7 +60,8 @@ public abstract class Script implements Module {
     /**
      * Timeout avant d'arrêter d'essayer de se déplacer (quand un ennemi est dans un obstacle par exemple)
      */
-    private int blockTimeout;
+    @Configurable
+    private long locomotionObstructedTimeout;
 
     /**
      * Construit un script
@@ -85,11 +87,11 @@ public abstract class Script implements Module {
             Optional<MobileCircularObstacle> obstacle = table.findMobileObstacleInPosition(entryPosition);
             obstacle.ifPresent(mobileObstacle -> {
                 Log.LOCOMOTION.warning("Point d'arrivée " + entryPosition + " dans l'obstacle mobile " + mobileObstacle);
-                Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+                Log.LOCOMOTION.warning("Attente de "+ locomotionObstructedTimeout +" ms tant que ça se libère pas...");
 
                 // attente de qq secondes s'il y a un ennemi là où on veut aller
                 try {
-                    Module.withTimeout(blockTimeout, () -> {
+                    Module.withTimeout(locomotionObstructedTimeout, () -> {
                         while (table.isPositionInMobileObstacle(entryPosition)) {
                             try {
                                 Thread.sleep(50);
@@ -204,8 +206,4 @@ public abstract class Script implements Module {
         return future;
     }
 
-    @Override
-    public void updateConfig(Config config) {
-        blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
-    }
 }

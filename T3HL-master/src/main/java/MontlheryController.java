@@ -170,8 +170,4 @@ public class MontlheryController extends Thread implements Module {
         return Math.abs(value) > EPSILON;
     }
 
-    @Override
-    public void updateConfig(Config config) {
-
-    }
 }

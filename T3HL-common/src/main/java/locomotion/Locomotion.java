@@ -26,8 +26,7 @@ import data.XYO;
 import data.graphe.Node;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
-import pfg.config.Config;
-import utils.ConfigData;
+import pfg.config.Configurable;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -82,9 +81,11 @@ public class Locomotion implements Module {
     /**
      * Seuil de distance par rapport à un point pour savoir si un point est considéré comme dans l'autre robot
      */
-    private int compareThreshold;
+    @Configurable
+    private int vectorComparisonThreshold;
 
-    private int blockTimeout;
+    @Configurable
+    private long locomotionObstructedTimeout;
 
     /**
      * Construit le service de locmotion
@@ -208,11 +209,11 @@ public class Locomotion implements Module {
         Optional<MobileCircularObstacle> mobileObstacleBelowPoint = table.findMobileObstacleInPosition(point);
         mobileObstacleBelowPoint.ifPresent(obstacle -> {
             Log.LOCOMOTION.warning("Point d'arrivée " + point + " dans l'obstacle mobile " + obstacle);
-            Log.LOCOMOTION.warning("Attente de "+blockTimeout+" ms tant que ça se libère pas...");
+            Log.LOCOMOTION.warning("Attente de "+ locomotionObstructedTimeout +" ms tant que ça se libère pas...");
 
             // FIXME: gérer le TimeoutError
             // attente de qq secondes s'il y a un ennemi là où on veut aller
-            Module.withTimeout(blockTimeout, () -> {
+            Module.withTimeout(locomotionObstructedTimeout, () -> {
                 while(table.isPositionInMobileObstacle(point)) {
                     try {
                         Thread.sleep(50);
@@ -239,7 +240,7 @@ public class Locomotion implements Module {
         Log.LOCOMOTION.debug("not moving!");
 
         boolean encounteredException = true; // 'true' pour forcer le calcul
-        while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold || SensorState.MOVING.getData()) {
+        while (xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= vectorComparisonThreshold * vectorComparisonThreshold || SensorState.MOVING.getData()) {
             try {
                 if (encounteredException) {
                     synchronized (pointsQueue) {
@@ -260,7 +261,7 @@ public class Locomotion implements Module {
                     }
                     encounteredException = false;
                 }
-                while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= compareThreshold*compareThreshold) {
+                while (!graphe.isUpdated() && xyo.getPosition().squaredDistanceTo(aim.getPosition()) >= vectorComparisonThreshold * vectorComparisonThreshold) {
                 //    System.out.println("xyo: "+xyo.getPosition()+" / aim: "+aim.getPosition());
                     if (exceptionsQueue.peek() != null) {
                         synchronized (exceptionsQueue) {
@@ -271,7 +272,7 @@ public class Locomotion implements Module {
                         if (exception.getReason().equals(UnableToMoveReason.TRAJECTORY_OBSTRUCTED) || exception.getReason().equals(UnableToMoveReason.ENEMY_IN_PATH)) {
                             XYO buddyPos = XYO.getBuddyInstance();
                             Log.PATHFINDING.critical("Trajectory obstructed, recomputing");
-                            if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < compareThreshold) {
+                            if(buddyPos.getPosition().distanceTo(exception.getAim().getPosition()) < vectorComparisonThreshold) {
                                 Log.PATHFINDING.critical("POTO TODO!! "+buddyPos+" aim: "+exception.getAim());
                                 // TODO: c'est ton pote, on fait quoi?
                             }
@@ -341,15 +342,6 @@ public class Locomotion implements Module {
 
     public void setAI(AIModule ai) {
         this.ai = ai;
-    }
-
-    /**
-     * @see Module#updateConfig(Config)
-     */
-    @Override
-    public void updateConfig(Config config) {
-        this.compareThreshold = config.getInt(ConfigData.VECTOR_COMPARISON_THRESHOLD);
-        this.blockTimeout = config.getInt(ConfigData.LOCOMOTION_OBSTRUCTED_TIMEOUT);
     }
 
     public Table getTable() {

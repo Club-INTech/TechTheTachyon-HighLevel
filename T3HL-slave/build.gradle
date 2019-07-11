@@ -4,3 +4,5 @@ dependencies {
     implementation project(":T3HL-common")
     implementation project(":T3HL-simulator")
 }
+
+ext.runConfigs = ["LaunchRobotSlave", "LaunchSimulatorSlave"]

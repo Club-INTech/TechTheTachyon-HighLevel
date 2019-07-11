@@ -4,13 +4,16 @@ import connection.Connection;
 import data.SensorState;
 import orders.OrderWrapper;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.container.Module;
 
 public class KeepAlive extends Thread implements Module {
 
     private final OrderWrapper orderWrapper;
+    @Configurable
     private long pingInterval;
+    @Configurable
     private long pingTimeout;
     private Connection llConnection;
 
@@ -57,9 +60,6 @@ public class KeepAlive extends Thread implements Module {
 
     @Override
     public void updateConfig(Config config) {
-        pingInterval = config.getLong(ConfigData.PING_INTERVAL);
-        pingTimeout = config.getLong(ConfigData.PING_TIMEOUT);
-
         boolean isMaster = config.getBoolean(ConfigData.MASTER);
         if(config.getBoolean(ConfigData.SIMULATION)) {
             llConnection = Connection.MASTER_LL_SIMULATEUR;

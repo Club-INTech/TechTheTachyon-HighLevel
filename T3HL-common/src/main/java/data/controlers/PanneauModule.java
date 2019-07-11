@@ -6,6 +6,7 @@ import com.panneau.TooManyDigitsException;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CFactory;
 import pfg.config.Config;
+import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.Container;
 import utils.Log;
@@ -19,12 +20,17 @@ import java.io.IOException;
 public class PanneauModule implements Module {
 
     private Panneau panel;
-    private long updatePeriod;
+    @Configurable
+    private long scoreUpdatePeriod;
+    @Configurable
     private String couleur;
     private Container container;
-    private int programPort;
+    @Configurable
+    private int ledProgramPort;
+    @Configurable
     private int ledCount;
-    private boolean have7seg;
+    @Configurable
+    private boolean using7Segments;
 
     public PanneauModule(Container container) {
         this.container = container;
@@ -37,8 +43,8 @@ public class PanneauModule implements Module {
     public Panneau getPanneau() {
         if(panel == null) {
             try {
-                panel = new Panneau(ledCount, programPort, RaspiPin.GPIO_07, have7seg);
-                if(have7seg) {
+                panel = new Panneau(ledCount, ledProgramPort, RaspiPin.GPIO_07, using7Segments);
+                if(using7Segments) {
                     Log.STRATEGY.debug("Appel au constructeur du panneau avec " + ledCount + " leds et l'ecran de score");
                 }else{
                     Log.STRATEGY.debug("Appel au constructeur du panneau avec " + ledCount + " leds, sans l'ecran de score");
@@ -61,18 +67,9 @@ public class PanneauModule implements Module {
     }
 
     public void printScore(int score) throws IOException, TooManyDigitsException {
-        if(have7seg){
+        if(using7Segments){
             panel.printScore(score);
         }
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        updatePeriod = config.get(ConfigData.SCORE_UPDATE_PERIOD);
-        couleur = config.get(ConfigData.COULEUR);
-        ledCount = config.get(ConfigData.LED_COUNT);
-        programPort = config.get(ConfigData.LED_PROGRAM_PORT);
-        have7seg = config.get(ConfigData.USING_7_SEGMENTS);
     }
 
     @Override

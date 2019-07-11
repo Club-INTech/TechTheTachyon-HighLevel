@@ -120,10 +120,6 @@ public class HookFactory implements Module {
         }
     }
 
-    @Override
-    public void updateConfig(Config config) {
-
-    }
 }
 
 
