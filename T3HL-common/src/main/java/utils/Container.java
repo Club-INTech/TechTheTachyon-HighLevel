@@ -37,7 +37,7 @@ import java.util.*;
  * Un singleton est une classe implémentant "Module", et permettant d'instancier les autres services dépendant.
  * Il stocke également toute les références des services à partir d'un dictionnaire.
  *
- * @author pf, rem
+ * @author pf, rem, jglrxavpok
  */
 public class Container implements Module {
     /**
@@ -65,7 +65,7 @@ public class Container implements Module {
      * Lie un nom de classe à la **dernière** instance de module de ce type chargée. Prend en compte les sous-classes.
      * Permet donc de récupérer <pre>Master.class</pre> sur le principal avec <pre>container.module(Robot.class)</pre>
      */
-    private Map<String, Module> subclasses = new HashMap<>();
+    private Map<String, Module> lastInstance = new HashMap<>();
 
     /**
      * Instancie le gestionnaire de dépendances ainsi que la config
@@ -203,9 +203,9 @@ public class Container implements Module {
             }
 
             // On vérifie si une des classes filles correspond
-            Optional<Module> subclass = checkSubclasses(service);
-            if(subclass.isPresent())
-                return (S) subclass.get();
+            Optional<Module> lastInstance = checkLastInstance(service);
+            if(lastInstance.isPresent())
+                return (S) lastInstance.get();
 
             /* Détection des dépendances circulaires */
             if (stack.contains(service.getSimpleName()))
@@ -288,7 +288,7 @@ public class Container implements Module {
      *      L'instance du module
      */
     private void notifyHierarchy(Class<?> moduleClass, Module moduleInstance) {
-        subclasses.put(moduleClass.getSimpleName(), moduleInstance);
+        lastInstance.put(moduleClass.getSimpleName(), moduleInstance);
         if(Module.class.isAssignableFrom(moduleClass.getSuperclass())) {
             notifyHierarchy(moduleClass.getSuperclass(), moduleInstance);
         }
@@ -303,9 +303,9 @@ public class Container implements Module {
      * @return
      *      <pre>Optional.empty()</pre> si rien n'a été trouvé, <pre>Optional.of(module)</pre> si on a trouvé une instance déjà chargée
      */
-    private <S extends Module> Optional<Module> checkSubclasses(Class<S> service) {
-        if(subclasses.containsKey(service.getSimpleName())) {
-            return Optional.of(subclasses.get(service.getSimpleName()));
+    private <S extends Module> Optional<Module> checkLastInstance(Class<S> service) {
+        if(lastInstance.containsKey(service.getSimpleName())) {
+            return Optional.of(lastInstance.get(service.getSimpleName()));
         }
         return Optional.empty();
     }
