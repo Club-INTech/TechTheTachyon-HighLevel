@@ -1,10 +1,11 @@
 Refactoring du HL - Chronologie
 ===
 
-11/07/2019 - 20h07
+11/07/2019
 ----
 * Utilisation de `@Configurable` partout où possible, pour remplacer les trop nombreux `Module#updateConfig`
 * Prise en compte des recalages mécaniques en simulation
+* `container.module(Robot.class)` renvoit maintenant la dernière instance de `Robot.class` chargée (ie `Master` sur le principal, `Slave` sur le secondaire)
 
 11/07/2019 - 00h08
 ----

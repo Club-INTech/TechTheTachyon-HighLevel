@@ -30,9 +30,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Gestionnaire des singletons et dépendances entre les classes du code.
@@ -56,12 +54,18 @@ public class Container implements Module {
      * Liste des services déjà instanciés. Contient au moins Config et Log.
      * Les autres services appelables seront présents quand ils auront été appelés
      */
-    private HashMap<String, Module> instanciedServices;
+    private HashMap<String, Module> instanciedServices = new HashMap<>();
 
     /**
      * Liste des threads instanciés
      */
-    private HashMap<String, Thread> instanciedThreads;
+    private HashMap<String, Thread> instanciedThreads = new HashMap<>();
+
+    /**
+     * Lie un nom de classe à la **dernière** instance de module de ce type chargée. Prend en compte les sous-classes.
+     * Permet donc de récupérer <pre>Master.class</pre> sur le principal avec <pre>container.module(Robot.class)</pre>
+     */
+    private Map<String, Module> subclasses = new HashMap<>();
 
     /**
      * Instancie le gestionnaire de dépendances ainsi que la config
@@ -108,8 +112,6 @@ public class Container implements Module {
         System.out.println("   Remember, with great power comes great current squared times resistance !\n");
 
         /* Instanciation des attributs & de la config */
-        instanciedServices = new HashMap<>();
-        instanciedThreads = new HashMap<>();
         System.out.println("Chargement de la config...");
         ConfigInfo[] values = new ConfigInfo[ConfigData.values().length + Offsets.values().length];
         System.arraycopy(ConfigData.values(), 0, values, 0, ConfigData.values().length);
@@ -200,6 +202,11 @@ public class Container implements Module {
                 return (S) instanciedServices.get(service.getSimpleName());
             }
 
+            // On vérifie si une des classes filles correspond
+            Optional<Module> subclass = checkSubclasses(service);
+            if(subclass.isPresent())
+                return (S) subclass.get();
+
             /* Détection des dépendances circulaires */
             if (stack.contains(service.getSimpleName()))
             {
@@ -209,6 +216,8 @@ public class Container implements Module {
                 buf.append(service.getSimpleName());
                 throw new ContainerException(buf.toString());
             }
+
+
 
             /* Mise à jour de la pile */
             stack.push(service.getSimpleName());
@@ -235,6 +244,8 @@ public class Container implements Module {
             Log.DATA_HANDLER.debug("Initialisation du service "+service.getSimpleName());
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
+
+            notifyHierarchy(service, (Module)s);
             instanciedServices.put(service.getSimpleName(), (Module) s);
 
             /* Si c'est un Thread, on l'ajoute dans une liste à part */
@@ -267,6 +278,36 @@ public class Container implements Module {
             e.printStackTrace();
             throw new ContainerException(e.getMessage());
         }
+    }
+
+    /**
+     * Préviens toute l'hiérarchie d'héritage de 'moduleClass' de l'arrivée d'une nouvelle instance
+     * @param moduleClass
+     *      La classe du module
+     * @param moduleInstance
+     *      L'instance du module
+     */
+    private void notifyHierarchy(Class<?> moduleClass, Module moduleInstance) {
+        subclasses.put(moduleClass.getSimpleName(), moduleInstance);
+        if(Module.class.isAssignableFrom(moduleClass.getSuperclass())) {
+            notifyHierarchy(moduleClass.getSuperclass(), moduleInstance);
+        }
+    }
+
+    /**
+     * Vérifie si la dernière instance de 'service' chargée ne serait pas déjà présente sous la forme d'une instance de classe fille
+     * @param service
+     *      La classe du module
+     * @param <S>
+     *      Le type de module
+     * @return
+     *      <pre>Optional.empty()</pre> si rien n'a été trouvé, <pre>Optional.of(module)</pre> si on a trouvé une instance déjà chargée
+     */
+    private <S extends Module> Optional<Module> checkSubclasses(Class<S> service) {
+        if(subclasses.containsKey(service.getSimpleName())) {
+            return Optional.of(subclasses.get(service.getSimpleName()));
+        }
+        return Optional.empty();
     }
 
     /**
