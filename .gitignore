@@ -1,6 +1,8 @@
 # JetBrains files
 **.idea/
 **.iml
+**.ipr
+**.iws
 
 # Maven Output Directories
 **/out

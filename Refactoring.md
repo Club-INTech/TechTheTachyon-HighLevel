@@ -3,7 +3,7 @@ Refactoring du HL - Chronologie
 
 11/07/2019 - 20h07
 ----
-* Utilisation de `@Configurable` partout sauf dans les scripts pour remplacer `Module#updateConfig` quand possible
+* Utilisation de `@Configurable` partout où possible, pour remplacer les trop nombreux `Module#updateConfig`
 * Prise en compte des recalages mécaniques en simulation
 
 11/07/2019 - 00h08
