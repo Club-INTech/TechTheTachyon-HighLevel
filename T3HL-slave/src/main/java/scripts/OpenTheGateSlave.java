@@ -3,10 +3,8 @@ package scripts;
 import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -71,11 +69,6 @@ public class OpenTheGateSlave extends Script {
     @Override
     public Vec2 entryPosition(Integer version) {
         return XYO.getRobotInstance().getPosition();
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
     }
 
     @Override

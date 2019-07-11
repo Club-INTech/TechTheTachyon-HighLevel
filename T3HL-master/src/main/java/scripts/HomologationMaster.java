@@ -15,8 +15,6 @@ public class HomologationMaster extends Script{
 
     private final Container container;
 
-    private boolean symetry = false;
-
 
     public HomologationMaster(Master robot, Table table, Container container){
         super(robot, table);

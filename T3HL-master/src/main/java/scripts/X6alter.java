@@ -1,13 +1,16 @@
 package scripts;
+
 import data.*;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Master;
 import robot.Robot;
-import utils.*;
+import utils.Container;
+import utils.Log;
+import utils.Offsets;
+import utils.TimeoutError;
 import utils.container.ContainerException;
 import utils.container.Module;
 import utils.math.Calculs;
@@ -35,6 +38,7 @@ public class X6alter extends Script implements Offsets {
     private static double offsetTheta;
     private Container container;
     private SynchronizationWithBuddy syncBuddy;
+    @Configurable
     private long balanceWaitTime;
 
     float distanceToWall;
@@ -68,7 +72,8 @@ public class X6alter extends Script implements Offsets {
     /**
      * Est-ce qu'on a un recalage sur x6?
      */
-    private boolean usingRecalageX6;
+    @Configurable
+    private boolean recalageAcc;
 
     public X6alter(Container container, Master robot, Table table, SynchronizationWithBuddy syncBuddy) {
         super(robot, table);
@@ -215,7 +220,7 @@ public class X6alter extends Script implements Offsets {
                         try {
                             robot.followPathTo(positionZoneDepart);
                             robot.turn(Math.PI);
-                            if(usingRecalageX6) {
+                            if(!recalageAcc) {
                                 recalageX6();
                             }
                             robot.turnToPoint(container.getService(Accelerateur.class).entryPosition(Match.ACC_VERSION));
@@ -510,11 +515,5 @@ public class X6alter extends Script implements Offsets {
     public void finalize(Exception e) {
         // range le bras quand on a fini
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,false);
-    }
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        balanceWaitTime = config.get(ConfigData.BALANCE_WAIT_TIME);
-        usingRecalageX6 = ! config.get(ConfigData.RECALAGE_ACC);
     }
 }

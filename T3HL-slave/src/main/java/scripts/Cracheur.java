@@ -1,9 +1,8 @@
 package scripts;
 
+import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import data.Table;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
 import utils.math.Vec2;
@@ -86,7 +85,4 @@ public class Cracheur extends Script {
     @Override
     public void finalize(Exception e) { }
 
-    @Override
-    public void updateConfig(Config config) {
-    }
 }

@@ -18,7 +18,6 @@
 
 package scripts;
 
-import pfg.config.Config;
 import utils.Container;
 import utils.container.ContainerException;
 
@@ -44,7 +43,4 @@ public class ScriptManagerSlave extends ScriptManager {
             }
         }
     }
-
-    @Override
-    public void updateConfig(Config config) {}
 }

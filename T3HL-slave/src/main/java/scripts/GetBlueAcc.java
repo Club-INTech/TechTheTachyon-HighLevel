@@ -3,10 +3,8 @@ package scripts;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -23,7 +21,8 @@ public class GetBlueAcc extends Script implements Offsets {
     private int yEntry = 240;//250+ 30+10  ; //a tester
     private int offsetY;
     private int offsetX;
-    private boolean recalageMeca=false;
+    @Configurable
+    private boolean recalageMecaBlueAcc =false;
 
     public GetBlueAcc(Slave robot, Table table) {
         super(robot, table);
@@ -72,7 +71,7 @@ public class GetBlueAcc extends Script implements Offsets {
             else {
                 robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
             }
-            if(recalageMeca) {
+            if(recalageMecaBlueAcc) {
                 robot.turn(-Math.PI / 2);
                 robot.recalageMeca(true, 150/*rayon robot*/ + 10 + 7 /*bras*/);
             }
@@ -137,10 +136,5 @@ public class GetBlueAcc extends Script implements Offsets {
 
     @Override
     public void finalize(Exception e) { }
-
-    @Override
-    public void updateConfig(Config config) {
-        this.recalageMeca = config.get(ConfigData.RECALAGE_MECA_BLUE_ACC);
-    }
 
 }

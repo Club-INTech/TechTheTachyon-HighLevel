@@ -4,9 +4,8 @@ import connection.Connection;
 import data.SensorState;
 import data.Table;
 import data.XYO;
-import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
-import utils.ConfigData;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.math.Vec2;
@@ -15,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Electron extends Script{
 
+    @Configurable
     private boolean usingElectron;
 
     public Electron(Master robot, Table table) {
@@ -70,10 +70,4 @@ public class Electron extends Script{
 
     @Override
     public void finalize(Exception e) { }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        usingElectron = config.getBoolean(ConfigData.USING_ELECTRON);
-    }
 }

@@ -1,15 +1,13 @@
 package scripts;
+
 import data.CouleurPalet;
-import data.SensorState;
 import data.Sick;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Master;
 import robot.Robot;
-import utils.ConfigData;
 import utils.Log;
 import utils.math.Calculs;
 import utils.math.Vec2;
@@ -352,9 +350,5 @@ public class PaletsX6 extends Script {
     public void finalize(Exception e) {
         // range le bras quand on a fini
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,false);
-    }
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
     }
 }

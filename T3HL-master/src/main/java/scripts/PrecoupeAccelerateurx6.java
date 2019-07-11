@@ -1,14 +1,10 @@
 package scripts;
 
-import data.GameState;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import robot.Master;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -284,11 +280,6 @@ public class PrecoupeAccelerateurx6 extends Script {
     @Override
     public void finalize(Exception e) {
         robot.setSpeed(Speed.DEFAULT_SPEED);
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
     }
 
 }

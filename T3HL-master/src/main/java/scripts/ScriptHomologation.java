@@ -1,21 +1,10 @@
 package scripts;
 
-import data.CouleurPalet;
 import data.Table;
-import data.table.Obstacle;
 import locomotion.UnableToMoveException;
-import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import robot.Master;
-import robot.Robot;
-import utils.Log;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ScriptHomologation extends Script {
 
@@ -60,10 +49,5 @@ public class ScriptHomologation extends Script {
 
     @Override
     public void finalize(Exception e) {
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
     }
 }

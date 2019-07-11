@@ -4,10 +4,8 @@ import data.CouleurPalet;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -45,10 +43,5 @@ public class GetRedDep extends Script {
 
     @Override
     public void finalize(Exception e) { }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-    }
 
 }

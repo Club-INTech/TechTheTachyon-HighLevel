@@ -5,16 +5,13 @@ import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class PaletsX3Slave extends Script implements Offsets {
     /**
@@ -163,10 +160,5 @@ public class PaletsX3Slave extends Script implements Offsets {
 
     @Override
     public void finalize(Exception e) { }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-    }
 
 }

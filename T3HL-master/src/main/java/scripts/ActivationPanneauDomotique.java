@@ -1,15 +1,12 @@
 package scripts;
 
 import data.Table;
+import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import robot.Robot;
-import utils.math.Circle;
-import utils.math.Shape;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
-import locomotion.UnableToMoveException;
 
 /**
  * Exemple d'un script
@@ -72,8 +69,4 @@ public class ActivationPanneauDomotique extends Script{
         robot.setSpeed(Speed.DEFAULT_SPEED);
     }
 
-    @Override
-    public void updateConfig(Config config) {
-
-    }
 }

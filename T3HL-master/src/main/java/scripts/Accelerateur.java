@@ -8,10 +8,11 @@ import data.controlers.AudioPlayer;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Master;
-import utils.*;
+import utils.Container;
+import utils.Log;
+import utils.Offsets;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -77,7 +78,9 @@ public class Accelerateur extends Script implements Offsets {
     /**
      * Est-ce qu'on se recale à l'accélérateur?
      */
+    @Configurable
     private boolean recalageAcc;
+    @Configurable
     private boolean recalageMecaAcc;
 
     public Accelerateur(Master robot, Table table, Container container) {
@@ -258,13 +261,6 @@ public class Accelerateur extends Script implements Offsets {
     @Override
     public void finalize(Exception e) {
         robot.setSpeed(Speed.DEFAULT_SPEED);
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        this.recalageAcc = config.get(ConfigData.RECALAGE_ACC);
-        this.recalageMecaAcc = config.get(ConfigData.RECALAGE_MECA_ACC);
     }
 
 }

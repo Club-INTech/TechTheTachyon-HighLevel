@@ -3,13 +3,11 @@ package scripts;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
+import orders.OrderWrapper;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
-import orders.OrderWrapper;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.Offsets;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -47,7 +45,8 @@ public class Goldenium extends Script implements Offsets {
     @Configurable
     private boolean symetry;
     private SynchronizationWithBuddy syncBuddy;
-    private long balanceWaitTime;
+    @Configurable
+    private long balanceSlaveWaitTime;
 	private OrderWrapper orderWrapper;
 
 
@@ -213,9 +212,4 @@ public class Goldenium extends Script implements Offsets {
         robot.setSpeed(Speed.DEFAULT_SPEED);
     }
 
-    @Override
-    public void updateConfig(Config config) {
-        balanceWaitTime = config.get(ConfigData.BALANCE_SLAVE_WAIT_TIME);
-        super.updateConfig(config);
-    }
 }

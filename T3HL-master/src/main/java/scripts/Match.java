@@ -1,14 +1,11 @@
 package scripts;
 
-import data.CouleurPalet;
 import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
-import locomotion.UnableToMoveException;
-import pfg.config.Config;
+import pfg.config.Configurable;
 import robot.Master;
 import utils.ConfigData;
 import utils.Container;
-import utils.container.ContainerException;
 import utils.math.Vec2;
 
 public class Match extends Script {
@@ -16,6 +13,7 @@ public class Match extends Script {
     private final ScriptManagerMaster scriptManagerMaster;
     private SynchronizationWithBuddy syncBuddy;
     private final Container container;
+    @Configurable
     private boolean secours;
 
     public Match(Master robot, Table table, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy, Container container) {
@@ -198,11 +196,5 @@ public class Match extends Script {
     @Override
     public void finalize(Exception e) {
 
-    }
-
-    @Override
-    public void updateConfig(Config config) {
-        super.updateConfig(config);
-        this.secours = config.getBoolean(ConfigData.SECOURS);
     }
 }

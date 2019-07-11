@@ -186,7 +186,6 @@ public class PathFollower extends ModuleThread {
                                 }
                                 orderWrapper.immobilise();
                                 SensorState.STUCKED.setData(true);
-                                throw new UnableToMoveException(aim, UnableToMoveReason.PHYSICALLY_STUCKED);
                             }
                         }
                         if (SensorState.STUCKED.getData() && !expectedWallImpact) {
