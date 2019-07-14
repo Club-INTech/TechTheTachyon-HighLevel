@@ -1,10 +1,9 @@
 package scripts;
 
-import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Slave;
+import utils.Container;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -19,8 +18,8 @@ public class PaletsX6Slave extends Script {
     private boolean symetry;
 
 
-    public PaletsX6Slave(Slave robot, Table table) {
-        super(robot, table);
+    public PaletsX6Slave(Container container) {
+        super(container);
     }
 
     @Override

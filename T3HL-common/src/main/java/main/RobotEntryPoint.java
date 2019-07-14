@@ -59,6 +59,7 @@ public abstract class RobotEntryPoint {
 
     public void entryPoint(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) throws ContainerException {
         this.container = container;
+        container.module(robotClass); // charge l'instance du robot (Master ou Slave selon le robot). Nécessaire pour que .module(Robot.class) ne plante pas: il faut une instance de Robot.class qui existe déjà (c'est une classe abstraite)
         initServices(container, robotClass, scriptManagerClass);
         preLLConnection();
         waitForAllConnectionsReady();

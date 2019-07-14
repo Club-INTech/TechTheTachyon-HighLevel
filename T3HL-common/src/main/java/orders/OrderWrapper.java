@@ -120,10 +120,10 @@ public class OrderWrapper implements Module {
                 Log.COMMUNICATION.debug("Attente du bras du à l'ordre "+order.getOrderStr());
 
                 // on attend que le bras ait fini
-                waitWhileTrue(armMoving::getData);
+                Module.waitWhileTrue(armMoving::getData);
             } else {
                 SensorState.ACTUATOR_ACTUATING.setData(true);
-                waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+                Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
                 Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
             }
             if(order instanceof ActuatorsOrder) {
@@ -241,7 +241,7 @@ public class OrderWrapper implements Module {
             SensorState.ACTUATOR_ACTUATING.setData(true);
             this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
-            waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
+            Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
             try {
                 container.module(DataControler.class).waitForTwoPositionUpdates();
             } catch (ContainerException e) {
@@ -394,7 +394,7 @@ public class OrderWrapper implements Module {
         Log.STRATEGY.debug("Waiting jumper...");
         SensorState.WAITING_JUMPER.setData(true);
         sendString("waitJumper");
-        waitWhileTrue(SensorState.WAITING_JUMPER::getData);
+        Module.waitWhileTrue(SensorState.WAITING_JUMPER::getData);
         if(usingBaliseImage) {
             try {
                 System.out.println("Message envoyeeeeeeeeeeeeeeeeeeeeeeeee");

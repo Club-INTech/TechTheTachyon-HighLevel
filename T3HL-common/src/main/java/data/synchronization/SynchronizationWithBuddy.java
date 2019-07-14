@@ -4,9 +4,9 @@ import connection.Connection;
 import data.GameState;
 import data.controlers.Channel;
 import pfg.config.Config;
-import utils.ConfigData;
 import utils.Container;
 import utils.Log;
+import utils.container.Module;
 
 /**
  * Classe de communication avec l'autre robot
@@ -56,7 +56,7 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
 
     public void waitForFreeBalance() {
         if(connection.isInitiated()) {
-            waitWhileTrue(() -> !((boolean)GameState.BALANCE_FREE.getData()));
+            Module.waitWhileTrue(() -> !((boolean)GameState.BALANCE_FREE.getData()));
         } else {
             Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que la balance est libre");
         }
@@ -64,7 +64,7 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
 
     public void waitForFreeAccelerator() {
         if(connection.isInitiated()) {
-            waitWhileTrue(() -> !((boolean)GameState.ACCELERATOR_FREE.getData()));
+            Module.waitWhileTrue(() -> !((boolean)GameState.ACCELERATOR_FREE.getData()));
         } else {
             Log.STRATEGY.critical("Pas de connexion au buddy, on prend l'hypothèse que l'accélérateur est libre");
         }

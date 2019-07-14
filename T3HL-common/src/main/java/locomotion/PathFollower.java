@@ -129,7 +129,7 @@ public class PathFollower extends ModuleThread {
         SensorState.MOVING.setData(true);
         orderWrapper.moveToPoint(aim);
 
-        waitWhileTrue(SensorState.MOVING::getData, () -> {
+        Module.waitWhileTrue(SensorState.MOVING::getData, () -> {
             if (SensorState.STUCKED.getData()) {
                 orderWrapper.immobilise();
                 throw new UnableToMoveException(new XYO(aim, 0.0), UnableToMoveReason.PHYSICALLY_STUCKED);
@@ -169,7 +169,7 @@ public class PathFollower extends ModuleThread {
                     parallelActionsLambda = new Runnable[0]; // on ne refait pas les actions en parallèle
 
                     boolean finalFirstPass = firstPass;
-                    waitWhileTrue(SensorState.MOVING::getData, () -> {
+                    Module.waitWhileTrue(SensorState.MOVING::getData, () -> {
                         handleEnemyForward(distance, aim, finalFirstPass);
                         if(expectedWallImpact && simulation) {
                             if(table.isPositionInFixedObstacle(robotXYO.getPosition(), true)) {
@@ -305,7 +305,7 @@ public class PathFollower extends ModuleThread {
             SensorState.MOVING.setData(true);
             this.orderWrapper.turn(angle, parallelActions);
 
-            waitWhileTrue(SensorState.MOVING::getData, () -> {
+            Module.waitWhileTrue(SensorState.MOVING::getData, () -> {
                 if (isCircleObstructed()) {
                     orderWrapper.immobilise();
                     throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
@@ -348,7 +348,7 @@ public class PathFollower extends ModuleThread {
         this.orderWrapper.moveToPoint(point, parallelActions);
 
         try {
-            waitWhileTrue(SensorState.MOVING::getData, () -> {
+            Module.waitWhileTrue(SensorState.MOVING::getData, () -> {
                 if (isCircleObstructed()) {
                     orderWrapper.immobilise();
                     throw new UnableToMoveException("Current pos: "+robotXYO, aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);

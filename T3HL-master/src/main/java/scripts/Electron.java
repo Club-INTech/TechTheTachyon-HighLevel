@@ -2,10 +2,9 @@ package scripts;
 
 import connection.Connection;
 import data.SensorState;
-import data.Table;
 import data.XYO;
 import pfg.config.Configurable;
-import robot.Master;
+import utils.Container;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.math.Vec2;
@@ -17,8 +16,8 @@ public class Electron extends Script{
     @Configurable
     private boolean usingElectron;
 
-    public Electron(Master robot, Table table) {
-        super(robot, table);
+    public Electron(Container container) {
+        super(container);
     }
 
     @Override

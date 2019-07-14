@@ -184,7 +184,7 @@ public abstract class Robot implements Module {
                 throw new IllegalArgumentException("Côté non reconnu: "+side);
         }
         state.setData(true);
-        waitWhileTrue(state::getData);
+        Module.waitWhileTrue(state::getData);
     }
 
     /**
@@ -399,7 +399,7 @@ public abstract class Robot implements Module {
             SensorState.RECALAGE_LIDAR_EN_COURS.setData(false);
             return;
         }
-        waitWhileTrue(SensorState.RECALAGE_LIDAR_EN_COURS);
+        Module.waitWhileTrue(SensorState.RECALAGE_LIDAR_EN_COURS);
     }
 
     /**

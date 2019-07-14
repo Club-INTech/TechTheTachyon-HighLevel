@@ -1,10 +1,8 @@
 package scripts;
 
-import data.Table;
 import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
-import robot.Slave;
 import utils.ConfigData;
 import utils.Container;
 import utils.math.Vec2;
@@ -14,13 +12,11 @@ import java.util.concurrent.TimeUnit;
 public class MatchSlave extends Script {
     private final ScriptManagerSlave scriptManagerSlave;
     private SynchronizationWithBuddy syncBuddy;
-    private Container container;
 
-    public MatchSlave(Slave robot, Table table, ScriptManagerSlave scriptManagerSlave, SynchronizationWithBuddy syncBuddy, Container container) {
-        super(robot,table);
+    public MatchSlave(Container container, ScriptManagerSlave scriptManagerSlave, SynchronizationWithBuddy syncBuddy) {
+        super(container);
         this.scriptManagerSlave = scriptManagerSlave;
         this.syncBuddy = syncBuddy;
-        this.container=container;
     }
 
     @Override

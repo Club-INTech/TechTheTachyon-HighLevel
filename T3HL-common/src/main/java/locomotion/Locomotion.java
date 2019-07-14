@@ -34,7 +34,10 @@ import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
@@ -236,7 +239,7 @@ public class Locomotion implements Module {
 
         // on attend d'être à l'arrêt
         Log.LOCOMOTION.debug("followPathTo("+aim.getPosition()+")");
-        waitWhileTrue(SensorState.MOVING::getData);
+        Module.waitWhileTrue(SensorState.MOVING::getData);
         Log.LOCOMOTION.debug("not moving!");
 
         boolean encounteredException = true; // 'true' pour forcer le calcul
@@ -337,7 +340,7 @@ public class Locomotion implements Module {
         exceptionsQueue.clear();
 
         Log.LOCOMOTION.debug("Attente de la fin du mouvement en followpathto("+aim.getPosition()+")");
-        waitWhileTrue(SensorState.MOVING);
+        Module.waitWhileTrue(SensorState.MOVING);
     }
 
     public void setAI(AIModule ai) {

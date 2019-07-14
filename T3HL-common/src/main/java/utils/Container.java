@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -206,6 +207,10 @@ public class Container implements Module {
             Optional<Module> lastInstance = checkLastInstance(service);
             if(lastInstance.isPresent())
                 return (S) lastInstance.get();
+
+            if((service.getModifiers() & Modifier.ABSTRACT) != 0) {
+                throw new ContainerException("Tried to instanciate module with abstract class '"+service.getCanonicalName()+"' but no instance has already been loaded.");
+            }
 
             /* Détection des dépendances circulaires */
             if (stack.contains(service.getSimpleName()))

@@ -2,12 +2,10 @@ package scripts;
 
 import data.CouleurPalet;
 import data.Sick;
-import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Master;
 import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
@@ -22,8 +20,6 @@ public class PaletsZoneDepart extends Script implements Offsets {
      */
     public static int JUST_BLUE = 1;
 
-    Container container;
-
     private static final int DISTANCE_INTERPALET = 300;
     private final int xEntry = 1500-191-65+ Offsets.get(ZDD_X_VIOLET);//1244;
     private final int yEntry = 450+605;//;
@@ -31,9 +27,8 @@ public class PaletsZoneDepart extends Script implements Offsets {
     @Configurable
     private boolean symetry;
 
-    public PaletsZoneDepart(Master robot, Table table, Container container) {
-        super(robot, table);
-        this.container=container;
+    public PaletsZoneDepart(Container container) {
+        super(container);
     }
 
     @Override
@@ -66,22 +61,22 @@ public class PaletsZoneDepart extends Script implements Offsets {
         int i =0;
         try {
             //robot.turn(Math.PI / 2);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+            actuators.LEFT_PUMP.activate(true);
+            actuators.LEFT_VALVE.desactivate(true);
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             CompletableFuture<Void> puckStored = null;
             CompletableFuture<Void> elevatorAtRightPlace = null;
             for (Vec2 position : positions) {
                 CompletableFuture<Void> armInPlace = null;
                 if(premierPaletPris&&version==JUST_BLUE) {
-                    robot.turn(Math.PI);
+                    turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-                    async("Descend ascenseur gauche", () -> robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false));
+                    async("Descend ascenseur gauche", () -> actuators.LEFT_ELEVATOR.down());
                     robot.followPathTo(position);
                 }
                 else if (premierPaletPris) {
                     robot.followPathTo(position);
-                    robot.turn(Math.PI / 2);
+                    turn(Math.PI / 2);
                 } else {
                     premierPaletPris = true;
                 }
@@ -93,11 +88,11 @@ public class PaletsZoneDepart extends Script implements Offsets {
                 int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                    robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
+                    actuators.LEFT_VALVE.activate(true);
                     readjustElevator(puckIndex);
                     if(puckIndex == 0) { // on retourne au sol que pour le 2e palet
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                        actuators.LEFT_VALVE.desactivate(true);
                     }
                 });
 
@@ -134,9 +129,9 @@ public class PaletsZoneDepart extends Script implements Offsets {
      */
     private void readjustElevator(int puckIndex) {
         if(puckIndex == 0) { // 1er palet
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET, false);
+            actuators.LEFT_ELEVATOR.down();
         } else { // 2e palet
-            robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
+            actuators.LEFT_ELEVATOR.downup();
         }
     }
 

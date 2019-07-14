@@ -1,10 +1,9 @@
 package scripts;
 
-import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Slave;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -24,15 +23,15 @@ public class GetBlueAcc extends Script implements Offsets {
     @Configurable
     private boolean recalageMecaBlueAcc =false;
 
-    public GetBlueAcc(Slave robot, Table table) {
-        super(robot, table);
+    public GetBlueAcc(Container container) {
+        super(container);
     }
 
     @Override
     public void execute(int version) {
         try {
 
-            robot.turn(-Math.PI / 2);
+            turn(-Math.PI / 2);
             if (symetry) {
                 robot.recalageMeca(true, 100 + 51 + offsetY);
             } else {
@@ -41,9 +40,9 @@ public class GetBlueAcc extends Script implements Offsets {
 
             robot.setOrientation(-Math.PI/2);
             if(symetry) {
-                robot.turn(Math.PI);
+                turn(Math.PI);
             } else {
-                robot.turn(0);
+                turn(0);
             }
 
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ACCELERATEUR_DEPOT,true);
@@ -76,9 +75,9 @@ public class GetBlueAcc extends Script implements Offsets {
                 robot.recalageMeca(true, 150/*rayon robot*/ + 10 + 7 /*bras*/);
             }
             if(symetry) {
-                robot.turn(Math.PI);
+                turn(Math.PI);
             } else {
-                robot.turn(0);
+                turn(0);
             }
 
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);

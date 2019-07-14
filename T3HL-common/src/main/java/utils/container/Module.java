@@ -23,7 +23,6 @@ import pfg.config.Config;
 import utils.TimeoutError;
 
 import java.util.concurrent.*;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 /**
@@ -46,7 +45,8 @@ public interface Module
      */
     default void updateConfig(Config config) {}
 
-    default void waitWhileTrue(SensorState<Boolean> condition) {
+    // TODO: Move somewhere else
+    static void waitWhileTrue(SensorState<Boolean> condition) {
         waitWhileTrue(condition::getData, () -> {});
     }
 
@@ -54,11 +54,11 @@ public interface Module
      * Boucle qui dure tant que la condition donnée est à 'true'
      * @param condition une fonction renvoyant un booléen
      */
-    default void waitWhileTrue(Supplier<Boolean> condition) {
+    static void waitWhileTrue(Supplier<Boolean> condition) {
         waitWhileTrue(condition, () -> {});
     }
 
-    default <ExceptionType extends Throwable> void waitWhileTrue(SensorState<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
+    static <ExceptionType extends Throwable> void waitWhileTrue(SensorState<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
         waitWhileTrue(condition::getData, additionalAction);
     }
 
@@ -67,7 +67,7 @@ public interface Module
      * @param condition une fonction renvoyant un booléen
      * @param additionalAction une fonction ou lambda qui apporte un comportement additionnel à l'attente
      */
-    default <ExceptionType extends Throwable> void waitWhileTrue(Supplier<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
+    static <ExceptionType extends Throwable> void waitWhileTrue(Supplier<Boolean> condition, AdditionalAction<ExceptionType> additionalAction) throws ExceptionType {
         while(condition.get()) {
             try {
                 Thread.sleep(WAIT_LOOP_DELAY);

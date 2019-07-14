@@ -524,7 +524,7 @@ public class DataControler extends Thread implements Module {
         // on reset le compteur à 2
         posUpdates = 2;
         // on attend d'en avoir reçu deux
-        waitWhileTrue(() -> posUpdates > 0);
+        Module.waitWhileTrue(() -> posUpdates > 0);
     }
 
     public void setRobotClass(Class<? extends Robot> robotClass) {

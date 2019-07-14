@@ -1,12 +1,11 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.Table;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Slave;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -37,8 +36,8 @@ public class PaletsX3Slave extends Script implements Offsets {
     private SynchronizationWithBuddy syncBuddy;
 
 
-    public PaletsX3Slave(Slave robot, Table table, SynchronizationWithBuddy syncBuddy) {
-        super(robot, table);
+    public PaletsX3Slave(Container container, SynchronizationWithBuddy syncBuddy) {
+        super(container);
         this.syncBuddy = syncBuddy;
     }
 
@@ -53,20 +52,17 @@ public class PaletsX3Slave extends Script implements Offsets {
             positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
             positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
 
-
-            //recalage();
-
-            robot.turn(Math.PI/2);
+            turn(Math.PI/2);
 
             robot.moveLengthwise(600,false);
 
             if(!symetry) {
                 robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
-                robot.turn(Math.PI);
+                turn(Math.PI);
             }
             else{
                 robot.recalageMeca(true,-1800+positions.get(0).getY()-15);
-                robot.turn(0);
+                turn(0);
             }
             //robot.recalageMeca(false,1500-positions.get(0).getX());
 
@@ -82,28 +78,13 @@ public class PaletsX3Slave extends Script implements Offsets {
 
             }
 
-//            getPuck();
-//            robot.pushPaletDroit(CouleurPalet.BLEU); // TODO
-//            robot.moveLengthwise(-100,false);
-            //robot.gotoPoint(positions.get(1));
-
             getPuck();
             robot.pushPaletDroit(CouleurPalet.VERT); // TODO
 
-            //robot.moveLengthwise(-85,false);
-            //robot.gotoPoint(positions.get(2));
-
-           // getPuck(); //FIXME: faire la nouvelle position et la rotation pour prendre le dernier palet de X3
-          /*  robot.moveLengthwise(150,false);
-            robot.pushPaletDroit(CouleurPalet.ROUGE); // TODO
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DU_SECONDAIRE);
-
-            //robot.recalageMeca(false,100);*/
-
-            robot.turn(-Math.PI/2);
+            turn(-Math.PI/2);
 
             robot.moveLengthwise(600, false);
-            robot.turn(Math.PI);
+            turn(Math.PI);
 
 
 
@@ -113,34 +94,11 @@ public class PaletsX3Slave extends Script implements Offsets {
         }
     }
 
-    /*
-    private void recalage() {
-        if(symetry) {
-            try {
-                robot.turn(-Math.PI/2);
-                robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                robot.turn(Math.PI);
-                robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-            } catch (UnableToMoveException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    */
-
     private void getPuck() {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DU_SECONDAIRE);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_DISTRIBUTEUR, true); //TODO refaire position bras
         robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        //robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DU_SECONDAIRE_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_MUSCLOR, true);
-        /*robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE, true);
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DU_SECONDAIRE_DE_UN_PALET);*/
     }
 
     @Override

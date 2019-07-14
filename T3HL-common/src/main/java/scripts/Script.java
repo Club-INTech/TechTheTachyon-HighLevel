@@ -21,8 +21,10 @@ package scripts;
 import data.Table;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
+import lowlevel.ActuatorsModule;
 import pfg.config.Configurable;
 import robot.Robot;
+import utils.Container;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -36,9 +38,11 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Définition d'un script :
  *
- * @author rem
+ * @author rem, jglrxavpok
  */
 public abstract class Script implements Module {
+
+    protected final Container container;
 
     /**
      * Le robot
@@ -64,14 +68,18 @@ public abstract class Script implements Module {
     @Configurable
     protected boolean symetry;
 
+    protected ActuatorsModule actuators;
+
     /**
      * Construit un script
-     * @param robot
-     *              le robot
+     * @param container
+     *              le container
      */
-    protected Script(Robot robot, Table table) {
-        this.robot = robot;
-        this.table = table;
+    protected Script(Container container) {
+        this.container = container;
+        this.robot = container.module(Robot.class);
+        this.table = container.module(Table.class);
+        this.actuators = container.module(ActuatorsModule.class);
     }
 
     /**
@@ -189,6 +197,22 @@ public abstract class Script implements Module {
      *              l'exception qui a été levée
      */
     public abstract void finalize(Exception e);
+
+    // =========================================
+    // Début des méthodes pour raccourcir le code
+    // =========================================
+
+    /**
+     * Tournes le robot vers un angle donné (absolu!)
+     * @param angle l'angle absolu vers lequel le robot doit s'orienter
+     */
+    public void turn(double angle) throws UnableToMoveException {
+        robot.turn(angle);
+    }
+
+    // =========================================
+    // Fin des méthodes pour raccourcir le code
+    // =========================================
 
     protected CompletableFuture<Void> async(Runnable action) {
         return async("Async Thread - "+action, action);

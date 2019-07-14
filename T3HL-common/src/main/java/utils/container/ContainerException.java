@@ -21,9 +21,12 @@ package utils.container;
 /**
  * Exception levé par le container en cas de dépendance circulaire ou de dépendances mal gérée entre les classes
  *
- * @author pf
+ * @since 2019 'extends' RuntimeException pour ne pas être obligé de la catch. Vaut mieux faire vraiment planter le HL
+ * si une telle erreur arrive: c'est qu'il se passe quelque chose de grave, ou que quelqu'un sait pas coder.
+ *
+ * @author pf, jglrxavpok
  */
-public class ContainerException extends Exception
+public class ContainerException extends RuntimeException
 {
     public ContainerException() {super();}
     public ContainerException(String message) {super(message);}

@@ -5,7 +5,8 @@ import data.Table;
 import data.XYO;
 import orders.OrderWrapper;
 import orders.order.MotionOrder;
-import robot.Master;
+import utils.Container;
+import utils.container.Module;
 import utils.math.Vec2;
 
 import java.util.Locale;
@@ -23,8 +24,8 @@ public class ScriptMaltraitanceMCS extends Script {
      * @param robot le robot
      * @param table
      */
-    protected ScriptMaltraitanceMCS(Master robot, OrderWrapper orderWrapper, Table table) {
-        super(robot, table);
+    protected ScriptMaltraitanceMCS(Container container, Table table) {
+        super(container);
         this.orderWrapper = orderWrapper;
     }
 
@@ -36,7 +37,7 @@ public class ScriptMaltraitanceMCS extends Script {
             float randY = (float) (Math.random()*2-1)*0.1f;
             SensorState.MOVING.setData(true);
             orderWrapper.sendString(String.format(Locale.US, "%s %f %f", MotionOrder.MOVE_TO_POINT.getOrderStr(), target.getX()+randX, target.getY()+randY));
-            waitWhileTrue(SensorState.MOVING::getData);
+            Module.waitWhileTrue(SensorState.MOVING::getData);
         }
     }
 

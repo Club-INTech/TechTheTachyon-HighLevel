@@ -40,7 +40,7 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public ScriptNamesMaster getScript() {
-        return ScriptNamesMaster.PALETS6;
+        return ScriptNamesMaster.PALETSX6;
     }
 
     @Override

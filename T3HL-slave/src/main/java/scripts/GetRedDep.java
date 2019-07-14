@@ -1,11 +1,10 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Slave;
+import utils.Container;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -16,8 +15,8 @@ public class GetRedDep extends Script {
     @Configurable
     private boolean symetry;
 
-    public GetRedDep(Slave robot, Table table) {
-        super(robot, table);
+    public GetRedDep(Container container) {
+        super(container);
     }
 
     public void execute(int version) {

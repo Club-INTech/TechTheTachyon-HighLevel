@@ -1,9 +1,8 @@
 package scripts;
 
-import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
-import robot.Slave;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -19,8 +18,8 @@ public class OpenTheGateSlave extends Script {
      * @param robot le robot
      * @param table
      */
-    protected OpenTheGateSlave(Slave robot, Table table) {
-        super(robot, table);
+    protected OpenTheGateSlave(Container container) {
+        super(container);
     }
 
     @Override

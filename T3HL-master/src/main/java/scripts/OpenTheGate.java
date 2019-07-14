@@ -1,11 +1,10 @@
 package scripts;
 
-import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Master;
+import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -20,11 +19,9 @@ public class OpenTheGate extends Script {
     /**
      * Construit un script
      *
-     * @param robot le robot
-     * @param table
      */
-    protected OpenTheGate(Master robot, Table table) {
-        super(robot, table);
+    protected OpenTheGate(Container container) {
+        super(container);
     }
 
     @Override
@@ -44,20 +41,19 @@ public class OpenTheGate extends Script {
         while (true) {
             try {
                 robot.followPathTo(zoneDep, 0);
-                robot.turn(Math.PI/2);
-                robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                turn(Math.PI/2);
+                actuators.LEFT_PUMP.activate(true);
+                actuators.LEFT_VALVE.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                actuators.LEFT_VALVE.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, true);
-                robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET,false);
-                robot.waitForLeftElevator();
+                actuators.LEFT_VALVE.activate(true);
+                actuators.LEFT_ELEVATOR.downup(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                actuators.LEFT_VALVE.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE, true); // on attent que le vide se fasse
+                actuators.LEFT_VALVE.activate();
+                actuators.LEFT_VALVE.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();

@@ -1,8 +1,7 @@
 package scripts;
 
-import data.Table;
 import locomotion.UnableToMoveException;
-import robot.Slave;
+import utils.Container;
 import utils.math.Vec2;
 
 public class ScriptHomologationSlave extends Script {
@@ -10,19 +9,19 @@ public class ScriptHomologationSlave extends Script {
     private int yEntry = 400;
     private static final int DISTANCE_INTERPALET = 300;
 
-    public ScriptHomologationSlave(Slave robot, Table table){
-        super(robot, table);
+    public ScriptHomologationSlave(Container container) {
+        super(container);
     }
     @Override
     public void execute(int version) {
         try {
-            robot.turn(Math.PI/2);
+            turn(Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
-            robot.turn(Math.PI);
+            turn(Math.PI);
             robot.moveLengthwise(DISTANCE_INTERPALET*3, false);
-            robot.turn(-Math.PI/2);
+            turn(-Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET, false);
-            robot.turn(0);
+            turn(0);
             robot.moveLengthwise(DISTANCE_INTERPALET*2+150, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();

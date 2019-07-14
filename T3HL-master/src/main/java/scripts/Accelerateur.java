@@ -2,17 +2,17 @@ package scripts;
 
 import data.SensorState;
 import data.Sick;
-import data.Table;
 import data.XYO;
 import data.controlers.AudioPlayer;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import robot.Master;
+import robot.Robot;
 import utils.Container;
 import utils.Log;
 import utils.Offsets;
+import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -22,13 +22,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class Accelerateur extends Script implements Offsets {
-
-    /**
-     * Position d'entrée du script
-     */
-    //private final int xEntry = -490+10;
-    //private final int yEntry = 410-78+50+10;
-    private final Container container;
 
     /**
      * Boolean de symétrie
@@ -83,9 +76,8 @@ public class Accelerateur extends Script implements Offsets {
     @Configurable
     private boolean recalageMecaAcc;
 
-    public Accelerateur(Master robot, Table table, Container container) {
-        super(robot, table);
-        this.container = container;
+    public Accelerateur(Container container) {
+        super(container);
         versions = new ArrayList<>();
         versions.add(0);  //version initiale (7 palets)
         versions.add(1);  //version pour mettre 7 palets + le bleu initial
@@ -114,70 +106,58 @@ public class Accelerateur extends Script implements Offsets {
                 offsetThetaAutreCote = Offsets.get(ACCELERATEUR_THETA_RECALAGE_VIOLET_COTE_2);
             }
             if(recalageMecaAcc) {
-                robot.turn(Math.PI/2);
+                turn(Math.PI/2);
                 double recalageY = Offsets.get(ACCELERATEUR_Y_RECALAGE_JAUNE);
                 if(symetry) {
                     recalageY = Offsets.get(ACCELERATEUR_Y_RECALAGE_VIOLET);
                 }
                 robot.recalageMeca(false, (int)recalageY);
                 robot.setOrientation(Math.PI/2);
-                robot.turn(offsetTheta+0);
+                turn(offsetTheta+0);
             }
 
             while (robot.getNbPaletsDroits() > 0) {
-                robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                if (version == 0) {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                } else if (version == 1) {
-                    robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                }
-                robot.increaseScore(10);
-
-                if (robot.getNbPaletsDroits() > 1) {
-                    SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                    robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                }
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-                robot.popPaletDroit();
+                storePuck(version, robot);
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
+            actuators.RIGHT_VALVE.desactivate();
 
-            robot.turn(Math.PI-offsetThetaAutreCote);
+            turn(Math.PI-offsetThetaAutreCote);
             recalageLeft.join();
             robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
-                   robot.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-                   robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
-                   if (version == 0) {
-                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
-                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
-                   } else if (version == 1) {
-                       robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-                   }
-                   robot.increaseScore(10);
-
-                   if (robot.getNbPaletsDroits() > 1) {
-                       SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                       robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-                   }
-                   robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, true);
-                   robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-                   robot.popPaletDroit();
+                   storePuck(version, robot);
                }
-           });
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            });
+            actuators.LEFT_VALVE.desactivate();
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
     }
 
+    private void storePuck(int version, Robot robot) {
+        Module.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+        actuators.RIGHT_VALVE.desactivate(true);
+        if (version == 0) {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
+        } else if (version == 1) {
+            robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
+        }
+        robot.increaseScore(10);
+
+        if (robot.getNbPaletsDroits() > 1) {
+            SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
+            actuators.RIGHT_ELEVATOR.up();
+        }
+        actuators.RIGHT_VALVE.activate(true);
+        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
+        robot.popPaletDroit();
+    }
+
 
     public void recalageAccelerateur(int yEntry) throws UnableToMoveException {
-        robot.turn(Math.PI);
+        turn(Math.PI);
         robot.computeNewPositionAndOrientation(Sick.NOTHING);
         if(symetry) {
             ecart_mesures_sicks=Sick.SICK_AVANT_DROIT.getLastMeasure() - Sick.SICK_ARRIERE_DROIT.getLastMeasure();
@@ -215,11 +195,10 @@ public class Accelerateur extends Script implements Offsets {
         robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, true);
-            robot.waitForLeftElevator();
+            actuators.LEFT_ELEVATOR.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+            actuators.LEFT_PUMP.activate();
+            actuators.LEFT_VALVE.desactivate(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
         });
@@ -227,11 +206,10 @@ public class Accelerateur extends Script implements Offsets {
             //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
             // robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, true);
-            robot.waitForRightElevator();
+            actuators.RIGHT_ELEVATOR.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-            robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE, true);
+            actuators.RIGHT_PUMP.activate();
+            actuators.RIGHT_VALVE.desactivate(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });

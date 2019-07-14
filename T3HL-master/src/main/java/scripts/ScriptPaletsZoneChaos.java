@@ -1,12 +1,16 @@
 package scripts;
 
-import data.*;
+import data.CouleurPalet;
+import data.GameState;
+import data.PaletsZoneChaos;
+import data.SensorState;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import pfg.config.Configurable;
-import robot.Master;
 import utils.ConfigData;
+import utils.Container;
+import utils.container.Module;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -27,8 +31,8 @@ public class ScriptPaletsZoneChaos extends Script {
     int robotRay = 190;
     int rayonPalet = 38;
 
-    public ScriptPaletsZoneChaos(Master robot, Table table) {
-        super(robot, table);
+    public ScriptPaletsZoneChaos(Container container) {
+        super(container);
     }
 
     @Override
@@ -69,51 +73,30 @@ public class ScriptPaletsZoneChaos extends Script {
 
         try {
             //table.removeAllChaosObstacles();
-            robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
+            actuators.LEFT_VALVE.activate();
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
                 robot.turn(Math.PI / 2);
                 // tant que l'ascenseur gauche bouge on continue pas, sinon on risque de pas avoir un ascenseur à une bonne position (en théorie ici c'est bon mais on sait jamais)
-                waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET); // on baisse l'ascenseur pendant le mouvement du bras
+                Module.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
+                actuators.LEFT_ELEVATOR.down();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
-                robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
+                actuators.LEFT_VALVE.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
-                robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, false);
+                actuators.LEFT_VALVE.activate();
 
                 SensorState.LEFT_ELEVATOR_MOVING.setData(true); // on dit que l'ascenseur gauche bouge pour pas le refaire bouger son mouvement dans la prochaine itération
                 if (robot.getNbPaletsGauches() < 4) {
-                    robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                    actuators.LEFT_ELEVATOR.downup();
                 } else {
-                    robot.useActuator(ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET);
+                    actuators.LEFT_ELEVATOR.updown();
                 }
 
 
                 // à défaut de savoir la couleur, au moins on cassera pas les ascenseurs
                 robot.pushPaletGauche(CouleurPalet.ROUGE);
-                    /*
-                    //Ce qui suit c'est du piff j'ai la flemme de vérifier la couleur parcequ'on s'en fou
-                    if (position == positions[0]){
-                        table.removeTemporaryObstacle(table.getPaletRedUnZoneChaosYellow());
-                        robot.pushPaletGauche(CouleurPalet.ROUGE);
-                    }
-                    if (position == positions[1]){
-                        table.removeTemporaryObstacle(table.getPaletRedDeuxZoneChaosYellow());
-                        robot.pushPaletGauche(CouleurPalet.ROUGE);
-
-                    }
-                    if (position == positions[2]){
-                        table.removeTemporaryObstacle(table.getPaletGreenZoneChaosYellow());
-                        robot.pushPaletGauche(CouleurPalet.VERT);
-                    }
-                    if (position== positions[3]){
-                        table.removeTemporaryObstacle(table.getPaletBlueZoneChaosYellow());
-                        robot.pushPaletGauche(CouleurPalet.BLEU);
-                    }*/
-                //table.removeObstacleZoneChaos(position);
-
             }
-            robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
+            actuators.LEFT_PUMP.desactivate();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

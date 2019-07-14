@@ -22,13 +22,12 @@ import connection.Connection;
 import data.SensorState;
 import data.Table;
 import data.XYO;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.ConfigData;
 import utils.LastElementCollection;
 import utils.Log;
 import utils.MatchTimer;
 import utils.communication.CopyIOThread;
+import utils.container.Module;
 import utils.container.ModuleThread;
 import utils.math.*;
 
@@ -149,7 +148,7 @@ public class LidarControler extends ModuleThread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
+        Module.waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
         Log.LIDAR_PROCESS.debug("Processus OK");
 
         while (!listener.isAlive()) {

@@ -1,6 +1,26 @@
 Refactoring du HL - Chronologie
 ===
 
+14/07/2019
+----
+* Les scripts prennent maintenant que `Container` en argument, ça permet d'initialiser le robot, la table et les actuateurs (cf. en-dessous) dans tous les scripts sans devoir le faire manuellement.
++ Couche "d'abstraction" des actuateurs (cf package `lowlevel`) qui se base sur les anciens ordres
+    + Actuateurs à deux états (`OnOffActuator`) tels que les électrovannes ou les pompes
+        + Méthode `activate(boolean = false)` avec overloading pour attendre confirmation du LL
+        + Méthode `desactivate(boolean = false)` avec overloading pour attendre confirmation du LL
+    + Actuateurs asynchrones: pour les actuateurs qui ont un processus asynchrone dans le LL
+        + Méthode `isFinished()` pour savoir si l'actuateur a fini
+        + Méthode `waitFor()` pour attendre que l'actuateur ait fini
+    + Ascenseurs:
+        + Méthodes `up(boolean = false)` `down(boolean = false)` `updown(boolean = false)` `downup(boolean = false)` pour les ordres correspondants
+* Utilisation de cette nouvelle couche dans les anciens scripts pour les quelques ordres implémentés.
+* Ajout d'une méthode de raccourci `turn(double)` dans `Script` pour ne pas avoir à écrire `robot.` à chaque fois (test, sûrement plein d'autre méthodes comme celle-ci à ajouter).
+* `ContainerException` est maintenant une `RuntimeException`, plus besoin de la catch tout le temps. Si ça plante, c'est qu'il y a une bonne raison
+* `ContainerException` appropriée levée lorsqu'on essaie d'appeler `Container#module(Class<? extends Module>)` avec une classe abstraite et qu'aucune instance n'a déjà été chargée directement.
+* Changement des signatures de certaines des méthodes `Script` (`Integer` devient `int`).
+* `X6Alter` est devenu `PaletsX6` (il le méritait)
+* Léger ménage des scripts non utilisés.
+
 11/07/2019
 ----
 * Utilisation de `@Configurable` partout où possible, pour remplacer les trop nombreux `Module#updateConfig`
