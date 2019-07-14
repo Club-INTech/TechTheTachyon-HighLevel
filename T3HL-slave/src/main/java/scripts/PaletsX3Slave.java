@@ -43,7 +43,7 @@ public class PaletsX3Slave extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             if(version == 0) {
                 syncBuddy.sendBalanceFree();
@@ -144,7 +144,7 @@ public class PaletsX3Slave extends Script implements Offsets {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         if (!symetry) {
             offsetX = Offsets.get(PALETSX3_X_JAUNE);
             offsetY = Offsets.get(PALETSX3_Y_JAUNE);

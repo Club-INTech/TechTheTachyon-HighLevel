@@ -18,7 +18,7 @@ public class ScriptTestPositions extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         Vec2 pointA = new VectCartesian(-700, 500);
         Vec2 pointB = new VectCartesian(+700, 500);
         while(true) {
@@ -32,7 +32,7 @@ public class ScriptTestPositions extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return XYO.getRobotInstance().getPosition();
     }
 

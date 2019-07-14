@@ -93,7 +93,7 @@ public class Accelerateur extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             int yEntryPostRecalageAvecSymetrie = yEntryPostRecalage;
             if (version == 1) {
@@ -238,7 +238,7 @@ public class Accelerateur extends Script implements Offsets {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         if (version == 1) {
             if (symetry) {
                 return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));

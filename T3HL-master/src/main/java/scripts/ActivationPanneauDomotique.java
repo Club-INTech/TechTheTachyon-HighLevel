@@ -33,7 +33,7 @@ public class ActivationPanneauDomotique extends Script{
      */
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             /** Fait avancer le robot de 10mm */
             robot.moveLengthwise(10,false);
@@ -58,7 +58,7 @@ public class ActivationPanneauDomotique extends Script{
      */
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

@@ -25,7 +25,7 @@ public class ScriptZoneDepartPreCoupe extends Script{
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
 
             // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
@@ -91,7 +91,7 @@ public class ScriptZoneDepartPreCoupe extends Script{
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

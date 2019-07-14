@@ -20,7 +20,7 @@ public class GetRedDep extends Script {
         super(robot, table);
     }
 
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             if (!symetry) {
                 robot.moveLengthwise(-100,false);
@@ -37,7 +37,7 @@ public class GetRedDep extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

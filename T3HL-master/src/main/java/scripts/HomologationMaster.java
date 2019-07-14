@@ -21,7 +21,7 @@ public class HomologationMaster extends Script{
         this.container = container;
     }
 
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             robot.turn(Math.PI);
             robot.moveLengthwise(1000, false);
@@ -37,7 +37,7 @@ public class HomologationMaster extends Script{
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

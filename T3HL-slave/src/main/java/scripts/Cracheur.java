@@ -29,7 +29,7 @@ public class Cracheur extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             robot.softGoTo(new VectCartesian(1500-1330+60, 1380),false);
             if (symetry){
@@ -80,7 +80,7 @@ public class Cracheur extends Script {
         }
     }
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) { return new VectCartesian(xEntry, yEntry); }
+    public Vec2 entryPosition(int version) { return new VectCartesian(xEntry, yEntry); }
 
     @Override
     public void finalize(Exception e) { }

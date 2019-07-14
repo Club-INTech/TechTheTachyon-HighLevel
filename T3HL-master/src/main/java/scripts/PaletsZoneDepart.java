@@ -6,19 +6,14 @@ import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Master;
-import utils.ConfigData;
 import utils.Container;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-import static utils.Offsets.*;
 
 public class PaletsZoneDepart extends Script implements Offsets {
 
@@ -42,7 +37,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         Vec2[] positions;
         Vec2 entry = entryPosition(version);
         //double OffX = (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get();
@@ -146,7 +141,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         if(version ==JUST_BLUE)//position du premier palet
         {
             return new VectCartesian(xEntry, yEntry);

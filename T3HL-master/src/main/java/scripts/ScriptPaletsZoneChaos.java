@@ -32,7 +32,7 @@ public class ScriptPaletsZoneChaos extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
 
         while (!(boolean) (GameState.POSITIONS_CHAOS_RECUES.getData())) {
             try {
@@ -121,7 +121,7 @@ public class ScriptPaletsZoneChaos extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

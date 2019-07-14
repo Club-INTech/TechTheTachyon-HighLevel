@@ -57,7 +57,7 @@ public class Goldenium extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         double balanceOffsetX;
         double balanceOffsetY;
         if (symetry){
@@ -196,7 +196,7 @@ public class Goldenium extends Script implements Offsets {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         if (!symetry) {
             offsetX = Offsets.get(GOLDENIUM_X_JAUNE);
             offsetY = Offsets.get(GOLDENIUM_Y_JAUNE);

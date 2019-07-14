@@ -21,10 +21,8 @@ package scripts;
 import data.Table;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.ConfigData;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -63,6 +61,9 @@ public abstract class Script implements Module {
     @Configurable
     private long locomotionObstructedTimeout;
 
+    @Configurable
+    protected boolean symetry;
+
     /**
      * Construit un script
      * @param robot
@@ -78,7 +79,7 @@ public abstract class Script implements Module {
      * @param version
      *              version du script à executer
      */
-    public void goToThenExecute(Integer version) throws TimeoutError {
+    public void goToThenExecute(int version) throws TimeoutError {
         Log.STRATEGY.debug("Executing script "+getClass().getCanonicalName()+" v"+version);
         Vec2 entryPosition = this.entryPosition(version);
         if (table.isPositionInFixedObstacle(entryPosition)) {
@@ -172,7 +173,7 @@ public abstract class Script implements Module {
      * @param version
      *              la version à executer
      */
-    public abstract void execute(Integer version);
+    public abstract void execute(int version);
 
     /**
      * Methode retournant la zone d'entrée, c'est-à-dire une forme !
@@ -180,7 +181,7 @@ public abstract class Script implements Module {
      *              la version à executer
      * @return  le perimètre d'entré
      */
-    public abstract Vec2 entryPosition(Integer version);
+    public abstract Vec2 entryPosition(int version);
 
     /**
      * A executer à la fin du script, terminé ou non !

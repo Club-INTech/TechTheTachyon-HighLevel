@@ -3,7 +3,6 @@ package scripts;
 import data.Table;
 import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
-import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import robot.Slave;
 import utils.ConfigData;
@@ -25,7 +24,7 @@ public class MatchSlave extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
        /* try {
             robot.turn(0);
         } catch (UnableToMoveException e) {
@@ -83,7 +82,7 @@ public class MatchSlave extends Script {
     }
 
         @Override
-        public Vec2 entryPosition(Integer version) {
+        public Vec2 entryPosition(int version) {
             return XYO.getRobotInstance().getPosition();
         }
 

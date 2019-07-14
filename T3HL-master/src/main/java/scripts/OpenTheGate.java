@@ -4,10 +4,8 @@ import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Master;
-import utils.ConfigData;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -30,7 +28,7 @@ public class OpenTheGate extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         double offX;
         if (symetry){
             offX= Offsets.get(ZDD_X_VIOLET);
@@ -90,7 +88,7 @@ public class OpenTheGate extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return XYO.getRobotInstance().getPosition();
     }
 

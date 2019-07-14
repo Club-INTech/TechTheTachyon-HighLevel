@@ -44,7 +44,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             robot.turn(Math.PI/2);
             robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
@@ -137,7 +137,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(900, 450);
 
     }

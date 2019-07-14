@@ -22,7 +22,7 @@ public class Electron extends Script{
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         if(!usingElectron) {
             Log.STRATEGY.critical("L'électron est désactivé! On skippe le script de lancement de l'électron!");
             return;
@@ -64,7 +64,7 @@ public class Electron extends Script{
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return XYO.getRobotInstance().getPosition();
     }
 

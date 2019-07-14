@@ -18,7 +18,7 @@ public class ScriptHomologation extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             robot.turn(Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
@@ -43,7 +43,7 @@ public class ScriptHomologation extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

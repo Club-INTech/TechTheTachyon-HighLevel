@@ -1,7 +1,6 @@
 package scripts;
 
 import data.Table;
-import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import robot.Slave;
 import utils.math.Vec2;
@@ -15,7 +14,7 @@ public class ScriptHomologationSlave extends Script {
         super(robot, table);
     }
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             robot.turn(Math.PI/2);
             robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
@@ -33,7 +32,7 @@ public class ScriptHomologationSlave extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return null;
     }
 

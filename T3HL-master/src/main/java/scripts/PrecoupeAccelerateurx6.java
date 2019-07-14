@@ -38,7 +38,7 @@ public class PrecoupeAccelerateurx6 extends Script {
 
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
 
             if (version==0){
@@ -273,7 +273,7 @@ public class PrecoupeAccelerateurx6 extends Script {
 
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

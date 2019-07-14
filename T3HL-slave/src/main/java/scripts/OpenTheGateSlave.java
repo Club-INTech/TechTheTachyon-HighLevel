@@ -3,7 +3,6 @@ package scripts;
 import data.Table;
 import data.XYO;
 import locomotion.UnableToMoveException;
-import pfg.config.Configurable;
 import robot.Slave;
 import utils.Offsets;
 import utils.math.Vec2;
@@ -13,9 +12,6 @@ import static utils.Offsets.ZDD_X_JAUNE;
 import static utils.Offsets.ZDD_X_VIOLET;
 
 public class OpenTheGateSlave extends Script {
-
-    @Configurable
-    private boolean symetry;
 
     /**
      * Construit un script
@@ -28,7 +24,7 @@ public class OpenTheGateSlave extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         double offX;
         if (symetry){
             offX = Offsets.get(ZDD_X_VIOLET);
@@ -67,7 +63,7 @@ public class OpenTheGateSlave extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return XYO.getRobotInstance().getPosition();
     }
 

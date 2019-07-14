@@ -6,9 +6,7 @@ import data.XYO;
 import orders.OrderWrapper;
 import orders.order.MotionOrder;
 import robot.Master;
-import robot.Robot;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
 
 import java.util.Locale;
 
@@ -31,7 +29,7 @@ public class ScriptMaltraitanceMCS extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         Vec2 target = XYO.getRobotInstance().getPosition();
         while (true) {
             float randX = (float) (Math.random()*2-1)*0.1f;
@@ -43,7 +41,7 @@ public class ScriptMaltraitanceMCS extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return XYO.getRobotInstance().getPosition();
     }
 

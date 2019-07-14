@@ -3,10 +3,8 @@ package scripts;
 import data.Table;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import robot.Slave;
-import utils.ConfigData;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -26,7 +24,7 @@ public class PaletsX6Slave extends Script {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
             if(!symetry){
                 robot.turn(Math.PI);
@@ -48,7 +46,7 @@ public class PaletsX6Slave extends Script {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         return new VectCartesian(xEntry, yEntry);
     }
 

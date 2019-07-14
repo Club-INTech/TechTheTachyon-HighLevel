@@ -29,7 +29,7 @@ public class GetBlueAcc extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         try {
 
             robot.turn(-Math.PI / 2);
@@ -98,7 +98,7 @@ public class GetBlueAcc extends Script implements Offsets {
     }
 
     @Override //à adapter
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         if (symetry){
 
             offsetX = Offsets.get(GETBLUEACC_X_VIOLET);

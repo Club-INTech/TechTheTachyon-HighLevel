@@ -96,7 +96,7 @@ public class X6alter extends Script implements Offsets {
     }
 
     @Override
-    public void execute(Integer version) {
+    public void execute(int version) {
         /*  Donne le côté duquel on commence à prendre les palets selon la position au début du script du robot.
             Autrement dit on divise la demi table en deux et selon cela on choisit de commencer à droite ou à gauche du distributeur
          */
@@ -472,7 +472,7 @@ public class X6alter extends Script implements Offsets {
     }
 
     @Override
-    public Vec2 entryPosition(Integer version) {
+    public Vec2 entryPosition(int version) {
         loadOffsets();
         //position de départ directement au niveau du palet
         if (version == 0) {
