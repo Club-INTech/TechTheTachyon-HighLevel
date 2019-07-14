@@ -119,7 +119,7 @@ public class Accelerateur extends Script implements Offsets {
             while (robot.getNbPaletsDroits() > 0) {
                 storePuck(version, robot);
             }
-            actuators.RIGHT_VALVE.desactivate();
+            actuators.rightValve.desactivate();
 
             turn(Math.PI-offsetThetaAutreCote);
             recalageLeft.join();
@@ -128,7 +128,7 @@ public class Accelerateur extends Script implements Offsets {
                    storePuck(version, robot);
                }
             });
-            actuators.LEFT_VALVE.desactivate();
+            actuators.leftValve.desactivate();
 
         } catch (UnableToMoveException e) {
             e.printStackTrace();
@@ -137,7 +137,7 @@ public class Accelerateur extends Script implements Offsets {
 
     private void storePuck(int version, Robot robot) {
         Module.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
-        actuators.RIGHT_VALVE.desactivate(true);
+        actuators.rightValve.desactivate(true);
         if (version == 0) {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR_DEPOT, true);
@@ -148,9 +148,9 @@ public class Accelerateur extends Script implements Offsets {
 
         if (robot.getNbPaletsDroits() > 1) {
             SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-            actuators.RIGHT_ELEVATOR.up();
+            actuators.rightElevator.up();
         }
-        actuators.RIGHT_VALVE.activate(true);
+        actuators.rightValve.activate(true);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         robot.popPaletDroit();
     }
@@ -195,10 +195,10 @@ public class Accelerateur extends Script implements Offsets {
         robot.useActuator(ActuatorsOrder.ACTIVE_COUPLE_DU_BRAS_DROIT);
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
-            actuators.LEFT_ELEVATOR.updown(true);
+            actuators.leftElevator.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-            actuators.LEFT_PUMP.activate();
-            actuators.LEFT_VALVE.desactivate(true);
+            actuators.leftPump.activate();
+            actuators.leftValve.desactivate(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
         });
@@ -206,10 +206,10 @@ public class Accelerateur extends Script implements Offsets {
             //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
             // robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
-            actuators.RIGHT_ELEVATOR.updown(true);
+            actuators.rightElevator.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
-            actuators.RIGHT_PUMP.activate();
-            actuators.RIGHT_VALVE.desactivate(true);
+            actuators.rightPump.activate();
+            actuators.rightValve.desactivate(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });

@@ -73,30 +73,30 @@ public class ScriptPaletsZoneChaos extends Script {
 
         try {
             //table.removeAllChaosObstacles();
-            actuators.LEFT_VALVE.activate();
+            actuators.leftValve.activate();
             for (Vec2 position : positions) {
                 robot.followPathTo(position);
                 robot.turn(Math.PI / 2);
                 // tant que l'ascenseur gauche bouge on continue pas, sinon on risque de pas avoir un ascenseur à une bonne position (en théorie ici c'est bon mais on sait jamais)
                 Module.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
-                actuators.LEFT_ELEVATOR.down();
+                actuators.leftElevator.down();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
-                actuators.LEFT_VALVE.activate();
+                actuators.leftValve.activate();
 
                 SensorState.LEFT_ELEVATOR_MOVING.setData(true); // on dit que l'ascenseur gauche bouge pour pas le refaire bouger son mouvement dans la prochaine itération
                 if (robot.getNbPaletsGauches() < 4) {
-                    actuators.LEFT_ELEVATOR.downup();
+                    actuators.leftElevator.downup();
                 } else {
-                    actuators.LEFT_ELEVATOR.updown();
+                    actuators.leftElevator.updown();
                 }
 
 
                 // à défaut de savoir la couleur, au moins on cassera pas les ascenseurs
                 robot.pushPaletGauche(CouleurPalet.ROUGE);
             }
-            actuators.LEFT_PUMP.desactivate();
+            actuators.leftPump.desactivate();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

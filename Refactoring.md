@@ -11,7 +11,7 @@ Refactoring du HL - Chronologie
     + Actuateurs asynchrones: pour les actuateurs qui ont un processus asynchrone dans le LL
         + Méthode `isFinished()` pour savoir si l'actuateur a fini
         + Méthode `waitFor()` pour attendre que l'actuateur ait fini
-    + Ascenseurs:
+    + Ascenseurs (asynchrones):
         + Méthodes `up(boolean = false)` `down(boolean = false)` `updown(boolean = false)` `downup(boolean = false)` pour les ordres correspondants
 * Utilisation de cette nouvelle couche dans les anciens scripts pour les quelques ordres implémentés.
 * Ajout d'une méthode de raccourci `turn(double)` dans `Script` pour ne pas avoir à écrire `robot.` à chaque fois (test, sûrement plein d'autre méthodes comme celle-ci à ajouter).

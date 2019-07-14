@@ -38,10 +38,10 @@ public class VideDansZoneDepartSiProbleme extends Script {
     public void execute(int version) {
         try {
             turn(Math.PI/2);
-            actuators.RIGHT_PUMP.activate();
+            actuators.rightPump.activate();
             recalageRight.join();
             while (robot.getNbPaletsDroits() > 0) {
-                actuators.RIGHT_PUMP.desactivate(true);
+                actuators.rightPump.desactivate(true);
 
                 if (robot.getRightElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
                     System.out.println(1111);
@@ -57,11 +57,11 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
                 if (robot.getNbPaletsDroits() > 1) {
                     SensorState.RIGHT_ELEVATOR_MOVING.setData(true);
-                    actuators.RIGHT_ELEVATOR.up();
+                    actuators.rightElevator.up();
                 }
-                actuators.RIGHT_VALVE.activate(true);
+                actuators.rightValve.activate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
-                actuators.RIGHT_VALVE.desactivate(true);
+                actuators.rightValve.desactivate(true);
                 robot.increaseScore(6);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
 
@@ -73,10 +73,10 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
 
             turn(-Math.PI/2);
-            actuators.LEFT_PUMP.activate(true);
+            actuators.leftPump.activate(true);
             recalageLeft.join();
             while (robot.getNbPaletsGauches() > 0) {
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.desactivate(true);
 
                 if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
                     robot.moveLengthwise(300, false);
@@ -89,11 +89,11 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_ZONE_DEPART, true);
                 if (robot.getNbPaletsGauches() > 1) {
                     SensorState.LEFT_ELEVATOR_MOVING.setData(true);
-                    actuators.LEFT_ELEVATOR.up();
+                    actuators.leftElevator.up();
                 }
-                actuators.LEFT_VALVE.activate(true);
+                actuators.leftValve.activate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_DE_LA_POSITION_AU_DESSUS_ZONE_DEPART_A_STOCKAGE, true);
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.desactivate(true);
                 robot.increaseScore(6);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
 
@@ -113,12 +113,12 @@ public class VideDansZoneDepartSiProbleme extends Script {
     public void executeWhileMovingToEntry(int version) {
         recalageLeft = async("Recalage ascenseur gauche", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_LIBERE_ASCENSEUR,true);
-            actuators.LEFT_ELEVATOR.updown(true);
+            actuators.leftElevator.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
         });
         recalageRight = async("Recalage ascenseur droit", () -> {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
-            actuators.RIGHT_ELEVATOR.updown(true);
+            actuators.rightElevator.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
         });
     }

@@ -61,8 +61,8 @@ public class PaletsZoneDepart extends Script implements Offsets {
         int i =0;
         try {
             //robot.turn(Math.PI / 2);
-            actuators.LEFT_PUMP.activate(true);
-            actuators.LEFT_VALVE.desactivate(true);
+            actuators.leftPump.activate(true);
+            actuators.leftValve.desactivate(true);
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             CompletableFuture<Void> puckStored = null;
             CompletableFuture<Void> elevatorAtRightPlace = null;
@@ -71,7 +71,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
                 if(premierPaletPris&&version==JUST_BLUE) {
                     turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
-                    async("Descend ascenseur gauche", () -> actuators.LEFT_ELEVATOR.down());
+                    async("Descend ascenseur gauche", () -> actuators.leftElevator.down());
                     robot.followPathTo(position);
                 }
                 else if (premierPaletPris) {
@@ -88,11 +88,11 @@ public class PaletsZoneDepart extends Script implements Offsets {
                 int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda
                 puckStored = async("Remonte vers ascenseur et recale", () -> {
                     robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                    actuators.LEFT_VALVE.activate(true);
+                    actuators.leftValve.activate(true);
                     readjustElevator(puckIndex);
                     if(puckIndex == 0) { // on retourne au sol que pour le 2e palet
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
-                        actuators.LEFT_VALVE.desactivate(true);
+                        actuators.leftValve.desactivate(true);
                     }
                 });
 
@@ -129,9 +129,9 @@ public class PaletsZoneDepart extends Script implements Offsets {
      */
     private void readjustElevator(int puckIndex) {
         if(puckIndex == 0) { // 1er palet
-            actuators.LEFT_ELEVATOR.down();
+            actuators.leftElevator.down();
         } else { // 2e palet
-            actuators.LEFT_ELEVATOR.downup();
+            actuators.leftElevator.downup();
         }
     }
 

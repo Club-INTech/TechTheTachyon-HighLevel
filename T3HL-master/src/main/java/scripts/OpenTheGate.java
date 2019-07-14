@@ -42,18 +42,18 @@ public class OpenTheGate extends Script {
             try {
                 robot.followPathTo(zoneDep, 0);
                 turn(Math.PI/2);
-                actuators.LEFT_PUMP.activate(true);
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftPump.activate(true);
+                actuators.leftValve.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,true);
-                actuators.LEFT_VALVE.activate(true);
-                actuators.LEFT_ELEVATOR.downup(true);
+                actuators.leftValve.activate(true);
+                actuators.leftElevator.downup(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET, true);
-                actuators.LEFT_VALVE.activate();
-                actuators.LEFT_VALVE.desactivate(true);
+                actuators.leftValve.activate();
+                actuators.leftValve.desactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();

@@ -128,7 +128,7 @@ public class PaletsX6 extends Script implements Offsets {
 
             if(version == 4) {
                 //On prend le 1er palet
-                actuators.RIGHT_VALVE.desactivate();
+                actuators.rightValve.desactivate();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 try {
                     Thread.sleep(300);
@@ -177,7 +177,7 @@ public class PaletsX6 extends Script implements Offsets {
                     turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                     robot.increaseScore(12);
                     armInPlace.join(); // on attend que le bras soit à la bonne position
-                    actuators.RIGHT_VALVE.activate(true);
+                    actuators.rightValve.activate(true);
 
                     try {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
@@ -233,7 +233,7 @@ public class PaletsX6 extends Script implements Offsets {
             Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        actuators.RIGHT_VALVE.desactivate(true);
+        actuators.rightValve.desactivate(true);
 
         try {
             turn(Math.PI); // réoriente le robot vers PI
@@ -255,11 +255,11 @@ public class PaletsX6 extends Script implements Offsets {
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_TIENT_BLEU, true);
             } else {
                 robot.useActuator(ActuatorsOrder.REMONTE_LE_BRAS_DROIT_DU_DISTRIBUTEUR_VERS_ASCENSEUR, true);
-                actuators.RIGHT_VALVE.activate(true);
+                actuators.rightValve.activate(true);
                 if(moveElevator) {
-                    actuators.RIGHT_ELEVATOR.downup();
+                    actuators.rightElevator.downup();
                 }
-                actuators.RIGHT_VALVE.desactivate();
+                actuators.rightValve.desactivate();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 try {
                     Thread.sleep(300);
@@ -335,7 +335,7 @@ public class PaletsX6 extends Script implements Offsets {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT,false);
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT,false);
         if(robot.getNbPaletsDroits()>=1 && robot.getNbPaletsDroits() < 4){ // si l'asc contient 4 palets, on peut plus descendre
-            actuators.RIGHT_ELEVATOR.down(true);
+            actuators.rightElevator.down(true);
         }
     }
 
