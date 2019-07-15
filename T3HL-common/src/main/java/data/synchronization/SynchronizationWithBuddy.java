@@ -4,7 +4,7 @@ import connection.Connection;
 import data.GameState;
 import data.controlers.Channel;
 import pfg.config.Config;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.container.Module;
 
@@ -16,9 +16,9 @@ public class SynchronizationWithBuddy extends SynchronizationCommon {
     /**
      * Constructeur
      */
-    public SynchronizationWithBuddy(Container container) {
-        super(container);
-        this.container=container;
+    public SynchronizationWithBuddy(HLInstance hl) {
+        super(hl);
+        this.hl = hl;
     }
 
 

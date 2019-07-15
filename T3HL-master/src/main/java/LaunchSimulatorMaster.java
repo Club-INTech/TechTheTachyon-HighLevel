@@ -1,5 +1,5 @@
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 
 /**
@@ -9,11 +9,11 @@ import utils.container.ContainerException;
 public class LaunchSimulatorMaster {
 
     public static void main(String[] args) throws ContainerException {
-        Container container = Container.getInstance("Master");
+        HLInstance hl = HLInstance.getInstance("Master");
         //container.getConfig().override(ConfigData.COULEUR, "violet");
-        container.getConfig().override(ConfigData.SIMULATION, true);
-        container.getConfig().override(ConfigData.VISUALISATION, false);
-        container.getConfig().override(ConfigData.USING_LIDAR, false);
+        hl.getConfig().override(ConfigData.SIMULATION, true);
+        hl.getConfig().override(ConfigData.VISUALISATION, false);
+        hl.getConfig().override(ConfigData.USING_LIDAR, false);
         MainMaster.main(args);
     }
 }

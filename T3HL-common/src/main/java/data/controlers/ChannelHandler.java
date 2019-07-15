@@ -16,7 +16,7 @@ public class ChannelHandler{
      * Constructeur
      * @param listener listener dans lequel on va s'abonner
      * @param channel channel auquel on s'abonne
-     * @param function fonction qu'on apelle en cas de réception de message
+     * @param function fonction qu'on appelle en cas de réception de message
      */
     public ChannelHandler(Listener listener, Channel channel, Consumer<String> function){
         this.channel = channel;

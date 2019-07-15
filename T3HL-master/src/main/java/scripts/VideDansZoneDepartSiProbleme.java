@@ -5,12 +5,12 @@ import data.SensorState;
 import locomotion.UnableToMoveException;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 /**
  * Script pour vider les ascenseurs dans la zone de départ si l'accélérateur est bloqué
@@ -24,11 +24,11 @@ public class VideDansZoneDepartSiProbleme extends Script {
     //private final int yEntry = 410-78+50+10;
     private boolean lastWasRed=true;
 
-    private CompletableFuture<Void> recalageLeft;
-    private CompletableFuture<Void> recalageRight;
+    private Future<Void> recalageLeft;
+    private Future<Void> recalageRight;
 
-    public VideDansZoneDepartSiProbleme(Container container) {
-        super(container);
+    public VideDansZoneDepartSiProbleme(HLInstance hl) {
+        super(hl);
         versions = new ArrayList<>();
         versions.add(0);  //version initiale (7 palets)
         versions.add(1);  //version pour mettre 7 palets + le bleu initial
@@ -39,7 +39,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
         try {
             turn(Math.PI/2);
             actuators.rightPump.activate();
-            recalageRight.join();
+            join(recalageRight);
             while (robot.getNbPaletsDroits() > 0) {
                 actuators.rightPump.desactivate(true);
 
@@ -74,7 +74,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
             turn(-Math.PI/2);
             actuators.leftPump.activate(true);
-            recalageLeft.join();
+            join(recalageLeft);
             while (robot.getNbPaletsGauches() > 0) {
                 actuators.leftValve.desactivate(true);
 

@@ -3,8 +3,10 @@ package scripts;
 import connection.Connection;
 import data.SensorState;
 import data.XYO;
+import data.controlers.Channel;
+import data.controlers.Listener;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.math.Vec2;
@@ -16,8 +18,8 @@ public class Electron extends Script{
     @Configurable
     private boolean usingElectron;
 
-    public Electron(Container container) {
-        super(container);
+    public Electron(HLInstance hl) {
+        super(hl);
     }
 
     @Override
@@ -26,6 +28,8 @@ public class Electron extends Script{
             Log.STRATEGY.critical("L'électron est désactivé! On skippe le script de lancement de l'électron!");
             return;
         }
+        Listener listener = hl.module(Listener.class);
+        listener.registerMessageHandler(Channel.EVENTS, this::handleElectronEvents);
         Thread electronThread = new Thread(() -> {
 
 
@@ -60,6 +64,23 @@ public class Electron extends Script{
         electronThread.setName("Electron");
         electronThread.setDaemon(true);
         electronThread.start();
+    }
+
+    private void handleElectronEvents(String message) {
+        String[] event = message.split(" ");
+        switch (event[0]) {
+            case "electron_activated":
+                // TODO: SensorState encore utile?
+                SensorState.ELECTRON_ACTIVATED.setData(true);
+                break;
+
+            case "electron_arrived":
+                if( ! SensorState.ELECTRON_ARRIVED.getData()) {
+                    Log.STRATEGY.debug("Electron arrivé!");
+                }
+                SensorState.ELECTRON_ARRIVED.setData(true);
+                break;
+        }
     }
 
     @Override

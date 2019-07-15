@@ -6,12 +6,12 @@ import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class PaletsZoneDepart extends Script implements Offsets {
 
@@ -27,8 +27,8 @@ public class PaletsZoneDepart extends Script implements Offsets {
     @Configurable
     private boolean symetry;
 
-    public PaletsZoneDepart(Container container) {
-        super(container);
+    public PaletsZoneDepart(HLInstance hl) {
+        super(hl);
     }
 
     @Override
@@ -64,10 +64,8 @@ public class PaletsZoneDepart extends Script implements Offsets {
             actuators.leftPump.activate(true);
             actuators.leftValve.desactivate(true);
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
-            CompletableFuture<Void> puckStored = null;
-            CompletableFuture<Void> elevatorAtRightPlace = null;
+            Future<Void> puckStored = null;
             for (Vec2 position : positions) {
-                CompletableFuture<Void> armInPlace = null;
                 if(premierPaletPris&&version==JUST_BLUE) {
                     turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
@@ -80,9 +78,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
                 } else {
                     premierPaletPris = true;
                 }
-                if(puckStored != null) {
-                    puckStored.join();
-                }
+                join(puckStored);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL,true);
 
                 int puckIndex = i; // on est obligés de copier la variable pour la transmettre à la lambda

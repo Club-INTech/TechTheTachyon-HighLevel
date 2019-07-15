@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.*;
 
@@ -42,20 +42,20 @@ public class Test_Table {
      * La table à tester
      */
     private Table table;
-    private Container container;
+    private HLInstance hl;
 
     @Before
     public void setUp() throws ContainerException {
-        container = Container.getInstance("Master");
-        table = container.module(Table.class);
-        container.module(Graphe.class);
+        hl = HLInstance.getInstance("Master");
+        table = hl.module(Table.class);
+        hl.module(Graphe.class);
     }
 
     @After
     public void tearDown() {
         table = null;
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -158,8 +158,8 @@ public class Test_Table {
         points.add(new VectCartesian(800, 150));
         points.add(new VectCartesian(20, 10));
 
-        int ennemyRay = container.getConfig().getInt(ConfigData.ENNEMY_RAY);
-        int buddyRay = container.getConfig().getInt(ConfigData.BUDDY_RAY);
+        int ennemyRay = hl.getConfig().getInt(ConfigData.ENNEMY_RAY);
+        int buddyRay = hl.getConfig().getInt(ConfigData.BUDDY_RAY);
 
         table.updateMobileObstacles(points);
 
@@ -178,7 +178,7 @@ public class Test_Table {
 
     @Test
     public void testUpdateMobileObstaclesFull() throws Exception {
-        Graphe graphe = container.module(Graphe.class);
+        Graphe graphe = hl.module(Graphe.class);
         graphe.reInit();
         XYO.getBuddyInstance().update(20, 10, 0.0);
         ArrayList<Vec2> points = new ArrayList<>();

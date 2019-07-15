@@ -33,7 +33,7 @@ import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.Offsets;
 import utils.communication.SimulatorDebug;
@@ -58,16 +58,16 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
     }
 
     private void start() throws ContainerException {
-        Container container = Container.getInstance("Master");
-        entryPoint(container, Master.class, ScriptManagerMaster.class);
+        HLInstance hl = HLInstance.getInstance("Master");
+        entryPoint(hl, Master.class, ScriptManagerMaster.class);
     }
 
     @Override
-    protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
-        super.initServices(container, robotClass, scriptManagerClass);
-        if(container.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
+    protected void initServices(HLInstance hl, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
+        super.initServices(hl, robotClass, scriptManagerClass);
+        if(hl.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
             try {
-                MontlheryController montlheryController = container.module(MontlheryController.class);
+                MontlheryController montlheryController = hl.module(MontlheryController.class);
                 montlheryController.start();
             } catch (ContainerException e) {
                 e.printStackTrace();
@@ -79,18 +79,18 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
     protected void preLLConnection() throws ContainerException {
         waitForColorSwitch();
 
-        if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-            SimulatorDebug debug = container.module(SimulatorDebug.class);
-            if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if(hl.getConfig().getBoolean(ConfigData.VISUALISATION) || hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
+            SimulatorDebug debug = hl.module(SimulatorDebug.class);
+            if(hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
             } else {
                 debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
             }
         }
 
-        if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if (hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
-        } else if(container.getConfig().getBoolean(ConfigData.VISUALISATION)) {
+        } else if(hl.getConfig().getBoolean(ConfigData.VISUALISATION)) {
             initVisualisateur();
         }
     }
@@ -98,7 +98,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
 
     @Override
     protected void act() throws UnableToMoveException {
-        if(container.getConfig().get(ConfigData.MODE_MONTHLERY)) {
+        if(hl.getConfig().get(ConfigData.MODE_MONTHLERY)) {
             while(true) {
                 try {
                     TimeUnit.SECONDS.sleep(5);
@@ -113,10 +113,10 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
-        boolean openTheGate = container.getConfig().get(ConfigData.OPEN_THE_GATE);
+        boolean openTheGate = hl.getConfig().get(ConfigData.OPEN_THE_GATE);
         if(openTheGate) {
             double offX;
-            boolean symetry = container.getConfig().get(ConfigData.SYMETRY);
+            boolean symetry = hl.getConfig().get(ConfigData.SYMETRY);
             if (symetry){
                 offX= Offsets.get(ZDD_X_VIOLET);
             } else {
@@ -130,7 +130,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             Vec2 newPos = new VectCartesian(1500-191, 350);
             robot.setPositionAndOrientation(newPos, Math.PI);
 
-            if (container.getConfig().get(ConfigData.COULEUR).equals("violet")) {
+            if (hl.getConfig().get(ConfigData.COULEUR).equals("violet")) {
                 Log.TABLE.critical("Couleur pour le recalage : violet");
                 robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
             } else {
@@ -156,7 +156,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         robot.setRotationSpeed(Speed.DEFAULT_SPEED);
         // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
 
-        if( ! container.getConfig().get(ConfigData.OPEN_THE_GATE)) {
+        if( ! hl.getConfig().get(ConfigData.OPEN_THE_GATE)) {
             table.removeTemporaryObstacle(table.getPaletVertDroite());
         }
         table.removeTemporaryObstacle(table.getPaletRougeDroite());
@@ -165,17 +165,17 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
 
 
         try {
-            double offX = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
-            double offY = container.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
+            double offX = hl.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
+            double offY = hl.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
 
-            Match match = container.module(Match.class);
+            Match match = hl.module(Match.class);
 
             if( ! openTheGate) {
                 Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
                 robot.gotoPoint(entryPos);
                 Vec2 currentPosition = XYO.getRobotInstance().getPosition();
                 double angleToStart;
-                if (container.getConfig().get(ConfigData.SYMETRY)) {
+                if (hl.getConfig().get(ConfigData.SYMETRY)) {
                     angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
                 }
                 else {
@@ -214,7 +214,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            simulatorLauncher.setPathfollowerToShow(hl.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -237,7 +237,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
         simulatorLauncher.setVisualisationMode(Master.class);
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+            simulatorLauncher.setPathfollowerToShow(hl.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

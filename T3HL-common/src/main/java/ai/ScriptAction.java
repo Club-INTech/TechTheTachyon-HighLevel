@@ -28,7 +28,7 @@ import data.table.Obstacle;
 import locomotion.NoPathFound;
 import scripts.Script;
 import scripts.ScriptNames;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -73,7 +73,7 @@ public class ScriptAction extends Action {
         Script scriptInstance;
         try {
             // TODO FIXME
-            scriptInstance = scriptName.createScript(Container.getInstance("Master"));
+            scriptInstance = scriptName.createScript(HLInstance.getInstance("Master"));
         } catch (ContainerException e) {
             e.printStackTrace();
             scriptInstance = null;

@@ -1,9 +1,7 @@
 package scripts;
 
 import data.CouleurPalet;
-import data.XYO;
-import robot.Master;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -11,7 +9,7 @@ import utils.math.VectCartesian;
 public class TestAccelerateur extends TestScriptBase {
 
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
         for (int i = 0; i < 5; i++) {
             robot.pushPaletDroit(CouleurPalet.ROUGE);
             robot.pushPaletGauche(CouleurPalet.ROUGE);

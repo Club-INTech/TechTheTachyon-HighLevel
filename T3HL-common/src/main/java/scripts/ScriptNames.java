@@ -18,7 +18,7 @@
 
 package scripts;
 
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 
 /**
@@ -30,5 +30,5 @@ public interface ScriptNames {
     @Override
     String toString();
 
-    Script createScript(Container container) throws ContainerException;
+    Script createScript(HLInstance hl) throws ContainerException;
 }

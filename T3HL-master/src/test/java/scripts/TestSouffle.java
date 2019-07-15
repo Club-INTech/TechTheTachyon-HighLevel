@@ -1,7 +1,6 @@
 package scripts;
 
-import orders.order.ActuatorsOrder;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -10,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class TestSouffle extends TestBaseHL {
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
 
     }
 

@@ -24,25 +24,25 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 
 public class Test_ConnectionManager {
 
     private ConnectionManager connectionManager;
 
-    private Container container;
+    private HLInstance hl;
 
     @Before
     public void setUp() throws Exception {
-        container = Container.getInstance("Master");
-        connectionManager = container.module(ConnectionManager.class);
+        hl = HLInstance.getInstance("Master");
+        connectionManager = hl.module(ConnectionManager.class);
     }
 
     @After
     public void tearDown() throws Exception {
         connectionManager = null;
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
     }
 
     @Test

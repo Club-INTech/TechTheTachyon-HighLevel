@@ -18,7 +18,7 @@
 
 package scripts;
 
-import utils.Container;
+import utils.HLInstance;
 import utils.container.Module;
 
 import java.util.HashMap;
@@ -33,7 +33,7 @@ public abstract class ScriptManager implements Module {
     /**
      * Container pour construire les scripts
      */
-    protected Container container;
+    protected HLInstance hl;
 
     /**
      * Dictionnaire faisant le liens entre nom de script et script
@@ -42,11 +42,11 @@ public abstract class ScriptManager implements Module {
 
     /**
      * Construit le script manager
-     * @param container
+     * @param hl
      *              container pour instancier les scripts
      */
-    protected ScriptManager(Container container) {
-        this.container = container;
+    protected ScriptManager(HLInstance hl) {
+        this.hl = hl;
         this.instanciedScripts = new HashMap<>();
     }
 

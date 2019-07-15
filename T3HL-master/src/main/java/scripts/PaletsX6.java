@@ -9,7 +9,7 @@ import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.Offsets;
 import utils.TimeoutError;
@@ -20,7 +20,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 public class PaletsX6 extends Script implements Offsets {
     private ArrayList<VectCartesian> positions;
@@ -28,8 +28,7 @@ public class PaletsX6 extends Script implements Offsets {
     @Configurable
     private boolean symetry;
     boolean premierPaletPris;
-    CompletableFuture<Void> puckStored = null;
-    CompletableFuture<Void> elevatorAtRightPlace = null;
+    Future<Void> puckStored = null;
 
     private static final int DISTANCE_INTER_PUCK = 100;
     private static double offsetY ;
@@ -45,8 +44,8 @@ public class PaletsX6 extends Script implements Offsets {
     @Configurable
     private boolean recalageAcc;
 
-    public PaletsX6(Container container, SynchronizationWithBuddy syncBuddy) {
-        super(container);
+    public PaletsX6(HLInstance hl, SynchronizationWithBuddy syncBuddy) {
+        super(hl);
         this.syncBuddy = syncBuddy;
         /* on va faire plusieurs versions selon la combinaison de palets que l'on veut prendre et dans quel ordre
          *  (selon le côté de la table que l'on choisit ?)
@@ -171,12 +170,12 @@ public class PaletsX6 extends Script implements Offsets {
 
                     // On dépose le bleu
                     // on tourne en même temps qu'on lève le bras
-                    CompletableFuture<Void> armInPlace = async("Dépose bleu dans la balance", () -> {
+                    Future<Void> armInPlace = async("Dépose bleu dans la balance", () -> {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_BALANCE, true);
                     });
                     turn(Calculs.modulo(Math.PI+Math.PI/16, Math.PI));
                     robot.increaseScore(12);
-                    armInPlace.join(); // on attend que le bras soit à la bonne position
+                    join(armInPlace); // on attend que le bras soit à la bonne position
                     actuators.rightValve.activate(true);
 
                     try {
@@ -192,7 +191,7 @@ public class PaletsX6 extends Script implements Offsets {
                             if(!recalageAcc) {
                                 recalageX6();
                             }
-                            robot.turnToPoint(container.module(Accelerateur.class).entryPosition(Match.ACC_VERSION));
+                            robot.turnToPoint(hl.module(Accelerateur.class).entryPosition(Match.ACC_VERSION));
                         } catch (ContainerException e) {
                             e.printStackTrace();
                         }
@@ -229,7 +228,7 @@ public class PaletsX6 extends Script implements Offsets {
         Log.STRATEGY.critical("Entrée dans grabPuck");
         if(puckStored != null) {
             Log.STRATEGY.warning("Attente de puckStored");
-            puckStored.join();
+            join(puckStored);
             Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
@@ -281,7 +280,7 @@ public class PaletsX6 extends Script implements Offsets {
         Log.STRATEGY.critical("Entrée dans grabPuckGoto");
         if(puckStored != null) {
             Log.STRATEGY.warning("Attente de puckStored");
-            puckStored.join();
+            join(puckStored);
             Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);

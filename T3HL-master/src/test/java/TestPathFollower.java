@@ -1,7 +1,7 @@
 import connection.ConnectionManager;
 import data.Graphe;
 import data.XYO;
-import data.controlers.DataControler;
+import data.controlers.DataController;
 import data.controlers.Listener;
 import data.graphe.Node;
 import data.graphe.Ridge;
@@ -11,7 +11,7 @@ import orders.OrderWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Master;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Segment;
 import utils.math.Vec2;
@@ -19,28 +19,28 @@ import utils.math.VectCartesian;
 
 public class TestPathFollower {
 
-    private static Container container;
+    private static HLInstance hl;
     private static Master robot;
     private static ConnectionManager connectionManager;
     private static Listener listener;
     private static OrderWrapper orderWrapper;
     private static Graphe graphe;
     private static PathFollower pathFollower;
-    private static DataControler sensorController;
+    private static DataController sensorController;
 
     @Before
     public void init() {
-        container = Container.getInstance("robot.Master");
+        hl = HLInstance.getInstance("robot.Master");
         try {
-            connectionManager = container.module(ConnectionManager.class);
-            orderWrapper = container.module(OrderWrapper.class);
-            listener = container.module(Listener.class);
+            connectionManager = hl.module(ConnectionManager.class);
+            orderWrapper = hl.module(OrderWrapper.class);
+            listener = hl.module(Listener.class);
             listener.start();
-            graphe = container.module(Graphe.class);
-            pathFollower = container.module(PathFollower.class);
-            sensorController = container.module(DataControler.class);
+            graphe = hl.module(Graphe.class);
+            pathFollower = hl.module(PathFollower.class);
+            sensorController = hl.module(DataController.class);
             sensorController.start();
-            robot = container.module(Master.class);
+            robot = hl.module(Master.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

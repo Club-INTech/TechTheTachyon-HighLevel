@@ -5,27 +5,27 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 
 public class Test_AIModule {
 
-    private Container container;
+    private HLInstance hl;
 
     private AIModule ai;
 
     @Ignore
     @Before
     public void setUp() throws Exception {
-        container = Container.getInstance("Master");
-        ai = container.module(AIModule.class);
+        hl = HLInstance.getInstance("Master");
+        ai = hl.module(AIModule.class);
     }
 
     @Ignore
     @After
     public void tearDown() {
-        container = null;
+        hl = null;
         ai = null;
-        Container.resetInstance();
+        HLInstance.resetInstance();
     }
 
     @Test

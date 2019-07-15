@@ -4,7 +4,7 @@ import data.Table;
 import locomotion.PathFollower;
 import robot.Robot;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -31,7 +31,7 @@ public class SimulatorManagerLauncher extends Thread{
     private HashMap<Integer, SimulatedConnectionManager> simulatedLLConnectionManager = new HashMap<>();
     private HashMap<Integer, SimulatedConnectionManager> simulatedHLConnectionManager = new HashMap<>();
     private SimulatedConnectionManager lidarConnection;
-    private Container container;
+    private HLInstance hl;
     private Table table;
 
     // PathFollower à montrer si non nul (permet de connaître le chemin du robot)
@@ -274,12 +274,12 @@ public class SimulatorManagerLauncher extends Thread{
         }
 
         //Récupération des obstacles
-        this.container = Container.getInstance("Master");
+        this.hl = HLInstance.getInstance("Master");
 
         if(visualisationMode) {
             System.out.println("Initialisation du robot visualisé");
             try {
-                VisualisedRobot robot = new VisualisedRobot(container, robotClass);
+                VisualisedRobot robot = new VisualisedRobot(hl, robotClass);
                 this.simulatedRobots.put(SimulatedConnectionManager.VISUALISATION_PORT, robot);
             } catch (ContainerException e) {
                 e.printStackTrace();
@@ -315,7 +315,7 @@ public class SimulatorManagerLauncher extends Thread{
 
         System.out.println("Instanciation de l'interface graphique");
         try {
-            this.table = this.container.module(Table.class);
+            this.table = this.hl.module(Table.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

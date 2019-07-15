@@ -1,7 +1,7 @@
 package scripts;
 
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -10,12 +10,12 @@ public class TestLidarShow extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
-        container.getConfig().override(ConfigData.USING_LIDAR, true);
+        hl.getConfig().override(ConfigData.USING_LIDAR, true);
         super.setup(simulationMode);
     }
 
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
     }
 
     @Override

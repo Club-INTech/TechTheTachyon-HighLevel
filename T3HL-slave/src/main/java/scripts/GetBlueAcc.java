@@ -3,7 +3,7 @@ package scripts;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -23,8 +23,8 @@ public class GetBlueAcc extends Script implements Offsets {
     @Configurable
     private boolean recalageMecaBlueAcc =false;
 
-    public GetBlueAcc(Container container) {
-        super(container);
+    public GetBlueAcc(HLInstance hl) {
+        super(hl);
     }
 
     @Override

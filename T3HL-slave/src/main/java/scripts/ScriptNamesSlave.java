@@ -1,6 +1,6 @@
 package scripts;
 
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.container.Module;
 
@@ -23,8 +23,8 @@ public enum ScriptNamesSlave implements ScriptNames {
     }
 
     @Override
-    public Script createScript(Container container) throws ContainerException {
-        return (Script)container.module(scriptClass);
+    public Script createScript(HLInstance hl) throws ContainerException {
+        return (Script) hl.module(scriptClass);
     }
 
     /**

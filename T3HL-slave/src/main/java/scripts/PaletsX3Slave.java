@@ -5,7 +5,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -36,8 +36,8 @@ public class PaletsX3Slave extends Script implements Offsets {
     private SynchronizationWithBuddy syncBuddy;
 
 
-    public PaletsX3Slave(Container container, SynchronizationWithBuddy syncBuddy) {
-        super(container);
+    public PaletsX3Slave(HLInstance hl, SynchronizationWithBuddy syncBuddy) {
+        super(hl);
         this.syncBuddy = syncBuddy;
     }
 

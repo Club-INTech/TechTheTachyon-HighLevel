@@ -8,10 +8,8 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 import utils.math.VectPolar;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 public class SimulatedRobot implements IRobot {
 
@@ -145,19 +143,19 @@ public class SimulatedRobot implements IRobot {
 
     /* =============================== Méthodes de synchronisation LL<->HL ===================================== */
     public void confirmOrder(String givenOrder) {
-        simulatedLLConnectionManager.sendMessage(String.format("%s%s %s\n", Channel.EVENT.getHeaders(), "confirmOrder", givenOrder));
+        simulatedLLConnectionManager.sendMessage(String.format("%s%s %s\n", Channel.EVENTS.getHeaders(), "confirmOrder", givenOrder));
     }
 
     public void sendConfirmationForElevator(String side) {
-        simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENT.getHeaders(), side));
+        simulatedLLConnectionManager.sendMessage(String.format("%s%sElevatorStopped\n", Channel.EVENTS.getHeaders(), side));
     }
 
     public void sendArmConfirmation(RobotSide side) {
-        simulatedLLConnectionManager.sendMessage(String.format("%sarmFinishedMovement %s\n", Channel.EVENT.getHeaders(), side.name().toLowerCase()));
+        simulatedLLConnectionManager.sendMessage(String.format("%sarmFinishedMovement %s\n", Channel.EVENTS.getHeaders(), side.name().toLowerCase()));
     }
 
     public void sendPong() {
-        simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(), "pong"));
+        simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENTS.getHeaders(), "pong"));
     }
 
     /* =============================== Méthodes de signalisation d'arrêt du robot ============================== */
@@ -180,7 +178,7 @@ public class SimulatedRobot implements IRobot {
     private void trySendStoppedMovingMessage(){
         if (this.stoppedMovingFlag) {
             System.out.println("stoppedMoving");
-            this.simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENT.getHeaders(), "stoppedMoving"));
+            this.simulatedLLConnectionManager.sendMessage(String.format("%s%s\n", Channel.EVENTS.getHeaders(), "stoppedMoving"));
             sendRealtimePosition();
             this.stoppedMovingFlag=false;
         }
@@ -445,7 +443,7 @@ public class SimulatedRobot implements IRobot {
     }
 
     public void sendJumperOkay() {
-        simulatedLLConnectionManager.sendMessage(String.format("%sgogogofast\n", Channel.EVENT.getHeaders()));
+        simulatedLLConnectionManager.sendMessage(String.format("%sgogogofast\n", Channel.EVENTS.getHeaders()));
     }
 
 }

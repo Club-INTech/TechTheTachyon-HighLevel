@@ -3,7 +3,7 @@ package scripts;
 import data.Sick;
 import locomotion.UnableToMoveException;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -14,12 +14,12 @@ public class TestLidarMove extends TestBaseHL {
 
     @Override
     protected void setup(boolean simulationMode) {
-        container.getConfig().override(ConfigData.USING_LIDAR, true);
+        hl.getConfig().override(ConfigData.USING_LIDAR, true);
         super.setup(simulationMode);
     }
 
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
         table.removeTemporaryObstacle(table.getPaletRougeGauche());
         table.removeTemporaryObstacle(table.getPaletVertGauche());
         table.removeTemporaryObstacle(table.getPaletBleuGauche());

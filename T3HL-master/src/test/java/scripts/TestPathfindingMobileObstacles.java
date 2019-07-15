@@ -1,15 +1,14 @@
 package scripts;
 
-import data.XYO;
 import locomotion.UnableToMoveException;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class TestPathfindingMobileObstacles extends TestBaseHL {
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
     }
 
     @Override

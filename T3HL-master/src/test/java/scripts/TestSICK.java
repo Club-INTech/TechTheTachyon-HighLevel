@@ -2,16 +2,13 @@ package scripts;
 
 import data.Sick;
 import data.XYO;
-import locomotion.UnableToMoveException;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.concurrent.TimeUnit;
-
-import static java.lang.Thread.sleep;
 
 /**
  * Test du recalage avec les SICK
@@ -24,7 +21,7 @@ public class TestSICK extends TestBaseHL {
     }
 
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
 
     }
 

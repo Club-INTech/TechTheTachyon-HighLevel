@@ -20,8 +20,10 @@ package data.controlers;
 
 import connection.Connection;
 import connection.ConnectionManager;
+import data.MessageHandler;
 import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Configurable;
+import utils.HLInstance;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ModuleThread;
@@ -29,9 +31,9 @@ import utils.container.ModuleThread;
 import java.util.*;
 
 /**
- * Ecoute toutes les connections instanciées
+ * Ecoute toutes les connections instanciées et dispatche les messages reçus aux gestionnaires appropriés
  *
- * @author rem
+ * @author rem, jglrxavpok
  */
 public class Listener extends ModuleThread {
 
@@ -40,6 +42,7 @@ public class Listener extends ModuleThread {
      */
     public static final int TIME_LOOP =   200;
 
+    private HLInstance hl;
     /**
      * Gestionnaire des connexions
      */
@@ -105,10 +108,16 @@ public class Listener extends ModuleThread {
     private List<Channel> channelList;
 
     /**
+     * Header -> Liste des handlers correspondants
+     */
+    private Map<String, List<MessageHandler>> messageHandlers = new HashMap<>();
+
+    /**
      * Construit un listener
      * @param connectionManager     gestionnaire des connexions
      */
-    public Listener(ConnectionManager connectionManager, SynchronizationWithBuddy buddySync) {
+    public Listener(HLInstance hl, ConnectionManager connectionManager, SynchronizationWithBuddy buddySync) {
+        this.hl = hl;
         this.connectionManager = connectionManager;
         this.buddySync = buddySync;
         this.collectionMap = new HashMap<>();
@@ -123,11 +132,19 @@ public class Listener extends ModuleThread {
      */
     private void handleMessage(String header, String message) {
       //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
+        // TODO: Remplacer complétement par le système des MessageHandler
         for (int i = 0; i < channelList.size(); i++) {
             Channel registeredChannel = channelList.get(i);
             if (registeredChannel.getHeaders().equals(header)) {
                 collectionMap.get(registeredChannel).add(message);
             }
+        }
+
+        List<MessageHandler> handlers = messageHandlers.get(header);
+        if(handlers == null) return;
+        for (int i = 0; i < handlers.size(); i++) {
+            final MessageHandler handler = handlers.get(i);
+            hl.async("Handle Message", () -> handler.handle(message));
         }
     }
 
@@ -217,6 +234,7 @@ public class Listener extends ModuleThread {
         ArrayList<Connection> initiatedConnections = connectionManager.getInitiatedConnections();
         LinkedList<Connection> toClose = new LinkedList<>();
         while (!isInterrupted()) {
+            // TODO: Un thread par connexion?
             for (int i = 0; i < initiatedConnections.size(); i++) {
                 Connection current = initiatedConnections.get(i);
                 try {
@@ -258,4 +276,9 @@ public class Listener extends ModuleThread {
         }
     }
 
+    public void registerMessageHandler(Channel channel, MessageHandler handler) {
+        List<MessageHandler> messageHandlerList = messageHandlers.getOrDefault(channel.getHeaders(), new LinkedList<>());
+        messageHandlerList.add(handler);
+        messageHandlers.put(channel.getHeaders(), messageHandlerList);
+    }
 }

@@ -4,7 +4,7 @@ import data.CouleurPalet;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -15,8 +15,8 @@ public class GetRedDep extends Script {
     @Configurable
     private boolean symetry;
 
-    public GetRedDep(Container container) {
-        super(container);
+    public GetRedDep(HLInstance hl) {
+        super(hl);
     }
 
     public void execute(int version) {

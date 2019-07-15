@@ -4,7 +4,7 @@ import data.XYO;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -20,8 +20,8 @@ public class OpenTheGate extends Script {
      * Construit un script
      *
      */
-    protected OpenTheGate(Container container) {
-        super(container);
+    protected OpenTheGate(HLInstance hl) {
+        super(hl);
     }
 
     @Override

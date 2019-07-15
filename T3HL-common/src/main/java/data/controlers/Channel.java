@@ -42,7 +42,7 @@ public enum Channel {
     SCRIPTS('!', 'O'),
 
     //Pour l'IA
-    EVENT('@', 'B'),
+    EVENTS('@', 'B'),
     PALETS_ASCENSEUR('@', 'D'),
 
     //LidarControler

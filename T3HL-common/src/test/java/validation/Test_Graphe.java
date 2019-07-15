@@ -25,7 +25,7 @@ import data.graphe.Ridge;
 import data.table.StillCircularObstacle;
 import data.table.StillRectangularObstacle;
 import org.junit.*;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 import utils.math.VectPolar;
@@ -35,26 +35,26 @@ public class Test_Graphe {
      * Graphe à tester
      */
     private Graphe graphe;
-    private Container container;
+    private HLInstance hl;
 
     @Before
     public void setUp() throws Exception {
-        container = Container.getInstance("Master");
+        hl = HLInstance.getInstance("Master");
     }
 
     @After
     public void tearDown() throws Exception {
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
     }
 
     @Test
     public void testInstanciation() throws Exception {
-        Table table = container.module(Table.class);
+        Table table = hl.module(Table.class);
         table.addFixedObstacle(new StillCircularObstacle(new VectPolar(300, 300), 200));
         table.addFixedObstacle(new StillRectangularObstacle(new VectPolar(600, 300), 300, 200));
 
-        graphe = container.module(Graphe.class);
+        graphe = hl.module(Graphe.class);
 
         Assert.assertEquals(graphe, table.getGraphe());
 
@@ -69,7 +69,7 @@ public class Test_Graphe {
 
     @Test
     public void testAddProvisoryNode1() throws Exception {
-        graphe = container.module(Graphe.class);
+        graphe = hl.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().clone();
         int nbNode = graphe.getNodes().size();
 
@@ -81,7 +81,7 @@ public class Test_Graphe {
 
     @Test
     public void testAddProvisoryNode2() throws Exception {
-        graphe = container.module(Graphe.class);
+        graphe = hl.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 
@@ -94,7 +94,7 @@ public class Test_Graphe {
     @Ignore
     @Test
     public void testRemoveProvisoryNode1() throws Exception {
-        graphe = container.module(Graphe.class);
+        graphe = hl.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().clone();
         int nbNode = graphe.getNodes().size();
 
@@ -107,7 +107,7 @@ public class Test_Graphe {
     @Ignore
     @Test
     public void testRemoveProvisoryNode2() throws Exception {
-        graphe = container.module(Graphe.class);
+        graphe = hl.module(Graphe.class);
         Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 

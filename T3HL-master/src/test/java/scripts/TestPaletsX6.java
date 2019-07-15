@@ -2,7 +2,7 @@ package scripts;
 
 import data.Sick;
 import data.Table;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -10,8 +10,8 @@ import utils.math.VectCartesian;
 public class TestPaletsX6 extends TestScriptBase {
 
     @Override
-    public void initState(Container container) throws ContainerException {
-        Table table = container.module(Table.class);
+    public void initState(HLInstance hl) throws ContainerException {
+        Table table = hl.module(Table.class);
         table.removeAllChaosObstacles();
         table.removeFixedObstacle(table.getPaletBleuGauche());
         table.removeFixedObstacle(table.getPaletRougeGauche());

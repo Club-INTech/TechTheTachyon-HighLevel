@@ -3,7 +3,7 @@ package scripts;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -23,8 +23,8 @@ public class Cracheur extends Script {
     private int nbPalets = robot.getNbPaletsDroits();
 
 
-    public Cracheur(Container container) {
-        super(container);
+    public Cracheur(HLInstance hl) {
+        super(hl);
     }
 
     @Override

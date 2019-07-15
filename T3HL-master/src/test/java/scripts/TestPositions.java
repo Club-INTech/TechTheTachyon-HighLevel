@@ -2,7 +2,7 @@ package scripts;
 
 import orders.SymmetrizedActuatorOrderMap;
 import orders.order.ActuatorsOrder;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -20,7 +20,7 @@ public class TestPositions extends TestBaseHL {
     }
 
     @Override
-    public void initState(Container container) throws ContainerException {
+    public void initState(HLInstance hl) throws ContainerException {
 
     }
 
@@ -37,7 +37,7 @@ public class TestPositions extends TestBaseHL {
 
     @Override
     public void action() throws InterruptedException, ContainerException {
-        SymmetrizedActuatorOrderMap symetry = container.module(SymmetrizedActuatorOrderMap.class);
+        SymmetrizedActuatorOrderMap symetry = hl.module(SymmetrizedActuatorOrderMap.class);
         for (int i = 0; i < 1000; i++) {
             ActuatorsOrder order = ActuatorsOrder.ARM_ORDERS[(int)(Math.random()*(ActuatorsOrder.ARM_ORDERS.length-1))];
             //robot.useActuator(order);

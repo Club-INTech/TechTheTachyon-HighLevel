@@ -26,49 +26,49 @@ import unitaires.container.A;
 import unitaires.container.C;
 import unitaires.container.D;
 import unitaires.container.E;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 
-public class Test_Container
+public class Test_HLInstance
 {
     /**
      * L'instance à tester
      */
-    private Container container;
+    private HLInstance hl;
 
     @Before
     public void setUp()
     {
-        container = Container.getInstance("Master");
-        Assert.assertNotNull(container.getConfig());
+        hl = HLInstance.getInstance("Master");
+        Assert.assertNotNull(hl.getConfig());
     }
 
     @After
     public void tearDown()
     {
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
     }
 
     @Test(expected = ContainerException.class)
     public void testCircularDependencies() throws Exception
     {
-        container.module(A.class);
+        hl.module(A.class);
     }
 
     @Test(expected = ContainerException.class)
     public void testMultipleConstructors() throws Exception
     {
-        container.module(C.class);
+        hl.module(C.class);
     }
 
     @Test
     public void testSimple() throws Exception
     {
-        D d = container.module(D.class);
-        Assert.assertTrue(container.getInstanciedServices().containsKey(E.class.getSimpleName()));
-        Assert.assertTrue(container.getInstanciedServices().containsKey(D.class.getSimpleName()));
-        Assert.assertTrue(((E)container.getInstanciedServices().get(E.class.getSimpleName())).isConfig());
-        Assert.assertTrue(((D)container.getInstanciedServices().get(D.class.getSimpleName())).isConfig());
+        D d = hl.module(D.class);
+        Assert.assertTrue(hl.getInstanciedServices().containsKey(E.class.getSimpleName()));
+        Assert.assertTrue(hl.getInstanciedServices().containsKey(D.class.getSimpleName()));
+        Assert.assertTrue(((E) hl.getInstanciedServices().get(E.class.getSimpleName())).isConfig());
+        Assert.assertTrue(((D) hl.getInstanciedServices().get(D.class.getSimpleName())).isConfig());
     }
 }

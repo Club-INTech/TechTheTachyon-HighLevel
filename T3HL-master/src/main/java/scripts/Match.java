@@ -4,7 +4,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import pfg.config.Configurable;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -15,8 +15,8 @@ public class Match extends Script {
     @Configurable
     private boolean secours;
 
-    public Match(Container container, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy) {
-        super(container);
+    public Match(HLInstance hl, ScriptManagerMaster scriptManagerMaster, SynchronizationWithBuddy syncBuddy) {
+        super(hl);
         this.scriptManagerMaster = scriptManagerMaster;
         this.syncBuddy = syncBuddy;
     }
@@ -24,12 +24,12 @@ public class Match extends Script {
 
     @Override
     public void execute(int version) {
-        if(container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
+        if(hl.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.ELECTRON).timedExecute(0);
             scriptManagerMaster.getScript(ScriptNamesMaster.HOMOLOGATION).timedExecute(0);
-        } else if(container.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
+        } else if(hl.getConfig().getBoolean(ConfigData.OPEN_THE_GATE)) {
             scriptManagerMaster.getScript(ScriptNamesMaster.OPEN_THE_GATE).timedExecute(0);
-        } else if(container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
+        } else if(hl.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
             System.out.println("ok ok ");
             scriptManagerMaster.getScript(ScriptNamesMaster.PALETS_ZONE_CHAOS).timedExecute(0);
         } else {
@@ -96,14 +96,14 @@ public class Match extends Script {
             if (secours || exceptionRaised) {
                 //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité
                 try {
-                    container.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
+                    hl.module(VideDansZoneDepartSiProbleme.class).goToThenExecute(0);
                 } catch (ContainerException e) {
                     e.printStackTrace();
                 }
             } else {
                 //Si on a réussi à aller à l'accélérateur, on exécute le script
                 try {
-                    container.module(Accelerateur.class).timedExecute(ACC_VERSION);
+                    hl.module(Accelerateur.class).timedExecute(ACC_VERSION);
                 } catch (ContainerException e) {
                     e.printStackTrace();
                 }

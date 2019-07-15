@@ -6,7 +6,7 @@ import data.controlers.Channel;
 import data.table.MobileCircularObstacle;
 import pfg.config.Config;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
 
@@ -19,9 +19,9 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     /**
      * Constructeur
      */
-    public SynchronizationWithIA(Container container) {
-        super(container);
-        this.container = container;
+    public SynchronizationWithIA(HLInstance hl) {
+        super(hl);
+        this.hl = hl;
     }
 
     /**
@@ -55,7 +55,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
      * Envoie un message quand le jumper est sorti
      */
     public void sendJumperOut(){
-        this.sendString(String.format(Locale.US, "%s KRAKATOA", Channel.EVENT.getHeaders()));
+        this.sendString(String.format(Locale.US, "%s KRAKATOA", Channel.EVENTS.getHeaders()));
     }
 
     /**
@@ -64,7 +64,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     public void sendPaletsAscenseurDroit(){
         Robot robot = null;
         try {
-            robot = this.container.module(Robot.class);
+            robot = this.hl.module(Robot.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -85,7 +85,7 @@ public class SynchronizationWithIA extends SynchronizationCommon {
     public void sendPaletsAscenseurGauche(){
         Robot robot = null;
         try {
-            robot = this.container.module(Robot.class);
+            robot = this.hl.module(Robot.class);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

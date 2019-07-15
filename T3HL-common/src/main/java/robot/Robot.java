@@ -26,7 +26,7 @@ import data.SensorState;
 import data.Sick;
 import data.XYO;
 import data.controlers.AudioPlayer;
-import data.controlers.DataControler;
+import data.controlers.DataController;
 import data.controlers.PanneauModule;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.Locomotion;
@@ -39,7 +39,7 @@ import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
 import orders.order.MontlheryOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.RobotSide;
 import utils.TimeoutError;
@@ -74,7 +74,7 @@ public abstract class Robot implements Module {
     private final PanneauModule panneauService;
     private AudioPlayer audioPlayer;
 
-    private Container container;
+    private HLInstance hl;
     /**
      * Permet d'envoyer des infos de debug
      */
@@ -128,8 +128,8 @@ public abstract class Robot implements Module {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService, AudioPlayer audioPlayer) {
-        this.container = container;
+    protected Robot(HLInstance hl, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService, AudioPlayer audioPlayer) {
+        this.hl = hl;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
@@ -137,7 +137,7 @@ public abstract class Robot implements Module {
         this.panneauService = panneauService;
         this.audioPlayer = audioPlayer;
         try {
-            container.module(DataControler.class).setRobotClass(getClass());
+            hl.module(DataController.class).setRobotClass(getClass());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -156,7 +156,7 @@ public abstract class Robot implements Module {
         }
         else{
             try {
-                container.module(SynchronizationWithBuddy.class).increaseScore(points);
+                hl.module(SynchronizationWithBuddy.class).increaseScore(points);
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

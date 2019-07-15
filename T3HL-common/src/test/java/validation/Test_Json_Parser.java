@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class Test_Json_Parser {
 
     private ConnectionManager connectionManager;
-    private Container container;
+    private HLInstance hl;
     private Listener listener;
     private PaletsDepartControler paletsDepartControler;
     private Table table;

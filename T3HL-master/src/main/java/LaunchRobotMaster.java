@@ -1,5 +1,5 @@
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 
 /**
@@ -9,9 +9,9 @@ import utils.container.ContainerException;
 public class LaunchRobotMaster {
 
     public static void main(String[] args) throws ContainerException {
-        Container container = Container.getInstance("Master");
-        container.getConfig().override(ConfigData.SIMULATION, false);
-        container.getConfig().override(ConfigData.VISUALISATION, true);
+        HLInstance hl = HLInstance.getInstance("Master");
+        hl.getConfig().override(ConfigData.SIMULATION, false);
+        hl.getConfig().override(ConfigData.VISUALISATION, true);
         MainMaster.main(args);
     }
 }

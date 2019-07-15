@@ -4,7 +4,7 @@ import data.*;
 import orders.OrderWrapper;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.MatchTimer;
 import utils.container.ContainerException;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  *
  * @author rem
  */
-public class DataControler extends Thread implements Module {
+public class DataController implements Module {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -35,7 +35,7 @@ public class DataControler extends Thread implements Module {
      */
     private static final String ARGUMENTS_SEPARATOR = " ";
 
-    private Container container;
+    private HLInstance hl;
     /**
      * Listener
      */
@@ -80,9 +80,9 @@ public class DataControler extends Thread implements Module {
      * @param listener
      *              le listener
      */
-    public DataControler(Container container, Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
-        super("DataController");
-        this.container = container;
+    public DataController(HLInstance hl, Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
+        //super("DataController");
+        this.hl = hl;
         this.listener = listener;
         this.timer = timer;
         this.orderWrapper = orderWrapper;
@@ -93,16 +93,58 @@ public class DataControler extends Thread implements Module {
             sickWriter.print("\t"+sick.name());
         }
         sickWriter.println();*/
-        registerChannelHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
-        registerChannelHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
-        registerChannelHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
-        registerChannelHandler(Channel.UPDATE_PALETS, this::handlePaletUpdate);
-        registerChannelHandler(Channel.SCRIPTS, this::handleScriptOrder);
-        registerChannelHandler(Channel.EVENT, this::handleEvent);
-        registerChannelHandler(Channel.SICK, this::handleSick);
-        registerChannelHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
-        registerChannelHandler(Channel.LL_DEBUG, this::handleLLDebug);
-        registerChannelHandler(Channel.BUDDY_EVENT, this::handleBuddyEvent);
+
+    }
+
+    @Override
+    public void onInit(HLInstance hl) {
+        // FIXME: Est-ce que c'est mieux avec registerChannelHandler? -> Ces channels sont sur des canaux spéciaux parce qu'ils sont très utilisés, vaut mieux éviter de créer 10000 threads pour eux
+        listener.registerMessageHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
+        listener.registerMessageHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
+        listener.registerMessageHandler(Channel.LL_DEBUG, this::handleLLDebug);
+
+        listener.registerMessageHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
+        listener.registerMessageHandler(Channel.UPDATE_PALETS, this::handlePaletUpdate);
+        listener.registerMessageHandler(Channel.SCRIPTS, this::handleScriptOrder);
+        listener.registerMessageHandler(Channel.EVENTS, this::handleEvent);
+        listener.registerMessageHandler(Channel.EVENTS, this::handleArmEvent);
+        listener.registerMessageHandler(Channel.SICK, this::handleSick);
+        listener.registerMessageHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
+        listener.registerMessageHandler(Channel.BUDDY_EVENT, this::handleBuddyEvent);
+    }
+
+    private void handleArmEvent(String message) {
+        String[] event = message.split(" ");
+        switch (event[0]) {
+            // que le bras soit à la bonne position ou pas, il faut dire que le mouvement est fini
+            case "armPositionFail": {
+                // TODO: gérer quand le bras y arrive pas ?
+                String side = event[1];
+                SensorState.getArmMovingState(side).setData(false);
+                Log.ORDERS.critical("Le bras n'est pas arrivé à destination");
+                break;
+            }
+
+            case "armFinishedMovement": {
+                String side = event[1];
+                // Bras PHYSIQUE (ie ne prend pas en compte la symétrie)
+                SensorState.getArmMovingState(side).setData(false);
+                Log.COMMUNICATION.debug("Fin de mouvement du bras "+side);
+                break;
+            }
+
+            case "armIsMute": {
+                String side = event[1];
+                Log.COMMUNICATION.warning("Le bras '"+side+"' est muet: on ne peut pas vérifier qu'il va au bon endroit mais il devrait bouger.");
+                break;
+            }
+
+            case "armIsSpeaking": {
+                String side = event[1];
+                Log.COMMUNICATION.warning("Le bras '"+side+"' n'est plus muet!");
+                break;
+            }
+        }
     }
 
     /**
@@ -114,7 +156,7 @@ public class DataControler extends Thread implements Module {
         this.channelHandlers.add(new ChannelHandler(this.listener, channel, function));
     }
 
-    @Override
+   /* @Override
     public void run() {
         Log.DATA_HANDLER.debug("Controler lancé : en attente du listener...");
         while (!listener.isAlive()) {
@@ -126,6 +168,7 @@ public class DataControler extends Thread implements Module {
         }
         Log.DATA_HANDLER.debug("Controler opérationnel");
 
+        // TODO: Complétement remplacer par MessageHandler
         ArrayList<ChannelHandler> handlers = this.channelHandlers;
         while (!isInterrupted()) {
             for (int i = 0; i < handlers.size(); i++) {
@@ -133,7 +176,7 @@ public class DataControler extends Thread implements Module {
                 channelHandler.checkAndHandle();
             }
         }
-    }
+    }*/
 
     private void handleBuddyEvent(String message) {
         String[] parts = message.split(" ");
@@ -150,7 +193,7 @@ public class DataControler extends Thread implements Module {
                 if (master) {
                     try {
                         int points = Integer.parseInt(parts[1]);
-                        container.module(robotClass).increaseScore(points);
+                        hl.module(robotClass).increaseScore(points);
                     }
                     catch (NumberFormatException | ContainerException e) {
                         e.printStackTrace();
@@ -198,9 +241,10 @@ public class DataControler extends Thread implements Module {
     }
 
     /**
-     * EVENT
+     * EVENTS
      */
     private void handleEvent(String message) {
+        // TODO: Découper en plusieurs petites méthodes
         if (!message.equals("pong") && !message.equals("electron_arrived")) { // ne log pas les pongs
             Log.COMMUNICATION.debug("Got event: " + message);
         }
@@ -243,51 +287,12 @@ public class DataControler extends Thread implements Module {
                 }
                 break;
 
-            case "electron_activated":
-                SensorState.ELECTRON_ACTIVATED.setData(true);
-                break;
-
-            case "electron_arrived":
-                if( ! SensorState.ELECTRON_ARRIVED.getData()) {
-                    Log.STRATEGY.debug("Electron arrivé!");
-                }
-                SensorState.ELECTRON_ARRIVED.setData(true);
-                break;
-
             case "gogogofast": {
                 timer.resetTimer();
                 SensorState.WAITING_JUMPER.setData(false);
                 break;
             }
 
-            // que le bras soit à la bonne position ou pas, il faut dire que le mouvement est fini
-            case "armPositionFail": {
-                // TODO: gérer quand le bras y arrive pas ?
-                String side = event[1];
-                SensorState.getArmMovingState(side).setData(false);
-                Log.ORDERS.critical("Le bras n'est pas arrivé à destination");
-                break;
-            }
-
-            case "armFinishedMovement": {
-                String side = event[1];
-                // Bras PHYSIQUE (ie ne prend pas en compte la symétrie)
-                SensorState.getArmMovingState(side).setData(false);
-                Log.COMMUNICATION.debug("Fin de mouvement du bras "+side);
-                break;
-            }
-
-            case "armIsMute": {
-                String side = event[1];
-                Log.COMMUNICATION.warning("Le bras '"+side+"' est muet: on ne peut pas vérifier qu'il va au bon endroit mais il devrait bouger.");
-                break;
-            }
-
-            case "armIsSpeaking": {
-                String side = event[1];
-                Log.COMMUNICATION.warning("Le bras '"+side+"' n'est plus muet!");
-                break;
-            }
         }
     }
 

@@ -1,6 +1,12 @@
 Refactoring du HL - Chronologie
 ===
 
+15/07/2019
+----
+* `Container` est devenu `HLInstance`. Les différents champs et variables sont nommés `hl` maintenant.
+* Début de programmation évènementielle pour gérer les messages des différentes connexions. Utilise un Executor sous le capot pour éviter de générer 30000 threads (en moyenne ~26 sur le script de match sur le simulateur)
+
+
 14/07/2019
 ----
 * Les scripts prennent maintenant que `Container` en argument, ça permet d'initialiser le robot, la table et les actuateurs (cf. en-dessous) dans tous les scripts sans devoir le faire manuellement.

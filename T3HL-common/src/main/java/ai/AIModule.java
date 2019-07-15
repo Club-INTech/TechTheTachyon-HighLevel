@@ -23,7 +23,7 @@ import ai.goap.Agent;
 import locomotion.Locomotion;
 import locomotion.Pathfinder;
 import pfg.config.Config;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.container.ModuleThread;
 
@@ -37,8 +37,8 @@ public class AIModule extends ModuleThread {
     private final SpectreRobot spectre;
     private final Config config;
 
-    public AIModule(Container container, Locomotion locomotion, Pathfinder pathfinder) {
-        this.config = container.getConfig();
+    public AIModule(HLInstance hl, Locomotion locomotion, Pathfinder pathfinder) {
+        this.config = hl.getConfig();
         this.locomotion = locomotion;
         this.graph = new ActionGraph(new AINodeComparator());
 

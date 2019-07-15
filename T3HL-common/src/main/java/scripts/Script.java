@@ -24,7 +24,7 @@ import locomotion.UnableToMoveException;
 import lowlevel.ActuatorsModule;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -32,7 +32,8 @@ import utils.math.Vec2;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 
 /**
@@ -42,7 +43,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class Script implements Module {
 
-    protected final Container container;
+    protected final HLInstance hl;
 
     /**
      * Le robot
@@ -72,14 +73,14 @@ public abstract class Script implements Module {
 
     /**
      * Construit un script
-     * @param container
+     * @param hl
      *              le container
      */
-    protected Script(Container container) {
-        this.container = container;
-        this.robot = container.module(Robot.class);
-        this.table = container.module(Table.class);
-        this.actuators = container.module(ActuatorsModule.class);
+    protected Script(HLInstance hl) {
+        this.hl = hl;
+        this.robot = hl.module(Robot.class);
+        this.table = hl.module(Table.class);
+        this.actuators = hl.module(ActuatorsModule.class);
     }
 
     /**
@@ -214,21 +215,22 @@ public abstract class Script implements Module {
     // Fin des méthodes pour raccourcir le code
     // =========================================
 
-    protected CompletableFuture<Void> async(Runnable action) {
+    protected Future<Void> async(Runnable action) {
         return async("Async Thread - "+action, action);
     }
 
-    protected CompletableFuture<Void> async(String name, Runnable action) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        Thread thread = new Thread(() -> {
-            action.run();
-            future.complete(null);
-            Log.STDOUT.critical("Fin async "+name);
-        });
-        thread.setName(name+" (async)");
-        thread.setDaemon(true);
-        thread.start();
-        return future;
+    protected Future<Void> async(String name, Runnable action) {
+        return hl.async(name, action);
+    }
+
+    protected void join(Future<Void> future) {
+        if(future != null) {
+            try {
+                future.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

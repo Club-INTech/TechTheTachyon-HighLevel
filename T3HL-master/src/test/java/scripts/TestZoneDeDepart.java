@@ -1,13 +1,13 @@
 package scripts;
 
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 public class TestZoneDeDepart extends TestScriptBase {
 
     @Override
-    public void initState(Container container) {
+    public void initState(HLInstance hl) {
         // NOP
     }
 

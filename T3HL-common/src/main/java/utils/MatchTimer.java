@@ -1,7 +1,6 @@
 package utils;
 
 import orders.OrderWrapper;
-import pfg.config.Config;
 import utils.container.ModuleThread;
 
 public class MatchTimer extends ModuleThread {
@@ -28,6 +27,11 @@ public class MatchTimer extends ModuleThread {
                     orderWrapper.endMatch();
                     break;
                 }
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

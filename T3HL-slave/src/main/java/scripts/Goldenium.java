@@ -6,7 +6,7 @@ import orders.OrderWrapper;
 import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Offsets;
 import utils.TimeoutError;
 import utils.container.Module;
@@ -49,8 +49,8 @@ public class Goldenium extends Script implements Offsets {
 	private OrderWrapper orderWrapper;
 
 
-    public Goldenium(Container container, OrderWrapper orderWrapper, SynchronizationWithBuddy syncBuddy) {
-        super(container);
+    public Goldenium(HLInstance hl, OrderWrapper orderWrapper, SynchronizationWithBuddy syncBuddy) {
+        super(hl);
 	    this.orderWrapper = orderWrapper;
         this.syncBuddy = syncBuddy;
     }

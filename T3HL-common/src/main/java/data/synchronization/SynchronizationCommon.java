@@ -4,9 +4,8 @@ import connection.Connection;
 import data.Palet;
 import data.XYO;
 import data.controlers.Channel;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.Module;
@@ -43,13 +42,13 @@ public abstract class SynchronizationCommon implements Module {
     /**
      * Container
      */
-    protected Container container;
+    protected HLInstance hl;
 
     /**
      * Constructeur
      */
-    protected SynchronizationCommon(Container container){
-        this.container=container;
+    protected SynchronizationCommon(HLInstance hl){
+        this.hl = hl;
     }
 
     /**

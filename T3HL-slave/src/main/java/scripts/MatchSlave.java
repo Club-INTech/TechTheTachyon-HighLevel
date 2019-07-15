@@ -4,7 +4,7 @@ import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
 import pfg.config.Config;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 
 import java.util.concurrent.TimeUnit;
@@ -13,8 +13,8 @@ public class MatchSlave extends Script {
     private final ScriptManagerSlave scriptManagerSlave;
     private SynchronizationWithBuddy syncBuddy;
 
-    public MatchSlave(Container container, ScriptManagerSlave scriptManagerSlave, SynchronizationWithBuddy syncBuddy) {
-        super(container);
+    public MatchSlave(HLInstance hl, ScriptManagerSlave scriptManagerSlave, SynchronizationWithBuddy syncBuddy) {
+        super(hl);
         this.scriptManagerSlave = scriptManagerSlave;
         this.syncBuddy = syncBuddy;
     }
@@ -33,7 +33,7 @@ public class MatchSlave extends Script {
 
         // on attend que le principal parte
 
-        if (container.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
+        if (hl.getConfig().getBoolean(ConfigData.HOMOLOGATION)) {
             scriptManagerSlave.getScript(ScriptNamesSlave.HOMOLOGATION).timedExecute(0);
         }
         else {

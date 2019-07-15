@@ -5,10 +5,9 @@ import com.panneau.Panneau;
 import com.panneau.TooManyDigitsException;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.io.i2c.I2CFactory;
-import pfg.config.Config;
 import pfg.config.Configurable;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.container.Module;
 
@@ -24,7 +23,7 @@ public class PanneauModule implements Module {
     private long scoreUpdatePeriod;
     @Configurable
     private String couleur;
-    private Container container;
+    private HLInstance hl;
     @Configurable
     private int ledProgramPort;
     @Configurable
@@ -32,8 +31,8 @@ public class PanneauModule implements Module {
     @Configurable
     private boolean using7Segments;
 
-    public PanneauModule(Container container) {
-        this.container = container;
+    public PanneauModule(HLInstance hl) {
+        this.hl = hl;
     }
 
     public void setPanel(Panneau panel) {
@@ -51,8 +50,8 @@ public class PanneauModule implements Module {
                 }
                 panel.addListener(teamColor -> {
                     couleur=panel.getTeamColor().toString().toLowerCase();
-                    container.getConfig().override(ConfigData.COULEUR, couleur);
-                    container.updateConfig(container.getConfig());
+                    hl.getConfig().override(ConfigData.COULEUR, couleur);
+                    hl.updateConfig(hl.getConfig());
                 });
                 panel.getLeds().fillColor(LEDs.RGBColor.NOIR);
             } catch (IOException | I2CFactory.UnsupportedBusNumberException e){

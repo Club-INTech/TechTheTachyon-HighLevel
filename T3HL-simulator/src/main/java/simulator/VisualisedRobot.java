@@ -3,7 +3,7 @@ package simulator;
 import data.CouleurPalet;
 import data.XYO;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.RobotSide;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class VisualisedRobot implements IRobot {
 
-    private final Container container;
+    private final HLInstance hl;
     private final Robot robot;
 
-    public VisualisedRobot(Container container, Class<? extends Robot> robotClass) throws ContainerException {
-        this.container = container;
-        robot = container.module(robotClass);
+    public VisualisedRobot(HLInstance hl, Class<? extends Robot> robotClass) throws ContainerException {
+        this.hl = hl;
+        robot = hl.module(robotClass);
     }
 
     @Override

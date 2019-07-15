@@ -23,7 +23,7 @@ import data.controlers.PanneauModule;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
 import orders.hooks.HookFactory;
-import utils.Container;
+import utils.HLInstance;
 import utils.communication.SimulatorDebug;
 
 /**
@@ -33,8 +33,8 @@ import utils.communication.SimulatorDebug;
  */
 public class Slave extends Robot {
 
-    public Slave(Container container, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService) {
-        super(container, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService, new AudioPlayer());
+    public Slave(HLInstance hl, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService) {
+        super(hl, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService, new AudioPlayer());
         createRightElevator();
     }
 

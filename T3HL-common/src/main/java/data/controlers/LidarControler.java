@@ -23,12 +23,11 @@ import data.SensorState;
 import data.Table;
 import data.XYO;
 import pfg.config.Configurable;
-import utils.LastElementCollection;
+import utils.HLInstance;
 import utils.Log;
 import utils.MatchTimer;
 import utils.communication.CopyIOThread;
 import utils.container.Module;
-import utils.container.ModuleThread;
 import utils.math.*;
 
 import java.io.IOException;
@@ -41,7 +40,7 @@ import java.util.List;
  *
  * @author rem
  */
-public class LidarControler extends ModuleThread {
+public class LidarControler implements Module {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -68,17 +67,6 @@ public class LidarControler extends ModuleThread {
      * Listener
      */
     private Listener listener;
-
-    /**
-     * File de communication avec le Listener
-     */
-    private LastElementCollection<String> messageStack;
-
-    /**
-     * File de communication avec le Listener
-     */
-    private LastElementCollection<String> recalageDataStack;
-
 
     /**
      * True si autre couleur
@@ -126,78 +114,40 @@ public class LidarControler extends ModuleThread {
         this.timer = timer;
         this.table = table;
         this.listener = listener;
-        this.messageStack = new LastElementCollection<>();
-        this.recalageDataStack = new LastElementCollection<>();
-        listener.addCollection(Channel.OBSTACLES, this.messageStack);
-        listener.addCollection(Channel.RAW_LIDAR_DATA, this.recalageDataStack);
+        float margin = 10;
+        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2* ennemyRay - 2*margin, table.getWidth()-2* ennemyRay - 2*margin);
     }
 
     @Override
-    public void run() {
-        if(!usingLidar) {
-            return;
-        }
-        Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
-        Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
-        try {
-            Process lidarProcess = new ProcessBuilder(lidarProcessPath).start();
-
-            // force l'extinction du programme quand la VM s'arrête
-            Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
-            new CopyIOThread(lidarProcess, Log.LIDAR_PROCESS).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Module.waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
-        Log.LIDAR_PROCESS.debug("Processus OK");
-
-        while (!listener.isAlive()) {
+    public void onInit(HLInstance hl) {
+        hl.async("Init Lidar Module", () -> {
+            if(!usingLidar) {
+                return;
+            }
+            Log.LIDAR_PROCESS.debug("Controller lancé : en attente du listener...");
+            Log.LIDAR_PROCESS.debug("Démarrage du processus LiDAR_UST_10LX...");
             try {
-                Thread.sleep(Listener.TIME_LOOP);
-            } catch (InterruptedException e) {
+                Process lidarProcess = new ProcessBuilder(lidarProcessPath).start();
+
+                // force l'extinction du programme quand la VM s'arrête
+                Runtime.getRuntime().addShutdownHook(new Thread(lidarProcess::destroyForcibly));
+                new CopyIOThread(lidarProcess, Log.LIDAR_PROCESS).start();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-
-        /* Si jamais besoin du mode RAW:
-        try {
-            Log.LIDAR.debug("Setting mode to RAW data...");
-            Connection.LIDAR_DATA.send("!!R");
-            Log.LIDAR.debug("Mode RAW set!");
-        } catch (CommunicationException e) {
-            e.printStackTrace();
-        }
-*/
-
-        Log.LIDAR_PROCESS.debug("Controller opérationnel");
-
-        String[] points;
-        List<Vec2> mobileObstacles = new LinkedList<>();
-        float margin = 10;
-        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2* ennemyRay - 2*margin, table.getWidth()-2* ennemyRay - 2*margin);
-        while (true) {
-            if (!recalageDataStack.isEmpty()) {
-                handleRecalageData();
-            }
-            if (!messageStack.isEmpty()) {
-                handleObstacles();
-            }
-            else {
-                try {
-                    Thread.sleep(TIME_LOOP);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+            Module.waitWhileTrue(() -> !Connection.LIDAR_DATA.isInitiated());
+            Log.LIDAR_PROCESS.debug("Processus OK");
+            listener.registerMessageHandler(Channel.OBSTACLES, this::handleObstacles);
+            listener.registerMessageHandler(Channel.RAW_LIDAR_DATA, this::handleRecalageData);
+        });
     }
 
-    private void handleObstacles(){
+    private void handleObstacles(String message) {
         if(SensorState.DISABLE_LIDAR.getData()) {
             return; // on ignore les valeurs renvoyées par le lidar pendant qu'il est désactivé
         }
         XYO currentXYO = XYO.getRobotInstance();
-        points = messageStack.pop().split(POINT_SEPARATOR);
+        points = message.split(POINT_SEPARATOR);
         mobileObstacles.clear();
         for (String point : points) {
             Vec2 obstacleCenter = new VectPolar(Double.parseDouble(point.split(COORDONATE_SEPARATOR)[0]),
@@ -211,7 +161,6 @@ public class LidarControler extends ModuleThread {
             obstacleCenter.setA(Calculs.modulo(obstacleCenter.getA() + currentXYO.getOrientation(), Math.PI));
             obstacleCenter.plus(currentXYO.getPosition());
 
-
             // on ajoute l'obstacle que s'il est dans la table et qu'il est pas dans les rampes
             if(tableBB.isInShape(obstacleCenter) && !table.isPositionInBalance(obstacleCenter)) {
                 // signes différents, on est de deux côtés de la table différents
@@ -222,20 +171,15 @@ public class LidarControler extends ModuleThread {
                 mobileObstacles.add(obstacleCenter);
             }
         }
-        messageStack.clear();
-        //table.getGraphe().writeLock().lock();
-
-        //   long start = System.currentTimeMillis();
         table.updateMobileObstacles(mobileObstacles);
-        //     System.out.println(">>> "+(System.currentTimeMillis()-start)+" ms");
     }
 
     @SuppressWarnings("Duplicates")
-    private void handleRecalageData(){
+    private void handleRecalageData(String message){
         if(SensorState.DISABLE_LIDAR.getData()) {
             return; // on ignore les valeurs renvoyées par le lidar pendant qu'il est désactivé
         }
-        points = recalageDataStack.pop().split(POINT_SEPARATOR);
+        points = message.split(POINT_SEPARATOR);
         Vec2 currentRobotPos = XYO.getRobotInstance().getPosition();
         double currentRobotOr = XYO.getRobotInstance().getOrientation();
         Vec2 vectToPoto1 = potoCenter1.minusVector(currentRobotPos);

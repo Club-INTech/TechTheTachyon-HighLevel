@@ -9,7 +9,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Config;
 import pfg.config.Configurable;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.Module;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -31,8 +31,8 @@ public class ScriptPaletsZoneChaos extends Script {
     int robotRay = 190;
     int rayonPalet = 38;
 
-    public ScriptPaletsZoneChaos(Container container) {
-        super(container);
+    public ScriptPaletsZoneChaos(HLInstance hl) {
+        super(hl);
     }
 
     @Override

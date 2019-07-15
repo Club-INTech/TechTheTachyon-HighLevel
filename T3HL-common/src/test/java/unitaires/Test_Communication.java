@@ -22,7 +22,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.communication.SocketClientInterface;
 import utils.communication.SocketServerInterface;
@@ -31,7 +31,7 @@ import java.util.Optional;
 
 public class Test_Communication {
 
-    public Container container;
+    public HLInstance hl;
 
     public SocketServerInterface interface1;
 
@@ -39,7 +39,7 @@ public class Test_Communication {
 
     @Before
     public void setUp() throws Exception {
-        container = Container.getInstance("Master");
+        hl = HLInstance.getInstance("Master");
         Log.init();
         interface1 = new SocketServerInterface("localhost", 10200, true);
         interface1.init();
@@ -51,8 +51,8 @@ public class Test_Communication {
         interface2.close();
         interface1 = null;
         interface2 = null;
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
         System.gc();
     }
 

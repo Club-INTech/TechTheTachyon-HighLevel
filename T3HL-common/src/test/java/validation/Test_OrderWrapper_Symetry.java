@@ -31,7 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pfg.config.Config;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.VectCartesian;
 
 import java.util.Locale;
@@ -40,7 +40,7 @@ import java.util.Optional;
 public class Test_OrderWrapper_Symetry {
 
     /**Container*/
-    private Container container;
+    private HLInstance hl;
     /**orderWrapper*/
     private OrderWrapper orderWrapper;
     /**connectionManager pour établir et fermer les connexions en local pour run les tests*/
@@ -54,11 +54,11 @@ public class Test_OrderWrapper_Symetry {
      */
     @Before
     public void setUp()throws Exception{
-        container = Container.getInstance("Master");
-        config = container.getConfig();
+        hl = HLInstance.getInstance("Master");
+        config = hl.getConfig();
         config.override(ConfigData.COULEUR,"jaune");
-        orderWrapper=container.module(OrderWrapper.class);
-        connectionsManager=container.module(ConnectionManager.class);
+        orderWrapper= hl.module(OrderWrapper.class);
+        connectionsManager= hl.module(ConnectionManager.class);
         connectionsManager.initConnections(Connection.LOCALHOST_SERVER);
         Thread.sleep(50);
         connectionsManager.initConnections(Connection.LOCALHOST_CLIENT);
@@ -126,12 +126,12 @@ public class Test_OrderWrapper_Symetry {
      */
     @After
     public void closeConnection() throws Exception{
-        container = null;
+        hl = null;
         config.override(ConfigData.COULEUR,"violet");
         config = null;
         orderWrapper = null;
         connectionsManager.closeInitiatedConnections();
         connectionsManager = null;
-        Container.resetInstance();
+        HLInstance.resetInstance();
     }
 }

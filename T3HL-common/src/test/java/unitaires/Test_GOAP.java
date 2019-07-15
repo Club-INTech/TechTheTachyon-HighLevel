@@ -1,11 +1,14 @@
 package unitaires;
 
-import ai.goap.*;
+import ai.goap.Action;
+import ai.goap.ActionGraph;
+import ai.goap.Agent;
+import ai.goap.EnvironmentInfo;
 import data.XYO;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
@@ -33,8 +36,8 @@ public class Test_GOAP {
 
     @Before
     public void init() {
-        Container container = Container.getInstance("Master");
-        Assert.assertNotNull(container.getConfig());
+        HLInstance hl = HLInstance.getInstance("Master");
+        Assert.assertNotNull(hl.getConfig());
         Log.init();
         getAxe = new Action() {
             {

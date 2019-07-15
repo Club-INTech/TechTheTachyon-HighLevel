@@ -29,7 +29,7 @@ import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -49,17 +49,17 @@ public class MainSlave extends RobotEntryPoint {
     }
 
     private void start() throws ContainerException {
-        Container container = Container.getInstance("Slave");
-        entryPoint(container, Slave.class, ScriptManagerSlave.class);
+        HLInstance hl = HLInstance.getInstance("Slave");
+        entryPoint(hl, Slave.class, ScriptManagerSlave.class);
     }
 
     @Override
     protected void preLLConnection() throws ContainerException {
         robot.getAudioPlayer().play("STARTUP");
         waitForColorSwitch();
-        if(container.getConfig().getBoolean(ConfigData.VISUALISATION) || container.getConfig().getBoolean(ConfigData.SIMULATION)) {
-            SimulatorDebug debug = container.module(SimulatorDebug.class);
-            if(container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if(hl.getConfig().getBoolean(ConfigData.VISUALISATION) || hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
+            SimulatorDebug debug = hl.module(SimulatorDebug.class);
+            if(hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
                 // TODO: LL Slave Simulateur?
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
             } else {
@@ -67,9 +67,9 @@ public class MainSlave extends RobotEntryPoint {
             }
         }
 
-        if (container.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if (hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
             initSimulator();
-        } else if(container.getConfig().getBoolean(ConfigData.VISUALISATION)) {
+        } else if(hl.getConfig().getBoolean(ConfigData.VISUALISATION)) {
             initVisualisateur();
         }
     }
@@ -94,7 +94,7 @@ public class MainSlave extends RobotEntryPoint {
 
         double targetAngle;
         //Pour aller à la bonne position de départ
-        if(container.getConfig().get(ConfigData.SYMETRY)) { // symétrie
+        if(hl.getConfig().get(ConfigData.SYMETRY)) { // symétrie
             XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
             robot.setPositionAndOrientation(newPos, Math.PI/2);
             targetAngle = Math.PI / 2;
@@ -143,7 +143,7 @@ public class MainSlave extends RobotEntryPoint {
 
 
         try {
-            container.module(MatchSlave.class).execute(0);
+            hl.module(MatchSlave.class).execute(0);
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -162,7 +162,7 @@ public class MainSlave extends RobotEntryPoint {
         //simulatorLauncher.setLidarPort((int) ConfigData.LIDAR_DATA_PORT.getDefaultValue());
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
+            simulatorLauncher.setPathfollowerToShow(hl.module(PathFollower.class), (int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
         } catch (ContainerException e) {
             e.printStackTrace();
         }
@@ -186,7 +186,7 @@ public class MainSlave extends RobotEntryPoint {
         simulatorLauncher.setVisualisationMode(Slave.class);
 
         try {
-            simulatorLauncher.setPathfollowerToShow(container.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
+            simulatorLauncher.setPathfollowerToShow(hl.module(PathFollower.class), SimulatedConnectionManager.VISUALISATION_PORT);
         } catch (ContainerException e) {
             e.printStackTrace();
         }

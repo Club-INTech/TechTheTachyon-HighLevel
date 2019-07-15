@@ -20,13 +20,13 @@ package orders;
 
 import connection.Connection;
 import data.SensorState;
-import data.controlers.DataControler;
+import data.controlers.DataController;
 import orders.hooks.HookNames;
 import orders.order.*;
 import pfg.config.Config;
 import pfg.config.Configurable;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.communication.CommunicationException;
 import utils.container.ContainerException;
@@ -65,7 +65,7 @@ public class OrderWrapper implements Module {
      */
     @Configurable
     private boolean usingBaliseImage;
-    private Container container;
+    private HLInstance hl;
     /**
      * Le service de symétrie des ordres
      */
@@ -77,8 +77,8 @@ public class OrderWrapper implements Module {
      * @param symmetrizedActuatorOrderMap
      *              service permettant de gérer la symétrie des ordres
      */
-    private OrderWrapper(Container container, SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
-        this.container = container;
+    private OrderWrapper(HLInstance hl, SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
+        this.hl = hl;
         this.symmetrizedActuatorOrderMap = symmetrizedActuatorOrderMap;
     }
 
@@ -243,7 +243,7 @@ public class OrderWrapper implements Module {
                     PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
             Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
             try {
-                container.module(DataControler.class).waitForTwoPositionUpdates();
+                hl.module(DataController.class).waitForTwoPositionUpdates();
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

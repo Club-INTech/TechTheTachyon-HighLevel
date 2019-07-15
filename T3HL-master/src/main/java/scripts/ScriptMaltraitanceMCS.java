@@ -5,7 +5,7 @@ import data.Table;
 import data.XYO;
 import orders.OrderWrapper;
 import orders.order.MotionOrder;
-import utils.Container;
+import utils.HLInstance;
 import utils.container.Module;
 import utils.math.Vec2;
 
@@ -24,8 +24,8 @@ public class ScriptMaltraitanceMCS extends Script {
      * @param robot le robot
      * @param table
      */
-    protected ScriptMaltraitanceMCS(Container container, Table table) {
-        super(container);
+    protected ScriptMaltraitanceMCS(HLInstance hl, Table table) {
+        super(hl);
         this.orderWrapper = orderWrapper;
     }
 

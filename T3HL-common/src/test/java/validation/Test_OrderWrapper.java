@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pfg.config.Config;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.VectCartesian;
 
 import java.util.Locale;
@@ -40,7 +40,7 @@ import java.util.Optional;
 public class Test_OrderWrapper {
 
     /**Container*/
-    private Container container;
+    private HLInstance hl;
 
     /**orderWrapper*/
     private OrderWrapper orderWrapper;
@@ -56,10 +56,10 @@ public class Test_OrderWrapper {
 
     @Before
     public void setUp() throws Exception{
-        container = Container.getInstance("Master");
-        config = container.getConfig();
-        orderWrapper=container.module(OrderWrapper.class);
-        connectionsManager=container.module(ConnectionManager.class);
+        hl = HLInstance.getInstance("Master");
+        config = hl.getConfig();
+        orderWrapper= hl.module(OrderWrapper.class);
+        connectionsManager= hl.module(ConnectionManager.class);
         connectionsManager.initConnections(Connection.LOCALHOST_SERVER);
         Thread.sleep(50);
         connectionsManager.initConnections(Connection.LOCALHOST_CLIENT);
@@ -235,12 +235,12 @@ public class Test_OrderWrapper {
      */
     @After
     public void closeConnection() throws Exception {
-        container = null;
+        hl = null;
         config = null;
         orderWrapper = null;
         connectionsManager.closeInitiatedConnections();
         connectionsManager = null;
-        Container.resetInstance();
+        HLInstance.resetInstance();
     }
 }
 

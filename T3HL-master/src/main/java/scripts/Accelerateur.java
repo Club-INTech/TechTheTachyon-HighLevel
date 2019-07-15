@@ -9,7 +9,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
 import robot.Robot;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.Offsets;
 import utils.container.Module;
@@ -18,7 +18,7 @@ import utils.math.Vec2;
 import utils.math.VectCartesian;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class Accelerateur extends Script implements Offsets {
@@ -56,8 +56,8 @@ public class Accelerateur extends Script implements Offsets {
     double teta;
     //variable pour le calcul du recalage
     int yEntryPostRecalage = 410-78+15-4-5;
-    private CompletableFuture<Void> recalageLeft;
-    private CompletableFuture<Void> recalageRight;
+    private Future<Void> recalageLeft;
+    private Future<Void> recalageRight;
 
 
     private int distavance = 0;
@@ -76,8 +76,8 @@ public class Accelerateur extends Script implements Offsets {
     @Configurable
     private boolean recalageMecaAcc;
 
-    public Accelerateur(Container container) {
-        super(container);
+    public Accelerateur(HLInstance hl) {
+        super(hl);
         versions = new ArrayList<>();
         versions.add(0);  //version initiale (7 palets)
         versions.add(1);  //version pour mettre 7 palets + le bleu initial
@@ -98,7 +98,7 @@ public class Accelerateur extends Script implements Offsets {
             if(recalageAcc) {
                 recalageAccelerateur(yEntryPostRecalageAvecSymetrie);
             }
-            recalageRight.join();
+            join(recalageRight);
             double offsetTheta = Offsets.get(ACCELERATEUR_THETA_RECALAGE_JAUNE);
             double offsetThetaAutreCote = Offsets.get(ACCELERATEUR_THETA_RECALAGE_JAUNE_COTE_2);
             if(symetry) {
@@ -122,7 +122,7 @@ public class Accelerateur extends Script implements Offsets {
             actuators.rightValve.desactivate();
 
             turn(Math.PI-offsetThetaAutreCote);
-            recalageLeft.join();
+            join(recalageLeft);
             robot.invertOrders(robot -> {
                while (robot.getNbPaletsDroits() > 0) {
                    storePuck(version, robot);

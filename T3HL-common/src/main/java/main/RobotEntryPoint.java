@@ -29,7 +29,7 @@ import orders.OrderWrapper;
 import robot.Robot;
 import scripts.ScriptManager;
 import utils.ConfigData;
-import utils.Container;
+import utils.HLInstance;
 import utils.Log;
 import utils.MatchTimer;
 import utils.communication.KeepAlive;
@@ -43,12 +43,12 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class RobotEntryPoint {
 
-    protected Container container;
+    protected HLInstance hl;
     protected ScriptManager scriptManager;
     protected ConnectionManager connectionManager;
     protected OrderWrapper orderWrapper;
     protected Listener listener;
-    protected DataControler dataControler;
+    protected DataController dataController;
     protected LidarControler lidarControler;
     protected Table table;
     protected Robot robot;
@@ -57,10 +57,10 @@ public abstract class RobotEntryPoint {
     protected AIModule ai;
     protected PanneauModule panneauService;
 
-    public void entryPoint(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) throws ContainerException {
-        this.container = container;
-        container.module(robotClass); // charge l'instance du robot (Master ou Slave selon le robot). Nécessaire pour que .module(Robot.class) ne plante pas: il faut une instance de Robot.class qui existe déjà (c'est une classe abstraite)
-        initServices(container, robotClass, scriptManagerClass);
+    public void entryPoint(HLInstance hl, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) throws ContainerException {
+        this.hl = hl;
+        hl.module(robotClass); // charge l'instance du robot (Master ou Slave selon le robot). Nécessaire pour que .module(Robot.class) ne plante pas: il faut une instance de Robot.class qui existe déjà (c'est une classe abstraite)
+        initServices(hl, robotClass, scriptManagerClass);
         preLLConnection();
         waitForAllConnectionsReady();
         Log.COMMUNICATION.debug("Connection established, starting match");
@@ -79,7 +79,7 @@ public abstract class RobotEntryPoint {
                 e.printStackTrace();
             }
         }
-        Container.resetInstance();
+        HLInstance.resetInstance();
     }
 
     protected abstract void preLLConnection() throws ContainerException;
@@ -88,7 +88,7 @@ public abstract class RobotEntryPoint {
 
     protected void waitForAllConnectionsReady() {
         LEDs leds = null;
-        if(container.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
+        if(hl.getConfig().getBoolean(ConfigData.USING_PANEL) && panneauService.getPanneau() != null) {
             leds = panneauService.getPanneau().getLeds();
         }
         while (!connectionManager.areMandatoryConnectionsInitiated()) {
@@ -109,7 +109,7 @@ public abstract class RobotEntryPoint {
     }
 
     protected void waitForColorSwitch() {
-        if( ! container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
+        if( ! hl.getConfig().getBoolean(ConfigData.USING_PANEL)) {
             panneauService.setPanel(null);
             return;
         }
@@ -175,16 +175,16 @@ public abstract class RobotEntryPoint {
                 break;
         }
     }
-    protected void initServices(Container container, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
+    protected void initServices(HLInstance hl, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
         try {
             // trouve la couleur
-            panneauService = container.module(PanneauModule.class);
-            if(container.getConfig().getBoolean(ConfigData.USING_PANEL)) {
+            panneauService = hl.module(PanneauModule.class);
+            if(hl.getConfig().getBoolean(ConfigData.USING_PANEL)) {
                 if(panneauService.getPanneau() != null) {
                     if(panneauService.getPanneau().isViolet()) {
-                        container.getConfig().override(ConfigData.COULEUR, "violet");
+                        hl.getConfig().override(ConfigData.COULEUR, "violet");
                     } else {
-                        container.getConfig().override(ConfigData.COULEUR, "jaune");
+                        hl.getConfig().override(ConfigData.COULEUR, "jaune");
                     }
                 } else {
                     Log.STRATEGY.critical("PAS DE PANNEAU");
@@ -202,28 +202,26 @@ public abstract class RobotEntryPoint {
                 Log.STRATEGY.critical("PAS DE PANNEAU");
             }
 //            container.getConfig().override(ConfigData.COULEUR, "jaune");
-            Log.STRATEGY.debug("Couleur: "+container.getConfig().get(ConfigData.COULEUR));
-            scriptManager = container.module(scriptManagerClass);
-            connectionManager = container.module(ConnectionManager.class);
-            orderWrapper = container.module(OrderWrapper.class);
-            listener = container.module(Listener.class);
+            Log.STRATEGY.debug("Couleur: "+ hl.getConfig().get(ConfigData.COULEUR));
+            scriptManager = hl.module(scriptManagerClass);
+            connectionManager = hl.module(ConnectionManager.class);
+            orderWrapper = hl.module(OrderWrapper.class);
+            listener = hl.module(Listener.class);
             listener.start();
-            dataControler = container.module(DataControler.class);
-            dataControler.start();
-            table = container.module(Table.class);
+            dataController = hl.module(DataController.class);
+            table = hl.module(Table.class);
             table.initObstacles();
-            lidarControler = container.module(LidarControler.class);
-            lidarControler.start();
-            robot = container.module(robotClass);
-            KeepAlive keepAliveService = container.module(KeepAlive.class);
+            lidarControler = hl.module(LidarControler.class);
+            robot = hl.module(robotClass);
+            KeepAlive keepAliveService = hl.module(KeepAlive.class);
             keepAliveService.start();
-            if(container.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || container.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
+            if(hl.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || hl.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
                 System.out.println("suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuus");
-                paletsChaosControler = container.module(PaletsChaosControler.class);
+                paletsChaosControler = hl.module(PaletsChaosControler.class);
                 paletsChaosControler.start();
             }
-            ai = container.module(AIModule.class);
-            MatchTimer timer = container.module(MatchTimer.class);
+            ai = hl.module(AIModule.class);
+            MatchTimer timer = hl.module(MatchTimer.class);
             timer.start();
         } catch (ContainerException e) {
             e.printStackTrace();

@@ -1,7 +1,7 @@
 package scripts;
 
 import locomotion.UnableToMoveException;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -12,8 +12,8 @@ public class ScriptHomologation extends Script {
     private int xEntry = 1500-191-65+20;//1350;
     private int yEntry = 430;
 
-    public ScriptHomologation(Container container) {
-        super(container);
+    public ScriptHomologation(HLInstance hl) {
+        super(hl);
     }
 
     @Override

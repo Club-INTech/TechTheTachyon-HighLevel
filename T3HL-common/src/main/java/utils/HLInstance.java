@@ -32,19 +32,24 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Gestionnaire des singletons et dépendances entre les classes du code.
- * Un singleton est une classe implémentant "Module", et permettant d'instancier les autres services dépendant.
+ * Un singleton est une classe implémentant "Module", et permettant d'instancier les autres modules dépendant.
  * Il stocke également toute les références des services à partir d'un dictionnaire.
  *
  * @author pf, rem, jglrxavpok
  */
-public class Container implements Module {
+public class HLInstance implements Module {
     /**
      * Instance du container (Singleton comme tous les services)
      */
-    private volatile static Container instance       = null;
+    private volatile static HLInstance instance       = null;
+    private final ExecutorService threadPool;
 
     /**
      * La config, qui ici n'implémente pas service
@@ -71,7 +76,7 @@ public class Container implements Module {
     /**
      * Instancie le gestionnaire de dépendances ainsi que la config
      */
-    private Container(String profile) {
+    private HLInstance(String profile) {
         Log.init();
 
         /* Affichage du message de bienvenue */
@@ -120,6 +125,8 @@ public class Container implements Module {
         config = new Config(values, true, "../config/config.txt", "Common", profile, "Offsets");
 
         Offsets.loadFromConfig(config);
+
+        threadPool = Executors.newWorkStealingPool();
         /* Le container est un service ! */
         instanciedServices.put(getClass().getSimpleName(), this);
     }
@@ -144,9 +151,9 @@ public class Container implements Module {
     /**
      * Getter pour instanciation du singleton
      */
-    public static Container getInstance(String configProfile) {
+    public static HLInstance getInstance(String configProfile) {
         if (instance == null) {
-            instance = new Container(configProfile);
+            instance = new HLInstance(configProfile);
         }
         return instance;
     }
@@ -251,6 +258,9 @@ public class Container implements Module {
             constructor.setAccessible(false);
 
             notifyHierarchy(service, (Module)s);
+
+            s.onInit(this);
+
             instanciedServices.put(service.getSimpleName(), (Module) s);
 
             /* Si c'est un Thread, on l'ajoute dans une liste à part */
@@ -345,7 +355,7 @@ public class Container implements Module {
     @Override
     public void updateConfig(Config config) {
         for(Module module :instanciedServices.values()){
-            if(module instanceof Container)
+            if(module instanceof HLInstance)
                 continue;
             try {
                 config.loadInto(module);
@@ -356,6 +366,14 @@ public class Container implements Module {
         }
 
         Offsets.loadFromConfig(config);
+    }
+
+    public <T> Future<T> async(String name, Callable<T> action) {
+        return threadPool.submit(action);
+    }
+
+    public Future<Void> async(String name, Runnable action) {
+        return async(name, () -> { action.run(); return null;});
     }
 
     /**

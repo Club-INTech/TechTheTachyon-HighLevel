@@ -18,7 +18,7 @@
 
 package scripts;
 
-import utils.Container;
+import utils.HLInstance;
 import utils.container.ContainerException;
 
 /**
@@ -30,14 +30,14 @@ public class ScriptManagerSlave extends ScriptManager {
 
     /**
      * Construit un script manager pour le maître
-     * @param container
+     * @param hl
      *              container pour instancier les scripts
      */
-    public ScriptManagerSlave(Container container) {
-        super(container);
+    public ScriptManagerSlave(HLInstance hl) {
+        super(hl);
         for(ScriptNamesSlave script : ScriptNamesSlave.values()) {
             try {
-                instanciedScripts.put(script, script.createScript(container));
+                instanciedScripts.put(script, script.createScript(hl));
             } catch (ContainerException e) {
                 e.printStackTrace();
             }

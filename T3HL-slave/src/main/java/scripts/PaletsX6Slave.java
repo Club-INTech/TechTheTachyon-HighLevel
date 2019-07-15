@@ -3,7 +3,7 @@ package scripts;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -18,8 +18,8 @@ public class PaletsX6Slave extends Script {
     private boolean symetry;
 
 
-    public PaletsX6Slave(Container container) {
-        super(container);
+    public PaletsX6Slave(HLInstance hl) {
+        super(hl);
     }
 
     @Override

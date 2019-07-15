@@ -6,7 +6,7 @@ public abstract class TestScriptBase extends TestBaseHL {
 
     @Override
     public void action() throws ContainerException {
-        Script script = getScript().createScript(container);
+        Script script = getScript().createScript(hl);
 
         for(int version : versionsToTest()) {
             script.goToThenExecute(version);

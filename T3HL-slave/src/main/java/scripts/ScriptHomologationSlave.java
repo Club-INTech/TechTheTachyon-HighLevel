@@ -1,7 +1,7 @@
 package scripts;
 
 import locomotion.UnableToMoveException;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.Vec2;
 
 public class ScriptHomologationSlave extends Script {
@@ -9,8 +9,8 @@ public class ScriptHomologationSlave extends Script {
     private int yEntry = 400;
     private static final int DISTANCE_INTERPALET = 300;
 
-    public ScriptHomologationSlave(Container container) {
-        super(container);
+    public ScriptHomologationSlave(HLInstance hl) {
+        super(hl);
     }
     @Override
     public void execute(int version) {

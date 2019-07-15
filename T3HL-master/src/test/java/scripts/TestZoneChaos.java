@@ -1,7 +1,6 @@
 package scripts;
 
-import utils.Container;
-import utils.container.ContainerException;
+import utils.HLInstance;
 import utils.math.Vec2;
 import utils.math.VectCartesian;
 
@@ -17,7 +16,7 @@ public class TestZoneChaos extends TestScriptBase {
     }
 
     @Override
-    public void initState(Container container) {
+    public void initState(HLInstance hl) {
         table.removeFixedObstacle(table.getPaletBleuGauche());
         table.removeFixedObstacle(table.getPaletRougeGauche());
         table.removeFixedObstacle(table.getPaletVertGauche());

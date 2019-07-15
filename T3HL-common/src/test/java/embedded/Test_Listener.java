@@ -22,33 +22,33 @@ package embedded;
 import connection.Connection;
 import data.controlers.Listener;
 import org.junit.*;
-import utils.Container;
+import utils.HLInstance;
 
 public class Test_Listener {
 
-    private Container container;
+    private HLInstance hl;
 
     private Listener listener;
 
     @Ignore
     @Before
     public void setUp() throws Exception {
-        container = Container.getInstance("Master");
-        listener = container.module(Listener.class);
+        hl = HLInstance.getInstance("Master");
+        listener = hl.module(Listener.class);
     }
 
     @Ignore
     @After
     public void tearDown() {
         listener = null;
-        container = null;
-        Container.resetInstance();
+        hl = null;
+        HLInstance.resetInstance();
     }
 
     @Ignore
     @Test
     public void testInitialisation() throws Exception {
-        container.startInstanciedThreads();
+        hl.startInstanciedThreads();
         Thread.sleep(5000);
         // TODO : lancer le processus de gestion du Lidar !
 

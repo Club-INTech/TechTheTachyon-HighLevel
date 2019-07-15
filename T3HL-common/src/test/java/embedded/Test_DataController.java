@@ -21,18 +21,18 @@ package embedded;
 
 import connection.ConnectionManager;
 import data.XYO;
+import data.controlers.DataController;
 import data.controlers.Listener;
-import data.controlers.DataControler;
 import data.synchronization.SynchronizationWithBuddy;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import utils.Container;
+import utils.HLInstance;
 import utils.math.VectCartesian;
 
-public class Test_DataControler {
+public class Test_DataController {
 
-    private DataControler dataControler;
+    private DataController dataController;
 
     private Listener listener;
 
@@ -43,9 +43,9 @@ public class Test_DataControler {
     public void setUp() throws Exception{
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
-        Container container = Container.getInstance("Master");
-        listener=new Listener(connectionManager, new SynchronizationWithBuddy(container));
-        dataControler =new DataControler(container, listener, null, null);
+        HLInstance hl = HLInstance.getInstance("Master");
+        listener=new Listener(connectionManager, new SynchronizationWithBuddy(hl));
+        dataController =new DataController(hl, listener, null, null);
     }
 
     @Test

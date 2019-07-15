@@ -20,6 +20,7 @@ package utils.container;
 
 import data.SensorState;
 import pfg.config.Config;
+import utils.HLInstance;
 import utils.TimeoutError;
 
 import java.util.concurrent.*;
@@ -44,6 +45,11 @@ public interface Module
      * Elle sert à attribuer à des attributs des valeurs contenues dans la config, quand {@link pfg.config.Configurable} ne suffit pas.
      */
     default void updateConfig(Config config) {}
+
+    /**
+     * Méthode appelée lorsque le module est instancié par le HL pour la première fois. Plus propre que d'utiliser le constructeur
+     */
+    default void onInit(HLInstance hl) {}
 
     // TODO: Move somewhere else
     static void waitWhileTrue(SensorState<Boolean> condition) {
