@@ -11,18 +11,18 @@ import orders.OrderWrapper;
 public class OnOffActuator implements Actuator {
     private OrderWrapper wrapper;
     private Order activateOrder;
-    private Order desactivateOrder;
+    private Order deactivateOrder;
 
     /**
      * Instancies l'actuateur à deux états
      * @param wrapper le module permettant de communiquer les ordres
      * @param activateOrder l'ordre d'activation
-     * @param desactivateOrder l'ordre de désactivation
+     * @param deactivateOrder l'ordre de désactivation
      */
-    public OnOffActuator(OrderWrapper wrapper, Order activateOrder, Order desactivateOrder) {
+    public OnOffActuator(OrderWrapper wrapper, Order activateOrder, Order deactivateOrder) {
         this.wrapper = wrapper;
         this.activateOrder = activateOrder;
-        this.desactivateOrder = desactivateOrder;
+        this.deactivateOrder = deactivateOrder;
     }
 
     /**
@@ -43,15 +43,15 @@ public class OnOffActuator implements Actuator {
     /**
      * Désactive l'actuateur et retourne immédiatement sans l'attendre
      */
-    public void desactivate() {
-        desactivate(false);
+    public void deactivate() {
+        deactivate(false);
     }
 
     /**
      * Désactive l'actuateur
      * @param waitForSync 'true' si le HL doit attendre la confirmation du LL que l'action est finie, 'false' pour retourner immédiatement la main à l'appelant
      */
-    public void desactivate(boolean waitForSync) {
-        wrapper.perform(desactivateOrder, waitForSync);
+    public void deactivate(boolean waitForSync) {
+        wrapper.perform(deactivateOrder, waitForSync);
     }
 }

@@ -25,11 +25,11 @@ public final class ActuatorsOrders {
             .on();
     public static final SidedOrder ActivateLeftPump = ActivateRightPump.symetrize();
 
-    public static final SidedOrder DisactivateRightPump = OrderBuilder
+    public static final SidedOrder DeactivateRightPump = OrderBuilder
             .create(PUMPS)
             .side(RobotSide.RIGHT)
             .off();
-    public static final SidedOrder DisactivateLeftPump = DisactivateRightPump.symetrize();
+    public static final SidedOrder DeactivateLeftPump = DeactivateRightPump.symetrize();
 
     public static final SidedOrder ActivateRightValve = OrderBuilder
             .create(VALVES)
@@ -37,11 +37,11 @@ public final class ActuatorsOrders {
             .on();
     public static final SidedOrder ActivateLeftValve = ActivateRightValve.symetrize();
 
-    public static final SidedOrder DisactivateRightValve = OrderBuilder
+    public static final SidedOrder DeactivateRightValve = OrderBuilder
             .create(VALVES)
             .side(RobotSide.RIGHT)
             .off();
-    public static final SidedOrder DisactivateLeftValve = DisactivateRightValve.symetrize();
+    public static final SidedOrder DeactivateLeftValve = DeactivateRightValve.symetrize();
 
     public static final SidedServoGroupOrder BrasDroitToutDroit = (SidedServoGroupOrder) OrderBuilder
             .create(SERVOGROUPS)

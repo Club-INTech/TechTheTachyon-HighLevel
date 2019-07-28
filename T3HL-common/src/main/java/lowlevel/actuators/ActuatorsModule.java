@@ -26,10 +26,10 @@ public class ActuatorsModule implements Module {
         this.wrapper = wrapper;
 
         // Initialisation des différents actuateurs
-        leftPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftPump, ActuatorsOrders.DisactivateLeftPump);
-        rightPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightPump, ActuatorsOrders.DisactivateRightPump);
-        leftValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftValve, ActuatorsOrders.DisactivateLeftValve);
-        rightValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightValve, ActuatorsOrders.DisactivateRightValve);
+        leftPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftPump, ActuatorsOrders.DeactivateLeftPump);
+        rightPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightPump, ActuatorsOrders.DeactivateRightPump);
+        leftValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftValve, ActuatorsOrders.DeactivateLeftValve);
+        rightValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightValve, ActuatorsOrders.DeactivateRightValve);
 
         leftElevator = new ElevatorActuator(wrapper, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,
                 ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, SensorState.LEFT_ELEVATOR_MOVING);

@@ -81,7 +81,7 @@ public class ScriptPaletsZoneChaos extends Script {
                 Module.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                 actuators.leftElevator.down();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_SOL, true);
-                actuators.leftValve.desactivate(true);
+                actuators.leftValve.deactivate(true);
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT, true);
                 actuators.leftValve.activate();
 
@@ -96,7 +96,7 @@ public class ScriptPaletsZoneChaos extends Script {
                 // à défaut de savoir la couleur, au moins on cassera pas les ascenseurs
                 robot.pushPaletGauche(CouleurPalet.ROUGE);
             }
-            actuators.leftPump.desactivate();
+            actuators.leftPump.deactivate();
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

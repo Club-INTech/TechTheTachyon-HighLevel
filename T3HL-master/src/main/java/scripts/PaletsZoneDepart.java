@@ -62,7 +62,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
         try {
             //robot.turn(Math.PI / 2);
             actuators.leftPump.activate(true);
-            actuators.leftValve.desactivate(true);
+            actuators.leftValve.deactivate(true);
             // robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE, true);
             Future<Void> puckStored = null;
             for (Vec2 position : positions) {
@@ -88,7 +88,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
                     readjustElevator(puckIndex);
                     if(puckIndex == 0) { // on retourne au sol que pour le 2e palet
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_AU_DESSUS_PALET,true);
-                        actuators.leftValve.desactivate(true);
+                        actuators.leftValve.deactivate(true);
                     }
                 });
 

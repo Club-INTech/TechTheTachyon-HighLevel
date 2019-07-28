@@ -127,7 +127,7 @@ public class PaletsX6 extends Script implements Offsets {
 
             if(version == 4) {
                 //On prend le 1er palet
-                actuators.rightValve.desactivate();
+                actuators.rightValve.deactivate();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 try {
                     Thread.sleep(300);
@@ -232,7 +232,7 @@ public class PaletsX6 extends Script implements Offsets {
             Log.STRATEGY.warning("Fin d'attente de puckStored");
         }
         //robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
-        actuators.rightValve.desactivate(true);
+        actuators.rightValve.deactivate(true);
 
         try {
             turn(Math.PI); // réoriente le robot vers PI
@@ -258,7 +258,7 @@ public class PaletsX6 extends Script implements Offsets {
                 if(moveElevator) {
                     actuators.rightElevator.downup();
                 }
-                actuators.rightValve.desactivate();
+                actuators.rightValve.deactivate();
                 robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DISTRIBUTEUR_SANS_REESSAI, true);
                 try {
                     Thread.sleep(300);

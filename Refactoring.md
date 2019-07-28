@@ -1,6 +1,10 @@
 Refactoring du HL - Chronologie
 ===
 
+28/07/2019
+----
++ Tentative de nouveau système pour créer des ordres unifiés
+
 15/07/2019
 ----
 * `Container` est devenu `HLInstance`. Les différents champs et variables sont nommés `hl` maintenant.
