@@ -1,7 +1,7 @@
-package lowlevel;
+package lowlevel.actuators;
 
+import lowlevel.order.Order;
 import orders.OrderWrapper;
-import orders.order.Order;
 
 /**
  * Un actuator qui n'a que deux états: allumé ou éteint
@@ -37,7 +37,7 @@ public class OnOffActuator implements Actuator {
      * @param waitForSync 'true' si le HL doit attendre la confirmation du LL que l'action est finie, 'false' pour retourner immédiatement la main à l'appelant
      */
     public void activate(boolean waitForSync) {
-        wrapper.useActuator(activateOrder, waitForSync);
+        wrapper.perform(activateOrder, waitForSync);
     }
 
     /**
@@ -52,6 +52,6 @@ public class OnOffActuator implements Actuator {
      * @param waitForSync 'true' si le HL doit attendre la confirmation du LL que l'action est finie, 'false' pour retourner immédiatement la main à l'appelant
      */
     public void desactivate(boolean waitForSync) {
-        wrapper.useActuator(desactivateOrder, waitForSync);
+        wrapper.perform(desactivateOrder, waitForSync);
     }
 }

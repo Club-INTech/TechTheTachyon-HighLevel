@@ -1,4 +1,4 @@
-package lowlevel;
+package lowlevel.actuators;
 
 /**
  * Représente un actuateur quelconque pour le HL.

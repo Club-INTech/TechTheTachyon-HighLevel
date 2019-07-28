@@ -21,7 +21,7 @@ package scripts;
 import data.Table;
 import data.table.MobileCircularObstacle;
 import locomotion.UnableToMoveException;
-import lowlevel.ActuatorsModule;
+import lowlevel.actuators.ActuatorsModule;
 import pfg.config.Configurable;
 import robot.Robot;
 import utils.HLInstance;

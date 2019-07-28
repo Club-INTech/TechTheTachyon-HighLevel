@@ -1,4 +1,4 @@
-package lowlevel;
+package lowlevel.actuators;
 
 import data.SensorState;
 import orders.OrderWrapper;

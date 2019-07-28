@@ -1,8 +1,9 @@
-package lowlevel;
+package lowlevel.actuators;
 
 import data.SensorState;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
+import orders.order.ActuatorsOrders;
 import utils.container.Module;
 
 /**
@@ -25,10 +26,10 @@ public class ActuatorsModule implements Module {
         this.wrapper = wrapper;
 
         // Initialisation des différents actuateurs
-        leftPump = new OnOffActuator(wrapper, ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE, ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);
-        rightPump = new OnOffActuator(wrapper, ActuatorsOrder.ACTIVE_LA_POMPE_DROITE, ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-        leftValve = new OnOffActuator(wrapper, ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-        rightValve = new OnOffActuator(wrapper, ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE, ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+        leftPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftPump, ActuatorsOrders.DisactivateLeftPump);
+        rightPump = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightPump, ActuatorsOrders.DisactivateRightPump);
+        leftValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftValve, ActuatorsOrders.DisactivateLeftValve);
+        rightValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightValve, ActuatorsOrders.DisactivateRightValve);
 
         leftElevator = new ElevatorActuator(wrapper, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,
                 ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, SensorState.LEFT_ELEVATOR_MOVING);

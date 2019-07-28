@@ -21,6 +21,8 @@ package orders;
 import connection.Connection;
 import data.SensorState;
 import data.controlers.DataController;
+import lowlevel.order.ServoGroupOrder;
+import lowlevel.order.SidedOrder;
 import orders.hooks.HookNames;
 import orders.order.*;
 import pfg.config.Config;
@@ -28,6 +30,7 @@ import pfg.config.Configurable;
 import utils.ConfigData;
 import utils.HLInstance;
 import utils.Log;
+import utils.RobotSide;
 import utils.communication.CommunicationException;
 import utils.container.ContainerException;
 import utils.container.Module;
@@ -425,5 +428,35 @@ public class OrderWrapper implements Module {
 
     public void forceStop() {
         sendString(MotionOrder.FORCE_STOP.getOrderStr());
+    }
+
+    public void perform(lowlevel.order.Order order) {
+        perform(order, false);
+    }
+
+    public void perform(lowlevel.order.Order order, boolean waitForConfirmation) {
+        if(order instanceof SidedOrder && shouldSymetrize()) {
+            order = ((SidedOrder) order).symetrize();
+        }
+        if(waitForConfirmation) {
+            Log.COMMUNICATION.debug("Asking for confirmation for "+order.toLL());
+            boolean isArmOrder = order instanceof ServoGroupOrder;
+            if(!isArmOrder) {
+                SensorState.ACTUATOR_ACTUATING.setData(true);
+                this.sendString("!"+order.toLL());
+                Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING);
+            } else {
+                RobotSide side = RobotSide.RIGHT;
+                if(order instanceof SidedOrder) {
+                    side = ((SidedOrder) order).side();
+                }
+                SensorState<Boolean> state = SensorState.getArmMovingState(side.name().toLowerCase());
+                state.setData(true);
+                this.sendString("!"+order.toLL());
+                Module.waitWhileTrue(state);
+            }
+        } else {
+            sendString(order.toLL());
+        }
     }
 }
