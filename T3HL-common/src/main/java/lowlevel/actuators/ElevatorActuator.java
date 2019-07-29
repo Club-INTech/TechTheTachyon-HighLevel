@@ -1,8 +1,8 @@
 package lowlevel.actuators;
 
 import data.SensorState;
+import lowlevel.order.Order;
 import orders.OrderWrapper;
-import orders.order.Order;
 
 /**
  * Représentes un ascenseur
@@ -57,7 +57,7 @@ public class ElevatorActuator implements AsyncActuator {
     }
 
     public void up(boolean wait) {
-        wrapper.useActuator(up, wait);
+        wrapper.perform(up, wait);
     }
 
     public void down() {
@@ -65,7 +65,7 @@ public class ElevatorActuator implements AsyncActuator {
     }
 
     public void down(boolean wait) {
-        wrapper.useActuator(down, wait);
+        wrapper.perform(down, wait);
     }
 
     public void updown() {
@@ -73,7 +73,7 @@ public class ElevatorActuator implements AsyncActuator {
     }
 
     public void updown(boolean wait) {
-        wrapper.useActuator(updown, wait);
+        wrapper.perform(updown, wait);
     }
 
     public void downup() {
@@ -81,7 +81,7 @@ public class ElevatorActuator implements AsyncActuator {
     }
 
     public void downup(boolean wait) {
-        wrapper.useActuator(downup, wait);
+        wrapper.perform(downup, wait);
     }
 
 }

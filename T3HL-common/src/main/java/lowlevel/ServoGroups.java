@@ -1,5 +1,10 @@
 package lowlevel;
 
+/**
+ * Liste des groupes de servomoteurs disponibles pour le HL
+ *
+ * @author jglrxavpok
+ */
 public class ServoGroups implements Servos {
 
     public static final ServoGroup LeftArm = new ServoGroup(0, leftArmBase, leftArmElbow, leftArmWrist);

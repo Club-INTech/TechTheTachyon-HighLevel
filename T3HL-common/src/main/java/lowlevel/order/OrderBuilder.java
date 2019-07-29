@@ -49,17 +49,27 @@ public class OrderBuilder<T extends Order> {
     }
 
     /**
-     *
-     * @return
+     * Crée un ordre permettant d'activer l'actuateur
+     * @return l'ordre pour activer l'actuateur
      */
     public T on() {
         return terminal("on");
     }
 
+    /**
+     * Crée un ordre permettant de désactiver l'actuateur
+     * @return l'ordre pour désactiver l'actuateur
+     */
     public T off() {
         return terminal("off");
     }
 
+    /**
+     * Crée un ordre terminal (ie. ce que doit faire l'actuateur)
+     * @param terminal
+     * @see {@link #on()} {@link #off()}
+     * @return l'ordre créé
+     */
     public T terminal(String terminal) {
         if(isSided) {
             BuiltSidedOrder original = new BuiltSidedOrder(system, side, terminal);
@@ -82,8 +92,12 @@ public class OrderBuilder<T extends Order> {
         }
     }
 
-    private OrderBuilder() {}
-
+    /**
+     * Créé un ordre pour déplacer un groupe de servomoteurs
+     * @param servoGroup le groupe de servomoteurs à bouger
+     * @param angles les angles dans chacun des servomoteurs
+     * @return l'ordre pour bouger les servo
+     */
     public ServoGroupOrder moveServoGroup(ServoGroup servoGroup, float... angles) {
         if(angles.length != servoGroup.count()) {
             throw new IllegalArgumentException("Il faut autant d'angles que de servos dans le bras!");
@@ -93,7 +107,9 @@ public class OrderBuilder<T extends Order> {
             original.symetrized = original.createSymetrized();
             return original;
         } else {
-            throw new UnsupportedOperationException("TODO");
+            return new BuiltServoGroupOrder(system, servoGroup, angles);
         }
     }
+
+    private OrderBuilder() {}
 }

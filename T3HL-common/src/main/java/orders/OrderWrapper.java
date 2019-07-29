@@ -21,6 +21,7 @@ package orders;
 import connection.Connection;
 import data.SensorState;
 import data.controlers.DataController;
+import lowlevel.order.ElevatorOrder;
 import lowlevel.order.ServoGroupOrder;
 import lowlevel.order.SidedOrder;
 import orders.hooks.HookNames;
@@ -440,20 +441,31 @@ public class OrderWrapper implements Module {
         }
         if(waitForConfirmation) {
             Log.COMMUNICATION.debug("Asking for confirmation for "+order.toLL());
-            boolean isArmOrder = order instanceof ServoGroupOrder;
-            if(!isArmOrder) {
-                SensorState.ACTUATOR_ACTUATING.setData(true);
-                this.sendString("!"+order.toLL());
-                Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING);
-            } else {
+            if (order instanceof ServoGroupOrder) {
                 RobotSide side = RobotSide.RIGHT;
-                if(order instanceof SidedOrder) {
+                if(order instanceof SidedOrder) { // TODO: unsided versions?
                     side = ((SidedOrder) order).side();
                 }
                 SensorState<Boolean> state = SensorState.getArmMovingState(side.name().toLowerCase());
                 state.setData(true);
                 this.sendString("!"+order.toLL());
                 Module.waitWhileTrue(state);
+            } else if(order instanceof ElevatorOrder && order instanceof SidedOrder) {
+                RobotSide side = RobotSide.RIGHT;
+                if(order instanceof SidedOrder) { // TODO: unsided versions?
+                    side = ((SidedOrder) order).side();
+                }
+                SensorState<Boolean> state = SensorState.RIGHT_ELEVATOR_MOVING;
+                if(side == RobotSide.LEFT) {
+                    state = SensorState.LEFT_ELEVATOR_MOVING;
+                }
+                state.setData(true);
+                this.sendString("!"+order.toLL());
+                Module.waitWhileTrue(state);
+            } else {
+                SensorState.ACTUATOR_ACTUATING.setData(true);
+                this.sendString("!"+order.toLL());
+                Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING);
             }
         } else {
             sendString(order.toLL());

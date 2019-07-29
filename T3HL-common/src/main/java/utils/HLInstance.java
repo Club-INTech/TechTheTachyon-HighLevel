@@ -291,7 +291,7 @@ public class HLInstance implements Module {
                 | SecurityException
                 | InstantiationException e) {
             e.printStackTrace();
-            throw new ContainerException(e.getMessage());
+            throw new ContainerException(e);
         }
     }
 

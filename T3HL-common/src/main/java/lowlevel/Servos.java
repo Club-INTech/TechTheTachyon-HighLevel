@@ -1,7 +1,11 @@
 package lowlevel;
 
+/**
+ * Servomoteurs disponibles pour le HL
+ *
+ * @author jglrxavpok
+ */
 public interface Servos {
-    // TODO
     Servo oust = new Servo(7);
 
     Servo rightArmBase = new Servo(1, 4);

@@ -2,8 +2,8 @@ package lowlevel.actuators;
 
 import data.SensorState;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import orders.order.ActuatorsOrders;
+import orders.order.ElevatorOrders;
 import utils.container.Module;
 
 /**
@@ -31,9 +31,9 @@ public class ActuatorsModule implements Module {
         leftValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateLeftValve, ActuatorsOrders.DeactivateLeftValve);
         rightValve = new OnOffActuator(wrapper, ActuatorsOrders.ActivateRightValve, ActuatorsOrders.DeactivateRightValve);
 
-        leftElevator = new ElevatorActuator(wrapper, ActuatorsOrder.MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_GAUCHE_DE_UN_PALET,
-                ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_GAUCHE_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_GAUCHE_DE_UN_PALET, SensorState.LEFT_ELEVATOR_MOVING);
-        rightElevator = new ElevatorActuator(wrapper, ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET,
-                ActuatorsOrder.MONTE_DESCEND_ASCENCEUR_DROIT_DE_UN_PALET, ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_DROIT_DE_UN_PALET, SensorState.RIGHT_ELEVATOR_MOVING);
+        leftElevator = new ElevatorActuator(wrapper, ElevatorOrders.RaiseLeftElevator, ElevatorOrders.LowerLeftElevator,
+                ElevatorOrders.RaiseThenLowerLeftElevator, ElevatorOrders.RaiseThenLowerLeftElevator, SensorState.LEFT_ELEVATOR_MOVING);
+        rightElevator = new ElevatorActuator(wrapper, ElevatorOrders.RaiseRightElevator, ElevatorOrders.LowerRightElevator,
+                ElevatorOrders.RaiseThenLowerRightElevator, ElevatorOrders.RaiseThenLowerRightElevator, SensorState.RIGHT_ELEVATOR_MOVING);
     }
 }

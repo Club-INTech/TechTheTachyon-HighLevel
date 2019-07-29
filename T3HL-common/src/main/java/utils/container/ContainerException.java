@@ -30,4 +30,5 @@ public class ContainerException extends RuntimeException
 {
     public ContainerException() {super();}
     public ContainerException(String message) {super(message);}
+    public ContainerException(Exception reason) {super(reason);}
 }

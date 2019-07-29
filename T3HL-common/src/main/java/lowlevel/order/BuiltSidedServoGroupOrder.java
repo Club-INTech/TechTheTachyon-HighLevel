@@ -3,8 +3,12 @@ package lowlevel.order;
 import lowlevel.ServoGroup;
 import utils.RobotSide;
 
-// TODO: documentation
-public class BuiltSidedServoGroupOrder implements SidedServoGroupOrder {
+/**
+ * Instance de {@link ServoGroupOrder} créée par un {@link OrderBuilder}, qui peut être symétrisée
+ *
+ * @author jglrxavpok
+ */
+class BuiltSidedServoGroupOrder implements SidedServoGroupOrder {
 
     private final String system;
     private final RobotSide side;

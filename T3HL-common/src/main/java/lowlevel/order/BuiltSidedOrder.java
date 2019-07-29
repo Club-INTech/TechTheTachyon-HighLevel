@@ -2,6 +2,11 @@ package lowlevel.order;
 
 import utils.RobotSide;
 
+/**
+ * Ordre simple créé par un {@link OrderBuilder}
+ *
+ * @author jglrxavpok
+ */
 class BuiltSidedOrder implements SidedOrder {
 
     private final String system;
@@ -35,6 +40,10 @@ class BuiltSidedOrder implements SidedOrder {
         return system+" "+side.toString()+" "+terminal;
     }
 
+    /**
+     * Permets de garder l'instance de l'ordre symétrisé pour éviter de le calculer à chaque appel de symetrize
+     * @param symetrized
+     */
     void setSymetrized(BuiltSidedOrder symetrized) {
         this.symetrized = symetrized;
     }
