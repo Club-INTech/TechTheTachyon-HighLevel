@@ -70,10 +70,10 @@ public class PaletsZoneDepart extends Script implements Offsets {
                     turn(Math.PI);
                     robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
                     async("Descend ascenseur gauche", () -> actuators.leftElevator.down());
-                    robot.followPathTo(position);
+                    followPathTo(position);
                 }
                 else if (premierPaletPris) {
-                    robot.followPathTo(position);
+                    followPathTo(position);
                     turn(Math.PI / 2);
                 } else {
                     premierPaletPris = true;

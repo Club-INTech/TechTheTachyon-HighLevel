@@ -61,7 +61,6 @@ public class GetBlueAcc extends Script implements Offsets {
                 offsetXGoto = Offsets.get(GETBLUEACC_X_RETRAIT_VIOLET);
                 offsetYGoto = Offsets.get(GETBLUEACC_Y_RETRAIT_VIOLET);
             }
-            //robot.moveLengthwise(230,false);
             if (symetry){
 
                 robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
@@ -71,7 +70,7 @@ public class GetBlueAcc extends Script implements Offsets {
                 robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
             }
             if(recalageMecaBlueAcc) {
-                robot.turn(-Math.PI / 2);
+                turn(-Math.PI / 2);
                 robot.recalageMeca(true, 150/*rayon robot*/ + 10 + 7 /*bras*/);
             }
             if(symetry) {
@@ -111,26 +110,13 @@ public class GetBlueAcc extends Script implements Offsets {
         }
     }
 
-
     /**
      * Exécution d'actions pendant le mouvement jusqu'à la position d'entrée du script. Utile pour mettre les bras à la bonne position, baisser un ascenseur, etc.
      * @param version la version du script
      */
     @Override
     public void executeWhileMovingToEntry(int version){
-
         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-        //c cassé, jsp pk il envoie down, demande d'attendre et reçoit quasi instantanéturnment la confirmation de "je bouge plus" ...
-        /*
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DU_SECONDAIRE,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR_HAUT,true);
-        //robot.useActuator(ActuatorsOrder.DESCEND_MONTE_ASCENCEUR_SECONDAIRE_DE_UN_PALET,true);
-        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET,true);
-        robot.waitForRightElevator();
-        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET,true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR_FOR_RED);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DU_SECONDAIRE);
-        */
     }
 
     @Override

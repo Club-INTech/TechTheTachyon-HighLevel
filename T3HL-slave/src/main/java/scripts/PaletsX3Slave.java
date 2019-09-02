@@ -20,8 +20,6 @@ public class PaletsX3Slave extends Script implements Offsets {
     private ArrayList<VectCartesian> positions = new ArrayList<>();
     private int xEntry = 1300; //1235;// 1338
     private int yEntry = 1300 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
-//    private int xEntry2 = 1300;
-//    private int yEntry2 = 1630;
     private double offsetX;
     private double offsetY;
     private static final int DISTANCE_INTER_PUCK = 100;
@@ -54,7 +52,7 @@ public class PaletsX3Slave extends Script implements Offsets {
 
             turn(Math.PI/2);
 
-            robot.moveLengthwise(600,false);
+            moveLengthwise(600,false);
 
             if(!symetry) {
                 robot.recalageMeca(true,-1800+positions.get(0).getY()+5);
@@ -83,11 +81,8 @@ public class PaletsX3Slave extends Script implements Offsets {
 
             turn(-Math.PI/2);
 
-            robot.moveLengthwise(600, false);
+            moveLengthwise(600, false);
             turn(Math.PI);
-
-
-
         }
         catch (UnableToMoveException e) {
             e.printStackTrace();

@@ -14,9 +14,6 @@ public class OpenTheGateSlave extends Script {
 
     /**
      * Construit un script
-     *
-     * @param robot le robot
-     * @param table
      */
     protected OpenTheGateSlave(HLInstance hl) {
         super(hl);
@@ -38,22 +35,22 @@ public class OpenTheGateSlave extends Script {
 
         while (true) {
             try {
-                robot.followPathTo(upperRight, 0);
+                followPathTo(upperRight, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(upperLeft, 0);
+                followPathTo(upperLeft, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(lowerLeft, 0);
+                followPathTo(lowerLeft, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(lowerRight, 0);
+                followPathTo(lowerRight, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }

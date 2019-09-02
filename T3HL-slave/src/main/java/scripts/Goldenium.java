@@ -81,22 +81,20 @@ public class Goldenium extends Script implements Offsets {
             if(symetry) {
                 turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise(Offsets.get(MOVE_GOLDENIUM_VIOLET), false);
-//                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_VIOLET.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_VIOLET.get()),false);
+                moveLengthwise(Offsets.get(MOVE_GOLDENIUM_VIOLET), false);
             } else {
-//                robot.softGoTo(new VectCartesian(-500 + 230-517+Offsets.GOLDENIUM_GOTO_X_JAUNE.get(),154 + 100 + 34 - 30+Offsets.GOLDENIUM_GOTO_Y_JAUNE.get()),false);
                 turn(Math.PI);
                 robot.setTranslationSpeed(Speed.SLOW_ALL);
-                robot.moveLengthwise(Offsets.get(MOVE_GOLDENIUM_JAUNE), false);
+                moveLengthwise(Offsets.get(MOVE_GOLDENIUM_JAUNE), false);
                 turn(0);
             }
 
             turn(Math.PI/2);
-            robot.moveLengthwise(decalageGold, false);
+            moveLengthwise(decalageGold, false);
             if(symetry) {
-                robot.turn(Math.PI);
+                turn(Math.PI);
             } else {
-                robot.turn(0);
+                turn(0);
             }
         } catch(UnableToMoveException e) {
             e.printStackTrace();
@@ -127,9 +125,9 @@ public class Goldenium extends Script implements Offsets {
             // le principal part en même temps que nous
             syncBuddy.sendAcceleratorFree();
             robot.getAudioPlayer().play("DEJAVU");
-            robot.followPathTo(positionBalance2);
+            followPathTo(positionBalance2);
             table.removeTassot();
-            robot.followPathTo(positionBalance1);
+            followPathTo(positionBalance1);
             if(!symetry) {
                 turn(Math.PI);
                 depose();
@@ -152,7 +150,7 @@ public class Goldenium extends Script implements Offsets {
                             depose();
                         }
                     });
-                    robot.moveLengthwise(-90,false);
+                    moveLengthwise(-90,false);
                 } catch (UnableToMoveException e) {
                     e.printStackTrace();
                 }
@@ -160,18 +158,6 @@ public class Goldenium extends Script implements Offsets {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-       /* try {
-            if(!symetry) {
-                robot.moveLengthwise(-60, false);
-            }
-            else{
-                robot.moveLengthwise(60, false);
-            }
-            robot.turn(-Math.PI/2-0.1);
-            robot.moveLengthwise(200,false);
-        } catch (UnableToMoveException e) {
-            e.printStackTrace();
-        }*/
     }
 
     private void depose() {

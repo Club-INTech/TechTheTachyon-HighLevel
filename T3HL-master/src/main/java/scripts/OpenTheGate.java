@@ -40,7 +40,7 @@ public class OpenTheGate extends Script {
 
         while (true) {
             try {
-                robot.followPathTo(zoneDep, 0);
+                followPathTo(zoneDep, 0);
                 turn(Math.PI/2);
                 actuators.leftPump.activate(true);
                 actuators.leftValve.deactivate(true);
@@ -60,22 +60,22 @@ public class OpenTheGate extends Script {
             }
 
             try {
-                robot.followPathTo(upperRight, 0);
+                followPathTo(upperRight, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(upperLeft, 0);
+                followPathTo(upperLeft, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(lowerLeft, 0);
+                followPathTo(lowerLeft, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }
             try {
-                robot.followPathTo(lowerRight, 0);
+                followPathTo(lowerRight, 0);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();
             }

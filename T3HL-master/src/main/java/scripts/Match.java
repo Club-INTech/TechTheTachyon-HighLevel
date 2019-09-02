@@ -56,42 +56,20 @@ public class Match extends Script {
             //On tente d'aller à l'accélérateur
             boolean exceptionRaised = false;
             if(!secours) {
-                try {
-                    robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
-                } catch (UnableToMoveException e) {
-                    exceptionRaised = true;
-                    e.printStackTrace();
-                }
-                if (exceptionRaised) {
-                    //Si on n'a pas réussi, on attend 2 secondes et on retente
+                exceptionRaised = attemptMultipleTimes(3, () -> {
                     try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    exceptionRaised = false;
-                    try {
-                        robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
+                        followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
+                        return true;
                     } catch (UnableToMoveException e) {
-                        exceptionRaised = true;
                         e.printStackTrace();
-                    }
-                    if (exceptionRaised) {
-                        //Si on n'a toujours pas réussi, on attend encore 2 secondes et on retente
                         try {
                             Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        exceptionRaised = false;
-                        try {
-                            robot.followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
-                        } catch (UnableToMoveException e) {
-                            exceptionRaised = true;
-                            e.printStackTrace();
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
                         }
                     }
-                }
+                    return false;
+                });
             }
             if (secours || exceptionRaised) {
                 //Si on n'a jamais réussi à aller à l'accélérateur, on fait le script de sécurité

@@ -16,13 +16,13 @@ public class ScriptHomologationSlave extends Script {
     public void execute(int version) {
         try {
             turn(Math.PI/2);
-            robot.moveLengthwise(DISTANCE_INTERPALET*2, false);
+            moveLengthwise(DISTANCE_INTERPALET*2, false);
             turn(Math.PI);
-            robot.moveLengthwise(DISTANCE_INTERPALET*3, false);
+            moveLengthwise(DISTANCE_INTERPALET*3, false);
             turn(-Math.PI/2);
-            robot.moveLengthwise(DISTANCE_INTERPALET, false);
+            moveLengthwise(DISTANCE_INTERPALET, false);
             turn(0);
-            robot.moveLengthwise(DISTANCE_INTERPALET*2+150, false);
+            moveLengthwise(DISTANCE_INTERPALET*2+150, false);
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }

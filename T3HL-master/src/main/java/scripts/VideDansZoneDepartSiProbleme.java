@@ -20,8 +20,6 @@ public class VideDansZoneDepartSiProbleme extends Script {
     /**
      * Position d'entrée du script
      */
-    //private final int xEntry = -490+10;
-    //private final int yEntry = 410-78+50+10;
     private boolean lastWasRed=true;
 
     private Future<Void> recalageLeft;
@@ -45,11 +43,11 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
                 if (robot.getRightElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
                     System.out.println(1111);
-                    robot.moveLengthwise(-300, false);
+                    moveLengthwise(-300, false);
                     lastWasRed=true;
                 } else if (robot.getRightElevatorOrNull().peek() == CouleurPalet.VERT && lastWasRed) {
                     System.out.println(2222);
-                    robot.moveLengthwise(300, false);
+                    moveLengthwise(300, false);
                     lastWasRed=false;
                 }
 
@@ -79,10 +77,10 @@ public class VideDansZoneDepartSiProbleme extends Script {
                 actuators.leftValve.deactivate(true);
 
                 if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.ROUGE && !lastWasRed) {
-                    robot.moveLengthwise(300, false);
+                    moveLengthwise(300, false);
                     lastWasRed=true;
                 } else if (robot.getLeftElevatorOrNull().peek() == CouleurPalet.VERT && lastWasRed) {
-                    robot.moveLengthwise(-300, false);
+                    moveLengthwise(-300, false);
                     lastWasRed=false;
                 }
 

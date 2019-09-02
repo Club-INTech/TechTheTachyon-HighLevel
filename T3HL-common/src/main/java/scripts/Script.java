@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
 
 /**
@@ -211,7 +212,46 @@ public abstract class Script implements Module {
         robot.turn(angle);
     }
 
-    // =========================================
+    /**
+     * Cf {@link #followPathTo(Vec2, int)} (valeur de maxRetries à -1)
+     * @see #followPathTo(Vec2, int)
+     */
+    public void followPathTo(Vec2 point) throws UnableToMoveException {
+        followPathTo(point, -1);
+    }
+
+    /**
+     * Permet au robot d'aller jusqu'à un point donné. Actives les leds du robot en fonction de son état.<br/>
+     * <ul>
+     *     <li>Rouge: Première tentative de followpath</li>
+     *     <li>Bleu: Nouvelle tentative de followpath (indice pair)</li>
+     *     <li>Vert: Nouvelle tentative de followpath (indice impair)</li>
+     * </ul>
+     * @param point
+     *              le point visé
+     * @param maxRetries
+     *              le nombre de réessais à faire, 0 throw un UnableToMoveException dès le premier échec, -1 signifie de tester à l'infini
+     * @throws UnableToMoveException
+     *              en cas de problème de blocage/adversaire
+     */
+    public void followPathTo(Vec2 point, int maxRetries) throws UnableToMoveException, TimeoutError {
+        robot.followPathTo(point, maxRetries);
+    }
+
+    /**
+     * Permet au robot d'avancer/recluer en ligne droite
+     * @param distance
+     *              la distance à parcourir, négative si l'on veut aller en arrière
+     * @param expectedWallImpact
+     *              true si l'on s'attend à un blocage mécanique (lorsque l'on veut se caler contre le mur par exemple)
+     * @throws UnableToMoveException
+     *              en cas de problèmes de blocage/adversaire
+     */
+    public void moveLengthwise(int distance, boolean expectedWallImpact, Runnable... runnables) throws UnableToMoveException {
+        robot.moveLengthwise(distance, expectedWallImpact, runnables);
+    }
+
+        // =========================================
     // Fin des méthodes pour raccourcir le code
     // =========================================
 
@@ -221,6 +261,21 @@ public abstract class Script implements Module {
 
     protected Future<Void> async(String name, Runnable action) {
         return hl.async(name, action);
+    }
+
+    /**
+     * Réessaies une même action, avec un nombre de réessai maximal
+     * @param times le nombre de réessais max à tenter
+     * @param action l'action à répéter. Doit renvoyer 'true' quand l'action est réussie
+     * @return 'true' si l'action a été réussie, 'false' sinon
+     */
+    protected boolean attemptMultipleTimes(int times, Supplier<Boolean> action) {
+        for (int i = 0; i < times; i++) {
+            if(action.get()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void join(Future<Void> future) {

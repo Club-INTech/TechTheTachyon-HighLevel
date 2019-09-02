@@ -109,7 +109,7 @@ public class PaletsX6 extends Script implements Offsets {
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         premierPaletPris = false;
         try {
-            robot.turn(Math.PI);
+            turn(Math.PI);
             if(symetry) {
                 offsetTheta = Offsets.get(PALETSX6_THETA_VIOLET);
                 robot.computeNewPositionAndOrientation(Sick.UPPER_LEFT_CORNER_TOWARDS_0);
@@ -122,7 +122,7 @@ public class PaletsX6 extends Script implements Offsets {
             } else {
                 robot.computeNewPositionAndOrientation(Sick.UPPER_RIGHT_CORNER_TOWARDS_PI);
             }
-            robot.followPathTo(positions.get(0));
+            followPathTo(positions.get(0));
             turn(Math.PI);
 
             if(version == 4) {
@@ -166,7 +166,7 @@ public class PaletsX6 extends Script implements Offsets {
                         error.printStackTrace();
                     }
                     table.removeAllTemporaryObstacles();
-                    robot.followPathTo(positionBalance);
+                    followPathTo(positionBalance);
 
                     // On dépose le bleu
                     // on tourne en même temps qu'on lève le bras
@@ -182,12 +182,10 @@ public class PaletsX6 extends Script implements Offsets {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT, true);
                         syncBuddy.sendBalanceFree();
 
-                      //  robot.turn(0);
-                      //  robot.moveLengthwise(600,false);
                         // on va dans notre zone de départ pour libérer le chemin
                         try {
-                            robot.followPathTo(positionZoneDepart);
-                            robot.turn(Math.PI);
+                            followPathTo(positionZoneDepart);
+                            turn(Math.PI);
                             if(!recalageAcc) {
                                 recalageX6();
                             }
@@ -239,7 +237,7 @@ public class PaletsX6 extends Script implements Offsets {
             storePuck(blue, moveElevator, lastInChain);
 
             if (moveDistance != 0) {
-                robot.moveLengthwise(moveDistance, false);
+                moveLengthwise(moveDistance, false);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

@@ -1,6 +1,10 @@
 Refactoring du HL - Chronologie
 ===
 
+02/09/2019
+----
++ Ajout de nouvelles méthodes de raccourci et utilisation
+
 28/07/2019
 ----
 + Tentative de nouveau système pour créer des ordres unifiés
@@ -52,3 +56,4 @@ Refactoring du HL - Chronologie
     + Refactoring de ConfigData et Offsets pour convenir à la nouvelle architecture. (C'est moins joli qu'un enum, 
     mais ça permet d'avoir des types génériques et donc évite de se tromper entre 'getBoolean', 'getString', etc.)
     + Utilisation du système d'attributs dérivés pour savoir si on est en symétrie ou non, plus besoin de vérifier la couleur "à la main"
+    + Utilisation de @Configurable pour la symétrie

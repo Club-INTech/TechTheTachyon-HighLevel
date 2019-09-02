@@ -75,8 +75,8 @@ public class ScriptPaletsZoneChaos extends Script {
             //table.removeAllChaosObstacles();
             actuators.leftValve.activate();
             for (Vec2 position : positions) {
-                robot.followPathTo(position);
-                robot.turn(Math.PI / 2);
+                followPathTo(position);
+                turn(Math.PI / 2);
                 // tant que l'ascenseur gauche bouge on continue pas, sinon on risque de pas avoir un ascenseur à une bonne position (en théorie ici c'est bon mais on sait jamais)
                 Module.waitWhileTrue(SensorState.LEFT_ELEVATOR_MOVING::getData);
                 actuators.leftElevator.down();

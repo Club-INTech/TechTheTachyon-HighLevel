@@ -26,10 +26,10 @@ public class PaletsX6Slave extends Script {
     public void execute(int version) {
         try {
             if(!symetry){
-                robot.turn(Math.PI);
+                turn(Math.PI);
             }
             else {
-                robot.turn(0);
+                turn(0);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

@@ -22,7 +22,7 @@ public class GetRedDep extends Script {
     public void execute(int version) {
         try {
             if (!symetry) {
-                robot.moveLengthwise(-100,false);
+                moveLengthwise(-100,false);
             }
         } catch (UnableToMoveException e) {
             e.printStackTrace();

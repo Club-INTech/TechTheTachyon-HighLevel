@@ -136,7 +136,7 @@ public class Accelerateur extends Script implements Offsets {
     }
 
     private void storePuck(int version, Robot robot) {
-        Module.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING::getData);
+        Module.waitWhileTrue(SensorState.RIGHT_ELEVATOR_MOVING);
         actuators.rightValve.deactivate(true);
         if (version == 0) {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_AU_DESSUS_ACCELERATEUR);
@@ -203,8 +203,6 @@ public class Accelerateur extends Script implements Offsets {
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
         });
         recalageRight = async("Recalage ascenseur droit", () -> {
-            //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
-            // robot.waitForRightElevator();
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_LIBERE_ASCENSEUR, true);
             actuators.rightElevator.updown(true);
             robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR, true);
