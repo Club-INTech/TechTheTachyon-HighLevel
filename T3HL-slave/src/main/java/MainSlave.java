@@ -55,7 +55,6 @@ public class MainSlave extends RobotEntryPoint {
 
     @Override
     protected void preLLConnection() throws ContainerException {
-        robot.getAudioPlayer().play("STARTUP");
         waitForColorSwitch();
         if(hl.getConfig().getBoolean(ConfigData.VISUALISATION) || hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
             SimulatorDebug debug = hl.module(SimulatorDebug.class);

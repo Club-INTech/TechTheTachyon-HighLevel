@@ -18,7 +18,6 @@
 
 package robot;
 
-import data.controlers.AudioPlayer;
 import data.controlers.PanneauModule;
 import locomotion.Locomotion;
 import orders.OrderWrapper;
@@ -34,7 +33,7 @@ import utils.communication.SimulatorDebug;
 public class Slave extends Robot {
 
     public Slave(HLInstance hl, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService) {
-        super(hl, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService, new AudioPlayer());
+        super(hl, locomotion, orderWrapper, hookFactory, simulatorDebug, panneauService);
         createRightElevator();
     }
 

@@ -21,7 +21,6 @@ package locomotion;
 import data.SensorState;
 import data.Table;
 import data.XYO;
-import data.controlers.AudioPlayer;
 import data.table.MobileCircularObstacle;
 import orders.OrderWrapper;
 import orders.Speed;
@@ -52,7 +51,6 @@ public class PathFollower extends ModuleThread {
      * Table
      */
     private Table table;
-    private AudioPlayer audioPlayer;
 
     /**
      * Position & orientation du robot
@@ -113,10 +111,9 @@ public class PathFollower extends ModuleThread {
      * @param table
      *              table
      */
-    private PathFollower(OrderWrapper orderWrapper, Table table, AudioPlayer audioPlayer) {
+    private PathFollower(OrderWrapper orderWrapper, Table table) {
         this.orderWrapper = orderWrapper;
         this.table = table;
-        this.audioPlayer = audioPlayer;
         this.robotXYO = XYO.getRobotInstance();
     }
 
@@ -268,7 +265,6 @@ public class PathFollower extends ModuleThread {
             Log.LOCOMOTION.warning("Enemy in front of me: "+obstacle);
             Log.LOCOMOTION.warning("Attente de "+ locomotionObstructedTimeout +" ms tant que ça se libère pas...");
 
-            audioPlayer.play("AH");
             orderWrapper.immobilise();
 
             // attente de qq secondes s'il y a un ennemi là où on veut aller
@@ -386,7 +382,6 @@ public class PathFollower extends ModuleThread {
 
                     if(needsToStop) {
                         orderWrapper.immobilise();
-                        audioPlayer.play("AH");
                         throw new UnableToMoveException("Enemy intersects "+segment+": "+enemy.get().toString()+" ", aim, UnableToMoveReason.TRAJECTORY_OBSTRUCTED);
                     }
                 }

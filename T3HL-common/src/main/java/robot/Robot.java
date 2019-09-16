@@ -25,7 +25,6 @@ import data.CouleurPalet;
 import data.SensorState;
 import data.Sick;
 import data.XYO;
-import data.controlers.AudioPlayer;
 import data.controlers.DataController;
 import data.controlers.PanneauModule;
 import data.synchronization.SynchronizationWithBuddy;
@@ -72,7 +71,6 @@ public abstract class Robot implements Module {
      * Module qui permet de communiquer avec le panneau de score et l'interrupteur pour la sélection de la couleur de jeu
      */
     private final PanneauModule panneauService;
-    private AudioPlayer audioPlayer;
 
     private HLInstance hl;
     /**
@@ -128,14 +126,13 @@ public abstract class Robot implements Module {
      * @param orderWrapper
      *              service d'envoie d'ordre vers le LL
      */
-    protected Robot(HLInstance hl, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService, AudioPlayer audioPlayer) {
+    protected Robot(HLInstance hl, Locomotion locomotion, OrderWrapper orderWrapper, HookFactory hookFactory, SimulatorDebug simulatorDebug, PanneauModule panneauService) {
         this.hl = hl;
         this.simulatorDebug = simulatorDebug;
         this.locomotion = locomotion;
         this.orderWrapper = orderWrapper;
         this.hookFactory = hookFactory;
         this.panneauService = panneauService;
-        this.audioPlayer = audioPlayer;
         try {
             hl.module(DataController.class).setRobotClass(getClass());
         } catch (ContainerException e) {
@@ -374,7 +371,6 @@ public abstract class Robot implements Module {
             }
             this.setTranslationSpeed(Speed.DEFAULT_SPEED);
             this.ableRotation();
-            audioPlayer.play("IMOKAY");
             if (avant) {
                 this.moveLengthwise(-distReculeAbsolu, false);
             } else {
@@ -702,9 +698,5 @@ public abstract class Robot implements Module {
     }
 
     public XYO getXyo() { return this.xyo;}
-
-    public AudioPlayer getAudioPlayer() {
-        return audioPlayer;
-    }
 
 }

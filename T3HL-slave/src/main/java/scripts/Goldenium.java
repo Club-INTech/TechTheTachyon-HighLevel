@@ -124,7 +124,6 @@ public class Goldenium extends Script implements Offsets {
         try {
             // le principal part en même temps que nous
             syncBuddy.sendAcceleratorFree();
-            robot.getAudioPlayer().play("DEJAVU");
             followPathTo(positionBalance2);
             table.removeTassot();
             followPathTo(positionBalance1);

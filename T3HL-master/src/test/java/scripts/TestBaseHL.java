@@ -83,11 +83,9 @@ public abstract class TestBaseHL {
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);
             DataController sensorControler = hl.module(DataController.class);
-            sensorControler.start();
 
             if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
                 LidarControler lidarControler = hl.module(LidarControler.class);
-                lidarControler.start();
             }
 
             Listener listener = hl.module(Listener.class);
