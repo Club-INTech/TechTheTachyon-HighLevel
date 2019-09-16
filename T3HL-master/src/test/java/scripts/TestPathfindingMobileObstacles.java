@@ -4,7 +4,7 @@ import locomotion.UnableToMoveException;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestPathfindingMobileObstacles extends TestBaseHL {
     @Override
@@ -13,12 +13,12 @@ public class TestPathfindingMobileObstacles extends TestBaseHL {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(1300, 500);
+        return new InternalVectCartesian(1300, 500);
     }
 
     @Override
     public void action() throws Exception {
-        Vec2 pointA = new VectCartesian(1300, 500);
+        Vec2 pointA = new InternalVectCartesian(1300, 500);
         Vec2 pointB = pointA.symetrizeVector();
         for (int i = 0; i < 100; i++) {
             try {

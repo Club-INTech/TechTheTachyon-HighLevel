@@ -6,7 +6,7 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +33,7 @@ public class TestSICK extends TestBaseHL {
     @Override
     public Vec2 startPosition() {
         // on s'en fiche de la position de départ, tout le but de ce test est de vérifier qu'on reçoit des données
-        return new VectCartesian(0,500);
+        return new InternalVectCartesian(0,500);
     }
 
     @Override

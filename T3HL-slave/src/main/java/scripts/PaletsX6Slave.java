@@ -5,7 +5,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class PaletsX6Slave extends Script {
 
@@ -46,7 +46,7 @@ public class PaletsX6Slave extends Script {
 
     @Override
     public Vec2 entryPosition(int version) {
-        return new VectCartesian(xEntry, yEntry);
+        return new InternalVectCartesian(xEntry, yEntry);
     }
 
     @Override

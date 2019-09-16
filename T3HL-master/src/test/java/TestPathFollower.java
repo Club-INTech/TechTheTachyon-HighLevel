@@ -15,7 +15,7 @@ import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Segment;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestPathFollower {
 
@@ -39,7 +39,6 @@ public class TestPathFollower {
             graphe = hl.module(Graphe.class);
             pathFollower = hl.module(PathFollower.class);
             sensorController = hl.module(DataController.class);
-            sensorController.start();
             robot = hl.module(Master.class);
         } catch (ContainerException e) {
             e.printStackTrace();
@@ -69,9 +68,9 @@ public class TestPathFollower {
     @Test
     public void simplePath() throws UnableToMoveException, InterruptedException {
         graphe.clear();
-        Vec2 pointA = new VectCartesian(0,0);
-        Vec2 pointB = new VectCartesian(200,0);
-        Vec2 pointC = new VectCartesian(200,200);
+        Vec2 pointA = new InternalVectCartesian(0,0);
+        Vec2 pointB = new InternalVectCartesian(200,0);
+        Vec2 pointC = new InternalVectCartesian(200,200);
         XYO.getRobotInstance().getPosition().setXY(pointA.getX(), pointA.getY());
         Node nodeA = new Node(pointA, true);
         Node nodeB = new Node(pointB, true);

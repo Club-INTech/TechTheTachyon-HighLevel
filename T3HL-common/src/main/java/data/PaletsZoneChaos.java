@@ -1,9 +1,7 @@
 package data;
 
 import utils.math.Vec2;
-import utils.math.VectCartesian;
-
-import java.util.ArrayList;
+import utils.math.InternalVectCartesian;
 
 public enum PaletsZoneChaos {
     /**
@@ -12,15 +10,15 @@ public enum PaletsZoneChaos {
 
 
 
-    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new VectCartesian(476,1151)),
-    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new VectCartesian(585,1101)),
-    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new VectCartesian(504,1003)),
-    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new VectCartesian(410,1062)),
+    RED_1_ZONE_CHAOS_PURPLE(3,CouleurPalet.ROUGE,false,false,new InternalVectCartesian(476,1151)),
+    RED_2_ZONE_CHAOS_PURPLE(4,CouleurPalet.ROUGE,false,false,new InternalVectCartesian(585,1101)),
+    BLUE_ZONE_CHAOS_PURPLE(5,CouleurPalet.BLEU,false,false,new InternalVectCartesian(504,1003)),
+    GREEN_ZONE_CHAOS_PURPLE(6,CouleurPalet.VERT,false,false,new InternalVectCartesian(410,1062)),
 
-    RED_1_ZONE_CHAOS_YELLOW(7,CouleurPalet.ROUGE,false,false,new VectCartesian(426,1050)),
-    RED_2_ZONE_CHAOS_YELLOW(8,CouleurPalet.ROUGE,false,false,new VectCartesian(574,1050)),
-    BLUE_ZONE_CHAOS_YELLOW(9,CouleurPalet.BLEU,false,false,new VectCartesian(500,976)),
-    GREEN_ZONE_CHAOS_YELLOW(10,CouleurPalet.VERT,false,false,new VectCartesian(501,1124)),
+    RED_1_ZONE_CHAOS_YELLOW(7,CouleurPalet.ROUGE,false,false,new InternalVectCartesian(426,1050)),
+    RED_2_ZONE_CHAOS_YELLOW(8,CouleurPalet.ROUGE,false,false,new InternalVectCartesian(574,1050)),
+    BLUE_ZONE_CHAOS_YELLOW(9,CouleurPalet.BLEU,false,false,new InternalVectCartesian(500,976)),
+    GREEN_ZONE_CHAOS_YELLOW(10,CouleurPalet.VERT,false,false,new InternalVectCartesian(501,1124)),
     ;
 
     private int id;

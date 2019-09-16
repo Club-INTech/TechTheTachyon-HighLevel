@@ -22,7 +22,7 @@ import orders.order.Order;
 
 import orders.Speed;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 /**
  * Contient le nom des hooks et leurs paramètres associés
@@ -33,7 +33,7 @@ import utils.math.VectCartesian;
 public enum HookNames {
 
     // Example :
-    SPEED_DOWN(1, new VectCartesian(50, 50), 5 ,0,Math.PI, Speed.SLOW_ALL),
+    SPEED_DOWN(1, new InternalVectCartesian(50, 50), 5 ,0,Math.PI, Speed.SLOW_ALL),
     ;
 
     /**

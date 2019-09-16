@@ -3,11 +3,9 @@ package simulator;
 import data.CouleurPalet;
 import data.Table;
 import data.graphe.Node;
-import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import locomotion.PathFollower;
-import robot.Robot;
 import utils.ConfigData;
 import utils.RobotSide;
 import utils.math.*;
@@ -488,7 +486,7 @@ public class GraphicalInterface extends JFrame {
 
     /** Transforme les coordonnées de la table pour qu'ils soient affichés correction sur l'interface */
     private Vec2 transformTableCoordsToInterfaceCoords(int xOnTable, int yOnTable) {
-        return new VectCartesian(
+        return new InternalVectCartesian(
                 (xOnTable + (this.WIDTH_TABLE / 2.0f)) * (this.TABLE_PIXEL_WIDTH / (float) this.WIDTH_TABLE),
                 (this.HEIGHT_TABLE - yOnTable) * (this.TABLE_PIXEL_HEIGHT / (float) this.HEIGHT_TABLE)
         );
@@ -503,7 +501,7 @@ public class GraphicalInterface extends JFrame {
 
     /** Transforme les coordonnées de l'interface pour qu'ils correspondent à ceux de la table */
     private Vec2 transformInterfaceCoordsToTableCoords(int xOnInterface, int yOnInterface){
-        return new VectCartesian(
+        return new InternalVectCartesian(
                 (xOnInterface - (this.TABLE_PIXEL_WIDTH / 2.0f)) * (this.WIDTH_TABLE / (float) this.TABLE_PIXEL_WIDTH),
                 (this.TABLE_PIXEL_HEIGHT - yOnInterface) * (this.HEIGHT_TABLE/ (float) this.TABLE_PIXEL_HEIGHT)
         );
@@ -530,7 +528,7 @@ public class GraphicalInterface extends JFrame {
                 }
             }
             else{
-                this.table.SIMULATEDmoveMobileObstacle(new VectCartesian(0, -1000));
+                this.table.SIMULATEDmoveMobileObstacle(new InternalVectCartesian(0, -1000));
             }
         }
     }

@@ -3,7 +3,7 @@ package scripts;
 import locomotion.UnableToMoveException;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class ScriptHomologation extends Script {
 
@@ -43,7 +43,7 @@ public class ScriptHomologation extends Script {
 
     @Override
     public Vec2 entryPosition(int version) {
-        return new VectCartesian(xEntry, yEntry);
+        return new InternalVectCartesian(xEntry, yEntry);
     }
 
     @Override

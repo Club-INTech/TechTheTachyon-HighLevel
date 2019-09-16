@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import utils.HLInstance;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class Test_DataController {
 
@@ -44,7 +44,7 @@ public class Test_DataController {
         //Les constructeurs de connecionManager et listener ont été mis en public pour pouvoir faire les tests
         connectionManager=new ConnectionManager();
         HLInstance hl = HLInstance.getInstance("Master");
-        listener=new Listener(connectionManager, new SynchronizationWithBuddy(hl));
+        listener=new Listener(hl, connectionManager, new SynchronizationWithBuddy(hl));
         dataController =new DataController(hl, listener, null, null);
     }
 
@@ -86,10 +86,10 @@ public class Test_DataController {
 
             }
 
-        VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
+        InternalVectCartesian newPosition = new InternalVectCartesian(xCalcule, yCalcule);
         Double newOrientation = teta + Math.PI;
         XYO newXYO = new XYO(newPosition, newOrientation);
-        VectCartesian vecttest = new VectCartesian(1200 , 300);
+        InternalVectCartesian vecttest = new InternalVectCartesian(1200 , 300);
         Double orientest = 0.0 + Math.PI;
         Assert.assertEquals(vecttest,newPosition);
         Assert.assertEquals(orientest,newOrientation);

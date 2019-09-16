@@ -6,7 +6,7 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +37,7 @@ public class TestLidarMove extends TestBaseHL {
     public Vec2 startPosition() {
         // coin bas-droit de la table
 //        return new VectCartesian(table.getLength()/2-215,1000);
-        return new VectCartesian(-750,500);
+        return new InternalVectCartesian(-750,500);
     }
 
     @Override
@@ -45,9 +45,9 @@ public class TestLidarMove extends TestBaseHL {
         robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
         while(true) {
             try {
-                robot.followPathTo(new VectCartesian(-750,500));
+                robot.followPathTo(new InternalVectCartesian(-750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
-                robot.followPathTo(new VectCartesian(750,500));
+                robot.followPathTo(new InternalVectCartesian(750,500));
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (UnableToMoveException e) {
                 e.printStackTrace();

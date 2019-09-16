@@ -25,13 +25,12 @@ import data.table.MobileCircularObstacle;
 import data.table.Obstacle;
 import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
 import utils.math.Circle;
 import utils.math.Segment;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -186,7 +185,7 @@ public class Graphe implements Module {
      * @throws CloneNotSupportedException   exception qui n'arrive jamais...
      */
     private void placeNodes(Obstacle obstacle) throws CloneNotSupportedException {
-        Vec2 pos = new VectCartesian(0, 0);
+        Vec2 pos = new InternalVectCartesian(0, 0);
         Log.GRAPHE.debug("Placement de noeuds autour de l'obstacle "+obstacle);
         if (obstacle instanceof StillCircularObstacle) {
             for (int i = 0; i < nodeCircleNbr; i++) {
@@ -235,7 +234,7 @@ public class Graphe implements Module {
      * @throws CloneNotSupportedException   exception qui n'arrive jamais...
      */
     private void placeNodes() throws CloneNotSupportedException {
-        Vec2 pos = new VectCartesian(0, 0);
+        Vec2 pos = new InternalVectCartesian(0, 0);
         int xStep = table.getLength()/nodeXNbr;
         int yStep = table.getWidth()/nodeYNbr;
 
@@ -259,7 +258,7 @@ public class Graphe implements Module {
      * @throws CloneNotSupportedException   exception qui n'arrive jamais...
      */
     private void placeRidges() throws CloneNotSupportedException {
-        Segment segment = new Segment(new VectCartesian(0, 0), new VectCartesian(0, 0));
+        Segment segment = new Segment(new InternalVectCartesian(0, 0), new InternalVectCartesian(0, 0));
         Log.GRAPHE.debug("Initialisation des arrêtes");
         for (int i = 0; i < nodes.size(); i++) {
             Node node1 = nodes.get(i);
@@ -338,7 +337,7 @@ public class Graphe implements Module {
                 //writeLock().lock();
                 n = new Node(position, true);
                 Log.GRAPHE.debug("Ajout d'un noeud provisoire à "+position);
-                Segment seg = new Segment(position, new VectCartesian(0, 0));
+                Segment seg = new Segment(position, new InternalVectCartesian(0, 0));
                 for (Node node : nodes) {
                     seg.setPointB(node.getPosition());
                     constructRidge(n, node, seg);

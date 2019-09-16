@@ -17,13 +17,13 @@ import utils.container.ContainerException;
 import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.ArrayList;
 import java.util.concurrent.Future;
 
 public class PaletsX6 extends Script implements Offsets {
-    private ArrayList<VectCartesian> positions;
+    private ArrayList<InternalVectCartesian> positions;
 
     @Configurable
     private boolean symetry;
@@ -75,7 +75,7 @@ public class PaletsX6 extends Script implements Offsets {
             offsetZddX = Offsets.get(ZDD_POST_BALANCE_X_VIOLET);
             offsetZddY = Offsets.get(ZDD_POST_BALANCE_Y_VIOLET);
         }
-        Vec2 positionZoneDepart = new VectCartesian(1500-250+offsetZddX, 500+offsetZddY);
+        Vec2 positionZoneDepart = new InternalVectCartesian(1500-250+offsetZddX, 500+offsetZddY);
 
         int i=0;
         loadOffsets();
@@ -83,28 +83,28 @@ public class PaletsX6 extends Script implements Offsets {
         if(symetry) {
             offsetBalance = Offsets.get(PALETS_X6_BALANCE_Y_VIOLET);
         }
-        Vec2 positionBalance = new VectCartesian(200,1204+10+5+offsetY+20+offsetBalance);
+        Vec2 positionBalance = new InternalVectCartesian(200,1204+10+5+offsetY+20+offsetBalance);
 
         //Position pour le côté droit
         //difference de ~100  entre chaque palet
         if (version == 0) { //rouge droite
             // version pour juste les rouges
-            positions.add(new VectCartesian(905, 1206));
-            positions.add(new VectCartesian(805 , 1206));
-            positions.add(new VectCartesian(597, 1206));
+            positions.add(new InternalVectCartesian(905, 1206));
+            positions.add(new InternalVectCartesian(805 , 1206));
+            positions.add(new InternalVectCartesian(597, 1206));
         } else if (version == 1) {  // version pour juste les verts
-            positions.add(new VectCartesian(905, 1206));
-            positions.add(new VectCartesian(505, 1206));
+            positions.add(new InternalVectCartesian(905, 1206));
+            positions.add(new InternalVectCartesian(505, 1206));
         } else if (version == 2) {  //// version pour juste le bleu
-            positions.add(new VectCartesian(834, 1206));
+            positions.add(new InternalVectCartesian(834, 1206));
         }//version pour prendre les palets à la suite sauf le bleu
         else if (version == 3 || version == 4) {
-            positions.add(new VectCartesian(1000 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (0)
-            positions.add(new VectCartesian(900 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (1)
-            positions.add(new VectCartesian(800 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (2)
-            positions.add(new VectCartesian(700 + offsetX, 1204 + 10 + 5 + offsetY)); // bleu (3)
-            positions.add(new VectCartesian(600 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (4)
-            positions.add(new VectCartesian(500 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (5)
+            positions.add(new InternalVectCartesian(1000 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (0)
+            positions.add(new InternalVectCartesian(900 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (1)
+            positions.add(new InternalVectCartesian(800 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (2)
+            positions.add(new InternalVectCartesian(700 + offsetX, 1204 + 10 + 5 + offsetY)); // bleu (3)
+            positions.add(new InternalVectCartesian(600 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (4)
+            positions.add(new InternalVectCartesian(500 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (5)
         }
         robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
         premierPaletPris = false;
@@ -302,17 +302,17 @@ public class PaletsX6 extends Script implements Offsets {
         //position de départ directement au niveau du palet
         if (version == 0) {
             //Shape positionEntree = new Circle(new VectCartesian(1500-280,1206), 5);
-            return new VectCartesian(1000,1206);
+            return new InternalVectCartesian(1000,1206);
         }
         else if (version == 1) {
-            return new VectCartesian(905,1206);
+            return new InternalVectCartesian(905,1206);
         }
         else if (version == 2) {
-            return new VectCartesian(834,1206);
+            return new InternalVectCartesian(834,1206);
         }
         else if (version == 3 || version == 4 || version == 5) {
             System.err.println("OFFSET Y: "+offsetY);
-            return new VectCartesian(1500-191-65+offsetX, 1204+10+5+offsetY);
+            return new InternalVectCartesian(1500-191-65+offsetX, 1204+10+5+offsetY);
         }
         return null;
     }

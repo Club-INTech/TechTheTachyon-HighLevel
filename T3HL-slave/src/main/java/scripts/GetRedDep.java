@@ -6,7 +6,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class GetRedDep extends Script {
     private final int xEntry = 1500-449+148; //1244;//1350;
@@ -37,7 +37,7 @@ public class GetRedDep extends Script {
 
     @Override
     public Vec2 entryPosition(int version) {
-        return new VectCartesian(xEntry, yEntry);
+        return new InternalVectCartesian(xEntry, yEntry);
     }
 
     @Override

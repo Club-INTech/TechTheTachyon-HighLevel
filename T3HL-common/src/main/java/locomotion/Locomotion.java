@@ -32,7 +32,7 @@ import utils.TimeoutError;
 import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -201,7 +201,7 @@ public class Locomotion implements Module {
             Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(xyo.getPosition());
             obstacleBelowPosition.ifPresent(obstacle -> {
                 Log.LOCOMOTION.warning("Point de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle);
-                startHack[0] = graphe.addProvisoryNode(obstacle.getShape().closestPointToShape(new VectCartesian(0, 500)/*Centre*/));
+                startHack[0] = graphe.addProvisoryNode(obstacle.getShape().closestPointToShape(new InternalVectCartesian(0, 500)/*Centre*/));
             });
             start = startHack[0];
             aim = graphe.addProvisoryNode(point);

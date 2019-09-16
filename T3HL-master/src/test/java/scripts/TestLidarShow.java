@@ -4,7 +4,7 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestLidarShow extends TestBaseHL {
 
@@ -29,7 +29,7 @@ public class TestLidarShow extends TestBaseHL {
     public Vec2 startPosition() {
         // coin bas-droit de la table
 //        return new VectCartesian(table.getLength()/2-215,1000);
-        return new VectCartesian(-750,500);
+        return new InternalVectCartesian(-750,500);
     }
 
     @Override

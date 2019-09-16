@@ -7,7 +7,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.ArrayList;
 import java.util.concurrent.Future;
@@ -123,7 +123,7 @@ public class VideDansZoneDepartSiProbleme extends Script {
 
     @Override
     public Vec2 entryPosition(int version) {
-        return new VectCartesian(900, 450);
+        return new InternalVectCartesian(900, 450);
 
     }
 

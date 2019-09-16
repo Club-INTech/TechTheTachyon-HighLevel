@@ -5,7 +5,7 @@ import orders.order.ActuatorsOrder;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +32,7 @@ public class TestPositions extends TestBaseHL {
     @Override
     public Vec2 startPosition() {
         // on s'en fiche de la position de départ
-        return new VectCartesian(0,0);
+        return new InternalVectCartesian(0,0);
     }
 
     @Override

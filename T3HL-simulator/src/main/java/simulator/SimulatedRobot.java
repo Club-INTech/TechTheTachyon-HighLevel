@@ -5,7 +5,7 @@ import data.controlers.Channel;
 import utils.RobotSide;
 import utils.math.Calculs;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 import utils.math.VectPolar;
 
 import java.util.LinkedList;
@@ -34,7 +34,7 @@ public class SimulatedRobot implements IRobot {
     private final float TRANSLATION_SPEED = 0.5f;     //Vitesse de translation en m/s
     private final float ROTATION_SPEED = 0.002f;      //Vitesse de rotation en rad/s
 
-    private Vec2 START_POSITION = new VectCartesian(0,1000);
+    private Vec2 START_POSITION = new InternalVectCartesian(0,1000);
     private float START_ORIENTATION = 0;
 
     private boolean forwardOrBackward;     //Vrai si le robot avance ou recule, faux sinon
@@ -272,7 +272,7 @@ public class SimulatedRobot implements IRobot {
                 if(forwardOrBackward) {
                     float dirX = (float) (Math.cos(orientation)*forcedTranslationSpeed);
                     float dirY = (float) (Math.sin(orientation)*forcedTranslationSpeed);
-                    setPosition(position.plusVector(new VectCartesian(dirX, dirY)));
+                    setPosition(position.plusVector(new InternalVectCartesian(dirX, dirY)));
                 }
 
                 return;

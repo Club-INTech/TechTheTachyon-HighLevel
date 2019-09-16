@@ -7,13 +7,11 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -89,7 +87,7 @@ public class PaletsChaosControler extends Thread implements Module {
                         color = (String) jsonObj.get("color");
                         x = toIntExact((long) jsonObj.get("x"));
                         y = toIntExact((long) jsonObj.get("y"));
-                        position = new VectCartesian(x, y);
+                        position = new InternalVectCartesian(x, y);
                         switch (color) {
                             case "red":
                                 if (first_red_purple) {
@@ -120,7 +118,7 @@ public class PaletsChaosControler extends Thread implements Module {
                         x = toIntExact((long) jsonObj.get("x"));
                         y = toIntExact((long) jsonObj.get("y"));
                         color = (String) jsonObj.get("color");
-                        position = new VectCartesian(x, y);
+                        position = new InternalVectCartesian(x, y);
 
                         switch (color) {
                             case "red":

@@ -4,7 +4,7 @@ import data.CouleurPalet;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestAccelerateur extends TestScriptBase {
 
@@ -28,6 +28,6 @@ public class TestAccelerateur extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-730, 442);
+        return new InternalVectCartesian(-730, 442);
     }
 }

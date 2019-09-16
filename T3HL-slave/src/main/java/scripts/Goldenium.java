@@ -11,7 +11,7 @@ import utils.Offsets;
 import utils.TimeoutError;
 import utils.container.Module;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -38,8 +38,8 @@ public class Goldenium extends Script implements Offsets {
 
     //paramètres
 
-    private VectCartesian positionBalance1;
-    private VectCartesian positionBalance2;
+    private InternalVectCartesian positionBalance1;
+    private InternalVectCartesian positionBalance2;
 
     @Configurable
     private boolean symetry;
@@ -62,14 +62,14 @@ public class Goldenium extends Script implements Offsets {
         if (symetry){
             balanceOffsetX = Offsets.get(SECONDAIRE_BALANCE_OFFSET_X_VIOLET);
             balanceOffsetY = Offsets.get(SECONDAIRE_BALANCE_OFFSET_Y_VIOLET);
-            positionBalance1 = new VectCartesian(xBalance1+30+balanceOffsetX, yBalance1+40+balanceOffsetY);
-            positionBalance2 =new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
+            positionBalance1 = new InternalVectCartesian(xBalance1+30+balanceOffsetX, yBalance1+40+balanceOffsetY);
+            positionBalance2 =new InternalVectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
         else {
             balanceOffsetX = Offsets.get(SECONDAIRE_BALANCE_OFFSET_X_JAUNE);
             balanceOffsetY = Offsets.get(SECONDAIRE_BALANCE_OFFSET_Y_JAUNE);
-            positionBalance1 = new VectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10-50+balanceOffsetY);
-            positionBalance2 = new VectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
+            positionBalance1 = new InternalVectCartesian(xBalance1+20+balanceOffsetX, yBalance1-10-50+balanceOffsetY);
+            positionBalance2 = new InternalVectCartesian(xBalance2+balanceOffsetX, yBalance2+balanceOffsetY);
         }
 
         int decalageGold = Offsets.get(DECALAGE_GOLD_JAUNE);
@@ -189,7 +189,7 @@ public class Goldenium extends Script implements Offsets {
             offsetX = Offsets.get(GOLDENIUM_X_VIOLET);
             offsetY = Offsets.get(GOLDENIUM_Y_VIOLET);
         }
-        return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
+        return new InternalVectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
     @Override

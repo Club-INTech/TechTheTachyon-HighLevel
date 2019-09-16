@@ -15,7 +15,7 @@ import utils.Offsets;
 import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.ArrayList;
 import java.util.concurrent.Future;
@@ -174,8 +174,8 @@ public class Accelerateur extends Script implements Offsets {
             Log.POSITION.critical("no symetrie" + Sick.SICK_AVANT_GAUCHE.getLastMeasure() + " " + Sick.SICK_ARRIERE_GAUCHE.getLastMeasure() + " " + distanceToWall);
         }
         Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-        robot.setPositionAndOrientation(new VectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
-        robot.gotoPoint(new VectCartesian(currentPosition.getX()-decalageAccelerateur, yEntry));
+        robot.setPositionAndOrientation(new InternalVectCartesian(currentPosition.getX(), distanceToWall + offsetRecalage), Calculs.modulo(teta+Math.PI, Math.PI));
+        robot.gotoPoint(new InternalVectCartesian(currentPosition.getX()-decalageAccelerateur, yEntry));
     }
 
     @Override
@@ -217,17 +217,17 @@ public class Accelerateur extends Script implements Offsets {
     public Vec2 entryPosition(int version) {
         if (version == 1) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
+                return new InternalVectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
             }
             else {
-                return new VectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
+                return new InternalVectCartesian(-490 + 10 + 76 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
             }
         } else if (version == 0) {
             if (symetry) {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
+                return new InternalVectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_VIOLET));
             }
             else {
-                return new VectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
+                return new InternalVectCartesian(-490 + 10 + decalageAccelerateur, 190+210 - 78 + 50 + 10+Offsets.get(ACCELERATEUR_Y_JAUNE));
             }
         }
         return null;

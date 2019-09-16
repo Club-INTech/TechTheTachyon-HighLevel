@@ -19,9 +19,7 @@
 package data;
 
 import data.table.*;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
 import utils.math.*;
@@ -188,27 +186,27 @@ public class Table implements Module {
         this.addTemporaryObstacle(paletBleuZoneChaosGauche);
         this.paletBlueZoneChaosYellow = paletBleuZoneChaosGauche;
 
-        Vec2 vecteurRampeCentre = new VectCartesian(0, 1789);
+        Vec2 vecteurRampeCentre = new InternalVectCartesian(0, 1789);
         CircularRectangle formeRampe = new CircularRectangle(vecteurRampeCentre, 2100-robotRay-obstacleMargin, 422, robotRay+obstacleMargin);
         balanceAndRamps = new StillCircularRectangularObstacle(formeRampe);
         this.addFixedObstacleNoGraphChange(balanceAndRamps);
 
-        Vec2 vecteurSupportPaletRampeDroiteCentre = new VectCartesian(750, 1561);           //arrondi
+        Vec2 vecteurSupportPaletRampeDroiteCentre = new InternalVectCartesian(750, 1561);           //arrondi
         CircularRectangle formePaletSupportRampeDroite = new CircularRectangle(vecteurSupportPaletRampeDroiteCentre, 600-robotRay-obstacleMargin, 18, robotRay+obstacleMargin);
         Obstacle paletSupportRampeDroite = new StillCircularRectangularObstacle(formePaletSupportRampeDroite);
         this.addFixedObstacleNoGraphChange(paletSupportRampeDroite);
 
-        Vec2 vecteurSupportPaletRampeGaucheCentre = new VectCartesian(-750, 1561);           //arrondi
+        Vec2 vecteurSupportPaletRampeGaucheCentre = new InternalVectCartesian(-750, 1561);           //arrondi
         CircularRectangle formePaletSupportRampeGauche = new CircularRectangle(vecteurSupportPaletRampeGaucheCentre, 600-robotRay-obstacleMargin, 18, robotRay+obstacleMargin);
         Obstacle paletSupportRampeGauche = new StillCircularRectangularObstacle(formePaletSupportRampeGauche);
         this.addFixedObstacleNoGraphChange(paletSupportRampeGauche);
 
-        Vec2 vecteurSeparationRampeCentre = new VectCartesian(0, 1478);
+        Vec2 vecteurSeparationRampeCentre = new InternalVectCartesian(0, 1478);
         CircularRectangle formeSeparationRampe = new CircularRectangle(vecteurSeparationRampeCentre, 40, 200, robotRay+obstacleMargin);
         this.separationRampe = new StillCircularRectangularObstacle(formeSeparationRampe);
         this.addTemporaryObstacle(separationRampe);
 
-        Vec2 vecteurAccelerateurCentre = new VectCartesian(0, 18);                                 //arrondi
+        Vec2 vecteurAccelerateurCentre = new InternalVectCartesian(0, 18);                                 //arrondi
         CircularRectangle formeAccelerateur = new CircularRectangle(vecteurAccelerateurCentre, 2000-robotRay-obstacleMargin, 36, robotRay+obstacleMargin);
         Obstacle accelerateur = new StillCircularRectangularObstacle(formeAccelerateur);
         this.addFixedObstacleNoGraphChange(accelerateur);
@@ -228,22 +226,22 @@ public class Table implements Module {
          * Bord de la table !
          */
 
-        Vec2 vecteurTableBordDroit = new VectCartesian(1500,1000);
+        Vec2 vecteurTableBordDroit = new InternalVectCartesian(1500,1000);
         Rectangle formeTableBordDroit = new Rectangle(vecteurTableBordDroit, 2*robotRay,2000);
         Obstacle tableBordDroit = new StillRectangularObstacle(formeTableBordDroit);
         this.addFixedObstacleNoGraphChange(tableBordDroit);
 
-        Vec2 vecteurTableBordGauche = new VectCartesian(-1500,1000);
+        Vec2 vecteurTableBordGauche = new InternalVectCartesian(-1500,1000);
         Rectangle formeTableBordGauche = new Rectangle(vecteurTableBordGauche, 2*robotRay,2000);
         Obstacle tableBordGauche = new StillRectangularObstacle(formeTableBordGauche);
         this.addFixedObstacleNoGraphChange(tableBordGauche);
 
-        Vec2 vecteurTableBordHaut = new VectCartesian(0,2000);
+        Vec2 vecteurTableBordHaut = new InternalVectCartesian(0,2000);
         Rectangle formeTableBordHaut = new Rectangle(vecteurTableBordHaut, 3000,2*robotRay);
         Obstacle tableBordHaut = new StillRectangularObstacle(formeTableBordHaut);
         this.addFixedObstacleNoGraphChange(tableBordHaut);
 
-        Vec2 vecteurTableBordBas = new VectCartesian(0,0);
+        Vec2 vecteurTableBordBas = new InternalVectCartesian(0,0);
         Rectangle formeTableBordBas = new Rectangle(vecteurTableBordBas, 3000,2*robotRay);
         Obstacle tableBordBas = new StillRectangularObstacle(formeTableBordBas);
         this.addFixedObstacleNoGraphChange(tableBordBas);
@@ -254,38 +252,38 @@ public class Table implements Module {
          * Couleur représente la couleur de la zone se situant derrière le palet !
          */
 
-        Vec2 vecteurPaletRougeDroiteCentre = new VectCartesian(1000, 450);
+        Vec2 vecteurPaletRougeDroiteCentre = new InternalVectCartesian(1000, 450);
         Obstacle paletRougeDroite = new StillCircularObstacle(vecteurPaletRougeDroiteCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletRougeDroite);
         this.paletRougeDroite = paletRougeDroite;
 
-        Vec2 vecteurPaletVertDroiteCentre = new VectCartesian(1000, 750);
+        Vec2 vecteurPaletVertDroiteCentre = new InternalVectCartesian(1000, 750);
         Obstacle paletVertDroite = new StillCircularObstacle(vecteurPaletVertDroiteCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletVertDroite);
         this.paletVertDroite = paletVertDroite;
 
-        Vec2 vecteurPaletBleuDroiteCentre = new VectCartesian(1000, 1050);
+        Vec2 vecteurPaletBleuDroiteCentre = new InternalVectCartesian(1000, 1050);
         Obstacle paletBleuDroite = new StillCircularObstacle(vecteurPaletBleuDroiteCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletBleuDroite);
         this.paletBleuDroite = paletBleuDroite;
 
-        Vec2 vecteurPaletRougeGaucheCentre = new VectCartesian(-1000, 450);
+        Vec2 vecteurPaletRougeGaucheCentre = new InternalVectCartesian(-1000, 450);
         Obstacle paletRougeGauche = new StillCircularObstacle(vecteurPaletRougeGaucheCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletRougeGauche);
         this.paletRougeGauche = paletRougeGauche;
 
-        Vec2 vecteurPaletVertGaucheCentre = new VectCartesian(-1000, 750);
+        Vec2 vecteurPaletVertGaucheCentre = new InternalVectCartesian(-1000, 750);
         Obstacle paletVertGauche = new StillCircularObstacle(vecteurPaletVertGaucheCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletVertGauche);
         this.paletVertGauche = paletVertGauche;
 
-        Vec2 vecteurPaletBleuGaucheCentre = new VectCartesian(-1000, 1050);
+        Vec2 vecteurPaletBleuGaucheCentre = new InternalVectCartesian(-1000, 1050);
         Obstacle paletBleuGauche = new StillCircularObstacle(vecteurPaletBleuGaucheCentre, robotRay+obstacleMargin);
         this.addTemporaryObstacle(paletBleuGauche);
         this.paletBleuGauche = paletBleuGauche;
 
         if(openTheGate) {
-            addFixedObstacle(new StillRectangularObstacle(new Rectangle(new VectCartesian(0, 1000), 2, 2000)));
+            addFixedObstacle(new StillRectangularObstacle(new Rectangle(new InternalVectCartesian(0, 1000), 2, 2000)));
         }
     }
 
@@ -594,7 +592,7 @@ public class Table implements Module {
      * Ajoute l'obstacle mobile SIMULÉ à la liste des obstacles mobiles
      */
     public void SIMULATEDaddMobileObstacle() {
-        this.simulatedObstacle = new MobileCircularObstacle(new VectCartesian(0, -1000), ennemyRay +robotRay);
+        this.simulatedObstacle = new MobileCircularObstacle(new InternalVectCartesian(0, -1000), ennemyRay +robotRay);
         this.simulatedObstacle.setLifeTime(100000);
         this.mobileObstacles.add(this.simulatedObstacle);
     }

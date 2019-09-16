@@ -39,7 +39,7 @@ import utils.Offsets;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -122,12 +122,12 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             } else {
                 offX= Offsets.get(ZDD_X_JAUNE);
             }
-            Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
+            Vec2 zoneDep = new InternalVectCartesian(1500-191-65+offX-20,1040-300);
 
             robot.setPositionAndOrientation(zoneDep, Math.PI/2);
         } else {
 
-            Vec2 newPos = new VectCartesian(1500-191, 350);
+            Vec2 newPos = new InternalVectCartesian(1500-191, 350);
             robot.setPositionAndOrientation(newPos, Math.PI);
 
             if (hl.getConfig().get(ConfigData.COULEUR).equals("violet")) {
@@ -171,7 +171,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             Match match = hl.module(Match.class);
 
             if( ! openTheGate) {
-                Vec2 entryPos = new VectCartesian(1254+offX,900-198+offY);
+                Vec2 entryPos = new InternalVectCartesian(1254+offX,900-198+offY);
                 robot.gotoPoint(entryPos);
                 Vec2 currentPosition = XYO.getRobotInstance().getPosition();
                 double angleToStart;

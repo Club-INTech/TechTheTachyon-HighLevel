@@ -98,13 +98,13 @@ public class CircularRectangle extends Shape {
         }
 
         // Pour la numéroation des rectangles, voir schema ci-dessus
-        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new VectCartesian(0, mainRectangle.getWidth()/2 + radius/2)),
+        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new InternalVectCartesian(0, mainRectangle.getWidth()/2 + radius/2)),
                 mainRectangle.getLength(), radius));
-        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new VectCartesian(mainRectangle.getLength()/2 + radius/2, 0)),
+        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new InternalVectCartesian(mainRectangle.getLength()/2 + radius/2, 0)),
                 radius, mainRectangle.getWidth()));
-        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new VectCartesian(0, -mainRectangle.getWidth()/2 - radius/2)),
+        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new InternalVectCartesian(0, -mainRectangle.getWidth()/2 - radius/2)),
                 mainRectangle.getLength(), radius));
-        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new VectCartesian(-mainRectangle.getLength()/2 - radius/2, 0)),
+        sideRectangles.add(new Rectangle(mainRectangle.getCenter().plusVector(new InternalVectCartesian(-mainRectangle.getLength()/2 - radius/2, 0)),
                 radius, mainRectangle.getWidth()));
     }
 

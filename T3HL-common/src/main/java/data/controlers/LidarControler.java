@@ -98,9 +98,9 @@ public class LidarControler implements Module {
     /**
      * Objets servant au recalage du Lidar
      */
-    private Vec2 potoCenter1 = new VectCartesian(1550,50);
-    private Vec2 potoCenter2 = new VectCartesian(1550, 1950);
-    private Vec2 potoCenter3 = new VectCartesian(-1550, 1000);
+    private Vec2 potoCenter1 = new InternalVectCartesian(1550,50);
+    private Vec2 potoCenter2 = new InternalVectCartesian(1550, 1950);
+    private Vec2 potoCenter3 = new InternalVectCartesian(-1550, 1000);
     private ArrayList<Vec2> pointsInPoto1 = new ArrayList<>();
     private ArrayList<Vec2> pointsInPoto2 = new ArrayList<>();
     private ArrayList<Vec2> pointsInPoto3 = new ArrayList<>();
@@ -115,7 +115,7 @@ public class LidarControler implements Module {
         this.table = table;
         this.listener = listener;
         float margin = 10;
-        tableBB = new Rectangle(new VectCartesian(0f, table.getWidth()/2), table.getLength()-2* ennemyRay - 2*margin, table.getWidth()-2* ennemyRay - 2*margin);
+        tableBB = new Rectangle(new InternalVectCartesian(0f, table.getWidth()/2), table.getLength()-2* ennemyRay - 2*margin, table.getWidth()-2* ennemyRay - 2*margin);
     }
 
     @Override

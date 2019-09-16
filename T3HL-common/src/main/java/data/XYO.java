@@ -20,7 +20,7 @@ package data;
 
 import utils.Log;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 /**
  * Classe représentant les positions des robots (doublons)
@@ -71,7 +71,7 @@ public class XYO {
      */
     public static XYO getRobotInstance() {
         if (robotXYO == null) {
-            robotXYO = new XYO(new VectCartesian(200000,200000), Math.PI);
+            robotXYO = new XYO(new InternalVectCartesian(200000,200000), Math.PI);
         }
         return robotXYO;
     }
@@ -79,7 +79,7 @@ public class XYO {
         // c'est instancié la première fois qu'on veut y accéder.
         // la position est mise à jour lors des communications avec le buddy
         if (buddyXYO == null) {
-            buddyXYO = new XYO(new VectCartesian(100000, 100000), 0);
+            buddyXYO = new XYO(new InternalVectCartesian(100000, 100000), 0);
         }
         return buddyXYO;
     }

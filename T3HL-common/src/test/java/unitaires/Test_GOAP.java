@@ -11,7 +11,7 @@ import org.junit.Test;
 import utils.HLInstance;
 import utils.Log;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +30,8 @@ public class Test_GOAP {
     private Action getAxe2;
     private Action chopLog2;
 
-    private Vec2 getAxePosition = new VectCartesian(-100f, -100f);
-    private Vec2 chopLogPosition = new VectCartesian(100f, 100f);
+    private Vec2 getAxePosition = new InternalVectCartesian(-100f, -100f);
+    private Vec2 chopLogPosition = new InternalVectCartesian(100f, 100f);
 
 
     @Before
@@ -251,7 +251,7 @@ public class Test_GOAP {
 
     @Test
     public void finiteStateMachine() {
-        XYO xyo = new XYO(new VectCartesian(0f, 0f), 0.0);
+        XYO xyo = new XYO(new InternalVectCartesian(0f, 0f), 0.0);
         Map<String, Object> baseState = new HashMap<>();
         baseState.put("axe in inventory", false);
         baseState.put("make firewood", false);
@@ -287,7 +287,7 @@ public class Test_GOAP {
 
     @Test
     public void movingState() {
-        XYO xyo = new XYO(new VectCartesian(0f, 0f), 0.0);
+        XYO xyo = new XYO(new InternalVectCartesian(0f, 0f), 0.0);
         Map<String, Object> baseState = new HashMap<>();
         baseState.put("axe in inventory", false);
         baseState.put("make firewood", false);

@@ -25,6 +25,12 @@ package utils.math;
  */
 public abstract class Vec2 {
 
+    /**
+     * Largeur de la table, en mm
+     */
+    public static final int TABLE_WIDTH = 3000;
+    public static final int HALF_TABLE_WIDTH = TABLE_WIDTH/2;
+
     /**abscisse du vecteur*/
     private int x;
 
@@ -96,7 +102,7 @@ public abstract class Vec2 {
      * @return  un nouveau vecteur qui est l'addition des deux
      */
     public Vec2 plusVector(Vec2 vecteur){
-        return new VectCartesian(this.x + vecteur.getX(), this.y + vecteur.getY());
+        return new InternalVectCartesian(this.x + vecteur.getX(), this.y + vecteur.getY());
     }
 
     /**
@@ -106,7 +112,7 @@ public abstract class Vec2 {
      * @return  un nouveau vecteur qui est égale à this - vecteur
      */
     public Vec2 minusVector(Vec2 vecteur){
-        return new VectCartesian(this.x - vecteur.getX(), this.y - vecteur.getY());
+        return new InternalVectCartesian(this.x - vecteur.getX(), this.y - vecteur.getY());
     }
 
     /**
@@ -158,7 +164,7 @@ public abstract class Vec2 {
      * @return  un nouveau vecteur égale à a*this
      */
     public Vec2 homothetie(float a){
-        return new VectCartesian(Math.round(a*this.x), Math.round(a*this.y));
+        return new InternalVectCartesian(Math.round(a*this.x), Math.round(a*this.y));
     }
 
     /**
@@ -173,7 +179,7 @@ public abstract class Vec2 {
      * @return  le vecteur symétrique de this
      */
     public Vec2 symetrizeVector(){
-        return new VectCartesian(-x,y);
+        return new InternalVectCartesian(-x,y);
     }
 
     /**
@@ -247,7 +253,7 @@ public abstract class Vec2 {
      */
     @Override
     public Vec2 clone() {
-        return new VectCartesian(this.x, this.y);
+        return new InternalVectCartesian(this.x, this.y);
     }
 
     /**
@@ -256,6 +262,14 @@ public abstract class Vec2 {
     @Override
     public String toString() {
         return String.format("(%s,%s)",this.x,this.y);
+    }
+
+    /**
+     * String représentant ce vecteur dans des coordonnées lisibles par un humain (0,0 dans le coin de départ du robot)
+     * @return
+     */
+    public String toHumanString() {
+        return String.format("(%s, %s)", this.x+HALF_TABLE_WIDTH, this.y);
     }
 
     /**

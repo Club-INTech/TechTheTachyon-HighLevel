@@ -60,30 +60,30 @@ public class Test_Table {
 
     @Test(expected = IllegalArgumentException.class)
     public void testAddFixedObstacle1() {
-        table.addFixedObstacle(new MobileCircularObstacle(new VectCartesian(0, 50), 200));
+        table.addFixedObstacle(new MobileCircularObstacle(new InternalVectCartesian(0, 50), 200));
     }
 
     @Test
     public void testAddFixedObstacle2() throws Exception {
-        table.addFixedObstacle(new StillCircularObstacle(new VectCartesian(0, 100), 200));
+        table.addFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(0, 100), 200));
         Assert.assertEquals(1, table.getFixedObstacles().size());
     }
 
     @Test
     public void testRemoveFixedObstacle() throws Exception {
-        table.addFixedObstacle(new StillCircularObstacle(new VectCartesian(100, 0), 200));
-        table.removeFixedObstacle(new StillCircularObstacle(new VectCartesian(100, 0), 200));
+        table.addFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(100, 0), 200));
+        table.removeFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(100, 0), 200));
 
         Assert.assertEquals(0, table.getFixedObstacles().size());
     }
 
     @Test
     public void testIsPositionInFixedObstacle() throws Exception {
-        table.addFixedObstacle(new StillCircularObstacle(new VectCartesian(300, 200), 120));
-        table.addFixedObstacle(new StillRectangularObstacle(new VectCartesian(600, 500), 400, 200));
-        Vec2 p1 = new VectCartesian(350, 240);
-        Vec2 p2 = new VectCartesian(678, 599);
-        Vec2 p3 = new VectCartesian(-420, 200);
+        table.addFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(300, 200), 120));
+        table.addFixedObstacle(new StillRectangularObstacle(new InternalVectCartesian(600, 500), 400, 200));
+        Vec2 p1 = new InternalVectCartesian(350, 240);
+        Vec2 p2 = new InternalVectCartesian(678, 599);
+        Vec2 p3 = new InternalVectCartesian(-420, 200);
 
         Assert.assertTrue(table.isPositionInFixedObstacle(p1));
         Assert.assertTrue(table.isPositionInFixedObstacle(p2));
@@ -92,8 +92,8 @@ public class Test_Table {
 
     @Test
     public void testIsPositionInMobileObstacle() throws Exception {
-        Vec2 p1 = new VectCartesian(100, 500);
-        Vec2 p2 = new VectCartesian(500, 800);
+        Vec2 p1 = new InternalVectCartesian(100, 500);
+        Vec2 p2 = new InternalVectCartesian(500, 800);
         Vec2 po = p1.plusVector(new VectPolar(0.5* (int) ConfigData.BUDDY_RAY.getDefaultValue(), Math.PI/4));
         ArrayList<Vec2> points = new ArrayList<>();
 
@@ -107,12 +107,12 @@ public class Test_Table {
 
     @Test
     public void testIntersectAnyFixedObstacle() throws Exception {
-        table.addFixedObstacle(new StillRectangularObstacle(new VectCartesian(200, 300), 300, 200));
-        table.addFixedObstacle(new StillCircularObstacle(new VectCartesian(100, 100), 200));
-        Segment s1 = new Segment(new VectCartesian(0, 0), new VectCartesian(600, 400));
-        Segment s2 = new Segment(new VectCartesian(0, 0), new VectCartesian(-21, 100));
-        Segment s3 = new Segment(new VectCartesian(320, 250), new VectCartesian(500, 400));
-        Segment s4 = new Segment(new VectCartesian(-100, -200), new VectCartesian(300, -150));
+        table.addFixedObstacle(new StillRectangularObstacle(new InternalVectCartesian(200, 300), 300, 200));
+        table.addFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(100, 100), 200));
+        Segment s1 = new Segment(new InternalVectCartesian(0, 0), new InternalVectCartesian(600, 400));
+        Segment s2 = new Segment(new InternalVectCartesian(0, 0), new InternalVectCartesian(-21, 100));
+        Segment s3 = new Segment(new InternalVectCartesian(320, 250), new InternalVectCartesian(500, 400));
+        Segment s4 = new Segment(new InternalVectCartesian(-100, -200), new InternalVectCartesian(300, -150));
 
         Assert.assertTrue(table.intersectAnyFixedObstacle(s1));
         Assert.assertTrue(table.intersectAnyFixedObstacle(s2));
@@ -122,9 +122,9 @@ public class Test_Table {
 
     @Test
     public void testIntersectAnyMobileObstacle_Segment() throws Exception {
-        Vec2 po = new VectCartesian(540, 620);
-        Segment s1 = new Segment(new VectCartesian(500, 600), new VectCartesian(700, 900));
-        Segment s2 = new Segment(new VectCartesian(300, 400), new VectCartesian(1200, 320));
+        Vec2 po = new InternalVectCartesian(540, 620);
+        Segment s1 = new Segment(new InternalVectCartesian(500, 600), new InternalVectCartesian(700, 900));
+        Segment s2 = new Segment(new InternalVectCartesian(300, 400), new InternalVectCartesian(1200, 320));
         ArrayList<Vec2> points = new ArrayList<>();
 
         XYO.getBuddyInstance();
@@ -137,9 +137,9 @@ public class Test_Table {
 
     @Test
     public void testIntersectAnyMobileObstacle_Circle() throws Exception {
-        Vec2 po = new VectCartesian(540, 620);
-        Circle c1 = new Circle(new VectCartesian(480, 500), 50);
-        Circle c2 = new Circle(new VectCartesian(1000, 600), 200);
+        Vec2 po = new InternalVectCartesian(540, 620);
+        Circle c1 = new Circle(new InternalVectCartesian(480, 500), 50);
+        Circle c2 = new Circle(new InternalVectCartesian(1000, 600), 200);
         ArrayList<Vec2> points = new ArrayList<>();
 
         XYO.getBuddyInstance();
@@ -154,9 +154,9 @@ public class Test_Table {
     public void testUpdateMobileObstaclesTableOnly() throws Exception {
         XYO.getBuddyInstance().update(20, 10, 0);
         ArrayList<Vec2> points = new ArrayList<>();
-        points.add(new VectCartesian(300, 100));
-        points.add(new VectCartesian(800, 150));
-        points.add(new VectCartesian(20, 10));
+        points.add(new InternalVectCartesian(300, 100));
+        points.add(new InternalVectCartesian(800, 150));
+        points.add(new InternalVectCartesian(20, 10));
 
         int ennemyRay = hl.getConfig().getInt(ConfigData.ENNEMY_RAY);
         int buddyRay = hl.getConfig().getInt(ConfigData.BUDDY_RAY);
@@ -182,9 +182,9 @@ public class Test_Table {
         graphe.reInit();
         XYO.getBuddyInstance().update(20, 10, 0.0);
         ArrayList<Vec2> points = new ArrayList<>();
-        points.add(new VectCartesian(300, 100));
-        points.add(new VectCartesian(800, 150));
-        points.add(new VectCartesian(20, 10));
+        points.add(new InternalVectCartesian(300, 100));
+        points.add(new InternalVectCartesian(800, 150));
+        points.add(new InternalVectCartesian(20, 10));
 
         ArrayList<MobileCircularObstacle> obstacles = new ArrayList<>();
         obstacles.add(new MobileCircularObstacle(points.get(0), (int) ConfigData.ENNEMY_RAY.getDefaultValue()));

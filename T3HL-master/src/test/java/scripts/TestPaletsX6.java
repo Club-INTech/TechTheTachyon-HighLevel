@@ -5,7 +5,7 @@ import data.Table;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestPaletsX6 extends TestScriptBase {
 
@@ -35,7 +35,7 @@ public class TestPaletsX6 extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(1309, 226);
+        return new InternalVectCartesian(1309, 226);
     }
 
     @Override

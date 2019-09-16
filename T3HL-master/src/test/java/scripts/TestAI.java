@@ -3,7 +3,7 @@ package scripts;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestAI extends TestBaseHL {
     // TODO: Initialiser l'IA
@@ -15,7 +15,7 @@ public class TestAI extends TestBaseHL {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(0,200);
+        return new InternalVectCartesian(0,200);
     }
 
     @Override

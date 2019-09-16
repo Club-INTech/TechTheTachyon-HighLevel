@@ -27,7 +27,7 @@ import data.table.StillRectangularObstacle;
 import org.junit.*;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 import utils.math.VectPolar;
 
 public class Test_Graphe {
@@ -82,7 +82,7 @@ public class Test_Graphe {
     @Test
     public void testAddProvisoryNode2() throws Exception {
         graphe = hl.module(Graphe.class);
-        Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
+        Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new InternalVectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 
         Node node = graphe.addProvisoryNode(nodePos);
@@ -108,7 +108,7 @@ public class Test_Graphe {
     @Test
     public void testRemoveProvisoryNode2() throws Exception {
         graphe = hl.module(Graphe.class);
-        Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new VectCartesian(-20, 12));
+        Vec2 nodePos = graphe.getNodes().get(8).getPosition().plusVector(new InternalVectCartesian(-20, 12));
         int nbNode = graphe.getNodes().size();
 
         Node node = graphe.addProvisoryNode(nodePos);

@@ -7,7 +7,7 @@ import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import static utils.Offsets.ZDD_X_JAUNE;
 import static utils.Offsets.ZDD_X_VIOLET;
@@ -32,11 +32,11 @@ public class OpenTheGate extends Script {
         } else {
             offX= Offsets.get(ZDD_X_JAUNE);
         }
-        Vec2 zoneDep = new VectCartesian(1500-191-65+offX-20,1040-300);
-        Vec2 lowerLeft = new VectCartesian(650, 300);
-        Vec2 lowerRight = new VectCartesian(zoneDep.getX(), 300);
-        Vec2 upperLeft = new VectCartesian(650, 1300);
-        Vec2 upperRight = new VectCartesian(zoneDep.getX(), 1300);
+        Vec2 zoneDep = new InternalVectCartesian(1500-191-65+offX-20,1040-300);
+        Vec2 lowerLeft = new InternalVectCartesian(650, 300);
+        Vec2 lowerRight = new InternalVectCartesian(zoneDep.getX(), 300);
+        Vec2 upperLeft = new InternalVectCartesian(650, 1300);
+        Vec2 upperRight = new InternalVectCartesian(zoneDep.getX(), 1300);
 
         while (true) {
             try {

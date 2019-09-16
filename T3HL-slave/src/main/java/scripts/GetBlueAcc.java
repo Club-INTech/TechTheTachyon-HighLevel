@@ -6,7 +6,7 @@ import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -63,11 +63,11 @@ public class GetBlueAcc extends Script implements Offsets {
             }
             if (symetry){
 
-                robot.softGoTo(new VectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
+                robot.softGoTo(new InternalVectCartesian(-500+230+100+offsetXGoto,154+100+34+10+offsetYGoto),false);
 
             }
             else {
-                robot.softGoTo(new VectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
+                robot.softGoTo(new InternalVectCartesian(-500 + 230+offsetXGoto, 154 + 100 + 34 - 30+offsetYGoto), false);
             }
             if(recalageMecaBlueAcc) {
                 turn(-Math.PI / 2);
@@ -101,12 +101,12 @@ public class GetBlueAcc extends Script implements Offsets {
 
             offsetX = Offsets.get(GETBLUEACC_X_VIOLET);
             offsetY = Offsets.get(GETBLUEACC_Y_VIOLET);
-            return new VectCartesian(xEntry+110,yEntry);
+            return new InternalVectCartesian(xEntry+110,yEntry);
         }
         else {
             offsetX = Offsets.get(GETBLUEACC_X_JAUNE);
             offsetY = Offsets.get(GETBLUEACC_Y_JAUNE);
-            return new VectCartesian(xEntry, yEntry);
+            return new InternalVectCartesian(xEntry, yEntry);
         }
     }
 

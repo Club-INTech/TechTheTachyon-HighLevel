@@ -33,7 +33,7 @@ import utils.HLInstance;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 /**
  * @author nayth, jglrxavpok
@@ -85,10 +85,10 @@ public class MainSlave extends RobotEntryPoint {
         //robot.setRotationSpeed(Speed.SLOW_ALL);
         //Vec2 newPos = new VectCartesian(1500-242, 145+58);
         //Vec2 newPos = new VectCartesian(1500 -59 -145,400);
-        Vec2 newPos = new VectCartesian(1500 -297,400);
+        Vec2 newPos = new InternalVectCartesian(1500 -297,400);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
        // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
-        Vec2 pos = new VectCartesian(1500-449+148, 301+100);
+        Vec2 pos = new InternalVectCartesian(1500-449+148, 301+100);
        // Vec2 posSansSick = new VectCartesian(1399, 450);
 
 

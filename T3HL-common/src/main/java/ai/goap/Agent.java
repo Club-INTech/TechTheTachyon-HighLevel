@@ -20,11 +20,10 @@ package ai.goap;
 
 import utils.Log;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 public abstract class Agent {
@@ -43,8 +42,8 @@ public abstract class Agent {
      */
     private Stack<ActionGraph.Node> currentPlan;
 
-    private Vec2 targetPosition = new VectCartesian(0, 0);
-    private Vec2 previousTargetPosition = new VectCartesian(0, 0);
+    private Vec2 targetPosition = new InternalVectCartesian(0, 0);
+    private Vec2 previousTargetPosition = new InternalVectCartesian(0, 0);
 
     /**
      * Liste des erreurs dans le mouvement, mis à jour via #reportMovementError

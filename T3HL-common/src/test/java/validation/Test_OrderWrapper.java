@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pfg.config.Config;
 import utils.HLInstance;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.Locale;
 import java.util.Optional;
@@ -157,7 +157,7 @@ public class Test_OrderWrapper {
      */
     @Test
     public void setPositionAndOrientationTest() throws Exception {
-        orderWrapper.setPositionAndOrientation(new VectCartesian(2, 3), Math.PI / 2, false);
+        orderWrapper.setPositionAndOrientation(new InternalVectCartesian(2, 3), Math.PI / 2, false);
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
@@ -185,7 +185,7 @@ public class Test_OrderWrapper {
      */
     @Test
     public void configureHookTest() throws Exception {
-        orderWrapper.configureHook(0, new VectCartesian(2, 3), 2, Math.PI, 2, ActuatorsOrder.FERME_PORTE_AVANT);
+        orderWrapper.configureHook(0, new InternalVectCartesian(2, 3), 2, Math.PI, 2, ActuatorsOrder.FERME_PORTE_AVANT);
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
@@ -223,7 +223,7 @@ public class Test_OrderWrapper {
 
     @Test
     public void moveToPoint() throws Exception {
-        orderWrapper.moveToPoint(new VectCartesian(54, 647));
+        orderWrapper.moveToPoint(new InternalVectCartesian(54, 647));
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());

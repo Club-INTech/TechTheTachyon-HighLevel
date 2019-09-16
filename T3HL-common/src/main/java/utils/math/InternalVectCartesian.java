@@ -19,23 +19,32 @@
 package utils.math;
 
 /**
- * @see InternalVectCartesian
+ * Classe héritante de Vec2 dont la fonction est de différencier son constructeur de Vec2
  * @see Vec2
  *
- * @author youra
+ * @author yousra
  */
-public class VectPolar extends Vec2 {
+public class InternalVectCartesian extends Vec2 {
 
     /**
-     * Constructeur d'un vecteur polaire pour qu'il n'y ait pas de confusion avec les vecteurs cartésiens
-     * @param r
-     * @param a
+     * Constructeur d'un vecteur cartésien pour qu'il n'y ait pas de confusion avec les vecteurs polaires quand on débug
+     * @param x
+     * @param y
      */
-    public VectPolar(float r, float a){
-        super(r,a);
+    public InternalVectCartesian(int x, int y){
+        super(x, y);
     }
 
-    public VectPolar(double r, double a){
-        super(r,a);
+    /**
+     * Constructeur d'un vecteur cartésien pour qu'il n'y ait pas de confusion avec les vecteurs polaires quand on débug
+     * @param x
+     * @param y
+     */
+    public InternalVectCartesian(float x, float y) {
+        super(Math.round(x), Math.round(y));
+    }
+
+    public InternalVectCartesian(double x, double y) {
+        this((int)Math.round(x), (int)Math.round(y));
     }
 }

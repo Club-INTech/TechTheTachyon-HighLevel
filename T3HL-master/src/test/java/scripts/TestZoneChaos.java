@@ -2,7 +2,7 @@ package scripts;
 
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestZoneChaos extends TestScriptBase {
     @Override
@@ -24,6 +24,6 @@ public class TestZoneChaos extends TestScriptBase {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(-730,470);
+        return new InternalVectCartesian(-730,470);
     }
 }

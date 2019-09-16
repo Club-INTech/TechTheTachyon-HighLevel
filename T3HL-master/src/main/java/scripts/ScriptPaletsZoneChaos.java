@@ -12,7 +12,7 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.Module;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.Arrays;
 
@@ -24,7 +24,7 @@ public class ScriptPaletsZoneChaos extends Script {
 
     private int xEntry = 900;
     private int yEntry = 1055;
-    private Vec2[] positions = new VectCartesian[4];
+    private Vec2[] positions = new InternalVectCartesian[4];
 
     @Configurable
     private boolean symetry;
@@ -47,15 +47,15 @@ public class ScriptPaletsZoneChaos extends Script {
         }
         if (symetry) {
 
-            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
-            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[0] = new InternalVectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.RED_1_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[1] = new InternalVectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.RED_2_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[2] = new InternalVectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
+            positions[3] = new InternalVectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_PURPLE.getPosition().getX() + (robotRay + rayonPalet ), PaletsZoneChaos.GREEN_ZONE_CHAOS_PURPLE.getPosition().getY());
         } else {
-            positions[0] = new VectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[1] = new VectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[2] = new VectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
-            positions[3] = new VectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[0] = new InternalVectCartesian(PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.RED_1_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[1] = new InternalVectCartesian(PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.RED_2_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[2] = new InternalVectCartesian(PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
+            positions[3] = new InternalVectCartesian(PaletsZoneChaos.BLUE_ZONE_CHAOS_YELLOW.getPosition().getX() + (robotRay + rayonPalet), PaletsZoneChaos.GREEN_ZONE_CHAOS_YELLOW.getPosition().getY());
         }
 /**
  * On trie les palets selon l'axe X pour les prendre de droite à gauche
@@ -105,7 +105,7 @@ public class ScriptPaletsZoneChaos extends Script {
 
     @Override
     public Vec2 entryPosition(int version) {
-        return new VectCartesian(xEntry, yEntry);
+        return new InternalVectCartesian(xEntry, yEntry);
     }
 
     @Override

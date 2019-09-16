@@ -9,7 +9,7 @@ import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.Future;
 
@@ -43,17 +43,17 @@ public class PaletsZoneDepart extends Script implements Offsets {
             offX= Offsets.get(ZDD_X_JAUNE);
         }
         if(version == JUST_BLUE) {
-            positions = new VectCartesian[]{
-                    new VectCartesian(entry.getX(), entry.getY()),
+            positions = new InternalVectCartesian[]{
+                    new InternalVectCartesian(entry.getX(), entry.getY()),
                     //new VectCartesian(xEntry-190-46, yEntry-15),
-                    new VectCartesian(xEntry,yEntry+302),
+                    new InternalVectCartesian(xEntry,yEntry+302),
                     //new VectCartesian(xEntry,yEntry+605)
             };
         } else {
-            positions = new VectCartesian[]{
+            positions = new InternalVectCartesian[]{
                     //new VectCartesian(xEntry, yEntry),
-                    new VectCartesian(xEntry+offX, entry.getY()),
-                    new VectCartesian(xEntry+offX-20,1040),
+                    new InternalVectCartesian(xEntry+offX, entry.getY()),
+                    new InternalVectCartesian(xEntry+offX-20,1040),
                     //new VectCartesian(entry.getX(),entry.getY()+605),
             };
         }
@@ -135,7 +135,7 @@ public class PaletsZoneDepart extends Script implements Offsets {
     public Vec2 entryPosition(int version) {
         if(version ==JUST_BLUE)//position du premier palet
         {
-            return new VectCartesian(xEntry, yEntry);
+            return new InternalVectCartesian(xEntry, yEntry);
         }
         else{
             //return new VectCartesian(xEntry + (container.getConfig().getString(ConfigData.COULEUR).equals("jaune") ? PALETS_DEPART_X_JAUNE : GOLDENIUM_X_VIOLET).get(), yEntry-605);

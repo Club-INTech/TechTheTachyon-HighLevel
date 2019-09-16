@@ -8,7 +8,7 @@ import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Offsets;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class PaletsX3Slave extends Script implements Offsets {
      * Position d'entrée du script
      */
 
-    private ArrayList<VectCartesian> positions = new ArrayList<>();
+    private ArrayList<InternalVectCartesian> positions = new ArrayList<>();
     private int xEntry = 1300; //1235;// 1338
     private int yEntry = 1300 ;//+  (int) ConfigData.ROBOT_RAY.getDefaultValue() ;
     private double offsetX;
@@ -46,9 +46,9 @@ public class PaletsX3Slave extends Script implements Offsets {
                 syncBuddy.sendBalanceFree();
             }
 
-            positions.add(new VectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
-            positions.add(new VectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
-            positions.add(new VectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
+            positions.add(new InternalVectCartesian(xFirstPuck+offsetX, yFirstPuck+offsetY));     //???
+            positions.add(new InternalVectCartesian(xFirstPuck+offsetX+DISTANCE_INTER_PUCK , yFirstPuck+offsetY));
+            positions.add(new InternalVectCartesian(xFirstPuck+offsetX+2*DISTANCE_INTER_PUCK, yFirstPuck+offsetY));
 
             turn(Math.PI/2);
 
@@ -106,9 +106,9 @@ public class PaletsX3Slave extends Script implements Offsets {
             offsetY = Offsets.get(PALETSX3_Y_VIOLET);
         }
         if (!symetry) {
-            return new VectCartesian(xEntry+offsetX, yEntry+offsetY-300);
+            return new InternalVectCartesian(xEntry+offsetX, yEntry+offsetY-300);
         }
-        return new VectCartesian(xEntry+offsetX, yEntry+offsetY);
+        return new InternalVectCartesian(xEntry+offsetX, yEntry+offsetY);
     }
 
     @Override

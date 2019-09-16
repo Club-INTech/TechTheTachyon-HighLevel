@@ -340,7 +340,7 @@ public class PathFollower extends ModuleThread {
         }
         double alpha = Calculs.modulo(trajet.getA(), Math.PI);
         XYO aim = new XYO(point, alpha);
-        Segment segment = new Segment(new VectCartesian(0,0), new VectCartesian(0,0));
+        Segment segment = new Segment(new InternalVectCartesian(0,0), new InternalVectCartesian(0,0));
         segment.setPointA(XYO.getRobotInstance().getPosition());
         SensorState.MOVING.setData(true);
         SensorState.STUCKED.setData(false);

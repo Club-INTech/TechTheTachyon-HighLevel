@@ -4,7 +4,7 @@ import orders.order.ActuatorsOrder;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestAscenseurs extends TestBaseHL {
     @Override
@@ -40,7 +40,7 @@ public class TestAscenseurs extends TestBaseHL {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(0, 0);
+        return new InternalVectCartesian(0, 0);
     }
 
 }

@@ -1,11 +1,10 @@
 package simulator;
 
-import connection.Connection;
 import simulator.exceptions.OrderException;
 import data.CouleurPalet;
 import orders.order.*;
 import utils.RobotSide;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -227,13 +226,13 @@ public class SimulatorManager extends Thread {
                     robot.turn(parseFloat(arguments[1]));
                 }
                 else if (testOrder(arguments, MotionOrder.MOVE_TO_POINT,3)) {
-                    robot.goTo(new VectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
+                    robot.goTo(new InternalVectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
                 }
                 else if (testOrder(arguments, MotionOrder.STOP,1)) {
                     robot.stop();
                 }
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION, 4)){
-                    robot.setPosition(new VectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
+                    robot.setPosition(new InternalVectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
                     robot.setOrientation(parseFloat(arguments[3]));
                 }
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_ORIENTATION,2)){

@@ -11,7 +11,7 @@ import utils.container.ContainerException;
 import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -329,7 +329,7 @@ public class DataController implements Module {
         if (master) {
             dsick = 173;
             double rapport = ((double)esick) / dsick;
-            VectCartesian vectsick = new VectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
+            InternalVectCartesian vectsick = new InternalVectCartesian(101,113); //Vecteur qui place les sick par rapport à l'origine du robot
             double orien= XYO.getRobotInstance().getOrientation();
 
             if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
@@ -384,7 +384,7 @@ public class DataController implements Module {
         }
         else {
             dsick = 64;
-            VectCartesian vectSickSecondaire = new VectCartesian(108,100); //Vecteur qui place les sick par rapport à l'origine du robot
+            InternalVectCartesian vectSickSecondaire = new InternalVectCartesian(108,100); //Vecteur qui place les sick par rapport à l'origine du robot
             double rapport = ((double)esick) / dsick;
             double orien = XYO.getRobotInstance().getOrientation();
             //Pour le secondaire, on différencie les 4 config possibles selon l'orientation du robot
@@ -427,7 +427,7 @@ public class DataController implements Module {
             }
             newOrientation = teta;
         }
-        VectCartesian newPosition = new VectCartesian(xCalcule, yCalcule);
+        InternalVectCartesian newPosition = new InternalVectCartesian(xCalcule, yCalcule);
         newOrientation=Calculs.modulo(newOrientation, Math.PI);
         XYO newXYO = new XYO(newPosition, newOrientation);
         long timestampStop = System.currentTimeMillis();
@@ -458,7 +458,7 @@ public class DataController implements Module {
         String[] pathString = message.split(ARGUMENTS_SEPARATOR);
         ArrayList<Vec2> path = new ArrayList<Vec2>();
         for(int i=0; i < pathString.length; i+=2){
-            path.add(new VectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
+            path.add(new InternalVectCartesian(Integer.parseInt(pathString[i]), Integer.parseInt(pathString[i+1])));
         }
         BuddyState.BUDDY_PATH.setData(path);
     }

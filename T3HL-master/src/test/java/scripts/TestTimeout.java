@@ -3,7 +3,7 @@ package scripts;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class TestTimeout extends TestBaseHL {
     @Override
@@ -25,7 +25,7 @@ public class TestTimeout extends TestBaseHL {
 
     @Override
     public Vec2 startPosition() {
-        return new VectCartesian(0, 0);
+        return new InternalVectCartesian(0, 0);
     }
 
 }

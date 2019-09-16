@@ -5,7 +5,7 @@ import orders.order.ActuatorsOrder;
 import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.math.Vec2;
-import utils.math.VectCartesian;
+import utils.math.InternalVectCartesian;
 
 public class Cracheur extends Script {
     /**
@@ -30,7 +30,7 @@ public class Cracheur extends Script {
     @Override
     public void execute(int version) {
         try {
-            robot.softGoTo(new VectCartesian(1500-1330+60, 1380),false);
+            robot.softGoTo(new InternalVectCartesian(1500-1330+60, 1380),false);
             if (symetry){
                 turn(0);
                 moveLengthwise(-60,false);
@@ -52,7 +52,7 @@ public class Cracheur extends Script {
         }
     }
     @Override //à adapter
-    public Vec2 entryPosition(int version) { return new VectCartesian(xEntry, yEntry); }
+    public Vec2 entryPosition(int version) { return new InternalVectCartesian(xEntry, yEntry); }
 
     @Override
     public void finalize(Exception e) { }

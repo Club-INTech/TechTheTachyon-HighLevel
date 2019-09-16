@@ -155,7 +155,7 @@ public class Circle extends Shape {
         for(int i=0;i<n;i++){
             int x=(int)Math.round(this.getRadius()*Math.cos(2*i*Math.PI/n))+this.getCenter().getX();
             int y=(int)Math.round(this.getRadius()*Math.sin(2*i*Math.PI/n))+this.getCenter().getY();
-            Vec2 vectToAdd=new VectCartesian(x,y);
+            Vec2 vectToAdd=new InternalVectCartesian(x,y);
             l.add(vectToAdd);
         }
         return l;
