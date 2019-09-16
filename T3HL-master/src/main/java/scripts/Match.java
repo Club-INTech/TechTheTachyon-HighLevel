@@ -59,7 +59,7 @@ public class Match extends Script {
                 exceptionRaised = attemptMultipleTimes(3, () -> {
                     try {
                         followPathTo(accelerateurScript.entryPosition(ACC_VERSION), 0);
-                        return true;
+                        return false;
                     } catch (UnableToMoveException e) {
                         e.printStackTrace();
                         try {
@@ -67,8 +67,8 @@ public class Match extends Script {
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }
+                        return true;
                     }
-                    return false;
                 });
             }
             if (secours || exceptionRaised) {

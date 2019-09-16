@@ -49,7 +49,7 @@ public abstract class RobotEntryPoint {
     protected OrderWrapper orderWrapper;
     protected Listener listener;
     protected DataController dataController;
-    protected LidarControler lidarControler;
+    protected LidarController lidarController;
     protected Table table;
     protected Robot robot;
     protected PaletsChaosControler paletsChaosControler;
@@ -207,11 +207,10 @@ public abstract class RobotEntryPoint {
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);
             listener = hl.module(Listener.class);
-            listener.start();
             dataController = hl.module(DataController.class);
             table = hl.module(Table.class);
             table.initObstacles();
-            lidarControler = hl.module(LidarControler.class);
+            lidarController = hl.module(LidarController.class);
             robot = hl.module(robotClass);
             KeepAlive keepAliveService = hl.module(KeepAlive.class);
             keepAliveService.start();

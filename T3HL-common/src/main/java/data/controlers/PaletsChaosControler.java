@@ -42,7 +42,7 @@ public class PaletsChaosControler extends Thread implements Module {
     @Override
     public void run() {
         Log.DATA_HANDLER.debug("Controler lancé : en attente du listener...");
-        while (!listener.isAlive()) {
+        while (!listener.hasFinishedLoading()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
             } catch (InterruptedException e) {

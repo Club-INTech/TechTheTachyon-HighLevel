@@ -6,9 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import pfg.config.Config;
 import pfg.config.Configurable;
-import utils.ConfigData;
 import utils.Log;
 import utils.container.Module;
 
@@ -39,7 +37,7 @@ public class PaletsDepartControler extends Thread implements Module {
     @Override
     public void run() {
         Log.DATA_HANDLER.debug("Controler lancé : en attente du listener...");
-        while (!listener.isAlive()) {
+        while (!listener.hasFinishedLoading()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
             } catch (InterruptedException e) {

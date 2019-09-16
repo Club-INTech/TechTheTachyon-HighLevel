@@ -26,6 +26,7 @@ import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Log;
 import utils.communication.CommunicationException;
+import utils.container.Module;
 import utils.container.ModuleThread;
 
 import java.util.*;
@@ -35,7 +36,7 @@ import java.util.*;
  *
  * @author rem, jglrxavpok
  */
-public class Listener extends ModuleThread {
+public class Listener implements Module {
 
     /**
      * Temps d'attente entre chaque boucle pour l'initialisation des connexions
@@ -111,6 +112,7 @@ public class Listener extends ModuleThread {
      * Header -> Liste des handlers correspondants
      */
     private Map<String, List<MessageHandler>> messageHandlers = new HashMap<>();
+    private boolean activated;
 
     /**
      * Construit un listener
@@ -122,7 +124,7 @@ public class Listener extends ModuleThread {
         this.buddySync = buddySync;
         this.collectionMap = new HashMap<>();
         this.channelList = new LinkedList<>();
-        this.setPriority(Thread.MAX_PRIORITY);
+      //  this.setPriority(Thread.MAX_PRIORITY);
     }
 
     /**
@@ -131,20 +133,29 @@ public class Listener extends ModuleThread {
      * @param message   corps du message
      */
     private void handleMessage(String header, String message) {
-      //  System.out.println("RECEIVED ON HEADER '"+header+"': "+message);
         // TODO: Remplacer complétement par le système des MessageHandler
+
+        boolean handled = false;
         for (int i = 0; i < channelList.size(); i++) {
             Channel registeredChannel = channelList.get(i);
             if (registeredChannel.getHeaders().equals(header)) {
                 collectionMap.get(registeredChannel).add(message);
+                handled = true;
             }
         }
+
+        if(handled) // on évite de lancer des événements pour un canal déjà géré
+            return;
 
         List<MessageHandler> handlers = messageHandlers.get(header);
         if(handlers == null) return;
         for (int i = 0; i < handlers.size(); i++) {
             final MessageHandler handler = handlers.get(i);
-            hl.async("Handle Message", () -> handler.handle(message));
+            System.err.println("Async message: "+message);
+            hl.async("Handle Message", () -> {
+                System.err.println("InAsync message: "+message);
+                handler.handle(message);
+            });
         }
     }
 
@@ -159,7 +170,11 @@ public class Listener extends ModuleThread {
     }
 
     @Override
-    public void run() {
+    public void onInit(HLInstance hl) {
+        hl.async("Async Listener init", ()->asyncInit(hl));
+    }
+
+    private void asyncInit(HLInstance hl) {
         Connection buddy = Connection.SLAVE;
         // Initialisation des connexions
         Log.COMMUNICATION.debug("Listener lancé : connection aux devices...");
@@ -204,7 +219,7 @@ public class Listener extends ModuleThread {
                 }
             }
             if(usingBaliseImage || zoneChaosTest){
-            //if(usingBaliseImage ){
+                //if(usingBaliseImage ){
                 connectionManager.initConnections(Connection.BALISE_IMAGE);
             }
             if(usingLidar) {
@@ -227,45 +242,44 @@ public class Listener extends ModuleThread {
         }
         Log.COMMUNICATION.debug("Listener opérationnel");
 
-        // Main loop
-        String header;
-        String message;
-        Optional<String> buffer;
         ArrayList<Connection> initiatedConnections = connectionManager.getInitiatedConnections();
         LinkedList<Connection> toClose = new LinkedList<>();
-        while (!isInterrupted()) {
-            // TODO: Un thread par connexion?
-            for (int i = 0; i < initiatedConnections.size(); i++) {
-                Connection current = initiatedConnections.get(i);
-                try {
-                    buffer = current.read();
-                    while (buffer.isPresent()) {
-                        if (buffer.get().length() >= 2) {
-                            header = buffer.get().substring(0, 2);
-                            message = buffer.get().substring(2);
-                            handleMessage(header, message);
-                            if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
-                                if (buddy.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenPosUpdates) {
-                                    buddySync.sendPosition();
-                                    lastTimeSinceBuddyUpdate = System.currentTimeMillis();
+        final Connection buddyConnection = buddy;
+        for (int i = 0; i < initiatedConnections.size(); i++) {
+            Connection current = initiatedConnections.get(i);
+            hl.async("Read connection "+current, () -> {
+                while(true) {
+                    try {
+                        Optional<String> buffer = current.read();
+                        if(buffer.isPresent()) {
+                            if (buffer.get().length() >= 2) {
+                                String header = buffer.get().substring(0, 2);
+                                String message = buffer.get().substring(2);
+                                handleMessage(header, message);
+                                if (header.equals(Channel.ROBOT_POSITION.getHeaders())) {
+                                    if (buddyConnection.isInitiated() && System.currentTimeMillis() - lastTimeSinceBuddyUpdate >= timeBetweenPosUpdates) {
+                                        buddySync.sendPosition();
+                                        lastTimeSinceBuddyUpdate = System.currentTimeMillis();
+                                    }
                                 }
                             }
                         }
-
-                        buffer = current.read();
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                        Log.COMMUNICATION.critical("Impossible de lire sur la connexion " + current.name() + " : fermeture de la connexion");
+                        break;
                     }
-                } catch (CommunicationException e) {
-                    e.printStackTrace();
-                    Log.COMMUNICATION.critical("Impossible de lire sur la connexion " + current.name() + " : fermeture de la connexion");
-                    toClose.add(current);
                 }
-            }
-
-            initiatedConnections.removeAll(toClose);
-            toClose.clear();
+            });
         }
+        activated = true;
     }
 
+    public boolean hasFinishedLoading() {
+        return activated;
+    }
+
+    /* TODO
     @Override
     public void interrupt() {
         try {
@@ -274,7 +288,7 @@ public class Listener extends ModuleThread {
         } catch (CommunicationException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void registerMessageHandler(Channel channel, MessageHandler handler) {
         List<MessageHandler> messageHandlerList = messageHandlers.getOrDefault(channel.getHeaders(), new LinkedList<>());

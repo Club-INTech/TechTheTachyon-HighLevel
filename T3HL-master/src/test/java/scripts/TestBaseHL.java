@@ -4,7 +4,7 @@ import connection.ConnectionManager;
 import data.Table;
 import data.XYO;
 import data.controlers.DataController;
-import data.controlers.LidarControler;
+import data.controlers.LidarController;
 import data.controlers.Listener;
 import locomotion.PathFollower;
 import orders.OrderWrapper;
@@ -85,7 +85,7 @@ public abstract class TestBaseHL {
             DataController sensorControler = hl.module(DataController.class);
 
             if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
-                LidarControler lidarControler = hl.module(LidarControler.class);
+                LidarController lidarController = hl.module(LidarController.class);
             }
 
             Listener listener = hl.module(Listener.class);

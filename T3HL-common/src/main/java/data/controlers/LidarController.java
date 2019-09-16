@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author rem
  */
-public class LidarControler implements Module {
+public class LidarController implements Module {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -110,7 +110,7 @@ public class LidarControler implements Module {
      * @param table     la table
      * @param listener  le listener
      */
-    public LidarControler(Table table, Listener listener, MatchTimer timer) {
+    public LidarController(Table table, Listener listener, MatchTimer timer) {
         this.timer = timer;
         this.table = table;
         this.listener = listener;

@@ -126,7 +126,7 @@ public class HLInstance implements Module {
 
         Offsets.loadFromConfig(config);
 
-        threadPool = Executors.newWorkStealingPool();
+        threadPool = Executors.newCachedThreadPool();
         /* Le container est un service ! */
         instanciedServices.put(getClass().getSimpleName(), this);
     }
@@ -257,9 +257,7 @@ public class HLInstance implements Module {
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
 
-            notifyHierarchy(service, (Module)s);
-
-            s.onInit(this);
+            updateSubInstances(service, (Module)s);
 
             instanciedServices.put(service.getSimpleName(), (Module) s);
 
@@ -278,6 +276,9 @@ public class HLInstance implements Module {
                 e.printStackTrace();
             }
             s.updateConfig(this.config);
+
+            s.onInit(this);
+
             Log.DATA_HANDLER.debug("Module "+service.getSimpleName()+" prêt");
 
             /* Mise à jour de la pile */
@@ -296,16 +297,17 @@ public class HLInstance implements Module {
     }
 
     /**
-     * Préviens toute l'hiérarchie d'héritage de 'moduleClass' de l'arrivée d'une nouvelle instance
+     * Sauvegarde la dernière instance de <pre>moduleClass</pre> instanciée, et sauvegarde cette instance aussi pour les classes mères.
+     * Permet de faire <pre>module(Robot.class)</pre> et de récupérer l'instance de Master ou Slave instanciée
      * @param moduleClass
      *      La classe du module
      * @param moduleInstance
      *      L'instance du module
      */
-    private void notifyHierarchy(Class<?> moduleClass, Module moduleInstance) {
+    private void updateSubInstances(Class<?> moduleClass, Module moduleInstance) {
         lastInstance.put(moduleClass.getSimpleName(), moduleInstance);
         if(Module.class.isAssignableFrom(moduleClass.getSuperclass())) {
-            notifyHierarchy(moduleClass.getSuperclass(), moduleInstance);
+            updateSubInstances(moduleClass.getSuperclass(), moduleInstance);
         }
     }
 

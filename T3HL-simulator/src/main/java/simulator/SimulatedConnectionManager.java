@@ -1,5 +1,7 @@
 package simulator;
 
+import utils.Log;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -86,6 +88,7 @@ public class SimulatedConnectionManager extends Thread {
     void sendMessage(String message){
         if(port != VISUALISATION_PORT) {
             try {
+                Log.LL_DEBUG.debug("[SimulatedLL] Sending: "+message);
                 this.outgoing.write(message);
                 this.outgoing.flush();
             } catch (IOException e) {

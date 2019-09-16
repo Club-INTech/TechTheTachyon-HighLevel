@@ -260,16 +260,13 @@ public class SimulatorManager extends Thread {
                     robot.sendJumperOkay();
                     graphicalInterface.resetTimer();
                 }
-                else if(testOrder(arguments, "down", 2)
-                        || testOrder(arguments, "up", 2)
-                        || testOrder(arguments, "downup", 2)
-                        || testOrder(arguments, "updown", 2)) {
+                else if(testOrder(arguments, "elevator", 3)) {
                     // désolé
                     // TODO: tmp
                     new Thread(() -> {
                         try {
                             Thread.sleep(1000);
-                            robot.sendConfirmationForElevator(arguments[1]);
+                            robot.sendConfirmationForElevator(arguments[1].toLowerCase());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -296,12 +293,14 @@ public class SimulatorManager extends Thread {
                             String position = arguments[0];
                             RobotSide side = RobotSide.valueOf(arguments[1].toUpperCase());
                             robot.setArmPosition(side, position);
-                            try {
-                                TimeUnit.MILLISECONDS.sleep((long) (500/this.graphicalInterface.getTimeScale())); // simulation du mouvement
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            robot.sendArmConfirmation(side);
+                            new Thread(() -> {
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep((long) (500/this.graphicalInterface.getTimeScale())); // simulation du mouvement
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                robot.sendArmConfirmation(side);
+                            }).start();
                             return;
                         }
                     }

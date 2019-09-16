@@ -9,6 +9,7 @@ import utils.Log;
 import utils.MatchTimer;
 import utils.container.ContainerException;
 import utils.container.Module;
+import utils.container.ModuleThread;
 import utils.math.Calculs;
 import utils.math.Vec2;
 import utils.math.InternalVectCartesian;
@@ -23,7 +24,7 @@ import java.util.function.Consumer;
  *
  * @author rem
  */
-public class DataController implements Module {
+public class DataController extends ModuleThread {
 
     /**
      * Temps d'attente entre deux vérification de la queue
@@ -81,27 +82,19 @@ public class DataController implements Module {
      *              le listener
      */
     public DataController(HLInstance hl, Listener listener, MatchTimer timer, OrderWrapper orderWrapper) throws FileNotFoundException, UnsupportedEncodingException {
-        //super("DataController");
+        super();
         this.hl = hl;
         this.listener = listener;
         this.timer = timer;
         this.orderWrapper = orderWrapper;
-        /*
-        this.sickWriter = new PrintWriter("./sick-"+System.currentTimeMillis()+".csv", StandardCharsets.UTF_16.name());
-        sickWriter.print("Indice");
-        for (Sick sick : Sick.values()) {
-            sickWriter.print("\t"+sick.name());
-        }
-        sickWriter.println();*/
-
     }
 
     @Override
     public void onInit(HLInstance hl) {
-        // FIXME: Est-ce que c'est mieux avec registerChannelHandler? -> Ces channels sont sur des canaux spéciaux parce qu'ils sont très utilisés, vaut mieux éviter de créer 10000 threads pour eux
-        listener.registerMessageHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
-        listener.registerMessageHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
-        listener.registerMessageHandler(Channel.LL_DEBUG, this::handleLLDebug);
+        // Ces channels sont sur des canaux spéciaux parce qu'ils sont très utilisés, vaut mieux éviter de créer 10000 threads pour eux. En plus pour la synchronisation, vaut mieux pouvoir tout supprimer dans le channel position
+        registerChannelHandler(Channel.ROBOT_POSITION, this::handleRobotPos);
+        registerChannelHandler(Channel.BUDDY_POSITION, this::handleBuddyPos);
+        registerChannelHandler(Channel.LL_DEBUG, this::handleLLDebug);
 
         listener.registerMessageHandler(Channel.BUDDY_PATH, this::handleBuddyPath);
         listener.registerMessageHandler(Channel.UPDATE_PALETS, this::handlePaletUpdate);
@@ -111,6 +104,8 @@ public class DataController implements Module {
         listener.registerMessageHandler(Channel.SICK, this::handleSick);
         listener.registerMessageHandler(Channel.COULEUR_PALET_PRIS, this::handleCouleurPalet);
         listener.registerMessageHandler(Channel.BUDDY_EVENT, this::handleBuddyEvent);
+
+        start();
     }
 
     private void handleArmEvent(String message) {
@@ -156,19 +151,18 @@ public class DataController implements Module {
         this.channelHandlers.add(new ChannelHandler(this.listener, channel, function));
     }
 
-   /* @Override
+    @Override
     public void run() {
-        Log.DATA_HANDLER.debug("Controler lancé : en attente du listener...");
-        while (!listener.isAlive()) {
+        Log.DATA_HANDLER.debug("Controller lancé : en attente du listener...");
+        while (!listener.hasFinishedLoading()) {
             try {
                 Thread.sleep(Listener.TIME_LOOP);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        Log.DATA_HANDLER.debug("Controler opérationnel");
+        Log.DATA_HANDLER.debug("Controller opérationnel");
 
-        // TODO: Complétement remplacer par MessageHandler
         ArrayList<ChannelHandler> handlers = this.channelHandlers;
         while (!isInterrupted()) {
             for (int i = 0; i < handlers.size(); i++) {
@@ -176,7 +170,7 @@ public class DataController implements Module {
                 channelHandler.checkAndHandle();
             }
         }
-    }*/
+    }
 
     private void handleBuddyEvent(String message) {
         String[] parts = message.split(" ");
@@ -203,9 +197,7 @@ public class DataController implements Module {
             }
 
             default:
-
                 break;
-
         }
 
         Log.COMMUNICATION.debug("Got event from buddy: "+message);
@@ -222,10 +214,10 @@ public class DataController implements Module {
      * POSITION
      */
     private void handleRobotPos(String message) {
-        String[] coordonates = message.split(ARGUMENTS_SEPARATOR);
-        int x = Math.round(Float.parseFloat(coordonates[0]));
-        int y = Math.round(Float.parseFloat(coordonates[1]));
-        double o = Double.parseDouble(coordonates[2]);
+        String[] coordinates = message.split(ARGUMENTS_SEPARATOR);
+        int x = Math.round(Float.parseFloat(coordinates[0]));
+        int y = Math.round(Float.parseFloat(coordinates[1]));
+        double o = Double.parseDouble(coordinates[2]);
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             x = -x;
             o = Math.PI - o;
@@ -311,8 +303,6 @@ public class DataController implements Module {
             System.out.print(sickMeasurementsStr[i]+" ");
         }
         System.out.println();
-     /*   sickWriter.println(String.format("%d\t%d\t%d\t%d\t%d\t%d\t%d", measureIndex++, sickMeasurements[0], sickMeasurements[1], sickMeasurements[2], sickMeasurements[3], sickMeasurements[4], sickMeasurements[5]));
-        sickWriter.flush();*/
         System.out.println("============");
         Sick[] significantSicks = Sick.getSignificantSicks();
         if (significantSicks == Sick.NOTHING){
@@ -493,12 +483,6 @@ public class DataController implements Module {
 
     private boolean symetry() {
         return orderWrapper.shouldSymetrize();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-    //    sickWriter.close();
     }
 
     /**
