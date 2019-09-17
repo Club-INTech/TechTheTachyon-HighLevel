@@ -2,6 +2,10 @@
 task genIntellijRuns {
 
     def xmlFile = rootProject.projectDir.canonicalPath+'/.idea/workspace.xml'
+    def file = new File(xmlFile)
+    if(!file.exists()) {
+        return
+    }
     def xml = new XmlParser().parse(xmlFile)
     def runManager = xml.component.find { it.@name == 'RunManager' }
     if(!runManager) {
