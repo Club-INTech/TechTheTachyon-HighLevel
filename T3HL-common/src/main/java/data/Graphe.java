@@ -276,23 +276,7 @@ public class Graphe implements Module {
      * Met à jour la disponibilité des arrêtes en fonction des obstacles mobiles
      */
     public void update() {
-      //  Log.LIDAR.debug("Mise à jour du graphe...");
-        int counter = 0;
-       /* synchronized (mobileCircularObstacles) {
-            for (Ridge ridge : ridges) {
-                ridge.setReachable(true);
-                for (MobileCircularObstacle obstacle : mobileCircularObstacles) {
-                    if (obstacle.intersect(ridge.getSeg())) {
-                        ridge.setReachable(false);
-                        counter++;
-                        break;
-                    }
-                }
-            }
-        }*/
-        // reset cache
         resetCache();
-      //  Log.LIDAR.debug(String.format("Mise à jour du graphe : %d/%d arrêtes non-accessibles", counter, ridges.size()));
     }
 
     private NodeList partition(int indexX, int indexY) {
