@@ -1,13 +1,32 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+    }
+}
+
 apply plugin: 'idea'
 
-// On dit à Gradle qu'on va faire du Java
 subprojects {
-    ext.runConfigs = []
-
-    apply plugin: 'java-library'
-
     group 'fr.club_intech.hl'
     version '2019-indev'
+
+    buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+        }
+    }
+
+    ext.runConfigs = []
+
+    // On dit à Gradle qu'on va faire du Java
+    apply plugin: 'java-library'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
 // On dit que c'est du Java 8
     sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -43,9 +62,8 @@ subprojects {
         implementation 'com.github.Club-INTech:PanneauRaspi:master-SNAPSHOT' // TODO: remove -SNAPSHOT or replace lib
         // Lib qui gère la config du robot
         implementation 'com.github.Club-INTech:config:d190abd67e'
-        // Lib audio
-        implementation 'com.github.jglrxavpok:Audiokode:aa1606587b'
     }
+
 }
 
 project.evaluationDependsOnChildren()

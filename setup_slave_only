@@ -1,5 +1,4 @@
 #!/bin/bash -v
-
 #Build du slave
 cd T3HL-slave/
 mvn clean

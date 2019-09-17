@@ -6,4 +6,12 @@ dependencies {
     implementation 'com.github.WilliamAHartman:Jamepad:1.2'
 }
 
+jar {
+    manifest {
+        attributes  'Implementation-Title': 'INTech Main Robot',
+                    'Implementation-Version': version,
+                    'Main-Class': 'LaunchRobotMaster'
+    }
+}
+
 ext.runConfigs = ["LaunchRobotMaster", "LaunchSimulatorMaster"]

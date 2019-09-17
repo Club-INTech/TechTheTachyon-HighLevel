@@ -1,5 +1,4 @@
 #!/bin/bash -v
-
 #Build du master
 cd T3HL-master/
 mvn clean
