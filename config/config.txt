@@ -84,13 +84,6 @@ ACCELERATEUR_THETA_RECALAGE_VIOLET  =0.05
 ACCELERATEUR_Y_RECALAGE_VIOLET             =123
 ACCELERATEUR_Y_RECALAGE_JAUNE             =122
 
-USING_LIDAR			                = true
-LED_COUNT			                = 16
-HOMOLOGATION                        = false
-
-# DIMENSIONS DES ROBOTS
-ROBOT_RAY                           = 190
-BUDDY_RAY                           = 150
 ZDD_X_VIOLET                        =-3
 ZDD_X_JAUNE                         =-3
 

@@ -65,7 +65,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
     @Override
     protected void initServices(HLInstance hl, Class<? extends Robot> robotClass, Class<? extends ScriptManager> scriptManagerClass) {
         super.initServices(hl, robotClass, scriptManagerClass);
-        if(hl.getConfig().getBoolean(ConfigData.MODE_MONTHLERY)) {
+        if(hl.getConfig().get(ConfigData.MODE_MONTHLERY)) {
             try {
                 MontlheryController montlheryController = hl.module(MontlheryController.class);
                 montlheryController.start();
@@ -79,18 +79,18 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
     protected void preLLConnection() throws ContainerException {
         waitForColorSwitch();
 
-        if(hl.getConfig().getBoolean(ConfigData.VISUALISATION) || hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if(hl.getConfig().get(ConfigData.VISUALISATION) || hl.getConfig().get(ConfigData.SIMULATION)) {
             SimulatorDebug debug = hl.module(SimulatorDebug.class);
-            if(hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
+            if(hl.getConfig().get(ConfigData.SIMULATION)) {
                 debug.setSenderPort((int)ConfigData.LL_MASTER_SIMULATEUR.getDefaultValue());
             } else {
                 debug.setSenderPort(SimulatedConnectionManager.VISUALISATION_PORT);
             }
         }
 
-        if (hl.getConfig().getBoolean(ConfigData.SIMULATION)) {
+        if (hl.getConfig().get(ConfigData.SIMULATION)) {
             initSimulator();
-        } else if(hl.getConfig().getBoolean(ConfigData.VISUALISATION)) {
+        } else if(hl.getConfig().get(ConfigData.VISUALISATION)) {
             initVisualisateur();
         }
     }

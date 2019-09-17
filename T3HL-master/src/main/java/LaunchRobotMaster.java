@@ -11,7 +11,7 @@ public class LaunchRobotMaster {
     public static void main(String[] args) throws ContainerException {
         HLInstance hl = HLInstance.getInstance("Master");
         hl.getConfig().override(ConfigData.SIMULATION, false);
-        hl.getConfig().override(ConfigData.VISUALISATION, true);
+        hl.getConfig().override(ConfigData.VISUALISATION, false);
         MainMaster.main(args);
     }
 }

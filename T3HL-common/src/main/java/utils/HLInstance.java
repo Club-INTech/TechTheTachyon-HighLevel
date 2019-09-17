@@ -77,10 +77,10 @@ public class HLInstance implements Module {
      * Instancie le gestionnaire de dépendances ainsi que la config
      */
     private HLInstance(String profile) {
-        Log.init();
-
         /* Affichage du message de bienvenue */
         printMessage("../resources/intro_colored.txt");
+
+        Log.init();
 
         /* Affiche la version du programme (dernier commit et sa branche) */
         try {
@@ -356,7 +356,7 @@ public class HLInstance implements Module {
      */
     @Override
     public void updateConfig(Config config) {
-        for(Module module :instanciedServices.values()){
+        for(Module module : instanciedServices.values()){
             if(module instanceof HLInstance)
                 continue;
             try {
