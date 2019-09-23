@@ -219,16 +219,16 @@ public class SimulatorManager extends Thread {
         if (arguments.length>0) {
             String order = arguments[0];
             try {
-                if (testOrder(arguments, MotionOrder.MOVE_LENTGHWISE,2)) {
+                if (testOrder(arguments, MotionOrders.MoveLengthwise,2)) {
                     robot.moveLengthwise(parseInt(arguments[1]));
                 }
-                else if (testOrder(arguments, MotionOrder.TURN,2)) {
+                else if (testOrder(arguments, MotionOrders.Turn,2)) {
                     robot.turn(parseFloat(arguments[1]));
                 }
-                else if (testOrder(arguments, MotionOrder.MOVE_TO_POINT,3)) {
+                else if (testOrder(arguments, MotionOrders.MoveToPoint,3)) {
                     robot.goTo(new InternalVectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
                 }
-                else if (testOrder(arguments, MotionOrder.STOP,1)) {
+                else if (testOrder(arguments, MotionOrders.Stop,1)) {
                     robot.stop();
                 }
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION, 4)){
@@ -238,22 +238,22 @@ public class SimulatorManager extends Thread {
                 else if (testOrder(arguments, PositionAndOrientationOrder.SET_ORIENTATION,2)){
                     robot.setOrientation(parseFloat(arguments[1]));
                 }
-                else if(testOrder(arguments, MontlheryOrder.MONTLHERY, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.Montlhery, 1)) {
                     robot.setMontlheryMode();
                 }
-                else if(testOrder(arguments, MontlheryOrder.AVANCE, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.GoForward, 1)) {
                     robot.goForward();
                 }
-                else if(testOrder(arguments, MontlheryOrder.RECULE, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.GoBackwards, 1)) {
                     robot.goBackwards();
                 }
-                else if(testOrder(arguments, MontlheryOrder.LEFT, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.Left, 1)) {
                     robot.turnLeft();
                 }
-                else if(testOrder(arguments, MontlheryOrder.RIGHT, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.Right, 1)) {
                     robot.turnRight();
                 }
-                else if(testOrder(arguments, MontlheryOrder.STOP, 1)) {
+                else if(testOrder(arguments, MontlheryOrders.Stop, 1)) {
                     robot.sstop();
                 }
                 else if(testOrder(arguments, "waitJumper", 1)) {
@@ -272,7 +272,7 @@ public class SimulatorManager extends Thread {
                         }
                     }).start();
                 }
-                else if(testOrder(arguments, MiscOrder.PING, 1)) {
+                else if(testOrder(arguments, MiscOrders.Ping, 1)) {
                     robot.sendPong();
                 }
                 else if(testOrder(arguments, "torqueBras", 2)) {
@@ -335,6 +335,10 @@ public class SimulatorManager extends Thread {
     }
 
     /* ========================= Méthodes permettant tester la validité des ordres reçus ========================== */
+    private boolean testOrder(String[] arguments, lowlevel.order.Order order, int nb_args) throws OrderException {
+        return testOrder(arguments, order.toLL(), nb_args);
+    }
+
     /** Compare une string et un ordre
      * @param arguments arguments envoyés au simulateur
      * @param order ordre auquel on compare le message reçu

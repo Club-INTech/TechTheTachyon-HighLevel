@@ -7,11 +7,11 @@ import java.util.Map;
 /**
  * Utilisé par la PriorityQueue
  */
-public class ComparatorNode implements Comparator<Node> {
+public class NodeComparator implements Comparator<Node> {
 
     private final Map<Node, Double> heuristiques;
 
-    public ComparatorNode(Map<Node, Double> heuristiques) {
+    public NodeComparator(Map<Node, Double> heuristiques) {
         this.heuristiques = heuristiques;
     }
 

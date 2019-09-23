@@ -23,7 +23,7 @@ import connection.ConnectionManager;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
 import orders.order.HooksOrder;
-import orders.order.MotionOrder;
+import orders.order.MotionOrders;
 import orders.order.PositionAndOrientationOrder;
 import org.junit.After;
 import org.junit.Assert;
@@ -76,7 +76,7 @@ public class Test_OrderWrapper_Symetry {
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", MotionOrder.TURN.getOrderStr(), 2 * Math.PI / 3);
+        String a = String.format(Locale.US, "%s %.5f", MotionOrders.Turn.toLL(), 2 * Math.PI / 3);
         Assert.assertEquals(a, m.get());
 
     }

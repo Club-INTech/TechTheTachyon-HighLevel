@@ -35,7 +35,6 @@ public class TestPathFollower {
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);
             listener = hl.module(Listener.class);
-            listener.start();
             graphe = hl.module(Graphe.class);
             pathFollower = hl.module(PathFollower.class);
             sensorController = hl.module(DataController.class);

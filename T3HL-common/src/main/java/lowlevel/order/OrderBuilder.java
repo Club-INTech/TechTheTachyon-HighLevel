@@ -38,6 +38,15 @@ public class OrderBuilder<T extends Order> {
     }
 
     /**
+     * Crée un ordre avec le string donné
+     * @param id l'ID à envoyer au LL pour cet ordre
+     * @return l'ordre instancié avec le nom donné
+     */
+    public static Order createSimple(String id) {
+        return () -> id;
+    }
+
+    /**
      * Côté du robot impliqué
      * @param side Côté du robot
      * @return cet {@link OrderBuilder} pour les enchaînements

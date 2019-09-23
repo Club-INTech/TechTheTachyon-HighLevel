@@ -82,14 +82,13 @@ public abstract class TestBaseHL {
 //            ScriptManagerMaster scriptManager = container.module(ScriptManagerMaster.class);
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);
-            DataController sensorControler = hl.module(DataController.class);
+            hl.initModule(DataController.class);
 
-            if((boolean)ConfigData.USING_LIDAR.getDefaultValue()) {
-                LidarController lidarController = hl.module(LidarController.class);
+            if(hl.getConfig().get(ConfigData.USING_LIDAR)) {
+                hl.initModule(LidarController.class);
             }
 
-            Listener listener = hl.module(Listener.class);
-            listener.start();
+            hl.initModule(Listener.class);
 
             table = hl.module(Table.class);
             table.initObstacles();

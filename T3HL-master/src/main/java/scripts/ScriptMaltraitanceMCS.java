@@ -4,7 +4,7 @@ import data.SensorState;
 import data.Table;
 import data.XYO;
 import orders.OrderWrapper;
-import orders.order.MotionOrder;
+import orders.order.MotionOrders;
 import utils.HLInstance;
 import utils.container.Module;
 import utils.math.Vec2;
@@ -36,7 +36,7 @@ public class ScriptMaltraitanceMCS extends Script {
             float randX = (float) (Math.random()*2-1)*0.1f;
             float randY = (float) (Math.random()*2-1)*0.1f;
             SensorState.MOVING.setData(true);
-            orderWrapper.sendString(String.format(Locale.US, "%s %f %f", MotionOrder.MOVE_TO_POINT.getOrderStr(), target.getX()+randX, target.getY()+randY));
+            orderWrapper.sendString(String.format(Locale.US, "%s %f %f", MotionOrders.MoveToPoint.toLL(), target.getX()+randX, target.getY()+randY));
             Module.waitWhileTrue(SensorState.MOVING::getData);
         }
     }

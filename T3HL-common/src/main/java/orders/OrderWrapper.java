@@ -154,7 +154,7 @@ public class OrderWrapper implements Module {
      */
     public void moveLenghtwise(double distance, boolean expectedWallImpact, Runnable... parallelActions) {
         int d = (int) Math.round(distance);
-        this.sendString(String.format(Locale.US, "%s %d %b", MotionOrder.MOVE_LENTGHWISE.getOrderStr(), d, expectedWallImpact));
+        this.sendString(String.format(Locale.US, "%s %d %b", MotionOrders.MoveLengthwise.toLL(), d, expectedWallImpact));
         runAll(parallelActions);
     }
 
@@ -166,7 +166,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             angle=(Math.PI - angle)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.5f", MotionOrder.TURN.getOrderStr(), angle));
+        this.sendString(String.format(Locale.US, "%s %.5f", MotionOrders.Turn.toLL(), angle));
         runAll(parallelActions);
     }
 
@@ -179,7 +179,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             p = p.symetrizeVector();
         }
-        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), p.getX(), p.getY()));
+        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrders.MoveToPoint.toLL(), p.getX(), p.getY()));
         runAll(parallelActions);
     }
 
@@ -187,7 +187,7 @@ public class OrderWrapper implements Module {
      * On envoit au bas niveau comme ordre de s'arrêter
      */
     public void immobilise() {
-        this.sendString(MotionOrder.STOP.getOrderStr());
+        perform(MotionOrders.Stop);
         SensorState.MOVING.setData(false);
     }
 
@@ -195,19 +195,19 @@ public class OrderWrapper implements Module {
     /**
      * Couper l'asserv en rotation
      */
-    public void noRotationControl() {this.sendString(MotionOrder.NO_ROTATION_CONTROL.getOrderStr());}
+    public void noRotationControl() {this.sendString(MotionOrders.DisableRotationControl.toLL());}
 
     /**
      * Activer l'asserv en rotation
      */
-    public void rotationControl() {this.sendString(MotionOrder.ROTATION_CONTROL.getOrderStr());}
+    public void rotationControl() {this.sendString(MotionOrders.EnableRotationControl.toLL());}
 
     /**
      * On dit au bas niveau la vitesse de translation qu'on veut
      * @param speed la vitesse qu'on veut
      */
     public void setTranslationnalSpeed(float speed) {
-        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_TRANSLATION_SPEED.getOrderStr(), speed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrders.SetTranslationSpeed.toLL(), speed));
     }
 
     /**
@@ -215,7 +215,7 @@ public class OrderWrapper implements Module {
      * @param rotationSpeed la vitesse de rotation qu'on veut
      */
     public void setRotationnalSpeed(double rotationSpeed) {
-        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrder.SET_ROTATIONNAL_SPEED.getOrderStr(), (float) rotationSpeed));
+        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrders.SetRotationalSpeed.toLL(), (float) rotationSpeed));
     }
 
     /**
@@ -314,7 +314,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             point.symetrize();
         }
-        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrder.MOVE_TO_POINT.getOrderStr(), point.getX(), point.getY()));
+        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrders.MoveToPoint.toLL(), point.getX(), point.getY()));
     }
 
     /**
@@ -372,7 +372,7 @@ public class OrderWrapper implements Module {
      * Envoie un ping au LL pour vérifier que la connexion est encore active
      */
     public void ping() {
-        sendString(MiscOrder.PING.getOrderStr());
+        sendString(MiscOrders.Ping.toLL());
     }
 
     @Override
@@ -431,7 +431,7 @@ public class OrderWrapper implements Module {
     }
 
     public void forceStop() {
-        sendString(MotionOrder.FORCE_STOP.getOrderStr());
+        perform(MotionOrders.ForceStop);
     }
 
     public void perform(lowlevel.order.Order order) {

@@ -220,7 +220,7 @@ d'utilisation. Par exemple, plutôt que de devoir écrire, à chaque fois que l'
 d'avancer d'une certaine distance `Connection.TEENSY_MASTER.send("d 100")`, on préfère utiliser une méthode
 du style `orderWrapper.moveLenghtwise(100)` ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
 sur des enums qui implémentent l'interface `orders.order.Order`, et qui typent les chaînes de caractères correspondant aux
-ordres que l'on envoie au bas niveau. Regardez la classe `orders.order.MotionOrder` ainsi que dans l'order wrapper
+ordres que l'on envoie au bas niveau. Regardez la classe `orders.order.MotionOrders` ainsi que dans l'order wrapper
 pour plus d'informations.
 
 L'order wrapper ne s'occupe pas que de simplifier l'envoie d'ordre au bas-niveau, il est également en charge de

@@ -1,9 +1,8 @@
 import com.studiohartman.jamepad.*;
+import lowlevel.order.Order;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
-import orders.order.MontlheryOrder;
-import orders.order.Order;
-import pfg.config.Config;
+import orders.order.MontlheryOrders;
 import robot.Master;
 import robot.Robot;
 import utils.container.Module;
@@ -97,14 +96,14 @@ public class MontlheryController extends Thread implements Module {
                     if(epsilonCheck(leftAxisY)) {
                         float forward = leftAxisY;
                         if(forward > 0) {
-                            order(MontlheryOrder.AVANCE);
+                            order(MontlheryOrders.GoForward);
                         } else {
-                            order(MontlheryOrder.RECULE);
+                            order(MontlheryOrders.GoBackwards);
                         }
                         moving = true;
                         translating = true;
                     } else if(translating) {
-                        order(MontlheryOrder.STOP_TRANSLATION);
+                        order(MontlheryOrders.StopTranslation);
                         translating = false;
                     }
 
@@ -113,24 +112,24 @@ public class MontlheryController extends Thread implements Module {
                         rotating = true;
                         if(rightAxisX < 0) {
                             if(leftAxisY > 0) {
-                                order(MontlheryOrder.LEFT);
+                                order(MontlheryOrders.Left);
                             } else {
-                                order(MontlheryOrder.RIGHT);
+                                order(MontlheryOrders.Right);
                             }
                         } else {
                             if(leftAxisY > 0) {
-                                order(MontlheryOrder.RIGHT);
+                                order(MontlheryOrders.Right);
                             } else {
-                                order(MontlheryOrder.LEFT);
+                                order(MontlheryOrders.Left);
                             }
                         }
                     } else if(rotating) {
-                        order(MontlheryOrder.STOP_ROTATION);
+                        order(MontlheryOrders.StopRotation);
                         rotating = false;
                     }
 
                     if(!moving) {
-                        order(MontlheryOrder.STOP);
+                        order(MontlheryOrders.Stop);
                     }
                 } catch (ControllerUnpluggedException e) {
                     e.printStackTrace();
@@ -154,9 +153,9 @@ public class MontlheryController extends Thread implements Module {
         controllers.quitSDLGamepad();
     }
 
-    private void order(MontlheryOrder order) {
+    private void order(Order order) {
         if(lastOrder != order) {
-            orders.sendString(order.getOrderStr());
+            orders.sendString(order.toLL());
             lastOrder = order;
         }
     }

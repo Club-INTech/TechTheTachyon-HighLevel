@@ -19,7 +19,7 @@
 package orders.order;
 
 /**
- * Interface permettant que tous les ordres(MotionOrder, ActionOrder,....) soient de la classe Order
+ * Interface permettant que tous les ordres(MotionOrders, ActionOrder,....) soient de la classe Order
  *
  * @author yousra
  */

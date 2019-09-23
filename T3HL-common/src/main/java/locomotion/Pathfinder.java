@@ -22,7 +22,6 @@ import data.Graphe;
 import data.graphe.Node;
 import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
-import pfg.config.Config;
 import utils.container.Module;
 import utils.math.Vec2;
 
@@ -66,7 +65,7 @@ public class Pathfinder implements Module {
         parents = new HashMap<>();
 
         this.graphe = graphe;
-        this.openList = new PriorityQueue<>(new ComparatorNode(heuristiques));
+        this.openList = new PriorityQueue<>(new NodeComparator(heuristiques));
         this.closedList = new LinkedList<>();
     }
 

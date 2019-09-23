@@ -36,7 +36,7 @@ import orders.Speed;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
 import orders.order.ActuatorsOrder;
-import orders.order.MontlheryOrder;
+import orders.order.MontlheryOrders;
 import pfg.config.Configurable;
 import utils.HLInstance;
 import utils.Log;
@@ -488,9 +488,9 @@ public abstract class Robot implements Module {
      * Actives le mode montlhery
      */
     public void switchToMontlheryMode() {
-        this.orderWrapper.sendString(MontlheryOrder.MONTLHERY.getOrderStr());
-        this.orderWrapper.sendString(MontlheryOrder.MAX_ROTATION_SPEED.getOrderStr()+" "+Math.PI/4f);
-        this.orderWrapper.sendString(MontlheryOrder.MAX_TRANSLATION_SPEED.getOrderStr()+" 180");
+        this.orderWrapper.sendString(MontlheryOrders.Montlhery.toLL());
+        this.orderWrapper.sendString(MontlheryOrders.MaxRotationSpeed.toLL()+" "+Math.PI/4f);
+        this.orderWrapper.sendString(MontlheryOrders.MaxTranslationSpeed.toLL()+" 180");
     }
 
     // Gestion des ascenseurs

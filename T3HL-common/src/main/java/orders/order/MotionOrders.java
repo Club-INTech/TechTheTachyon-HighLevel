@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018, INTech.
+ * Copyright (c) 2019, INTech.
  * this file is part of INTech's HighLevel.
  *
  * INTech's HighLevel is free software: you can redistribute it and/or modify
@@ -18,44 +18,30 @@
 
 package orders.order;
 
+import lowlevel.order.Order;
+import lowlevel.order.OrderBuilder;
+
 /**
- * Enum qui contient tous les ordres envoyés au LL concernant les mouvements du robot
+ * Tous les ordres envoyés au LL concernant les mouvements du robot
  *
- * @author yousra
+ * @author yousra, jglrxavpok
  */
-public enum MotionOrder implements Order {
+public class MotionOrders {
     /**Avancer*/
-    MOVE_LENTGHWISE("d"),
-    /**Tourner*/
-    TURN("t"),
+    public static final Order MoveLengthwise = OrderBuilder.createSimple("d");
+    /** Tourner */
+    public static final Order Turn = OrderBuilder.createSimple("t");
     /** Aller jusqu'à un point */
-    MOVE_TO_POINT("goto"),
+    public static final Order MoveToPoint = OrderBuilder.createSimple("goto");
+
     /**S'arrêter*/
-    STOP("stop"),
+    public static final Order Stop = OrderBuilder.createSimple("stop");
     /** On force l'arrêt */
-    FORCE_STOP("sstop"),
+    public static final Order ForceStop = OrderBuilder.createSimple("sstop");
     /** Couper l'asserv en rotation */
-    NO_ROTATION_CONTROL("cr0"),
+    public static final Order DisableRotationControl = OrderBuilder.createSimple("cr0");
     /** Activer l'asserv en rotation */
-    ROTATION_CONTROL("cr1"),
-    ;
+    public static final Order EnableRotationControl = OrderBuilder.createSimple("cr1");
 
-    /**Ordre envoyé au LL*/
-    private String orderStr;
-
-    /**
-     * Constructeur qui ne précise pas la durée de l'action
-     * @param orderStr : order envoyé au LL
-     */
-    MotionOrder(String orderStr){
-        this.orderStr = orderStr;
-    }
-
-    /**
-     * Getter de l'ordre
-     * @return l'ordre en string envoyé
-     */
-    public String getOrderStr(){
-        return this.orderStr;
-    }
+    private MotionOrders() {}
 }

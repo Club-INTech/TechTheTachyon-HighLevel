@@ -180,14 +180,24 @@ public class HLInstance implements Module {
     }
 
     /**
+     * Méthode initialisant un module sans le retourner. C'est strictement équivalent à <pre>module(TaClasse.class)</pre>,
+     * c'est juste pour être plus lisible et compréhensible
+     * @param moduleClass classe du module à initialiser
+     * @throws ContainerException
+     */
+    public synchronized <S extends Module> void initModule(Class<S> moduleClass) throws ContainerException {
+        module(moduleClass, new Stack<>());
+    }
+
+    /**
      * Méthode retournant une référence d'une classe demandée.
      *
-     * @param   service classe demandée
+     * @param   moduleClass classe demandée
      * @return  référene de l'instance de la classe demandée
      * @throws  ContainerException
      */
-    public synchronized <S extends Module> S module(Class<S> service) throws ContainerException {
-        return module(service, new Stack<String>());
+    public synchronized <S extends Module> S module(Class<S> moduleClass) throws ContainerException {
+        return module(moduleClass, new Stack<String>());
     }
 
     /**
@@ -195,53 +205,53 @@ public class HLInstance implements Module {
      * renvoie la référence de l'objet créé.
      * Gère automatiquement les dépendances entre les classes, et détecte automatiquement les dépendances circulaires
      *
-     * @param   service   classe demandée
+     * @param   moduleClass   classe demandée
      * @param   stack     pile de services servant à détecter les dépendances circulaires
      * @return  référence de l'objet créé
      * @throws  ContainerException  en cas d'exception relative à l'instanciation d'objet ou de détection de dépendance
      *                              circulaire
      */
     @SuppressWarnings("unchecked")
-    private synchronized <S extends Module> S module(Class<S> service, Stack<String> stack) throws ContainerException {
+    private synchronized <S extends Module> S module(Class<S> moduleClass, Stack<String> stack) throws ContainerException {
         try {
             /* Si l'objet à déjà été instancié, on renvoie la référence */
-            if (instanciedServices.containsKey(service.getSimpleName()))
+            if (instanciedServices.containsKey(moduleClass.getSimpleName()))
             {
-                return (S) instanciedServices.get(service.getSimpleName());
+                return (S) instanciedServices.get(moduleClass.getSimpleName());
             }
 
             // On vérifie si une des classes filles correspond
-            Optional<Module> lastInstance = checkLastInstance(service);
+            Optional<Module> lastInstance = checkLastInstance(moduleClass);
             if(lastInstance.isPresent())
                 return (S) lastInstance.get();
 
-            if((service.getModifiers() & Modifier.ABSTRACT) != 0) {
-                throw new ContainerException("Tried to instanciate module with abstract class '"+service.getCanonicalName()+"' but no instance has already been loaded.");
+            if((moduleClass.getModifiers() & Modifier.ABSTRACT) != 0) {
+                throw new ContainerException("Tried to instanciate module with abstract class '"+moduleClass.getCanonicalName()+"' but no instance has already been loaded.");
             }
 
             /* Détection des dépendances circulaires */
-            if (stack.contains(service.getSimpleName()))
+            if (stack.contains(moduleClass.getSimpleName()))
             {
                 StringBuffer buf = new StringBuffer();
                 for (String stk : stack)
                     buf.append(String.format(Locale.US, "%s -> ", stk));
-                buf.append(service.getSimpleName());
+                buf.append(moduleClass.getSimpleName());
                 throw new ContainerException(buf.toString());
             }
 
 
 
             /* Mise à jour de la pile */
-            stack.push(service.getSimpleName());
+            stack.push(moduleClass.getSimpleName());
 
-            /* Un service n'a qu'un seul constructeur */
-            if (service.getConstructors().length > 1)
+            /* Un moduleClass n'a qu'un seul constructeur */
+            if (moduleClass.getConstructors().length > 1)
             {
-                throw new ContainerException(service.getSimpleName() + " a plusieurs constructeurs !");
+                throw new ContainerException(moduleClass.getSimpleName() + " a plusieurs constructeurs !");
             }
 
             /* Récupération du constructeur & des paramètres */
-            Constructor<S> constructor = (Constructor<S>) service.getDeclaredConstructors()[0];
+            Constructor<S> constructor = (Constructor<S>) moduleClass.getDeclaredConstructors()[0];
             Class<Module>[] param = (Class<Module>[]) constructor.getParameterTypes();
 
             /* On demande récursivement chacun des paramètres */
@@ -253,21 +263,21 @@ public class HLInstance implements Module {
 
             /* On instancie l'objet ou on le stocke dans le dico */
             constructor.setAccessible(true);    // Petit hack, ne faite pas ca chez vous !
-            Log.DATA_HANDLER.debug("Initialisation du service "+service.getSimpleName());
+            Log.DATA_HANDLER.debug("Initialisation du moduleClass "+moduleClass.getSimpleName());
             S s = constructor.newInstance(paramObject);
             constructor.setAccessible(false);
 
-            updateSubInstances(service, (Module)s);
+            updateSubInstances(moduleClass, (Module)s);
 
-            instanciedServices.put(service.getSimpleName(), (Module) s);
+            instanciedServices.put(moduleClass.getSimpleName(), (Module) s);
 
             /* Si c'est un Thread, on l'ajoute dans une liste à part */
             if (s instanceof Thread)
             {
-                instanciedThreads.put(service.getSimpleName(), (Thread) s);
+                instanciedThreads.put(moduleClass.getSimpleName(), (Thread) s);
             }
 
-            Log.DATA_HANDLER.debug("Mise à jour de la config du service "+service.getSimpleName()+" après son initialisation.");
+            Log.DATA_HANDLER.debug("Mise à jour de la config du moduleClass "+moduleClass.getSimpleName()+" après son initialisation.");
             /* Mise à jour de la config */
 
             try {
@@ -279,7 +289,7 @@ public class HLInstance implements Module {
 
             s.onInit(this);
 
-            Log.DATA_HANDLER.debug("Module "+service.getSimpleName()+" prêt");
+            Log.DATA_HANDLER.debug("Module "+moduleClass.getSimpleName()+" prêt");
 
             /* Mise à jour de la pile */
             stack.pop();
