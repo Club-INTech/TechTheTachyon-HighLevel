@@ -1,3 +1,4 @@
+import robot.Robots;
 import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
@@ -9,7 +10,7 @@ import utils.container.ContainerException;
 public class LaunchSimulatorMaster {
 
     public static void main(String[] args) throws ContainerException {
-        HLInstance hl = HLInstance.getInstance("Master");
+        HLInstance hl = HLInstance.get(Robots.MAIN);
         //container.getConfig().override(ConfigData.COULEUR, "violet");
         hl.getConfig().override(ConfigData.SIMULATION, true);
         hl.getConfig().override(ConfigData.VISUALISATION, false);

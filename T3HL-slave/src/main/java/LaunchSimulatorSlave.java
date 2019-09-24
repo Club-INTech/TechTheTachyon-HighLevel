@@ -1,3 +1,4 @@
+import robot.Robots;
 import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
@@ -9,7 +10,7 @@ import utils.container.ContainerException;
 public class LaunchSimulatorSlave {
 
     public static void main(String[] args) throws ContainerException {
-        HLInstance hl = HLInstance.getInstance("Slave");
+        HLInstance hl = HLInstance.get(Robots.SECONDARY);
         hl.getConfig().override(ConfigData.USING_LIDAR, false);
         hl.getConfig().override(ConfigData.MASTER, false);
         hl.getConfig().override(ConfigData.USING_PANEL, false);

@@ -20,6 +20,7 @@ package utils;
 
 import pfg.config.Config;
 import pfg.config.ConfigInfo;
+import robot.Robots;
 import utils.container.ContainerException;
 import utils.container.Module;
 
@@ -146,6 +147,10 @@ public class HLInstance implements Module {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static HLInstance get(Robots type) {
+        return getInstance(type.id());
     }
 
     /**

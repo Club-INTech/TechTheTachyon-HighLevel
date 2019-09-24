@@ -11,6 +11,7 @@ import orders.OrderWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import robot.Master;
+import robot.Robots;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Segment;
@@ -30,7 +31,7 @@ public class TestPathFollower {
 
     @Before
     public void init() {
-        hl = HLInstance.getInstance("robot.Master");
+        hl = HLInstance.get(Robots.MAIN);
         try {
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);

@@ -26,6 +26,7 @@ import data.Table;
 import data.graphe.Node;
 import data.table.Obstacle;
 import locomotion.NoPathFound;
+import robot.Robots;
 import scripts.Script;
 import scripts.ScriptNames;
 import utils.HLInstance;
@@ -73,7 +74,7 @@ public class ScriptAction extends Action {
         Script scriptInstance;
         try {
             // TODO FIXME
-            scriptInstance = scriptName.createScript(HLInstance.getInstance("Master"));
+            scriptInstance = scriptName.createScript(HLInstance.get(Robots.MAIN));
         } catch (ContainerException e) {
             e.printStackTrace();
             scriptInstance = null;

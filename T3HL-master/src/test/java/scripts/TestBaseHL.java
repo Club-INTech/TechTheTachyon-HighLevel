@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import robot.Master;
 import robot.Robot;
+import robot.Robots;
 import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
 import simulator.SimulatorManager;
@@ -76,7 +77,7 @@ public abstract class TestBaseHL {
     }
 
     protected void setup(boolean simulationMode) {
-        hl = HLInstance.getInstance("Master");
+        hl = HLInstance.get(Robots.MAIN);
         hl.getConfig().override(ConfigData.SIMULATION, simulationMode);
         try {
 //            ScriptManagerMaster scriptManager = container.module(ScriptManagerMaster.class);

@@ -101,7 +101,7 @@ Dans le dossier des sources, plusieurs packages regroupent les classes par fonct
 * Scripts : ce package regroupe les classes abstraites et interfaces definissant le fonctionnement d'un script ! Un script
   est une suite d'action à faire pour le robot, implémentée dans la methode _Script.execute_.
 
-L'orchestration de tous ces packages et modules se fait de la manière suivante :
+L'orchestration de tous ces packages et modules se fait de la manière suivante (attention les noms ont pu changer depuis):
 
 ![TTHL - Architecture générale](doc/images/TTHL.png)
 
@@ -146,8 +146,8 @@ Le container fait office à la fois de factory .ie il instancie les services(tou
 et de gestion des dépendances : lorsque  l'on demande un module via la méthode `getService(Class class)`, le container va
 instancier tous les paramètres du constructeur en tant que module s'ils n'ont pas déjà été instanciés. Utilisation :
 ```Java
-Container container = Container.getInstance("Master");
-MonService module = container.getService(MonService.class);
+HLInstance hl = HLInstance.getInstance(Robots.MASTER);
+MonModule module = hl.module(MonModule.class);
 ```
 "Tu nous parles de module depuis tout à l'heure mais c'est quoi au juste un module ???"
 

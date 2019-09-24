@@ -21,6 +21,7 @@ import locomotion.PathFollower;
 import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.order.ActuatorsOrder;
+import robot.Robots;
 import robot.Slave;
 import scripts.MatchSlave;
 import scripts.ScriptManagerSlave;
@@ -49,7 +50,7 @@ public class MainSlave extends RobotEntryPoint {
     }
 
     private void start() throws ContainerException {
-        HLInstance hl = HLInstance.getInstance("Slave");
+        HLInstance hl = HLInstance.get(Robots.SECONDARY);
         entryPoint(hl, Slave.class, ScriptManagerSlave.class);
     }
 

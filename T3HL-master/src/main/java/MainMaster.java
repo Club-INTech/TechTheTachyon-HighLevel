@@ -25,6 +25,7 @@ import orders.Speed;
 import orders.order.ActuatorsOrder;
 import robot.Master;
 import robot.Robot;
+import robot.Robots;
 import scripts.Match;
 import scripts.ScriptManager;
 import scripts.ScriptManagerMaster;
@@ -58,7 +59,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
     }
 
     private void start() throws ContainerException {
-        HLInstance hl = HLInstance.getInstance("Master");
+        HLInstance hl = HLInstance.get(Robots.MAIN);
         entryPoint(hl, Master.class, ScriptManagerMaster.class);
     }
 

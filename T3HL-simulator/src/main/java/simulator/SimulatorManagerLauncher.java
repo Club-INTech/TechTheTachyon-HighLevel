@@ -3,6 +3,7 @@ package simulator;
 import data.Table;
 import locomotion.PathFollower;
 import robot.Robot;
+import robot.Robots;
 import utils.ConfigData;
 import utils.HLInstance;
 import utils.container.ContainerException;
@@ -274,7 +275,7 @@ public class SimulatorManagerLauncher extends Thread{
         }
 
         //Récupération des obstacles
-        this.hl = HLInstance.getInstance("Master");
+        this.hl = HLInstance.get(Robots.MAIN);
 
         if(visualisationMode) {
             System.out.println("Initialisation du robot visualisé");
