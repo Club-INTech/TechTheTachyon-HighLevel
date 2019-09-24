@@ -105,7 +105,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d", MotionOrders.MoveLengthwise.toLL(), 15);
+        String a = MotionOrders.MoveLengthwise.with(15, false);
         Assert.assertEquals(a, m.get());
     }
 
@@ -119,7 +119,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", MotionOrders.Turn.toLL(), Math.PI);
+        String a = MotionOrders.Turn.with(Math.PI);
         Assert.assertEquals(a, m.get());
     }
 

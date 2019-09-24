@@ -219,13 +219,13 @@ public class SimulatorManager extends Thread {
         if (arguments.length>0) {
             String order = arguments[0];
             try {
-                if (testOrder(arguments, MotionOrders.MoveLengthwise,2)) {
+                if (testOrder(arguments, MotionOrders.MoveLengthwise.getBase(),2)) {
                     robot.moveLengthwise(parseInt(arguments[1]));
                 }
-                else if (testOrder(arguments, MotionOrders.Turn,2)) {
+                else if (testOrder(arguments, MotionOrders.Turn.getBase(),2)) {
                     robot.turn(parseFloat(arguments[1]));
                 }
-                else if (testOrder(arguments, MotionOrders.MoveToPoint,3)) {
+                else if (testOrder(arguments, MotionOrders.MoveToPoint.getBase(),3)) {
                     robot.goTo(new InternalVectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
                 }
                 else if (testOrder(arguments, MotionOrders.Stop,1)) {

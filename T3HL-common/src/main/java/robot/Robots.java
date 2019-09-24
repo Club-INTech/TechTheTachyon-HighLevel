@@ -1,5 +1,10 @@
 package robot;
 
+/**
+ * Liste des Robots et identifiants utilisés dans le HL
+ *
+ * @author jglrxavpok
+ */
 public enum Robots {
     MAIN("Master"),
     SECONDARY("Slave");

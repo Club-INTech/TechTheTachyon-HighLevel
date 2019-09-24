@@ -20,6 +20,8 @@ package orders.order;
 
 import lowlevel.order.Order;
 import lowlevel.order.OrderBuilder;
+import lowlevel.order.OrderWithArgument;
+import static utils.communication.Formatting.*;
 
 /**
  * Tous les ordres envoyés au LL concernant les mouvements du robot
@@ -28,11 +30,11 @@ import lowlevel.order.OrderBuilder;
  */
 public class MotionOrders {
     /**Avancer*/
-    public static final Order MoveLengthwise = OrderBuilder.createSimple("d");
+    public static final OrderWithArgument MoveLengthwise = OrderBuilder.createWithArgs("d", INTEGER, BOOLEAN);
     /** Tourner */
-    public static final Order Turn = OrderBuilder.createSimple("t");
+    public static final OrderWithArgument Turn = OrderBuilder.createWithArgs("t", FLOAT5);
     /** Aller jusqu'à un point */
-    public static final Order MoveToPoint = OrderBuilder.createSimple("goto");
+    public static final OrderWithArgument MoveToPoint = OrderBuilder.createWithArgs("goto", INTEGER, INTEGER);
 
     /**S'arrêter*/
     public static final Order Stop = OrderBuilder.createSimple("stop");

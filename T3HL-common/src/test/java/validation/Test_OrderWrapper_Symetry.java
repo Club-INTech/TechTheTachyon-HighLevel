@@ -76,7 +76,7 @@ public class Test_OrderWrapper_Symetry {
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", MotionOrders.Turn.toLL(), 2 * Math.PI / 3);
+        String a = MotionOrders.Turn.with(2 * Math.PI / 3);
         Assert.assertEquals(a, m.get());
 
     }

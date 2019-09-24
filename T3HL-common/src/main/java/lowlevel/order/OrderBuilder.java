@@ -37,6 +37,10 @@ public class OrderBuilder<T extends Order> {
         return instance;
     }
 
+    public static OrderWithArgument createWithArgs(String base, String... types) {
+        return new OrderWithArgument(base, types);
+    }
+
     /**
      * Crée un ordre avec le string donné
      * @param id l'ID à envoyer au LL pour cet ordre

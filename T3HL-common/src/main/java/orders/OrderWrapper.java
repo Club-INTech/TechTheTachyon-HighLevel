@@ -154,7 +154,7 @@ public class OrderWrapper implements Module {
      */
     public void moveLenghtwise(double distance, boolean expectedWallImpact, Runnable... parallelActions) {
         int d = (int) Math.round(distance);
-        this.sendString(String.format(Locale.US, "%s %d %b", MotionOrders.MoveLengthwise.toLL(), d, expectedWallImpact));
+        sendString(MotionOrders.MoveLengthwise.with(d, expectedWallImpact));
         runAll(parallelActions);
     }
 
@@ -166,7 +166,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             angle=(Math.PI - angle)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.5f", MotionOrders.Turn.toLL(), angle));
+        this.sendString(MotionOrders.Turn.with(angle));
         runAll(parallelActions);
     }
 
@@ -179,7 +179,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             p = p.symetrizeVector();
         }
-        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrders.MoveToPoint.toLL(), p.getX(), p.getY()));
+        this.sendString(MotionOrders.MoveToPoint.with(p.getX(), p.getY()));
         runAll(parallelActions);
     }
 
@@ -314,7 +314,7 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             point.symetrize();
         }
-        this.sendString(String.format(Locale.US, "%s %d %d", MotionOrders.MoveToPoint.toLL(), point.getX(), point.getY()));
+        this.sendString(MotionOrders.MoveToPoint.with(point.getX(), point.getY()));
     }
 
     /**
