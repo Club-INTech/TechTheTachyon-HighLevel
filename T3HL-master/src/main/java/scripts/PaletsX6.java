@@ -7,6 +7,7 @@ import data.XYO;
 import data.synchronization.SynchronizationWithBuddy;
 import locomotion.UnableToMoveException;
 import orders.order.ActuatorsOrder;
+import orders.order.ActuatorsOrders;
 import pfg.config.Configurable;
 import robot.Robot;
 import utils.HLInstance;
@@ -106,7 +107,7 @@ public class PaletsX6 extends Script implements Offsets {
             positions.add(new InternalVectCartesian(600 + offsetX, 1204 + 10 + 5 + offsetY)); // rouge (4)
             positions.add(new InternalVectCartesian(500 + offsetX, 1204 + 10 + 5 + offsetY)); // vert (5)
         }
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
+        robot.perform(ActuatorsOrders.ActivateRightPump);
         premierPaletPris = false;
         try {
             turn(Math.PI);

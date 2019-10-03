@@ -22,7 +22,6 @@ import utils.math.Vec2;
 
 /**
  * Exception levée lorsque le Pathfinding ne trouve pas de chemin
- * TODO 1As
  *
  * @author rem
  */

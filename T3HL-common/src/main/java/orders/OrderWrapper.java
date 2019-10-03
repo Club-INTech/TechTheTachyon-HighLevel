@@ -434,10 +434,19 @@ public class OrderWrapper implements Module {
         perform(MotionOrders.ForceStop);
     }
 
+    /**
+     * Utilise un ordre donné, sans attendre de confirmation
+     * @param order l'ordre à exécuter
+     */
     public void perform(lowlevel.order.Order order) {
         perform(order, false);
     }
 
+    /**
+     * Utilise un ordre donné, avec possibilité d'attendre la confirmation du LL
+     * @param order l'ordre à exécuter
+     * @param waitForConfirmation doit-on attendre la confirmation du LL?
+     */
     public void perform(lowlevel.order.Order order, boolean waitForConfirmation) {
         if(order instanceof SidedOrder && shouldSymetrize()) {
             order = ((SidedOrder) order).symetrize();

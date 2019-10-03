@@ -29,6 +29,7 @@ import orders.order.Order;
 
 public enum Speed implements Order {
     //TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
+    // TODO: Le LL devrait aller plus vite cette année, faut prendre en compte ça aussi
 
     /** Vitesse ultra lente en translation, ultra lente en rotation */
     ULTRA_VERY_SLOW_ALL(10,0.5D),

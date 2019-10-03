@@ -31,6 +31,7 @@ import data.synchronization.SynchronizationWithBuddy;
 import locomotion.Locomotion;
 import locomotion.UnableToMoveException;
 import locomotion.UnableToMoveReason;
+import lowlevel.order.Order;
 import orders.OrderWrapper;
 import orders.Speed;
 import orders.hooks.HookFactory;
@@ -342,6 +343,14 @@ public abstract class Robot implements Module {
         this.orderWrapper.useActuator(order, waitForConfirmation);
     }
 
+    public void perform(Order order) {
+        this.orderWrapper.perform(order);
+    }
+
+    public void perform(Order order, boolean waitForConfirmation) {
+        this.orderWrapper.perform(order, waitForConfirmation);
+    }
+
     /**
      * Permet au robot de désactiver l'asserv en rotation
      */
@@ -589,9 +598,6 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletDroitNoSymetry(CouleurPalet palet) {
-        //if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
-        // ascenseurDroite.push(CouleurPalet.getCouleurPalRecu());
-        //}
         Objects.requireNonNull(rightElevator, "Tentative d'insérer un palet dans l'ascenseur de droite alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         rightElevator.push(palet);
         sendElevatorUpdate();
@@ -602,9 +608,6 @@ public abstract class Robot implements Module {
      * @throws NullPointerException si l'ascenseur n'existe pas
      */
     public void pushPaletGaucheNoSymetry(CouleurPalet palet) {
-        // if (CouleurPalet.getCouleurPalRecu() != CouleurPalet.PAS_DE_PALET) {
-        //ascenseurGauche.push(CouleurPalet.getCouleurPalRecu());
-        //}
         Objects.requireNonNull(leftElevator, "Tentative d'insérer un palet dans l'ascenseur de gauche alors qu'il n'y a pas d'ascenseur à droite dans ce robot!");
         leftElevator.push(palet);
         sendElevatorUpdate();
