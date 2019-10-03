@@ -2,6 +2,7 @@ import com.studiohartman.jamepad.*;
 import lowlevel.order.Order;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
+import orders.order.ActuatorsOrders;
 import orders.order.MontlheryOrders;
 import robot.Master;
 import robot.Robot;
@@ -77,12 +78,12 @@ public class MontlheryController extends Thread implements Module {
                         robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
                     }
                     if(leftTriggerPressed && !wasLeftTriggerPressed) {
-                        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_DROITE);
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_DROITE);
+                        orders.perform(ActuatorsOrders.ActivateRightPump);
+                        orders.perform(ActuatorsOrders.DeactivateRightValve);
                     }
                     if(rightTriggerPressed && !wasRightTriggerPressed) {
-                        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_DROITE);
-                        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_DROITE);
+                        orders.perform(ActuatorsOrders.DeactivateLeftPump);
+                        orders.perform(ActuatorsOrders.ActivateRightValve);
                     }
 
                     wasAPressed = aPressed;
