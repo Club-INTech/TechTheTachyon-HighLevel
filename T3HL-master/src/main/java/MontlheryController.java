@@ -61,8 +61,8 @@ public class MontlheryController extends Thread implements Module {
                     // B: Goto ELEVATOR
                     // X: monter asc droit
                     // Y: descendre asc droit
-                    // LEFT TRIGGER: active pompe droite
-                    // RIGHT TRIGGER: désactive pompe droite
+                    // LEFT BUMPER: active pompe droite
+                    // RIGHT BUMPER: désactive pompe droite
                     if(aPressed && !wasAPressed && armPosition != ArmState.GROUND) {
                         armPosition = ArmState.GROUND;
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);

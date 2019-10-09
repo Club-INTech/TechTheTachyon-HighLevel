@@ -95,7 +95,7 @@ public class GraphicalInterface extends JFrame {
         this.pointsToDraw=new ArrayList<>();
         this.lastTimeUpdate=System.currentTimeMillis();
         try {
-            this.backgroundImage = ImageIO.read(getClass().getResourceAsStream("/Table2019.png"));
+            this.backgroundImage = ImageIO.read(getClass().getResourceAsStream("/Table2020.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
