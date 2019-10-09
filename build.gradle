@@ -28,10 +28,10 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'com.github.johnrengelman.shadow'
 
-// On dit que c'est du Java 8
-    sourceCompatibility = targetCompatibility = '1.13' // Need this here so eclipse task generates correctly.
+// On dit que c'est du Java 13
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_13 // Need this here so eclipse task generates correctly.
     compileJava {
-        sourceCompatibility = targetCompatibility = '1.13'
+        sourceCompatibility = targetCompatibility = JavaVersion.VERSION_13
     }
 
     repositories {
