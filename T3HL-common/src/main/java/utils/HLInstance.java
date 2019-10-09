@@ -237,7 +237,7 @@ public class HLInstance implements Module {
             /* Détection des dépendances circulaires */
             if (stack.contains(moduleClass.getSimpleName()))
             {
-                StringBuffer buf = new StringBuffer();
+                StringBuilder buf = new StringBuilder();
                 for (String stk : stack)
                     buf.append(String.format(Locale.US, "%s -> ", stk));
                 buf.append(moduleClass.getSimpleName());

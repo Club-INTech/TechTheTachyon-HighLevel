@@ -493,7 +493,7 @@ public class DataController extends ModuleThread {
      * (Pire) Ordre des opérations:
      * - Le HL envoie la nouvelle position
      * - Le LL n'a pas encore reçu la position et a envoyé (0,0,0) (ou n'importe quelle position erronée)
-     * - Le DataControler met alors à jour la position du robot à (0,0,0)
+     * - Le DataController met alors à jour la position du robot à (0,0,0)
      * - Le LL reçoit la nouvelle position et confirme
      * - Le HL reçoit la confirmation, ignore les 2 prochains messages de position (pour être sûr que le LL envoie la bonne position)
      * - Le HL attent le prochain message de mise à jour, le LL lui envoie alors la (bonne) position et le HL la met à jour en interne.

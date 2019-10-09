@@ -14,17 +14,17 @@ public enum ScriptNamesMaster implements ScriptNames {
     OPEN_THE_GATE(OpenTheGate.class, "openthegate"),
     ;
 
-    private Class<? extends Module> scriptClass;
+    private Class<? extends Script> scriptClass;
     private String scriptName;
 
-    ScriptNamesMaster(Class<? extends Module> scriptClass, String scriptName){
+    ScriptNamesMaster(Class<? extends Script> scriptClass, String scriptName){
         this.scriptClass = scriptClass;
         this.scriptName = scriptName;
     }
 
     @Override
     public Script createScript(HLInstance hl) throws ContainerException {
-        return (Script) hl.module(scriptClass);
+        return hl.module(scriptClass);
     }
 
     /**

@@ -92,7 +92,7 @@ public interface Module
     static void withTimeout(long timeoutMillis, Runnable runnable) throws TimeoutError {
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        final Future<Void> handler = executor.submit((Callable) () -> {
+        final Future<Void> handler = executor.submit(() -> {
             runnable.run();
             return null;
         });

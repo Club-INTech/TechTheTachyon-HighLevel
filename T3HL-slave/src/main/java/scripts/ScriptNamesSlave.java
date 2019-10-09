@@ -14,17 +14,17 @@ public enum ScriptNamesSlave implements ScriptNames {
     HOMOLOGATION(ScriptHomologationSlave.class,"homologation"),
     ;
 
-    private Class<? extends Module> scriptClass;
+    private Class<? extends Script> scriptClass;
     private String scriptName;
 
-    ScriptNamesSlave(Class<? extends Module> scriptClass, String scriptName){
+    ScriptNamesSlave(Class<? extends Script> scriptClass, String scriptName){
         this.scriptClass = scriptClass;
         this.scriptName = scriptName;
     }
 
     @Override
     public Script createScript(HLInstance hl) throws ContainerException {
-        return (Script) hl.module(scriptClass);
+        return hl.module(scriptClass);
     }
 
     /**

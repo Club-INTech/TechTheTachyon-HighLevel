@@ -32,7 +32,6 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.Log;
 import utils.MatchTimer;
-import utils.communication.KeepAlive;
 import utils.container.ContainerException;
 
 import java.io.IOException;
@@ -212,10 +211,7 @@ public abstract class RobotEntryPoint {
             table.initObstacles();
             lidarController = hl.module(LidarController.class);
             robot = hl.module(robotClass);
-            KeepAlive keepAliveService = hl.module(KeepAlive.class);
-            keepAliveService.start();
             if(hl.getConfig().getBoolean(ConfigData.USING_BALISE_IMAGE) || hl.getConfig().getBoolean(ConfigData.ZONE_CHAOS_TEST)) {
-                System.out.println("suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuus");
                 paletsChaosControler = hl.module(PaletsChaosControler.class);
                 paletsChaosControler.start();
             }

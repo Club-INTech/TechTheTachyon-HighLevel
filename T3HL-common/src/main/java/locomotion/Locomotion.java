@@ -196,14 +196,12 @@ public class Locomotion implements Module {
 
         try {
             graphe.writeLock().lock();
-            start = graphe.addProvisoryNode(xyo.getPosition().clone());
-            final Node[] startHack = {start};
             Optional<Obstacle> obstacleBelowPosition = table.findFixedObstacleInPosition(xyo.getPosition());
-            obstacleBelowPosition.ifPresent(obstacle -> {
+            // Si on est dans un obstacle, on cherche la position la plus proche valide
+            start = obstacleBelowPosition.map(obstacle -> {
                 Log.LOCOMOTION.warning("Point de départ " + xyo.getPosition() + " dans l'obstacle " + obstacle);
-                startHack[0] = graphe.addProvisoryNode(obstacle.getShape().closestPointToShape(new InternalVectCartesian(0, 500)/*Centre*/));
-            });
-            start = startHack[0];
+                return graphe.addProvisoryNode(obstacle.getShape().closestPointToShape(new InternalVectCartesian(0, 500)/*Centre*/));
+            }).orElse(graphe.addProvisoryNode(xyo.getPosition().clone()));
             aim = graphe.addProvisoryNode(point);
         } finally {
             graphe.writeLock().unlock();

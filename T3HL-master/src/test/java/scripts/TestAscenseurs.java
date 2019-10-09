@@ -1,6 +1,7 @@
 package scripts;
 
 import orders.order.ActuatorsOrder;
+import orders.order.ElevatorOrders;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -17,11 +18,11 @@ public class TestAscenseurs extends TestBaseHL {
         //robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_PI);
        // robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
         while(true) {
-            robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+            robot.perform(ElevatorOrders.LowerRightElevator);
             robot.waitForRightElevator();
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            robot.perform(ElevatorOrders.RaiseRightElevator);
             robot.waitForRightElevator();
-            robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+            robot.perform(ElevatorOrders.RaiseRightElevator);
             robot.waitForRightElevator();
             //robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
 

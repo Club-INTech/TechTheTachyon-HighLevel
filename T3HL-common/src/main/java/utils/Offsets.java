@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Liste des offsets disponibles pour les scripts
  * @author mikail, jglrxavpok
  */
 public interface Offsets {

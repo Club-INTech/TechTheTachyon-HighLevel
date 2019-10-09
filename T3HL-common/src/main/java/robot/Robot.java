@@ -57,9 +57,8 @@ import java.util.function.Consumer;
 
 /**
  * Classe regroupant tout les services et fonctionnalitées de base du robot
- * TODO : Compléter
  *
- * @author rem
+ * @author rem, jglrxavpok
  */
 public abstract class Robot implements Module {
 

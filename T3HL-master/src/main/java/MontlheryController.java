@@ -3,6 +3,7 @@ import lowlevel.order.Order;
 import orders.OrderWrapper;
 import orders.order.ActuatorsOrder;
 import orders.order.ActuatorsOrders;
+import orders.order.ElevatorOrders;
 import orders.order.MontlheryOrders;
 import robot.Master;
 import robot.Robot;
@@ -72,10 +73,10 @@ public class MontlheryController extends Thread implements Module {
                         robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                     }
                     if(xPressed && !wasXPressed) {
-                        robot.useActuator(ActuatorsOrder.MONTE_ASCENCEUR_DROIT_DE_UN_PALET);
+                        robot.perform(ElevatorOrders.RaiseRightElevator);
                     }
                     if(yPressed && !wasYPressed) {
-                        robot.useActuator(ActuatorsOrder.DESCEND_ASCENSEUR_DROIT_DE_UN_PALET);
+                        robot.perform(ElevatorOrders.LowerRightElevator);
                     }
                     if(leftTriggerPressed && !wasLeftTriggerPressed) {
                         orders.perform(ActuatorsOrders.ActivateRightPump);

@@ -38,8 +38,7 @@ import java.util.function.Supplier;
 
 
 /**
- * Définition d'un script :
- *
+ * Définition d'un script
  * @author rem, jglrxavpok
  */
 public abstract class Script implements Module {
@@ -126,7 +125,6 @@ public abstract class Script implements Module {
             if( ! shouldContinueScript(e)) {
                 return;
             }
-            // TODO
         }
 
         Exception exception = null;

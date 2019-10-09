@@ -20,7 +20,6 @@ import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.HLInstance;
-import utils.communication.KeepAlive;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
 import utils.math.Vec2;
@@ -151,9 +150,6 @@ public abstract class TestBaseHL {
             Vec2 start = startPosition();
             XYO.getRobotInstance().update(start.getX(), start.getY(), startOrientation());
             robot.setPositionAndOrientation(start, startOrientation());
-
-            KeepAlive keepAliveService = hl.module(KeepAlive.class);
-            keepAliveService.start();
         } catch (ContainerException e) {
             e.printStackTrace();
         }

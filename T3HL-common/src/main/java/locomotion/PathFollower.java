@@ -140,6 +140,8 @@ public class PathFollower extends ModuleThread {
      *              distance de mouvement
      * @param expectedWallImpact
      *              true si l'on veut ignorer les blocages mécaniques
+     * @param parallelActions
+     *              actions à effectuer en parallèle du mouvement
      * @throws UnableToMoveException
      *              en cas d'évènents inattendus
      */

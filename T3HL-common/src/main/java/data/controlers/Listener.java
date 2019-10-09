@@ -151,9 +151,7 @@ public class Listener implements Module {
         if(handlers == null) return;
         for (int i = 0; i < handlers.size(); i++) {
             final MessageHandler handler = handlers.get(i);
-            hl.async("Handle Message", () -> {
-                handler.handle(message);
-            });
+            hl.async("Handle Message", () -> handler.handle(message));
         }
     }
 

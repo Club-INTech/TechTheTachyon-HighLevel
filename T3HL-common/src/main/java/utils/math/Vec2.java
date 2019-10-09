@@ -159,7 +159,7 @@ public abstract class Vec2 {
     }
 
     /**
-     * Homthétie du vecteur par a
+     * Homothétie du vecteur par a
      * @param a facteur de multiplication
      * @return  un nouveau vecteur égale à a*this
      */
