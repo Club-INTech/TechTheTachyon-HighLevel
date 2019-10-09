@@ -318,15 +318,6 @@ public enum Log
             }
         }
 
-        try {
-            PrintStream printer = new PrintStream(counterFile);
-            printer.println(counter+1);
-            printer.close();
-        } catch (FileNotFoundException e) {
-            stderr.println("Erreur lors de l'incrémentation du compteur");
-            e.printStackTrace();
-        }
-
         // création du dossier de logs si besoin
         File logFolder = new File("../logs/");
         if(!logFolder.exists()) {
@@ -343,6 +334,15 @@ public enum Log
             } else {
                 System.out.println("Réussite de la création du dossier de logs");
             }
+        }
+
+        try {
+            PrintStream printer = new PrintStream(counterFile);
+            printer.println(counter+1);
+            printer.close();
+        } catch (FileNotFoundException e) {
+            stderr.println("Erreur lors de l'incrémentation du compteur");
+            e.printStackTrace();
         }
 
         // sorties vers des fichiers
