@@ -18,14 +18,19 @@
 
 package orders.order;
 
+import lowlevel.order.Order;
+import lowlevel.order.OrderBuilder;
+import lowlevel.order.OrderWithArgument;
+import utils.communication.Formatting;
+
 /**
- * Interface permettant que tous les ordres(MotionOrders, ActionOrder,....) soient de la classe Order
+ * Enum qui contient tous les ordres concernant la position et l'orientation du robot
  *
- * @author yousra
+ * @author yousra, jglrxavpok
  */
-public interface Order {
-    /**
-     * Chaîne de caractères à envoyer au LL
-     */
-    String getOrderStr();
+public final class PositionAndOrientationOrders {
+    public static Order AskPosition = OrderBuilder.createSimple("?xyo");
+    public static OrderWithArgument SetPositionAndOrientation = OrderBuilder.createWithArgs("cxyo", Formatting.INTEGER, Formatting.INTEGER, Formatting.FLOAT5);
+    public static OrderWithArgument SetOrientation = OrderBuilder.createWithArgs("co", Formatting.FLOAT5);
+    public static Order AskSickData = OrderBuilder.createSimple("lectureSICK");
 }

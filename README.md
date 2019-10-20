@@ -219,7 +219,7 @@ L'order wrapper est un module servant à simplifier l'envoi d'ordres au bas nive
 d'utilisation. Par exemple, plutôt que de devoir écrire, à chaque fois que l'on veut envoyer au bas niveau l'ordre 
 d'avancer d'une certaine distance `Connection.TEENSY_MASTER.send("d 100")`, on préfère utiliser une méthode
 du style `orderWrapper.moveLenghtwise(100)` ! C'est le premier intérêt de l'order wrapper. Pour cela on se base
-sur des enums qui implémentent l'interface `orders.order.Order`, et qui typent les chaînes de caractères correspondant aux
+sur des enums qui implémentent l'interface `lowlevel.order.Order`, et qui typent les chaînes de caractères correspondant aux
 ordres que l'on envoie au bas niveau. Regardez la classe `orders.order.MotionOrders` ainsi que dans l'order wrapper
 pour plus d'informations.
 

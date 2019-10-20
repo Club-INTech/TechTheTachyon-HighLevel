@@ -3,21 +3,24 @@ buildscript {
         jcenter()
     }
     dependencies {
+        // plugin pour inclure les dépendances dans le .jar généré
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
     }
 }
 
 apply plugin: 'idea'
 
+// s'applique à tous les sous-projets (principal, secondaire, simulateur, etc.)
 subprojects {
     group 'fr.club_intech.hl'
-    version '2019-indev'
+    version '2019.0.0'
 
     buildscript {
         repositories {
             jcenter()
         }
         dependencies {
+            // plugin pour inclure les dépendances dans le .jar généré
             classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
         }
     }
@@ -54,18 +57,23 @@ subprojects {
         // https://stackoverflow.com/questions/44493378/whats-the-difference-between-implementation-and-compile-in-gradle
         // Tests unitaires
         implementation 'junit:junit:4.10'
+        
         // Parseur de JSON
         implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+        
         // Lib pour communiquer avec les ports série
         implementation 'com.fazecast:jSerialComm:2.5.1'
+        
         // Lib pour communiquer avec le panneau de score et de sélection de couleur sur le robot
-        implementation 'com.github.Club-INTech:PanneauRaspi:master-SNAPSHOT' // TODO: remove -SNAPSHOT or replace lib
+        implementation 'com.github.Club-INTech:PanneauRaspi:master-SNAPSHOT' // (jitpack) // TODO: remove -SNAPSHOT or replace lib
+        
         // Lib qui gère la config du robot
-        implementation 'com.github.Club-INTech:config:d190abd67e'
+        implementation 'com.github.Club-INTech:config:d190abd67e' // (jitpack)
     }
 
 }
 
+// Code nécessaire pour faire fonctionner 'genIntellijRuns'
 project.evaluationDependsOnChildren()
 
 apply from: 'runConfigs.gradle'

@@ -11,7 +11,7 @@ public class LaunchSimulatorMaster {
 
     public static void main(String[] args) throws ContainerException {
         HLInstance hl = HLInstance.get(Robots.MAIN);
-        //container.getConfig().override(ConfigData.COULEUR, "violet");
+        //hl.getConfig().override(ConfigData.COULEUR, "violet");
         hl.getConfig().override(ConfigData.SIMULATION, true);
         hl.getConfig().override(ConfigData.VISUALISATION, false);
         hl.getConfig().override(ConfigData.USING_LIDAR, false);

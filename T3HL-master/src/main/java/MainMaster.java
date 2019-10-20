@@ -16,13 +16,9 @@
  * along with it.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-import data.Sick;
-import data.XYO;
 import locomotion.PathFollower;
-import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
 import orders.Speed;
-import orders.order.ActuatorsOrder;
 import robot.Master;
 import robot.Robot;
 import robot.Robots;
@@ -35,12 +31,9 @@ import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.HLInstance;
-import utils.Log;
 import utils.Offsets;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.math.Vec2;
-import utils.math.InternalVectCartesian;
 
 import java.util.concurrent.TimeUnit;
 
@@ -98,7 +91,7 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
 
 
     @Override
-    protected void act() throws UnableToMoveException {
+    protected void act() {
         if(hl.getConfig().get(ConfigData.MODE_MONTHLERY)) {
             while(true) {
                 try {
@@ -110,91 +103,14 @@ public class MainMaster extends RobotEntryPoint implements Offsets {
             return;
         }
         robot.increaseScore(5); // présence de l'expérience
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_DEPOT);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_DEPOT);
         robot.setRotationSpeed(Speed.ULTRA_SLOW_ALL);
 
-        boolean openTheGate = hl.getConfig().get(ConfigData.OPEN_THE_GATE);
-        if(openTheGate) {
-            double offX;
-            boolean symetry = hl.getConfig().get(ConfigData.SYMETRY);
-            if (symetry){
-                offX= Offsets.get(ZDD_X_VIOLET);
-            } else {
-                offX= Offsets.get(ZDD_X_JAUNE);
-            }
-            Vec2 zoneDep = new InternalVectCartesian(1500-191-65+offX-20,1040-300);
-
-            robot.setPositionAndOrientation(zoneDep, Math.PI/2);
-        } else {
-
-            Vec2 newPos = new InternalVectCartesian(1500-191, 350);
-            robot.setPositionAndOrientation(newPos, Math.PI);
-
-            if (hl.getConfig().get(ConfigData.COULEUR).equals("violet")) {
-                Log.TABLE.critical("Couleur pour le recalage : violet");
-                robot.computeNewPositionAndOrientation(Sick.LOWER_LEFT_CORNER_TOWARDS_0);
-            } else {
-                Log.TABLE.critical("Couleur pour le recalage : jaune");
-                robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_PI);
-            }
-
-
-        /*robot.turn(Math.PI/2);
-        robot.useActuator(ActuatorsOrder.ACTIVE_LA_POMPE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_ELECTROVANNE_GAUCHE);
-        //robot.gotoPoint(new VectCartesian(1500-250,707));
-        robot.gotoPoint(new VectCartesian(-410,410-78+15-4-5));
-        robot.turn(Math.PI);
-
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ASCENSEUR, true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ACCELERATEUR, true);
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_GAUCHE_A_LA_POSITION_ACCELERATEUR_DEPOT_7_PALETS, true);
-        robot.useActuator(ActuatorsOrder.ACTIVE_ELECTROVANNE_GAUCHE);
-        robot.useActuator(ActuatorsOrder.DESACTIVE_LA_POMPE_GAUCHE);*/
-        }
-
-        robot.setRotationSpeed(Speed.DEFAULT_SPEED);
-        // la symétrie de la table permet de corriger le droit en gauche (bug ou feature?)
-
-        if( ! hl.getConfig().get(ConfigData.OPEN_THE_GATE)) {
-            table.removeTemporaryObstacle(table.getPaletVertDroite());
-        }
-        table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        table.removeAllChaosObstacles();
-
-
         try {
-            double offX = hl.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_X_VIOLET) : Offsets.get(ZDD_X_JAUNE);
-            double offY = hl.getConfig().get(ConfigData.SYMETRY) ? Offsets.get(ZDD_Y_VIOLET) : Offsets.get(ZDD_Y_JAUNE);
-
             Match match = hl.module(Match.class);
-
-            if( ! openTheGate) {
-                Vec2 entryPos = new InternalVectCartesian(1254+offX,900-198+offY);
-                robot.gotoPoint(entryPos);
-                Vec2 currentPosition = XYO.getRobotInstance().getPosition();
-                double angleToStart;
-                if (hl.getConfig().get(ConfigData.SYMETRY)) {
-                    angleToStart=Math.atan2(745- currentPosition.getY(),1000 - currentPosition.getX()-3);
-                }
-                else {
-                    angleToStart=Math.atan2(750- currentPosition.getY(),1000 - currentPosition.getX());
-                }
-                System.out.println("angleToStart : " + angleToStart);
-                robot.turn(angleToStart-Math.PI/2);
-            }
+            robot.setPositionAndOrientation(match.entryPosition(0), 0.0);
 
             orderWrapper.waitJumper();
-            /*Vec2 entryPos2 = new VectCartesian(1244+offX,900-195);
-            robot.gotoPoint(entryPos2);
-            robot.turn(angleToStart-Math.PI/2);*/
-
-            //robot.gotoPoint(new VectCartesian(0,1000));
-
-
-            match.execute(0);
+            match.execute();
         } catch (ContainerException e) {
             e.printStackTrace();
         }

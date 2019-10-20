@@ -85,14 +85,6 @@ public class Test_Json_Parser {
             e.printStackTrace();
         }
     }
-    @Test
-    public void testAvecZoneChaosControle(){
-        paletsDepartControler.run();
-        System.out.println(PaletsZoneDepart.PALET_R.getCouleur());
-        System.out.println(PaletsZoneDepart.PALET_G.getCouleur());
-        System.out.println(PaletsZoneDepart.PALET_B.getCouleur());
-
-    }
 
 
 }

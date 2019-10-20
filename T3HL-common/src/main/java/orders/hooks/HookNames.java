@@ -18,9 +18,10 @@
 
 package orders.hooks;
 
-import orders.order.Order;
 
+import lowlevel.order.Order;
 import orders.Speed;
+import orders.order.SpeedOrders;
 import utils.math.Vec2;
 import utils.math.InternalVectCartesian;
 
@@ -33,14 +34,13 @@ import utils.math.InternalVectCartesian;
 public enum HookNames {
 
     // Example :
-    SPEED_DOWN(1, new InternalVectCartesian(50, 50), 5 ,0,Math.PI, Speed.SLOW_ALL),
+    SPEED_DOWN(1, new InternalVectCartesian(50, 50), 5 ,0,Math.PI, SpeedOrders.SetSpeed.compileWith(50.f)),
     ;
 
     /**
-     * Ordre du hook
+     * L'ordre à appliquer
      */
-    private Order order;
-
+    private final Order order;
     /**
      * Position de trigger du hook
      */

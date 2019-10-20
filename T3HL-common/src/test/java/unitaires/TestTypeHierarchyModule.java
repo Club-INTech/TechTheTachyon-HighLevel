@@ -2,6 +2,7 @@ package unitaires;
 
 import org.junit.Assert;
 import org.junit.Test;
+import robot.Robots;
 import utils.HLInstance;
 import utils.container.ContainerException;
 import utils.container.Module;
@@ -13,7 +14,7 @@ public class TestTypeHierarchyModule {
 
     @Test
     public void findModuleWithBaseClass() throws ContainerException {
-        HLInstance hl = HLInstance.getInstance("Master");
+        HLInstance hl = HLInstance.get(Robots.MAIN);
         MyModule myModule = hl.module(MyModule.class);
         Assert.assertEquals(myModule, hl.module(ModuleBase.class));
     }

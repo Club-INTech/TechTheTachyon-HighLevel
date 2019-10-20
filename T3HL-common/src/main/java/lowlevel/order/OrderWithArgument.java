@@ -35,6 +35,16 @@ public class OrderWithArgument implements Order {
         return String.format(Locale.US, builder.toString(), arguments);
     }
 
+    /**
+     * Génère une instance d'Order avec les arguments donnés
+     * @param arguments la liste des arguments à appliquer à l'ordre
+     * @return l'instance d'Order correspondant aux arguments donnés. Attention: cette instance n'est pas modifiable
+     */
+    public Order compileWith(Object... arguments) {
+        String llOrder = with(arguments);
+        return () -> llOrder;
+    }
+
     @Override
     public String toLL() {
         throw new UnsupportedOperationException("You need to use #with to input arguments in order to use this order.");

@@ -4,6 +4,9 @@
 **.ipr
 **.iws
 
+# Compiled files
+bin/*
+
 # Maven Output Directories
 **/out
 **/target

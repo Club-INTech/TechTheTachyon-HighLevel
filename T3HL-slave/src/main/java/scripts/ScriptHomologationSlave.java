@@ -3,9 +3,10 @@ package scripts;
 import locomotion.UnableToMoveException;
 import utils.HLInstance;
 import utils.math.Vec2;
+import utils.math.VectCartesian;
 
 public class ScriptHomologationSlave extends Script {
-    private int xEntry = 1500 -297;
+    private int xEntry = 297;
     private int yEntry = 400;
     private static final int DISTANCE_INTERPALET = 300;
 
@@ -26,13 +27,11 @@ public class ScriptHomologationSlave extends Script {
         } catch (UnableToMoveException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
     public Vec2 entryPosition(int version) {
-        return null;
+        return new VectCartesian(xEntry, yEntry);
     }
 
     @Override

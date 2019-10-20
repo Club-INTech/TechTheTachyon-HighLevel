@@ -18,23 +18,19 @@
 
 import data.XYO;
 import locomotion.PathFollower;
-import locomotion.UnableToMoveException;
 import main.RobotEntryPoint;
-import orders.order.ActuatorsOrder;
 import robot.Robots;
 import robot.Slave;
 import scripts.MatchSlave;
 import scripts.ScriptManagerSlave;
-import simulator.GraphicalInterface;
 import simulator.SimulatedConnectionManager;
-import simulator.SimulatorManager;
 import simulator.SimulatorManagerLauncher;
 import utils.ConfigData;
 import utils.HLInstance;
 import utils.communication.SimulatorDebug;
 import utils.container.ContainerException;
-import utils.math.Vec2;
 import utils.math.InternalVectCartesian;
+import utils.math.Vec2;
 
 /**
  * @author nayth, jglrxavpok
@@ -42,8 +38,6 @@ import utils.math.InternalVectCartesian;
 public class MainSlave extends RobotEntryPoint {
 
     private SimulatorManagerLauncher simulatorLauncher;
-    // Regardez, c'est GLaDOS!
-    private GraphicalInterface interfaceGraphique;
 
     public static void main(String[] args) throws ContainerException {
         new MainSlave().start();
@@ -75,72 +69,23 @@ public class MainSlave extends RobotEntryPoint {
     }
 
     @Override
-    protected void act() throws UnableToMoveException {
-
-
-        table.removeAllChaosObstacles();
-        table.removeAllTemporaryObstacles();
-        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DU_SECONDAIRE_A_LA_POSITION_ASCENSEUR,true);
-
-        //robot.setRotationSpeed(Speed.SLOW_ALL);
-        //Vec2 newPos = new VectCartesian(1500-242, 145+58);
-        //Vec2 newPos = new VectCartesian(1500 -59 -145,400);
+    protected void act() {
         Vec2 newPos = new InternalVectCartesian(1500 -297,400);
         // position de démarrage, on s'oriente pour pouvoir prendre le palet rouge
-       // Vec2 pos = new VectCartesian(1500-300-10, 300+100+10); ça change en symétrie
-        Vec2 pos = new InternalVectCartesian(1500-449+148, 301+100);
-       // Vec2 posSansSick = new VectCartesian(1399, 450);
 
-
-        double targetAngle;
         //Pour aller à la bonne position de départ
         if(hl.getConfig().get(ConfigData.SYMETRY)) { // symétrie
             XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), Math.PI/2);
             robot.setPositionAndOrientation(newPos, Math.PI/2);
-            targetAngle = Math.PI / 2;
         }
         else {
             //s'oriente vers PI/2 avant de se recaler
             XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), -Math.PI/2);
             //XYO.getRobotInstance().update(newPos.getX(), newPos.getY(), -Math.PI/2);
             robot.setPositionAndOrientation(newPos, -Math.PI/2);
-            targetAngle = -Math.PI/2;
         }
-        //robot.computeNewPositionAndOrientation(Sick.SECONDAIRE);
-
-        //robot.gotoPoint(pos);
-        //robot.turn(targetAngle);
-        /*
-        for (int i = 0; i < 5; i++) {
-            if (XYO.getRobotInstance().getPosition().distanceTo(pos) >= 5) {
-                robot.gotoPoint(pos);
-            } else {
-                break;
-            }
-        }
-        //Pour se tourner vers la bonne orientation
-
-        for (int i = 0; i < 5; i++) {
-            if(Math.abs(Calculs.modulo(XYO.getRobotInstance().getOrientation()-targetAngle, Math.PI)) >= 2*Math.PI/180.0f ) { //2°
-                robot.turn(targetAngle);
-            } else {
-                break;
-            }
-        }*/
-
-
-        //robot.setPositionAndOrientation(pos, -Math.PI/2);
-
-        table.removeTemporaryObstacle(table.getPaletRougeDroite());
-        table.removeTemporaryObstacle(table.getPaletBleuDroite());
-        table.removeTemporaryObstacle(table.getPaletVertDroite());
-
-        table.removeTemporaryObstacle(table.getPaletRougeGauche());
-        table.removeTemporaryObstacle(table.getPaletBleuGauche());
-        table.removeTemporaryObstacle(table.getPaletVertGauche());
 
         orderWrapper.waitJumper();
-
 
         try {
             hl.module(MatchSlave.class).execute(0);
@@ -176,8 +121,6 @@ public class MainSlave extends RobotEntryPoint {
             e.printStackTrace();
         }
         simulatorLauncher.waitForLaunchCompletion();
-        SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
-        interfaceGraphique = simulatorManager.getGraphicalInterface();
     }
 
     private void initVisualisateur(){
@@ -202,8 +145,6 @@ public class MainSlave extends RobotEntryPoint {
             e.printStackTrace();
         }
         simulatorLauncher.waitForLaunchCompletion();
-        SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
-        interfaceGraphique = simulatorManager.getGraphicalInterface();
     }
 
 }

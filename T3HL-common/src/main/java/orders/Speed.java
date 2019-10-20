@@ -18,8 +18,6 @@
 
 package orders;
 
-import orders.order.Order;
-
 /**
  * Définition des vitesses possibles de déplacement du robot.
  * Les deux arguments passés dans les vitesses correspondent à des valeurs en mm/s pour la translation puis en rad/s pour la rotation
@@ -27,7 +25,7 @@ import orders.order.Order;
  * @author yousra
  */
 
-public enum Speed implements Order {
+public enum Speed {
     //TODO régler les valeurs de vitesse en translations et rotations avec des phases de test, décider des combinaisons de vitesses inutiles
     // TODO: Le LL devrait aller plus vite cette année, faut prendre en compte ça aussi
 
@@ -95,14 +93,6 @@ public enum Speed implements Order {
     }
     public double getRotationSpeed() {
         return rotationSpeed;
-    }
-
-    /**
-     * Getter de l'ordre envoyé (mais ici c'est l'orderWrapper qui fait tout) on est obligé d'override au fait
-     */
-    @Override
-    public String getOrderStr() {
-        return "ctv" + " " + "crv" ;
     }
 }
 

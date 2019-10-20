@@ -79,7 +79,6 @@ public abstract class TestBaseHL {
         hl = HLInstance.get(Robots.MAIN);
         hl.getConfig().override(ConfigData.SIMULATION, simulationMode);
         try {
-//            ScriptManagerMaster scriptManager = container.module(ScriptManagerMaster.class);
             connectionManager = hl.module(ConnectionManager.class);
             orderWrapper = hl.module(OrderWrapper.class);
             hl.initModule(DataController.class);
@@ -130,8 +129,6 @@ public abstract class TestBaseHL {
             }
 
             simulatorLauncher.waitForLaunchCompletion();
-            SimulatorManager simulatorManager = simulatorLauncher.getSimulatorManager();
-            GraphicalInterface interfaceGraphique = simulatorManager.getGraphicalInterface();
         }
 
         waitForLLConnection();

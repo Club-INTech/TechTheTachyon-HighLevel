@@ -38,18 +38,12 @@ public class TestSICK extends TestBaseHL {
 
     @Override
     public void action() throws InterruptedException {
-        if((boolean)ConfigData.SIMULATION.getDefaultValue()) {
+        if(ConfigData.SIMULATION.getDefaultValue()) {
             // impossible de tester en mode simulation
         } else {
             // test avec tous les SICK
             for (int i=0; i < 100000;i++) {
                 robot.computeNewPositionAndOrientation(Sick.LOWER_RIGHT_CORNER_TOWARDS_0);
-/*                TimeUnit.MILLISECONDS.sleep(200);
-                try {
-                    robot.turn(0);
-                } catch (UnableToMoveException e) {
-                    e.printStackTrace();
-                }*/
                 TimeUnit.MILLISECONDS.sleep(200);
                 System.out.println(XYO.getRobotInstance());
             }

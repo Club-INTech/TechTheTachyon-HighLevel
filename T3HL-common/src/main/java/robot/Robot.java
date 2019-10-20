@@ -36,7 +36,6 @@ import orders.OrderWrapper;
 import orders.Speed;
 import orders.hooks.HookFactory;
 import orders.hooks.HookNames;
-import orders.order.ActuatorsOrder;
 import orders.order.MontlheryOrders;
 import pfg.config.Configurable;
 import utils.HLInstance;
@@ -331,17 +330,6 @@ public abstract class Robot implements Module {
         this.locomotion.turn(angle);
     }
 
-    /**
-     * Permet au robot d'utiliser un actionneur
-     * @param order
-     *              l'ordre que l'on veut executer
-     * @param waitForConfirmation
-     *              Attendre une confirmation du LL avant de continuer?
-     */
-    public void useActuator(ActuatorsOrder order, boolean waitForConfirmation) {
-        this.orderWrapper.useActuator(order, waitForConfirmation);
-    }
-
     public void perform(Order order) {
         this.orderWrapper.perform(order);
     }
@@ -404,15 +392,6 @@ public abstract class Robot implements Module {
             return;
         }
         Module.waitWhileTrue(SensorState.RECALAGE_LIDAR_EN_COURS);
-    }
-
-    /**
-     * Permet au robot d'utiliser un actionneur
-     * @param order
-     *              l'ordre que l'on veut executer
-     */
-    public void useActuator(ActuatorsOrder order) {
-        this.orderWrapper.useActuator(order, false);
     }
 
 

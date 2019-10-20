@@ -31,7 +31,6 @@ import pfg.config.Config;
 import utils.HLInstance;
 import utils.math.InternalVectCartesian;
 
-import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -87,11 +86,11 @@ public class Test_OrderWrapper {
      */
     @Test
     public void sendActionOrder() throws Exception{
-        orderWrapper.useActuator(ActuatorsOrder.values()[0]);
+        orderWrapper.perform(ActuatorsOrders.ActivateRightValve);
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = ActuatorsOrder.values()[0].getOrderStr();
+        String a = ActuatorsOrders.ActivateRightValve.toLL();
         Assert.assertEquals(a,m.get());
     }
 
@@ -133,7 +132,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", SpeedOrders.SetTranslationSpeed.toLL(), 2.0);
+        String a = SpeedOrders.SetTranslationSpeed.with(2.0);
         Assert.assertEquals(a, m.get());
     }
 
@@ -147,7 +146,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", SpeedOrders.SetRotationalSpeed.toLL(), 3.0);
+        String a = SpeedOrders.SetRotationalSpeed.with(3.0);
         Assert.assertEquals(a,m.get());
     }
 
@@ -161,7 +160,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d %d %.5f", PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), 2, 3, Math.PI/2);
+        String a = PositionAndOrientationOrders.SetPositionAndOrientation.with(2, 3, Math.PI/2);
         Assert.assertEquals(a, m.get());
     }
 
@@ -175,7 +174,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), Math.PI);
+        String a = PositionAndOrientationOrders.SetOrientation.with(Math.PI);
         Assert.assertEquals(a, m.get());
     }
 
@@ -185,11 +184,11 @@ public class Test_OrderWrapper {
      */
     @Test
     public void configureHookTest() throws Exception {
-        orderWrapper.configureHook(0, new InternalVectCartesian(2, 3), 2, Math.PI, 2, ActuatorsOrder.FERME_PORTE_AVANT);
+        orderWrapper.configureHook(0, new InternalVectCartesian(2, 3), 2, Math.PI, 2, ActuatorsOrders.ActivateRightValve);
         Thread.sleep(20);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d %d %d %d %.5f %.5f %s", HooksOrder.INITIALISE_HOOK.getOrderStr(), 0, 2, 3, 2, Math.PI, 2.0, ActuatorsOrder.FERME_PORTE_AVANT.getOrderStr());
+        String a = HookOrders.InitialiseHook.with(0, 2, 3, 2, Math.PI, 2.0, ActuatorsOrders.ActivateRightValve.toLL());
         Assert.assertEquals(a, m.get());
     }
 
@@ -203,7 +202,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d", HooksOrder.ENABLE_HOOK.getOrderStr(),  HookNames.SPEED_DOWN.getId());
+        String a = HookOrders.EnableHook.with(HookNames.SPEED_DOWN.getId());
         Assert.assertEquals(a, m.get());
     }
 
@@ -217,7 +216,7 @@ public class Test_OrderWrapper {
         Thread.sleep(20);
         m = Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d", HooksOrder.DISABLE_HOOK.getOrderStr(),  HookNames.SPEED_DOWN.getId());
+        String a = HookOrders.DisableHook.with(HookNames.SPEED_DOWN.getId());
         Assert.assertEquals(a,m.get());
     }
 

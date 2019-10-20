@@ -268,6 +268,7 @@ public enum Log
         toLog
                 .append("] ")
                 .append(message )
+                .append(RESET)
         ;
         if(active) {
             severity.activeOutput.println(this.toLog.toString());
@@ -283,6 +284,9 @@ public enum Log
      */
     public static void init()
     {
+        System.out.println(LOG_INFO + "Démarrage du service de log");
+        System.out.println(RESET);
+
         calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+1:00"));
         // sorties standard (console)
         if(stdout == null) {
@@ -423,18 +427,7 @@ public enum Log
      */
     public static void close()
     {
-        System.out.println(LOG_INFO + "FERMETURE DU SERVICE DE LOG");
-        try {
-            System.out.println(LOG_INFO + "SAUVEGARDE DES FICHIERS DE LOG");
-            System.out.println(RESET);
-            synchronized (values()) {
-                // TODO?
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        System.out.println(LOG_INFO + "Fermeture du service de log");
     }
 
     /**

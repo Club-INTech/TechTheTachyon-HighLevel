@@ -2,6 +2,8 @@ package orders.order;
 
 import lowlevel.order.Order;
 import lowlevel.order.OrderBuilder;
+import lowlevel.order.OrderWithArgument;
+import utils.communication.Formatting;
 
 /**
  * Tous les ordres concernant la vitesse
@@ -9,9 +11,9 @@ import lowlevel.order.OrderBuilder;
  */
 public class SpeedOrders {
 
-    public static final Order SetTranslationSpeed = OrderBuilder.createSimple("maxtr");
-    public static final Order SetRotationalSpeed = OrderBuilder.createSimple("maxro");
-    public static final Order SetSpeed = OrderBuilder.createSimple("maxtrro");
+    public static final OrderWithArgument SetTranslationSpeed = OrderBuilder.createWithArgs("maxtr", Formatting.FLOAT5);
+    public static final OrderWithArgument SetRotationalSpeed = OrderBuilder.createWithArgs("maxro", Formatting.FLOAT5);
+    public static final OrderWithArgument SetSpeed = OrderBuilder.createWithArgs("maxtrro", Formatting.FLOAT5);
 
     private SpeedOrders() {}
 }

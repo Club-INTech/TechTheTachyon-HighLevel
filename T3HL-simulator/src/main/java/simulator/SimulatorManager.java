@@ -1,5 +1,6 @@
 package simulator;
 
+import lowlevel.order.OrderWithArgument;
 import simulator.exceptions.OrderException;
 import data.CouleurPalet;
 import orders.order.*;
@@ -7,7 +8,6 @@ import utils.RobotSide;
 import utils.math.InternalVectCartesian;
 
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 public class SimulatorManager extends Thread {
 
@@ -231,11 +231,11 @@ public class SimulatorManager extends Thread {
                 else if (testOrder(arguments, MotionOrders.Stop,1)) {
                     robot.stop();
                 }
-                else if (testOrder(arguments, PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION, 4)){
+                else if (testOrder(arguments, PositionAndOrientationOrders.SetPositionAndOrientation, 4)){
                     robot.setPosition(new InternalVectCartesian(parseInt(arguments[1]), parseInt(arguments[2])));
                     robot.setOrientation(parseFloat(arguments[3]));
                 }
-                else if (testOrder(arguments, PositionAndOrientationOrder.SET_ORIENTATION,2)){
+                else if (testOrder(arguments, PositionAndOrientationOrders.SetOrientation,2)){
                     robot.setOrientation(parseFloat(arguments[1]));
                 }
                 else if(testOrder(arguments, MontlheryOrders.Montlhery, 1)) {
@@ -282,14 +282,16 @@ public class SimulatorManager extends Thread {
                     CouleurPalet.setCouleurPalRecu(CouleurPalet.values()[rand].name().toLowerCase());
                 }
                 else {
-                    ActuatorsOrder correspondingOrder = null;
+                    // FIXME
+                    /*
+                    Order correspondingOrder = null;
                     if(arguments.length >= 2) {
                         for(ActuatorsOrder actuatorOrder : ActuatorsOrder.values()) {
                             if(actuatorOrder.getOrderStr().equals(m)) {
                                 correspondingOrder = actuatorOrder;
                             }
                         }
-                        if(correspondingOrder != null && correspondingOrder.isArmOrder()) {
+                        if(correspondingOrder != null && correspondingOrder instanceof ServoGroupOrder) {
                             String position = arguments[0];
                             RobotSide side = RobotSide.valueOf(arguments[1].toUpperCase());
                             robot.setArmPosition(side, position);
@@ -303,7 +305,7 @@ public class SimulatorManager extends Thread {
                             }).start();
                             return;
                         }
-                    }
+                    }*/
                     System.out.println(String.format("SIMULATEUR-LL : l'ordre \"%s\" est inconnu", order));
                 }
             }
@@ -336,18 +338,10 @@ public class SimulatorManager extends Thread {
 
     /* ========================= Méthodes permettant tester la validité des ordres reçus ========================== */
     private boolean testOrder(String[] arguments, lowlevel.order.Order order, int nb_args) throws OrderException {
+        if(order instanceof OrderWithArgument) {
+            return testOrder(arguments, ((OrderWithArgument) order).getBase(), nb_args);
+        }
         return testOrder(arguments, order.toLL(), nb_args);
-    }
-
-    /** Compare une string et un ordre
-     * @param arguments arguments envoyés au simulateur
-     * @param order ordre auquel on compare le message reçu
-     * @param nb_args nombre d'arguments minimum attendus (comprenant l'ordre)
-     * @return True, si le bon nombre d'arguments est reçu par le simulateur, et que l'ordre correspond au message envoyé, False sinon
-     * @throws OrderException si un mauvais nombre d'arguments est reçu par le simulateur
-     */
-    private boolean testOrder(String[] arguments, Order order, int nb_args) throws OrderException {
-        return testOrder(arguments, order.getOrderStr(), nb_args);
     }
 
     private boolean testOrder(String[] arguments, String orderStr, int nb_args) throws OrderException {

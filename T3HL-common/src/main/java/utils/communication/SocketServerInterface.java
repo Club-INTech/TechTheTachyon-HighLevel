@@ -69,7 +69,6 @@ public class SocketServerInterface extends SocketInterface {
                                 Log.COMMUNICATION.debug(String.format("Waiting connection on port %d", port));
                                 privSocket = serverSocket.accept();
                                 if (privSocket != null) {
-                                    System.err.println(">> Received before new socket: "+receivedCount);
                                     socket = privSocket;
                                     socket.setTcpNoDelay(true);
                                 }

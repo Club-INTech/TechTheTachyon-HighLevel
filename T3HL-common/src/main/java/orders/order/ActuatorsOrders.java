@@ -1,6 +1,6 @@
 package orders.order;
 
-import lowlevel.ServoGroups;
+import lowlevel.actuators.ServoGroups;
 import lowlevel.order.OrderBuilder;
 import lowlevel.order.SidedOrder;
 import lowlevel.order.SidedServoGroupOrder;

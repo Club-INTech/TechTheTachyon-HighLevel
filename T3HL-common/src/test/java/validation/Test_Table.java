@@ -23,6 +23,7 @@ import data.Table;
 import data.XYO;
 import data.graphe.Ridge;
 import data.table.MobileCircularObstacle;
+import data.table.Obstacle;
 import data.table.StillCircularObstacle;
 import data.table.StillRectangularObstacle;
 import org.junit.After;
@@ -71,8 +72,9 @@ public class Test_Table {
 
     @Test
     public void testRemoveFixedObstacle() throws Exception {
-        table.addFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(100, 0), 200));
-        table.removeFixedObstacle(new StillCircularObstacle(new InternalVectCartesian(100, 0), 200));
+        Obstacle obstacle = new StillCircularObstacle(new InternalVectCartesian(100, 0), 200);
+        table.addFixedObstacle(obstacle);
+        table.removeFixedObstacle(obstacle);
 
         Assert.assertEquals(0, table.getFixedObstacles().size());
     }

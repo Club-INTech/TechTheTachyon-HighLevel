@@ -184,6 +184,20 @@ public abstract class Script implements Module {
     public abstract void execute(int version);
 
     /**
+     * Exécute la version 0 du script.
+     */
+    public final void execute() {
+        execute(0);
+    }
+
+    /**
+     * Exécute la version 0 du script.
+     */
+    public final void timedExecute() {
+        timedExecute(0);
+    }
+
+    /**
      * Methode retournant la zone d'entrée, c'est-à-dire une forme !
      * @param version
      *              la version à executer

@@ -22,6 +22,7 @@ import connection.Connection;
 import data.SensorState;
 import data.controlers.DataController;
 import lowlevel.order.ElevatorOrder;
+import lowlevel.order.Order;
 import lowlevel.order.ServoGroupOrder;
 import lowlevel.order.SidedOrder;
 import orders.hooks.HookNames;
@@ -37,8 +38,6 @@ import utils.container.ContainerException;
 import utils.container.Module;
 import utils.math.Calculs;
 import utils.math.Vec2;
-
-import java.util.Locale;
 
 /**
  * Classe qui permet d'envoyer tous les ordres
@@ -70,10 +69,6 @@ public class OrderWrapper implements Module {
     @Configurable
     private boolean usingBaliseImage;
     private HLInstance hl;
-    /**
-     * Le service de symétrie des ordres
-     */
-    private SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap;
     private boolean forceInversion;
 
     /**
@@ -81,71 +76,8 @@ public class OrderWrapper implements Module {
      * @param symmetrizedActuatorOrderMap
      *              service permettant de gérer la symétrie des ordres
      */
-    private OrderWrapper(HLInstance hl, SymmetrizedActuatorOrderMap symmetrizedActuatorOrderMap) {
+    private OrderWrapper(HLInstance hl) {
         this.hl = hl;
-        this.symmetrizedActuatorOrderMap = symmetrizedActuatorOrderMap;
-    }
-
-    /**
-     * Permet d'envoyer un ordre au bas niveau
-     * @param order ordre quelconque
-     */
-    public void useActuator(Order order) {
-        useActuator(order, false);
-    }
-
-    /**
-     * Permet d'envoyer un ordre au bas niveau
-     * @param order ordre quelconque
-     * @param waitForConfirmation wait for confirmation of order
-     */
-    public void useActuator(Order order, boolean waitForConfirmation) {
-        Order symetrisedOrder;
-        if(shouldSymetrize() && order instanceof ActuatorsOrder) {
-            symetrisedOrder=this.symmetrizedActuatorOrderMap.getSymmetrizedActuatorOrder((ActuatorsOrder) order);
-            if(symetrisedOrder != null){
-                order=symetrisedOrder;
-            }
-
-        }
-        if(waitForConfirmation) {
-            Log.COMMUNICATION.debug("Asking for confirmation for "+order.getOrderStr());
-
-            // il y a une procédure de traitement des mouvements de bras qui n'est pas bloquante pour le LL,
-            // il faut donc un système comme les ascenseurs pour attendre qu'ils aient fini bougent
-            if(order instanceof ActuatorsOrder && ((ActuatorsOrder) order).isArmOrder()) {
-                // quel côté bouge?
-                String side = order.getOrderStr().split(" ")[1];
-
-                // l'ordre est déjà symétrisé quand on récupère la position, c'est donc le bras (droit par exemple) physique, pas logique
-                SensorState<Boolean> armMoving = SensorState.getArmMovingState(side);
-                armMoving.setData(true);
-
-                this.sendString("!"+order.getOrderStr());
-
-                Log.COMMUNICATION.debug("Attente du bras du à l'ordre "+order.getOrderStr());
-
-                // on attend que le bras ait fini
-                Module.waitWhileTrue(armMoving::getData);
-            } else {
-                SensorState.ACTUATOR_ACTUATING.setData(true);
-                this.sendString("!"+order.getOrderStr());
-                Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
-                Log.COMMUNICATION.debug("Confirmation received for "+order.getOrderStr());
-            }
-            if(order instanceof ActuatorsOrder) {
-                long duration = ((ActuatorsOrder) order).getActionDuration();
-                if(duration > 0) {
-                    try {
-                        Thread.sleep(duration);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } else {
-            this.sendString(order.getOrderStr());
-        }
     }
 
     /**
@@ -207,7 +139,7 @@ public class OrderWrapper implements Module {
      * @param speed la vitesse qu'on veut
      */
     public void setTranslationnalSpeed(float speed) {
-        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrders.SetTranslationSpeed.toLL(), speed));
+        this.sendString(SpeedOrders.SetTranslationSpeed.with(speed));
     }
 
     /**
@@ -215,7 +147,7 @@ public class OrderWrapper implements Module {
      * @param rotationSpeed la vitesse de rotation qu'on veut
      */
     public void setRotationnalSpeed(double rotationSpeed) {
-        this.sendString(String.format(Locale.US, "%s %.5f", SpeedOrders.SetRotationalSpeed.toLL(), (float) rotationSpeed));
+        this.sendString(SpeedOrders.SetRotationalSpeed.with((float) rotationSpeed));
     }
 
     /**
@@ -246,8 +178,7 @@ public class OrderWrapper implements Module {
         // cette demande nécessite une synchro
         if(synchronize) {
             SensorState.ACTUATOR_ACTUATING.setData(true);
-            this.sendString(String.format(Locale.US, "!%s %d %d %.5f",
-                    PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
+            this.sendWithConfirmation(PositionAndOrientationOrders.SetPositionAndOrientation.with(x, y, orientation));
             Module.waitWhileTrue(SensorState.ACTUATOR_ACTUATING::getData);
             try {
                 hl.module(DataController.class).waitForTwoPositionUpdates();
@@ -255,8 +186,7 @@ public class OrderWrapper implements Module {
                 e.printStackTrace();
             }
         } else {
-            this.sendString(String.format(Locale.US, "%s %d %d %.5f",
-                    PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), x,y, orientation));
+            this.sendString(PositionAndOrientationOrders.SetPositionAndOrientation.with(x, y, orientation));
         }
     }
 
@@ -268,14 +198,14 @@ public class OrderWrapper implements Module {
         if(symetry) { // pas shouldSymetrize parce qu'il faut rester au bon endroit sur la table
             orientation=(Math.PI - orientation)%(2*Math.PI);
         }
-        this.sendString(String.format(Locale.US, "%s %.5f", PositionAndOrientationOrder.SET_ORIENTATION.getOrderStr(), orientation));
+        this.sendString(PositionAndOrientationOrders.SetOrientation.with(orientation));
     }
 
     /**
      * Envoyer l'order de récupérer les données des sicks
      */
     public void getSickData() {
-        this.sendString(String.format(Locale.US, "%s", PositionAndOrientationOrder.DATA_SICK.getOrderStr()));
+        this.sendString(PositionAndOrientationOrders.AskSickData.toLL());
     }
 
     /**
@@ -294,16 +224,15 @@ public class OrderWrapper implements Module {
             Log.HOOK.debug("la position envoyée au bas niveau pour le hook"+posTrigger.toString());
             orientation=(Math.PI - orientation)%(2*Math.PI);
             Log.HOOK.debug("l'orientation envoyée au bas niveau pour le hook"+orientation);
-            if( order instanceof ActuatorsOrder) {
-                symetrisedOrder = symmetrizedActuatorOrderMap.getSymmetrizedActuatorOrder((ActuatorsOrder) order);
+            if( order instanceof SidedOrder) {
+                symetrisedOrder = ((SidedOrder) order).symetrize();
                 if(symetrisedOrder !=null){
                     order=symetrisedOrder;
                 }
             }
 
         }
-        this.sendString(String.format(Locale.US, "%s %d %s %d %.5f %.5f %s",
-                HooksOrder.INITIALISE_HOOK.getOrderStr(), id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.getOrderStr()));
+        this.sendString(HookOrders.InitialiseHook.with(id, posTrigger.toStringEth(), tolerency, orientation, tolerencyAngle, order.toLL()));
     }
 
     /**
@@ -322,7 +251,7 @@ public class OrderWrapper implements Module {
      * @param hook hook à activer
      */
     public void enableHook(HookNames hook) {
-        this.sendString(String.format(Locale.US, "%s %d", HooksOrder.ENABLE_HOOK.getOrderStr(), hook.getId()));
+        this.sendString(HookOrders.EnableHook.with(hook.getId()));
     }
 
     /**
@@ -330,7 +259,7 @@ public class OrderWrapper implements Module {
      * @param hook
      */
     public void disableHook(HookNames hook) {
-        this.sendString(String.format(Locale.US, "%s %d", HooksOrder.DISABLE_HOOK.getOrderStr(), hook.getId()));
+        this.sendString(HookOrders.DisableHook.with(hook.getId()));
     }
 
     /**
@@ -354,6 +283,14 @@ public class OrderWrapper implements Module {
                 e1.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Envoie un message au LL et demande une confirmation de l'ordre
+     * @param message
+     */
+    public void sendWithConfirmation(String message) {
+        this.sendString("!"+message);
     }
 
     /**
@@ -398,13 +335,14 @@ public class OrderWrapper implements Module {
     }
 
     public void waitJumper() {
+        if(simulation)
+            return;
         Log.STRATEGY.debug("Waiting jumper...");
         SensorState.WAITING_JUMPER.setData(true);
         sendString("waitJumper");
         Module.waitWhileTrue(SensorState.WAITING_JUMPER::getData);
         if(usingBaliseImage) {
             try {
-                System.out.println("Message envoyeeeeeeeeeeeeeeeeeeeeeeeee");
                 Connection.BALISE_IMAGE.send("GO");
             } catch (CommunicationException e) {
                 e.printStackTrace();

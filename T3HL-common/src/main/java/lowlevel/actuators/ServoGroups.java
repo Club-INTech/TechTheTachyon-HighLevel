@@ -1,4 +1,4 @@
-package lowlevel;
+package lowlevel.actuators;
 
 /**
  * Liste des groupes de servomoteurs disponibles pour le HL

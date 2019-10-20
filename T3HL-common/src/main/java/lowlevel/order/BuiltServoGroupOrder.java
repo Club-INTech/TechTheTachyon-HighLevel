@@ -1,6 +1,6 @@
 package lowlevel.order;
 
-import lowlevel.ServoGroup;
+import lowlevel.actuators.ServoGroup;
 
 /**
  * Instance de {@link ServoGroupOrder} créée par un {@link OrderBuilder}

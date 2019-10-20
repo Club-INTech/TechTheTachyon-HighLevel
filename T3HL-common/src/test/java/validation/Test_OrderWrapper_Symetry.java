@@ -21,10 +21,7 @@ package validation;
 import connection.Connection;
 import connection.ConnectionManager;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
-import orders.order.HooksOrder;
-import orders.order.MotionOrders;
-import orders.order.PositionAndOrientationOrder;
+import orders.order.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,7 +31,6 @@ import utils.ConfigData;
 import utils.HLInstance;
 import utils.math.InternalVectCartesian;
 
-import java.util.Locale;
 import java.util.Optional;
 
 public class Test_OrderWrapper_Symetry {
@@ -90,8 +86,7 @@ public class Test_OrderWrapper_Symetry {
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d %d %.5f",
-                PositionAndOrientationOrder.SET_POSITION_AND_ORIENTATION.getOrderStr(), -2, 3, 2* Math.PI/3);
+        String a = PositionAndOrientationOrders.SetPositionAndOrientation.with(-2, 3, 2* Math.PI/3);
         Assert.assertEquals(a, m.get());
 
     }
@@ -101,12 +96,11 @@ public class Test_OrderWrapper_Symetry {
      */
     @Test
     public void configureHookTestWithSymetry() throws Exception {
-        orderWrapper.configureHook(0, new InternalVectCartesian(2, 3), 2, 2*Math.PI / 3, 2, ActuatorsOrder.FERME_PORTE_DROITE);
+        orderWrapper.configureHook(0, new InternalVectCartesian(2, 3), 2, 2*Math.PI / 3, 2, ActuatorsOrders.ActivateRightValve);
         Thread.sleep(10);
         m=Connection.LOCALHOST_SERVER.read();
         Assert.assertTrue(m.isPresent());
-        String a = String.format(Locale.US, "%s %d %d %d %d %.5f %.5f %s",
-                HooksOrder.INITIALISE_HOOK.getOrderStr(), 0, -2, 3, 2, 2* Math.PI/3, 2.0, ActuatorsOrder.FERME_PORTE_GAUCHE.getOrderStr());
+        String a = HookOrders.InitialiseHook.with(0, -2, 3, 2, 2* Math.PI/3, 2.0, ActuatorsOrders.ActivateRightValve.toLL());
         Assert.assertEquals(a, m.get());
 
     }

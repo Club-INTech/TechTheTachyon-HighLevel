@@ -1,6 +1,6 @@
 package lowlevel.order;
 
-import lowlevel.ServoGroup;
+import lowlevel.actuators.ServoGroup;
 
 /**
  * Ordre affectant un groupe de servomoteurs

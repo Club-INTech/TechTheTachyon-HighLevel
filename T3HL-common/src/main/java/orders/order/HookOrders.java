@@ -18,38 +18,17 @@
 
 package orders.order;
 
+import lowlevel.order.OrderBuilder;
+import lowlevel.order.OrderWithArgument;
+import utils.communication.Formatting;
+
 /**
- * Enum qui contient tous les ordres concernant la position et l'orientation du robot
+ * Enum qui contient tous les ordres envoyé au LL qui concernent les hooks
  *
- * @author yousra
+ * @author yousra, jglrxavpok
  */
-public enum PositionAndOrientationOrder implements Order {
-
-    CXYO("cxyo"),
-    XYO("?xyo"),
-    SET_POSITION_AND_ORIENTATION("cxyo"),
-    SET_ORIENTATION("co"),
-    DATA_SICK("lectureSICK"),
-    ;
-
-    /**
-     * Ordre envoyé au LL
-     */
-    private String orderStr;
-
-    /**
-     * Constructeur qui ne précise pas la durée de l'action
-     * @param orderStr : order envoyé au LL
-     */
-    PositionAndOrientationOrder(String orderStr){
-        this.orderStr = orderStr;
-    }
-
-    /**
-     * Getter de l'ordre
-     * @return l'ordre en string envoyé
-     */
-    public String getOrderStr(){
-        return this.orderStr;
-    }
+public final class HookOrders implements Formatting {
+    public static OrderWithArgument InitialiseHook = OrderBuilder.createWithArgs("nh", INTEGER, STRING, INTEGER, FLOAT5, FLOAT5, STRING);
+    public static OrderWithArgument EnableHook = OrderBuilder.createWithArgs("eh", INTEGER);
+    public static OrderWithArgument DisableHook = OrderBuilder.createWithArgs("dh", INTEGER);
 }

@@ -1,11 +1,11 @@
-package lowlevel;
+package lowlevel.actuators;
 
 /**
  * Classe représentant un servomoteur
  *
  * @author jglrxavpok
  */
-public class Servo {
+public class Servo implements Actuator {
     /**
      * Identifiant du servomoteur
      */

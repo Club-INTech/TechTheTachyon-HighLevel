@@ -18,7 +18,7 @@
 
 package orders.hooks;
 
-import orders.order.Order;
+import lowlevel.order.Order;
 import pfg.config.Config;
 import orders.OrderWrapper;
 import utils.Log;
@@ -52,7 +52,6 @@ public class HookFactory implements Module {
      * @param hooks hooks à configurer
      */
     public void configureHooks(HookNames... hooks) {
-
         Order sentOrder;
         for(HookNames hook:hooks){
 
@@ -62,7 +61,7 @@ public class HookFactory implements Module {
                 Log.HOOK.warning("Hook déjà configuré : on ne fait rien");
                 break;
             }
-            orderWrapper.configureHook(hook.getId(), hook.getPosition(), hook.getTolerency(), hook.getOrientation(),hook.getTolerencyAngle(),sentOrder);
+            orderWrapper.configureHook(hook.getId(), hook.getPosition(), hook.getTolerency(), hook.getOrientation(),hook.getTolerencyAngle(), sentOrder);
             Log.HOOK.debug("Hook " + hook.getDeclaringClass() + " : Configuré");
             configuredHook.add(hook);
         }

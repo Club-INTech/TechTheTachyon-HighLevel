@@ -1,7 +1,6 @@
 import com.studiohartman.jamepad.*;
 import lowlevel.order.Order;
 import orders.OrderWrapper;
-import orders.order.ActuatorsOrder;
 import orders.order.ActuatorsOrders;
 import orders.order.ElevatorOrders;
 import orders.order.MontlheryOrders;
@@ -66,11 +65,11 @@ public class MontlheryController extends Thread implements Module {
                     // RIGHT BUMPER: désactive pompe droite
                     if(aPressed && !wasAPressed && armPosition != ArmState.GROUND) {
                         armPosition = ArmState.GROUND;
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
+                        // TODO: remplacer robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_SOL);
                     }
                     if(bPressed && !wasBPressed && armPosition != ArmState.ELEVATOR) {
                         armPosition = ArmState.ELEVATOR;
-                        robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
+                        // TODO: remplacer robot.useActuator(ActuatorsOrder.ENVOIE_LE_BRAS_DROIT_A_LA_POSITION_ASCENSEUR);
                     }
                     if(xPressed && !wasXPressed) {
                         robot.perform(ElevatorOrders.RaiseRightElevator);
